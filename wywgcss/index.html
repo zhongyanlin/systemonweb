@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> CSS design </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="editcss.css" />
+<script>var textmsg = new Array(1700);var installname="tealeaman";</script>
+<script type="text/javascript"  src="findrep.js"></script>
+<script type="text/javascript"  src="editcss.js"></script>
+</head>
+<body>
+    <form name="f" method="post" action="">
+<table id=t0 cellspacing="2" cellpadding="0"  align=center border=0>
+
+ 
+<tr><td   colspan="2"   rowspan="1" align="left"  id="title" > CSS Design Tool</td> 
+ <td valign="top"  rowspan="1" align="left" style="color:#11CC11" >
+<center><font size="5">Instructions</font></center>
+(1)To add a style sheet, write a <A href="http://www.w3schools.com/cssref/css_selectors.asp" target="_blank">selector</a> on the tail of the textarea on the left and click Parse.<br> 
+(2)After renaming a selector or a stage in @keyframes in the textarea,  click the Parse button 
+</td></tr>
+<tr height="150" >
+<td   ><textarea style="height:150px;margin:0px 0xp 0px 0px" cols="50" name="codes" onfocus="javascript:this.style.height='300px'" onblur="javascript:this.style.height='150px'" onchange="parsecss()"></textarea></td>
+<td colspan="1" rowspan="2"   valign="top" >
+    <table align="center" cellspacing="2" cellpadding=2 id="t2" border="0"><tr><td>File Name</td></tr>
+    <tr ><td><input name="filename"   value="filename"  class="button" style="background-color:white;color:black;overflow:hidden"></td></tr>
+    
+    <tr  ><td  class="non" ><input name="savebtn" type="button" class="button" style="background-color:navy;margin:3px 2px 2px 2px" value="Save" onclick="saveit()"></td></tr>
+     
+    <tr  ><td class="non"><input name="parsebtn" type="button" class="button" value="Parse"  style="background-color:black;margin:3px 2px 2px 2px"  onclick="parsecss()"></td></tr>
+     
+   <tr  ><td class="non"><input name="undobtn" type="button" class="button" value="Undo" style="background-color:#CC0000;margin:30px 2px 2px 2px"   onclick="undo()"></td></tr>
+   <tr  ><td class="non"><input name="dobtn" type="button"  style="background-color:#1D8D3D;margin:3px 2px 20px 2px"  class="button" value="Do" onclick="goahead()"></td></tr>
+    
+   <tr  ><td class="non"><input name="chn"  type="button" value="Sample" class="button" style="background-color:#2DCD3D;margin:40px 2px 1px 2px;" onclick="showhtml()"></td></tr>
+    </table></td>
+<td colspan="1" rowspan="3" valign="top"  ><table border="0" id="t1" ><tbody><tr>
+<td  align="right" ><a href="http://www.w3schools.com/cssref/css_selectors.asp" target="_blank">Selectors</a></td><td><select name="selector" onchange="getsel(this)" style=width:200px ><option value="">select</option></select></td>
+<td  align="right" style="visibility:hidden" id="lblstage">Stage</td><td><select name="stage" style="visibility:hidden" onchange="getsel1(this)" ></select></td>
+<td  align="right" >Tag</td><td><select name="fortag" onchange="getsel2(this)" ></select></td>
+
+            </tr> <tr>
+<td colspan="6" rowspan="1"   ><!--animation:e.g. aKeyframe 2s infinite                               
+animation-delay:e.g. 1s/2s/3s/4s/5s/6s/7s/8s/9s/10s/11s/12s/13s/14s/15s/16s                               
+animation-duration:e.g. 1s/2s/3s/4s/5s/6s/7s/8s/9s/10s/11s/12s/13s/14s/15s/16s
+animation-fill-mode:forwards/backwards/none/both
+animation-name:e.g. aKeyframe                              
+background:e.g url(pic.jpg) red no-repeat
+background-color:e.g lightblue
+background-image:e.g url(pic.jpg)
+background-position:e.g 200 -100
+background-repeat:repeat/no-repeat/repeat-x/repeat-y                               
+border:e.g 1px grey outset
+border-top-style:inset/outset/solid/dotted/none/hidden/dashed/double/groove/ridge/initial
+border-top-width:1-20px
+border-right-style:inset/outset/solid/dotted/none/hidden/dashed/double/groove/ridge/initial
+border-right-width:1-20px
+border-bottom-style:inset/outset/solid/dotted/none/hidden/dashed/double/groove/ridge/initial
+border-bottom-width:1-20px
+border-left-style:inset/outset/solid/dotted/none/hidden/dashed/double/groove/ridge/initial
+border-left-width:1-20px
+border-top-color:e.g lightblue
+border-right-color:e.g lightblue
+border-bottom-color:e.g lightblue
+border-left-color:e.g lightblue
+border-radius/-webkit-border-radius/-moz-border-radius:e.g 15px/40px / 60px/50% 50% 50% 50% / 60% 60% 40% 40% 
+box-shadow/-moz-box-shadow/-webkit-box-shadow:e.g 3px 3px #ccc                               
+color:e.g red #2343ab
+cursor:alias/all-scroll/auto/cell/context-menu/col-resize/copy/crosshair/default/e-resize/ew-resize/grab/grabbing/help/move/n-resize/ne-resize/nesw-resize/ns-resize/nw-resize/nwse-resize/no-drop/none/not-allowed/pointer/progress/row-resize/s-resize/se-resize/sw-resize/text/URL/vertical-text/w-resize/wait/zoom-in/zoom-out/initial/inherit                               
+display:block/inline/none/grid/inherit                                
+font-family:Arial,Helvetica,sans-serif/Arial Black,Gadget,sans-serif/Comic Sans MS,cursive,sans-serif/Impact, Charcoal, sans-serif/Lucida Sans Unicode,Lucida Grande,sans-serif/Tahoma,Geneva,sans-serif/Trebuchet MS,Helvetica,sans-serif/Verdana,Geneva,sans-serif                              
+font-size:8-58px
+font-weight:100-700
+float:left/right/none/inherit
+grid: e.g 150px / auto auto auto/'myArea myArea . . .'                              
+height:e.g 200px
+left:e.g -100px
+line-height:e.g 2.5px                               
+list-style:e.g square url("sqpurple.gif")  
+list-style-type: disc/armenian/circle/cjk-ideographic/decimal/decimal-leading-zero/georgian/hebrew/hiragana/hiragana-iroha/katakana/katakana-iroha/lower-alpha/lower-greek/lower-latin/lower-roman/none/square/upper-alpha/upper-greek/upper-latin/upper-roman/initial/inherit                              
+margin:e.g 3px 2px -1px 1px
+opacity:e.g 0.5
+overflow:display/auto/hidden
+padding:e.g 3px 2px 2px 1px
+position:static/absolute/relative/inherit 
+text-shadow:e.g -2px 2px #6374AB
+text-align:left/right/center
+text-transform:uppercase/lowercase/capitalize
+top:e.g 50px 
+transform:e.g. translate(10px,5px)/rotate(-10deg)/scale(1.5,3)/skew(20deg,30deg)/skewX(20deg)/skewY(-30deg)
+transform-origin: e.g 20% 40%;
+vertical-align:baseline/length/%/sub/super/top/text-top/middle/bottom/text-bottom/initial/inherit                               
+visibility:visible/hidden
+width:e.g 300px 
+z-index: -2-49 
+--></td></tr></tbody></table></td></tr>
+
+<tr height="150"><td><textarea name="sheet"  style="height:150px;color:red;margin:0px 0xp 0px 0px" cols="50">  
+        </textarea></td></tr>
+<tr><td colspan="2" rowspan="1" onclick="changecontent()" valign="top"   id="showarea">workshop</td></tr> 
+</table>
+ 
+</form>
+</body>
+</html>
