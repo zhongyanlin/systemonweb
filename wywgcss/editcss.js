@@ -105,10 +105,11 @@ function hidehint(t, h)
     t.className = 'enter';
     t.style.color = 'red';
 }
-
+var allpn = new Array();
+var sel;
 function makefield(ts)
 {
-    var sel = "<div style=height:640px;overflow:hidden  id=t3><table cellspacing=0 cellpadding=4 border=1 style=border-collapse:collapse >";
+    sel = "<div style=height:640px;overflow:show  id=t3><table cellspacing=0 cellpadding=4 border=1 style=border-collapse:collapse >";
     var z = 0;
 
     for (var i = 0; i < ts.length; i++)
@@ -118,6 +119,7 @@ function makefield(ts)
         if (j == -1)
             continue;
         var pn = ts[i].substring(0, j).replace(/ /g, '');
+        allpn[allpn.length] = pn;
         var v = trim(ts[i].substring(j + 1));
         if (v == '')
             continue;
@@ -125,7 +127,7 @@ function makefield(ts)
             sel += "<tr>";
         var y = trim(pn.replace(/\/.*/, ''));
         //y = '<a href="https://www.w3schools.com/cssref/" target=w3school>' + y + '</a>';
-        sel += "<td align=left><nobr>" + y + "</nobr></td><td align=center >";
+        sel += "<td align=left  onclick=explain('" + y + "')><nobr>" + y + "</nobr></td><td align=center style=\"background-color:white\">";
         if (v.indexOf("e.g") == 0)
         {
             v = trim(v.replace(/["|']/g, '')).replace(/;$/, '').replace(/ \/ /g, "@1#");
@@ -149,14 +151,14 @@ function makefield(ts)
                     + v2
                     + "')\" onfocus=\"hidehint(this,'"
                     + v2
-                    + "')\" class=hint style=\"width:150px\" value=\""
+                    + "')\" class=hint style=\"width:150px;border:0px;background-color:white\" value=\""
                     + v1
                     + "\" name=\""
                     + pn
                     + "\" onchange=setprop() " + (hasmore?("list=dl" + i + " "):"") + ">" + dl;
         } else
         {
-            sel += "<select name=\"" + pn + "\" class=enter  style=\"width:153px\" onchange=setprop()><option value=\"\"></option>";
+            sel += "<select name=\"" + pn + "\" class=enter  style=\"width:153px;border:0px;background-color:white\" onchange=setprop()><option value=\"\"></option>";
 
             if (v.replace(/[\-]?[0-9]+[ ]*\-[ ]*[\-]?[0-9]+[ ]*[a-z]*/, '') == '')
             {
@@ -194,16 +196,16 @@ function makefield(ts)
             + v.replace(/'/g, "\\'").replace(/"/g, '\\"')
             + "')\" class=hint style=\"width:150px\" value=\""
             + v.replace(/"/g, '\\"')
-            + "\"   onchange=setprop();setcl(this) ></td><td   width=20>&nbsp;</td>";
+            + "\"   onchange=setprop();setcl(this) ></td><td onclick=pullall()  width=20 align=center>&cdot;&cdot;&cdot;</td>";
 
     if (z % 2 == 1)
     {
-        sel += morestr + "</tr>";
+       return sel + morestr + "</tr></table></div>";  
     } else
     {
-        sel += "<tr>" + morestr + "<td colspan=3></td></tr>";
+       return  sel +  "<tr>" + morestr + "<td colspan=3></td></tr></table></div>";
     }
-    return sel + "</table></div>";
+    
 }
 var fields = '';
 function setcl( t)
@@ -1031,3 +1033,69 @@ function pind(pn)
     
 }
 
+function pullall()
+{
+   window.frames[0].location = "cssproperty.html";
+   }
+var pv = [];   
+function access(it)
+{
+   let innerDoc = it.contentDocument || it.contentWindow.document;
+   let dv = innerDoc.getElementsByTagName('div');
+   if (dv == null || dv.length==0) return;
+   var tbl = dv[0].getElementsByTagName('table');
+   
+   var pns = new Array();
+   for (var i=0; i < tbl.length; i++)
+   {
+      
+      var tb = tbl[i];
+      for (var j=0; j < tb.rows.length; j++)
+      {
+         let n = tb.rows[j].cells[0].innerHTML.replace(/<[^>]+>/g,'').replace(/^[ ]+/,'').replace(/^[ ]+/,'');
+         pv[n] = tb.rows[j].cells[1].innerHTML;
+         if (0 > allpn.indexOf(n))
+         {
+             pns[pns.length] = n;
+         }
+      }
+   }
+   var z = 0;
+
+    for (var i = 0; i < pns.length; i++)
+    {
+        var pn = pns[i];
+        allpn[allpn.length] = pn;
+        if (z % 2 == 0)
+            sel += "<tr>";
+        sel += "<td align=left onclick=explain('" + pn + "')><nobr>" + pn + "</nobr></td><td align=center style=\"background-color:white\">";
+        {
+            v1 = v2 = ''; 
+            sel += "<input   onblur=\"showhint(this,'"
+                    + v2
+                    + "')\" onfocus=\"hidehint(this,'"
+                    + v2
+                    + "')\" class=hint style=\"width:150px;border:0px;background-color:white\" value=\""
+                    + v1
+                    + "\" name=\""
+                    + pn
+                    + "\" onchange=setprop() "   + ">" ;
+        } 
+        sel += "</td><td onclick=pind(this) width=20>&nbsp;</td>";
+        if (z % 2 == 1)
+            sel += "</tr>";
+        z++;
+    }
+    
+    var t1 = document.getElementById('t1');
+    t1.rows[1].cells[0].innerHTML = sel + "</tr></table></div>"; 
+}
+function explain(n)
+{
+   var t = pv[n];
+   if (t!=null)
+   {
+       document.getElementById('t0').rows[0].cells[1].innerHTML =n + ":<br>" +  t;
+   }
+}
+  
