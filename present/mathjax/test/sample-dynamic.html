@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MathJax Dynamic Math Test Page</title>
+<!-- Copyright (c) 2010-2013 The MathJax Consortium -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+<script>
+    
+window.onload   = function () 
+{
+   var script = document.createElement("script");
+   script.type = "text/javascript";
+   script.src  = "../MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+   document.getElementsByTagName("head")[0].appendChild(script);  
+} 
+var jj = 1;
+var needtranslator = true;
+</script>
+ 
+</head>
+<body>
+<p>
+    <span >\(y^7\)</span>
+Type some   code and press RETURN:<br /> 
+<input id="MathInput" size="80" onblur="LaTexHTML.format(this.value,document.getElementById('d'+(jj++)))" />
+<input id="but" type="button" value='format' onclick="aa()" />
+<input id="but2" type="button" value='deformat' onclick="deaa()" />
+<input id="but1" type="button" value='reset' onclick="jj=1;LaTexHTML.reset()" />
+</p>
+6<div id="d6"> </div>
+<span >\(y^9\)</span>
+1<div id="d1"> </div>
+3<div id="d3"> </div>
+<div >$$y^v$$</div>
+4<div id="d4"> </div>
+5<div id="d5"> </div>
+7<div id="d7"> </div>
+2<div id="d2"> </div>
+
+<div id="xx">
+   
+</div>
+ 
+<script src='../../curve.js'></script>
+<script>
+function deaa()
+{
+    LaTexHTML.deformat(document.getElementById("xx"));
+    alert(LaTexHTML.sav);
+} 
+function aa()
+{
+   /* document.getElementById("xx").innerHTML =  "<font color=green size=7>$x^2$<strong>$$\\oint_0^{x^2}f(t)dt$$</strong><i>$x^9$</i><ol><li>$x^6$</li><li>ss</li></ol><p>$t^6$</p><textarea> $x^3$</textarea><div>sdff $x^2$</div></font><table><tr><td>$x^{100}$</td><td>$$\\int_0^xf(t)dt$$</td></tr></table>";
+    LaTexHTML.formatele(document.getElementById("xx"));
+    alert(LaTexHTML.sav);*/
+    var s = "\n23(\n)";
+    var r = new RegExp(/\n[0-9]+[\.|\(|\n]/);
+    var m = r.exec(s);
+    alert(m.toString())
+}
+</script>
+</body>
+</html>

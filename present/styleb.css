@@ -1,0 +1,33 @@
+A:link {COLOR: #0000AA;TEXT-DECORATION: none}
+A:visited {COLOR: #0000AA;TEXT-DECORATION: none}
+.GreenButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#3CA633,#59B845) #3CA633;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.RedButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#A63C75,#C34E87) #A63C75;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.YellowButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#FFD700,#FFE912) #FFD700;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.PurpleButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#8B008B,#A8129D) #8B008B;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.BlueButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#8377C5,#A089D7) #8377C5;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.OrangeButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#ad9428,#CAA63A) #ad9428;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.BlackButton{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#000000,#1D1212) #000000;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+.B00BBB{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#00BBBB,#1DCDCD) #00BBBB;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
+input.B22BB00 {background-color:#22BB00;color:#000000;font-weight:300;font-family:Times}
+input.leftd {background-color:#B5EBDD;color:black;border:0px;text-align:left;vertical-align:middle;font-family:Times}
+input.left {background-color:#eefdf9;color:black;border:0px;text-align:left;vertical-align:middle;font-family:Times}
+input.right {background-color:#eefdf9;color:black;border:0px;text-align:right;vertical-align:middle;font-family:Times}
+input.underline {background-color:#eefdf9;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:Times}
+input.flat {background-color:#eefdf9;color:blue;border:0px;vertical-align:middle;font-family:Times}
+input.dunderline {background-color:#B5EBDD;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:Times}
+input.samebg {background-color:transparent;border:0;text-align:left;vertical-align:middle;font-family:Times}
+input.dflat {background-color:#B5EBDD;color:blue;border:0px;vertical-align:middle;font-family:Times}
+select {background-color:#eefdf9;color:black;border-width:0px;font-family:Times}
+select.selectclass {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#eefdf9;color: black; border-width:0px;vertical-align:middle;font-family:Times}
+textarea {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#eefdf9;color:black;font-family:Times}
+input{background-color:#eefdf9;color:black;font-family:Times; vertical-align:middle}
+input.radchk{background-color:transparent}
+body{background:#B5EBDD url(image/bgimage/bgindex.jpg);margin:5px 5px 0px 5px;font-family:Times;font-weight:680}
+.outset{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:#45614E left  center url(image/header.gif) repeat-y;border:1px #45614E outset;font-family:Times}
+.outset2{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:#45614E top  center url(image/header1.gif) repeat-x;border:2px #45614E outset;font-family:Times}
+.forcurve1{text-shadow:#060606 -1px -1px;text-align:center;font-weight:bold;color:#DDCC11;font-size:25px;font-family:Times}
+.forcurve2{text-shadow:#060606 -1px -1px;text-align:center;font-weight:bold;color:#DDCC11;font-size:21px}
+.outset1{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#ABE1D3;border:1px #ABE1D3 outset;font-family:Times}
+.outset3{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:linear-gradient(180deg,#ABE1D3,#C8F3E5);border:1px #45614E solid;font-family:Times}
+.shadow1 {float:left;background: url(image/trans-shadow.png) no-repeat bottom right;}.shadow1 table {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 div {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 img {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}
+.trig{width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid white}

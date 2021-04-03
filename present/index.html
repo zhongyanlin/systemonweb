@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta id=mainmeta http-equiv="Content-Type" content="text/html; charset=gbk"> 
+<title></title>
+<script src="en.js" ></script>
+<script src="textmsgr.js" ></script>
+<script id=ltxscrpt type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+<style type="text/css">
+.tlmmsty{border:0px black solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px}
+.tlmmline{width:100%}
+.tlmvline{height:100%}
+.tdbutton{border:1px #bbb solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px;border-radius: 0px;font-weight:400}
+.samebg{color:black;font-size:20px;font-family:arial}
+</style>
+</head>    
+<body style="background-imgae:url() !important;background-color:white;margin:0px 5px 0px 5px"> 
+<script>
+var needtranslator = true;
+var orgnum = 0;
+var charset = "gb2312";
+function set()
+{
+      orgnum = document.location.search;
+      var y = opener;
+      if (y != null) 
+      {
+          charset =  y.document.characterSet.replace(/\.js/,'');
+          if (charset == 'GBK')
+          {
+              charset = 'gb2312';
+          }
+      }
+      if (isNaN(orgnum))
+      {
+         var j = orgnum.indexOf('en=');
+         if (j !=-1)
+         {
+             
+            var k = orgnum.indexOf('&',j); 
+            if (k==-1) 
+            {
+                k = orgnum.length;
+            }
+            charset = orgnum.substring(j+3,k).replace(/\.js/,'');
+         }
+         j = orgnum.indexOf('orgnum=');
+         if (j!=-1)
+         {
+            orgnum = orgnum.substring(j+7).replace(/[^0-9].*$/,'');
+         
+         }
+      }
+      if (isNaN(orgnum))
+          orgnum = 0;
+      var umltoolstyles = document.createElement('link');
+      umltoolstyles.rel = 'stylesheet';
+      umltoolstyles.type = 'text/css';
+      umltoolstyles.media = 'screen';
+      umltoolstyles.href = 'styleb' + orgnum + ".css";
+      document.getElementsByTagName('head')[0].appendChild(umltoolstyles);
+      var charsetMetaTag = document.createElement('meta');
+      charsetMetaTag['httpEquiv'] = 'Content-Type';
+        charsetMetaTag['content'] = 'text/html; charset=' + charset;
+        document.getElementsByTagName('head')[0].appendChild(charsetMetaTag);
+        
+};
+set();
+</script>
+ 
+<script type="text/javascript"  src="cookie.js"></script>
+<script type="text/javascript"  src="checkHTML.js"></script>
+<script type="text/javascript"  src="attachment.js"></script>
+<script type="text/javascript"  src="curve.js?sn=100&dn=60"></script>
+<script type="text/javascript"  src="findrep.js"></script>
+<script type="text/javascript"  src="installtool.js"></script>
+<script type="text/javascript"  src="umltool.js"></script>
+
+</body>
+</html>
