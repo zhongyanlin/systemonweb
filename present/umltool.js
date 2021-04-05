@@ -1,4 +1,4 @@
-textmsg[1854] = "Page @";
+
 if (document.location.toString().indexOf("localhost") >= 0
     && typeof (handleErr) == 'undefined')
 {

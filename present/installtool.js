@@ -1,9 +1,4 @@
-/*
- installtool.js
- Description: this program looks for textareas in the page and
- creates an online tool bar followign them based from cached information
- Author: Zhongyan Lin
- */
+ 
 if (document.location.toString().indexOf("localhost") >= 0
     && typeof (handleErr) == 'undefined')
 {
