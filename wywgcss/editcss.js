@@ -196,7 +196,7 @@ function makefield(ts)
             + v.replace(/'/g, "\\'").replace(/"/g, '\\"')
             + "')\" class=hint style=\"width:150px\" value=\""
             + v.replace(/"/g, '\\"')
-            + "\"   onchange=setprop();setcl(this) ></td><td onclick=pullall()  width=20 align=center>&cdot;&cdot;&cdot;</td>";
+            + "\"   onchange=setprop();setcl(this) ></td><td onclick=pullall()  width=20 align=center>&bull;&bull;&bull;</td>";
 
     if (z % 2 == 1)
     {
