@@ -8,8 +8,6 @@ function handleErr(msg, url, l)
        + "Error: " + msg + "\n"
        + "URL:   " + url + "\n"
        + "Line:  " + l;
-     
-
      // window.onerror = handleErr;
      return true;
 }

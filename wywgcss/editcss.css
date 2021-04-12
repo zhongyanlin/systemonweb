@@ -33,7 +33,7 @@ table tr td
 }
 #t0
 {
-    background-color: white;
+    background: linear-gradient(#ddd, #aaa);
 }
  
 #t3

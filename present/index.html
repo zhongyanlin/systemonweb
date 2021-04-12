@@ -3,8 +3,7 @@
 <head>
 <meta id=mainmeta http-equiv="Content-Type" content="text/html; charset=gbk"> 
 <title></title>
-<script src="en.js" ></script>
-<script src="textmsgr.js" ></script>
+ 
 <script id=ltxscrpt type="text/x-mathjax-config">
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],
@@ -74,7 +73,7 @@ function set()
       charsetMetaTag['httpEquiv'] = 'Content-Type';
         charsetMetaTag['content'] = 'text/html; charset=' + charset;
         document.getElementsByTagName('head')[0].appendChild(charsetMetaTag);
-        
+        document.write("<script type=text/javascript src=" + charset + ".js ></scr" + "ipt>"); 
 };
 set();
 </script>
