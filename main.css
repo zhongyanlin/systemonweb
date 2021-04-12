@@ -1,21 +1,28 @@
-h1{text-align: center}
+body{margin:0px 0px 0px 0px}
+h1{text-align: center;width:100%;background-color:#4444bb;margin:0px 0px 0px 0px;
+  padding:20px 0px 20px 0px}
+h1 span:nth-child(3){background-color:white;color:#4444bb;padding:5px 5px 5px 5px}
+h1 span:nth-child(1){background-color:white;color:#4444bb;padding:5px 5px 5px 5px}
+h1 span:nth-child(2){color:white;padding:5px 5px 5px 5px}
 h2{text-align: center}
-#main{ display: inline-grid;
+#main
+{ 
+  display: inline-grid;
   grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-  padding: 10px;
+  background-color: #ddd;
+  padding: 2px;
 }
-#main div{
-  background-color: rgba(255, 255, 255, 0.8);
+#main div
+{
+  background-image: linear-gradient(lightblue, lightyellow);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
   font-size: 19px;
   text-align: left;
-  margin:30px 30px 30px 30px;
-  border-radius: 4px;
-      
+  margin:20px 20px 20px 20px;
+  border-radius:4px;  
 }
-
+#main div:hover{background-image: linear-gradient(lightblue, pink);} 
 #main div span{
 display: block;
 text-align:center;
