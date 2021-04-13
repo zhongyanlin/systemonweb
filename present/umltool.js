@@ -8,6 +8,8 @@ function handleErr(msg, url, l)
        + "Error: " + msg + "\n"
        + "URL:   " + url + "\n"
        + "Line:  " + l;
+     
+
      // window.onerror = handleErr;
      return true;
 }
@@ -373,7 +375,7 @@ if (lj > 0)
 {
    var filenm = locationstr.substring(lj+1);
    locationstr = locationstr.substring(0, lj);
-   if (locationstr.indexOf("http")== 0 && filenm.indexOf("index.html")== 0)
+   if (locationstr.indexOf("http")== 0 && filenm.indexOf("umltool.html")== 0)
    {
        originalurl = locationstr;
        filename = passedfilename;
@@ -3790,9 +3792,12 @@ function circular(x, radius, cl)
        if (y == '-') y = '<font size=' + ((j<2||x.length-1-j<2)?2:1) + '>&bull;</font>';
        ans += "<div style=\"padding:0px 0px 0px 0px;margin:" + (j==0?0:(-radius)) + "px 0px 0px 0px;width:" + radius + "px;height:" + radius + "px;border-radius:" + (radius/2) + "px;transform:rotate(" + (0.4+j-x.length/2)*U + "deg);font-size:inherit;font-weight:700;text-align:center\">" + y + "</div>";
    }
-   ans +=  "<div style=\"padding:0px 0px 0px 0px;margin:-" +  radius + "px 0px 0px 0px;width:" + radius + "px;line-height:" + (radius) + "px;border-radius:" + (radius/3) + "px;font-size:25px;font-weight:700;text-align:center;vertical-align:middle\">&star;</div>";
+   ans +=  '<div style="padding:0px 0px 0px 0px;margin:-' 
+           + radius + 'px 0px 0px 0px;width:' 
+           + radius + 'px;line-height:' 
+           + radius + 'px;border-radius:' 
+           + (radius/3) + 'px;font-size:25px;font-weight:700;text-align:center;vertical-align:middle">&star;</div>';
    return ans;
-
 }
  
 function Shape (num, words, urlas, shapename,x, y, w, h, fs, cl, bc, fc,tm,zIndex,starttime, fontfamily,slope)

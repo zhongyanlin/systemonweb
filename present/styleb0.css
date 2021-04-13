@@ -21,29 +21,29 @@ A:visited {COLOR: #0000AA;TEXT-DECORATION: none}
 .OrangeButton{cursor:pointer;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background-color:#F79819;background:linear-gradient(#F79819,#FFAA2B) #F79819;color:antiquewhite;font-family:inherit;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
 .BlackButton{cursor:pointer;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background-color:#000000;background:linear-gradient(#000000,#1D1212) #000000;color:antiquewhite;font-family:inherit;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
 .B00BBB{cursor:pointer;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background-color:#00BBBB;background:linear-gradient(#00BBBB,#1DCDCD) #00BBBB;color:antiquewhite;font-family:inherit;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;}
-input.B22BB00 {background-color:#22BB00;color:#000000;font-weight:300;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
+input.B22BB00 {background-color:#22BB00;color:#000000;font-weight:300;font-family:times}
 .selectoption{background-color:#2F4034;color:white;}
 .selectsel{background-color:transparent;color:white;border:1px #c0c0c0 solid}
-input.leftd {background-color:#FFFFCC;color:black;border:0px;text-align:left;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.left {background-color:#FFFFFF;color:black;border:0px;text-align:left;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.right {background-color:#FFFFFF;color:black;border:0px;text-align:right;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.underline {background-color:#FFFFFF;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.flat {background-color:#FFFFFF;color:blue;border:0px;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.dunderline {background-color:#FFFFCC;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.samebg {background-color:transparent;border:0;text-align:left;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input.dflat {background-color:#FFFFCC;color:blue;border:0px;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-select {background-color:#FFFFFF;color:black;border-width:0px;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-select.selectclass {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#FFFFFF;color: black; border-width:0px;vertical-align:middle;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-textarea {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#FFFFFF;color:black;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-input{background-color:#FFFFFF;color:black;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti; vertical-align:middle}
+input.leftd {background-color:#FFFFCC;color:black;border:0px;text-align:left;vertical-align:middle;font-family:times}
+input.left {background-color:#FFFFFF;color:black;border:0px;text-align:left;vertical-align:middle;font-family:times}
+input.right {background-color:#FFFFFF;color:black;border:0px;text-align:right;vertical-align:middle;font-family:times}
+input.underline {background-color:#FFFFFF;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:times}
+input.flat {background-color:#FFFFFF;color:blue;border:0px;vertical-align:middle;font-family:times}
+input.dunderline {background-color:#FFFFCC;color:blue;text-decoration:underline; border:0; text-align:left;vertical-align:middle;font-family:times}
+input.samebg {background-color:transparent;border:0;text-align:left;vertical-align:middle;font-family:times}
+input.dflat {background-color:#FFFFCC;color:blue;border:0px;vertical-align:middle;font-family:times}
+select {background-color:#FFFFFF;color:black;border-width:0px;font-family:times}
+select.selectclass {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#FFFFFF;color: black; border-width:0px;vertical-align:middle;font-family:times}
+textarea {border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#FFFFFF;color:black;font-family:times}
+input{background-color:#FFFFFF;color:black;font-family:times; vertical-align:middle}
 input.radchk{background-color:transparent}
-body{background:linear-gradient(10deg,#FFFFCC,#FFFFED 10%, #FFFFFF) #FFFFCC;margin:5px 5px 0px 5px;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti;font-weight:680}
-.outset{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;;background:linear-gradient(to right,#2F4034,#394A3E,#A6A6A6);font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-.outset2{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:linear-gradient(#2F4034,#b0b0b0);border:2px #394A3E outset;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-.forcurve1{text-shadow:#060606 -1px -1px;text-align:center;font-weight:bold;color:#DDCC11;font-size:25px;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
+body{background:linear-gradient(10deg,#FFFFCC,#FFFFED 10%, #FFFFFF) #FFFFCC;margin:5px 5px 0px 5px;font-family:times;font-weight:680}
+.outset{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;;background:linear-gradient(to right,#2F4034,#394A3E,#A6A6A6);font-family:times}
+.outset2{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:linear-gradient(#2F4034,#b0b0b0);border:2px #394A3E outset;font-family:times}
+.forcurve1{text-shadow:#060606 -1px -1px;text-align:center;font-weight:bold;color:#DDCC11;font-size:25px;font-family:times}
 .forcurve2{text-shadow:#060606 -1px -1px;text-align:center;font-weight:bold;color:#DDCC11;font-size:21px}
-.outset1{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#F5F5C2;border:1px #F5F5C2 outset;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
-.outset3{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-image:linear-gradient(180deg,#F5F5C2,#FFFFD4);background-color:#FFFFCC;border:1px #394A3E solid;font-family:楷体,KaiTi,KaiTiGB2312,STKaiti}
+.outset1{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-color:#F5F5C2;border:1px #F5F5C2 outset;font-family:times}
+.outset3{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background-image:linear-gradient(180deg,#F5F5C2,#FFFFD4);background-color:#FFFFCC;border:1px #394A3E solid;font-family:times}
 .shadow1 {float:left;background: url(image/trans-shadow.png) no-repeat bottom right;}.shadow1 table {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 div {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 img {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}
 .trig{width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid white}
 .MathJax nobr>span.math>span{border-left-width:0 !important};

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta id=mainmeta http-equiv="Content-Type" content="text/html; charset=gbk"> 
+<title>Showcase</title>
+ 
+<script id=ltxscrpt type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+<style type="text/css">
+.tlmmsty{border:0px black solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px}
+.tlmmline{width:100%}
+.tlmvline{height:100%}
+.tdbutton{border:1px #bbb solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px;border-radius: 0px;font-weight:400}
+.samebg{color:black;font-size:20px;font-family:arial}
+</style>
+</head>    
+<body style="background-imgae:url() !important;background-color:white;margin:0px 5px 0px 5px"> 
+<script>
+var needtranslator = true;
+var orgnum = 0;
+var charset = "utf-8";
+function parseQuery(queryString) 
+{
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+}
+function set()
+{
+      let query = parseQuery(document.location.search);
+      orgnum = query["orgnum"];
+      charset = query["en"];
+      let langcode = query["lang"];
+      var y = opener;
+      if (y != null) 
+      {
+          charset =  y.document.characterSet.replace(/\.js/,'');
+      }
+      if (orgnum == null) 
+          orgnum = 0;
+      else
+          orgnum = parseInt(orgnum);
+      if (charset == null)
+          charset = "utf-8";
+      if (langcode == null)
+          langcode = "en";
+      
+      var umltoolstyles = document.createElement('link');
+      umltoolstyles.rel = 'stylesheet';
+      umltoolstyles.type = 'text/css';
+      umltoolstyles.media = 'screen';
+      umltoolstyles.href = 'styleb' + orgnum + ".css";
+      document.getElementsByTagName('head')[0].appendChild(umltoolstyles);
+      var charsetMetaTag = document.createElement('meta');
+      charsetMetaTag['httpEquiv'] = 'Content-Type';
+        charsetMetaTag['content'] = 'text/html; charset=' + charset;
+        document.getElementsByTagName('head')[0].appendChild(charsetMetaTag);
+        document.write("<script type=text/javascript src=" + langcode + ".js ></scr" + "ipt>"); 
+};
+set();
+</script>
+ 
+<script type="text/javascript"  src="cookie.js"></script>
+<script type="text/javascript"  src="checkHTML.js"></script>
+<script type="text/javascript"  src="attachment.js"></script>
+<script type="text/javascript"  src="curve.js?sn=100&dn=60"></script>
+<script type="text/javascript"  src="findrep.js"></script>
+<script type="text/javascript"  src="installtool.js"></script>
+<script type="text/javascript"  src="umltool.js"></script>
+
+</body>
+</html>
