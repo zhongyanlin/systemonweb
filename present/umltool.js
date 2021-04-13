@@ -373,7 +373,7 @@ if (lj > 0)
 {
    var filenm = locationstr.substring(lj+1);
    locationstr = locationstr.substring(0, lj);
-   if (locationstr.indexOf("http")== 0 && filenm.indexOf("umltool.html")== 0)
+   if (locationstr.indexOf("http")== 0 && filenm.indexOf("index.html")== 0)
    {
        originalurl = locationstr;
        filename = passedfilename;
