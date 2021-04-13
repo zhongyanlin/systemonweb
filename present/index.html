@@ -29,40 +29,37 @@
 var needtranslator = true;
 var orgnum = 0;
 var charset = "gb2312";
+function parseQuery(queryString) 
+{
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+}
 function set()
 {
-      orgnum = document.location.search;
+      
+      let query = parseQuery("?en=utf-8&fn=20210412.html&orgnum=0&lang=en");
+      orgnum = query["orgnum"];
+      charset = query["en"];
+      let langcode = query["lang"];
       var y = opener;
       if (y != null) 
       {
           charset =  y.document.characterSet.replace(/\.js/,'');
-          if (charset == 'GBK')
-          {
-              charset = 'gb2312';
-          }
       }
-      if (isNaN(orgnum))
-      {
-         var j = orgnum.indexOf('en=');
-         if (j !=-1)
-         {
-             
-            var k = orgnum.indexOf('&',j); 
-            if (k==-1) 
-            {
-                k = orgnum.length;
-            }
-            charset = orgnum.substring(j+3,k).replace(/\.js/,'');
-         }
-         j = orgnum.indexOf('orgnum=');
-         if (j!=-1)
-         {
-            orgnum = orgnum.substring(j+7).replace(/[^0-9].*$/,'');
-         
-         }
-      }
-      if (isNaN(orgnum))
+      if (orgnum == null) 
           orgnum = 0;
+      else
+          orgnum = parseInt(orgnum);
+      if (charset == null)
+          charset = "utf-8";
+      if (langcode == null)
+          langcode = "en";
+      
       var umltoolstyles = document.createElement('link');
       umltoolstyles.rel = 'stylesheet';
       umltoolstyles.type = 'text/css';
@@ -73,7 +70,7 @@ function set()
       charsetMetaTag['httpEquiv'] = 'Content-Type';
         charsetMetaTag['content'] = 'text/html; charset=' + charset;
         document.getElementsByTagName('head')[0].appendChild(charsetMetaTag);
-        document.write("<script type=text/javascript src=" + charset + ".js ></scr" + "ipt>"); 
+        document.write("<script type=text/javascript src=" + langcode + ".js ></scr" + "ipt>"); 
 };
 set();
 </script>
