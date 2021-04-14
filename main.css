@@ -5,7 +5,7 @@ body{margin:0px 0px 0px 0px}
 #title span:nth-child(1){background-color:white;color:#4444bb;padding:5px 5px 5px 5px}
 #title span:nth-child(2){color:white;padding:5px 5px 5px 5px}
 #me{display:inline;float:right;color:white;
-    padding:0px 20px 0px 0px; font-size:16px}
+    padding:0px 0px 0px 0px; font-size:16px}
 #main
 { 
   text-align: center;width:100%;
