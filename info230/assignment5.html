@@ -1,0 +1,49 @@
+
+<html>
+<head>
+<style>
+@keyframes movebox
+{
+   from{transform:scale(0.1, 0.1); left:20px}
+   to{transform:scale(1.0, 1.0); left:200px}
+}
+@keyframes movebg
+{
+   from{background-position:0px 0px}
+   to{background-position:500px 300px}
+}
+#p0
+{
+   position:absolute;left:200px;
+   animation:movebox 15s 0s 1
+}
+#p1{width:500px;position:absolute;
+    height:250px;left:125px;
+    transform:skewX(-45deg);
+    background-image:url(11.jpg);
+    animation:movebg 3s 15s 1
+   }
+#p2{width:500px;position:absolute;
+    height:500px;
+    top:250px;
+    background-image:url(12.jpg);
+    animation:movebg 3s 18s 1;
+  }
+#p3{width:250px;position:absolute;
+    height:500px;
+    top:125px;
+    left:500px;
+    transform:skewY(-45deg); 
+    background-image:url(13.jpg);
+    animation:movebg 3s 21s infinite
+   }
+</style>
+</head>
+<body>
+<div id=p0>
+<div id=p1>QQ</div>
+<div id=p2></div>
+<div id=p3></div>
+</div>
+</body>
+</html>
