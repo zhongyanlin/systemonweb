@@ -543,7 +543,8 @@ onload = function()
     {
         let c = this.value;
         let dl = $('courselist');
-        for (let l = 0;l < dl.options.length; l++)
+        let l=0;
+        for (l = 0;l < dl.options.length; l++)
         {
             if (dl.options[l].value == c) break;
         }
@@ -872,7 +873,8 @@ function match()
     }
     if (dup[0]== null)
     {
-        for (let j=0; j < g[0].length; j++)
+        let j=0;
+        for (j=0; j < g[0].length; j++)
         {
            let f = parseFloat(g[0][j]);
            if (''+f != 'NaN') break;
