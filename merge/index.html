@@ -507,6 +507,7 @@ let bl = [0,0,0];
 let maintbl = null;
 let source0 = new Array();
 let mergebtn, matchbtn, swapbtn, headingset;
+let courselistobj = [];
 onload = function()
 {
     source0[0]  = $('bbsource').value;
@@ -520,16 +521,29 @@ onload = function()
     mergebtn.style.display = 'none';
     swapbtn.style.display = 'none';
     headingset.style.display = 'none';
-    let course = GetCookie("course");
-    let courselist = GetCookie("courselist");
-    if (courselist!=null)
+    let course = localStorage["course"];
+    let courseliststr = localStorage["courselist"];
+     
+    var regl = $("reglist");
+    var regarrstr = localStorage["reglist"];
+    if (regarrstr!=null)
     {
-        let cs = courselist.split(/\n/);
-        let dl = $('courselist');
-        for (let l = 0;l < cs.length; l++)
+       var regarr = JSON.parse(regarrstr);
+       for (let l = 0;l < regarr.length; l++)
         {
             let option = document.createElement('option');
-            option.value = cs[l];
+            option.value = regarr[l][0];
+           regl.appendChild(option);
+        }
+    }
+    if (courseliststr!=null)
+    {
+        courselistobj = JSON.parse(courseliststr);
+        let dl = $('courselist');
+        for (let l = 0;l < courselistobj.length; l++)
+        {
+            let option = document.createElement('option');
+            option.value = courselistobj[l];
             dl.appendChild(option);
         }
     }
@@ -550,17 +564,15 @@ onload = function()
         }
         if (l == dl.options.length)
         {
-             let option = document.createElement('option');
+            let option = document.createElement('option');
             option.value = c;
             dl.appendChild(option);
             if (c!='')
             {
-                SetCookie("course", c); 
-                let q =GetCookie("courslist");
-                if (q == null)
-                SetCookie("courselist",c);
-                else
-                SetCookie("courselist", q + "\n" + c);
+                localStorage["course"] = c; 
+                let q =localStorage["courslist"];
+                courselistobj[courselistobj.length] = c;
+                localStorage["courselist"] = JSON.stringify(courselistobj);  
             }
             
         }
@@ -568,18 +580,28 @@ onload = function()
         loadcoursesource(c);
         
     } 
-    
 }
-
+function changedsource(t)
+{
+    var v = t.value;
+    var alls = localStorage['reglist'];
+    if (alls!=null)
+    {
+        var x = JSON.parse(alls);
+        for (var i=0; i < x.length; i++)
+            if (v == x[i][0])
+        {
+            $('targetchar').value = x[i][1];
+        }
+    }
+}
 function loadcoursesource(course)
 {
     for(let cl=0; cl < 3; cl+=2)
     {
-        let s0 = GetCookie("source"+course + cl);
-        if (s0!=null)
-            maintbl.rows[1].cells[cl].getElementsByTagName('textarea')[0].value = s0;
-        else 
-            maintbl.rows[1].cells[cl].getElementsByTagName('textarea')[0].value = source0[cl/2];
+        let s0 = localStorage["source"+course + cl];
+        if (s0==null) s0 = source0[cl/2];
+        maintbl.rows[1].cells[cl].getElementsByTagName('textarea')[0].value = s0;
             
     }
 }
@@ -602,7 +624,7 @@ function parse(cl)
     }
     
     let source = maintbl.rows[1].cells[cl].childNodes[0].value;
-    SetCookie("source"+ $('course').value + cl, source);
+    localStorage["source"+ $('course').value + cl] = source;
     if (delimiter == '  ')
     {    
        source = source.replace(/[ ][ ]+/g,'\t');
@@ -1220,42 +1242,7 @@ function nullall()
         field.value = '';
     } 
 }
-
-function getCookieVal(offset)
-{
-    let endstr = document.cookie.indexOf(";", offset);
-    if (endstr == -1)
-        endstr = document.cookie.length;
-    return decodeURIComponent(document.cookie.substring(offset, endstr));
-}
-function GetCookie(name)
-{
-    return localStorage[name];
-   /*
-   let s = GetCookie0(name + "__0");
-   if (s == null)
-     return GetCookie0(name);
-   let j = 1;
-   while (true)
-   {
-       let x = GetCookie0(name + "__" + (j++));
-       if (x == null) break;
-       s += x;
-   }
-   return s;
-        */
-}
  
-
-function delCookie(name)
-{
-    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-function SetCookie(name, value, expdays)
-{
-    localStorage[name] = value;
-     
-}
 
 function csv()
 {
@@ -1272,10 +1259,17 @@ function csv()
     }
     
     let td = maintbl.rows[5].cells[0];
-    td.innerHTML = '<textarea style="width:100%" id="result" rows="' + (b.length+1) + '">' + s + '</textarea>'        
+    td.innerHTML = '<textarea style="width:100%" id="result" rows="' + (b.length+1) + '">' + s + '</textarea>'  
+     + '<input class=button  type="button" style=float:center id="btnclip" value="ToClipboard" onclick="toclip()">';
    
 }
-
+function toclip() {
+  var copyText = document.getElementById("result");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  document.execCommand("copy");
+  alert("Text has been copied to clipboard. Now you start a window's texteditor/nopdatd and invoke paste inside" + copyText.value);
+}
 function swap(row)
 {
     let s = prompt("What number of column is your final score column? It's better to swap it with the email (3rd) column. Enter a pair of columns:", "3 10");
@@ -1312,6 +1306,7 @@ function view(btn)
    }
 }
 let oldt = new Array();
+let allregs = [];
 function replace()
 {
    let t = $('googlesource');
@@ -1321,10 +1316,24 @@ function replace()
    let s =  $('sourcechar');
    let c =  $('targetchar');
    let a = $('regex');
+   var rs = localStorage['myreg'];
+   if (rs == null)
+       allregs = []; 
+   for (var i =0; i< allregs.length; i++)
+       if (allregs[i][0] == s.value) break;
+   if ( i == allregs.length)
+   {
+       allregs[allregs.length] = [s.value,c.value];
+       var newitem = document.createElement('option');
+       newitem.value = s.value;
+       $('reglist').appendChild(newitem);
+       localStorage['myreg'] = JSON.stringify(allregs);
+   }
    if (a.checked)
    try
    {
      let r = new RegExp(s.value, "gi");
+     
      oldt[oldt.length] = t.value;
      t.value = t.value.replace(r, c.value);
      undo.style.visibility = 'visible'; 
@@ -1408,9 +1417,9 @@ function undo(btn)
                             <table align="left"><tr>
                                     <td><input class="button" id="view" value="View Tab" onclick="view(this)"></td>
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td><input id="regex" type="checkbox"></td>
+                                    <td><datalist id="reglist"><option></option></datalist><input id="regex"  type="checkbox"></td>
                                     <td>RegEx</td><td>&nbsp;</td>
-                                    <td><input id="sourcechar" size="8"></td>
+                                    <td><input id="sourcechar" onchange="changedsource(this)" size="8" list=reglist></td>
                                     <td><input id="replace" type="button" class="button" style="width:90px" value="Replace By" onclick="replace()"></td>
                                     <td><input id="targetchar" size="8"></td>
                                     <td><input id="undo" type="button" class="button" style="width:90px;visibility:hidden" value="Undo" onclick="undo(this)"></td>
