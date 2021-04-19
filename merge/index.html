@@ -53,7 +53,7 @@ table tr td table{background-color: lightyellow; border-collapse: collapse;borde
    font-size:16px
 }
 /*3*/
-table tr td textarea{font-size:14px;background:lightyellow;border-radius:3px}
+table tr td textarea{font-size:14px;background:lightyellow;border-radius:3px;margin:0px 0px 0px 0px}
 /*4 see data list*/
 
 /*5,8*/
@@ -592,6 +592,7 @@ function changedsource(t)
             if (v == x[i][0])
         {
             $('targetchar').value = x[i][1];
+            $('regex').checked = x[i][2];
         }
     }
 }
@@ -927,7 +928,7 @@ function match()
     }
     let m = 0;
     let mn = 1;
-    let msg =  '<li>Mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><span style=background-color:blue>Left Records without Matching</span>:<table>';
+    let msg =  '<li>Mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><div  style=background-color:blue;color:white>Left Records without Matching</div><table>';
     let  missleft = false;
     let rw0=0, rw1=0;
     for (m=0; m < b.length; m++)
@@ -952,7 +953,7 @@ function match()
             dup[m].splice(0,1);
         }
     }
-    msg += '</table></td><td valign=top><span style=background-color:red>Right Records without Matching</span><table>'
+    msg += '</table></td><td valign=top><div style=background-color:red>Right Records without Matching</div><table>'
     let  missright = mism.length>0;
      
     for (let j=0; j < mism.length; j++)
@@ -989,13 +990,13 @@ function match()
     }
     if (hasd)
         msg += '<li>What do you want to do with the <span style=background-color:orange;color:black>' + dcount + ' duplicates</span>?<br><input name=dup value=l  type=radio  onclick=dup(0)>Take the lowest<input name=dup value=h type=radio onclick=dup(2)>Take the highest<input name=dup value=a  type=radio  onclick=dup(1)>Take the average  <input name=dup value=h type=radio onclick=dup(3) checked > Take the first  <input name=dup value=h type=radio onclick=dup(4)> Take the last<br>';
-    msg += '<br><li>Next, you need to decide which column on the right is going to merge to which column on the left. Please note that the red boxes on heading area are editable: typing inluding keeping as is, selecting, or clearing, correspoding to merging as a new column in the gradebook, overriding an existing column, or discarding that data column, respectively. The Null Heading button clears all headings'; 
+    msg += '<br><li>Next, you need to decide which column on the right is going to merge to which column on the left. Please note that the red boxes on heading area are editable: typing or keeping as is, selecting, or clearing, correspoding to merging as a new column in the gradebook, overriding an existing column, or discarding that data column, respectively. The Null Heading button clears all headings'; 
     
     if (msg!='')
     {
         msg += "<br><br><li>The curved box allows you to enter a fomula to convert raw score x to blackboard score as full-point scale you declared on Blackboard may be different from that in the other systems. Using + for plus, - for minus as usual, but * from multiplication, and / for division, e.g, x/10 means the raw score will be converted to one tenth of the score to Blackboard"
         let dv = document.createElement('div');
-        dv.style.cssText = 'padding:4px;position: absolute;top:0;left: 50%;-webkit-transform: translate(-50%, 0);transform: translate(-50%, 0);z-index:20;background-color:#f0f0f0;border:1px gray outset;border-radius:4px';
+        dv.style.cssText = 'padding:4px;position: absolute;top:200px;left: 50%;-webkit-transform: translate(-50%, 0);transform: translate(-50%, 0);z-index:20;background-color:#f0f0f0;border:1px gray outset;border-radius:4px';
         dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a><br><br>Matchstrength:<select name=sel onchange=redomatch(this)><option value=1 " + (matchstrength==1?"selected":"") + ">At least one name part</option><option value=2 " + (matchstrength==2?"selected":"") + ">At least two name parts</option><option value=3 " + (matchstrength==3?"selected":"") + ">require email matching</option></select></center><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
         dv.id = 'pop';
         document.body.appendChild(dv);
@@ -1260,7 +1261,7 @@ function csv()
     
     let td = maintbl.rows[5].cells[0];
     td.innerHTML = '<textarea style="width:100%" id="result" rows="' + (b.length+1) + '">' + s + '</textarea>'  
-     + '<input class=button  type="button" style=float:center id="btnclip" value="ToClipboard" onclick="toclip()">';
+     + '<input class=button  type="button" style=float:center id="btnclip" value="Copy" onclick="toclip()">';
    
 }
 function toclip() {
@@ -1268,7 +1269,7 @@ function toclip() {
   copyText.select();
   copyText.setSelectionRange(0, 99999); /* For mobile devices */
   document.execCommand("copy");
-  alert("Text has been copied to clipboard. Now you start a window's texteditor/nopdatd and invoke paste inside" + copyText.value);
+  alert("Text has been copied to clipboard. Now you start a window's text editor or notepad and invoke the Paste inside the editor");
 }
 function swap(row)
 {
@@ -1316,18 +1317,22 @@ function replace()
    let s =  $('sourcechar');
    let c =  $('targetchar');
    let a = $('regex');
-   var rs = localStorage['myreg'];
+   var rs = localStorage['reglist'];
    if (rs == null)
        allregs = []; 
+   else
+       allregs = JSON.parse(rs);
    for (var i =0; i< allregs.length; i++)
-       if (allregs[i][0] == s.value) break;
+       if (allregs[i][0] == s.value) 
+           break;
    if ( i == allregs.length)
    {
-       allregs[allregs.length] = [s.value,c.value];
+       allregs[allregs.length] = [s.value,c.value, ($('regex').checked)];
        var newitem = document.createElement('option');
        newitem.value = s.value;
        $('reglist').appendChild(newitem);
-       localStorage['myreg'] = JSON.stringify(allregs);
+       $('sourcechar').list = 'reglist';
+       localStorage['reglist'] = JSON.stringify(allregs);
    }
    if (a.checked)
    try
@@ -1409,15 +1414,15 @@ function undo(btn)
 
 <table align="center" border="0" cellpadding="1" cellspacing="5" style="width:100%">
 	<tbody>
-		<tr>
-                    <td style="background-color:lightgray; text-align:left"><strong>CSV formated full or partial Gradebook downloaded from Blackboard</strong><br>
+		<tr >
+                    <td style="background-color:lightgray;text-align:left;"><strong>CSV formated full or partial Gradebook downloaded from Blackboard</strong><br>
                     Course: <datalist id="courselist"></datalist><input id="course" list="courselist"></td>
 			<td>&nbsp;</td>
                         <td style="background-color:lightgray; text-align:left"><strong>Score report copied from Google form, Github, zybooks or others</strong><br>
                             <table align="left"><tr>
                                     <td><input class="button" id="view" value="View Tab" onclick="view(this)"></td>
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td><datalist id="reglist"><option></option></datalist><input id="regex"  type="checkbox"></td>
+                                    <td><datalist id="reglist"></datalist><input id="regex"  type="checkbox"></td>
                                     <td>RegEx</td><td>&nbsp;</td>
                                     <td><input id="sourcechar" onchange="changedsource(this)" size="8" list=reglist></td>
                                     <td><input id="replace" type="button" class="button" style="width:90px" value="Replace By" onclick="replace()"></td>
@@ -1426,11 +1431,11 @@ function undo(btn)
                                    </tr></table></td>
 		</tr>
 		<tr>
-			<td style="vertical-align:top"><textarea style="width:100%" id="bbsource" rows="20">"Last Name","First Name","Username","Student ID","Last Access","Availability","recitation0129 [Total Pts: 1 Score] |561031"
+			<td style="text-align:left;vertical-align:top;border:1px lightgray solid"><textarea style="width:99%;margin:0px 0px 0px 0px;border:0px;" id="bbsource" rows="20">"Last Name","First Name","Username","Student ID","Last Access","Availability","recitation0129 [Total Pts: 1 Score] |561031"
 "Honter","Gred","dffg22@students.desu.edu","D10000001","2021-02-27 18:14:54","Yes","43.00"
 "Smith","Juan","qwer124@students.desu.edu","D10000002","2021-02-27 22:44:54","Yes","85.00"
 </textarea><td>&nbsp;</td>
-			<td style="text-align:left; vertical-align:top"><textarea style="width:100%"  id="googlesource" required="required" rows="20">Last Name        First Name    email    item1     item2
+			<td style="text-align:left;vertical-align:top;border:1px lightgray solid"><textarea style="width:99%;margin:0px 0px 0px 0px;border:0px;"  id="googlesource" required="required" rows="20">Last Name        First Name    email    item1     item2
 Sample    Student  samplestudent@desu.edu  70  80
 "Honter"  "Gred"  "dffg22@students.desu.edu"  40  50
 "Honter"   "Gred"  "dffg22@students.desu.edu"  45   67</textarea></td>
