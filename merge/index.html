@@ -785,17 +785,31 @@ function dup(k)
         }
     }
 }
-function copyc(i)
+function copyc(i, mark)
 {
    let v= new Array();
    for (let j=0; j < g[i].length; j++)
    {
        v[j] = g[i][j];
    }
+   v[v.length] = mark;
    return v;
+}
+var matchstrength = 1;// email, two name, 1 name
+function redomatch(sel)
+{
+    matchstrength = sel.options[sel.selectedIndex].value;
+    closethis();
+    parse(2);
+    match();
 }
 function match()
 {
+    duplicate = [];
+    oldg = [];
+    mid = 0;
+    pairb =  pairg = -1;
+    clickedcellb = clickedcellg = null;
     if (b == null || g == null || b.length <2 || g.length<2)
     {
         alert('Enter source and Parse first');
@@ -819,7 +833,7 @@ function match()
         for (let j=0; j < g[i].length; j++)
             if (g[i][j] == null)
                 g[i][j] = "";
-            else g[i][j] = g[i][j].replace(/^[ ]+/,'').replace(/[ ]+$/,'');;
+            else g[i][j] = g[i][j].replace(/^[ ]+/,'').replace(/[ ]+$/,''); 
         let m;
         let arr = new Array();
         for (m=0; m < b.length; m++)
@@ -854,7 +868,7 @@ function match()
          //maintbl.rows[6].cells[0].getElementsByTagName('textarea')[0].value  += '\n' + arr[arr.length-1];
          m = arr[arr.length-1];
          //document.writeln("i=" +i + ", m=" + m + ", m%1000=" + m%1000 + "<br>");
-         if (m < 1000)
+         if (m < matchstrength*1000)
          {
              mism[mism.length] = i;
          }
@@ -914,10 +928,11 @@ function match()
     }
     msg += '</table></td><td valign=top>All mismatches on right:<table>'
     let  missright = mism.length>0;
+     
     for (let j=0; j < mism.length; j++)
     {
         let i = mism[j];
-        newg[newg.length] = copyc(i);
+        newg[newg.length] = copyc(i, 'missed');
         msg +='<tr>';
         for (let l=0; l < gi; l++)
         {
@@ -926,8 +941,7 @@ function match()
         msg += '</tr>'
     }
     msg += "</table></td></tr></table><br>";
-    if (!missright || !missleft)
-        msg = '';
+    if (!missright && !missleft)  msg = '';
     let hasd = false;
     for (m=0; m < b.length; m++)
     {
@@ -940,7 +954,7 @@ function match()
         for(let j=0; j < dup[m].length; j++)
         {
             let i = dup[m][j];
-            newg[newg.length] = copyc(i);
+            newg[newg.length] = copyc(i,'duplicate' + m);
             x[x.length] = newg.length-1;
         }
         duplicate[m] = x;
@@ -954,7 +968,7 @@ function match()
         msg += "<br><br><li>The curved box allows you to enter a fomula to convert raw score x to blackboard score as full-point scale you declared on Blackboard may be different from that in the other systems. Using + for plus, - for minus as usual, but * from multiplication, and / for division, e.g, x/10 means the raw score will be converted to one tenth of the score to Blackboard"
         let dv = document.createElement('div');
         dv.style.cssText = 'padding:4px;position: absolute;top:0;left: 50%;-webkit-transform: translate(-50%, 0);transform: translate(-50%, 0);z-index:20;background-color:#f0f0f0;border:1px gray outset;border-radius:4px';
-        dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a></center><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
+        dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a></center><select name=sel onchange=redomatch(this)><option value=1 " + (matchstrength==1?"selected":"") + ">One name</option><option value=2 " + (matchstrength==2?"selected":"") + ">Two names</option><option value=3 " + (matchstrength==3?"selected":"") + ">Email</option></select><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
         dv.id = 'pop';
         document.body.appendChild(dv);
     }
@@ -977,7 +991,23 @@ function match()
     s += "</tr>";
     for (let i=1; i <g.length; i++)
     {
-        s += '<tr bgcolor=' + (i==0?'lightgray':(i>=b.length?'lightyellow':'white')) + '>';
+        let bgcolor = 'lightgray';
+        let mark = null;
+        if (i >0 &&  i < b.length) bgcolor = 'white';
+        else if (g[i].length>=maxcol && g[i][maxcol].indexOf('duplicate') == 0)
+        {
+            bgcolor = 'orange';
+            let kk = parseInt(g[i][maxcol].substring(9));
+            mark = b[kk][0];
+            for (let k1 = 1; k1 < bi; k1++)
+                mark += " " + b[kk][k1];
+        } 
+        else if (g[i].length>=maxcol && g[i][maxcol].indexOf('miss') == 0)
+        {   
+            bgcolor = 'red'; 
+            
+        }
+        s += '<tr bgcolor=' +  bgcolor + '>';
         if (g[i] == null)
         {  
              g[i] = new Array(maxcol);
@@ -989,10 +1019,14 @@ function match()
             //s += '<td colspan=' + maxm +'>&nbsp&nbsp;</td>';
         }
         else 
-            for (let j=0; j < maxcol; j++)
+        for (let j=0; j < maxcol; j++)
         {
-            if (g[i][j]==null)g[i][j] = '';
-            s += '<td ' + (j==0 && i>=b.length ?'onclick=moveto('+i+',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '><div style="' + (j<bi?"":"width:80px;overflow:hidden") + '"><nobr>' + (g[i][j]==null?"":g[i][j]) + '</nobr></div></td>';
+            if (g[i][j]==null)
+                g[i][j] = '';
+            s += '<td ';
+            if (j ==0 && mark!=null)
+                s += ' onmouseover="showdup(\'' + mark + '\','+ i +')" onmouseexit=cleardup('+ i +') ';
+            s +=   (j==0 && i>=b.length ?'onclick=moveto('+i+',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '><div style="' + (j<bi?"":"width:80px;overflow:hidden") + '"><nobr>' + (g[i][j]==null?"":g[i][j]) + '</nobr></div></td>';
         }
         s += '</tr>';
     }
@@ -1004,7 +1038,24 @@ function match()
     //$('discard').enabled = true;
     
 }
- 
+function showdup(mark, i)
+{
+    var tbl0 = $('tbl0');
+    for(var k=tbl0.rows.length; k <= i; k++)
+    {
+        tbl0.insertRow(-1);
+        tbl0.rows[k].insertCell(0);
+        tbl0.rows[k].cells[0].colSpan = b[0].length;
+        tbl0.rows[k].cells[0].align = 'right';
+        tbl0.rows[k].cells[0].innerHTML = '&nbsp;'
+    }
+    tbl0.rows[i].cells[0].innerHTML = mark;
+   
+}
+function cleardup(i)
+{
+    
+}
 function closethis()
 {
    let dv = $('pop');
