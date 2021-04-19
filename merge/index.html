@@ -491,7 +491,7 @@ function CSVParse()
         let s = '<table border=1 style="border-collapse:collapse" >';
         for (let i = 0; i < x.length; i++)
         {
-            s += "<tr>";
+            s += "<tr height=28>";
             for (let j = 0; j < x[i].length; j++)
             {
                 let sp=1; for (let k=j+sp; k < x[i].length && x[i][k] == null; k++,sp++);
@@ -623,7 +623,6 @@ function parse(cl)
     
     for (let i=0; i <m.length; i++)
     {
-        
         if (m[i].length < 2) 
         {
             m.splice(i, 1);
@@ -634,7 +633,7 @@ function parse(cl)
         {
             maxcol = m[i].length;
         }
-        s += '<tr bgcolor=' + (i==0?'lightgray':'white') + '>';
+        s += '<tr height=28 bgcolor=' + (i==0?'lightgray':'white') + '>';
         for (let j=0; j <  m[i].length ; j++)
         {
             s += '<td align=' + (j<l?'left':'right width=85 ') + '><div style="' + (j<l?"":"width:80px;overflow:hidden") + '"><nobr>' + m[i][j] + '</nobr></div></td>';
@@ -731,11 +730,11 @@ let oldg = [];
 
 function dup(k)
 {
-     
     let bi = bl[0], gi = bl[2];
     let tbl = $('tbl2');
     for (let y in duplicate)
     {
+        //alert('y=' + y + ',l=' +  g[y].length);
         if (oldg[y]==null) 
             oldg[y] = new Array(maxcol);
         let s = duplicate[y];
@@ -764,7 +763,7 @@ function dup(k)
            }
         }
         else
-        for (let j=gi; j < g[y].length; j++)
+        for (let j=gi; j < maxcol; j++)
         {
            
            let arr = new Array();
@@ -781,7 +780,12 @@ function dup(k)
            if (oldg[y][j]==null)
                oldg[y][j] = g[y][j];
            g[y][j] = q;
-           tbl.rows[y].cells[j].innerHTML = q;
+           if (y >= tbl.rows.length)
+               alert('tbl2.rows[' +y + '] not exist');        
+           else if(j < tbl.rows[y].cells.length)
+                tbl.rows[y].cells[j].innerHTML = q;
+           else 
+               alert('tbl2.rows[' +y + '].cells[' + j + '] not exist');
         }
     }
 }
@@ -901,7 +905,7 @@ function match()
     }
     let m = 0;
     let mn = 1;
-    let msg =  '<li>Mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top>All mismatches on left:<table>';
+    let msg =  '<li>Mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><span style=background-color:blue>Left Records without Matching</span>:<table>';
     let  missleft = false;
     let rw0=0, rw1=0;
     for (m=0; m < b.length; m++)
@@ -911,7 +915,7 @@ function match()
             //newg[m] = new Array(g[0].length);
             missleft = true;
             if (m>0){
-            msg +='<tr>';
+            msg +='<tr height=28>';
             for (let l=0; l < bi; l++)
             {
                msg += '<td bgcolor=white onclick="pair(this,' + m + ',' + (rw0++) +  ')">' + b[m][l] + '</td>';
@@ -926,14 +930,14 @@ function match()
             dup[m].splice(0,1);
         }
     }
-    msg += '</table></td><td valign=top>All mismatches on right:<table>'
+    msg += '</table></td><td valign=top><span style=background-color:red>Right Records without Matching</span><table>'
     let  missright = mism.length>0;
      
     for (let j=0; j < mism.length; j++)
     {
         let i = mism[j];
         newg[newg.length] = copyc(i, 'missed');
-        msg +='<tr>';
+        msg +='<tr height=28>';
         for (let l=0; l < gi; l++)
         {
              msg += '<td bgcolor=white onclick="pair1(this,' + (newg.length-1) + ',' + (rw1++) +   ')">' + g[i][l] + '</td>';
@@ -943,6 +947,7 @@ function match()
     msg += "</table></td></tr></table><br>";
     if (!missright && !missleft)  msg = '';
     let hasd = false;
+    let dcount = 0;
     for (m=0; m < b.length; m++)
     {
         if (dup[m] == null || dup[m].length == 0)
@@ -955,12 +960,13 @@ function match()
         {
             let i = dup[m][j];
             newg[newg.length] = copyc(i,'duplicate' + m);
+            dcount++;
             x[x.length] = newg.length-1;
         }
         duplicate[m] = x;
     }
     if (hasd)
-        msg += '<li>What do you want to do with the duplicates?<br><input name=dup value=l  type=radio  onclick=dup(0)>Take the lowest<input name=dup value=h type=radio onclick=dup(2)>Take the highest<input name=dup value=a  type=radio  onclick=dup(1)>Take the average  <input name=dup value=h type=radio onclick=dup(3) checked > Take the first  <input name=dup value=h type=radio onclick=dup(4)> Take the last<br>';
+        msg += '<li>What do you want to do with the <span style=background-color:orange;color:black>' + dcount + ' duplicates</span>?<br><input name=dup value=l  type=radio  onclick=dup(0)>Take the lowest<input name=dup value=h type=radio onclick=dup(2)>Take the highest<input name=dup value=a  type=radio  onclick=dup(1)>Take the average  <input name=dup value=h type=radio onclick=dup(3) checked > Take the first  <input name=dup value=h type=radio onclick=dup(4)> Take the last<br>';
     msg += '<br><li>Next, you need to decide which column on the right is going to merge to which column on the left. Please note that the red boxes on heading area are editable: typing inluding keeping as is, selecting, or clearing, correspoding to merging as a new column in the gradebook, overriding an existing column, or discarding that data column, respectively. The Null Heading button clears all headings'; 
     
     if (msg!='')
@@ -968,14 +974,14 @@ function match()
         msg += "<br><br><li>The curved box allows you to enter a fomula to convert raw score x to blackboard score as full-point scale you declared on Blackboard may be different from that in the other systems. Using + for plus, - for minus as usual, but * from multiplication, and / for division, e.g, x/10 means the raw score will be converted to one tenth of the score to Blackboard"
         let dv = document.createElement('div');
         dv.style.cssText = 'padding:4px;position: absolute;top:0;left: 50%;-webkit-transform: translate(-50%, 0);transform: translate(-50%, 0);z-index:20;background-color:#f0f0f0;border:1px gray outset;border-radius:4px';
-        dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a></center><select name=sel onchange=redomatch(this)><option value=1 " + (matchstrength==1?"selected":"") + ">One name</option><option value=2 " + (matchstrength==2?"selected":"") + ">Two names</option><option value=3 " + (matchstrength==3?"selected":"") + ">Email</option></select><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
+        dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a><br><br>Matchstrength:<select name=sel onchange=redomatch(this)><option value=1 " + (matchstrength==1?"selected":"") + ">At least one name part</option><option value=2 " + (matchstrength==2?"selected":"") + ">At least two name parts</option><option value=3 " + (matchstrength==3?"selected":"") + ">require email matching</option></select></center><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
         dv.id = 'pop';
         document.body.appendChild(dv);
     }
      
     g = newg;
     
-    let s = makelist(b[0],bi) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr bgcolor=lightgray>';
+    let s = makelist(b[0],bi) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr height=28 bgcolor=lightgray>';
     if (g[0] == null)
     {
         g[0] = new Array(maxm);
@@ -993,7 +999,13 @@ function match()
     {
         let bgcolor = 'lightgray';
         let mark = null;
-        if (i >0 &&  i < b.length) bgcolor = 'white';
+        if (i >0 &&  i < b.length) 
+        {
+            if (g[i] == null) 
+                bgcolor = 'blue'
+            else
+                bgcolor = 'white';
+        }
         else if (g[i].length>=maxcol && g[i][maxcol].indexOf('duplicate') == 0)
         {
             bgcolor = 'orange';
@@ -1007,7 +1019,7 @@ function match()
             bgcolor = 'red'; 
             
         }
-        s += '<tr bgcolor=' +  bgcolor + '>';
+        s += '<tr height=28 bgcolor=' +  bgcolor + '>';
         if (g[i] == null)
         {  
              g[i] = new Array(maxcol);
@@ -1041,14 +1053,18 @@ function match()
 function showdup(mark, i)
 {
     var tbl0 = $('tbl0');
-    for(var k=tbl0.rows.length; k <= i; k++)
+    let N = tbl0.rows.length;
+    for(var k=N; k <= i; k++)
     {
         tbl0.insertRow(-1);
-        tbl0.rows[k].insertCell(0);
-        tbl0.rows[k].cells[0].colSpan = b[0].length;
+        tbl0.rows[k].outerHTML = '<tr height=28><td colspan=' + b[0].length + ' align=right>&nbsp;</td></tr>';
+       /* tbl0.rows[k].cells[0].colSpan = b[0].length;
         tbl0.rows[k].cells[0].align = 'right';
         tbl0.rows[k].cells[0].innerHTML = '&nbsp;'
+        tbl0.rows[k].height = '28';*/
     }
+    for(var k=N; k <= i; k++)
+        tbl0.rows[k].height = '28';
     tbl0.rows[i].cells[0].innerHTML = mark;
    
 }
@@ -1164,7 +1180,12 @@ function merge()
                    merged[i][m] = g[i][j];
                else
                {
-                   merged[i][m] = '' + eval(curve.replace(/x/g,g[i][j])).toFixed(2);
+                   try
+                   {
+                   var se = curve.replace(/x/g,g[i][j]);
+                   var sc = eval(se);
+                   merged[i][m] = '' + sc.toFixed(2);
+                   }catch(e){alert(se + " seems not a good expression. extra%?");}
                }
            }
         }
