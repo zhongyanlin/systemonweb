@@ -57,10 +57,10 @@ table tr td textarea{font-size:14px;background:lightyellow;border-radius:3px;mar
 /*4 see data list*/
 
 /*5,8*/
-body{font-size:20px;font-weight:500}
+body{font-size:20px;font-weight:500;margin:0px 2px 0px 2px}
 
 /*6*/
-h1{text-align:center;text-shadow:1px 1px grey}
+h2{text-align:center;text-shadow:1px 1px grey;background-color:lightgray;margin:0px 0px 0px 0px;padding:6px 3px 3px 3px}
 
 /*7*/
 talbe tr td select{font-family:arial;font-size:16px;font-weight:500}
@@ -1400,7 +1400,7 @@ function undo(btn)
     
     </head>
     <body>
-       <h1 >Merging Blackboard Gradebook with Other Score Reports</h1>
+       <h2 >Merging Blackboard Gradebook with Other Score Reports</h2>
     Instructions:<ol>
         <li>Download the grade book from Blackboard Grade Center with Work Offline option using comma as the separator, copy-paste the file content to the left textbox and parse the text (see 1st <span class=lbl>Parse</span> button)
     <li>Copy-paste/download a score report from the other software such as google form/github/zybooks, copy-paste the file content to the right textbox and the parse the text(see 2nd <span class=lbl>Parse</span> button)
@@ -1419,7 +1419,7 @@ function undo(btn)
                     Course: <datalist id="courselist"></datalist><input id="course" list="courselist"></td>
 			<td>&nbsp;</td>
                         <td style="background-color:lightgray; text-align:left"><strong>Score report copied from Google form, Github, zybooks or others</strong><br>
-                            <table align="left"><tr>
+                            <table align="left" style="background-color:lightgray"><tr>
                                     <td><input class="button" id="view" value="View Tab" onclick="view(this)"></td>
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td><datalist id="reglist"></datalist><input id="regex"  type="checkbox"></td>
