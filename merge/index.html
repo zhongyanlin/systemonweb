@@ -659,7 +659,7 @@ function parse(cl)
         s += '<tr height=28 bgcolor=' + (i==0?'lightgray':'white') + '>';
         for (let j=0; j <  m[i].length ; j++)
         {
-            s += '<td align=' + (j<l?'left':'right width=85 ') + '><div style="' + (j<l?"":"width:80px;overflow:hidden") + '"><nobr>' + m[i][j] + '</nobr></div></td>';
+            s += '<td align=' + (j<l?'left':'right width=85 ') + '><div style="' + (j<l?"":"width:80px;overflow:hidden") + '" ' + (cl>0||i>0?'':' onmouseover=showfull(this) onmouseexit=showless(this) ') + '><nobr>' + m[i][j] + '</nobr></div></td>';
         }
         s += '</tr>'
     }
@@ -676,6 +676,51 @@ function parse(cl)
 }
 let pairb = -1, pairg = -1;
 let clickedcellb = null, clickedcellg = null;
+function findPositionnoScrolling(oElement, win)
+{        
+    if (win == null)
+        win = self;
+    if (oElement == null)
+        return [0, 0];
+    if (typeof (oElement.offsetParent) != 'undefined')
+    {
+        var ii = 0;
+        var originalElement = oElement;
+        for (var posY = 0, posX = 0; ii++ < 20 && oElement != null; oElement = oElement.offsetParent)
+        {
+            posY += oElement.offsetTop;
+            posX += oElement.offsetLeft;
+            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
+            {
+                posY -= oElement.scrollTop;
+                posX -= oElement.scrollLeft;
+            }
+        }
+        return  [posX, posY];
+    }
+    else
+    {
+        return  [oElement.x, oElement.y];
+    }
+}
+function showfull(dv)
+{
+   if ($('popdv') != null) showless(); 
+   var xy = findPositionnoScrolling(dv);
+   var hint = document.createElement('span');
+   hint.style.cssText = 'box-shadow:1px 1px gray;height:28px;z-index:10;position:absolute;left:' + (xy[0]-10) + 'px;top:'
+   + (xy[1]-4) + 'px;background:lightyellow;font-weight:700;color:purple';
+   hint.innerHTML = dv.innerHTML;
+   hint.id = 'popdv';
+   document.body.appendChild(hint);
+   setTimeout("showless()", 2000);
+}
+ 
+function showless()
+{
+   if ($('popdv') != null) 
+   document.body.removeChild($('popdv'));
+}
 function copy(f, t)
 {
     let temp = g[f];
