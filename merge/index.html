@@ -529,7 +529,7 @@ onload = function()
     if (regarrstr!=null)
     {
        var regarr = JSON.parse(regarrstr);
-       for (let l = 0;l < regarr.length; l++)
+       for (let l = 0;l < regarr.length && l < 25; l++)
         {
             let option = document.createElement('option');
             option.value = regarr[l][0];
@@ -973,7 +973,7 @@ function match()
     }
     let m = 0;
     let mn = 1;
-    let msg =  '<li>Mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><div  style=background-color:blue;color:white>Left Records without Matching</div><table>';
+    let msg =  '<li>Some mismatches were found. If a manual match is found, just click the matched pair.<table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><div  style=background-color:blue;color:white>Left Records without Matching</div><table>';
     let  missleft = false;
     let rw0=0, rw1=0;
     for (m=0; m < b.length; m++)
@@ -1372,12 +1372,15 @@ function replace()
            break;
    if ( i == allregs.length)
    {
-       allregs[allregs.length] = [s.value,c.value, ($('regex').checked)];
+       allregs.splice(0,0,[s.value,c.value, ($('regex').checked)]);
+       if (allregs.length > 25)
+           allregs.splice(allregs.length-1,1);
+       localStorage['reglist'] = JSON.stringify(allregs);
        var newitem = document.createElement('option');
        newitem.value = s.value;
-       $('reglist').appendChild(newitem);
+       $('reglist').insertBefore($('reglist').childNodes[0],newitem);
        $('sourcechar').list = 'reglist';
-       localStorage['reglist'] = JSON.stringify(allregs);
+       
    }
    if (a.checked)
    try

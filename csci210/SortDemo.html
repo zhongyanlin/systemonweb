@@ -1,0 +1,896 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">td{font-family:courier;font-size:20px}
+p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margin:5px 5px 0px 5px"><table align="left"><tbody><tr><td align="right" style="color:teal" valign="top"><p>1<br>
+2<br>
+3<br>
+4<br>
+5<br>
+6<br>
+7<br>
+8<br>
+9<br>
+10<br>
+11<br>
+12<br>
+13<br>
+14<br>
+15<br>
+16<br>
+17<br>
+18<br>
+19<br>
+20<br>
+21<br>
+22<br>
+23<br>
+24<br>
+25<br>
+26<br>
+27<br>
+28<br>
+29<br>
+30<br>
+31<br>
+32<br>
+33<br>
+34<br>
+35<br>
+36<br>
+37<br>
+38<br>
+39<br>
+40<br>
+41<br>
+42<br>
+43<br>
+44<br>
+45<br>
+46<br>
+47<br>
+48<br>
+49<br>
+50<br>
+51<br>
+52<br>
+53<br>
+54<br>
+55<br>
+56<br>
+57<br>
+58<br>
+59<br>
+60<br>
+61<br>
+62<br>
+63<br>
+64<br>
+65<br>
+66<br>
+67<br>
+68<br>
+69<br>
+70<br>
+71<br>
+72<br>
+73<br>
+74<br>
+75<br>
+76<br>
+77<br>
+78<br>
+79<br>
+80<br>
+81<br>
+82<br>
+83<br>
+84<br>
+85<br>
+86<br>
+87<br>
+88<br>
+89<br>
+90<br>
+91<br>
+92<br>
+93<br>
+94<br>
+95<br>
+96<br>
+97<br>
+98<br>
+100<br>
+101<br>
+102<br>
+103<br>
+104<br>
+105<br>
+106<br>
+107<br>
+108<br>
+109<br>
+110<br>
+111<br>
+112<br>
+113<br>
+114<br>
+115<br>
+116<br>
+117<br>
+118<br>
+119<br>
+120<br>
+121<br>
+122<br>
+123<br>
+124<br>
+125<br>
+126<br>
+127<br>
+128<br>
+129<br>
+130<br>
+131<br>
+132<br>
+133<br>
+134<br>
+135<br>
+136<br>
+137<br>
+138<br>
+139<br>
+140<br>
+141<br>
+142<br>
+143<br>
+144<br>
+145<br>
+146<br>
+147<br>
+148<br>
+149<br>
+150<br>
+151<br>
+152<br>
+153<br>
+154<br>
+155<br>
+156<br>
+157<br>
+158<br>
+159<br>
+160<br>
+161<br>
+162<br>
+163<br>
+164<br>
+165<br>
+166<br>
+167<br>
+168<br>
+169<br>
+170<br>
+171<br>
+172<br>
+173<br>
+174<br>
+175<br>
+176<br>
+177<br>
+178<br>
+179<br>
+180<br>
+181<br>
+182<br>
+183<br>
+184<br>
+185<br>
+186<br>
+187<br>
+188<br>
+189<br>
+190<br>
+191<br>
+192<br>
+193<br>
+194<br>
+195<br>
+196<br>
+197<br>
+198<br>
+199<br>
+200<br>
+201<br>
+202<br>
+203<br>
+204<br>
+205<br>
+206<br>
+207<br>
+208<br>
+209<br>
+210<br>
+211<br>
+212<br>
+213<br>
+214<br>
+215<br>
+216<br>
+217<br>
+218<br>
+219<br>
+220<br>
+221<br>
+222<br>
+223<br>
+224<br>
+225<br>
+226<br>
+227<br>
+228<br>
+229<br>
+230<br>
+231<br>
+232<br>
+233<br>
+234<br>
+235<br>
+236<br>
+237<br>
+238<br>
+239<br>
+240<br>
+241<br>
+242<br>
+243<br>
+244<br>
+245<br>
+246<br>
+247<br>
+248<br>
+249<br>
+250<br>
+251<br>
+252<br>
+253<br>
+254<br>
+255<br>
+256<br>
+257<br>
+258<br>
+259<br>
+260<br>
+261<br>
+262<br>
+263<br>
+264<br>
+265<br>
+266<br>
+267<br>
+268<br>
+269<br>
+270<br>
+271<br>
+272<br>
+273<br>
+274<br>
+275<br>
+276<br>
+277<br>
+278<br>
+279<br>
+280<br>
+281<br>
+282<br>
+283<br>
+284<br>
+285<br>
+286<br>
+287<br>
+288<br>
+289<br>
+290<br>
+291<br>
+292<br>
+293<br>
+294<br>
+295<br>
+296<br>
+297<br>
+298<br>
+299<br>
+300<br>
+301<br>
+302<br>
+303<br>
+304<br>
+305<br>
+306<br>
+307<br>
+308<br>
+309<br>
+310<br>
+311<br>
+312<br>
+313<br>
+314<br>
+315<br>
+316<br>
+317<br>
+318<br>
+319<br>
+320<br>
+321<br>
+322<br>
+323<br>
+324<br>
+325<br>
+326<br>
+327<br>
+328<br>
+329<br>
+330<br>
+331<br>
+332<br>
+333<br>
+334<br>
+335<br>
+336<br>
+337<br>
+338<br>
+339<br>
+340<br>
+341<br>
+342<br>
+343<br>
+344<br>
+345<br>
+346<br>
+347<br>
+348<br>
+349<br>
+350<br>
+351<br>
+352<br>
+353<br>
+354<br>
+355<br>
+356<br>
+357<br>
+358<br>
+359<br>
+360<br>
+361<br>
+362<br>
+363<br>
+364<br>
+365<br>
+366<br>
+367<br>
+368<br>
+369<br>
+370<br>
+371<br>
+372<br>
+373<br>
+374<br>
+375<br>
+376<br>
+377<br>
+378<br>
+379<br>
+380<br>
+381<br>
+382<br>
+383<br>
+384<br>
+385<br>
+386<br>
+387<br>
+388<br>
+389<br>
+390<br>
+391<br>
+392<br>
+393<br>
+394<br>
+395<br>
+396<br>
+397<br>
+398<br>
+399<br>
+400<br>
+401<br>
+402<br>
+403<br>
+404<br>
+405<br>
+406<br>
+407<br>
+408<br>
+409<br>
+410<br>
+411<br>
+412<br>
+413<br>
+414<br>
+415<br>
+416<br>
+417<br>
+418<br>
+419<br>
+420<br>
+421<br>
+422<br>
+423<br>
+424<br>
+425<br>
+426<br>
+427<br>
+428<br>
+429<br>
+430<br>
+431<br>
+432<br>
+433<br>
+434<br>
+435<br>
+436<br>
+437<br>
+438<br>
+439<br>
+440<br>
+441<br>
+442<br>
+443<br>
+444<br>
+445<br>
+446<br>
+447<br>
+</p></td><td align="left" valign="top"><p><nobr><b>import</b> javax.imageio.*;</nobr><br>
+<nobr><b>import</b> javax.swing.border.*;</nobr><br>
+<nobr><b>import</b> java.awt.event.*;</nobr><br>
+<nobr><b>import</b> javax.swing.text.*;</nobr><br>
+<nobr><b>import</b> java.awt.*;</nobr><br>
+<nobr><b>import</b> java.util.*;</nobr><br>
+<nobr><b>import</b> javax.swing.*;</nobr><br>
+<nobr><b>import</b> java.util.concurrent.*;</nobr><br>
+<nobr><b>import</b> java.util.concurrent.atomic.*;</nobr><br>
+<nobr><b>import</b> javax.imageio.ImageIO;</nobr><br>
+<nobr><b>import</b> java.io.*;</nobr><br>
+<nobr><b>import</b> java.lang.reflect.Method;</nobr><br>
+<nobr></nobr><br>
+<nobr><b>public</b> <b>class</b> SortDemo   <b>extends</b> JFrame</nobr><br>
+<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>class</b> AnimatePanel <b>extends</b> JPanel</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>@Override</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>protected</b> <b>void</b> paintComponent(Graphics g)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>super.paintComponent(g);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>for</b> (Shape shape : shapes)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>shape.drawShape(g);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>@Override</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> Dimension getPreferredSize()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> <b>new</b> Dimension(D_WIDTH, 300);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> <b>static</b> <b>final</b> <b>int</b> D_HEIGHT = 800;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> <b>static</b> <b>final</b> <b>int</b> D_WIDTH = 1000;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> <b>static</b> <b>final</b> <b>int</b> INCREMENT = 8;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AtomicInteger va = <b>new</b> AtomicInteger(0);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AtomicInteger vb = <b>new</b> AtomicInteger(0);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AtomicInteger ua = <b>new</b> AtomicInteger(0);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AtomicInteger ub = <b>new</b> AtomicInteger(0);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AtomicBoolean isswap = <b>new</b> AtomicBoolean(false);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>String sa,sb;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>boolean</b> keepdoing = true;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>int</b> N = 8;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JTextField tt;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JComboBox cmbmethod;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel lblarray = <b>new</b> JLabel(<font color="red">"Array"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel lblmethod = <b>new</b> JLabel(<font color="red">"Method"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel movecount = <b>new</b> JLabel(<font color="red">"#Move"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel txtmovecount = <b>new</b> JLabel(<font color="red">"&nbsp;&nbsp;0"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>Font ft = <b>new</b> Font(<font color="red">"Arial"</font>, Font.PLAIN, 12);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel compcount = <b>new</b> JLabel(<font color="red">"#Comp"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JLabel txtcompcount = <b>new</b> JLabel(<font color="red">"&nbsp;&nbsp;0"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JTextArea tarea = <b>new</b> JTextArea(25, 60);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>Font f1 = <b>new</b> Font(<font color="red">"Courier"</font>, Font.PLAIN, 16);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>JScrollPane scrollPane = <b>new</b> JScrollPane(tarea);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>String [] sources = <b>new</b> String[800];</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>int</b> [] lengths = <b>new</b> int[800];</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>ArrayList&lt;Integer&gt; emptylines = <b>new</b> ArrayList&lt;&gt;();</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>String source = <font color="red">""</font>;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>int</b> ncomp = -1, nmove = -1;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>AnimatePanel demo = <b>new</b> AnimatePanel();</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>int</b> total = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>boolean</b> begin = true;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>Semaphore semaphore = <b>new</b> Semaphore(1);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>Shape[] shapes;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>String letters = <font color="red">""</font>;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>class</b> MySort <b>extends</b> Sort</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> MySort(String [] x)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>super(x);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>oldlinenum = -1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> oldlinenum = -1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> firstline = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> highlight(int lineNumber)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (oldlinenum == -1)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> kk=emptylines.size()-1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>for</b> (; kk &gt;= 0; kk--)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>firstline = emptylines.get(kk);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (firstline !=0 &amp;&amp; firstline &lt; lineNumber) break;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> endline = 760;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (kk &lt; emptylines.size()-2)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>endline = emptylines.get(kk+2);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>StringBuffer s = <b>new</b> StringBuffer();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>for</b> (kk = firstline+1; kk &lt; endline; kk++)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>s.append(sources[kk] + <font color="red">"\n"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.setText(s.toString());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>oldlinenum = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> pos = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><font color="green">//for&nbsp;(kk=0;&nbsp;kk&nbsp;&lt;&nbsp;lineNumber;&nbsp;kk++)&nbsp;&nbsp;pos&nbsp;+=&nbsp;sources[kk&nbsp;+&nbsp;firstline&nbsp;+&nbsp;2].length();</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr>try</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.getHighlighter().removeAllHighlights();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Rectangle viewRect = tarea.modelToView(pos);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.scrollRectToVisible(viewRect);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>catch(Exception e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>lineNumber -= firstline + 2;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight0(lineNumber, Color.YELLOW);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> highlight0(int lineNumber, Color cl)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>try</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.getHighlighter().removeAllHighlights();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> startIndex = tarea.getLineStartOffset(lineNumber);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> endIndex = tarea.getLineEndOffset(lineNumber);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Highlighter.HighlightPainter painter = <b>new</b> DefaultHighlighter.DefaultHighlightPainter(cl);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.getHighlighter().addHighlight(startIndex, endIndex, painter);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>catch(Exception e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> compareTo(int low, <b>int</b> high)<font color="green">//Comparable&nbsp;x,&nbsp;Comparable&nbsp;y)</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (keepdoing == false) <b>return</b> 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>synchronize();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>ua.set(low);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>ub.set(high);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatcompcount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> shapes[low].label.compareTo(shapes[high].label);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> release()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>semaphore.release();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> swap(int a, <b>int</b> b)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (keepdoing == false) <b>return</b> ;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>synchronize();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>isswap.set(true);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>va.set(a);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>vb.set(b);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sa = shapes[a].label;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sb = shapes[b].label;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatmovecount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatmovecount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatmovecount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> goesto(int a, <b>int</b> b)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (keepdoing == false) <b>return</b> ;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>synchronize();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>isswap.set(false);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>va.set(a);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>vb.set(b);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sa = shapes[a].label;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sb = shapes[b].label;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatmovecount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> moveToy(int from, <b>int</b> to)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>goesto(from, to+N);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> moveTox(int from, <b>int</b> to)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>goesto(from+N, to);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> moveTo(int from, <b>int</b> to)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>goesto(from, to);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b>  moveToTemp(int from)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>goesto(from, N);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b> synchronize()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>try</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>semaphore.acquire();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>catch</b> (Exception e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>void</b>  moveFromTemp(int to)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>highlight(Thread.currentThread().getStackTrace()[2].getLineNumber());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>goesto(N, to);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> javax.swing.Timer timer =  <b>new</b> javax.swing.Timer(30, <b>new</b> ActionListener()</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> actionPerformed(ActionEvent e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> a = va.get(), b = vb.get();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (a &gt;= 0 &amp;&amp; b &gt;= 0 )</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>shapes[a].moveTo(b,sb);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>shapes[b].moveTo(a,sa);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.repaint();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>a = ua.get();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>b = ub.get();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (a &gt;= 0 &amp;&amp; b &gt;= 0)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>shapes[a].blink();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>shapes[b].blink();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.repaint();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>);</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>void</b> updatcompcount()</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtcompcount.setText(<font color="red">""</font>+ (++ncomp));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtcompcount.setBounds(new Rectangle(40,20));</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>void</b> updatmovecount()</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtmovecount.setText(<font color="red">""</font>+ (++nmove));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtmovecount.setBounds(new Rectangle(40,20));</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>public</b> SortDemo(String letters)</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>this.letters = letters;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JButton start = <b>new</b> JButton(<font color="red">"Start"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JButton pause = <b>new</b> JButton(<font color="red">"Pause"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JButton test = <b>new</b> JButton(<font color="red">"Test"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tt = <b>new</b> JTextField(<font color="red">"56232367683"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tt.setPreferredSize(new Dimension(240, 30));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JPanel panel = <b>new</b> JPanel();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(lblarray);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(tt);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cmbmethod = <b>new</b> JComboBox();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>for</b> (int i=0; i &lt; Sort.sortMethodNames.length-2; i++)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cmbmethod.addItem(Sort.sortMethodNames[i].replaceAll(<font color="red">"([a-z])([A-Z])"</font>, <font color="red">"$1&nbsp;$2"</font>).toLowerCase());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cmbmethod.setPreferredSize(new Dimension(100, 30));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(lblmethod);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(cmbmethod);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(start);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(pause);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(compcount);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtcompcount.setBounds(new Rectangle(40,20));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtcompcount.setFont(ft);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(txtcompcount);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtmovecount.setBounds(new Rectangle(40,20));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>txtmovecount.setFont(ft);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(movecount);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(txtmovecount);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.add(test);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.setFont(f1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>setPreferredSize(new Dimension(1000,600));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>pack();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>setTitle(<font color="red">"Sorting&nbsp;Demo"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>setLocationRelativeTo(null);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>setVisible(true);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>try</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>InputStream in = this.getClass().getClassLoader().getResourceAsStream(<font color="red">"resources/Sort.txt"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>BufferedReader r = <b>new</b> BufferedReader(new InputStreamReader(in));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>String aline = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> jj = 0, kk=0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>StringBuffer s = <b>new</b> StringBuffer();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>while</b> ( (aline = r.readLine())!= null)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (aline.trim().length() == 0)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>emptylines.add(jj);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sources[jj++] = aline;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>s.append(aline + <font color="red">"\n"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>source = s.toString().trim();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.setText(source);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>r.close();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>in.close();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>catch</b> (Exception e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>System.out.println(e.toString());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Container cotentpane = getContentPane();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cotentpane.setLayout(new GridBagLayout());</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>GridBagConstraints gc = <b>new</b> GridBagConstraints();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.anchor = GridBagConstraints.PAGE_START;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.fill = GridBagConstraints.BOTH;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.weightx = 1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.weighty = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><font color="green">//&nbsp;gc.gridheight&nbsp;=&nbsp;1;</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr><font color="green">//&nbsp;gc.gridwidth&nbsp;=&nbsp;1;</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr>gc.gridx = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.gridy = 0;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cotentpane.add(panel, gc);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.gridy = 1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.setBounds(new Rectangle(D_WIDTH,300));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.weighty = 0.3;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cotentpane.add(scrollPane, gc);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>gc.gridy = 2;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>cotentpane.add(demo, gc);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>createShapeList(letters);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.setBounds(new Rectangle(D_WIDTH,200));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.repaint();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>boolean</b> doingtest = false;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>test.addActionListener(new ActionListener()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> actionPerformed(ActionEvent e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>test.disable();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>start.disable();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JTable jt = Sort.test(null);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>jt.setBounds(0,0,D_WIDTH,300);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JScrollPane sp=new JScrollPane(jt);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Point p = getLocation();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>JFrame f=new JFrame();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>jt.setBounds(0,0,800,350);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>f.add(sp);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>f.setSize(800,350);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>f.setVisible(true);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>f.setLocation(p);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>f.setTitle(<font color="red">"Performane&nbsp;Evaluation"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>test.enable();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>start.enable();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>repaint();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>pause.addActionListener(new ActionListener()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> actionPerformed(ActionEvent e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>String label = ((JButton)e.getSource()).getText();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (label.equals(<font color="red">"Pause"</font>))</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>timer.stop();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>((JButton)e.getSource()).setText(<font color="red">"Resume"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>return;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>timer.restart();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>((JButton)e.getSource()).setText(<font color="red">"Pause"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>});</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>start.addActionListener(new ActionListener()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> actionPerformed(ActionEvent e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>String label = ((JButton)e.getSource()).getText();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (label.equals(<font color="red">"Quit"</font>))</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>keepdoing = false;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>timer.stop();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>((JButton)e.getSource()).setText(<font color="red">"Start"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>return;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>keepdoing = true;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>((JButton)e.getSource()).setText(<font color="red">"Quit"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>String txt = tt.getText().trim();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>createShapeList(txt);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>semaphore = <b>new</b> Semaphore(1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>va.set(-1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>vb.set(-1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>ua.set(-1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>ub.set(-1);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>MySort sorter = <b>new</b> MySort(txt.split(<font color="red">"|"</font>));</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>new</b> Thread()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Method sortMethod = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> run()</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>String method = (String)cmbmethod.getSelectedItem();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>int</b> j = method.indexOf(<font color="red">"&nbsp;"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (j &gt;0)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>method = method.substring(0,j) + method.substring(j+1,j+2).toUpperCase() + method.substring(j+2);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>try</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sortMethod = MySort.class.getMethod(method);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>catch(NoSuchMethodException e2)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>ncomp =  nmove = -1;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatcompcount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>updatmovecount();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>try{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>sortMethod.invoke(sorter);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>catch(Exception e1)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>try{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>semaphore.acquire();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>catch(Exception e)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>timer.stop();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>((JButton)e.getSource()).setText(<font color="red">"Start"</font>);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>demo.repaint();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tarea.setText(source);</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>.start();</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>timer.start();</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+<nobr>}</nobr><br>
+<nobr>);</nobr><br>
+<nobr></nobr><br>
+<font color="red"> </font></p><h3><font color="red">Fatal Error: Extra brace }. Parsor stops.</font></h3><br> <p></p></td></tr></tbody></table>
+<script> if(window==parent)window.moveTo(screen.width/2 - 300,3);window.resizeTo(602,screen.height-30);</script>
+</body></html>
