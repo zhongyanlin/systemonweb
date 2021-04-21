@@ -553,33 +553,27 @@ onload = function()
         dl.value = course;
         loadcoursesource(course);
     }
-    dl.onchange = function()
+}
+
+function buildcourselist(t)
+{
+    let c = t.value;
+    if (c == '') return;
+    let dl = $('courselist');
+    let l=0;
+    for (l = 0;l < dl.options.length; l++)
     {
-        let c = this.value;
-        let dl = $('courselist');
-        let l=0;
-        for (l = 0;l < dl.options.length; l++)
-        {
-            if (dl.options[l].value == c) break;
-        }
-        if (l == dl.options.length)
-        {
-            let option = document.createElement('option');
-            option.value = c;
-            dl.appendChild(option);
-            if (c!='')
-            {
-                localStorage["course"] = c; 
-                let q =localStorage["courslist"];
-                courselistobj[courselistobj.length] = c;
-                localStorage["courselist"] = JSON.stringify(courselistobj);  
-            }
-            
-        }
-        
-        loadcoursesource(c);
-        
-    } 
+        if (dl.options[l].value == c) break;
+    }
+    if (l == dl.options.length)
+    {
+        let option = document.createElement('option');
+        option.value = c;
+        dl.appendChild(option);
+        courselistobj[courselistobj.length] = c;
+        localStorage["courselist"] = JSON.stringify(courselistobj);  
+    }
+    loadcoursesource(c);
 }
 function changedsource(t)
 {
@@ -1464,7 +1458,7 @@ function undo(btn)
 	<tbody>
 		<tr >
                     <td style="background-color:lightgray;text-align:left;"><strong>CSV formated full or partial Gradebook downloaded from Blackboard</strong><br>
-                    Course: <datalist id="courselist"></datalist><input id="course" list="courselist"></td>
+                    Course: <datalist id="courselist"></datalist><input id="course" list="courselist" onchange="buildcourselist(this)"></td>
 			<td>&nbsp;</td>
                         <td style="background-color:lightgray; text-align:left"><strong>Score report copied from Google form, Github, zybooks or others</strong><br>
                             <table align="left" style="background-color:lightgray"><tr>
