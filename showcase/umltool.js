@@ -182,6 +182,8 @@ onlinetoolinitial += textmsg[16] + ";web;Configuration;Configure;;openconfigtool
 var onlinetoolinfo = onlinetoolinitial;
 if (typeof(allies) == 'undefined')
     var allies = [];
+var filenamestr = localStorage['filenames'];
+
 function samefont(x, y)
 {
     if (x == null || y== null) return false;
@@ -409,6 +411,10 @@ else if (parent!=self && parent.frames[0]!=self && typeof(parent.fntobesaved)!='
     folder = "communication/chat";
     filename = parent.fntobesaved();
 }
+else
+{
+    
+}
 
 }
 var subdb = null;
@@ -513,6 +519,8 @@ function makemenu2()
 }
 function popmenu(id,td)
 {
+    if (filenamestr == null) 
+    filenamestr = JSON.stringify([filename,"other.html"]);
     var dv = $(id);
     var xy = findPositionnoScrolling(td); 
     if (dv != null)
@@ -580,9 +588,25 @@ function popmenu(id,td)
         }
         str += ("<tr height=" + high + "><td  valign=middle  class=flipcolor align=left  style=font-weight:400 onclick=\"filecontent();shrinkht('selfile');\" >" + textmsg[1849].split(/@/)[3] + "</td></tr>");
         str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"clr();shrinkht('selfile');\"  id=\"clearbtn\"  title=\"" + hintstr[6] + "\" >" + textmsg[1663] + "</td></tr>");
-
-        str += ("</table>");
-    } else {
+        
+            
+        if (filenamestr!=null && filenamestr.replace(filename,'').replace(/[\W]/g,'')!='')
+        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >Recent File</td></tr>");
+ 
+    } 
+    else if (id == 'recentfile')
+    {
+        if (filenamestr!=null && filenamestr!='')
+        {
+           let allfs = JSON.parse(filenamestr);
+           for (let ii=0; ii < allfs.length; ii++)
+           {   
+               if (allfs[ii] != filename)
+               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >Recent File</td></tr>");
+           } 
+        }
+    }
+    else {
         for (var i = 0; i < Math.max(1, shapearr.length); i++)
         {
             str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400; onclick=\"changepage(this);shrinkht('selpage');\">" + textmsg[1854].replace(/@/, '' + (i + 1)) + "</td></tr>");
@@ -605,10 +629,64 @@ function popmenu(id,td)
     }
     document.body.appendChild(dv);
 }
+
+
 var closemenuhandle = [];
 function nullmenu(menu)
 {
    closemenuhandle[menu] = setTimeout("$('" + menu + "').style.visibility='hidden';$('" + menu.replace(/sel/,'td') + "').style.textDecoration='underline';",500); 
+}
+
+function popmenu1(id,td)
+{
+    var dv = $(id);
+    var xy = findPositionnoScrolling(td); 
+    if (dv != null)
+    {
+        if (closemenuhandle[id] != null)
+            clearTimeout(closemenuhandle[id]);
+        closemenuhandle[id] = null;
+        dv.style.visibility = 'visible';
+        td.style.textDecoration = 'none';
+        dv.style.left = xy[0] + 'px';
+        $(id).style.color =  colors[menufontcolor];
+        return;
+    }
+    
+     
+    dv = document.createElement('div');
+    dv.id = id;
+    xy[1] += 2; xy[0] += 230;
+    dv.style.cssText = "background-image:linear-gradient(#eff,#cdd);visibility:hidden;background-color:white;box-shadow:#bbb 1px 1px;padding:5px 4px 4px 4px;vertical-align:middle;position:absolute;left:" + xy[0] + "px;top:" + (xy[1] + high) + "px;z-index:300;color:" + colors[menufontcolor]  ;
+    var str = "<table style=margin:0px;font-weight:400px;color:inherit cellpadding=0 cellspacing=0>";
+     
+        if (filenamestr!=null && filenamestr!='')
+        {
+           let allfs = JSON.parse(filenamestr);
+           for (let ii=0; ii < allfs.length; ii++)
+           {   
+               if (allfs[ii] != filename)
+               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >" + allfs[ii] + "</td></tr>");
+           } 
+        }
+    
+    str += "</table>";
+    dv.innerHTML = str;
+    dv.onmouseout = function () {
+      closemenuhandle[this.id] = setTimeout("$('" + this.id + "').style.visibility='hidden';",500); 
+    }
+    dv.onmouseover = function () 
+    {
+        if (closemenuhandle[this.id] != null)
+            clearTimeout(closemenuhandle[this.id]);
+        this.style.visibility = 'visible';
+        closemenuhandle[this.id] = null;
+    }
+    document.body.appendChild(dv);
+}
+function loadthis(filename)
+{
+   document.location.href = document.location.toString().replace(/fn=[^\.]+\.html/,'fn=' + filename);
 }
 function makebtns()
 {
