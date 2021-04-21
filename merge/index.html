@@ -511,9 +511,9 @@ let mergebtn, matchbtn, swapbtn, headingset;
 let courselistobj = [];
 onload = function()
 {
+    maintbl =   document.getElementsByTagName('table')[1];
     source0[0]  = $('bbsource').value;
     source0[1] = $('googlesource').value;
-    maintbl =   document.getElementsByTagName('table')[0];
     mergebtn = $('merge');
     matchbtn = $('match'); 
     swapbtn =  $("swapbt");
@@ -596,7 +596,7 @@ function loadcoursesource(course)
     for(let cl=0; cl < 3; cl+=2)
     {
         let s0 = localStorage["source_"+course+ "_" + cl];
-        if (s0==null) s0 = source0[cl/2];
+        if (s0==null || s0=='null' || s0.length < 10) s0 = source0[cl/2];
         maintbl.rows[1].cells[cl].getElementsByTagName('textarea')[0].value = s0;
             
     }
@@ -610,8 +610,7 @@ function parse(cl)
         if (b1.value == 'Back') view(b1);
         maxcol = 0;
     }
-    if (maintbl==null)
-        maintbl =   document.getElementsByTagName('table')[0];
+     
     let delimiter = ',';
     if (cl==2)
     {
@@ -659,7 +658,7 @@ function parse(cl)
         s += '</tr>'
     }
       
-    let t = document.getElementsByTagName('table')[0].rows[3].cells[cl];
+    let t = maintbl.rows[3].cells[cl];
     if (cl == 0) b = m;else g = m;
     t.innerHTML = s + '</table>';
     
