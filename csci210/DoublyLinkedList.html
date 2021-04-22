@@ -1,5 +1,5 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">td{font-family:courier;font-size:20px}
-p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margin:5px 5px 0px 5px"><table align="left"><tbody><tr><td align="right" style="color:teal" valign="top"><p>1<br>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">td{font-family:courier;font-size:18px}
+p{line-height:23.0px;}</style></head><body style="background-color:#ffffee;margin:5px 5px 0px 5px"><table align="left"><tbody><tr><td align="right" style="color:teal" valign="top"><p>1<br>
 2<br>
 3<br>
 4<br>
@@ -47,6 +47,7 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 46<br>
 47<br>
 48<br>
+49<br>
 50<br>
 51<br>
 52<br>
@@ -151,14 +152,13 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 151<br>
 152<br>
 153<br>
-154<br>
-155<br>
 </p></td><td align="left" valign="top"><p><nobr><b>public</b> <b>class</b> DoublyLinkedList&lt;T&gt;</nobr><br>
 <nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr><b>private</b> <b>class</b> Dnode&lt;T&gt;</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>T data;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Dnode previous =null, next = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>protected</b> T data;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>protected</b> Dnode previous = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>protected</b> Dnode next = null;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>public</b> Dnode(T s, Dnode p, Dnode n)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>data = s;</nobr><br>
@@ -170,13 +170,15 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>data = s;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
-&nbsp;&nbsp;&nbsp;<nobr>Dnode&lt;T&gt; head = null, tail = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> Dnode&lt;T&gt; head = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>private</b> Dnode&lt;T&gt; tail = null;</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr><b>public</b> DoublyLinkedList()</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr></nobr><br>
-&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> prepend(T s)</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> prepend(T s)  <font color="green">//O(1)</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;<nobr></nobr></font><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (head == null)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
@@ -184,8 +186,8 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b></nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = <b>new</b> Dnode(s, null, head);</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head.next.previous = head;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = <b>new</b> Dnode(s, null, head);  <font color="green">//&nbsp;two&nbsp;bands</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr>head.next.previous = head;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> append(T s)</nobr><br>
@@ -208,13 +210,17 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (head == tail)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = tail = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> x.data ;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tail = x.previous;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tail.next = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tail = tail.previous;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>tail.next = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next = x.previous = null;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> x.data;</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr><b>public</b> T removeHead()</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (head == null) <b>return</b> null;</nobr><br>
@@ -222,19 +228,22 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (head == tail)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = tail = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> x.data ;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = x.next;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head.previous = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head = head.next;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>head.previous = null;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next = x.previous = null;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> x.data;</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
-&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> remove(T t)</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> remove(T key)</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Dnode&lt;T&gt; x =  head;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>while</b> (x!= null)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.data.equals(t))</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.data.equals(key))</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>break;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
@@ -242,26 +251,15 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>removeNode(x);</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
-&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> removeAll(T t)</nobr><br>
+&nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> removeAll(T key)</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Dnode&lt;T&gt; x =  head;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>while</b> (x!= null)</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>Dnode&lt;T&gt; y = x.next;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.data.equals(t))</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.data.equals(key))</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x == head)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>removeHead();</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b> <b>if</b> (x == tail)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>removeTail();</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>else</b></nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>{</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.previous!=null)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous.next = x.next;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.next!=null)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next.previous = x.previous;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous = x.next = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>removeNode(x);</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x = y;</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
@@ -273,11 +271,11 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x == head) <b>return</b> removeHead();</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x == tail) <b>return</b> removeTail();</nobr><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.previous!=null)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous.next = x.next;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>if</b> (x.next!=null)</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next.previous = x.previous;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous = x.next = null;</nobr><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr><b>return</b> x.data;</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.previous.next = x.next;       <font color="green">//&nbsp;by-pass&nbsp;him</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr><b>if</b> (x.next!=null)</nobr><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr>x.next.previous = x.previous;   <font color="green">//&nbsp;by&nbsp;pass</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr>x.previous = x.next = null;     <font color="green">//&nbsp;isolate&nbsp;him</font></nobr><font color="green"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<nobr></nobr></font><nobr><b>return</b> x.data;</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr></nobr><br>
 &nbsp;&nbsp;&nbsp;<nobr><b>public</b> <b>void</b> print()</nobr><br>
@@ -308,5 +306,20 @@ p{line-height:26.0px;}</style></head><body style="background-color:#ffffee;margi
 &nbsp;&nbsp;&nbsp;<nobr>}</nobr><br>
 <nobr>}</nobr><br>
 </p></td></tr></tbody></table>
-<script> if(window==parent)window.moveTo(screen.width/2 - 300,3);window.resizeTo(602,screen.height-30);</script>
+        <div>
+<pre>
+run:
+lt=
+5
+3
+1
+2
+12
+1
+lt=
+5
+2
+12
+BUILD SUCCESSFUL (total time: 0 seconds)
+</pre></div>
 </body></html>
