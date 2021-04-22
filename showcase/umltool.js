@@ -83,6 +83,7 @@ var tdaredoing;
 var numaredoing = [];
 var itemaredoing;
 var bgcolorcode = -1;
+var fromserver = true;
 if (typeof(originalurl) == 'undefined')
 {
     var originalurl = '';
@@ -90,6 +91,7 @@ if (typeof(originalurl) == 'undefined')
 }
 if (typeof(shapearr) == 'undefined')
 {
+    fromserver = true;
     var shapearr = new Array();
     var linearr = new Array();
     var curvearr = new Array();
@@ -591,7 +593,7 @@ function popmenu(id,td)
         
             
         if (filenamestr!=null && filenamestr.replace(filename,'').replace(/[\W]/g,'')!='')
-        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >Recent File</td></tr>");
+        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >Recent</td></tr>");
  
     } 
     else if (id == 'recentfile')
@@ -602,7 +604,7 @@ function popmenu(id,td)
            for (let ii=0; ii < allfs.length; ii++)
            {   
                if (allfs[ii] != filename)
-               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >Recent File</td></tr>");
+               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >Recent</td></tr>");
            } 
         }
     }
@@ -648,7 +650,7 @@ function popmenu1(id,td)
         closemenuhandle[id] = null;
         dv.style.visibility = 'visible';
         td.style.textDecoration = 'none';
-        dv.style.left = xy[0] + 'px';
+        dv.style.left = xy[0]  + 'px';
         $(id).style.color =  colors[menufontcolor];
         return;
     }
@@ -656,8 +658,9 @@ function popmenu1(id,td)
      
     dv = document.createElement('div');
     dv.id = id;
-    xy[1] += 2; xy[0] += 230;
-    dv.style.cssText = "background-image:linear-gradient(#eff,#cdd);visibility:hidden;background-color:white;box-shadow:#bbb 1px 1px;padding:5px 4px 4px 4px;vertical-align:middle;position:absolute;left:" + xy[0] + "px;top:" + (xy[1] + high) + "px;z-index:300;color:" + colors[menufontcolor]  ;
+    xy[1] += 2; 
+    xy[0] += 230;
+    dv.style.cssText = "background-image:linear-gradient(#eff,#cdd);background-color:white;box-shadow:#bbb 1px 1px;padding:5px 4px 4px 4px;vertical-align:middle;position:absolute;left:73px;top:125px;z-index:300;color:" + colors[menufontcolor]  ;
     var str = "<table style=margin:0px;font-weight:400px;color:inherit cellpadding=0 cellspacing=0>";
      
         if (filenamestr!=null && filenamestr!='')
@@ -2201,19 +2204,54 @@ function saveit()
         else
             parent.helpsave(window, document.f.filedir.value,   ($("savearea").value));
     }
+    else if (folder !=null)
+    {
+        document.f.folder.value  =  folder;
+        document.f.destination.value = makefile();
+        document.f.target = "w" + tstmp;
+        document.f.operation.value = "save";
+        formnewaction(document.f,originalurl + "/FileOperation");
+        visual(document.f);
+        document.f.submit();
+    }
     else
     {
-         document.f.folder.value  =  folder;
-         document.f.destination.value = makefile();
-         document.f.target = "w" + tstmp;
-         document.f.operation.value = "save";
-         formnewaction(document.f,originalurl + "/FileOperation");
-         visual(document.f);
-         document.f.submit();
+        tojson(); 
     }
-
 }
-
+function tojson()
+{
+    var obj = {
+    "orgnum":orgnum,
+    "originalurl":originalurl,
+    "umltoolstylesid":umltoolstyles.id,
+    "umltoolstyleshref":umltoolstyleshref,
+    "cachedfontfamily":cachedfontfamily,
+    "colors":colors,
+    "bcolors":bcolors,
+    "filename":filename,
+    "needtranslator":needtranslator,
+    "editable":editable,
+    "tstmp":tstmp,
+    "shapearr":shapearr,
+    "linearr":linearr,
+    "curvearr":curvearr,
+    "attachstr":attachstr,
+    "shapetime":shapetime,
+    "linetime":linetime,
+    "curvetime":curvetime,
+     "pagetime":pagetime,
+     "allies":allies,
+     "bgarr":bgarr,
+    "kframes":kframes,
+    "kshapes":kshapes
+    };
+    localStorage[filename] = JSON.stringify(obj);
+}
+function fromjson()
+{
+    
+}
 function sourcecodes()
 {
     closeprompt();
