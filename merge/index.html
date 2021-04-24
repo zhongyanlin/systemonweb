@@ -1375,7 +1375,11 @@ function replace()
        localStorage['reglist'] = JSON.stringify(allregs);
        var newitem = document.createElement('option');
        newitem.value = s.value;
-       $('reglist').insertBefore($('reglist').childNodes[0],newitem);
+       var lt = $('reglist').childNodes;
+       if (lt ==null || lt.length == 0)
+           lt.append(newitem);
+       else
+           lt.insertBefore(lt,newitem);
        $('sourcechar').list = 'reglist';
        
    }

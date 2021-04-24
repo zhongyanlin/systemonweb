@@ -1,57 +1,56 @@
 
 if (document.location.toString().indexOf("localhost") >= 0
-    && typeof (handleErr) == 'undefined')
+        && typeof (handleErr) == 'undefined')
 {
-function handleErr(msg, url, l)
-{
-      var txt= "There was an error on this page.\n\n"
-       + "Error: " + msg + "\n"
-       + "URL:   " + url + "\n"
-       + "Line:  " + l;
-     
+    function handleErr(msg, url, l)
+    {
+        var txt = "There was an error on this page.\n\n"
+                + "Error: " + msg + "\n"
+                + "URL:   " + url + "\n"
+                + "Line:  " + l;
 
-     // window.onerror = handleErr;
-     return true;
+
+        // window.onerror = handleErr;
+        return true;
+    }
+    window.onerror = handleErr;
 }
-window.onerror = handleErr;
-}
-if (typeof(expiretime) == 'undefined')
+if (typeof (expiretime) == 'undefined')
 {
-    var expiretime = (new Date()).getTime()+ 3600000;
+    var expiretime = (new Date()).getTime() + 3600000;
     var activeidletime = 3600000;
 }
 var allis = [];
 //shapearr[i]=[words,shapename,x,y,width,height,fontsize,color]
 //linearr[i]=[type,startobjnum,xonobj, yonobj, endobjnum, xonobj,yonobj,thick,direction]
-var shapes = ["rightrect", "roundrect",  "ellipse", "diamond"];
-var arrows = ["arrow", "arrom",  "diamond", "line"];
+var shapes = ["rightrect", "roundrect", "ellipse", "diamond"];
+var arrows = ["arrow", "arrom", "diamond", "line"];
 //var COLORS = ["black", "red", "green", "orange", "blue", "purple", "pink", "#BBBB00"];
 //var BCOLORS = ["white", "red", "green", "orange", "blue", "purple", "pink","lightyellow","transparent",'1'];
-if (typeof(kframes)== 'undefined')
+if (typeof (kframes) == 'undefined')
 {
     var kframes = new Object();// kframes['5_4'] = {esn:1, ets:[[1,2]], etm:5, ssn:1, sts:[[1,2]], stm:5, loop:3, lsn:1, lts:[[1,2]], ltm:5};
     var kshapes = [];
 }
-if (typeof(colors) == 'undefined')
+if (typeof (colors) == 'undefined')
 {
     var colors = ["black", "red", "green", "orange", "blue", "purple", "pink", "#BBBB00"];
 }
-if (typeof(bcolors) == 'undefined')
+if (typeof (bcolors) == 'undefined')
 {
-    var bcolors = ["white", "red", "green", "orange", "blue", "purple", "pink", "lightyellow","transparent",'1'];
-}
-else
+    var bcolors = ["white", "red", "green", "orange", "blue", "purple", "pink", "lightyellow", "transparent", '1'];
+} else
 {
     bcolors[8] = 'transparent';
     bcolors[9] = '1';
 }
 var iconx, icony;
-var handle =null;
-var allfonts = [15,20,25,30,35,40,45,50];
+var handle = null;
+var allfonts = [15, 20, 25, 30, 35, 40, 45, 50];
 var fillblank = "<!---->";
 var diamondchar = "&loz;";
 var horarrowchar = "&rarr;";
-var uparrowchar =  "&uarr;";
+var uparrowchar = "&uarr;";
 var bullchar = "&bull;";
 var diamschar = "&diams;";
 var linetype = '';
@@ -64,8 +63,8 @@ var savestarty = 0;
 var numLines = 0;
 var allLines = new Array();
 var currentlnum = 0;
-var myHintx=0;
-var myHinty=0;
+var myHintx = 0;
+var myHinty = 0;
 var cord;
 var folder = null;
 var locationstr = '';
@@ -75,7 +74,7 @@ var playstate = 'playstop';
 var menufontcolor = 0;
 var numbeing = 0;
 var activesave = false;
-var pagetbl = null; 
+var pagetbl = null;
 var hasone = null;
 var numsselected = [];
 var cdbeing = -1;
@@ -84,12 +83,12 @@ var numaredoing = [];
 var itemaredoing;
 var bgcolorcode = -1;
 var fromserver = true;
-if (typeof(originalurl) == 'undefined')
+if (typeof (originalurl) == 'undefined')
 {
     var originalurl = '';
     var filename = null;
 }
-if (typeof(shapearr) == 'undefined')
+if (typeof (shapearr) == 'undefined')
 {
     fromserver = true;
     var shapearr = new Array();
@@ -101,29 +100,29 @@ if (typeof(shapearr) == 'undefined')
     var curvetime = new Array();
     var pagetime = new Array();
 }
-if (typeof(bgarr) == 'undefined')
-var bgarr = new Array();
-if (typeof(attachstr) == 'undefined')
+if (typeof (bgarr) == 'undefined')
+    var bgarr = new Array();
+if (typeof (attachstr) == 'undefined')
     var attachstr = '';
-if (typeof(attacharr) != 'undefined')
-   {
-       for(var i1=0; i1 < attacharr.length; i1++)
-           if (attacharr[i1]!=null && attacharr[i1]!='')
-           attachstr += attacharr[i1];
-   }
-if (typeof(editable) == 'undefined')
+if (typeof (attacharr) != 'undefined')
+{
+    for (var i1 = 0; i1 < attacharr.length; i1++)
+        if (attacharr[i1] != null && attacharr[i1] != '')
+            attachstr += attacharr[i1];
+}
+if (typeof (editable) == 'undefined')
 {
     var editable = true;
 }
-if ( typeof(tstmp) == 'undefined')
+if (typeof (tstmp) == 'undefined')
 {
-    var tstmp = (new Date()).getTime()%10000000;
+    var tstmp = (new Date()).getTime() % 10000000;
 }
 
 var iframename = "w" + tstmp;
 
 var seldirect = 0;
-var onmouseover0  =  null;
+var onmouseover0 = null;
 var pagenum = 0;
 var favorx = 5;
 var mfavory = 0;
@@ -154,7 +153,7 @@ var drawpoints = null;
 var drawpointslength = 0;
 var numCurves = 0;
 var allCurves = new Array();
-var searches = document.location.search.replace(/^\?/,'').split(/&/);
+var searches = document.location.search.replace(/^\?/, '').split(/&/);
 var dobackground = false;
 var minutes = "";
 var sessionid = null;
@@ -169,73 +168,76 @@ var cachedfc = 0;
 var ismakingtab = 1;
 var savedfontrate = 1;
 var hintstr = textmsg[1836].split(/@/);
-if (typeof(cachedfontfamily) == 'undefined')
-var cachedfontfamily = textmsg[1594].replace(/@.*/,'');
+if (typeof (cachedfontfamily) == 'undefined')
+    var cachedfontfamily = textmsg[1594].replace(/@.*/, '');
 var haspagesort = false;
 var imagelet2wh = [];
 var base2cn = [];
-if (typeof(myfontname)!='undefined')
+if (typeof (myfontname) != 'undefined')
     cachedfontfamily = myfontname;
-if (typeof(onlinetoolinitial) == 'undefined' || onlinetoolinitial == null)
+if (typeof (onlinetoolinitial) == 'undefined' || onlinetoolinitial == null)
 {
-    onlinetoolinitial =  ";LaTex;web;LaTex toolbar;LaTex;"+ originalurl + "/findrep.js;showlatexpanel(content_a,this);";
+    onlinetoolinitial = ";LaTex;web;LaTex toolbar;LaTex;" + originalurl + "/findrep.js;showlatexpanel(content_a,this);";
 }
 onlinetoolinitial += textmsg[16] + ";web;Configuration;Configure;;openconfigtool();";
 var onlinetoolinfo = onlinetoolinitial;
-if (typeof(allies) == 'undefined')
+if (typeof (allies) == 'undefined')
     var allies = [];
-var filenamestr = localStorage['filenames'];
+var filenamestr = null;// localStorage['filenames'];
 
 function samefont(x, y)
 {
-    if (x == null || y== null) return false;
+    if (x == null || y == null)
+        return false;
     y = y.toLowerCase();
     var ans = false;
     var xs = x.toLowerCase().split(/[ ]*,[ ]*/);
-    for (var i=0; i < xs.length; i++)
-        if (y.indexOf(xs[i]) >=0)
-    {
-        ans = true;
-        break;
-    }
+    for (var i = 0; i < xs.length; i++)
+        if (y.indexOf(xs[i]) >= 0)
+        {
+            ans = true;
+            break;
+        }
 
     return ans;
 }
 var oldonlinetoolcp = onlinetoolcp;
-onlinetoolcp = function(button, aname)
+onlinetoolcp = function (button, aname)
 {
     button.form.target = "_blank";
     oldonlinetoolcp(button, aname);
 }
 var objentering = -1;
+
 function openconfigtool()
 {
-    onlinetoolinfo = onlinetoolinfo.replace(/^;/,'');
+    onlinetoolinfo = onlinetoolinfo.replace(/^;/, '');
     var xs = onlinetoolinfo.split(/;/);
     var s = '@';
 
-    for (var i=0; i < xs.length; i++)
+    for (var i = 0; i < xs.length; i++)
         if (i % 6 == 3)
-            s += xs[i] +'@';
-    myprompt('<iframe src="remote.jsp?schedule=' + s + '" width=700 height=600 />',null,null,textmsg[16] + textmsg[1776]);
+            s += xs[i] + '@';
+    myprompt('<iframe src="remote.jsp?schedule=' + s + '" width=700 height=600 />', null, null, textmsg[16] + textmsg[1776]);
 
 }
-function setTool(n,y)
+function setTool(n, y)
 {
     var j;
-    if (y.charAt(0) == ';') y = y.substring(1);
-    if ((j = onlinetoolinfo.indexOf( y  ))>=0)
+    if (y.charAt(0) == ';')
+        y = y.substring(1);
+    if ((j = onlinetoolinfo.indexOf(y)) >= 0)
     {
 
-        onlinetoolinfo = onlinetoolinfo.substring(0,j) + onlinetoolinfo.substring(j + y.length);
+        onlinetoolinfo = onlinetoolinfo.substring(0, j) + onlinetoolinfo.substring(j + y.length);
 
-    }
-    else
+    } else
     {
         onlinetoolinfo += y;
 
     }
-    if (onlinetoolinfo.charAt(0)!=';') onlinetoolinfo = ';' + onlinetoolinfo;
+    if (onlinetoolinfo.charAt(0) != ';')
+        onlinetoolinfo = ';' + onlinetoolinfo;
 
     onlinetoolinitial = onlinetoolinfo;
     var ss = onlinetoolstr(onlinetoolinfo);
@@ -243,24 +245,24 @@ function setTool(n,y)
     onlinetoolbase.innerHTML = ss;
 }
 
-if (typeof(passedencoding) == 'undefined')
+if (typeof (passedencoding) == 'undefined')
 {
-var passedencoding = '';
-var passedfilename = '';
-var passedsessionid = '';
-for (var j2=0; j2<searches.length; j2++)
-    if (searches[j2].indexOf('fn=') == 0)
-       passedfilename = searches[j2].substring(3);
-    else if (searches[j2].indexOf('en=') == 0)
-       passedencoding = searches[j2].substring(3);
-    else if (searches[j2].indexOf('sn=') == 0)
-       passedsessionid = searches[j2].substring(3);
-document.title = passedfilename;
+    var passedencoding = '';
+    var passedfilename = '';
+    var passedsessionid = '';
+    for (var j2 = 0; j2 < searches.length; j2++)
+        if (searches[j2].indexOf('fn=') == 0)
+            passedfilename = searches[j2].substring(3);
+        else if (searches[j2].indexOf('en=') == 0)
+            passedencoding = searches[j2].substring(3);
+        else if (searches[j2].indexOf('sn=') == 0)
+            passedsessionid = searches[j2].substring(3);
+    document.title = passedfilename;
 }
 
-var chatsessionnum = (passedsessionid==null || passedsessionid=='' || isNaN(passedsessionid))?-1:parseInt(passedsessionid);
+var chatsessionnum = (passedsessionid == null || passedsessionid == '' || isNaN(passedsessionid)) ? -1 : parseInt(passedsessionid);
 
-if ($('mainmeta') && passedencoding!='')
+if ($('mainmeta') && passedencoding != '')
 {
     $('mainmeta').content = 'text/html; charset=' + passedencoding;
 }
@@ -268,156 +270,242 @@ function tohex(s)
 {
     var i = parseInt(s);
     var y = Number(i).toString(16);
-    if (y.length == 1) y = '0' + y;
+    if (y.length == 1)
+        y = '0' + y;
     return y.toLowerCase();
 }
 function hexcolor(cl)
 {
-    if (cl == null || cl==''  ||  cl.toLowerCase()=='transparent') return 'transparent';
-    else if ( !isNaN(cl)) return cl;
-    if ((cl+'').toLowerCase().indexOf('rgb')>=0)
+    if (cl == null || cl == '' || cl.toLowerCase() == 'transparent')
+        return 'transparent';
+    else if (!isNaN(cl))
+        return cl;
+    if ((cl + '').toLowerCase().indexOf('rgb') >= 0)
     {
-        var x = (''+cl).replace(/rgb/,'').replace(/\(/,'').replace(/\)/,'').split(/,/);
-        return  '#' + tohex(x[0]) + tohex(x[1]) +  tohex(x[2]) ;
+        var x = ('' + cl).replace(/rgb/, '').replace(/\(/, '').replace(/\)/, '').split(/,/);
+        return  '#' + tohex(x[0]) + tohex(x[1]) + tohex(x[2]);
     }
     cl = cl.toUpperCase();
-    if (cl=="WHITE") cl="#FFFFFF";
-else if (cl=="SILVER") cl="#C0C0C0";
-else if (cl=="GRAY") cl="#808080";
-else if (cl=="BLACK") cl="#000000";
-else if (cl=="RED") cl="#FF0000";
-else if (cl=="MAROON") cl="#800000";
-else if (cl=="YELLOW") cl="#FFFF00";
-else if (cl=="OLIVE") cl="#808000";
-else if (cl=="LIME") cl="#00FF00";
-else if (cl=="GREEN") cl="#008000";
-else if (cl=="AQUA") cl="#00FFFF";
-else if (cl=="TEAL") cl="#008080";
-else if (cl=="BLUE") cl="#0000FF";
-else if (cl=="NAVY") cl="#000080";
-else if (cl=="FUCHSIA") cl="#FF00FF";
-else if (cl=="PURPLE") cl="#800080";
-else if (cl =='PINK') cl = '#FFC0CB';
-else if (cl =='ORANGE') cl ='#FFA500';
-else if (cl =='CYAN') cl = '#00FFFF';
-  if (cl.replace(/#[0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z]/i,'')!='') return 'transparent';
-  return cl.toLowerCase();
+    if (cl == "WHITE")
+        cl = "#FFFFFF";
+    else if (cl == "SILVER")
+        cl = "#C0C0C0";
+    else if (cl == "GRAY")
+        cl = "#808080";
+    else if (cl == "BLACK")
+        cl = "#000000";
+    else if (cl == "RED")
+        cl = "#FF0000";
+    else if (cl == "MAROON")
+        cl = "#800000";
+    else if (cl == "YELLOW")
+        cl = "#FFFF00";
+    else if (cl == "OLIVE")
+        cl = "#808000";
+    else if (cl == "LIME")
+        cl = "#00FF00";
+    else if (cl == "GREEN")
+        cl = "#008000";
+    else if (cl == "AQUA")
+        cl = "#00FFFF";
+    else if (cl == "TEAL")
+        cl = "#008080";
+    else if (cl == "BLUE")
+        cl = "#0000FF";
+    else if (cl == "NAVY")
+        cl = "#000080";
+    else if (cl == "FUCHSIA")
+        cl = "#FF00FF";
+    else if (cl == "PURPLE")
+        cl = "#800080";
+    else if (cl == 'PINK')
+        cl = '#FFC0CB';
+    else if (cl == 'ORANGE')
+        cl = '#FFA500';
+    else if (cl == 'CYAN')
+        cl = '#00FFFF';
+    if (cl.replace(/#[0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z]/i, '') != '')
+        return 'transparent';
+    return cl.toLowerCase();
 }
-function samecolor(x,y)
+function samecolor(x, y)
 {
     return hexcolor(x) == hexcolor(y);
 }
 
-function gradient(cl,sn)
+function gradient(cl, sn)
 {
     cl = hexcolor(cl);
-    if (cl =='transparent') return "url()";
-    var r = parseInt(cl.substring(1,3),16);
-    var g = parseInt(cl.substring(3,5),16);
-    var b = parseInt(cl.substring(5),16);
+    if (cl == 'transparent')
+        return "url()";
+    var r = parseInt(cl.substring(1, 3), 16);
+    var g = parseInt(cl.substring(3, 5), 16);
+    var b = parseInt(cl.substring(5), 16);
     var c0;
-     if (sn == 'egg' || sn=='ellipse' || sn=='circle')
-     {
-         r += 60;  if (r>255) r = 255;
-         g += 50;  if (g>255) g = 255;
-         b += 60;  if (b>255) b = 255;
-         c0 = "rgb(" + r + "," + g + "," + b + ")";
-     }
-    else 
-    { 
-        if (r==0) r = Math.round(Math.random()* 50 );  else {r -=  Math.round(Math.random()*0.34*r); if (r < 0) r = 0;}
-        var rs = Number(r).toString(16); if (r < 16) rs = '0' + rs;
-        if (g==0) g= Math.round(Math.random()*50); else {g -= Math.round(Math.random()*0.34*g); if (g < 0) g = 0;}
-        var gs = Number(g).toString(16); if (g < 16) gs = '0' + gs;
-        if (b == 0) b= Math.round(Math.random()*50); else {b -= Math.round(Math.random()*0.30*b); if (b < 0) b = 0;}
-        var bs = Number(b).toString(16); if (b < 16) bs = '0' + bs;
+    if (sn == 'egg' || sn == 'ellipse' || sn == 'circle')
+    {
+        r += 60;
+        if (r > 255)
+            r = 255;
+        g += 50;
+        if (g > 255)
+            g = 255;
+        b += 60;
+        if (b > 255)
+            b = 255;
+        c0 = "rgb(" + r + "," + g + "," + b + ")";
+    } else
+    {
+        if (r == 0)
+            r = Math.round(Math.random() * 50);
+        else {
+            r -= Math.round(Math.random() * 0.34 * r);
+            if (r < 0)
+                r = 0;
+        }
+        var rs = Number(r).toString(16);
+        if (r < 16)
+            rs = '0' + rs;
+        if (g == 0)
+            g = Math.round(Math.random() * 50);
+        else {
+            g -= Math.round(Math.random() * 0.34 * g);
+            if (g < 0)
+                g = 0;
+        }
+        var gs = Number(g).toString(16);
+        if (g < 16)
+            gs = '0' + gs;
+        if (b == 0)
+            b = Math.round(Math.random() * 50);
+        else {
+            b -= Math.round(Math.random() * 0.30 * b);
+            if (b < 0)
+                b = 0;
+        }
+        var bs = Number(b).toString(16);
+        if (b < 16)
+            bs = '0' + bs;
         c0 = "#" + rs + gs + bs;
     }
-    
-    if (sn == 'egg' || sn=='ellipse' || sn=='circle')
-        c0 = 'radial-gradient(closest-side at 40% 35%,' + c0 + ",   "  + cl + ")";
+
+    if (sn == 'egg' || sn == 'ellipse' || sn == 'circle')
+        c0 = 'radial-gradient(closest-side at 40% 35%,' + c0 + ",   " + cl + ")";
     else
-        c0 = 'linear-gradient(' + c0 + " 10%,"  + cl + ")";
+        c0 = 'linear-gradient(' + c0 + " 10%," + cl + ")";
 
     return c0;
 }
-function findPositionnoScrolling( oElement, win)
+function findPositionnoScrolling(oElement, win)
 {
- if (win==null) win = self;
- if (oElement==null) return [0,0];
- if( typeof( oElement.offsetParent ) != 'undefined')
- {
- var ii = 0;
- var originalElement = oElement;
- for( var  posY = 0,posX=0; ii++<10 && oElement!=null; oElement = oElement.offsetParent )
- {
- posY += oElement.offsetTop;
- posX += oElement.offsetLeft;
- if( oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement )
- {
- posY -= oElement.scrollTop;
- posX -= oElement.scrollLeft;
- }
- }
- return  [posX, posY];
- }
- else
- {
- return  [oElement.x, oElement.y];
- }
+    if (win == null)
+        win = self;
+    if (oElement == null)
+        return [0, 0];
+    if (typeof (oElement.offsetParent) != 'undefined')
+    {
+        var ii = 0;
+        var originalElement = oElement;
+        for (var posY = 0, posX = 0; ii++<10 && oElement!=null; oElement = oElement.offsetParent )
+        {
+            posY += oElement.offsetTop;
+            posX += oElement.offsetLeft;
+            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
+            {
+                posY -= oElement.scrollTop;
+                posX -= oElement.scrollLeft;
+            }
+        }
+        return  [posX, posY];
+    }
+    else
+    {
+        return  [oElement.x, oElement.y];
+    }
 }
 function padd2(i)
 {
-    if (i > 9) return i;
-    else return '0' + i;
+    if (i > 9)
+        return i;
+    else
+        return '0' + i;
 }
 function initfilename()
 {
-locationstr = document.location.toString();
-var lj = locationstr.lastIndexOf("/");
-if (lj > 0)
-{
-   var filenm = locationstr.substring(lj+1);
-   locationstr = locationstr.substring(0, lj);
-   if (locationstr.indexOf("http")== 0 && filenm.indexOf("umltool.html")== 0)
-   {
-       originalurl = locationstr;
-       filename = passedfilename;
-   }
-}
+    locationstr = document.location.toString();
+    var lj = locationstr.lastIndexOf("/");
+    if (lj > 0)
+    {
+        var filenm = locationstr.substring(lj + 1);
+        locationstr = locationstr.substring(0, lj);
+        if (locationstr.indexOf("http") == 0 && filenm.indexOf("umltool.html") == 0)
+        {
+            originalurl = locationstr;
+            filename = passedfilename;
+        }
+    }
 
-if ( (filename == null || filename == '') &&  passedfilename!= 'erd.html')
-{
-   var d = new Date();
-   filename  = padd2(d.getYear()%100) + padd2(d.getMonth()) + padd2(d.getDate()) + ".html";
-}
+    if ( (filename == null || filename == '') &&  passedfilename!= 'erd.html')
+    {
+        var d = new Date();
+        filename = padd2(d.getYear() % 100) + padd2(d.getMonth()) + padd2(d.getDate()) + ".html";
+    }
 
-if (window.opener!= null
-     && typeof(window.self)!='undefined'
-     && window.opener!= window.self
-     && window.opener!=null
-     &&  (onmydomain(opener))
-     && typeof(window.opener.getFolder)!='undefined'
-)
-{
-    folder = window.opener.getFolder();
-     subdb = window.opener.getSubdb();
-}
-else if (parent!=self && parent.frames[0]!=self && typeof(parent.frames[0].getFolder)!='undefined')
-{
-    folder = parent.frames[0].getFolder();
-     subdb = parent.frames[0].getSubdb();
-}
-else if (parent!=self && parent.frames[0]!=self && typeof(parent.fntobesaved)!='undefined')
-{
-    folder = "communication/chat";
-    filename = parent.fntobesaved();
-}
-else
-{
-    
-}
-
+    if (window.opener!= null
+    && typeof(window.self)!='undefined'
+    && window.opener!= window.self
+    && window.opener!=null
+    &&  (onmydomain(opener))
+    && typeof(window.opener.getFolder)!='undefined'
+    )
+    {
+        folder = window.opener.getFolder();
+        subdb = window.opener.getSubdb();
+    }
+    else if (parent!=self && parent.frames[0]!=self && typeof(parent.frames[0].getFolder)!='undefined')
+    {
+        folder = parent.frames[0].getFolder();
+        subdb = parent.frames[0].getSubdb();
+    }
+    else if (parent!=self && parent.frames[0]!=self && typeof(parent.fntobesaved)!='undefined')
+    {
+        folder = "communication/chat";
+        filename = parent.fntobesaved();
+    }
+    else
+    {
+        var str = localStorage[filename];
+        if (str!=null)
+        {
+            var obj = JSON.parse(str);
+            orgnum = obj.orgnum;
+            originalurl = obj.originalurl;
+            if (typeof(umltoolstyles)!= 'undefined')
+            {
+            umltoolstyles.id = obj.umltoolstylesid;
+            umltoolstyles.href = obj.umltoolstyleshref;
+            }
+            cachedfontfamily = obj.cachedfontfamily;
+            colors = obj.colors;
+            bcolors = obj.bcolors;
+            filename = obj.filename;
+            needtranslator = obj.needtranslator;
+            editable = obj.editable;
+            tstmp = obj.tstmp;
+            shapearr = obj.shapearr;
+            linearr = obj.linearr;
+            curvearr = obj.curvearr;
+            attachstr = obj.attachstr;
+            shapetime = obj.shapetime;
+            linetime = obj.linetime;
+            curvetime = obj.curvetime;
+             pagetime = obj.pagetime;
+             allies = obj.allies;
+             bgarr = obj.bgarr;
+            kframes = obj.kframes;
+            kshapes = obj.kshapes;
+        }
+    }
 }
 var subdb = null;
 function rcolor(x)
@@ -522,7 +610,16 @@ function makemenu2()
 function popmenu(id,td)
 {
     if (filenamestr == null) 
-    filenamestr = JSON.stringify([filename,"other.html"]);
+    {
+        var farr = ["other.html"];
+       
+        for (var fn in localStorage)
+        {
+            if (fn.indexOf(".html")>0 )
+            farr[farr.length] = fn;
+        }
+        filenamestr = JSON.stringify(farr);
+    }
     var dv = $(id);
     var xy = findPositionnoScrolling(td); 
     if (dv != null)
@@ -655,7 +752,6 @@ function popmenu1(id,td)
         return;
     }
     
-     
     dv = document.createElement('div');
     dv.id = id;
     xy[1] += 2; 
@@ -2224,8 +2320,8 @@ function tojson()
     var obj = {
     "orgnum":orgnum,
     "originalurl":originalurl,
-    "umltoolstylesid":umltoolstyles.id,
-    "umltoolstyleshref":umltoolstyleshref,
+    "umltoolstylesid":typeof(umltoolstyles)!='undefined'? mltoolstyles.id:null,
+    "umltoolstyleshref":typeof(umltoolstyles)!='undefined'?umltoolstyles.href:null,
     "cachedfontfamily":cachedfontfamily,
     "colors":colors,
     "bcolors":bcolors,
