@@ -302,7 +302,7 @@ function showlatexpanel(ta,btn)
     
     var cellheight = 25;
     if (btn!=null) cellheight = btn.offsetHeight;
-    var str = '<table id=latexbtntbl cellspacing=1 cellpadding=0 style=\"layout:fixed;overflow:visible\"><tr height=25>';
+    var str = '<table id=latexbtntbl cellspacing=1 cellpadding=0 style="layout:fixed;overflow:visible"><tr height=25>';
      
     if (btn == null)
          str += '<td class=outset1 width=25 style="border:1px #333333 outset;width:25px;" align=center  onclick="topdf(\"' + ta.name + '\")">2PDF</td>';

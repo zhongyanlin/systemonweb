@@ -1,4 +1,5 @@
 
+
 if (document.location.toString().indexOf("localhost") >= 0
         && typeof (handleErr) == 'undefined')
 {
@@ -2865,25 +2866,12 @@ function mergelink(v,urlas)
    }
    var x1='';
    if (ishtml(v))
-      x1 = '<div style="margin:2px 2px 2px 2px;border:1px #999999 solid;"><table  cellspacing=0 cellpadding=3 style="margin:0px 3px 0px 0px;border-radius:0px"><tr><td width=50><nobr><b>' 
-      + textmsg[156] 
-      + '</b></nobr></td><td   align=left style="padding:0px 8px 0px 0px"><input name=wordformat style=background-color:#bbb onclick=changeformat('
-      + numbeing 
-      + ',0) type=radio value=0 ' 
-      + (tail==''?'checked':'') 
-      + '>' 
-      + textmsg[1608] 
-      + '</td><td  style="padding:0px 8px 0px 0px" align=left><input name=wordformat  type=radio  style=background-color:#bbb  onclick=changeformat('
-      + numbeing 
-      + ',1)  value=1 ' 
-      + (tail=='HTML'?'checked':'') 
-      + '>HTML</td><td  style="padding:0px 8px 0px 0px" align=left><input name=wordformat value=2  type=radio  style=background-color:#bbb  onclick=changeformat('+numbeing +',2) ' + (tail=='LaTex'?'checked':'') 
-      + ">LaTex</td></tr></table></div>";
+      x1 = '<div style=\"margin:2px 2px 2px 2px;border:1px #999999 solid;\"><table  cellspacing=0 cellpadding=3 style=\"margin:0px 3px 0px 0px;border-radius:0px\"><tr><td width=50><nobr><b>' + textmsg[156] + '</b></nobr></td><td   align=left style=\"padding:0px 8px 0px 0px\"><input name=wordformat style=background-color:#bbb onclick=changeformat('+numbeing +',0) type=radio value=0 ' + (tail==''?'checked':'') + '>' + textmsg[1608] +'</td><td  style=\"padding:0px 8px 0px 0px\" align=left><input name=wordformat  type=radio  style=background-color:#bbb  onclick=changeformat('+numbeing +',1)  value=1 ' + (tail=='HTML'?'checked':'') + '>HTML</td><td  style=\"padding:0px 8px 0px 0px\" align=left><input name=wordformat value=2  type=radio  style=background-color:#bbb  onclick=changeformat('+numbeing +',2) ' + (tail=='LaTex'?'checked':'') + ">LaTex</td></tr></table></div>";
 
    if (needp && (x!='' || x1!=''))
    {
        var x2 = '';
-       if (x!='') x2 =   textmsg[1777]+'<div style="margin:2px 2px 2px 2px;border:1px #999999 solid;"><table width=100%  cellspacing=0 cellpadding=3 style="margin:0px;border:1px #999999 solid;border-radius:0px">' + x + "</table></div>";
+       if (x!='') x2 =   textmsg[1777]+'<div style=\"margin:2px 2px 2px 2px;border:1px #999999 solid;\"><table width=100%  cellspacing=0 cellpadding=3 style=\"margin:0px;border:1px #999999 solid;border-radius:0px\">' + x + "</table></div>";
        if (x1!='') x2 += x1;
        //myprompt(x2,null,null,textmsg[1634]);
        var tbl = $('t'+numbeing).getElementsByTagName('table')[0];
@@ -3088,7 +3076,7 @@ function asoption(urlas,K)
     for (var i=1; i < xs.length; i++)
     {
         var w = (Y[0]==''+i);
-        x += "<td><input onclick=\"chooseurlas(" + K + "," + i + ")\" name=opts" + K + " type=radio  style=background-color:#bbb value=\"" + i + "\" " + (w?'checked':'') + '></td><td style="padding:0px 8px 0px 0px"><nobr>' + xs[i] + "</nobr></td>";
+        x += "<td><input onclick=\"chooseurlas(" + K + "," + i + ")\" name=opts" + K + " type=radio  style=background-color:#bbb value=\"" + i + "\" " + (w?'checked':'') + '></td><td style=\"padding:0px 8px 0px 0px\"><nobr>' + xs[i] + "</nobr></td>";
     }
     x += '<td  id=width' + K + ' style=visibility:' + (parseInt(Y[0]) < 4?'visible':'hidden') + '><table cellspacing=0 cellpadding=0><tr ><td><nobr>' +textmsg[733] + "</nobr></td><td><input type=text name=aswidth size=3 value=\"" + Y[1] + "\" onchange=dourlaswidth(this,"+ K + ")></td><td>px</td></tr></table></td></tr></table>";
     return x;

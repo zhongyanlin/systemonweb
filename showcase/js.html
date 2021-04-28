@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Parse JS</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+ 
+<script src="JSParser.js"></script>
+ 
+<br>
+<table><tr><td>
+<textarea rows=40 cols=70 id="t"  onchange="javascript:p=null;">
+</textarea> </td><td>
+<input style="vertical-align: top" type="button" value="Tokens" onclick="token()"><br>
+<input style="vertical-align: top" type="button" value="NextFun" onclick="nextf()"><br>
+<input style="vertical-align: top" type="button" value="NextVar" onclick="nextv()">
+</td><td><textarea  rows=40 cols=70 id="s"></textarea></td></tr></table>
+ 
+ 
+<script>
+var p = null;
+function nexte()
+{
+   if (p == null)
+   p = new JSParser($('t').value);
+   $('s').value += p.nextToken() + "\n";
+} 
+function nextv()
+{
+   if (p == null)
+   p = new JSParser($('t').value);
+   $('s').value += p.nextGlobalVar() + "\n";
+} 
+function nextf()
+{
+   if (p == null)
+   p = new JSParser($('t').value);
+   $('s').value = p.nextGlobalVar();
+} 
+function token()
+{
+   var s = new JSParser($('t').value);
+   s.navigate();
+}
+</script>
+    </body>
+</html>

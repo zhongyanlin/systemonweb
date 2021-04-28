@@ -1359,7 +1359,7 @@ function replace()
    let s =  $('sourcechar');
    let c =  $('targetchar');
    let a = $('regex');
-   var rs = localStorage['reglist'];
+   var rs = localStorage['reglist']; // search a piece of data named relist in cache/ harddrive
    if (rs == null)
        allregs = []; 
    else
@@ -1369,7 +1369,7 @@ function replace()
            break;
    if ( i == allregs.length)
    {
-       allregs.splice(0,0,[s.value,c.value, ($('regex').checked)]);
+       allregs.splice(0,0,[s.value, c.value, ($('regex').checked)]);
        if (allregs.length > 25)
            allregs.splice(allregs.length-1,1);
        localStorage['reglist'] = JSON.stringify(allregs);
@@ -1377,9 +1377,9 @@ function replace()
        newitem.value = s.value;
        var lt = $('reglist').childNodes;
        if (lt ==null || lt.length == 0)
-           lt.append(newitem);
+           $('reglist').append(newitem);
        else
-           lt.insertBefore(lt,newitem);
+           $('reglist').insertBefore(lt[0],newitem);
        $('sourcechar').list = 'reglist';
        
    }
