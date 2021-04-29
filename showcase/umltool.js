@@ -39,7 +39,8 @@ if (typeof (colors) == 'undefined')
 if (typeof (bcolors) == 'undefined')
 {
     var bcolors = ["white", "red", "green", "orange", "blue", "purple", "pink", "lightyellow", "transparent", '1'];
-} else
+} 
+else
 {
     bcolors[8] = 'transparent';
     bcolors[9] = '1';
