@@ -1,3 +1,4 @@
+body{margin:0px 0px 0px 0px}
 table tr td
 {
    background-color:#def;
@@ -28,9 +29,7 @@ table tr td
    width:68px;
    font-size:16px
 }
-#title{
-    background-image:url(/tealeaman/image/bgindex.jpg)
-}
+ 
 #t0
 {
     background: linear-gradient(#ddd, #aaa);
@@ -45,14 +44,14 @@ table tr td
 }
 #title
 {
-  
-   font-size:30px;
+   font-size:38px;color:white;background-color: blue;text-align:center
+    
    text-shadow:#239549 2px -2px 2px; 
    font-family: Helvetica, Arial, sans-serif;
    font-weight: bold;
    font-size: 60px;
    line-height: 1em;
-   color: rgba(10,60,150, 0.8);
+   color: white;/*rgba(10,60,150, 0.8);*/
    text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
    text-align:center;
 }

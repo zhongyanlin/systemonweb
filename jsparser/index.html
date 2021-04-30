@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+ 
 <html>
     <head>
         <title>Parse JS</title>
@@ -12,17 +8,16 @@ and open the template in the editor.
         <style>
             body{margin: 0px 0px 0px 0px;font-size:18px}
             input{width:80px;}
-            table{margin:-19px 0px 0px 0px;}
+            table{margin:0px 0px 0px 0px;}
             span.t{font-size:38px;color:white}
             textarea{background-color: lightyellow}
         </style>
+        <script src="../showcase/cookie.js"></script>
+    <script src="../showcase/en.js"></script>
+    <script src="JSParser.js"></script>
     </head>
     <body>
- 
-<script src="JSParser.js"></script>
- 
-<br>
-<table cellpadding="2" cellspacing="0"><tr><td colspan="3" align="center" bgcolor="blue" ><span class="t">Javascript Parser</span></td></tr>
+<table cellpadding="2" cellspacing="0" align="center"><tr><td colspan="3" align="center" bgcolor="blue" ><span class="t">Javascript Parser</span></td></tr>
 <tr><td>    
 Copy-paste your Javascript codes here: <br>           
 <textarea rows=40 cols=70 id="t"  onchange="javascript:reset()">
@@ -163,14 +158,21 @@ function reset()
 
 onload = function()
 {
-    let w = screen.width;let h = screen.height;
-   
+    let h = thispageheight();
+    let w = thispagewidth();
+    
     $('t').style.width = (w/2-60) + 'px';
     $('s').style.width = (w/2-60) + 'px';
-    $('t').style.height = (h-200) + 'px';
-    $('s').style.height = (h-200) + 'px';
+    $('t').style.height = (h-90) + 'px';
+    $('s').style.height = (h-90) + 'px';
 }
-
+ 
+onresize = function()
+{
+   $('t').style.width =   '10px';
+   $('s').style.width =  '10px';
+   onload();
+}
  
 </script>
     </body>

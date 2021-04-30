@@ -9,11 +9,15 @@ and open the template in the editor.
         <title>Java Source to Swift</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link rel="stylesheet" type="text/css" href="../pages.css"  />
+        <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
     </head>
     <body>
     <center>
-        <h1>Translate Java Source Codes to Swift</h1>
-        <table><tr><td>Description:</td><td>  The translator only translates the variable declarations and function declarations.
+        
+        <table><tr><td colspan="2" align="center" id=h >Translate Java Source Codes to Swift</td></tr>
+            <tr><td>Description:</td><td>  The translator only translates the variable declarations and function declarations.
         It can not translate APIs and libraries.</td>
         </tr>
         <tr><td>
@@ -23,9 +27,28 @@ and open the template in the editor.
                 How to use:</td><td> download the zip file, unzip it, double click the Java2Swift.jar file inside
             </td>
         </tr><tr><td colspan="2">
-        <img src="java2swift.png" alt="java2swift.png">
+        <img src="java2swift.png" alt="java2swift.png" id="im" style="width:200px">
             </td></tr>
         </table>
         </center>
+                <script>
+            function $(x){ return document.getElementById(x);}
+     onload = function()
+{
+     
+    let w = thispagewidth();
+    
+    $('im').style.width = (w - 30) + 'px';
+    
+}
+ 
+onresize = function()
+{
+   $('im').style.width =   '200px';
+   onload();
+}
+        
+            
+        </script>
     </body>
 </html>

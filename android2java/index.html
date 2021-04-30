@@ -1,33 +1,52 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+ 
 <html>
     <head>
         <title>Android to Java</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../pages.css"  />
+        <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
     </head>
     <body>
-    <center>
-        <h1>A2J: Android Design to Desktop Java</h1>
-        <table width="606"><tr valign="top"><td>Description:</td><td>  
+   
+        <table align="center">
+            <tr><td colspan="2" id="h"> 
+         A2J: Android Design to Desktop Java 
+            </td></tr>
+            <tr valign="top"><td>Description:</td><td>  
 Translate the  UI design of Android Studio projects to desktop Java.
  
 .</td>
         </tr>
-        <tr height="100" valign="middle">
+        <tr   valign="middle">
             <td> Download</td>
             <td> <a href="Android2Java.jar">Android2Java.jar</a>
             </td>
         </tr>
         <tr><td colspan="2" style="padding:5px 5px 5px 5px">
-         <img align=center src="a2j.png" width="600">
+         <img align=center src="a2j.png" id=im style="width:600px">
         </td></tr>
          
         </table>
-        </center>
+        <script>
+        function $(x){return document.getElementById(x);}
+   onload = function()
+{
+   
+    let w = thispagewidth();
+    
+    $('im').style.width = (w-60) + 'px';
+   
+}
+ 
+onresize = function()
+{
+   $('im').style.width =   '10px';
+  
+   onload();
+}
+    </script>     
     </body>
 </html>

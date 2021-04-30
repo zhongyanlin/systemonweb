@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+ 
 <html>
     <head>
         <title>Facial Attendance</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" type="text/css" href="../pages.css"  />
+       <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
     </head>
     <body>
-    <center>
-        <h1>Facial Attendance </h1></center>
-    <table align="center"><tr><td>    
+    <table align="center">
+        <tr><td id="h"> Facial Attendance </td></tr>
+        <tr><td>    
         This desktop Java Application analyzes pictures of classes or meetings, performs 
         AI facial 
         detection and facial recognition
@@ -30,8 +29,27 @@ and open the template in the editor.
         </ol>
      </td></tr>
         <tr><td>
-        <img src="FaceAttend.png" >
+        <img src="FaceAttend.png" id="im" style="width:400px">
    </td></tr>
         </table>
+        <script>
+            function $(x){ return document.getElementById(x);}
+     onload = function()
+{
+     
+    let w = thispagewidth();
+    
+    $('im').style.width = (w - 20) + 'px';
+    
+}
+ 
+onresize = function()
+{
+   $('im').style.width =   '200px';
+   onload();
+}
+        
+            
+        </script>
     </body>
 </html>

@@ -214,6 +214,51 @@ function setcl( t)
         t.style.color = 'red';
     else t.color = 'gery';
 }
+
+var thispagewidth = function()
+{
+    var wd = screen.width - 200;
+    if (typeof (self.innerWidth) != 'undefined')
+    {
+        wd = self.innerWidth;
+    }
+    else if (typeof document.documentElement != 'undefined'
+            && typeof document.documentElement.clientWidth !=
+            'undefined' && document.documentElement.clientWidth != 0)
+    {
+        wd = document.documentElement.clientWidth;
+    }
+    else
+    {
+        wd = document.getElementsByTagName('body')[0].clientWidth;
+    }
+    return wd;
+}
+
+var thispageheight = function()
+{
+    if (navigator.appName.indexOf('Explorer') > 0)
+    {
+        return (document.documentElement && document.documentElement.clientHeight) || window.innerHeight || self.innerHeight || document.body.clientHeight;
+    }
+    var het = screen.height;
+    if (typeof (self.innerHeight) != 'undefined')
+    {
+        het = self.innerHeight;
+    }
+    else if (typeof document.documentElement != 'undefined'
+            && typeof document.documentElement.clientWidth !=
+            'undefined' && document.documentElement.clientWidth != 0)
+    {
+        het = document.documentElement.clientHeight;
+    }
+    else
+    {
+        het = document.getElementsByTagName('body')[0].clientHeight;
+    }
+    return het;
+}
+
 onload = function ()
 {
     textareatobesearch = document.f.codes;
@@ -230,12 +275,23 @@ onload = function ()
         //document.f.savebtn.style.visibility = 'hidden';
         document.getElementById('t2').rows[0].cells[0].innerHTML = '';
     }
-
+    let w = thispagewidth();
+    textareatobesearch.style.width = (w - 710) + 'px';
+    document.f.sheet.style.width = (w - 710) + 'px';
     if (document.f.codes.value != '')
         parsecss();
     document.f.undobtn.disabled = true;
     document.f.dobtn.disabled = true;
     document.getElementById("t3").style.cssText = '' + document.getElementById("t3").style.cssText;
+}
+
+onresize = function()
+{
+    textareatobesearch.style.width =   '100px';
+    document.f.sheet.style.width =  100 + 'px';
+    let w = thispagewidth();
+    textareatobesearch.style.width = (w - 710) + 'px';
+    document.f.sheet.style.width = (w - 710) + 'px';
 }
 function findPositionnoScrolling(oElement, win)
 {

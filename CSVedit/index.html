@@ -1,4 +1,5 @@
 <html>
+    <head>
     <style>
         .heading{background-color:lightgray;border:1px gray inset;width:20px;text-align:right}
     #t1 {
@@ -18,20 +19,23 @@
       top:20px;
       margin-top:-20px
     }
-    body{margin: -10px 0px 0px 0px }
-    #main{margin: -6px 0px 0px 0px; width:100%}
+    body{margin: 0px 0px 0px 0px }
+    #main{margin: 0px 0px 0px 0px; width:100%}
     table tr td textarea{height:360px}
     td.h{background-color:blue;color:white;magin:-20px 0px 0px 0px;font-size:38px}
     #csv{width:800px}
     input.button{width:80px}
-    table tr td table tr td table{border:1px gray solid;width:100%;border-radius:4px}
+    table tr td table tr td table{margin:0px 0px 0px 0px;border:1px gray solid;width:100%;border-radius:4px}
     </style>
+    <script src="../showcase/cookie.js"></script>
+    <script src="../showcase/en.js"></script>
+    </head>
 <body>
-    <table id="main"><tr height="50"><td class="h" align="center" colspan="2">CSV File Editor</td></tr>
+    <table id="main" cellspacing="0"><tr height="50"><td class="h" align="center" colspan="2">CSV File Editor</td></tr>
         <tr><td>
 <textarea id=csv rows=25 >"Last Name","First Name","Username","Student ID","Last Access","Availability","recitation0129"
-"Honter","Gred","dffg22@students.desu.edu","D10000001","2021-02-27 18:14:54","Yes","79.00"
-"Smith","Juan","qwer124@students.desu.edu","D10000002","2021-02-27 22:44:54","Yes","85.00"</textarea>
+"Honter","Gred","hgred@students.desu.edu","D10000001","2021-02-27 18:14:54","Yes","79.00"
+"Smith","Juan","jsmith@students.desu.edu","D10000002","2021-02-27 22:44:54","Yes","85.00"</textarea>
             </td><td valign="top" width="180">
 <table>
  <tr> 
@@ -634,7 +638,7 @@ for (let i=0; i < m[0].length; i++)
 var str = "<div  class=heading><div id=t2  onclick=insertRow(0)></div><div id=t1 onclick=insertCol(0)></div></div>";
 for (var j=0; j < m[0].length; j++)
 {
-   str += "<div class=heading style=width:98px;text-align:left;background-color:#888 onmouseenter=menu("+ (j+1) + ") onmouseout=hidemenu() onclick=insertCol(" + (j+1) + ")>" + String.fromCharCode('A'.charCodeAt(0)+j) + "</div>"; 
+   str += "<div class=heading style=width:98px;text-align:left;background-color:#888;text-align:center onmouseenter=menu("+ (j+1) + ") onmouseout=hidemenu() onclick=insertCol(" + (j+1) + ") >" + String.fromCharCode('A'.charCodeAt(0)+j) + "</div>"; 
 }
 $('editing').style.gridTemplateColumns = autos.substring(1);
  
@@ -724,6 +728,18 @@ function insertCol(j)
     $('csv').value = p.str;
     parse();
 }
+onload = function()
+{
+    let w = thispagewidth();
+    $('csv').style.width = (w - 210) + 'px'
+}
+onresize = function()
+{
+   $('csv').style.width = '10px';
+   let w = thispagewidth();
+   $('csv').style.width = (w - 210) + 'px'
+}
 </script>
+
 </body>
 </html>

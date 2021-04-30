@@ -144,7 +144,7 @@ function JSParser(str)
    this.nextToken0 = function()
    {
       if (this.state == this.ERROR) return null;
-      let type = ['sparator','string','string','string','string','operator',
+      let type = ['separator','string','string','string','string','operator',
                   'comment', 'comment','comment','operator','literal','regex','regex'];
       while (true)
       {
