@@ -476,6 +476,7 @@ function initfilename()
     else
     {
         var str = localStorage[filename];
+         
         if (str!=null)
         {
             var obj = JSON.parse(str);
@@ -494,6 +495,7 @@ function initfilename()
             editable = obj.editable;
             tstmp = obj.tstmp;
             shapearr = obj.shapearr;
+            
             linearr = obj.linearr;
             curvearr = obj.curvearr;
             attachstr = obj.attachstr;
@@ -2313,6 +2315,7 @@ function saveit()
     }
     else
     {
+        makefile();
         tojson(); 
     }
 }
