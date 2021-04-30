@@ -73,7 +73,7 @@ function findPositionnoScrolling(oElement, win)
 <br>
 
 <input style="vertical-align: top" type="button" value="Next Var" onclick="next('var',1)"><br>
-<input style="vertical-align: top" type="button" value="All Vars" onclick="next('var')">
+<input style="vertical-align: top" type="button" value="All Vars" onclick="next('var')"><br>
 <span id="vc"></span><br>
 <br>
 
@@ -83,15 +83,16 @@ function findPositionnoScrolling(oElement, win)
 <br>
 
 <input style="vertical-align: top" type="button" value="Next Stat" onclick="next('statement',1)"><br>
-<input style="vertical-align: top" type="button" value="All Stats" onclick="next('statement')">
+<input style="vertical-align: top" type="button" value="All Stats" onclick="next('statement')"><br>
 <span id="sc"></span><br>
 <br>
+
 <input style="vertical-align: top" type="button" value="Next Any" onclick="next('any',1)"><br>
-<input style="vertical-align: top" type="button" value="Validate" onclick="next('any')">
+<input style="vertical-align: top" type="button" value="Validate" onclick="next('any')"><br>
 <span id="ac"></span><br>
 <br>
 
-<input style="vertical-align: top" type="button" value="Reset" onclick="reset()"><br>
+<input id=reset style="vertical-align: top" type="button" value="Reset" onclick="reset()"><br>
  
 </td><td>Parsed Parts:<span style="float:right"><a href="JSCleaner.jar">JSCleaner.jar</a></span><br> <textarea  rows=40 cols=70 id="s"></textarea></td></tr></table>
  
@@ -100,6 +101,7 @@ function findPositionnoScrolling(oElement, win)
 var pr = null;
 function nextt()
 {
+   $('reset').style.backgroundColor = null;  
    if (pr == null) pr = new JSParser($('t').value);
    var x = pr.nextToken();
    if (x!=null)
@@ -108,6 +110,7 @@ function nextt()
 var total = 0;
 function tokens(t)
 {
+   $('reset').style.backgroundColor = null;  
    if (t.value == 'All Tokens')
    {
        for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
@@ -127,12 +130,16 @@ function tokens(t)
    if (x != null)
     t.value = 'Continue';
    else
-    t.value = 'All Tokens';
+   { 
+       t.value = 'All Tokens';
+       $('reset').style.backgroundColor = 'orange';  
+   }
     
 } 
 
 function next(which,one)
 {
+   $('reset').style.backgroundColor = null;  
    for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
    if (pr == null)
    pr = new JSParser($('t').value);
@@ -148,12 +155,17 @@ function next(which,one)
        }    
    }
    $(which.charAt(0) + 'c').innerHTML = k; 
+   if (one == null || x == null)
+   {
+      $('reset').style.backgroundColor = 'orange';  
+   }
 } 
 
 function reset()
 {
    pr = new JSParser($('t').value);
    $('s').value = '';
+   $('reset').style.backgroundColor = null;  
 }    
 
 onload = function()
