@@ -24,8 +24,53 @@ and open the template in the editor.
 <br>
 <table cellpadding="2" cellspacing="0"><tr><td colspan="3" align="center" bgcolor="blue" ><span class="t">Javascript Parser</span></td></tr>
 <tr><td>    
-Javascript Codes: <br>           
+Copy-paste your Javascript codes here: <br>           
 <textarea rows=40 cols=70 id="t"  onchange="javascript:reset()">
+if (document.location.toString().indexOf("localhost") >= 0
+        && typeof (handleErr) == 'undefined')
+{
+    function handleErr(msg, url, l)
+    {
+        var txt = "There was an error on this page.\n\n"
+                + "Error: " + msg + "\n"
+                + "URL:   " + url + "\n"
+                + "Line:  " + l;
+        return true;
+    }
+    window.onerror = handleErr;
+}
+if (typeof (expiretime) == 'undefined')
+{
+    var expiretime = (new Date()).getTime() + 3600000;
+    var activeidletime = 3600000;
+}
+function findPositionnoScrolling(oElement, win)
+{
+    if (win == null)
+        win = self;
+    if (oElement == null)
+        return [0, 0];
+    if (typeof (oElement.offsetParent) != 'undefined')
+    {
+        var ii = 0;
+        var originalElement = oElement;
+        for (var posY = 0, posX = 0; ii++<10 && oElement!=null; oElement = oElement.offsetParent )
+        {
+            posY += oElement.offsetTop;
+            posX += oElement.offsetLeft;
+            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
+            {
+                posY -= oElement.scrollTop;
+                posX -= oElement.scrollLeft;
+            }
+        }
+        return  [posX, posY];
+    }
+    else
+    {
+        return  [oElement.x, oElement.y];
+    }
+}
 </textarea> </td><td valign="top" align="center"><br>
 <input style="vertical-align: top" type="button" value="Next Token" onclick="nextt()"><br>
 <input style="vertical-align: top" type="button" value="All Tokens" onclick="tokens(this)"><br>
@@ -53,7 +98,7 @@ Javascript Codes: <br>
 
 <input style="vertical-align: top" type="button" value="Reset" onclick="reset()"><br>
  
-</td><td>Parsed Parts:<span style="float:right"><a href="JSParser.jar">JSCleaner.jar</a></span><br> <textarea  rows=40 cols=70 id="s"></textarea></td></tr></table>
+</td><td>Parsed Parts:<span style="float:right"><a href="JSCleaner.jar">JSCleaner.jar</a></span><br> <textarea  rows=40 cols=70 id="s"></textarea></td></tr></table>
  
  
 <script>
