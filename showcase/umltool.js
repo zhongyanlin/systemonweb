@@ -614,7 +614,7 @@ function popmenu(id,td)
 {
     if (filenamestr == null) 
     {
-        var farr = ["other.html"];
+        var farr = [];
        
         for (var fn in localStorage)
         {
@@ -2234,8 +2234,21 @@ function makefile()
         s += "'" +  bgarr[n] +"';";
 
     }
-
-    s += "\n/*1*/var jsscripts = ['" + passedencoding + ".js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];\n";
+    let lang = null;
+    if (typeof(jsscripts)!='undefined')
+        lang = jsscripts[0].replace(/\.js/,'');
+    else
+    {
+        var lang0 = document.location.toString();
+        let j = lang0.indexOf('lang=');
+        if (j > 0)
+        {
+            lang = lang0.substring(j+5);
+        }
+        else
+            lang = 'en';
+    }
+    s += "\n/*1*/var jsscripts = ['" + lang + ".js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];\n";
     s += "/*1*/for (var ii=0; ii < jsscripts.length; ii++)\n";
     s += "/*1*/document.write('<scrip'+'t  type=\"text/javascript\" src=\"'   + originalurl + '/' + jsscripts[ii] + '\"></scrip' + 't>');\n";
     s += "/*1*/</scrip"+ "t>\n</body>\n</html>";
@@ -2263,8 +2276,8 @@ function filexist(fn, len)
 
 function saveas1(v)
 {
+    if (folder !=null){
     submitstring = "saveas1('" + v + "')";
-
     filename = document.f.filedir.value;
     document.f.target = iframename;
     document.f.operation.value = 'exist';
@@ -2273,6 +2286,15 @@ function saveas1(v)
     expiretime = activeidletime + (new Date()).getTime();
     visual(document.f);
     document.f.submit();
+    }
+    else
+    {
+        filename = v;
+        makefile();
+        tojson(); 
+        let x = document.location.toString().replace(/fn=[^&]+/,'fn=' + filename);
+        document.location.href = x;
+    }
 }
 var submitstring = null;
 resumehalted = function(sid)
@@ -2355,9 +2377,27 @@ function fromjson()
 function sourcecodes()
 {
     closeprompt();
-    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#BBBB00;width:120px;border:1px #b0b0b0 solid\" value=\"Delivery Version\" onclick=\"delivery()\" ></center>",null,null,filename + ": " + textmsg[532]);
+    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"Copy Clip\" onclick=\"toclip('" + filename + "')\" > <input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"Manage Files\" onclick=\"managefiles()\" > <input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles()\" ></center>",null,null,filename + ": " + textmsg[532]);
     $("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
 
+}
+function restorefiles(stage)
+{
+    if (stage == null)
+    {
+    closeprompt();
+    myprompt("Open a back-up file named <font color=red>showcase********.bak</font> in a notepad and copy the file contents to here<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles(1)\" ></center>",null,null,textmsg[118]);
+    //$("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
+    }
+    else
+    {
+       var xy = JSON.parse($("savearea").value);
+       for (let x in xy)
+       {
+           localStorage[x] = xy[x];
+       }
+       closeprompt();
+    }
 }
 function delivery()
 {
@@ -2395,6 +2435,96 @@ function delivery()
     myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#bbbb00;width:120px;border:1px #b0b0b0 solid\" value=\"Editing Version\" onclick=\"sourcecodes()\" ></center>",null,null,textmsg[532]);
     $("savearea").value = s + "</body></html>";
 
+}
+function managefiles(ms)
+{
+    if (ms == null) ms = '';
+    else 
+        ms = '<font color=red>'+ ms +'</font>';
+    var v =ms + '<table align=center id=savearea style=border-collapse:collapse;border-color:lightyellow border=1><tr bgcolor=lightgray><td>File Name</td><td><input type=checkbox onclick=selectallfile(this)></td></tr>';
+    for (let fn in localStorage)
+    {
+        if (fn.indexOf('.html')>0)
+        {
+            v += '<tr><td>' + fn + '</td><td><input type=checkbox></td></tr>';
+        }
+    }
+    v += '</table>';
+    myprompt(v + "<br><center><input type=button style=\"background-color:#bbbb00;width:100px;border:1px #b0b0b0 solid\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#bbbb00;width:100px;border:1px #b0b0b0 solid\" value=\"Delete\" onclick=\"deleteSFiles()\" ></center>",null,null,"Files");
+    //$("savearea").value = s + "</body></html>";   
+}
+function selectallfile(c)
+{
+    if (c.checked)
+    {
+       var tbl = $("savearea");
+       for (let i =1; i < tbl.rows.length; i++)
+       {
+           tbl.rows[i].cells[1].childNodes[0].checked = true;
+
+       }
+    }
+    else
+    {
+       var tbl = $("savearea");
+       for (let i =1; i < tbl.rows.length; i++)
+       {
+           tbl.rows[i].cells[1].childNodes[0].checked = false;
+       }
+    }
+}
+function deleteSFiles()
+{
+   var tbl = $("savearea");
+   var c = 0;
+   for (let i =1; i < tbl.rows.length; i++)
+   {
+       if (tbl.rows[i].cells[1].childNodes[0].checked)
+       {
+           delete  localStorage[tbl.rows[i].cells[1].innerHTML];
+           c++;
+       }
+   }
+   let ms = '';
+   if (c == 0) ms = 'No file selected';
+   managefiles(ms);
+}
+function backupFiles()
+{
+   var obj = {};
+   var tbl = $("savearea");
+   var nf = 0;
+   for (let i =1; i < tbl.rows.length; i++)
+   {
+       if (tbl.rows[i].cells[1].childNodes[0].checked)
+       {
+           nf++; let fn = tbl.rows[i].cells[0].innerHTML;
+           obj[fn] = localStorage[fn];
+       }
+   }
+   if (nf == 0)
+   {
+      managefiles('No file selected');
+      return;
+   }
+   var s = JSON.stringify(obj); 
+   var d  = new Date(); 
+let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+    
+   var fn = ye + mo + da;
+   myprompt(nf + " files. Don't edit the text. Click 'Clipboard' instead <br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#bbbb00;width:120px;border:1px #b0b0b0 solid\" value=\"Clipboard\" onclick=\"toclip('showcase"+fn+".bak')\" ></center>",null,null,textmsg[532]);
+   $("savearea").value = s ;
+
+}
+function toclip(fn)
+{
+   var copyText = document.getElementById("savearea");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  document.execCommand("copy");
+  myprompt("File contents have been copied to clipboard. You can paste them to a notepad and save them as a file named <font color=red>" + fn + "</font>");
 }
 function removescript(ss)
 {
