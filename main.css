@@ -25,7 +25,7 @@ body{margin:0px 0px 0px 0px}
   text-align: left;
   margin:10px 10px 10px 10px;
   
-  border-radius:20px; 
+  border-radius:6px; 
   box-shadow:#00BBBB 2 2
 }
 #main div:hover{background-image: linear-gradient(lightblue, pink);} 

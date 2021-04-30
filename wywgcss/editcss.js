@@ -291,6 +291,7 @@ onresize = function()
     document.f.sheet.style.width =  100 + 'px';
     let w = thispagewidth();
     textareatobesearch.style.width = (w - 710) + 'px';
+    textareatobesearch.style.width = (w - 710) + 'px';
     document.f.sheet.style.width = (w - 710) + 'px';
 }
 function findPositionnoScrolling(oElement, win)
