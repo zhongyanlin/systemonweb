@@ -31,3 +31,4 @@ body{background:#B5EBDD url(image/bgimage/bgindex.jpg);margin:5px 5px 0px 5px;fo
 .outset3{border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;background:linear-gradient(180deg,#ABE1D3,#C8F3E5);border:1px #45614E solid;font-family:Times}
 .shadow1 {float:left;background: url(image/trans-shadow.png) no-repeat bottom right;}.shadow1 table {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 div {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}.shadow1 img {display: block;  position: relative;  padding: 5px; background-color: #fff;  border: 1px solid #cecece; margin: 0px 6px 6px 0px;}
 .trig{width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px solid white}
+pre{margin:-2px 0px -2px 0px}

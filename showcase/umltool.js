@@ -25,7 +25,7 @@ var allis = [];
 //linearr[i]=[type,startobjnum,xonobj, yonobj, endobjnum, xonobj,yonobj,thick,direction]
 var shapes = ["rightrect", "roundrect", "ellipse", "diamond"];
 var arrows = ["arrow", "arrom", "diamond", "line"];
-//var COLORS = ["black", "red", "green", "orange", "blue", "purple", "pink", "#BBBB00"];
+//var COLORS = ["black", "red", "green", "orange", "blue", "purple", "pink", "#00BBBB"];
 //var BCOLORS = ["white", "red", "green", "orange", "blue", "purple", "pink","lightyellow","transparent",'1'];
 if (typeof (kframes) == 'undefined')
 {
@@ -180,6 +180,7 @@ if (typeof (onlinetoolinitial) == 'undefined' || onlinetoolinitial == null)
 {
     onlinetoolinitial = ";LaTex;web;LaTex toolbar;LaTex;" + originalurl + "/findrep.js;showlatexpanel(content_a,this);";
 }
+if (folder != null)
 onlinetoolinitial += textmsg[16] + ";web;Configuration;Configure;;openconfigtool();";
 var onlinetoolinfo = onlinetoolinitial;
 if (typeof (allies) == 'undefined')
@@ -2234,6 +2235,15 @@ function makefile()
         s += "'" +  bgarr[n] +"';";
 
     }
+    
+    s += "\n/*1*/var jsscripts = ['" + getlang() + ".js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];\n";
+    s += "/*1*/for (var ii=0; ii < jsscripts.length; ii++)\n";
+    s += "/*1*/document.write('<scrip'+'t  type=\"text/javascript\" src=\"'   + originalurl + '/' + jsscripts[ii] + '\"></scrip' + 't>');\n";
+    s += "/*1*/</scrip"+ "t>\n</body>\n</html>";
+    return s;
+}
+function getlang()
+{
     let lang = null;
     if (typeof(jsscripts)!='undefined')
         lang = jsscripts[0].replace(/\.js/,'');
@@ -2243,16 +2253,12 @@ function makefile()
         let j = lang0.indexOf('lang=');
         if (j > 0)
         {
-            lang = lang0.substring(j+5);
+            lang = lang0.substring(j+5).replace(/&.*/,'');
         }
         else
             lang = 'en';
     }
-    s += "\n/*1*/var jsscripts = ['" + lang + ".js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];\n";
-    s += "/*1*/for (var ii=0; ii < jsscripts.length; ii++)\n";
-    s += "/*1*/document.write('<scrip'+'t  type=\"text/javascript\" src=\"'   + originalurl + '/' + jsscripts[ii] + '\"></scrip' + 't>');\n";
-    s += "/*1*/</scrip"+ "t>\n</body>\n</html>";
-    return s;
+    return lang;
 }
 function saveas()
 {
@@ -2291,7 +2297,7 @@ function saveas1(v)
     {
         filename = v;
         makefile();
-        tojson(); 
+        localStorage[filename] = tojson(); 
         let x = document.location.toString().replace(/fn=[^&]+/,'fn=' + filename);
         document.location.href = x;
     }
@@ -2338,7 +2344,7 @@ function saveit()
     else
     {
         makefile();
-        tojson(); 
+        localStorage[filename] = tojson(); 
     }
 }
 function tojson()
@@ -2346,8 +2352,8 @@ function tojson()
     var obj = {
     "orgnum":orgnum,
     "originalurl":originalurl,
-    "umltoolstylesid":typeof(umltoolstyles)!='undefined'? mltoolstyles.id:null,
-    "umltoolstyleshref":typeof(umltoolstyles)!='undefined'?umltoolstyles.href:null,
+    "umltoolstylesid":typeof(umltoolstyles)!='undefined' && umltoolstyles!=null? umltoolstyles.id:null,
+    "umltoolstyleshref":typeof(umltoolstyles)!='undefined' && umltoolstyles!=null?umltoolstyles.href:null,
     "cachedfontfamily":cachedfontfamily,
     "colors":colors,
     "bcolors":bcolors,
@@ -2368,7 +2374,7 @@ function tojson()
     "kframes":kframes,
     "kshapes":kshapes
     };
-    localStorage[filename] = JSON.stringify(obj);
+    return JSON.stringify(obj);
 }
 function fromjson()
 {
@@ -2377,16 +2383,18 @@ function fromjson()
 function sourcecodes()
 {
     closeprompt();
-    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"Copy Clip\" onclick=\"toclip('" + filename + "')\" > <input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"Manage Files\" onclick=\"managefiles()\" > <input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles()\" ></center>",null,null,filename + ": " + textmsg[532]);
-    $("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
-
+    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><a id=\"da\"  download=\"" + filename + "\" type='text/html'>Save File</a>  <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Manage Cache\" onclick=\"managefiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles()\" ></center>",null,null,filename );
+    let csv = $("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
+    var data = new Blob([csv]);
+    var a = document.getElementById('da');
+    a.href = URL.createObjectURL(data);
 }
 function restorefiles(stage)
 {
     if (stage == null)
     {
     closeprompt();
-    myprompt("Open a back-up file named <font color=red>showcase********.bak</font> in a notepad and copy the file contents to here<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#BBBB00;width:100px;border:1px #b0b0b0 solid\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles(1)\" ></center>",null,null,textmsg[118]);
+    myprompt("Open a back-up file named <font color=red>showcase********.bak</font> in a notepad and copy the file contents to here<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles(1)\" ></center>",null,null,textmsg[118]);
     //$("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
     }
     else
@@ -2432,7 +2440,7 @@ function delivery()
          s += "<DIV " + attr + ">" + w.innerHTML + "</DIV>\n\n\n";
 
      }
-    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#bbbb00;width:120px;border:1px #b0b0b0 solid\" value=\"Editing Version\" onclick=\"sourcecodes()\" ></center>",null,null,textmsg[532]);
+    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Editing Version\" onclick=\"sourcecodes()\" ></center>",null,null,textmsg[532]);
     $("savearea").value = s + "</body></html>";
 
 }
@@ -2450,7 +2458,7 @@ function managefiles(ms)
         }
     }
     v += '</table>';
-    myprompt(v + "<br><center><input type=button style=\"background-color:#bbbb00;width:100px;border:1px #b0b0b0 solid\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#bbbb00;width:100px;border:1px #b0b0b0 solid\" value=\"Delete\" onclick=\"deleteSFiles()\" ></center>",null,null,"Files");
+    myprompt(v + "<br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Delete\" onclick=\"deleteSFiles()\" ></center>",null,null,"Files");
     //$("savearea").value = s + "</body></html>";   
 }
 function selectallfile(c)
@@ -2514,9 +2522,11 @@ let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
 let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
     
    var fn = ye + mo + da;
-   myprompt(nf + " files. Don't edit the text. Click 'Clipboard' instead <br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#bbbb00;width:120px;border:1px #b0b0b0 solid\" value=\"Clipboard\" onclick=\"toclip('showcase"+fn+".bak')\" ></center>",null,null,textmsg[532]);
-   $("savearea").value = s ;
-
+   myprompt(nf + " files. Don't edit the text. Click 'Save File' instead <br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><a id=\"da\"  download=\"showcase"+fn+".bak\" type='text/json'>Save File</a></center>",null,null,textmsg[532]);
+   let csv = $("savearea").value = s ;
+   var data = new Blob([csv]);
+   var a = document.getElementById('da');
+   a.href = URL.createObjectURL(data);
 }
 function toclip(fn)
 {
@@ -3495,6 +3505,7 @@ function showedit(num,x,y,w,h,tt)
         else
         s+= "<td                                         align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset;\"><span  onclick=\"showonlinetool(" + num + ")\"><nobr>" + textmsg[1776] + "</nobr></span></td><td style=width:10px;overflow:hidden></td>";
         s+= "<td    onclick=\"listf(" + num +",'b')\"    align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>" + textmsg[1592].replace(/ .*/,'') + "</nobr></td>"
+        s+= "<td    onclick=\"listf(" + num +",'pre')\"    align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>Pre</nobr></td>"
         + "<td    onclick=\"listf(" + num +",'oln')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>1.2.3.</nobr></td>"
         + "<td    onclick=\"listf(" + num +",'ola')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\">a.b.c.</td>"
         + "<td    onclick=\"listf(" + num +",'ulb')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\">&bull;&bull;&bull;</td>"
@@ -11084,18 +11095,46 @@ function tenexec()
    }
 }
 var oldonload4 = window.onload;
+function passcache()
+{
+   localStorage[filename] = $("savearea").value;
+   document.location.href = document.location.toString().replace(/&pass/,'');
+}
 window.onload  = function()
 {
     onlinetoolbarhas = true;
     if (oldonload4!=null) oldonload4();
+    if (document.location.toString().indexOf("&pass")>0)
+    {
+        myprompt("Paste cached codes to this textbox and click the Open button.<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Open\" onclick=\"passcache()\" ></center>");
+        $("savearea").focus();
+        return;
+    }
     if (shapearr.length==0 && chatsessionnum==-1)
     {
         trydemo();
     }
+    else
+    {
+        if (document.location.toString().indexOf("http")!=0)
+        {
+            myprompt("<textarea id=savearea cols=40 rows=2 ></textarea><br>You are opening the file from local disk. To edit it further, click the link to use designated web application to open it<br><a href=javascript:openremote()>" + originalurl + "</a>");
+            $("savearea").value = tojson();
+        }
+    }
     //else  tenexechandle = setInterval(tenexec,100);//fixall();
     
 }
-
+function openremote()
+{
+  var copyText = document.getElementById("savearea");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  document.execCommand("copy");
+  
+  open(originalurl + "/umltool.html?fn=" + filename + "&lang=" + getlang() + "&pass", "_self");
+  
+}
 var oldpagenum;
 function copyapage(xys)
 {

@@ -49,3 +49,4 @@ body{background:linear-gradient(10deg,#FFFFCC,#FFFFED 10%, #FFFFFF) #FFFFCC;marg
 .MathJax nobr>span.math>span{border-left-width:0 !important};
 @keyframes rotatepic{from {tranform:rotate(0deg)}
 to {tranform:rotate(359deg)}}
+pre{margin:-2px 0px -2px 0px}

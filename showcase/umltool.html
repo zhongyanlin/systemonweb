@@ -43,8 +43,20 @@ function set()
 {
       let query = parseQuery(document.location.search);
       orgnum = query["orgnum"];
+      fn = query["fn"];
+      if (fn == null)
+      {
+          var d  = new Date(); 
+          let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+          let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+          let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+          var fn = ye + mo + da + ".html";
+          document.location.search = document.location.search + "&fn=" + fn;
+          query["fn"] = fn;
+      }
       charset = query["en"];
       let langcode = query["lang"];
+      
       var y = opener;
       if (y != null) 
       {

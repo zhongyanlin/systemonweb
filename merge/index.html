@@ -1304,8 +1304,14 @@ function csv()
     
     let td = maintbl.rows[5].cells[0];
     td.innerHTML = '<textarea style="width:100%" id="result" rows="' + (b.length+1) + '">' + s + '</textarea>'  
-     + '<input class=button  type="button" style=float:center id="btnclip" value="Copy" onclick="toclip()">';
-   
+     + '<center><a id="da" download="' + course.value + '.csv" type="text/csv"><span class=button style="display:inline;width:70px;padding:2px 2px 2px 2px !important">Download</span></a> &nbsp; <a href="javascript:toclip()"><span class=button  style="display:inline;width:70px;padding:2px 2px 2px 2px !important">&nbsp;&nbsp;&nbsp;&nbsp;Copy&nbsp;&nbsp;&nbsp;</span></a></center>';
+    var data = new Blob([s]);
+    var a = document.getElementById('da');
+    a.href = URL.createObjectURL(data);
+}
+function download()
+{
+
 }
 function toclip() {
   var copyText = document.getElementById("result");
