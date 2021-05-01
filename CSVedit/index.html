@@ -25,7 +25,7 @@
      
     #csv{width:800px}
     input.button{width:80px}
-    table tr td table tr td table{margin:0px 0px 0px 0px;border:1px gray solid;width:100%;border-radius:4px}
+    table.op{margin:0px 0px 0px 0px;border:1px gray solid;width:100%;border-radius:4px}
     </style>
     <link rel="stylesheet" type="text/css" href="../pages.css"  />
     <script src="../showcase/cookie.js"></script>
@@ -43,7 +43,7 @@
 <table style="margin-top:27px">
  <tr> 
      <td align="left"> Uniform Editing<br>
-         <table><tr><td>
+         <table class="op"><tr><td>
      <input class=button type="button" id="view" value="View Tab" onclick="view(this)"></td>
     <td align="left" ><datalist id="reglist"></datalist><input id="regex"  type="checkbox"> 
                                      RegEx</td></tr>
@@ -52,24 +52,52 @@
  <tr><td ><input id="replace" type="button" class="button" style="width:90px" value="ReplaceBy" onclick="replace()"></td> 
      <td><input id="targetchar" size="8"></td>
  </tr>
- <tr><td colspan="2"><input id="undo" type="button" class="button" style="width:90px;visibility:hidden" value="Undo" onclick="undo(this)"></td>
+ <tr><td ><input id="undo" type="button" class="button" style="width:90px;visibility:hidden" value="Undo" onclick="undo(this)"></td>
+ <td ><input id="download" type="button" class="button" style="width:90px;" value="Download" onclick="download(this)"></td>
+ 
  </tr> </table></td></tr>
  <tr height="6"><td></td></tr> 
- <tr><td align="center"> To edit cells, set:<table>  
+ <tr><td align="left"> To edit cells, set:<table  class="op">  
  <tr> 
      <td >Column separator:</td><td><input value="," size="2" id="column" list="columnlist"  onchange="parse()"><datalist id="columnlist"><option value="\t"></option><option value=","></option></datalist>  
-</td></tr><tr><td>Saving column sep:</td><td><input  value=","  size="2" id="columns" list="columnslist"   onchange="parse()"><datalist id="columnslist" ><option value="\t"></option><option value=","></option></datalist> 
-            <br></td></tr><tr><td>Row Separator:</td><td><input  value="\n"  size="2" id="row" list="rowlist"  onchange="parse()"><datalist id="rowlist" ><option value="\r\n"></option><option value="\n"></option></datalist>  
-</td></tr><tr><td>Saving row separa:</td><td><input  value="\n"  size="2" id="rows" list=rowslist onchange="parse()"><datalist id="rowslist"><option value="\r\n"></option><option value="\n"></option></datalist>  
-            <br></td></tr><tr><td>Delimiter:</td><td><input  value='"'  size="2" id="de" list="delist"  onchange="parse()"><datalist id="delist" ><option value='"'></option><option value="'"></option></datalist>  
-</td></tr><tr><td>Saving delimter:</td><td><input  value='"'  size="2" id="des" list="deslist"  onchange="parse()"><datalist id="deslist" ><option value='"'></option><option value="'"></option></datalist>  
-            <br></td></tr><tr><td colspan="2" align="center"> then 
+</td></tr><tr><td>Row Separator:</td><td><input  value="\n"  size="2" id="row" list="rowlist"  onchange="parse()"><datalist id="rowlist" ><option value="\r\n"></option><option value="\n"></option></datalist>  
+</td></tr><tr><td>Enclosure:</td><td><input  value='"'  size="2" id="de" list="delist"  onchange="parse()"><datalist id="delist" ><option value='"'></option><option value="'"></option></datalist>  
+</td></tr><tr><td colspan="2" align="center"> then 
 <input  class=button type=button value="Parse" onclick=parse()>
         </td></tr></table></td></tr></table></td></tr>
         <tr><td colspan="2">        
 <div id=editing style="display:inline-grid;grid-template-columns:auto auto"> </div>
     </td></tr></table>
 <script>
+function download_file(name) {
+        let mime_type =  "text/csv";
+        let contents = $('csv').value;
+        var blob = new Blob([contents], {type: mime_type});
+
+        var dlink = document.createElement('a');
+        dlink.download = name;
+        dlink.href = window.URL.createObjectURL(blob);
+        dlink.onclick = function(e) {
+            // revokeObjectURL needs a delay to work properly
+            var that = this;
+            setTimeout(function() {
+                window.URL.revokeObjectURL(that.href);
+            }, 1500);
+        };
+
+        dlink.click();
+        dlink.remove();
+    }    
+function download(t)
+{
+   var d  = new Date(); 
+let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+    
+   var fn = ye + mo + da;
+   myprompt('Enter the file name:', fn + '.csv', 'download_file(v)', 'Download'); 
+}
 function $(x){return document.getElementById(x);}
 function CSVParse()
 {
@@ -676,6 +704,9 @@ function update()
 }
 function back()
 {
+   let cols = proc($('column').value);
+   let rows = proc($('row').value);
+   let des =  proc($('de').value);
    var text = '';
    let r = 0, c = 0;
    while(true)
@@ -693,17 +724,16 @@ function back()
          }
          else
          {
+             m[r][c] = ele.value;
              if (c == 0) 
              {
-                if (r > 0) text += '\n';
-                m[r][0] = ele.value;
-                text += '"' + ele.value.replace(/"/g,'\\"') + '"'
+                if (r > 0) text += rows;
              }
              else
              {
-                 m[r][c] = ele.value;
-                 text += ',"' + ele.value.replace(/"/g,'\\"') + '"';
+                 text += cols;
              }
+             text += des + ele.value.replace(des,des+des) + des;
              c++;
          }
 
@@ -735,7 +765,7 @@ onload = function()
 {
     let w = thispagewidth();
     $('csv').style.width = (w - 210) + 'px';
-    
+    parse();
 }
 onresize = function()
 {

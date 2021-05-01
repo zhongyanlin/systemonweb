@@ -45,6 +45,7 @@ table tr td
 #title
 {
    font-size:38px;color:white;text-align:center;background-color: blue;
+   text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
    /*text-shadow:#239549 2px -2px 2px;  
     font-family: Helvetica, Arial, sans-serif; 
    font-weight: bold;
