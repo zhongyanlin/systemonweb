@@ -283,6 +283,13 @@ onload = function ()
     document.f.undobtn.disabled = true;
     document.f.dobtn.disabled = true;
     document.getElementById("t3").style.cssText = '' + document.getElementById("t3").style.cssText;
+    var homestr = '<a href="../"><table cellspacing="0" width="24" style="background-image:url();background-color:transparent;margin:0px 0px 0px 5px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></a>';       
+      let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:20";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
+ 
 }
 
 onresize = function()

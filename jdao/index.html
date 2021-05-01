@@ -35,11 +35,14 @@ and rapidly generating form/grid web pages from data. It needs to be installed o
  function $(x){ return document.getElementById(x);}
  onload = function()
 {
-     
     let w = thispagewidth();
     for (let im of document.getElementsByTagName('img'))
     im.style.width = (w - 20) + 'px';
-    
+    let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
 }
  
 onresize = function()
@@ -48,8 +51,10 @@ onresize = function()
     im.style.width =   '200px';
    onload();
 }
-        
-            
+
+
+
+          
         </script>
     </body>
 </html>

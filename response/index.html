@@ -9,11 +9,18 @@ and open the template in the editor.
         <title>Facial Attendance</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../pages.css"  />
+         
+         <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
     </head>
     <body>
     <center>
-        <h1>Response </h1></center>
-    <table align="center"><tr><td>    
+       
+    <table align="center">
+        <tr><td id=h colspan=2 align=center>Response </td></tr>  
+        
+        <tr><td>    
         Description </td><td>Class/meeting/group coordinator and file synchronizer: administrating quizzes, surveys, data collections and keeping files synchronized cross platforms: iphone, ipad, android devices, Macbook and Windows PCs.
                 
                 
@@ -36,5 +43,13 @@ and open the template in the editor.
         <img src="desktop.png" >
    </td></tr>
         </table>
+    <script>
+      onload = function(){
+      let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
+      }</script>
     </body>
 </html>

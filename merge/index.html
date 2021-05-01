@@ -77,6 +77,8 @@ table tr td table tr td{font-size:16px;} /*second level nested table*/
         <title>Merge Score</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
 <script>
 function $(x)
 {
@@ -555,6 +557,11 @@ onload = function()
         dl.value = course;
         loadcoursesource(course);
     }
+      let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
 }
 
 function buildcourselist(t)

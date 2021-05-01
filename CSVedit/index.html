@@ -27,11 +27,12 @@
     input.button{width:80px}
     table tr td table tr td table{margin:0px 0px 0px 0px;border:1px gray solid;width:100%;border-radius:4px}
     </style>
+    <link rel="stylesheet" type="text/css" href="../pages.css"  />
     <script src="../showcase/cookie.js"></script>
     <script src="../showcase/en.js"></script>
     </head>
 <body>
-    <table id="main" cellspacing="0"><tr height="50"><td class="h" align="center" colspan="2">CSV File Editor</td></tr>
+    <table id="main" cellspacing="0"><tr height="50"><td class="h" id="h" align="center" colspan="2">CSV File Editor</td></tr>
         <tr><td>
 <textarea id=csv rows=25 >"Last Name","First Name","Username","Student ID","Last Access","Availability","recitation0129"
 "Honter","Gred","hgred@students.desu.edu","D10000001","2021-02-27 18:14:54","Yes","79.00"
@@ -731,7 +732,12 @@ function insertCol(j)
 onload = function()
 {
     let w = thispagewidth();
-    $('csv').style.width = (w - 210) + 'px'
+    $('csv').style.width = (w - 210) + 'px';
+      let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
 }
 onresize = function()
 {

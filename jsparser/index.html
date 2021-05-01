@@ -12,12 +12,13 @@
             span.t{font-size:38px;color:white}
             textarea{background-color: lightyellow}
         </style>
+         <link rel="stylesheet" type="text/css" href="../pages.css"  />
         <script src="../showcase/cookie.js"></script>
     <script src="../showcase/en.js"></script>
     <script src="JSParser.js"></script>
     </head>
     <body>
-<table cellpadding="2" cellspacing="0" align="center"><tr><td colspan="3" align="center" bgcolor="blue" ><span class="t">Javascript Parser</span></td></tr>
+<table cellpadding="2" cellspacing="0" align="center"><tr><td colspan="3" align="center" bgcolor="blue" id="h">Javascript Parser</td></tr>
 <tr><td>    
 Copy-paste your Javascript codes here: <br>           
 <textarea rows=40 cols=70 id="t"  onchange="javascript:reset()">
@@ -177,6 +178,11 @@ onload = function()
     $('s').style.width = (w/2-60) + 'px';
     $('t').style.height = (h-90) + 'px';
     $('s').style.height = (h-90) + 'px';
+      let hm = document.createElement('div');
+    hm.id = "home";
+    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
+    hm.innerHTML = homestr;
+    document.body.appendChild(hm);
 }
  
 onresize = function()
