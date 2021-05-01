@@ -1,10 +1,12 @@
 body{margin:0px 0px 0px 0px}
 #title{font-size:35px;text-align: center;width:100%;background-color:#4444bb;margin:0px 0px 0px 0px;
-  padding:20px 0px 20px 0px}
-#title span:nth-child(3){background-color:white;color:#4444bb;padding:5px 5px 5px 5px}
-#title span:nth-child(1){background-color:white;color:#4444bb;padding:5px 5px 5px 5px}
-#title span:nth-child(2){color:white;padding:5px 5px 5px 5px}
-#title span:nth-child(4){color:white; font-size:20px;padding:5px 5px 5px 5px}
+  padding:20px 0px 20px 0px;
+  
+}
+#title span:nth-child(3){background-color:white;color:#4444bb;padding:5px 5px 5px 5px;border-radius:4px}
+#title span:nth-child(1){background-color:white;color:#4444bb;padding:5px 5px 5px 5px;border-radius:4px}
+#title span:nth-child(2){color:white;padding:5px 5px 5px 5px;text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;}
+#title span:nth-child(4){color:white; font-size:20px;padding:5px 5px 5px 5px;text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;}
 #title img{float:right;width:80px;margin:-20px 0px 0px 0px}
 
 #main
@@ -38,4 +40,6 @@ font-size: 20px;
 font-weight:700px;
 margin: 6px 6px 6px 6px
 }
+
+#qrcode:hover{transform: scale(6,6);position: relative; left:-500px; top:250px}
 

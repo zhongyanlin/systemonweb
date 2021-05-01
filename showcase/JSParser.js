@@ -402,4 +402,91 @@ function JSParser(str)
    }
 }
 
+var pr = null;
+function nextt()
+{
+   $('reset').style.backgroundColor = null;  
+   if (pr == null) pr = new JSParser($('t').value);
+   var x = pr.nextToken();
+   if (x!=null)
+   $('s').value += x.type + "     "  + x.token.replace(/\r\n/,'\\r\\n').replace(/\r/,'\\r').replace(/\n/,'\\n').replace(/\t/,'\\t') + "\n";
+} 
+var total = 0;
+function tokens(t)
+{
+   $('reset').style.backgroundColor = null;  
+   if (t.value == 'All Tokens')
+   {
+       for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
+       total = 0;
+   }
+   if (pr == null) pr = new JSParser($('t').value);
+   let x; var k=0;
+   while ((x = pr.nextToken()) != null)
+   {
+       $('s').value +=(x.type + "      " + x.token.replace(/\r\n/,'\\r\\n').replace(/\r/,'\\r').replace(/\n/,'\\n').replace(/\t/,'\\t') + '\n');
+       k++;
+       if (k == 10000) break;
+   }
+   
+   total += k;
+   $('tc').innerHTML = total;
+   if (x != null)
+    t.value = 'Continue';
+   else
+   { 
+       t.value = 'All Tokens';
+       $('reset').style.backgroundColor = 'orange';  
+   }
+    
+} 
 
+function next(which,one)
+{
+   $('reset').style.backgroundColor = null;  
+   for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
+   if (pr == null)
+   pr = new JSParser($('t').value);
+   let x;
+   var k = 0;
+   while ( (x = pr.nextPiece())!=null)
+   {
+       if (which=='any' || x.type == which)
+       {
+           $('s').value += x.codes + "\n";
+           if (one!=null)return;
+           k++;
+       }    
+   }
+   $(which.charAt(0) + 'c').innerHTML = k; 
+   if (one == null || x == null)
+   {
+      $('reset').style.backgroundColor = 'orange';  
+   }
+} 
+
+function reset()
+{
+   pr = new JSParser($('t').value);
+   $('s').value = '';
+   $('reset').style.backgroundColor = null;  
+}    
+
+onload = function()
+{
+    let h = thispageheight();
+    let w = thispagewidth();
+    
+    $('t').style.width = (w/2-60) + 'px';
+    $('s').style.width = (w/2-60) + 'px';
+    $('t').style.height = (h-90) + 'px';
+    $('s').style.height = (h-90) + 'px';
+    
+}
+ 
+onresize = function()
+{
+   $('t').style.width =   '10px';
+   $('s').style.width =  '10px';
+   onload();
+}

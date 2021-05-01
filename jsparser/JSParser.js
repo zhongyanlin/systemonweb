@@ -1,4 +1,3 @@
-  
 function $(x){return document.getElementById(x);} 
 function JSParser(str)
 {
@@ -401,5 +400,6 @@ function JSParser(str)
        return '';
    }
 }
+
 
 
