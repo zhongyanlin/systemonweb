@@ -25,76 +25,78 @@
 </head>
 <body class=shapebg  style="margin:0px 5px 0px 5px;backgroundImage:url();background-color:white">
 <script  type="text/javascript" >
-/*1*/var orgnum=0;
-/*1*/var originalurl='https://zhongyanlin.github.io/site/showcase';
-/*1*/var umltoolstyles = document.createElement('link');umltoolstyles.id='styleb'+(orgnum%65536);umltoolstyles.rel = 'stylesheet';umltoolstyles.type = 'text/css';umltoolstyles.media = 'screen';document.getElementsByTagName('head')[0].appendChild(umltoolstyles);
-/*1*/umltoolstyles.href =originalurl + '/styleb' + (orgnum%65536) + '.css';
-/*1*/var cachedfontfamily='inherit';
-/*1*/var colors='#000000,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,#bbbb00'.split(/,/);
-/*1*/var bcolors='#ffffff,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,transparent,transparent,1'.split(/,/);
-/*1*/var filename='20210429.html';
-/*1*/var needtranslator = true;
-/*1*/var editable=true;
-/*1*/var tstmp=6216268;
-/*1*/var shapearr=[];
-/*1*/var linearr=[];
-/*1*/var curvearr=[];
-/*1*/var attachstr="";
-/*1*/var shapetime=[];
-/*1*/var linetime=[];
-/*1*/var curvetime=[];
-/*1*/var pagetime=[];
-/*1*/var allies=[];
-/*1*/var bgarr=[];
-/*1*/var kframes=[];
-/*1*/var kshapes = [];
+var orgnum=0;
+var originalurl='https://zhongyanlin.github.io/site/showcase';
+var umltoolstyles = document.createElement('link');umltoolstyles.id='styleb'+(orgnum%65536);umltoolstyles.rel = 'stylesheet';umltoolstyles.type = 'text/css';umltoolstyles.media = 'screen';document.getElementsByTagName('head')[0].appendChild(umltoolstyles);
+umltoolstyles.href =originalurl + '/styleb' + (orgnum%65536) + '.css';
+var cachedfontfamily='inherit';
+var colors='#000000,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,#bbbb00'.split(/,/);
+var bcolors='#ffffff,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,transparent,transparent,1'.split(/,/);
+var filename='20210429.html';
+var needtranslator = true;
+var editable=true;
+var tstmp=8187674;
+var shapearr=[];
+var linearr=[];
+var curvearr=[];
+var attachstr="";
+var shapetime=[];
+var linetime=[];
+var curvetime=[];
+var pagetime=[];
+var allies=[];
+var bgarr=[];
+var kframes=[];
+var kshapes = [];
 
-/*1*/shapearr[0] = ["'Lab Session 04/30\n',,roundrect,572,25,437,63,50,'0','0',0,0.000,0,0.000,'inherit',false,0",
+shapearr[0] = ["'Lab Session 04/30\n',,roundrect,572,25,437,63,50,'0','0',0,0.000,0,0.000,'inherit',false,0",
 "'1. what is the simplest code to produce a string of 100 \nspaces?',,roundrect,80,113,751,111,30,'0','0',0,0.000,1,1.000,'inherit',false,0",
-"2. What is the simplest code to produce a string of 20 asterisks?,,roundrect,82,361,739,75,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
+"2. What is the simplest code to produce a string of 20 asterisks?,,roundrect,78,265,739,75,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
 "'4. What is the set specified by range(2,8,2)\n<ola>[2, 3, 4, 5, 6, 7]\n[2, 4, 6]\n[0, 2, 4, 6]\n[0, 2, 4, 6, 8]\n[0, 1, 2, 3, 4, 5, 6, 7]</ola>',,roundrect,908,329,591,255,30,'0','0',0,0.000,3,3.000,'inherit',false,0",
-"'3. What is the set specified by range(3)\n<ola>[0,1,2,3]\n[0,1,2]\n[1,2,3]\n[1,2]</ola>',,roundrect,899,104,556,183,30,'0','0',0,0.000,4,4.000,'inherit',false,0"];
-/*1*/linearr[0] = [];
-/*1*/curvearr[0] = [];
-/*1*/allies[0] = [];
-/*1*/bgarr[0] = '';
-/*1*/shapearr[1] = ["Question 1:,,roundrect,607,19,168,40,30,'0','0',0,0.000,0,0.000,'inherit',false,0",
+"'3. What is the set specified by range(3)\n<ola>[0,1,2,3]\n[0,1,2]\n[1,2,3]\n[1,2]</ola>',,roundrect,899,104,556,183,30,'0','0',0,0.000,4,4.000,'inherit',false,0",
+"'Answer: \n1.   '' ''*100\n2. ''*''*20\n3.b\nc.b',,ellipse,433,318,181,273,45,'1','0',0,0.000,5,5.000,'inherit',false,0",
+"click page,,rightrect,97,34,76,22,15,'1','0',0,0.000,6,6.000,'inherit',false,0"];
+linearr[0] = [];
+curvearr[0] = [];
+allies[0] = [];
+bgarr[0] = '';
+shapearr[1] = ["Question 1:,,roundrect,607,19,168,40,30,'0','0',0,0.000,0,0.000,'inherit',false,0",
 "'Question 1:\n<pre>\nwhen height = 5:\n     *   \n    **  \n   ***\n  ****\n *****\n\nheight=6: \n      *\n     **   \n    ***\n   ****\n  *****\n ******\n\n</pre>',,roundrect,245,95,267,607,30,'0','0',0,0.000,1,1.000,'courier',false,0",
 "Each line contains three kinds of character multiples: Which three?,,roundrect,583,178,580,75,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
-"'<pre>\ndef rightRightTriangle(height):\n	s = ''''\n	for i in range(?)\n		s += '' ''*? + ''*''*? + ''\\n''\n	return s\n</pre>	',,roundrect,581,278,679,279,30,'0','0',0,0.000,3,3.000,'courier',false,0",
+"'<pre>\ndef rightRightTriangle(height):\n	s = ''''\n	for i in range(?)\n		s += '' ''*? + ''*''*? + ''\\n''\n	return s\n</pre>	',,roundrect,576,268,679,279,30,'0','0',0,0.000,3,3.000,'courier',false,0",
 "'5: ''    *\\n   **\\n  ***\\n ****\\n*****\\n''\n6: ''     *\\n    **\\n   ***\\n  ****\\n *****\\n******\\n''',,roundrect,565,76,499,75,30,'0','0',0,0.000,0,0.000,'inherit',false,0",
-"'<pre>\n	s = '' ''\n	i = 1\n        while ( i <= height)\n        	s += '' ''*? + ''*'' * ? + ''\\n''\n		i += 1;\n	return s\n</pre>',,roundrect,587,609,712,315,30,'0','0',0,0.000,5,5.000,'inherit',false,0"];
-/*1*/linearr[1] = [];
-/*1*/curvearr[1] = [];
-/*1*/allies[1] = [];
-/*1*/bgarr[1] = '';
-/*1*/shapearr[2] = ["Question 2:,,roundrect,627,31,201,39,30,'0','0',0,0.000,0,0.000,'courier',false,0",
-"'    *\\n   ***\\n  *****\\n*******\\n*********\\n',,roundrect,418,108,723,39,30,'0','0',0,0.000,0,0.000,'courier',false,0",
+"'<pre>def Triangle(height):\n	s = '' ''\n	i = 1\n        while ( i <= height)\n        	s += '' ''*? + ''*'' * ? + ''\\n''\n		i += 1;\n	return s</pre>\n',,roundrect,572,570,712,287,30,'0','0',0,0.000,5,5.000,'inherit',false,0"];
+linearr[1] = [];
+curvearr[1] = [];
+allies[1] = [];
+bgarr[1] = '';
+shapearr[2] = ["Question 2:,,roundrect,627,31,201,39,30,'0','0',0,0.000,0,0.000,'courier',false,0",
+"    *\\n   ***\\n  *****\\n*******\\n*********\\n,,roundrect,418,108,723,39,30,'0','0',0,0.000,0,0.000,'courier',false,0",
 "'height=5:\n<pre>\n    *\n   ***\n  *****\n *******\n*********\n</pre>',,roundrect,374,209,165,315,30,'0','0',0,0.000,2,2.000,'courier',false,0",
 "'height=2:\n<pre>\n    *\n   ***\n</pre>',,roundrect,150,208,165,207,30,'0','0',0,0.000,3,3.000,'courier',false,0",
-"'<pre>\ndef Triangle(height):\n	s = ''''\n        for i in range(?)\n		s += '' '' * ? + ''*'' * ? + ''\\n''\n	return s\n</pre>',,ellipse,531,166,745,279,30,'0','0',0,0.000,4,4.000,'courier',false,0"];
-/*1*/linearr[2] = [];
-/*1*/curvearr[2] = [];
-/*1*/allies[2] = [];
-/*1*/bgarr[2] = '';
-/*1*/shapearr[3] = ["Question 3,,roundrect,691,8,158,40,30,'6','2',0,0.000,0,0.000,'inherit',false,0",
-"'radius=5\n<pre>***\n****\n*****\n*****\n*****\n*****\n*****\n****\n***</pre>',,rightrect,279,170,147,423,30,'0','0',0,0.000,1,1.000,'courier',false,0",
-"'height = number of lines = ?(radius)\n\n5 ~ 9      double  - 1?',,rightrect,597,94,513,77,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
-"'<pre>def semicircle(radius):\n	s = ''''\n	for i in range(?,?)\n		s += ''*'' * (?)\n	return s\n</pre>',,rightrect,613,382,498,243,30,'0','0',0,0.000,3,3.000,'courier',false,0",
-"'Equation for circle: (x-x0)**2 + (y-y0)**2 = r**2\nWhere (x0, y0) is the center and r is the radius',,rightrect,604,202,571,147,30,'0','0',0,0.000,4,4.000,'inherit',false,0",
-"Symmetric in y direction ,,ellipse,34,619,351,39,30,'1','0',0,0.000,5,5.000,'inherit',false,0",
-"'\n<pre>\nWe need x:\nx = x0 + (r**2 - (y-y0)**2) ** (1/2)\n</pre>',,roundrect,603,641,597,171,30,'1','0',0,0.000,6,6.000,'inherit',false,0",
+"'<pre>\ndef Triangle(height):\n	s = ''''\n        for i in range(?)\n		s += '' '' * ? + ''*'' * ? + ''\\n''\n	return s\n</pre>',,roundrect,586,204,745,215,30,'0','0',0,0.000,4,4.000,'courier',false,0",
+"Pattern Recognition,,roundrect,894,486,146,21,15,'1','0',0,0.000,5,5.000,'inherit',false,0"];
+linearr[2] = [];
+curvearr[2] = [];
+allies[2] = [];
+bgarr[2] = '';
+shapearr[3] = ["Question 3,,roundrect,691,8,158,40,30,'6','2',0,0.000,0,0.000,'inherit',false,0",
+"'radius=5\n<pre>***\n****\n*****\n*****\n*****\n*****\n*****\n****\n***</pre>',,rightrect,152,83,147,423,30,'0','0',0,0.000,1,1.000,'courier',false,0",
+"'height = number of lines = ?(radius)\n\n5 ~ 9      double  - 1?',,rightrect,488,313,513,77,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
+"'<pre>def semicircle(radius):\n	s = ''''\n	for i in range(?,?)\n		s += ''*'' * (?)\n	return s\n</pre>',,rightrect,494,57,498,243,30,'0','0',0,0.000,3,3.000,'courier',false,0",
+"'Equation for circle: (x-x0)**2 + (y-y0)**2 = r**2\nWhere (x0, y0) is the center and r is the radius',,rightrect,487,414,571,147,30,'0','0',0,0.000,4,4.000,'inherit',false,0",
+"Symmetric in y direction ,,ellipse,18,547,351,39,30,'1','0',0,0.000,5,5.000,'inherit',false,0",
+"'\n<pre>\nWe need x:\nx = x0 + (r**2 - (y-y0)**2) ** (1/2)\n</pre>',,roundrect,489,588,597,171,30,'1','0',0,0.000,6,6.000,'inherit',false,0",
 "x,,roundrect,1508,102,20,40,30,'1','0',1,0.000,7,7.000,'inherit',false,0",
 "y,,roundrect,1352,388,20,40,30,'1','0',1,0.000,8,8.000,'inherit',false,0"];
-/*1*/linearr[3] = ["arrow,-1,1334.00,160.0000000,-1,1340.00,440.0000000,3,0,0_2,0,0",
+linearr[3] = ["arrow,-1,1334.00,160.0000000,-1,1340.00,440.0000000,3,0,0_2,0,0",
 "arrow,-1,1333.00,162.0000000,-1,1531.00,155.0000000,3,0,0_2,0,0"];
-/*1*/curvearr[3] = [];
-/*1*/allies[3] = [];
-/*1*/bgarr[3] = '';
-/*1*/var jsscripts = ['en.js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];
-/*1*/for (var ii=0; ii < jsscripts.length; ii++)
-/*1*/document.write('<scrip'+'t  type="text/javascript" src="' + jsscripts[ii] + '"></scrip' + 't>');
-/*1*/</script>
+curvearr[3] = [];
+allies[3] = [];
+bgarr[3] = '';
+var jsscripts = ['en.js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];
+for (var ii=0; ii < jsscripts.length; ii++)
+document.write('<scrip'+'t  type="text/javascript" src="'   + originalurl + '/' + jsscripts[ii] + '"></scrip' + 't>');
+</script>
 </body>
 </html>
-      
