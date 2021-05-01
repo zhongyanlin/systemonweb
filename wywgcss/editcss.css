@@ -44,8 +44,7 @@ table tr td
 }
 #title
 {
-   font-size:38px;color:white;text-align:center; 
-   line-height: 86px;height:86px;background:blue url(../frames.png) right no-repeat;
+   font-size:38px;color:white;text-align:center;background-color: blue;
    /*text-shadow:#239549 2px -2px 2px;  
     font-family: Helvetica, Arial, sans-serif; 
    font-weight: bold;

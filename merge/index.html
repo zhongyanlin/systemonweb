@@ -25,9 +25,7 @@ background-color:orange;
    width:70px
    }
 body{background-image:linear-gradient(#eeeeee,#303)}
-/*1*/
-table tr td table{background-color: lightyellow; border-collapse: collapse;border-color: #aaaaaa}
-/*2*/
+ table tr td table{border-collapse: collapse}
 .button
 {
    background-color:purple;
@@ -557,11 +555,7 @@ onload = function()
         dl.value = course;
         loadcoursesource(course);
     }
-      let hm = document.createElement('div');
-    hm.id = "home";
-    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
-    hm.innerHTML = homestr;
-    document.body.appendChild(hm);
+   
 }
 
 function buildcourselist(t)
@@ -1457,6 +1451,8 @@ function undo(btn)
       btn.style.visibility = 'hidden'; 
    }
 }
+
+
 </script>
     
     
@@ -1465,8 +1461,10 @@ function undo(btn)
     <body>
 <table align="center" border="0" cellpadding="1" cellspacing="1" style="width:100%;margin-top:0px">
 	<tbody>
-<tr> <td  height="60" align="center" id="h">
- Merging Blackboard Gradebook with Other Score Reports 
+<tr> <td  valign="middle"  align="center" id="h" >
+  Merging Blackboard Gradebook with Other Score Reports <a href="../"><img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" >       
+        
+  
 <tr> <td   class="showing0">
     Instructions:<ol>
     <li>Download the grade book from Blackboard Grade Center with Work Offline option using comma as the separator, copy-paste the file content to the left textbox and parse the text (see 1st <span class=lbl>Parse</span> button)
@@ -1529,5 +1527,7 @@ Sample    Student  samplestudent@desu.edu  70  80
 	</tbody>
 </table>
     <div class="waterdrop"></div>
+    <script>var homestr = '<a href="../"><div style="position:absolute;left:0px;top:0px;z-index:3;background:radial-gradient(farthest-side at 70% 65%,#efeffd,#666660);width:54px;height:54px;border-radius:27px;alignment:center;text-align:center;vertical-align:middle;line-height:54px"><table cellspacing="0" width="24" style="transform:scale(1.5,1.5);margin:10px 0px 0px 13px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></div></a>';
+document.write(homestr)</script>
     </body>
 </html>

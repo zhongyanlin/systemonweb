@@ -13,13 +13,18 @@ and open the template in the editor.
           <script src="../showcase/en.js"></script>
          <script src="../showcase/cookie.js"></script>
     </head>
-    <body><div id="h">Animated Demonstration and Performance Tests of<br>Classical Sorting Algorithms and their Variants</div>
-    <center> 
-        Download Executable: <a href="SortingDemo.jar">SortingDemo.jar</a>
-        <br>
-        <br>
+    <body><table><tr><td id="h" colspan="2" align="center"
+   valign="middle">   
+ <script>document.write(homestr)</script>  Sorting Demo <a href="../"><img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" >       
+     </td></tr>         
+     <tr><td>Description</td><td>      
+            Animated Demonstration and Performance Tests of Classical Sorting Algorithms and their Variants 
+         </td></tr><tr><td> 
+             Download Executable</td><td> <a href="SortingDemo.jar">SortingDemo.jar</a>
+         </td></tr>
+     <tr><td colspan="2">
         <img src="snapshot.png" id="im">
-        </center>
+         </td></tr></table>
                   <script>
             function $(x){ return document.getElementById(x);}
      onload = function()
@@ -28,11 +33,7 @@ and open the template in the editor.
     let w = thispagewidth();
     
     $('im').style.width = (w - 30) + 'px';
-      let hm = document.createElement('div');
-    hm.id = "home";
-    hm.style.cssText = "position:absolute;left:10px;top:20px;z-index:2";
-    hm.innerHTML = homestr;
-    document.body.appendChild(hm);
+      
 }
  
 onresize = function()
