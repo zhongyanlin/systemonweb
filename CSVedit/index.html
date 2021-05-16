@@ -1,6 +1,8 @@
 <html>
     <head>
     <style>
+    input.button{font-size:16px;border:1px #999 outset;padding: 2px 0px 2px 0px;border-radius:3px;margin:0px 0px 0px 0px;width:80px;color:white;background-color:#00BBBB}
+            
         .heading{background-color:lightgray;border:1px gray inset;width:20px;text-align:right}
     #t1 {
       width: 0;
@@ -24,7 +26,7 @@
     table tr td textarea{height:360px}
      
     #csv{width:800px}
-    input.button{width:80px}
+    
     table.op{margin:0px 0px 0px 0px;border:1px gray solid;width:100%;border-radius:4px}
     </style>
     <link rel="stylesheet" type="text/css" href="../pages.css"  />
@@ -35,7 +37,7 @@
     <table id="main" cellspacing="0"><tr >
             <td  id="h" align="center" colspan="2" valign="middle" >
             <script>document.write(homestr)</script>  CSV File Editor  <img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode ></td></tr>
-        <tr><td>
+        <tr><td> <div style="margin:-22px 0px 0px 100px"><input type="file" id="myfile" onchange="filepathfrom=openfileto(this,$('csv'))"></div>
 <textarea id=csv rows=25 >"Last Name","First Name","Username","Student ID","Last Access","Availability","recitation0129"
 "Honter","Gred","hgred@students.desu.edu","D10000001","2021-02-27 18:14:54","Yes","79.00"
 "Smith","Juan","jsmith@students.desu.edu","D10000002","2021-02-27 22:44:54","Yes","85.00"</textarea>
