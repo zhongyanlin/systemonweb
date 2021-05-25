@@ -13,9 +13,16 @@ and open the template in the editor.
     <body>
         <h1>保持健康、血指体重不超标的饮食</h1>
         <h2>淀粉: 极低</h2>
+        <h2>蛋白质: 中，70克/天</h2>
         <h2>油: 橄榄油，牛油果油，猪油，椰子油</h2>
         <h2>水果: 柠檬, 牛油果</h2>
         <h2>轻断食: 一天两顿</h2>
-        <script> for (let i=1; i < 31; i++)document.write("<img src=image/" + i + ".jpg><br><br><br>")</script>
+        
+        <script> 
+       if (screen.width>600)     
+    for (let i=1; i < 31; i++)document.write("<img src=image/" + i + ".jpg><br><br><br>");
+    else
+       for (let i=1; i < 31; i++)document.write("<img src=image/cell" + i + ".jpg><br><br><br>")</script>
+    
     </body>
 </html>
