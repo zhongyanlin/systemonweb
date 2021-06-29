@@ -4591,3 +4591,131 @@ eventcodes[121] = "SetCookie(mat[0][0] + \"acinfo\",'');parent.document.location
 eventcodes[122] = "saveabsence()"; 
 eventcodes[123] = "parent.extraweight(window)"; 
 var homestr = '<a href="../"><div style="float:left;background:radial-gradient(farthest-side at 70% 65%,#efeffd,#666660);width:54px;height:54px;border-radius:27px;alignment:center;text-align:center;vertical-align:middle;line-height:54px"><table cellspacing="0" width="24" style="transform:scale(1.5,1.5);margin:10px 0px 0px 13px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></div></a>';
+function openfileto(filebox,txtbox)
+{
+ var file = filebox.files[0];
+ var reader = new FileReader();
+ reader.onload = function (e) 
+ {
+    txtbox.value = e.target.result;
+ };
+ reader.readAsText(file); 
+ let j = filebox.value.lastIndexOf('/');
+ if (j==-1)j = filebox.value.lastIndexOf('\\');
+ return filebox.value.substring(j+1);
+}
+if (typeof ($)!='function')
+$ = function(id){return document.getElementById(id);}
+let txtboxhold =null;
+function savefileas(txtbox,filename)
+{
+    if (filename == null || filename.indexOf(".")==0)
+    {
+        txtboxhold = txtbox;
+        var d  = new Date(); 
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let hr = new Intl.DateTimeFormat('en', { hour: '2-digit' }).format(d);
+        let mn = new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(d);
+        //let se = new Intl.DateTimeFormat('en', { second: '2-digit' }).format(d);
+        var fn =  ye + mo + da;
+        if (filename == null) fn += ".csv";
+        else fn += filename;
+        myprompt('Enter File name:',fn,"downloadas(txtboxhold,v)","File Name");
+        return;
+    }
+    let ext2mime = [];
+    ext2mime['aac'] = 'audio/aac';    
+    ext2mime['abw'] = 'application/x-abiword';    
+    ext2mime['arc'] = 'application/x-freearc';    
+    ext2mime['avi'] = 'video/x-msvideo';    
+    ext2mime['azw'] = 'application/vnd.amazon.ebook';    
+    ext2mime['bin'] = 'application/octet-stream';    
+    ext2mime['bmp'] = 'image/bmp';    
+    ext2mime['bz'] = 'application/x-bzip';    
+    ext2mime['bz2'] = 'application/x-bzip2';    
+    ext2mime['csh'] = 'application/x-csh';    
+    ext2mime['css'] = 'text/css';    
+    ext2mime['csv'] = 'text/csv';    
+    ext2mime['doc'] = 'application/msword';    
+    ext2mime['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';    
+    ext2mime['eot'] = 'application/vnd.ms-fontobject';    
+    ext2mime['epub'] = 'application/epub+zip';    
+    ext2mime['gz'] = 'application/gzip';    
+    ext2mime['gif'] = 'image/gif';    
+    ext2mime['htm'] = 'text/html';    
+    ext2mime['html'] = 'text/html';    
+    ext2mime['ico'] = 'image/vnd.microsoft.icon';    
+    ext2mime['ics'] = 'text/calendar';    
+    ext2mime['jar'] = 'application/java-archive';    
+    ext2mime['jpg'] = 'image/jpeg';    
+    ext2mime['jpeg'] = 'image/jpeg';    
+    ext2mime['js'] = 'text/javascript';    
+    ext2mime['json'] = 'application/json';    
+    ext2mime['jsonld'] = 'application/ld+json';    
+    ext2mime['mid'] = 'audio/midi audio/x-midi';   
+    ext2mime['midi'] = 'audio/midi audio/x-midi';    
+    ext2mime['mjs'] = 'text/javascript';  
+    ext2mime['mp3'] = 'audio/mpeg';   
+    ext2mime['cda'] = 'application/x-cdf';   
+    ext2mime['mp4'] = 'video/mp4';  
+    ext2mime['mpeg'] = 'video/mpeg';  
+    ext2mime['mpkg'] = 'application/vnd.apple.installer+xml';   
+    ext2mime['odp'] = 'application/vnd.oasis.opendocument.presentation'; 
+    ext2mime['ods'] = 'application/vnd.oasis.opendocument.spreadsheet';   
+    ext2mime['odt'] = 'application/vnd.oasis.opendocument.text';    
+    ext2mime['oga'] = 'audio/ogg';    
+    ext2mime['ogv'] = 'video/ogg';    
+    ext2mime['ogx'] = 'application/ogg';   
+    ext2mime['opus'] = 'audio/opus';    
+    ext2mime['otf'] = 'font/otf';    
+    ext2mime['png'] = 'image/png';   
+    ext2mime['pdf'] = 'application/pdf';  
+    ext2mime['php'] = 'application/x-httpd-php'; 
+    ext2mime['ppt'] = 'application/vnd.ms-powerpoint';   
+    ext2mime['pptx'] = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';   
+    ext2mime['rar'] = 'application/vnd.rar';    
+    ext2mime['rtf'] = 'application/rtf';    
+    ext2mime['sh'] = 'application/x-sh';    
+    ext2mime['svg'] = 'image/svg+xml';    
+    ext2mime['swf'] = 'application/x-shockwave-flash';    
+    ext2mime['tar'] = 'application/x-tar';    
+    ext2mime['tif'] = 'image/tiff';   
+    ext2mime['tiff'] = 'image/tiff';   
+    ext2mime['ts'] = 'video/mp2t';    
+    ext2mime['ttf'] = 'font/ttf';    
+    ext2mime['txt'] = 'text/plain';   
+    ext2mime['vsd'] = 'application/vnd.visio';   
+    ext2mime['wav'] = 'audio/wav';    
+    ext2mime['weba'] = 'audio/webm';   
+    ext2mime['webm'] = 'video/webm';    
+    ext2mime['webp'] = 'image/webp';    
+    ext2mime['woff'] = 'font/woff';    
+    ext2mime['woff2'] = 'font/woff2';   
+    ext2mime['xhtml'] = 'application/xhtml+xml';   
+    ext2mime['xls'] = 'application/vnd.ms-excel';   
+    ext2mime['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';    
+    ext2mime['xml'] = 'text/xml';   
+    ext2mime['xul'] = 'application/vnd.mozilla.xul+xml'; 
+    ext2mime['zip'] = 'application/zip';    
+    ext2mime['3gp'] = 'video/3gppaudio/3gpp';  
+    ext2mime['3g2'] = 'video/3gpp2audio/3gpp2';   
+    ext2mime['7z'] = 'application/x-7z-compressed';
+var mime_type = ext2mime[filename.replace("[^\\.]+\\.","")];
+var blob = new Blob([txtbox.value], {type: mime_type});
+    var dlink = document.createElement('a');
+    dlink.download = filename;
+    dlink.href = window.URL.createObjectURL(blob);
+    dlink.onclick = function(e) {
+        // revokeObjectURL needs a delay to work properly
+        var that = this;
+        setTimeout(function() {
+            window.URL.revokeObjectURL(that.href);
+        }, 1500);
+    };
+
+    dlink.click();
+    dlink.remove();
+}   
+ 

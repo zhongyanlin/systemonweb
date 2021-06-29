@@ -1869,5 +1869,6 @@ var textmsg = [
 /*1867*/"Shuffled@Estimated",
 /*1868*/"Enter the name or id of the attendees, separate them by comma, semicolum, tab  or new line",
 /*1869*/"Check on Roster",
-/*1870*/"By Name List"];
+/*1870*/"By Name List",
+/*1871*/"Cache@Open@Rename@Download@Back up@Clear@Recent"];
 function getTextmsg(i){return textmsg[i];}

@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body{margin: 0px 0px 0px 0px;font-size:18px}
-            input{width:80px;}
+            input.button{font-size:16px;border:1px #999 outset;padding: 4px 0px 4px 0px;border-radius:3px;margin:0px 0px 4px 0px;width:80px;color:white;background-color:#00BBBB}
             table{margin:0px 0px 0px 0px;}
             span.t{font-size:38px;color:white}
             textarea{background-color: lightyellow}
@@ -21,8 +21,8 @@
 <table cellpadding="2" cellspacing="0" align="center"><tr height="70"><td style="padding-bottom:10px" colspan="3" align="center" valign=middle bgcolor="blue" id="h">
              <script>document.write(homestr)</script>Javascript Parser<img style="float:right;height:90px;margin-bottom:-40px;margin-top:-4px"  src="../frames.png" id=qrcode >       
         </td></tr>
-        <tr  valign="bottom"><td>   
-Copy-paste your Javascript codes here: <br>           
+    <tr  valign="bottom"><td>  <script>var filepathfrom=null;</script> 
+ <input type=file onchange="javascript:filepathfrom=openfileto(this,$('t'))"> or copy-paste your Javascript codes here: <br>           
 <textarea rows=40 cols=70 id="t"  onchange="javascript:reset()">
 if (document.location.toString().indexOf("localhost") >= 0
         && typeof (handleErr) == 'undefined')
@@ -70,32 +70,34 @@ function findPositionnoScrolling(oElement, win)
     }
 }
 </textarea> </td><td valign="top" align="center"><br> 
-<input style="vertical-align: top" type="button" value="Next Token" onclick="nextt()"><br>
-<input style="vertical-align: top" type="button" value="All Tokens" onclick="tokens(this)"><br>
+<input class="button" style="vertical-align: top" type="button" value="Next Token" onclick="nextt()"><br>
+<input  class="button" style="vertical-align: top" type="button" value="All Tokens" onclick="tokens(this)"><br>
 <span id="tc"></span><br>
-<br>
-
-<input style="vertical-align: top" type="button" value="Next Var" onclick="next('var',1)"><br>
-<input style="vertical-align: top" type="button" value="All Vars" onclick="next('var')"><br>
+ 
+<input  class="button" style="vertical-align: top" type="button" value="Next Var" onclick="next('var',1)"><br>
+<input  class="button" style="vertical-align: top" type="button" value="All Vars" onclick="next('var')"><br>
 <span id="vc"></span><br>
-<br>
+ 
 
-<input style="vertical-align: top" type="button" value="Next Func" onclick="next('function',1)"><br>
-<input style="vertical-align: top" type="button" value="All Funcs" onclick="next('function')"><br>
+<input  class="button" style="vertical-align: top" type="button" value="Next Func" onclick="next('function',1)"><br>
+<input  class="button" style="vertical-align: top" type="button" value="All Funcs" onclick="next('function')"><br>
 <span id="fc"></span><br>
-<br>
+ 
 
-<input style="vertical-align: top" type="button" value="Next Stat" onclick="next('statement',1)"><br>
-<input style="vertical-align: top" type="button" value="All Stats" onclick="next('statement')"><br>
+<input  class="button" style="vertical-align: top" type="button" value="Next Stat" onclick="next('statement',1)"><br>
+<input  class="button" style="vertical-align: top" type="button" value="All Stats" onclick="next('statement')"><br>
 <span id="sc"></span><br>
-<br>
-
-<input style="vertical-align: top" type="button" value="Next Any" onclick="next('any',1)"><br>
-<input style="vertical-align: top" type="button" value="Validate" onclick="next('any')"><br>
+ 
+<input  class="button" style="vertical-align: top" type="button" value="Next Any" onclick="next('any',1)"><br>
+<input  class="button" style="vertical-align: top" type="button" value="Validate" onclick="next('any')"><br>
 <span id="ac"></span><br>
-<br>
+ 
 
-<input id=reset style="vertical-align: top" type="button" value="Reset" onclick="reset()"><br>
+<input  class="button" id=reset style="vertical-align: top" type="button" value="Reset" onclick="reset()"><br>
+
+<input  class="button" id=saveit style="vertical-align: top" type="button" value="Save" onclick="saveit()"><br>
+
+
 <br><br><br>
 <span style="float:right"><a href="JSCleaner.jar">Validate<br>a Folder</a></span>
 </td><td>Parsed Parts:<br> <textarea  rows=40 cols=70 id="s"></textarea></td></tr></table>

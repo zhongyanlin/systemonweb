@@ -1,0 +1,12 @@
+Grading Scaner
+
+This app scans student's hand-written answer sheets  and teacher's standard answer sheets of quizzes，
+uses artificial intelligence to recognize format, words and digits, and perform automatic grading.
+
+这个应用程序能扫描学生的手写的测验答题卡和老师的标准答案卡的图像，用人工智能识别格式、文字和数字并自动评分。
+
+
+Some schools have policies prohibiting students from using PC and mobile device in school. To speed up the process of grading paper submission of quizzes,  teacher user can use this app to scan submitted paper answer sheets to perform automatic grading. This app uses artificial intelligence to analyze the images of student's hand-written answer sheets  or standard answer sheets, and recognize columns and rows  to generate  data grids. Then for each cell in a grid, it uses three typies of machine learning routines to recognize  hand-written words and digits. It performs automatic grading once a standard answer sheet is scanned. It also manages the generated database of quizzes, including searching records and sending reports.
+
+
+一些学校制定了禁止学生在学校中使用PC和移动设备的政策。 为了加快测验纸质提交成绩的评分过程，教师用户可以使用此应用程序扫描提交的纸质答题纸以执行自动评分。 该应用程序使用人工智能来分析学生的手写答题纸或标准答题纸的图像，并识别列和行以生成数据网格。 然后，对于网格中的每个单元，它使用三种类型的机器学习例程来识别手写的单词和数字。 扫描标准答题纸后，它将执行自动评分。 它还管理生成的测验数据库，包括搜索记录和发送报告。

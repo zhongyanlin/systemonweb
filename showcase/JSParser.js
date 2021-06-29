@@ -490,3 +490,10 @@ onresize = function()
    $('s').style.width =  '10px';
    onload();
 }
+ 
+function saveit()
+{
+    if (filepathfrom ==null)
+        filepathfrom = ".js";
+    savefileas($('s'),filepathfrom);
+}

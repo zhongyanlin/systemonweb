@@ -16,18 +16,23 @@ function download_file(name) {
 
         dlink.click();
         dlink.remove();
-    }    
+    }
+var filepathfrom = null;    
 function download(t)
 {
-   var d  = new Date(); 
-let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
-let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-    
-   var fn = ye + mo + da;
-   myprompt('Enter the file name:', fn + '.csv', 'download_file(v)', 'Download'); 
+   if (filepathfrom==null)
+   {
+    var d  = new Date(); 
+    let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+    let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+    filepathfrom = ye + mo + da + ".csv";
+   }
+   
+   myprompt('Enter the file name:', filepathfrom, 'download_file(v)', 'Download'); 
 }
-function $(x){return document.getElementById(x);}
+if (typeof($)!='function')
+$ = function(x){return document.getElementById(x);}
  
 var m;
 var temp;
@@ -172,7 +177,7 @@ for (var i=0; i < m.length; i++)
    for (var j=0; j < m[i].length; j++)
    {
       if (m[i][j] == null) m[i][j] = '';
-      str += "<input id=" + i + "_" + j + " onblur=update() value=\"" + m[i][j].replace(/"/g, '\\"') + "\" style=width:100px>";
+      str += "<input id=" + i + "_" + j + " onblur=update() value=\"" + m[i][j].replace(/"/g, '\\"') + "\" style=width:100px;border-radius:0px;border-top-width:0px;border-bottom-width:1px;border-left-width:0px;border-right-width:1px;>";
    }
 }
 $('editing').innerHTML = str;

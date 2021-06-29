@@ -186,7 +186,7 @@ var onlinetoolinfo = onlinetoolinitial;
 if (typeof (allies) == 'undefined')
     var allies = [];
 var filenamestr = null;// localStorage['filenames'];
-
+function $(id) {return document.getElementById(id);}
 function samefont(x, y)
 {
     if (x == null || y == null)
@@ -480,6 +480,7 @@ function initfilename()
          
         if (str!=null)
         {
+            try{
             var obj = JSON.parse(str);
             orgnum = obj.orgnum;
             originalurl = obj.originalurl;
@@ -508,6 +509,7 @@ function initfilename()
              bgarr = obj.bgarr;
             kframes = obj.kframes;
             kshapes = obj.kshapes;
+            }catch(e1){}
         }
     }
 }
@@ -680,21 +682,27 @@ function popmenu(id,td)
             str += ("<tr height=" + (high) + "><td  class=flipcolor align=left  valign=middle   onclick=\"makepagesort();shrinkht('selplay');\"  style=font-weight:400  title=\"" + hintstr[4] + "\" >" + palylabels[13] + "</td></tr>");
     } else if (id == 'selfile')
     {
+        let labelfs = textmsg[1871].split(/@/);
+        //0Cache@1Open@2Rename@3Download@4Back up@5Clear@Recent
+        str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400 onclick=\"newafile();activesave=true;shrinkht('selfile');\" id=\"newfile\">" +  textmsg[114]  + "</td></tr>");
         if (filename != null)
         {
-            str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400 onclick=\"saveit();activesave=true;shrinkht('selfile');\" id=\"saveit\">" + textmsg[67] + "</td></tr>");
+            str += ("<tr height=" + high + "><td  class=flipcolor align=left  valign=middle  style=font-weight:400 onclick=\"saveit();activesave=true;shrinkht('selfile');\" id=\"saveit\">" + (folder==null?labelfs[0]:textmsg[67]) + "</td></tr>");
         }
-        str += ("<tr height=" + high + "><td   class=flipcolor valign=middle  align=left  style=font-weight:400  onclick=\"saveas();shrinkht('selfile');\" id=\"saveit1\"><nobr>" + textmsg[797] + "</nobr></td></tr>");
-        if (chatsessionnum == -1)
+        str += ("<tr height=" + high + "><td   class=flipcolor valign=middle  align=left  style=font-weight:400  onclick=\"saveas();shrinkht('selfile');\" id=\"saveit1\"><nobr>" +  labelfs[2] + "</nobr></td></tr>");
+        if (chatsessionnum == -1 && folder!=null)
         {  //uploadfile()
             str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  style=font-weight:400  align=left onclick=\"uploadfile();shrinkht('selfile');\"  id=\"attachbtn\"  title=\"" + hintstr[5] + "\" >" + textmsg[294] + "</td></tr>");
         }
-        str += ("<tr height=" + high + "><td  valign=middle  class=flipcolor align=left  style=font-weight:400 onclick=\"filecontent();shrinkht('selfile');\" >" + textmsg[1849].split(/@/)[3] + "</td></tr>");
+        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"openfiles();shrinkht('selfile');\"  id=\"openbtn\"  title=\"" + labelfs[1] + "\" >" + labelfs[1] + "</td></tr>");
+        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"downloadfiles();shrinkht('selfile');\"  id=\"downloadbtn\"  title=\"" + labelfs[3] + "\" >" + labelfs[3] + "</td></tr>");
+        
+        str += ("<tr height=" + high + "><td  valign=middle  class=flipcolor align=left  style=font-weight:400 onclick=\"managefiles();shrinkht('selfile');\" >" + labelfs[4] + "</td></tr>");
         str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onclick=\"clr();shrinkht('selfile');\"  id=\"clearbtn\"  title=\"" + hintstr[6] + "\" >" + textmsg[1663] + "</td></tr>");
         
             
         if (filenamestr!=null && filenamestr.replace(filename,'').replace(/[\W]/g,'')!='')
-        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >Recent</td></tr>");
+        str += ("<tr height=" + high + "><td  class=flipcolor valign=middle  align=left  style=font-weight:400 onmouseenter=\"popmenu1('recentfile',this)\"  id=\"recentbtn\"  onmouseout=\"nullmenu('recentfile')\" >" + labelfs[6] + "</td></tr>");
  
     } 
     else if (id == 'recentfile')
@@ -732,9 +740,74 @@ function popmenu(id,td)
     }
     document.body.appendChild(dv);
 }
+function tempfilename()
+{
+   var d  = new Date(); 
+   let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+   let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+   let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+   var filen = "showcase" +ye + mo + da + ".html";
+   for (let fn in localStorage)
+   if (fn == filen) 
+   {
+      let k = 0;
+      while (true)
+      {
+         filen  = "showcase" + mo + da + (k) + ".html";
+         let found = false;
+         for (let gn in localStorage)
+          if (gn == filename)
+          {   
+              found = true;
+              break;
+          }
+        if (found) 
+           k++;
+        else 
+           break; 
+      }
+     
+   }
+   return filen;
+}
 
-
+function newafile()
+{
+   saveit();
+   clr();
+   filename = tempfilename();
+   shapearr=[];
+   linearr=[];
+   curvearr=[];
+   attachstr="";
+   shapetime=[];
+   linetime=[];
+   curvetime=[];
+   pagetime=[];
+   allies=[];
+   bgarr=[];
+   kframes=[];
+   kshapes = [];
+   document.location.href = document.location.toString().replace(/fn=[^&]+&/,"fn=" + filename).replace(/fn=[^&]+$/,"fn=" + filename);
+}
+function proceedfile(filebox)
+{
+   var file = filebox.files[0];
+   var reader = new FileReader();
+   reader.onload = function (e) 
+   {
+      let v  = e.target.result;
+      let i = v.indexOf('width:1px;height:1px>');
+      let j = v.indexOf('</textarea>',i);
+      passcache(v.substring(i+21,j));
+   };
+   reader.readAsText(file);
+}
 var closemenuhandle = [];
+function openfiles()
+{
+   myprompt("Open showcase presentation file:<input type=file onchange=proceedfile(this)><br> Typical file name look like showcase***.html");
+}
 function nullmenu(menu)
 {
    closemenuhandle[menu] = setTimeout("$('" + menu + "').style.visibility='hidden';$('" + menu.replace(/sel/,'td') + "').style.textDecoration='underline';",500); 
@@ -920,7 +993,7 @@ function makebtns()
     ResizeUploaded.attachref = document.f.attach;
    
 }
-function $(id) {return document.getElementById(id);}
+
 function playcomm(str)
 {
     if (str == playcommand) return;
@@ -2036,12 +2109,14 @@ function makeintostring(xy)
             k--;
         }
         else map[i] = i;
+        if (shapearr[pagenum]!=null)
         shapearr[pagenum][i] =  allShapes[j].toString().replace(/true$/,'false');
         if (xy!=null)
         {
             xy[i] = [allShapes[j].x,allShapes[j].y];
         }
     }
+    if (shapearr[pagenum]!=null)
     for (; i < shapearr[pagenum].length; i++)
         shapearr[pagenum][i] = null;
     k = numLines;
@@ -2062,6 +2137,7 @@ function makeintostring(xy)
         linearr[pagenum][i] =   allLines[j].toString(map) ;
 
     }
+    if (linearr[pagenum]!=null)
     for (; i < linearr[pagenum].length; i++)
         linearr[pagenum][i] = null;
 
@@ -2112,6 +2188,7 @@ function arrstr(x)
         str += '[' + x[j][0] + "," + x[j][1] + '],';
     return str.replace(/,$/,']');
 }
+
 function makefile()
 {
     attachstr  = document.f.attach.value;
@@ -2145,16 +2222,16 @@ function makefile()
     else
         tx = getdocbg();
     var xz = ''; var xt;
-    if (tx.indexOf('http') == 0 && tx.length>15)
+    if (tx!=null && tx.indexOf('http') == 0 && tx.length>15)
     var xx = ";background-image:url(" + tx +")";
-    else if (tx.indexOf(',') > 0)
+    else if (tx!=null &&tx.indexOf(',') > 0)
         xx = ";background-image:linear-gradient(to right," + tx +")";
-    else if ( (xt = tx.split(/ /)).length>1)
+    else if (tx!=null && (xt = tx.split(/ /)).length>1)
     {
         xx = ";backgroundImage:url();background-color:" + xt[1];
         xz = 'shapebg' +  xt[0] ;
     }
-    else if (!isNaN(tx))
+    else if (tx!=null &&!isNaN(tx))
     {
         xx = ";backgroundImage:url()";
         xz = 'shapebg' + tx;
@@ -2302,6 +2379,37 @@ function saveas1(v)
         document.location.href = x;
     }
 }
+function downloadfiles()
+{
+    //alert(pagenum);
+    if (pagenum == -1) pagenum = 0;
+    let mime_type =  "text/html";
+    makefile();
+    var short = new Shorty();
+    let contents = lzw_encode(tojson());
+    contents = "<html><body>" + 
+    "<textarea id=$_1 style=width:1px;height:1px>"
+    + contents + "</textarea>"
+    +"<script>function openit(){\nlet t=document.getElementsByTagName('textarea')[0];t.focus();t.select();\ndocument.execCommand('copy');\nopen('"
+   + originalurl + "/umltool.html?fn=" + filename + "&lang=" + getlang() 
+   + "&pass','_self');\n}</script>" +
+    '<br><center><font size=20><a href="javascript:openit()">' + originalurl + '</a><br>The File Content of Page 1:<br><div>'
+        + makemini() +  '</div></font></center></body></html>'; 
+    var blob = new Blob([contents], {type: mime_type});
+    var dlink = document.createElement('a');
+    dlink.download = filename;
+    dlink.href = window.URL.createObjectURL(blob);
+    dlink.onclick = function(e) {
+        // revokeObjectURL needs a delay to work properly
+        var that = this;
+        setTimeout(function() {
+            window.URL.revokeObjectURL(that.href);
+        }, 1500);
+    };
+
+    dlink.click();
+    dlink.remove();
+}  
 var submitstring = null;
 resumehalted = function(sid)
 {
@@ -2372,10 +2480,12 @@ function tojson()
      "allies":allies,
      "bgarr":bgarr,
     "kframes":kframes,
-    "kshapes":kshapes
+    "kshapes":kshapes,
+    "page1str":makemini()
     };
     return JSON.stringify(obj);
 }
+
 function fromjson()
 {
     
@@ -2389,23 +2499,32 @@ function sourcecodes()
     var a = document.getElementById('da');
     a.href = URL.createObjectURL(data);
 }
-function restorefiles(stage)
+function restorefiles(filebox)
 {
-    if (stage == null)
+    if (filebox == null)
     {
     closeprompt();
-    myprompt("Open a back-up file named <font color=red>showcase********.bak</font> in a notepad and copy the file contents to here<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"" + textmsg[118] + "\" onclick=\"restorefiles(1)\" ></center>",null,null,textmsg[118]);
+    myprompt("Open back-up file to restore:\b<input type=file onchange=restorefiles(this)><br>Typical file name is like yyyymmdd.bak",null,null,textmsg[118]);
     //$("savearea").value = makefile().replace(/\n\/\*1\*\//g, '\n');
     }
     else
     {
-       var xy = JSON.parse($("savearea").value);
-       for (let x in xy)
+       var file = filebox.files[0];
+       var reader = new FileReader();
+       reader.onload = function (e) 
        {
-           localStorage[x] = xy[x];
-       }
-       closeprompt();
-    }
+           let v  = e.target.result;
+           var xy = JSON.parse(lzw_decode(v));
+           let kk = 0 ;
+           for (let x in xy)
+           {
+               localStorage[x] = xy[x];
+               kk++;
+           }
+           myprompt(kk + " files are restored from  " + filebox.value);
+       };
+       reader.readAsText(file);
+   }
 }
 function delivery()
 {
@@ -2449,17 +2568,31 @@ function managefiles(ms)
     if (ms == null) ms = '';
     else 
         ms = '<font color=red>'+ ms +'</font>';
-    var v =ms + '<table align=center id=savearea style=border-collapse:collapse;border-color:lightyellow border=1><tr bgcolor=lightgray><td>File Name</td><td><input type=checkbox onclick=selectallfile(this)></td></tr>';
+    var v =ms + '<table align=center id=savearea style=border-collapse:collapse;border-color:lightyellow border=1><tr bgcolor=lightgray><td>File Name</td><td><input type=checkbox onclick=selectallfile(this)></td><td>Preview</td></tr>';
     for (let fn in localStorage)
     {
         if (fn.indexOf('.html')>0)
         {
-            v += '<tr><td>' + fn + '</td><td><input type=checkbox></td></tr>';
+            v += '<tr><td>' + fn + '</td><td><input type=checkbox></td><td onmouseover=showpage1(\''+ fn + '\') onmouseout=hidepage1()>Preview</td></tr>';
         }
     }
     v += '</table>';
-    myprompt(v + "<br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Delete\" onclick=\"deleteSFiles()\" ></center>",null,null,"Files");
+    myprompt(v + "<br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Back Up\" onclick=\"backupFiles()\" > <input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Delete\" onclick=\"deleteSFiles()\" ><br><a   href=\"javascript:restorefiles()\" >" + textmsg[118] + "</a></center>",null,null,"Files");
     //$("savearea").value = s + "</body></html>";   
+}
+function showpage1(fn)
+{
+   var tt = JSON.parse(localStorage[fn]).page1str;
+   var d = document.createElement('div');
+   var xy = findPositionnoScrolling(promptwin);
+   d.style.cssText = 'position:absolute;left:' + (xy[0] + 200) + 'px;top:100px';
+   d.innerHTML = JSON.parse(localStorage[fn]).page1str;
+   d.id = "$_z_$";
+   document.body.appendChild(d);
+}
+function hidepage1()
+{
+   document.body.removeChild($("$_z_$"));
 }
 function selectallfile(c)
 {
@@ -2506,7 +2639,8 @@ function backupFiles()
    {
        if (tbl.rows[i].cells[1].childNodes[0].checked)
        {
-           nf++; let fn = tbl.rows[i].cells[0].innerHTML;
+           nf++; 
+           let fn = tbl.rows[i].cells[0].innerHTML;
            obj[fn] = localStorage[fn];
        }
    }
@@ -2515,18 +2649,32 @@ function backupFiles()
       managefiles('No file selected');
       return;
    }
-   var s = JSON.stringify(obj); 
+   var s = lzw_encode(JSON.stringify(obj)); 
    var d  = new Date(); 
 let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
 let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
 let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+//let hr = new Intl.DateTimeFormat('en', { hour: '2-digit' }).format(d);
+//let mn = new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(d);
+//let se = new Intl.DateTimeFormat('en', { second: '2-digit' }).format(d);
     
-   var fn = ye + mo + da;
-   myprompt(nf + " files. Don't edit the text. Click 'Save File' instead <br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><a id=\"da\"  download=\"showcase"+fn+".bak\" type='text/json'>Save File</a></center>",null,null,textmsg[532]);
-   let csv = $("savearea").value = s ;
-   var data = new Blob([csv]);
-   var a = document.getElementById('da');
-   a.href = URL.createObjectURL(data);
+   var fn = "showcase" + ye + mo + da  + ".bak";
+   
+        var blob = new Blob([s], {type: "text/json"});
+
+        var dlink = document.createElement('a');
+        dlink.download = fn;
+        dlink.href = window.URL.createObjectURL(blob);
+        dlink.onclick = function(e) {
+            // revokeObjectURL needs a delay to work properly
+            var that = this;
+            setTimeout(function() {
+                window.URL.revokeObjectURL(that.href);
+            }, 1500);
+        };
+
+        dlink.click();
+        dlink.remove();
 }
 function toclip(fn)
 {
@@ -3341,8 +3489,15 @@ function dotag1(v, tag,i,cl,  fmt)
 }
 function uploadfile()
 {
-    saveit();
-    document.ff1.localpath.click();
+    if (folder == null)
+    {
+        
+    }
+    else
+    {
+        saveit();
+        document.ff1.localpath.click();
+    }
 }
 var freference;
 function upload(f,num)
@@ -3490,10 +3645,10 @@ function showedit(num,x,y,w,h,tt)
          ffs += "<option value=\"" + fns[i] + "\" " + ii + " >" + fns[i].replace(/,.*/,'').replace(/ .*/,'') + "</option>";
     }
     ffs += "</select>";
-    var fml = 'arial'; if (allShapes[num]!=null) allShapes[num].fontfamily;
+    var fml = 'courier'; if (allShapes[num]!=null) allShapes[num].fontfamily;
     edt.style.cssText = "border-radius:4px;border:2px #444 solid;background-image:linear-gradient(-45deg,#ccc,#bbb,#999,#aaa);position:absolute;z-index:" + (2*numShapes+4) + ";left:" + x +"px;top:" + y +"px;";
     var s = "<table cellpadding=0 cellspacing=0 border=0 align=center ><tr><td align=left><textarea  onkeydown=\"if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}\"        id=\"e"
-    + num + "\" onfocus=\"if(typeof(onlinetoolbarfollow)!='undefined')textareatobesearch=this;\"  class=samebg style=\"background-color:white;border-radius:3px;border:1px #eee block;width:" + w +"px;height:" + h +"px;font-size:" + cachedfontsize + ";font-family:" + fml + "\"  onkeyup=getInputSelection(this)  onmouseout=getInputSelection(this)>" + (tt==null?'':tt) +"</textarea></td></tr>"
+    + num + "\" onfocus=\"if(typeof(onlinetoolbarfollow)!='undefined')textareatobesearch=this;\"  class=samebg style=\"background-color:white;border-radius:3px;border:1px #eee block;width:" + w +"px;height:" + (h>600?600:h) +"px;font-size:" + cachedfontsize + ";font-family:" + fml + "\"  onkeyup=getInputSelection(this)  onmouseout=getInputSelection(this)>" + (tt==null?'':tt) +"</textarea></td></tr>"
     + "<tr><td  align=center  bgcolor=#bbb> <table cellspacing=0 cellpadding=0 border=0><tr>"
     + "<td><div id=an" + num + " style=\"background-color:#dde;width:24px;height:24px;border-radius:12px;line-height:24px;text-align:center;vertial-align:middle;font-size:18px\">&#10021;</div></td>";
     if (tt!=null)
@@ -9899,16 +10054,12 @@ function mergeto(sel,pn)
          var zi = parser.nextElement(); if (zi==null) zi = '0';
          new Line(drawinenumber,type,startn,sx,sy,endn ,ex,ey,parseInt(thick),direct,start,tm,cn,parseInt(zi));
    }
-
-   for (; pp<linearr.length-1;pp++)
-   {
-       shapearr[pp] = shapearr[pp+1]
-       linearr[pp] = linearr[pp+1];
-       allies[pp] = allies[pp+1];
-   }
-   shapearr[pp] = null;
-   linearr[pp] = null;
-   pagenum -= lower;
+   shapearr.splice(pp,1);
+   linearr.splice(pp,1);
+   curvearr.splice(pp);
+   allies.splice(pp);
+   bgarr.splice(pp);
+   //pagenum -= lower;
    $('tdpage').innerHTML = textmsg[1854].replace(/@/,''+ (pagenum+1));
    canceldia(0,0);
 }
@@ -11095,10 +11246,14 @@ function tenexec()
    }
 }
 var oldonload4 = window.onload;
-function passcache()
+function passcache(v)
 {
-   localStorage[filename] = $("savearea").value;
-   document.location.href = document.location.toString().replace(/&pass/,'');
+    //let y = document.location.toString().replace(/&pass/,'');
+    //var short = new Shorty();
+    let contents = lzw_decode(v);//$("savearea").value);
+    //$("savearea").value = (contents);
+    localStorage[filename] =  contents;
+    document.location.href = document.location.toString().replace(/&pass/,'');
 }
 window.onload  = function()
 {
@@ -11106,8 +11261,10 @@ window.onload  = function()
     if (oldonload4!=null) oldonload4();
     if (document.location.toString().indexOf("&pass")>0)
     {
-        myprompt("Paste cached codes to this textbox and click the Open button.<br><textarea id=\"savearea\" rows=20 cols=60></textarea><br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Open\" onclick=\"passcache()\" ></center>");
-        $("savearea").focus();
+        myprompt("Press Ctrl-V and click the Proceed button.","","passcache(v)","Do Ctrol-V");//<br><textarea id=\"savearea\" rows=1 cols=60 onchange=passcache() onload=this.focus()></textarea>", "passcache()",<br><center><input type=button style=\"background-color:#00BBBB;color:white;width:90px;border:1px #b0b0b0 outset;border-radius:3px\" value=\"Open\" onclick=\"passcache()\" ></center>");
+        $("promptinput").focus();
+        //document.execCommand("paste");
+        //passcache();
         return;
     }
     if (shapearr.length==0 && chatsessionnum==-1)
@@ -11170,6 +11327,17 @@ function makepagetab1()
     {
         showbig(oldpagenum);
     }
+}
+function makemini()
+{
+    let tt = "";
+    let arr = shapearr[0];
+    for (let i=0; i < arr.length; i++)
+    {
+        tt += (new CSVParse(arr[i], "'", ",")).nextElement() + "<br>";
+    }
+    return tt;
+        
 }
 function makepagetab()
 {
@@ -11745,6 +11913,56 @@ function fixall()
        }
        }
     }
+}
+function lzw_decode(s) {
+    var dict = {};
+    var data = (s + "").split("");
+    var currChar = data[0];
+    var oldPhrase = currChar;
+    var out = [currChar];
+    var code = 256;
+    var phrase;
+    for (var i=1; i<data.length; i++) {
+        var currCode = data[i].charCodeAt(0);
+        if (currCode < 256) {
+            phrase = data[i];
+        }
+        else {
+           phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+        }
+        out.push(phrase);
+        currChar = phrase.charAt(0);
+        dict[code] = oldPhrase + currChar;
+        code++;
+        oldPhrase = phrase;
+    }
+    return out.join("");
+}
+function lzw_encode(s) 
+{
+    var dict = {};
+    var data = (s + "").split("");
+    var out = [];
+    var currChar;
+    var phrase = data[0];
+    var code = 256;
+    for (var i=1; i<data.length; i++) {
+        currChar=data[i];
+        if (dict[phrase + currChar] != null) {
+            phrase += currChar;
+        }
+        else {
+            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+            dict[phrase + currChar] = code;
+            code++;
+            phrase=currChar;
+        }
+    }
+    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+    for (var i=0; i<out.length; i++) {
+        out[i] = String.fromCharCode(out[i]);
+    }
+    return out.join("");
 }
 ResizeUploaded.initfolder = folder;
 

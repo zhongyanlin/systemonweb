@@ -1,0 +1,9 @@
+Instead of roll call, this Attendance add uses member's face image
+as id to adminstrate attendance of meetings, classes or any group
+activities. Targeted users are teachers, team leaders or organizers
+of any informal group actitivities. Analyzing the image
+token by user on the  first-time meeting, this app is able to detect
+the faces of members and use them as Id to build a  list of group members.
+On each meeting later on, user can tap the face icon to take
+attendance without remembering people's names or calling
+people's name explicitly. 

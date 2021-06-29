@@ -5,9 +5,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="editcss.css" />
 <script>var textmsg = new Array(1800);var installname="tealeaman";</script>
+<script src="../showcase/en.js"></script>
+<script type="text/javascript"  src="../showcase/cookie.js"></script>
 <script type="text/javascript"  src="../showcase/findrep.js"></script>
 <script type="text/javascript"  src="../showcase/editcss.js"></script>
-<script src="../showcase/en.js"></script>
+
+
     
 </head>
 <body>
@@ -27,15 +30,16 @@
 (2)After renaming a selector or a stage in @keyframes in the textarea,  click the Parse button 
 </td></tr>
 <tr height="150" >
-<td   ><textarea style="height:150px;margin:0px 0xp 0px 0px" cols="50" name="codes" onfocus="javascript:this.style.height='300px'" onblur="javascript:this.style.height='150px'" onchange="parsecss()">div{color:purple}</textarea></td>
+<td   > <input id="myFile" type="file" size="10" onchange="filepathfrom=openfileto(this,$('csssource'))"/> or URL<input id="url" size="10" onfocus="justthis(this)" onchange="downloadFile(this)"/>
+<textarea style="height:150px;margin:0px 0xp 0px 0px" cols="50" id="csssource" name="codes" onfocus="javascript:this.style.height='300px'" onblur="javascript:this.style.height='150px'" onchange="parsecss()">div{color:purple}</textarea></td>
 <td colspan="1" rowspan="2"   valign="top" >
     <table align="center" cellspacing="2" cellpadding=2 id="t2" border="0"><tr><td>File Name</td></tr>
     <tr ><td><input name="filename"   value="filename"  class="button" style="background-color:white;color:black;overflow:hidden"></td></tr>
     
-    <tr  ><td  class="non" ><input name="savebtn" type="button" class="button" style="background-color:navy;margin:3px 2px 2px 2px" value="Save" onclick="saveit()"></td></tr>
-     
     <tr  ><td class="non"><input name="parsebtn" type="button" class="button" value="Parse"  style="background-color:black;margin:3px 2px 2px 2px"  onclick="parsecss()"></td></tr>
-     
+    
+    <tr  ><td  class="non" ><input name="savebtn" type="button" class="button" style="background-color:navy;margin:3px 2px 2px 2px" value="Save" onclick="saveit()"></td></tr>
+      
    <tr  ><td class="non"><input name="undobtn" type="button" class="button" value="Undo" style="background-color:#CC0000;margin:30px 2px 2px 2px"   onclick="undo()"></td></tr>
    <tr  ><td class="non"><input name="dobtn" type="button"  style="background-color:#1D8D3D;margin:3px 2px 20px 2px"  class="button" value="Do" onclick="goahead()"></td></tr>
     

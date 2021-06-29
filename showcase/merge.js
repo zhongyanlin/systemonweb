@@ -951,6 +951,22 @@ function undo(btn)
    }
 }
 
+let ii;
+function loadfile(i)
+{
+ var file = document.getElementById("myFile" + i).files[0];
+ ii = i;
+ var reader = new FileReader();
+ reader.onload = function (e) 
+ {
+    var textArea;
+    if(ii==0) textArea = document.getElementById("bbsource");
+    else textArea = document.getElementById("googlesource");
+    textArea.value = e.target.result;
+ };
+reader.readAsText(file); 
+}
+
 
 
 

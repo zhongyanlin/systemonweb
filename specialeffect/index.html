@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Spacial Effects</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="../pages.css"  />
+        <script src="../showcase/en.js"></script>
+         <script src="../showcase/cookie.js"></script>
+    </head>
+    <body><table align="center"> 
+      <tr><td id="h" align="center" colspan="2" valign="middle">
+    <script>document.write(homestr)</script>  Special Effects: Process multiple images <img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode >       
+                    
+              </td></tr>
+        <tr valign="top"><td>Description:</td><td>  
+Process multiple images under one command. It does filtering, replacing the dominant color, adjusting 
+each color channel, cropping, resizing, creating round corners, detecting human faces and rectangles, 
+and replacing straight lines in the background. 
+</td>
+        </tr>
+        <tr   valign="middle">
+            <td> Download</td>
+            <td> <a href="dist.zip">dist.zip</a>
+            </td>
+        </tr>
+        <tr><td colspan="2" style="padding:5px 5px 5px 5px">
+         <img align=center id=im src="special.png" style="width:100px">
+        </td></tr>
+         
+        </table>
+        
+               <script>
+            function $(x){ return document.getElementById(x);}
+     onload = function()
+{
+     
+    let w = thispagewidth();
+    
+    $('im').style.width = (w - 30) + 'px';
+      
+}
+ 
+onresize = function()
+{
+   $('im').style.width =   '200px';
+   onload();
+}
+        
+            
+        </script>
+    </body>
+</html>
