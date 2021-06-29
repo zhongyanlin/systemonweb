@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta id=mainmeta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<script id="ltxscrpt" type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script><style type="text/css">.tlmmsty{border:0px black solid;font-style:normal;font-family:arial,KaiTi,KaiTiGB2312,STKaiti;vertical-align:top;text-align:center;padding:0px 0px 0px 0px}
+.tlmmline{width:100%}
+.tlmvline{height:100%}
+.tdbutton1{border:0px #bbb solid;font-style:normal;font-family:arial;vertical-align:middle;text-align:center;padding:0px 0px 0px 0px;}
+.samebg{background-color:transparent;color:black;font-size:20px;font-family:arial,KaiTi,KaiTiGB2312,STKaiti}
+</style>
+
+<!--link rel=styleSheet type=css/text href=mystyle.css-->
+
+</head>
+<body class=shapebg  style="margin:0px 5px 0px 5px;backgroundImage:url();background-color:white">
+<script  type="text/javascript" >
+var orgnum=0;
+var originalurl='https://zhongyanlin.github.io/site/showcase';
+var umltoolstyles = document.createElement('link');umltoolstyles.id='styleb'+(orgnum%65536);umltoolstyles.rel = 'stylesheet';umltoolstyles.type = 'text/css';umltoolstyles.media = 'screen';document.getElementsByTagName('head')[0].appendChild(umltoolstyles);
+umltoolstyles.href =originalurl + '/styleb' + (orgnum%65536) + '.css';
+var cachedfontfamily='inherit';
+var colors='#000000,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,#bbbb00'.split(/,/);
+var bcolors='#ffffff,#ff0000,#008000,#ffa500,#0000ff,#800080,#ffc0cb,transparent,transparent,1'.split(/,/);
+var filename='20210514.html';
+var needtranslator = true;
+var editable=true;
+var tstmp=2237809;
+var shapearr=[];
+var linearr=[];
+var curvearr=[];
+var attachstr="";
+var shapetime=[];
+var linetime=[];
+var curvetime=[];
+var pagetime=[];
+var allies=[];
+var bgarr=[];
+var kframes=[];
+var kshapes = [];
+
+shapearr[0] = ["Review of String Processing,,roundrect,464,32,678,63,50,'0','3',0,0.000,1,1.000,'inherit',false,0",
+"'find a target in a range of string:\na_string.find(target, start, end)  report location',,rightrect,46,117,656,75,30,'0','3',0,0.000,2,2.000,'inherit',false,0",
+"'txt = \"Hello, welcome to my world.\"\nx = txt.find(\"wecome\",5)\nprint(x)  #what x will be?',,rightrect,50,208,504,111,30,'0','3',0,0.000,3,3.000,'inherit',false,0",
+"'x = txt.find(\",\",0,4)\nprint(x) #what x will be',,rightrect,604,211,325,75,30,'0','3',0,0.000,4,4.000,'inherit',false,0",
+"'Recall \n<ulb>Range(start, end, step)\nslice(start:end:step)\nfind(target, start, end)</ulb>\n\n',,roundrect,59,421,339,149,30,'3','4',0,0.000,5,5.000,'inherit',false,0",
+"'string slice:\ntxt[start:end:step]',,roundrect,812,340,260,75,30,'1','3',0,0.000,6,6.000,'inherit',false,0",
+"'txt = \"Hello, welcome to my world.\"\nx = txt[2:8:3]\nprint(x)  #what x will be?',,roundrect,812,431,504,111,30,'1','3',0,0.000,7,7.000,'inherit',false,0",
+"'find\nlook for\nseek\nsearch\ncontains\nquery\nlocate',,ellipse,444,357,126,255,30,'3','5',0,0.000,7,7.000,'inherit',false,0",
+"'<h1> Problem 1 </h1>\n<div style=width:1200px;font-size:19px;line-height:25px>\nWrite a function called <b>get_bracket_value</b> that takes a string called <b>a_string</b>, extracts, and returns the string literal values inside the set of open/close square brackets.  If there is only one set of open ([) and close (]) square brackets, then the function returns the string literal between the square brackets. If there are no characters between the open ([) and close (]) square brackets, then the function returns the <strong>empty string</strong>.  If there is no square bracket pair in the string, then the function should return <strong><span>None</span></strong>.  If there are multiple square brackets, then the function returns each of the string literals separated by a comma.\n<p style=\"color:red;\">You do not have to consider the case where the left or right brackets are not matched.</p><p>For example,</p>\n<pre style=\"font-size:19px;font-family:courier,monospace;font-weight:bold;background-color:#eaeaea;color:green;border:1px solid gray;border-radius:5px;\">>>> get_bracket_value(''a bracket has a value [23] and can be extracted how?'')\n''23''\n\n>>> print(get_bracket_value(''Any string that \nhas a [jojo] will have its value extracted!''))\njojo\n\n>>> print(get_bracket_value(''This string has no brackets!''))\nNone\n\n>>> print(get_bracket_value(''Any string that has \na [braket] will have its [value] extracted!''))\nbraket,value</pre>\n<p style=\"color:red;\"><strong>Note: you MUST use the <strong>find </strong>string method for this problem!</strong></p>\n</div>',HTML,roundrect,150,762,1203,728,15,'3','0',0,0.000,8,8.000,'inherit',false,0",
+"'<pre>Algorithm idea:\n(1) locate open [  after the previous closing ]\n(2) locate closing ] after the open [\n(3) with location of [], extract slice inside []\n(4) locate next [ after the previous closing ] ...\nso, need a loop\n\ndef extract_bracket_value(a_string):\n     answer = ''''\n     bracket_end = 0\n     while bracket_end < len(a_string):\n        bracket_start = ???   after the previous ]\n        if bracket_start  == -1:\n             break\n        bracket_end = ???   after open [\n        if bracket_end  == -1:\n             break \n        value = a_string[ bracket_start+1:bracket_end]\n        possibly append comma \n        append value to answer\n     if answer == '''':\n           return ''None''\n     return answer</pre>\n        ',,roundrect,154,1506,894,829,30,'0','0',0,0.000,9,9.000,'inherit',false,0",
+"'Problem 2:\nvowels = ''AEIOUaeiou''\nGiven a string, keep vowels, filter out consonants\nUsing while loop',,roundrect,241,2386,945,195,40,'0','3',0,0.000,10,10.000,'inherit',false,0",
+"'algorithm idea:\n   examine each char in a_string, if it is among\nvowels, accumulate it to answer.\n\n\"for char in a_string:\" is good, but you have to\nuse while loop to keep order',,roundrect,244,2597,888,245,40,'0','3',0,0.000,10,10.000,'inherit',false,0",
+"'<pre>\ndef extract_vowels(a_string):\n    answer = ''''\n    k = 0\n    while k < len(a_string):\n        char = a_string[k] #retrive one\n        if char is among vowels#how \n        append char to answer #how\n        k += 1\n    return answer</pre>\n',,roundrect,243,2867,861,527,40,'0','0',0,0.000,10,10.000,'inherit',false,0"];
+linearr[0] = [];
+curvearr[0] = [];
+allies[0] = [];
+bgarr[0] = '';
+shapearr[1] = ["'<div style=width:1200px;font-size:19px;line-height:25px>\nWrite a function called <b>get_bracket_value</b> that takes a string called <b>a_string</b>, extracts, and returns the string literal values inside the set of open/close square brackets.  If there is only one set of open ([) and close (]) square brackets, then the function returns the string literal between the square brackets. If there are no characters between the open ([) and close (]) square brackets, then the function returns the <strong>empty string</strong>.  If there is no square bracket pair in the string, then the function should return <strong><span>None</span></strong>.  If there are multiple square brackets, then the function returns each of the string literals separated by a comma.\n<p style=\"color:red;\">You do not have to consider the case where the left or right brackets are not matched.</p><p>For example,</p>\n<pre style=\"font-size:19px;font-family:courier,monospace;font-weight:bold;background-color:#eaeaea;color:green;border:1px solid gray;border-radius:5px;\">>>> get_bracket_value(''a bracket has a value [23] and can be extracted how?'')\n''23''\n\n>>> print(get_bracket_value(''Any string that \nhas a [jojo] will have its value extracted!''))\njojo\n\n>>> print(get_bracket_value(''This string has no brackets!''))\nNone\n\n>>> print(get_bracket_value(''Any string that has \na [braket] will have its [value] extracted!''))\nbraket,value</pre>\n<p style=\"color:red;\"><strong>Note: you MUST use the <strong>find </strong>string method for this problem!</strong></p>\n</div>\n',HTML,roundrect,27,30,1203,712,50,'0','0',0,0.000,0,0.000,'inherit',false,0"];
+linearr[1] = [];
+curvearr[1] = [];
+allies[1] = [];
+bgarr[1] = '';
+shapearr[2] = ["'Algorithm idea: locate a \"[\",  say, at brackt_start,  then locate the matching \"]\", after brackt_start. then next \"[\", next matching \"]\" ...... so we need a loop\n\nWith this pair of number brackt_start, brackt_end,\nextract the string slice in range [brackt_start+1, brackt_end)\n\nuse variable answer to accumulate all extracted slices\n',,roundrect,73,71,1513,367,50,'0','0',0,0.000,0,0.000,'inherit',false,0",
+"'<pre>\ndef get_bracket_value(a_string):\n	answer = '''';\n        bracket_end = 0\n	while true: # when exit? \n	     bracket_start = ...   \n             bracket_end = ...\n             value = a_string[?:?]\n             possibly append comma\n             answer += value\n       if answer == '''': \n         return ??\n      return answer\n</pre>	',,roundrect,0,584,965,779,50,'0','0',0,0.000,1,1.000,'inherit',false,0"];
+linearr[2] = [];
+curvearr[2] = [];
+allies[2] = [];
+bgarr[2] = '';
+shapearr[3] = ["'Write a function called <span style=\"font-family:courier,monospace;font-weight:bold;\"> extract_vowels</span> that takes a string  literal value called \n<strong><span>a_string</span></strong> and returns a string with  all the consonants extracted.   \nThat is, the returned string contains only the vowels in their original<br> lower/upper case form.  \nIf the string  contains no vowels, then return an empty string. \nFor example, \n<pre style=\"font-family:courier,monospace;font-weight:bold;background-color:#eaeaea;color:green;border:1px solid gray;border-radius:5px;\">>>> extract_vowels(''hello my name is jack'')\n''eoaeia''\n>>> extract_vowels(''ddd bcd hykj'')\n''''\n>>> extract_vowels(''A vowEl is Worth ...'')\n''AoEio''</pre><p style=\"color:red;\">NOTE: You <strong>MUST</strong> use a <strong>while</strong> loop for this problem.</p>\n ',HTML,rightrect,194,38,1115,567,30,'0','0',0,0.000,0,0.000,'inherit',false,0",
+"'vowels: A, E, I, O, U  (a, e, i, o, u)\nvowels = ''AEIOUaeiou''',,rightrect,834,632,455,75,30,'0','0',0,0.000,1,1.000,'inherit',false,0",
+"'Algorithm idea:\n(1)Using a while loop, examine each character, if it is a vowel,\n     append it to the answer\n(2) How to determine if a character is vowel?',,rightrect,199,637,613,219,30,'0','0',0,0.000,2,2.000,'inherit',false,0",
+"'<pre>\ndef extract_vowels(a_string):\n	answer = ''''\n        vowels = \"AEIOUaeiou\"\n	while i < len(a_string):\n		char = ...\n		if  char is a vowel: #how to do?\n                     answer += char\n        return answer \n</pre>       ',,rightrect,760,701,795,323,30,'0','0',0,0.000,3,3.000,'inherit',false,0"];
+linearr[3] = [];
+curvearr[3] = [];
+allies[3] = [];
+bgarr[3] = '';
+var jsscripts = ['en.js','cookie.js','checkHTML.js','attachment.js','curve.js?sn=30&dn=20','findrep.js','installtool.js','mousetrap.min.js','umltool.js'];
+for (var ii=0; ii < jsscripts.length; ii++)
+document.write('<scrip'+'t  type="text/javascript" src="'   + originalurl + '/' + jsscripts[ii] + '"></scrip' + 't>');
+</script>
+</body>
+</html>

