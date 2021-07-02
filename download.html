@@ -8,42 +8,47 @@ and open the template in the editor.
     <head>
         <title>Download</title>
         <style>
+            table tr td input{font-size:19px} 
             table{border-collapse: collapse;align-content: center}
-            input.button{border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#3CA633,#59B845) #3CA633;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;width:70px}
+            input.button{font-family:times;font-size:20px;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;;margin:0px;padding:0px;width:auto;overflow:visible;background:linear-gradient(#3CA633,#59B845) #3CA633;color:antiquewhite;font-family:Times;font-weight:bold;border:1px #b0b0b0 outset;text-shadow:#606060 -1px -1px;width:78px}
         </style>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="pages.css"  />
-         <script src="showcase/en.js"></script>
-         <script src="showcase/cookie.js"></script>
+         <script src="js/en.js"></script>
+         <script src="js/cookie.js"></script>
+          <script src="js/download.js"></script>
     </head>
     <body>
-        <div style="text-align:center">
-         <script>document.write(homestr)</script>Downloading Registration<img style="z-index:10;float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode >       
+        <div  id="h" style="text-align:center;height:56px;line-height:56px">
+            <script>document.write(homestr.replace(/\.\../,"javascript:history.back()"))</script>Downloading <span id="software">Registration</span> <img style="z-index:10;float:right;height:90px;margin-bottom:-40px"  src="frames.png" id=qrcode >       
      
-        </div>
-        <table align="center" border="1" cellspacing="1" cellpadding="3">
+        </div><br><center>
+         <div style=width:540px;text-align:left>Please provide information below to compose an email to request an link to the installation file. 
+             
+            </dvi>
+        <table style="margin: 30px;align-content: center" align="center" border="1" cellspacing="1" cellpadding="3">
             
             <tbody>
                 <tr>
                     <td>Your Name</td>
-                    <td><input name=user size="30"></td>
+                    <td><input id=user size="30"></td>
                 </tr>
                 <tr>
                     <td>Email Address</td>
-                    <td><input name=email size="30"></td>
+                    <td><input id=email size="30"></td>
                 </tr>
                 <tr>
                     <td>Company/Organization</td>
-                    <td><input name=company size="30"></td>
+                    <td><input id=company size="30"></td>
                 </tr>
                 <tr>
                     <td>Job Position</td>
-                    <td><input name=position size="30"></td>
+                    <td><input id=position size="30"></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">
-                     <input class="button" type=submit name=submit value="Submit">
+                     <input class="button" type=button name=submit value="Email" onclick="send()">
                      <input class="button" type=reset name=cancel value="Reset">
                         
                     </td>
@@ -52,14 +57,16 @@ and open the template in the editor.
                  
             </tbody>
         </table>
-
+            <br><br>You will receive a reply in a minute, but 
+            your email server may classify the incoming reply as a spam mail.
+         <div id="yourmail" style="margin-top:20px;width:560px"></div>
+         <br> 
+             
+    </center>
+     
     </body>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/8.6.8/firebase-app.js"></script>
+ 
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="/__/firebase/8.6.8/firebase-analytics.js"></script>
 
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
+ 
+</html>

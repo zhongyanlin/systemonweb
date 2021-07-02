@@ -2,7 +2,7 @@
 * (C) Copyright 2004-2021 by Systems on Web, Inc.  All Rights Reserved.  *
 * Author: Zhongyan Lin                                                   *
 **************************************************************************/
-
+/*
 if ( typeof(itisagooddomain) == 'undefined')
 {
    var itisagooddomain = document.location.toString().indexOf('https://zhongyanlin.github.io');
@@ -15,7 +15,7 @@ if ( typeof(itisagooddomain) == 'undefined')
        }
    }
 }
-
+*/
 if (document.location.toString().indexOf("localhost") >= 0
         && typeof (handleErr) == 'undefined')
 {
