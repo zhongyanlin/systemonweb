@@ -7,7 +7,8 @@ var applink = {"Java2swift":"https://sourceforge.net/projects/j2swift/",
 "Sorting-Demo":"https://sourceforge.net/projects/sorting-demo/",
 "Facial-Attendance":"https://sourceforge.net/projects/facialattendance/",
 "TeaLeaMan":"https://sourceforge.net/projects/tealeaman/",
-"Special-Effect":"https://sourceforge.net/projects/specialeffect/"};
+"Special-Effect":"https://sourceforge.net/projects/specialeffect/",
+"BBGrade":"https://sourceforge.net/projects/BBGrade/"};
  
  
  

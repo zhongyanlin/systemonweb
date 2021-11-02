@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+ 
+<html>
+    <head>
+        <title>Blackboard Batch Grade</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" type="text/css" href="../pages.css"  />
+       <script src="../js/en.js"></script>
+         <script src="../js/cookie.js"></script>
+    </head>
+    <body>
+    <table align="center">
+        <tr><td id="h" align="center" valign="middle">   
+ <script>document.write(homestr)</script>  Blackboard Batch Grade  <img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode >       
+     </td></tr> <tr><td>    
+        This desktop Java Application grades the downloaded student's submissions of assignments and tests in a batch mode.
+        User goes to the Bb's Full Grade Center, selects a specific submitted item of assignment, expands the top menu, selects
+        "Assignment File Download" to download all submissions as a single zip archive, then goes to "Work Offline" to download
+        the grade sheet of this item as a csv file. User then starts the BBgrade to allow it to find the downloaded archive and
+        grade sheet from the username/Downloads folder, then enters reference/standard answers, click Parse and Scan to scan the student's submitted
+        answers against reference/standard answers entered by user (instructor or grader). All submissions with estimated scores
+        will be loaded in a single Windows for user to check.
+     </td></tr>
+        <tr><td>
+        Download Executable: <a href="../download.html?BBGrade">Desktop Java version for Windows/Mac/Linux</a><br><br>
+     </td></tr>
+        <tr><td>   
+        How to use:<ol>
+        <li> Download the zip archive, unzip it
+        <li> In the dist folder, double click the executable BBGrade.jar.
+        </ol>
+     </td></tr>
+        <tr><td>
+        <img src="bbgrade.png" id="im" style="width:400px">
+   </td></tr>
+        </table>
+        <script>
+            function $(x){ return document.getElementById(x);}
+     onload = function()
+{
+     
+    let w = thispagewidth();
+    
+    $('im').style.width = (w - 20) + 'px';
+     
+}
+ 
+onresize = function()
+{
+   $('im').style.width =   '200px';
+   onload();
+}
+        
+            
+        </script>
+    </body>
+</html>
