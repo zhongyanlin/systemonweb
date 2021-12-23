@@ -548,7 +548,7 @@ function match()
      
     g = newg;
     
-    let s = makelist(b[0],bi) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr height=28 bgcolor=lightgray>';
+    let s = makelist(b[0],0) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr height=28 bgcolor=lightgray>';
     if (g[0] == null)
     {
         g[0] = new Array(maxm);
