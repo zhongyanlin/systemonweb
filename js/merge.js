@@ -137,7 +137,7 @@ function parse(cl)
     if (m.length <2) return;
     let l = 0; while (  l < m[1].length && 
             (m[1][l]==null || m[1][l].replace(/ /,'')=='' || ''+ parseFloat(m[1][l].replace(/ /,'')) == 'NaN')) l++;
-    bl[cl] = l;
+    bl[cl] = m[1].length;
     
     for (let i=0; i <m.length; i++)
     {
