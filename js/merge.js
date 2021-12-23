@@ -135,11 +135,11 @@ function parse(cl)
     let m = (new CSVParse(source,'"',delimiter,'\n')).nextMatrix();
     let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase>';
     if (m.length <2) return;
-    let l = 0; for ( ; l < m[1].length; l++)
+    let l = 1; for ( ; l < m[1].length; l++)
        if( m[1][l]!=null && m[1][l].replace(/ /,'')!='' && ''+ parseFloat(m[1][l].replace(/ /,'')) != 'NaN')
           break;
     bl[cl] = l;
-    
+    //alert('bl[' + cl + ']=' + l);
     for (let i=0; i <m.length; i++)
     {
         if (m[i].length < 2) 
