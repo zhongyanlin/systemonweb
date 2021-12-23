@@ -136,7 +136,7 @@ function parse(cl)
     let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase>';
     if (m.length <2) return;
     let l = 1; for ( ; l < m[1].length; l++)
-       if( m[1][l]!=null && (cl==0 && m[1][l].replace(/ /,'')=='' || m[1][l].replace(/ /,'')!='') && ''+ parseFloat(m[1][l].replace(/ /,'')) != 'NaN')
+       if( m[1][l]!=null && (cl==0 && m[1][l].replace(/ /g,'')=='' ||  ''+ parseFloat(m[1][l].replace(/ /g,'')) != 'NaN'))
           break;
     bl[cl] = l;
     //alert('bl[' + cl + ']=' + l);
