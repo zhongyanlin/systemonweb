@@ -743,7 +743,7 @@ function merge()
             else
             {
                let f = parseFloat(g[i][j]);
-               if ('' + f == 'NaN')
+               if ('' + f == 'NaN'|| curve == 'x')
                    merged[i][m] = g[i][j];
                else
                {
