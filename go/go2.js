@@ -1747,8 +1747,8 @@ function alongborder(a,i,j, maincolor)
         if (k == a.length) k = a,length-1;
         return k;
     }
-    
-        for (let   k=0; k < a.length; k++)
+    let k;
+        for (k=0; k < a.length; k++)
         {
              
             let u = [a[k][0] - i, a[k][1]-j]; 
@@ -1926,9 +1926,10 @@ let queue = null;
 
 function moretodo( )
 {
-       for (let i=0; i < NL; i++)
+       let i=0,j;
+       for (; i < NL; i++)
        {
-           for (let j=0; j < NL; j++)  
+           for (j=0; j < NL; j++)  
            if (getcolor(i,j,visited) == TRANSPARENT) 
                break;
            if (j != NL) break;
@@ -2335,10 +2336,10 @@ function countfillall()
     holdstatus = go.status;
     setstatus(INCOUNTING);  
    clickable = false;
-   let i,j=0;
+   let i=0, j;
    for (; i < NL; i++)
    {
-       for (; j < NL; j++)  
+       for (j=0; j < NL; j++)  
        if (getcolor(i,j) == TRANSPARENT) 
            break;
        if (j != NL) break;
