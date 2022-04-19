@@ -2335,9 +2335,10 @@ function countfillall()
     holdstatus = go.status;
     setstatus(INCOUNTING);  
    clickable = false;
-   for (let i=0; i < NL; i++)
+   let i,j=0;
+   for (; i < NL; i++)
    {
-       for (let j=0; j < NL; j++)  
+       for (; j < NL; j++)  
        if (getcolor(i,j) == TRANSPARENT) 
            break;
        if (j != NL) break;
