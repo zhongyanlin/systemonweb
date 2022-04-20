@@ -312,14 +312,14 @@ function heights()
        msgboard.style.height = (370-playertbl.offsetHeight) +  'px';
        if (go.id == -1)
        {
-           fm.myword.style.disabled = true;
-           fm.sendbtn.style.disabled = true;
+           fm.myword.disabled = true;
+           fm.sendbtn.disabled = true;
            msgboard.innerHTML = "<h3><center><b>"+textmsg[1892].replace(/@/,'</b></center></h3><ol><li>').replace(/@/g,'<li>') + '</ol>';
        }
        else
        {
-           fm.myword.style.disabled = false;
-           fm.sendbtn.style.disabled = false;
+           fm.myword.disabled = false;
+           fm.sendbtn.disabled = false;
        }
     }
     else 
@@ -384,7 +384,7 @@ function populate1()
    + gokeyword[39] + "</option><option value=\"2\">" +  gokeyword[117] + " "+ gokeyword[118]
    +"</option></select>";
    let sel = document.createElement('select');
-   fm.myword.style.width = (fm.myword.offsetWidth - 100) 
+   fm.myword.style.width = (msgboard.offsetWidth - 180) + 'px'; 
    fm.myword.parentNode.insertBefore(sel,fm.myword);
    sel.outerHTML = str ;
    fm.myword.disabled = false;
@@ -697,8 +697,8 @@ function reinit()
    msgboard.style.height = '150px';
    $('playerdiv').style.height = '220px';
    $('playerdiv').style.overflow = 'scroll';
-   fm.myword.style.disabled = true;
-   fm.sendbtn.style.disabled = true;
+   fm.myword.disabled = true;
+   fm.sendbtn.disabled = true;
    if (secondhandle!=null)
        clearInterval(secondhandle);
    $('newbtn').value = gokeyword[27];
@@ -935,8 +935,8 @@ function showlist(x)
      
     $('watch').style.visibility = 'hidden';
     $('newbtn').value = msg64;
-    fm.myword.style.disabled = true;
-    fm.sendbtn.style.disabled = true;
+    fm.myword.disabled = true;
+    fm.sendbtn.disabled = true;
     $('result').innerHTML = ''; 
     go.status = PAIRINGUP;
     
@@ -1203,8 +1203,8 @@ function startgame(str)
    $('playerdiv').style.height = playertbl.offsetHeight + 'px';
    $('playerdiv').style.overflow = ''; 
    msgboard.style.height = (370-playertbl.offsetHeight) + 'px';
-   fm.myword.style.disabled = false;
-   fm.sendbtn.style.disabled = false;
+   fm.myword.disabled = false;
+   fm.sendbtn.disabled = false;
    closeprompt();
    $('result').innerHTML = '';
 }
@@ -1216,7 +1216,7 @@ function deletewho()
    {
       let w = fm.myword.offsetWidth;
       wh.parentNode.removeChild(wh);
-      fm.myword.style.width = (w + 100) + 'px'
+      fm.myword.style.width = (msgboard.offsetWidth - 80) + 'px';
    }
 }
  
@@ -1299,7 +1299,7 @@ function makewho1(id, watcher)
         str += "<option value=" + go.opponent + ">" + go.oppname + "</option>";
     str += "<option value=" + id +  ">"+ watcher + "</option>";
     let sel = document.createElement('select');
-     fm.myword.style.width = (fm.myword.offsetWidth - 100);
+     fm.myword.style.width = (msgboard.offsetWidth - 180) + 'px' ;
      fm.myword.parentNode.insertBefore(sel,fm.myword);
      sel.outerHTML = str + '</select>';
 }
@@ -1326,7 +1326,7 @@ function makewho()
          }
      }
      let sel = document.createElement('select');
-     fm.myword.style.width = (fm.myword.offsetWidth - 100);
+     fm.myword.style.width = (msgboard.offsetWidth - 180) + 'px' ;
      fm.myword.parentNode.insertBefore(sel,fm.myword);
      sel.outerHTML = str + '</select>';
 }
@@ -1511,11 +1511,11 @@ function login()
  
 function deletegame(id)
 {
-    window.open("go.jsp?&username=1&email=4&password=" + id, "w" + tstmp);
+    window.open("index.html?&username=1&email=4&password=" + id, "w" + tstmp);
 }
 function allgames()
 {
-     window.open("go.jsp?email=3&password=0&username=1", "w" + tstmp);
+     window.open("index.html?email=3&password=0&username=1", "w" + tstmp);
 }
 function logout()
 {
@@ -1529,7 +1529,7 @@ function logout1()
 
 function register()
 {
-    myprompt1("<span style=color:red id=regerror></span><form name=f style=\"margin:15px 0px 10px 15px\" method=post action=go.jsp target=\"w" + tstmp + "\" onsubmit=\"return validate(this)\"><table width=300 cellpadding=0px cellspacing=3><tr><td  class=label2>" + gokeyword[59] + "</td><td><input name=username class=text></td></tr>"
+    myprompt1("<span style=color:red id=regerror></span><form name=f style=\"margin:15px 0px 10px 15px\" method=post action=https://edqaa.com/t/go.jsp target=\"w" + tstmp + "\" onsubmit=\"return validate(this)\"><table width=300 cellpadding=0px cellspacing=3><tr><td  class=label2>" + gokeyword[59] + "</td><td><input name=username class=text></td></tr>"
     + "<tr><td class=label2>" + gokeyword[60] + "</td><td><input  name=password  class=text type=password></td></tr><tr><td class=label2>" + gokeyword[61] + "</td><td><input name=email  class=text></td></tr>"
     + '<tr><td><img src="patchca.png" alt="captcha"  style="cursor:pointer;vertical-align:text-bottom;height:22px;line-height:22px;margin:0px 0px -3px 0px" onclick="randomit(this)">'
     +'</td><td><input type="text" class=text name="patchcafield" ></td></tr><tr><td colspan=2 align=center><input class=BlueButton type=submit style=width:70px value="' + gokeyword[58] + '"></td></tr></table></form>',null,null,gokeyword[58]);
@@ -1926,7 +1926,7 @@ let queue = null;
 
 function moretodo( )
 {
-       let i=0,j;
+       let i=0, j;
        for (; i < NL; i++)
        {
            for (j=0; j < NL; j++)  
@@ -2336,7 +2336,7 @@ function countfillall()
     holdstatus = go.status;
     setstatus(INCOUNTING);  
    clickable = false;
-   let i=0, j;
+   let i=0,j=0;
    for (; i < NL; i++)
    {
        for (j=0; j < NL; j++)  
@@ -2889,8 +2889,8 @@ function  gameover(result,noticeopp)
      showresult();
      window.onbeforeunload = null;
      $('newbtn').value==gokeyword[79];
-     fm.myword.style.disabled = true;
-     fm.sendbtn.style.disabled = true;
+     fm.myword.disabled = true;
+     fm.sendbtn.disabled = true;
    if (noticeopp != null)
    {
        let s = "&act=gameover&oppid=" + go.opponent +"&result=" + (-go.result);
@@ -3114,6 +3114,9 @@ function chooselang1(sel)
     let i = sel.selectedIndex; 
     let newnum = i*65536 + ORGNUM;
     SetCookie("orgnum", ""+newnum);
-    document.location.href='go.jsp?orgnum=' + newnum;
+    if (sel.selectedIndex == 0)
+       document.location.href='index.html?orgnum=' + newnum;
+    else
+       document.location.href='zh-cn.html?orgnum=' + newnum;
 }
      
