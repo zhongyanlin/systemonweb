@@ -417,7 +417,9 @@ function match()
                        count++;
                        if (b[m][j].indexOf("@")>0 && b[m][j].indexOf(".")>0)
                            isemail = true;
+                      // console.log(b[m][j].toLowerCase() + ' == ' +  g[i][k].toLowerCase());
                    }
+                   //else  console.log(b[m][j].toLowerCase() + ' != ' +  g[i][k].toLowerCase());
                 }
              }
              if (isemail)
@@ -427,22 +429,23 @@ function match()
              else
                  arr[m] = count*1000 + m;
          }
-         arr.sort((a, b) => a - b);
-         //document.writeln("i=" +i + ", m=" + arr[m-1] + ", count=" + (arr[m-1]%1000) + "<br>");
+         arr.sort((a,b)=>(a-b));
+         let maxscore = arr[m-1];
+         console.log("m=" + m + ", max score=" + maxscore +  ", g" +  i + "  bestmatch  b" + (arr[m-1]%1000) + "<br>");
              
          let ss = '';
          //for (let ll=0; ll < arr.length; ll++) ss +=    arr[ll] + "\n"
          
          //maintbl.rows[6].cells[0].getElementsByTagName('textarea')[0].value  += '\n' + arr[arr.length-1];
-         m = arr[arr.length-1];
-         //document.writeln("i=" +i + ", m=" + m + ", m%1000=" + m%1000 + "<br>");
-         if (m < matchstrength*1000)
+        // m = arr[arr.length-1];
+          
+         if ( Math.floor(maxscore/1000) < matchstrength )
          {
              mism[mism.length] = i;
          }
          else
          {
-             m = m%1000;
+             m = maxscore%1000;
              mts += "," + i + "<->" + m;
              if (maxm < g[i].length) 
                  maxm = g[i].length;
@@ -467,7 +470,7 @@ function match()
            dup[0] = [0];
         }
     }
-    let m = 0;
+    m = 0;
     let mn = 1;
     let msg =  "<" + "li>";
     msg += "Some mismatches were found. If a manual match is found, just click the matched pair.";
