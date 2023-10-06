@@ -3384,7 +3384,7 @@ function addasession(t)
         selstr += '<option value="' +  options[7][j]  + '" ' + (j==0?'selected':'') + '>' + captions[7][j] + '</option>';
     selstr += '<option value="new">' + textmsg[925] + '</option>';
      
-    var str = "<form name=fadds method=post action=follows.jsp target=w" + tstmp +" style=\"margin:0px 0px 0px 0px\"><table   align=center style=\"width:" + (document.getElementById('maintbl').offsetWidth-8) +"px;margin:4px 4px 4px 4px\"><tr><td colspan=2> </td></tr><tr height=80 valign=middle align=left><td colspan=2>" + textmsg[1808] + (t==null?'':('<br>(<font color=purple>' +textmsg[1817] + '</font>)') ) +  "</td></tr>"
+    var str = "<form rel=opener name=fadds method=post action=follows.jsp target=w" + tstmp +" style=\"margin:0px 0px 0px 0px\"  ><table   align=center style=\"width:" + (document.getElementById('maintbl').offsetWidth-8) +"px;margin:4px 4px 4px 4px\"><tr><td colspan=2> </td></tr><tr height=80 valign=middle align=left><td colspan=2>" + textmsg[1808] + (t==null?'':('<br>(<font color=purple>' +textmsg[1817] + '</font>)') ) +  "</td></tr>"
          //   + '<tr><td align=center colspan=2 style=font-weight:700;font-size:30px>' + textmsg[1813] + '</td></tr>'
             + '<tr><td style="border-radius:3px;background:' + gradientbg + ';background-color:' + IBGCOLOR +';color:#DDCC11;width:110px;font-weight:700;text-shadow:-1px -1px #060606">' + textmsg[152] + '</td>'
             + '<td><input class=left style="width:99%;color:#505050;border:1px rgb(176,176,176) solid;border-radius:3px" value="' + textmsg[1809] + '" onfocus=clearhint(this) onblur=rehint(this,1809) name=courseid></td></tr>'
@@ -4049,7 +4049,7 @@ function setbackf(x,err)
             err1+= "<td><select name=c" + j + " onchange=selectse(this,"+j+")><option value=\"\" >No  Use</option><option value=lastname" + l + ">LastName</option><option value=email" + e + ">Email</option><option value=sid" + i + ">StudentId</option><option value=score" + s + ">Score</option><option value=detail " + d + ">Detail</option></select></td>";
         }
         
-        myprompt('<form name=fef><font color=red>(' + (++numofuploadtries)  + ')</font> The following records failed to match. Match them manually by selecting columns then <input class=GreenButton type=button onclick=submissmatch() value=Resubmit><table id=missed border=1 style=border-collapse:collapse>' + err1 + "</tr>" + err + '<table><form>');
+        myprompt('<form rel=opener name=fef  ><font color=red>(' + (++numofuploadtries)  + ')</font> The following records failed to match. Match them manually by selecting columns then <input class=GreenButton type=button onclick=submissmatch() value=Resubmit><table id=missed border=1 style=border-collapse:collapse>' + err1 + "</tr>" + err + '<table><form>');
         promptwin.style.top = "0px";
         promptwin.style.left = "0px";
     }

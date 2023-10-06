@@ -214,7 +214,7 @@ function jsform(cgi, option, i, caption)
 
     }
 
-    ans += "<form name=toolform" + i + " style=\"margin:0px 0px 0px 0px\" target=" + targe(cgi) + ">" + alloptions + "<td  >"
+    ans += "<form rel=opener name=toolform" + i + " style=\"margin:0px 0px 0px 0px\" target=" + targe(cgi) + "  >" + alloptions + "<td  >"
     if (hasfile!='')
     { 
         ans +=  "<input class=\"BlueButton Button\" type=button  name=webservice" + i + "   value=\"" + textmsg[779]  + "\"";

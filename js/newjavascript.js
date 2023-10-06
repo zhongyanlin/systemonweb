@@ -819,7 +819,7 @@ function makebtns()
         }
         document.write("<td " + (chatsessionnum==-1?'':'width=0') + "   style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"   id=tdpage   onmouseenter=popmenu('selpage',this) onmouseout=nullmenu('selpage')  valign=middle >" + textmsg[1854].replace(/@/,'1') + "</td>");
         document.write("<td    id=tdcord  style=\"text-decoration:underline;background-color:transparent;border-radius:0px;font-weight:400;color:" + colors[menufontcolor] + "\"  valign=middle align=left onclick=movecord()></td>");
-        document.write("<td width=0><form style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\" >"
+        document.write("<td width=0><form rel=opener style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\"   >"
                         + "<input name=operation type=hidden value=save>"
                         + "<input name=filedir size=8 style=\"border:0px;background-color:transparent;\"  type=hidden  value=\"" + filename + "\"  >"
                         + "<input name=folder  type=hidden  >"
@@ -858,7 +858,7 @@ function makebtns()
                     "<input type=hidden   name=allcourse value=\"\"><input type=hidden name=subdb value=\"" + subdb + "\"><input type=hidden name=subfolder value=\"chat\"><input type=hidden name=saveindir value=\"" + folder + "\"></form>" +
                     "</td>");
         }
-        document.write("<td width=0><form style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\" >"
+        document.write("<td width=0><form rel=opener style=\"margin:0px 0px 0px 0px\" name=\"f\" method=\"post\" action=\"FileOperation\"   >"
                         + "<input name=operation type=hidden value=save>"
                         + "<input name=filedir size=8 style=\"border:0px;background-color:transparent;\"  type=hidden  value=\"" + filename + "\"  >"
                         + "<input name=folder  type=hidden  >"

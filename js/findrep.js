@@ -1,3 +1,4 @@
+
 /************************************************************************** 
 * (C) Copyright 2004-2014 by Systems on Web, Inc.  All Rights Reserved.  *
 * Author: Zhongyan Lin                                                   *
@@ -184,7 +185,7 @@ function searchreplacewin(ta)
  textareatobesearch = ta;
  var nav = window.open("","searchwin","location=0;toolboar=0,menubar=0,top=0,left=300,width=260,height=130");
  nav.document.getElementsByTagName("body")[0].innerHTML = "";
- nav.document.write("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=" + encoding +"\"></head><body bgcolor=lighyellow><form name=f><table>"
+ nav.document.write("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=" + encoding +"\"></head><body bgcolor=lighyellow><form rel=opener name=f  ><table>"
 +"<tr><td><input name=old value=D></td><td>"
 +"<input type=button name=findbtn  style=width:60 value=Next onclick=opener.findstrintextarea(document.f.old.value)>"
 +"</td></tr><tr><td><input name=newone></td><td>"

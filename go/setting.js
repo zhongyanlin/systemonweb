@@ -61,7 +61,7 @@ function moresetting()
     
     let lists = "<datalist id=timeformats><option value=\"MM/DD/YY hh:mm\" /><option value=\"MM/DD/YY hh:mm\" /><option value=\"MM/DD/YYYY hh:mm\" /><option value=\"MM-DD-YY hh:mm\" /><option value=\"YY-MM-DD hh:mm\" /><option value=\"YYYY-MM-DD hh:mm\" /><option value=\"MM/DD hh:mm\" /></datalist>";
     
-    myprompt(lists + "<table style=margin:0px ><tr><td><form name=fn><table  cellpadding=5 style=\"margin:3px;padding:0px;border:1px #b0b0b0 solid;border-radius:4px\">"
+    myprompt(lists + "<table style=margin:0px ><tr><td><form rel=opener name=fn  ><table  cellpadding=5 style=\"margin:3px;padding:0px;border:1px #b0b0b0 solid;border-radius:4px\">"
     + "<tr><td style=white-space:nowrap  width=100%>" +  ms[3] + "</td><td valign=top  ><input name=dbgcolor type=color value=" + DBGCOLOR + "  size=10 onchange=\"javascript:DBGCOLOR1=this.style.backgroundColor = this.value;\"   style=background-color:" + DBGCOLOR + ";width:90px;padding:0px></td></tr>"
     + "<tr><td style=white-space:nowrap width=100%>" +  ms[0] + "</td><td valign=top ><input  name=ibgcolor  type=color value=" + IBGCOLOR + " size=10 onchange=\"javascript:IBGCOLOR1=this.style.backgroundColor = this.value;\"  style=background-color:" + IBGCOLOR + ";width:90px;padding:0px></td></tr>"
     + "<tr><td style=white-space:nowrap width=100%>" +  ms[2] + "</td><td valign=top ><input  name=tbgcolor  type=color value="+ TBGCOLOR + "  size=10  onchange=\"javascript:TBGCOLOR1=this.style.backgroundColor = this.value;\"  style=background-color:" + TBGCOLOR + ";width:90px;padding:0px></td></tr>"
@@ -105,7 +105,7 @@ function studentsetting()
    selfonts += "</select>";
    let lists = "<datalist id=timeformats><option value=\"MM/DD/YY hh:mm\" /><option value=\"MM/DD/YY hh:mm\" /><option value=\"MM/DD/YYYY hh:mm\" /><option value=\"MM-DD-YY hh:mm\" /><option value=\"YY-MM-DD hh:mm\" /><option value=\"YYYY-MM-DD hh:mm\" /><option value=\"MM/DD hh:mm\" /></datalist>";
      
-    myprompt(lists + "<table align=center width=98% style=\"margin:4px;padding:4px;border:1px #b0b0b0 solid;border-radius:4px;\"><tr><td><form name=ff ><table  cellpadding=5 >"
+    myprompt(lists + "<table align=center width=98% style=\"margin:4px;padding:4px;border:1px #b0b0b0 solid;border-radius:4px;\"><tr><td><form rel=opener name=ff   ><table  cellpadding=5 >"
     + "<tr><td style=white-space:nowrap  width=100%>" +  ms[3] + "</td><td valign=top  ><input name=dbgcolor type=color value=" + DBGCOLOR + " size=10 onchange=\"javascript:DBGCOLOR1=this.style.backgroundColor = this.value;\"  style=background-color:" + DBGCOLOR + ";width:90px;padding:0px></td></tr>"
     + "<tr><td style=white-space:nowrap width=100%>" +  ms[0] + "</td><td valign=top ><input  name=ibgcolor  type=color value=" + IBGCOLOR + " size=10 onchange=\"javascript:IBGCOLOR1=this.style.backgroundColor = this.value;\"  style=background-color:" + IBGCOLOR + ";width:90px;padding:0px></td></tr>"
     + "<tr><td style=white-space:nowrap width=100%>" +  ms[2] + "</td><td valign=top ><input  name=tbgcolor  type=color value="+ TBGCOLOR + "  size=10  onchange=\"javascript:TBGCOLOR1=this.style.backgroundColor = this.value;\"  style=background-color:" + TBGCOLOR + ";width:90px;padding:0px></td></tr>"

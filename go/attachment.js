@@ -976,7 +976,7 @@ attachman : function(attach_h)
    {
        ss += "<a href=\"javascript:ResizeUploaded.asraw()\">" +   textmsg[1614].replace(/[^:]+:/,'') +" </a>&nbsp;&nbsp;&nbsp;<a href=javascript:ResizeUploaded.showwfhint()><!--[?]--></a></center>"; 
    }
-   ss += "<form name=form1 style=\margin:0px 0px 0px 0px\"><table id=\"attachaction\" cellpadding=2 cellspacing=2  border=0 class=outset1 style=\"border:0px #b0b0b0 outset;border-radius:3px;margin:3px 3px 3px 3px\" align=center  >";
+   ss += "<form rel=opener name=form1 style=\margin:0px 0px 0px 0px\"  ><table id=\"attachaction\" cellpadding=2 cellspacing=2  border=0 class=outset1 style=\"border:0px #b0b0b0 outset;border-radius:3px;margin:3px 3px 3px 3px\" align=center  >";
    
    var maps = new Array();
    

@@ -1529,7 +1529,7 @@ function logout1()
 
 function register()
 {
-    myprompt1("<span style=color:red id=regerror></span><form name=f style=\"margin:15px 0px 10px 15px\" method=post action=https://edqaa.com/t/go.jsp target=\"w" + tstmp + "\" onsubmit=\"return validate(this)\"><table width=300 cellpadding=0px cellspacing=3><tr><td  class=label2>" + gokeyword[59] + "</td><td><input name=username class=text></td></tr>"
+    myprompt1("<span style=color:red id=regerror></span><form rel=opener name=f style=\"margin:15px 0px 10px 15px\" method=post action=https://edqaa.com/t/go.jsp target=\"w" + tstmp + "\" onsubmit=\"return validate(this)\"  ><table width=300 cellpadding=0px cellspacing=3><tr><td  class=label2>" + gokeyword[59] + "</td><td><input name=username class=text></td></tr>"
     + "<tr><td class=label2>" + gokeyword[60] + "</td><td><input  name=password  class=text type=password></td></tr><tr><td class=label2>" + gokeyword[61] + "</td><td><input name=email  class=text></td></tr>"
     + '<tr><td><img src="patchca.png" alt="captcha"  style="cursor:pointer;vertical-align:text-bottom;height:22px;line-height:22px;margin:0px 0px -3px 0px" onclick="randomit(this)">'
     +'</td><td><input type="text" class=text name="patchcafield" ></td></tr><tr><td colspan=2 align=center><input class=BlueButton type=submit style=width:70px value="' + gokeyword[58] + '"></td></tr></table></form>',null,null,gokeyword[58]);
