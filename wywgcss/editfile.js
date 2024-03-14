@@ -66,7 +66,23 @@ function openwin()
     nav1.document.body.innerHTML = '';
     return true;
 }
+function downloadas(contents, filename) 
+{
+        let mime_type =  "text/html";
+        var blob = new Blob([contents], {type: mime_type});
+        var dlink = document.createElement('a');
+        dlink.download = filename;
+        dlink.href = window.URL.createObjectURL(blob);
+        dlink.onclick = function(e) {
+            var that = this;
+            setTimeout(function() {
+                window.URL.revokeObjectURL(that.href);
+            }, 1500);
+        };
 
+        dlink.click();
+        dlink.remove();
+    }
 
 function syn(x){return 1;};
 function whenwyewygchange(ta)

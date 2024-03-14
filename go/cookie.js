@@ -4821,7 +4821,7 @@ function savefileas(txtbox,filename)
         var fn =  ye + mo + da;
         if (filename == null) fn += ".csv";
         else fn += filename;
-        myprompt('Enter File name:',fn,"downloadas(txtboxhold,v)","File Name");
+        myprompt('Enter File name:',fn,"downloadas(txtboxhold.value,v)","File Name");
         return;
     }
     let ext2mime = [];
