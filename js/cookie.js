@@ -1671,7 +1671,7 @@ var formatstr0 = function(x, f)
             break;
         }
         if (ispre == '')
-            x =   x.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/[\r|\n]/g, '<br>') ;
+            x =   x.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/\r/g, "<br>").replace(/\n/g, "<br>");
         else 
             x = ispre +  x.replace(/</g, '&lt;').replace(/>/g, '&gt;')  + ispre1;
         

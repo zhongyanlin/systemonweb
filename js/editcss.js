@@ -985,6 +985,7 @@ function saveit()
     opener.helpsave(window, document.f.filename.value, document.f.codes.value);
     else  
     {
+        if (filepathfrom == null) filepathfrom = ".css";
         savefileas(document.f.codes,filepathfrom);
     }
 }
