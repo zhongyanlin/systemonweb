@@ -1189,8 +1189,8 @@ function downloadFile(txt)
  
  downloadas = function(contents, filename) 
 {
-        let mime_type =  "text/html";
-        var blob = new Blob([contents], {type: mime_type});
+        let mime_type =  "css/text";
+        var blob = new Blob([contents.value], {type: mime_type});
         var dlink = document.createElement('a');
         dlink.download = filename;
         dlink.href = window.URL.createObjectURL(blob);
