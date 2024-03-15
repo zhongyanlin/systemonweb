@@ -990,23 +990,7 @@ function saveit()
     }
 }
 
-function downloadas(contents, filename) 
-{
-        let mime_type =  "text/html";
-        var blob = new Blob([contents], {type: mime_type});
-        var dlink = document.createElement('a');
-        dlink.download = filename;
-        dlink.href = window.URL.createObjectURL(blob);
-        dlink.onclick = function(e) {
-            var that = this;
-            setTimeout(function() {
-                window.URL.revokeObjectURL(that.href);
-            }, 1500);
-        };
 
-        dlink.click();
-        dlink.remove();
-    }
 function renull(fn, len, furl, ltime)
 {
     var cl = document.f.savebtn.style.color;
@@ -1202,4 +1186,22 @@ function downloadFile(txt)
      }
      req.send();
  }
+ 
+ downloadas = function(contents, filename) 
+{
+        let mime_type =  "text/html";
+        var blob = new Blob([contents], {type: mime_type});
+        var dlink = document.createElement('a');
+        dlink.download = filename;
+        dlink.href = window.URL.createObjectURL(blob);
+        dlink.onclick = function(e) {
+            var that = this;
+            setTimeout(function() {
+                window.URL.revokeObjectURL(that.href);
+            }, 1500);
+        };
+
+        dlink.click();
+        dlink.remove();
+    }
   
