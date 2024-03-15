@@ -1187,7 +1187,7 @@ function downloadFile(txt)
      req.send();
  }
  
- downloadas = function(contents, filename) 
+downloadas = function(contents, filename) 
 {
         let mime_type =  "css/text";
         var blob = new Blob([contents.value], {type: mime_type});
