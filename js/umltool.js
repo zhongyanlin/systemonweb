@@ -178,7 +178,7 @@ if (typeof (myfontname) != 'undefined')
     cachedfontfamily = myfontname;
 if (typeof (onlinetoolinitial) == 'undefined' || onlinetoolinitial == null)
 {
-    onlinetoolinitial = ";LaTex;web;LaTex toolbar;LaTex;" + originalurl + "/../js/findrep.js;showlatexpanel(content_a,this);";
+    onlinetoolinitial = ";LaTex;web;LaTex toolbar;LaTex;" + originalurl + "/js/findrep.js;showlatexpanel(content_a,this);";
 }
 if (folder != null)
 onlinetoolinitial += textmsg[16] + ";web;Configuration;Configure;;openconfigtool();";
