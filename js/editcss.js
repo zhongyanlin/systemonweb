@@ -1203,6 +1203,6 @@ downloadas = function(contents, filename)
 
         dlink.click();
         dlink.remove();
-        myprompt("File downloaded to your local download folder. Insert the following line to the head element of your HTML file:<br><br> &lt;" + "link   rel=\"" + "stylesheet" + "\" type=text/css href=\"" + filename + " />",null,null,"How to Use");
+        myprompt("File downloaded to your local download folder. Insert the following line to the head element of your HTML file:<br><br> &lt;" + "link   rel=\"" + "stylesheet" + "\" type=text/css href=\"" + filename + "\" />",null,null,"How to Use");
     }
   
