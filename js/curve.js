@@ -1,11 +1,36 @@
+if (document.location.toString().indexOf("localhost") >= 0
+    && typeof (handleErr) == 'undefined')
+{
+function handleErr(msg, url, l)
+{
+      var txt= "There was an error on this page.<br>"
+       + "Error: " + msg + "<br>"
+       + "URL:   " + url + "<br>"
+       + "Line:  " + l + "<br><br>"
+       + "Click OK to continue.<br>";
+      myprompt(txt);
+      window.onerror = handleErr;
+      return true;
+}
+window.onerror = handleErr;
+}
 if (typeof(ismobile) == 'undefined') 
-ismobile = function()
+{
+   function ismobile0()
 {
     return navigator.userAgent.match(/Android/i) ||
-    navigator.userAgent.match(/BlackBerry/i)||
-    navigator.userAgent.match(/iPhone|iPad|iPod/i)
-    || navigator.userAgent.match(/Opera Mini/i)
-   ||  navigator.userAgent.match(/IEMobile/i);
+            navigator.userAgent.match(/BlackBerry/i) ||
+            navigator.userAgent.match(/iPhone|iPad|iPod/i)
+            || navigator.userAgent.match(/Opera Mini/i)
+            || navigator.userAgent.match(/IEMobile/i);
+}
+ismobile = function ()
+{
+    if (typeof(navigator.userAgentData)!='undefined' && typeof(navigator.userAgentData.mobile)!='undefined' )
+    return navigator.userAgentData.mobile;
+    return ismobile0();
+}
+
 }
  
  
@@ -143,8 +168,6 @@ function slowshow()
 {
     if (typeof ugentmsg == 'undefined')
         return;
-    var wd = thispagewidth();
-    var het = thispageheight();
     var ms = "";
     if (typeof(textmsg)!='undefined')
         ms = textmsg[567];
@@ -157,10 +180,7 @@ function closeUgentmsg()
         return;
     document.body.removeChild(promptwin);
 }
-
-
-
-
+ 
 
 if (!ismobile() && typeof (Drag) == 'undefined')
 {
@@ -2010,12 +2030,9 @@ var LaTexHTML =
      }
     
 };
-
-
  
-var oldonload7   = function()
+function createLaTexElements()
 {
-    
     if (typeof (tail) == 'function')
     {
          tail();
@@ -2025,23 +2042,18 @@ var oldonload7   = function()
    // initcurve();
     if (typeof(needtranslator)!='undefined' && needtranslator)
     {
+        let xy = [20,20];
         if (typeof(getJsParam) == 'function')
-            LaTexHTML.init(getJsParam("curve.js",['sn','dn']));
-        else
-            LaTexHTML.init([20,20]);
-
+            xy = getJsParam("curve.js",['sn','dn']);
+            LaTexHTML.init(xy);
+        
     }
     if (typeof ugentmsg != 'undefined' && ugentmsg!='')
     {
         slowshow(); 
     }
 }
-oldonload7();
-
-function tomaster()
-{
-     window.location.href = "mailto:linzhongyan@gmail.com?subject=About website&body="
-}
+createLaTexElements(); 
  
 
 

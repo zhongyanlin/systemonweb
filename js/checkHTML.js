@@ -2,6 +2,10 @@
 * (C) Copyright 2004-2014 by Systems on Web, Inc.  All Rights Reserved.  *
 * Author: Zhongyan Lin                                                   *
 **************************************************************************/
+
+
+
+
 function keeptext2html(txt)
 {
    return txt.replace(/ /g,'?').replace(/</g, "<").replace(/>/g,">").replace(/\n/g,'<br>');
@@ -17,7 +21,7 @@ function spaces(i)
 
 function foldlines(txt, max)
 {
-   var word  = txt.replace(/\n+/g, ' ');
+   var word  = txt.replace(/[\n]+/g, ' ');
    return  foldaline(word, max, '\n');
 }
 
@@ -68,9 +72,13 @@ function whichFormat(txt)
 {
    return guessFormat(txt.value);
 }
-
+var javamark1 = /public[ ]+class[ ]+[a-z|A-Z]/,
+    javamark2=/[ ]+void[ ]+main\(/,
+    pythonmark1=/\n\t\t/,
+    pythonmark2=/\n[\t]*print\(/;
 function guessFormat(txt)
 { 
+  
    var ans = 0;
    var i = 0; 
    var dcounter = 0; 
@@ -124,7 +132,7 @@ function guessFormat(txt)
          }
      }
    }
-   if (txt.replace(/[ |\n]/g,'')!='' && txt.replace(/^[ ]*\n*http[s]?:[^ ]+[ ]*\n*/,'')=='')
+   if (txt.replace(/[ |\n]/g,'')!='' && txt.replace(/^[ ]*[\n]*http[s]?:[^ ]+[ ]*[\n]*/,'')=='')
    {  
        if (typeof(guessedFormat)!='undefined')guessedFormat=3;
        return 3;
@@ -134,20 +142,18 @@ function guessFormat(txt)
    if (m != null)
    {
        var x = m.toString().toLowerCase().replace(/<[ ]*/,'');
-       
        var y = x.replace(/[^a-z]/,' ');
-     
        var j = y.indexOf(" ");
-   
        y = "," + y.substring(0, j) + ",";
-     
-       if (",br,li,img,input,hr,meta,link,area,param,iframe,".indexOf(y)>=0)
+       if (",br,li,img,input,hr,meta,link,area,param,iframe,div,".indexOf(y)>=0)
        {
            if (typeof(guessedFormat)!='undefined')guessedFormat=1;
            return 1;
        }
    }
    if (typeof(guessedFormat)!='undefined')guessedFormat=1;
+   if (javamark1.test(txt) && javamark2.test(txt)){guessedFormat=4; return 4;}
+   if ( pythonmark1.test(txt) || pythonmark2.test(txt)) {guessedFormat=5;return 5;}
    return 0;
 }
  
@@ -215,7 +221,7 @@ function Astack()
     }
 }
 var transition =
-[
+[  
 [1,0,0,9,0,13,0,0,0,0,0],
 [1,0,6,9,0,0,0,2,0,0,0],
 [1,4,3,9,7,0,2,2,2,2,0],
@@ -231,7 +237,24 @@ var transition =
 [14,14,14,14,14,14,14,14,14,14,14],
 [1,0,0,0,0,0,0,0,0,0,0]
 ];
-
+/*      <   >    /    $    "    \    \s    =   a-z   0-9  others
+ 0     b/1 o/0  o/0  o/9  o/0  o/13  o/0  o/0  o/0   o/0  o/0
+ 1 <  ob/1 o/0    
+ 2 
+ 3 
+ 4  
+ 5
+ 6 
+ 7 
+ 8  
+ 9 $
+ 10 
+ 11 
+ 12  
+ 13 \
+ 14 
+ 15
+ */ 
 function mapcode(c)
 {
     switch(c)
@@ -379,7 +402,7 @@ function checkh1(txtstr, modify)
         {
             if (c == 3)
             {
-                y += '<div>$'
+                y += '<div>$';
             }
             else
             {
@@ -424,9 +447,11 @@ function checkh1(txtstr, modify)
            w += "</" + z + ">";
         st.pop();
     }
+    if (typeof(syntaxerror)!='undefined')
+        syntaxerror = (w!='');
     if (modify)
     return  dobeginend(y) + w;
-    return w;
+    return dobeginend(y);
 }
 function dobeginend(t)
 {
@@ -772,7 +797,7 @@ function HTMLChecker(txtstr)
     this.newt = '';
     this.msg = '';
     this.ident = 0; 
-    
+    this.alltags = ",a,abbr,address,area,article,aside,audio,b,base,bdi,bdo,blockquote,body,br,button,canvas,caption,cite,code,col,colgroup,command,datalist,dd,del,details,dfn,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,font,form,h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,i,iframe,img,input,ins,kbd,keygen,label,legend,li,link,map,mark,menu,meta,meter,nav,nobr,noscript,object,ol,optgroup,option,output,p,param,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strong,style,sub,summary,sup,table,tbody,td,textarea,tfoot,th,thead,time,title,tr,track,u,ul,var,video,wbr,";
     this.harmfulele = 0;
     this.harmfultag = false;
     this.tag = '';
@@ -846,12 +871,13 @@ function HTMLChecker(txtstr)
     this.ishtml = function(y)
     {
          y = "," + y.toLowerCase() + ",";
-         return ",a,abbr,address,area,article,aside,audio,b,base,bdi,bdo,blockquote,body,br,button,canvas,caption,cite,code,col,colgroup,command,datalist,dd,del,details,dfn,dir,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,font,form,h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,i,iframe,img,input,ins,kbd,keygen,label,legend,li,link,map,mark,menu,meta,meter,nav,nobr,noscript,object,ol,optgroup,option,output,p,param,pre,progress,q,rp,rt,ruby,s,samp,script,section,select,small,source,span,strong,style,sub,summary,sup,table,tbody,td,textarea,tfoot,th,thead,time,title,tr,track,u,ul,var,video,wbr,".indexOf(y)>=0;
-    }
+         return this.alltags.includes(y);
+     }
+    this.needfolder = ",a,b,body,br,caption,div,dd,dl,dt,em,font,h1,h2,h3,h4,h5,h6,hr,i,mark,nobr,option,p,pre,small,span,strong,td,th,sub,sup,";
     this.nofolder = function(y)
     {
         y = "," + y.toLowerCase() + ",";
-        return ",a,b,body,br,caption,div,dd,dl,dt,em,font,h1,h2,h3,h4,h5,h6,hr,i,mark,nobr,option,p,pre,small,span,strong,td,th,sub,sup,".indexOf(y)>=0;
+        return this.needfolder.indexOf(y)>=0;
     }
                   
     this.lastopen = '';
@@ -859,7 +885,7 @@ function HTMLChecker(txtstr)
     this.proctag = function()
     {
         var x1 = this.x.substring(this.thisstart, this.thisend);
-        var x = x1.replace("^<[ ]+", "<");
+        var x = x1.replace(/^<[ ]+/, "<");
         var y = '';
         if (x.charAt(1) == '!' || x.charAt(1) == '>')
         {    
@@ -958,7 +984,7 @@ function HTMLChecker(txtstr)
                 }
                 else if (harmfultags.indexOf(','+y.toLowerCase() +',') >= 0)
                 {
-                    this.corrected = '';//this.corrected.replace(/</,'&lt;');
+                    this.corrected = ''; 
                     this.harmfultag = true;
                     this.harmfulel = 0;
                 }
@@ -979,7 +1005,7 @@ function HTMLChecker(txtstr)
     {
         var s = '';
         for (var i=0; i < n; i++)
-           s += '\t';
+           s += '   ';
        return s;
     }
     this.onechardiff = function (x,y)
@@ -1207,6 +1233,7 @@ var hasHTMLerror = false;
 var fentureg = null;
 function standardize(ts)
 {
+    if (ts == null) return;
     if (fentureg == null)
     {
         var x = "\\[[ ]*imagelet[ ]*([0-9]+)[ ]*([:]?)[ ]*([0-9]?)\\]";

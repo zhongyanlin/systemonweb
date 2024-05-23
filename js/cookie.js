@@ -1,13 +1,11 @@
-/**************************************************************************
- * (C) Copyright 2006-2013 by Systems on Web, Inc.  All Rights Reserved.  *
- * Author: Zhongyan Lin                                                   *
- **************************************************************************/
+ 
+  
 if (typeof(someconsts)=='undefined')
 {
-var someconsts=['<meta http-equiv="Pragma" content="no-cache" ><meta http-equiv="content-type" content="text/html; charset=gb2312" />','arial,KaiTi,KaiTiGB2312,STKaiti','121334211234341231231324354546765765sdffhgfjhgasczerrtredsv1312344dfdw3rhdsgQWERETEASA','1','3598000','zh-cn'];
+var someconsts=['<meta http-equiv="Pragma" content="no-cache" ><meta http-equiv="content-type" content="text/html; charset=gbk" />','arial,KaiTi,KaiTiGB2312,STKaiti','121334211234341231231324354546765765sdffhgfjhgasczerrtredsv1312344dfdw3rhdsgQWERETEASA','1','3598000','zh-cn'];
 var unititle = function(str,cls){
         if (cls!='outset2') 
-        return '<table cellspacing=0 cellpadding=0 width=100% border=0 align=center class=' + cls + ' ><tr height=48><td valign=middle align=center><table width=100%  align=center><tr><td width=36 align=middle id=homeico  onclick=gohome()></td><td  align=center><div class=forcurve1 style=width:180px;overflow:hidden  id=titlediv  onclick=qrlink()><NOBR>' + str + '</NOBR></div></td><td  onclick=actionmenu(this) valign=middle width=20  align=center  style="font-size:20px;color:white;padding:0px">&vellip;</td></tr></table></td></tr></table>'; 
+        return '<table cellspacing=0 cellpadding=0 width=100% border=0 align=center class=' + cls + ' ><tr height=48><td valign=middle align=center><table width=100%  align=center><tr><td width=36 align=middle id=homeico  onclick=gohome()></td><td  align=center><div class=forcurve1 style=width:180px;overflow:hidden  id=titlediv  onclick=qrlink()><NOBR>' + str + '</NOBR></div></td><td  onclick=actionmenu(this) valign=middle width=20  align=center  style=\"font-size:20px;color:white;padding:0px\">&vellip;</td></tr></table></td></tr></table>'; 
         return '<table  cellspacing=0 cellpadding=0 width=100%   align=center ><tr><td width="2px"></td><td class=outset2 valign=middle align=center style="border:1px outset"><table width=100% ><tr><td width=36 valign=middle  id=homeico   onclick=gohome()></td><td  align=center><div class=forcurve1  onclick=qrlink()  id=titlediv><NOBR>' + str + '</NOBR></div></td></tr></table></td><td width="3px"></td></tr></table>';
     } 
 }
@@ -22,6 +20,12 @@ var unititle = function(str,cls){
  var latexislocal= (someconsts[3]== '1');
  var activeidletime= parseInt(someconsts[4]);
  var ibgcolorw =  "#785673";
+ if (localStorage['qrcodeenable'] == null)
+     localStorage['qrcodeenable'] = "T";
+ if (localStorage['trackenable'] == null)
+     localStorage['trackenable'] = "F";
+ if (localStorage['logdataout'] == null)
+     localStorage['logdataout'] = "F";
  function headercl( clx) {
         var  cl = "#45626a";
         if (clx==("red")) {
@@ -96,6 +100,7 @@ var tabeingedited = null;
 var AMtranslated = true;
 var totaleles = 0;
 var myfontname = 'inherit';
+let trackstr = "";
 var round20 = "</td><td width=5  ><div style=\"height:1px;width:5px;background-color:transparent;cursor:e-resize\"></div></td>"
         + "</tr><tr height=5><td width=5  ></td>"
         + "<td colspan=1  ><div style=\"width:100%;height:5px;cursor:s-resize\"></div></td>"
@@ -105,13 +110,19 @@ var round2 = "</td><td width=2  ><div style=\"width:100%;cursor:e-resize\"></div
         + "</tr><tr height=5><td width=2   ></td>"
         + "<td   ><div style=\"width:100%;height:2px;cursor:s-resize\"></div></td>"
         + "<td width=2  ><div style=\"width:2px;height:2px;cursor:se-resize\"></div></td></tr></table>";
-function ismobile()
+function ismobile0()
 {
     return navigator.userAgent.match(/Android/i) ||
             navigator.userAgent.match(/BlackBerry/i) ||
             navigator.userAgent.match(/iPhone|iPad|iPod/i)
             || navigator.userAgent.match(/Opera Mini/i)
             || navigator.userAgent.match(/IEMobile/i);
+}
+function ismobile()
+{
+    if (typeof(navigator.userAgentData)!='undefined' && typeof(navigator.userAgentData.mobile)!='undefined' )
+    return navigator.userAgentData.mobile;
+    return ismobile0();
 }
 
 
@@ -280,7 +291,22 @@ function getCookieVal(offset)
         endstr = document.cookie.length;
     return decodeURIComponent(document.cookie.substring(offset, endstr));
 }
-
+function allCookieKeys()
+{
+    var k = new Array();
+    let r = new RegExp(/ [^ ]+=/);
+    let str = (' ' + document.cookie);
+    let i = 0;
+    while (true)
+    {
+        let m = r.exec(str.substring(i));
+        if (m == null) break;
+        let ke = m.toString();
+        k[k.length] = ke.replace(/^ /,'').replace(/=$/,'');
+        i += m.index + ke.length;
+    }
+    return k;
+}
 function GetCookie(name)
 {
     var arg = name + "=";
@@ -296,7 +322,8 @@ function GetCookie(name)
         if (i == 0)
             break;
     }
-    return null;
+    
+    return localStorage[name];
 }
 
 function dothetable(v)
@@ -392,15 +419,291 @@ function dothetable(v)
            str += '</table>';
            start = r;
        }
-        
     }
-     
     return str;
 }
+                       
+var jtrans = [[1,2,0,0,0,6,8,9,0],[1,2,0,0,0,8,8,8,0],[1,5,0,3,0,8,8,8,0],[3,3,3,4,3,3,3,3,3],[3,0,3,4,3,3,3,3,3],[5,5,5,5,0,5,5,5,5],[6,6,6,6,6,0,7,6,6],[6,6,6,6,8,6,6,6,6],[8,8,8,8,8,8,8,8,8],[9,9,9,9,9,9,10,0,9],[9,9,9,9,8,9,9,9,9]];
+var jaction = ['boooooooo','bcccccccc','booooooco','oooooooco','oooooooco','oooooooco','oooooooco','oooooooco','oooooooco','oooooooco','oooooooco'];/*
+                     a-z     /    space      *     \n\r    "      \    ' other
+0: code              b1    o2     o0         o0     o0    o6      o8   o9  o0
+1: alphabet          b1   c2     c0       c0    c0   o8     o8     o8  c0
+2: /                 b1   o5      o0         o3     o0  o8      o8     o8 o0
+3:/ *                o3   o3    o3         o4      o3  o3        o3    o3  o3
+4:/ * *              o3    o0   o3         o4     o3  o3        o3  o3 o3
+5:/ /                o5    o5   o5         o5    o0  o5       o5 o5  o5
+6:"                 o6    o6    o6         o6     o6  o0    o7    o6  o6
+7:\                 o6    o6    o6        o6   o8   o6     o6   o6  o6     
+8:error            o6   o6     o6         o6  o6     o6   o6  o6   o6 
+9:'                 o9    o9    o9         o9     o9   o9    o10   o0  o9
+10:\                o9    o9    o9        o9   o8   o9     o9     o9   
+**/
+function nbspace(n)
+{
+    let x = ''; for (let k=0; k < n;k++) x +='&nbsp;&nbsp;&nbsp;';
+    return x;
+}
+var jkeywords = ",abstract,continue,for,new	switch,assert,default,goto,package,synchronized,boolean,do,if,private,this,break,double,implements,protected,throw,byte,else,import,public,throws,case,enum,instanceof,return,transient,catch,extends,int,short,try,char,final,interface,static,void,class,finally,long,strictfp,volatile,const,float,native,super,while,";
 var codestab = new RegExp("[\t|\n][ ]*\t");
+var pkeywords= ",False,None,True,and,as,assert,async,await,break,class,continue,def,del,elif,else,except,finally,for,from,global,if,import,in,is,lambda,nonlocal,not,or,pass,raise,return,try,while,with,yield,";
+/*                a-zA-Z0-9  #    \n\r    "      \     '   other
+0: init              b1      2    0      3      15    8    0
+1: alphabet          b1   co2     co0   c15    c15   c15   c0
+2: #                 o2    o2     o0    o2      o2    o2   o2 
+3: "                o3     o3    o15    o(04)  o13    o3    o3
+4: ""               o15    o2   oo   o5      o15    o15   o0
+5: """              o5    o5     o5    o6       o5    o5    o5
+6:""" "             o5    o5     o5    o7      o5     o5   o5
+7: """ ""'          o5    o5     o5    o0      o5    o5    o5
+8:'                 o8    o8    o15    o8     o14    o(09)  o8
+9: ''              o15    o2   o0    o15    o15   o10     o0
+10:'''             o10  o10    o10    o10    o10   o11    o10
+11: ''' '          o10  o10   o10    o10     o10   o12    o10
+12: ''' ''         o10  o10   o10    010    o10   o0     o10
+13: "\            o3   o3    o15    03     o3    o3     o3
+14: '\            o8   o8    o15    o8      o8    o8    o8
+15:Error          o15  o15   o15    o15    o15   o15   o15
+**/
+var ptrans = [[1,2,0,3,15,8,0],[1,2,0,15,15,15,0],
+    [2,2,0,2,2,2,2,2],[3,3,15,0,13,3,3],
+    [15,2,0,5,15,15,0],[5,5,5,6,5,5,5],
+    [5,5,5,7,5,5,5],[5,5,5,0,5,5,5],
+    [8,8,15,8,14,0,8], [15,2,0,15,15,10,0],
+    [10,10,10,10,10,11,10],[10,10,10,10,10,12,10],
+    [10,10,10,10,10,0,10],[3,3,15,3,3,3,3],
+    [8,8,15,8,8,8,8],[15,15,15,15,15,15,15]];
+var jcharcode = {'/':1, ' ':2, '*':3, '\r':4, '\n':4, '"':5, '\\':6, '\'':7};
+var pcharcode = {'#':1, '\r': 2, '"':3,'\\':4,'\'':5};
+                               
 function formatstr(v, fmt)
 {
     if (v == null) return v;
+     
+    if (''+fmt=='4')
+    {
+        syntaxerror = false;
+        var qs = false;
+        var buf = [];
+        var state = 0, j;
+        var html=[];
+        var p ;
+        var ident = 0;
+        var bcounter = 0, pcounter=0;
+        var identstate = 0;
+        for (let i=0; i <  v.length;i++)
+        {
+            let c = '\n'; if (i < v.length) c = v.charAt(i); 
+            let cc = 32;  if (i < v.length) cc = v.charCodeAt(i);  
+            let t = 0;
+            if (!(48 <= cc && cc <=57 ||  65 <=cc && cc<=90 || 97  <= cc && cc <= 122 || c==='_'))
+            {
+                t=jcharcode[c]; 
+                if (t == null) t = 8;
+            }
+            let state1 = jtrans[state][t]; 
+           
+            if (state == 2 && (state1 == 3|| state1==5))            
+            {
+                html.splice(html.length-2,0,'<font color=grey>');
+            }
+            else if (state < 6 && state1==6 || state < 9 && state1==9)           
+            {
+                html.push('<font color=blue>');
+            }
+           else if(state1===8)
+           {
+                html.push('<font color=red>');
+           }
+           
+           let action = jaction[state][t];
+           if (action === 'b') 
+                buf.push(c);
+           else if (action==='c')
+           {
+                 let word = buf.join(''); buf=[]; 
+                 if (jkeywords.includes(","+word+","))
+                     html.push("<b>" + word + "</b>");
+                 else html.push( word );
+                 if (word === 'while'  || word === 'do' || word === 'if')
+                     identstate = 1; 
+                 else if ( word ==='for')
+                     identstate = 2; 
+           }    
+           if (action!=='b'  )
+           {
+               if (state < 3 && c === '{' && v.charAt(i+1)!=='}')
+               {
+                  while ((p=html[html.length-1]) === ' ' || p=== '\t'||p === '\r' || p === '<br>'|| p.replace(/&nbsp;/g,'') === '')  {html.pop();}
+                  html.push('<br>'); 
+                  if (ident>0) html.push(nbspace(ident)); 
+                  ident++;
+                  html.push('{');html.push('<br>');
+                  if (ident>0) html.push(nbspace(ident)); 
+                  while (i<v.length-1 && (  (p=v.charAt(i+1)) === ' ' || p === '\t'|| p === '\r' || p === '\n')){i++;}
+                  identstate = 0;
+               }
+               else if (state < 3  &&  c === '}' &&  v.charAt(i-1)!=='{'  && i<v.length  )
+               {
+                    while ((p=html[html.length-1]) === ' ' || p=== '\t'||p === '\r' || p === '<br>'|| p.replace(/&nbsp;/g,'') === '')  {html.pop();}
+                    html.push('<br>'); 
+                    --ident; 
+                    if (ident>0) html.push(nbspace(ident)); 
+                    html.push('}');
+                    while (i<v.length-1 && (  (p=v.charAt(i+1)) === ' ' || p === '\t'|| p === '\r' || p === '\n')){i++;}
+                    if (v.charAt(i+1)!==';'&&v.charAt(i+1)!==',') 
+                    { 
+                        html.push('<br>');
+                        if (ident>0) html.push(nbspace(ident)); 
+                        
+                    }
+               }
+              else if (c === '\n')
+              {
+                   while (html.length>=1 && ((p=html[html.length-1]) === ' ' || p=== '\t'||p === '\r' || p === '<br>'|| p.replace(/&nbsp;/g,'') === ''))  {html.pop();}
+                   html.push('<br>'); 
+                   if (ident>0) html.push(nbspace(ident)); 
+                   if (state < 3) 
+                   {
+                       while (i<v.length-1 && (  (p=v.charAt(i+1)) === ' ' || p === '\t'|| p === '\r' || p === '\n')){i++;}
+                       if (identstate > 0 && i<v.length && p!=='{')html.push(nbspace(1));
+                       identstate = 0;1
+                   }
+              }
+               
+              else if (state < 3  &&  c === '[')
+              {
+                  bcounter++;html.push(c);
+              }
+              else if (state < 3  &&  c === ']')
+              {
+                  bcounter--;html.push(c);
+              }
+              else if (state < 3  &&  c === '(')
+              {
+                  pcounter++;html.push(c);
+              }
+              else if (state < 3  &&  c === ')')
+              {
+                  pcounter--;html.push(c);
+              }
+              else if (state < 3  &&  c === ';')
+              {
+                   html.push(";"); 
+                   if (identstate == 1) identstate = 0; 
+                   if (pcounter === 0)
+                   {
+                       html.push('<br>'); 
+                       if (ident>0) html.push(nbspace(ident)); 
+                       while (i<v.length-1 && (  (p=v.charAt(i+1)) === ' ' || p === '\t'|| p === '\r' || p === '\n')){i++;}
+                   }
+              }
+              else if (c === '<')
+              {
+                  html.push('&lt;');
+              }
+              else if (c === '>')
+              {
+                  html.push('&gt;');
+              }
+              else html.push(c);
+              if ( (state===4 || state === 5 || state === 6|| state === 9) && state1==0) 
+              {
+                  html.push('</font>');
+               }
+           }
+           state = state1;
+    
+        }
+        syntaxerror = (state === 8 || ident !== 0 || pcounter!=0 || bcounter!=0);
+        if (ident!=0) html.push('<font color=red>brace  mismatch</font>');
+        if (pcounter!=0) html.push('<font color=red>parenthesis  mismatch</font>');
+        if (bcounter!=0) html.push('<font color=red>bracket  mismatch</font>');
+        return html.join('');
+    }
+    else if (''+fmt ==='5')
+    {
+        syntaxerror = false;
+        var qs = false;
+        var buf = [];
+        var state = 0, j;
+        var html=[];
+        var p = ' ';
+        var ident = 0;
+        for (let i=0; i < v.length;i++)
+        {
+            let t = 0;
+            let c = v.charAt(i); 
+            let cc = v.charCodeAt(i); 
+            
+            if (!(48 <= cc && cc <=57 ||  65 <=cc && cc<=90 || 97  <= cc && cc <= 122 || c==='_'))
+            {  
+                t = pcharcode[c];
+                if(t == null) t = 6;
+            }
+            
+            let state1 = ptrans[state][t]; 
+            if (state === 0 && (t===3 || t===5)) j = i;
+            else  if (state === 3 && t ===3)
+            { 
+                state1 = (p === '"'? 4:0); 
+                if (state1==0) 
+                {
+                    html.splice(html.length - (i-j),0,'<font color=blue>');
+                    html.push('</font>'); 
+                }
+            }
+            else  if (state == 8 && t == 5)
+            { 
+                state1 = (p == "'"? 9:0);
+                if (state1==0) 
+                {
+                    html.splice(html.length - (i-j),0,'<font color=blue>');
+                    html.push('</font>'); 
+                }
+            }
+            else  if (state ==4 && state1==5 || state==9 && state1==10)
+                html.splice(html.length-2,0,'<font color=grey>');
+            else  if (state <2 && state1 == 2) 
+                html.push('<font color=grey>');
+            else  if (state==7 && state1 == 0 || state==12 && state1==0 ||state==2 && t==2) 
+                html.push('</font>'); 
+           
+            let action = 'o';
+            if (state < 2 && t==0) action = 'b';
+            else if (state==1 && t > 0) action = 'c';
+            
+            if (action == 'b') 
+                buf.push(c);
+            else if (action=='c')
+            {
+                 let word = buf.join(''); buf=[]; 
+                 if (pkeywords.includes(","+word+","))
+                     html.push("<b>" + word + "</b>");
+                 else html.push( word );
+            }    
+           
+            if (action!='b')
+             {
+                  if (c =='\t')
+                  {
+                      html.push('&nbsp;&nbsp;&nbsp;'); 
+                  }
+                  else if (c!='\n')
+                      html.push(c);
+                  else 
+                  {
+                      html.push('<br>');
+                  }
+              }
+            
+             state = state1;
+             p =c;
+           
+        }
+        syntaxerror = (state == 15);
+        return html.join('');
+        
+    }
     var  mc = codestab.exec(v);
     var  e = 0;
     if (mc!=null)
@@ -467,7 +770,7 @@ function formatstr(v, fmt)
        }
        else if (r == x.length-1 || x[r+1]==null  || x[r].length!=x[r+1].length  )
        {
-           str += '<div style=display:block;align-content:' + (x[start+1][0].indexOf('  ')==0?'center':'left') + '><table  border=1 style="border:1px #aaaaaa solid;border-collapse:collapse;border-radius:3px;border-color:#cccccc;margin:3px 0px 3px 0px">';
+           str += '<div style=display:block;align-content:' + (x[start+1][0].indexOf('  ')==0?'center':'left') + '><table cellpadding=2 border=1 style="border:1px #aaaaaa solid;border-collapse:collapse;border-radius:3px;border-color:#cccccc;margin:3px 0px 3px 0px">';
            for ( var i= start+1; i <= r; i++)
            {
                str += "<tr>";
@@ -489,7 +792,7 @@ function formatstr(v, fmt)
                    }
                    if (k > -1)
                    {
-                       str += '<td   valign=top    ';
+                       str += '<td  style="padding:2px 4px 2px 4px"  valign=top    ';
                        var col = j - k +1;
                        if (col > 1) str += ' colspan=' + col + " ";
                        if (x[i][k].charAt(0) == ' ' && x[i][k].charAt(x[i][k].length-1)!=' ')
@@ -517,6 +820,11 @@ function delCookie(name)
 }
 function SetCookie(name, value, expdays)
 {
+    if (name.indexOf('undefined') == 0)
+    {
+        delCookie(name);
+        return;
+    }
     
     var expires = null;
     
@@ -587,10 +895,10 @@ function unifontstyle(font_size)
 }
 function bufferit(s)
 {
-    var x= GetCookie('fileurlbuf');
+    var x= localStorage('fileurlbuf');
     if (x==null) x = '';
     else if (x.indexOf(s)>=0) return;
-    SetCookie('fileurlbuf', x+s, 0.02);
+    localStorage['fileurlbuf'] = x+s;
 }
 function butstyle(font_size)
 {
@@ -675,7 +983,24 @@ var showmyhint = function(j) {
 }
 var hidemyhint = function() {
 }
-
+function Viewport()
+{ 
+    this.windowX = (document.documentElement && document.documentElement.clientWidth) || window.innerWidth || self.innerWidth || document.body.clientWidth; 
+    this.windowY = (document.documentElement && document.documentElement.clientHeight) || window.innerHeight || self.innerHeight || document.body.clientHeight; 
+    this.scrollX = (document.documentElement && document.documentElement.scrollLeft) || window.pageXOffset || self.pageXOffset || document.body.scrollLeft; 
+    this.scrollY = (document.documentElement && document.documentElement.scrollTop) || window.pageYOffset || self.pageYOffset || document.body.scrollTop; 
+    this.pageX =   (document.documentElement && document.documentElement.scrollWidth) ? document.documentElement.scrollWidth : (document.body.scrollWidth > document.body.offsetWidth) ? document.body.scrollWidth : document.body.offsetWidth; 
+    this.pageY =   (document.documentElement && document.documentElement.scrollHeight) ? document.documentElement.scrollHeight : (document.body.scrollHeight > document.body.offsetHeight) ? document.body.scrollHeight : document.body.offsetHeight;
+    this.str = function()
+    {
+        return("w=" + this.windowX
+                   +",h=" + this.windowY 
+                   + ", left=" + this.scrollX 
+                   + ", top=" + this.scrollY 
+                   + ", pw=" + this.pageY
+                   +", ph=" + this.pageY);
+     }
+}
 
 
 var thispagewidth = function()
@@ -856,20 +1181,20 @@ function removejs(str)
 }
 function mypromptchanggemsg(x)
 {
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML = x;
+    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].getElementsByTagName('div')[0].innerHTML = x;
 }
 function mypromptmodifymsg(x)
 {
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML += x;
+    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].getElementsByTagName('div')[0].innerHTML += x;
 }
 function mypromptmsg(x)
 {
-    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML = x;
+    promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].getElementsByTagName('div')[0].innerHTML = x;
 }
 function getpromptmsg()
 {
     if (promptwin == null) return "";
-    return promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].innerHTML;
+    return promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].getElementsByTagName('div')[0].innerHTML;
 }
 function addpromptmsg(y)
 {
@@ -878,7 +1203,7 @@ function addpromptmsg(y)
         myprompt(y);
         return;
     }
-    var x = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0];
+    var x = promptwin.getElementsByTagName('table')[0].rows[1].cells[1].getElementsByTagName('table')[0].rows[1].cells[0].getElementsByTagName('div')[0];
     var dv = document.createElement("div");
     dv.style.margin = "2px 3px 2px 3px";
     dv.innerHTML = y;
@@ -949,12 +1274,12 @@ function myprompt(str, dfv, func, title,mypromptid)
         promptwin0.style.cssText = "position:absolute;color:black;border:0px;padding:0px;zIndex:20;wodth:300px;overflow:hidden;top:" + (het - 200) + "px;left:" + (wd - 330) + "px;font-family:inherit";
     }
     var picwidth = 22;
-    var bdim = "width:68px;height:21px;";
+    var bdim = "width:70px;padding-top:3px;padding-bottom:3px;";
 
     if (typeof (font_size) != 'undefined')
     {
         picwidth = font_size + 6;
-        bdim = "width:" + Math.round(font_size * 4.5) + "px;";
+        bdim = "width:" + Math.round(font_size * 4.5) + "px;padding-top:3px;padding-bottom:3px;";
     }
     var fw = 4;
 
@@ -970,15 +1295,16 @@ function myprompt(str, dfv, func, title,mypromptid)
         else
             title = textmsg[1635];
     }
-
+    let bd = 1;
+    if (str.indexOf('border:')>0||str.indexOf('<table ')>=0) bd = 0;
     var head = round10('100%').replace(/">$/, "background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\">")
-            + "<table border=0 style=\"border-radius:" + fw + "px;-webkit-border-radius:" + fw + "px;-moz-border-radius:" + fw + "px;background-color:" + pbgcolor + ";border:0px " + bordercolor + " solid;font-family:" + myfontname + "\"   border=0 width=100% cellpadding=2 cellspacing=0>"
+            + "<table border=0 style=\"border-radius:" + fw + "px;-webkit-border-radius:" + fw + "px;-moz-border-radius:" + fw + "px;background-color:" + pbgcolor + ";border:0px " + bordercolor + " solid;font-family:" + myfontname + "\"   border=0 width=100% cellpadding=3 cellspacing=0>"
             +"<tr style=\"font-family:" + myfontname + ";background:" + gradientbg + ";background-color:" + bordercolor + "\" >"
             + "<td   style=\"width:" + picwidth + "px !important;font-family:" + myfontname + "\" valign=middle align=left>"
             + "<img  style=\"margin:0px 0px 0px 0px;float:left;width:" + picwidth + "px !important;border-radius:" + Math.round(picwidth/2) + "px;cursor:pointer\" src=\"image/icon/smalls00.png\" onclick=\"closeprompt('" + mypromptid + "')\" onmouseover=\"swappic(this)\" onmouseout=\"swappic(this)\"></td>"
-            + "<td id=myprompthead  valign=middle align=center style=\"color:#DDCC05;font-weight:700;text-align:center;font-family:" + myfontname + "\" onclick=stopgoing()><nobr>"
+            + "<td id=myprompthead valign=middle align=center style=\"color:#DDCC05;font-weight:700;text-align:center;font-family:" + myfontname + "\" onclick=stopgoing()><nobr>"
             + (title)
-            + "</nobr></td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td colspan=2 align=left valign=top style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";color:black\">";
+            + "</nobr></td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td colspan=2 align=left valign=top><div style=\"margin:" + 3*bd + "px " + 3*bd + "px " + 3*bd + "px " + 3*bd + "px;border:" + bd + "px #b0b0b0 solid;border-radius:4px;padding:5px 5px 4px 5px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";color:black\">";
     var lblyes = "Yes";
     var lblno = "No";
     var lblok = "Proceed";
@@ -990,18 +1316,23 @@ function myprompt(str, dfv, func, title,mypromptid)
         lblok = textmsg[66];
         lblcan = textmsg[18];
     }
-
+    
     if (func != null)
     {
         if (dfv == null)
         {
+            if (!str.includes('?'))
+            {
+                lblyes = lblok;
+                lblno = lblcan;
+            }
             promptwin0.innerHTML = head + ((het < 110) ? '<nobr>' : '') + str
-                    + "</td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table  cellpadding=3 align=center><tr><td align=center><input name=b1 type=button class=OrangeButton style=" + bdim + " value=\"" + lblyes + "\" onclick=\"takeuserinputyn(true)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblno + "\" onclick=\"takeuserinputyn(false)\"></td></tr></table></td></tr></table>" + round2;
+                    + "</div></td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table  cellpadding=3 align=center><tr><td align=center><input name=b1 type=button class=OrangeButton style=" + bdim + " value=\"" + lblyes + "\" onclick=\"takeuserinputyn(true)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblno + "\" onclick=\"takeuserinputyn(false)\"></td></tr></table></td></tr></table>" + round2;
         }
         else
         {
             promptwin0.innerHTML = head + str
-                    + "</td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table cellpadding=3 align=center><tr><td align=center><input id=promptinput style=\"width:" + (len) + "px;border:1px #505050 solid;border-radius:3px\"  value=\"" + dfv.replace(/"/g, '\\"') + "\" onkeypress=\"return takeuserinputenter(event,this)\"><br><table><tr><td></td></tr></table><input name=b1 type=button class=GreenButton style=" + bdim + " value=\"" + lblok + "\" onclick=\"takeuserinput(this)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblcan + "\" onclick=\"closeprompt()\"></td></tr></table></td></tr></table>" + round2;
+                    + "</div></td></tr><tr  style=\"padding:1px 1px 0px 1px;background-color:" + pbgcolor + ";font-family:" + myfontname +  ";\"><td align=center colspan=2><table cellpadding=3 align=center><tr><td align=center><input id=promptinput style=\"width:" + (len) + "px;border:1px #505050 solid;border-radius:3px\"  value=\"" + dfv.replace(/"/g, '\\"') + "\" onkeypress=\"return takeuserinputenter(event,this)\"><br><table><tr><td></td></tr></table><input name=b1 type=button class=GreenButton style=" + bdim + " value=\"" + lblok + "\" onclick=\"takeuserinput(this)\"><input name=b2 type=button class=GreenButton style=" + bdim + " value=\"" + lblcan + "\" onclick=\"closeprompt()\"></td></tr></table></td></tr></table>" + round2;
         }
     }
     else
@@ -1066,6 +1397,7 @@ function myprompt(str, dfv, func, title,mypromptid)
      }
     zi++;
     promptwin0.style.zIndex = ''+zi;
+   
     return promptwin0;
    
 }
@@ -1277,7 +1609,7 @@ function takeuserinputenter(evt, tbx)
 function takeuserinputyn(v)
 {
     closeprompt();
-    eval(promptfunc);
+    if (promptfunc!=null)eval(promptfunc.replace(/\(v\)/,'(' + v + ')'));
 }
 function closeprompt(mypromptid)
 {
@@ -1300,7 +1632,7 @@ function charwidthrate()
         x = document.characterSet.toLowerCase();
     else if (typeof (document.charset) != 'undefined')
         x = document.charset.toLowerCase();
-    if (x == 'gb2312')
+    if (x == 'gbk')
         return 4.1;
     return 4.5;
 }
@@ -1454,7 +1786,7 @@ function formnewaction(fm, s)
 
 function initialhintneed(i)
 {
-    var x = GetCookie("initialhint");
+    var x = localStorage["initialhint"];
 
     if (x == null)
         return true;
@@ -1462,7 +1794,7 @@ function initialhintneed(i)
 }
 function initialhint(i, helpmsg)
 {
-    return "<table cellpadding=1 cellspacing=1><tr><td colspan=2>"
+    return "<table cellpadding=3 cellspacing=1><tr><td colspan=2>"
             + ((helpmsg == null) ? textmsg[88] : helpmsg)
             + "</td></tr><tr><td><input type=checkbox style=background-color:transparent onclick=\"javascript:initialhintset(" + i + ")\">"
             + "</td><td>" + textmsg[872] + "</td></tr></table>";
@@ -1476,8 +1808,7 @@ function initialhintset(i)
         x += i + ",";
     else
         return;
-
-    SetCookie("initialhint", x);
+    localStorage["initialhint"] = x;
 }
 
 function newajax()
@@ -1645,8 +1976,25 @@ var addbr = function(x)
     }
     return y;
 }
-
-
+function formatas(t)
+{
+    var q ='~@#%`'.split(/|/);let x;
+    for (x of q)
+    {
+        if (!t.includes(x))break;
+    }
+     
+    return t.replace(/ ([ ]*)/g, x + "$1").replace(/\t/g,'   ').replace(/ /g,'&nbsp;').replace(new RegExp(x,'ig'),' ');
+}
+function spacestr(x)
+{
+    if (x == null || x=='') return x;
+    let str = '';
+    for (let j=0; j < x.length; j++)
+       if (x.charAt(j) ==' ') str += '&nbsp;';
+       else str += '&nbsp;&nbsp;&nbsp;';
+    return str;
+}
 
 var formatstr0 = function(x, f)
 {
@@ -1660,20 +2008,20 @@ var formatstr0 = function(x, f)
     }
     if (''+f == '0' )
     {
-        var ispre = '<pre style="display:inline;margin:0px 0px 0px 0px;font-family:inherit;font-size:inherit;font-weight:inherit">';
+        var ispre = '<pre style="display:inline-block;justify-content: left;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-family:inherit;font-size:inherit;font-weight:inherit">';
+        
         var ispre1 = '</pre>';
         var xs = x.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split(/\n/);
         for (var j=0; j < xs.length; j++)
-        if (xs[j].length > 70)
+        if (xs[j].length > 80)
         {
-            ispre = '';
-            ispre1 = '';
+            ispre =  '<pre style="display:inline-block;justify-content: left;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;font-family:courier;font-size:inherit;font-weight:inherit">';
             break;
         }
         if (ispre == '')
-            x =   x.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/\r/g, "<br>").replace(/\n/g, "<br>");
+            x = spacestr(x.replace(/[^ \t].*$/,'')) +  x.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n/g, '<br>').replace(/\r/g, '<br>').replace(/\n/g, '<br>') ;
         else 
-            x = ispre +  x.replace(/</g, '&lt;').replace(/>/g, '&gt;')  + ispre1;
+            x = formatas( x.replace(/</g, '&lt;').replace(/>/g, '&gt;') ).replace(/\n/g, '<br>');
         
     }
     else if (''+f == '2' )
@@ -1811,11 +2159,160 @@ function openproper(s,x,t)
     else
         openpicorfile(s,x,t);
 }
+const levenshteinDistance = (s, t) => {
+  if (!s.length) return t.length;
+  if (!t.length) return s.length;
+  const arr = [];
+  for (let i = 0; i <= t.length; i++) {
+    arr[i] = [i];
+    for (let j = 1; j <= s.length; j++) {
+      arr[i][j] =
+        i === 0
+          ? j
+          : Math.min(
+              arr[i - 1][j] + 1,
+              arr[i][j - 1] + 1,
+              arr[i - 1][j - 1] + (s[j - 1] === t[i - 1] ? 0 : 1)
+            );
+    }
+  }
+  return arr[t.length][s.length];
+};
+function Tex(s)
+{
+    if (s == null) s = '';
+    this.s = s.replace(/\$/g,'').replace(/_{(.)}/g,'_$1').replace(/\^{(.)}/g,'^$1').replace(/\{([0-9|\.]+)[ ]*\over[ ]*([0-9|\.]+)[ ]*\}/g, '$1/$2').replace(/\\frac[ ]*\{([0-9|\.]+)[ ]*\}[ ]*\{([0-9|\.]+)[ ]*\}/g, '$1/$2');
+    this.ctype = function(c)
+    {
+        if ("0123456789.".includes(c)) return 2;
+        
+        if ("abcdefghijklmnopqrstuvwxyz".includes(c.toLowerCase()) ) return 3;
+        return 5;
+    };
+    this.i = 0;
+    this.nextToken = function()
+    {
+        let state = 0;
+        let j = this.i;
+        if (this.i == this.s.length) return '';
+        for (let i = this.i;  i < this.s.length; i++)
+        {
+            let c = this.s.charAt(i);
+            let type;
+
+            switch(state)
+            {
+                case 0:
+                  if (c == ' ' || c=='\n' || c=='\t' || c =='\r') break;
+                  if (c=='\\') {state = 1; j=i; break;}
+                  type = this.ctype(c);
+                  if (type==2 ){  state = 2; j=i; break;}
+                  this.i = i+1;
+                  return c;
+              case 1:
+
+                  if (c == '\\' && i==j+1){this.i = i+1; state = 0;break;}
+                  if (c == ',' && i==j+1){this.i=i+1; state = 0; break;}
+                  if (c == '{' && i==j+1){this.i=i+1;return '\\{';}
+                  type = this.ctype(c);
+                  if (type == 3) break;
+                  this.i= i; return this.s.substring(j,i); 
+
+              case 2:
+                   type = this.ctype(c);
+                   if (type == 2) break;
+                  this.i = i; return this.s.substring(j,i); 
+            }
+        }
+        this.i = this.s.length;
+        return this.s.substring(j);
+     };
+     
+     this.literal = function()
+     {
+         let t; arr = new Array();
+         while ((t = this.nextToken())!='' )
+         {
+             if ( t.length != 1 || "(){},".includes(t) == false)
+             {
+             if (t == '\\frac') arr.push('\\over');
+             else
+                arr.push(t);
+             }
+         }
+         return arr;
+     };
+}
+function similarn(s, target)
+{  
+    if (target == null) return 1;
+    else if (s == null) return 0;
+    let x = target.replace(/\$/g,'').replace(/\\over/g, '/').replace(/\\times/g, '*').replace(/{/g,'(').replace(/}/g,')').replace(/([0-9|\.]+)^([0-9|\.]+)/g,'Math.power($1,$2)').replace(/\\pi/g,'3.1415926');
+    try
+    {
+        z = eval(x);
+        let y = s.replace(/\$/g,'').replace(/\\over/g, '/').replace(/\\times/g, '*').replace(/{/g,'(').replace(/}/g,')').replace(/([0-9|\.]+)^([0-9|\.]+)/g,'Math.power($1,$2)').replace(/\\pi/g,'3.1415926');
+        if (y == '') return 0;
+        try
+        {
+            w = eval(y);
+            if (z == 0 && w != 0) return 0;
+            u = Math.abs(w/z); if (u >= 2) return 0;
+            u = 1 - Math.abs(u - 1);
+            if (u >0.98) return 1;
+            return u;
+        }
+        catch(e) 
+        {
+            return 0;
+        }
+    }
+    catch(e){return 2;} 
+}
+function similarnum(s, target)
+{
+    let a = similarn(s,target);
+    if (a <= 1) return a;
+    let tt = target.replace(/^[ ]+/,'').replace(/[ ]+$/,'');
+    if (tt.charAt(0)=='$' && tt.charAt(tt.length-1) == '$')
+    {
+    let x = (new Tex(s)).literal();
+    let y = (new Tex(target)).literal();
+    let n = 0;
+    for (let c of x)
+    {
+        if (y.includes(c)) n++;
+    }
+    let m = 0;
+    for (let b of y)
+    {
+        if (x.includes(b)) m++;
+    }
+    return (n/x.length + m/y.length)/2;
+}
+return 2;
+}
+function similarity(s, target)
+{
+    target = target.toLowerCase().replace(/^[ ]+/,'').replace(/[ ]+$/,'');
+    s = s.toLowerCase().replace(/^[ ]+/,'').replace(/[ ]+$/,'');
+    if (s.length <= target.length) return levenshteinDistance(s,target);
+    let mn = target.length;
+    for (let i =0; i <= s.length-target.length; i++)
+    {
+        let d = levenshteinDistance(s.substring(i,i+target.length),target);
+        if (d < mn) mn = d;
+    }
+    return mn;
+}
 function mergeunderscore(x, y)
 {
-   if (x == null || y == null || y == '') return x;
+   if (x == null || y == null || y == '' || y.indexOf(textmsg[1867])==16) return x;
    var xs = (" " + x + " ").split(/__[_]+/);
-   var ys = y.replace(/\n/g,' \n').split(/\n/);
+   var ys = null;
+    
+   if (y.includes('<br>')) ys = y.replace(/<br>$/,'').split(/<br>/);
+   else ys = y.replace(/\n/g,' \n').split(/\n/);
    var ans = xs[0].substring(1);
    for (var i=1; i < xs.length; i++)
    {
@@ -1971,10 +2468,179 @@ function showlatexonfly(orientation, fmt, key)
     }
 }
 
+function uniqueid(ele)
+{
+    if (typeof (ele.id) != 'undefined' && ele.id!=null && ele.id!='' && ele.id.replace(/id_[0-9]+/,'')!='' )
+        trackstr = 'document.getElementById("' + ele.id + '").';
+    else
+    {
+        trackstr = '';
+        traceback(ele);
+    }
+    return trackstr.replace(/childNodes\[/g,'').replace(/\]/g,'').replace(/document.getElementById\(/,'').replace(/\)/,'');
+}
 
+var trackhistory = new Array();
+var tracknum = 0;
+var track = function(ele,iftxt)
+{
+    if (typeof (ele.form) != 'undefined'&& ele.form!=null && (ele.tagName.toLowerCase()=='input'
+            ||ele.tagName.toLowerCase()=='select'||ele.tagName.toLowerCase()=='textarea') )
+    {
+        trackstr = 'document.' + ele.form.name + "." + ele.name;
+        if (ele.name == '' && typeof (ele.id) != 'undefined' && ele.id!=null && ele.id!='' && ele.id.replace(/id_[0-9]+/,'')!='')
+           trackstr = 'document.getElementById("' + ele.id + '")'
+        if (iftxt==null)
+            trackhistory[trackhistory.length] = trackstr + ".click()";
+        else if (ele.tagName.toLowerCase()=='select')
+        {
+            trackhistory[trackhistory.length] = trackstr + ".selectedIndex = " + ele.selectedIndex;
+        }
+        else
+            trackhistory[trackhistory.length] = trackstr + ".value='" + ele.value + "'"; 
+        console.log(trackhistory[trackhistory.length-1]);
+        return;
+    }
+    if (typeof (ele.id) != 'undefined' && ele.id!=null && ele.id!='' && ele.id.replace(/id_[0-9]+/,'')!='' )
+        trackstr = 'document.getElementById("' + ele.id + '").';
+    else
+    {
+        trackstr = '';
+        traceback(ele);
+    }
+    trackhistory[trackhistory.length] = trackstr + "click()";
+    console.log(trackhistory[trackhistory.length-1]);
+    
+    if (promptwin!=null)
+    {
+       
+       trackinstall(promptwin); 
+       
+        
+    }
+    
+}
+
+function traceback(ele)
+{
+    if (ele == document.body)
+    {    
+        trackstr = 'document.body.' + trackstr;
+        return;
+    }
+    else if (ele != null && typeof(ele.id)!='undefined' && ele.id.replace(/id_[0-9]+/,'')!='')
+    {    
+        trackstr = 'document.getElementById("' + ele.id + '").' + trackstr;
+        return;
+    }
+    
+    let p = ele.parentNode;
+    let k = 0;
+    for (k =0; k < p.childNodes.length; k++)
+    {
+        if (p.childNodes[k] == ele)
+            break;
+    }
+    trackstr =  'childNodes[' + k + '].' + trackstr;
+    traceback(p);
+}
+var obj2functionstr = [];
+function trackinstall(x)
+{
+     if (x==null || x.nodeType==3 || x.tagName == null || typeof(x.className)!='undefined' && (''+x.className).toLowerCase().indexOf('math')==0 || x==Array.prototype) return;
+     if (( x.tagName.toLowerCase() == 'div' || x.tagName.toLowerCase() == 'td'
+             || x.tagName.toLowerCase() == 'span'
+             || x.tagName.toLowerCase() == 'input' &&  
+             (x.type=='button' || x.type!='radio' ||x.type=='submit' || x.type!='checkbix')
+         ) && x.onclick != null)
+     {
+        if (typeof x.onclick == 'function')
+        {
+            let t =  ("" + x.onclick).replace(/^[^\{]+{/,'').replace(/\}$/,'').replace(/;$/,'').replace(/\n$/,'');
+            if (!t.includes("track(this)") && !t.includes("obj2functionstr"))
+            {
+                if (typeof(x.id) == 'undefined' || x.id == null || x.id == '')
+                    x.id = "id_" + Object.keys(obj2functionstr).length;
+                obj2functionstr[x.id] = t + ";track(this)";
+                x.onclick = function()
+                {
+                    let str = obj2functionstr[this.id];
+                  
+                    try{
+                        eval(str);
+                    }catch(e){
+                        console.log("Error=" + e.toString());
+                    }
+                }
+            }
+        }
+        else  
+        {
+            let t =   ("" + x.onclick).replace(/^[^\{]+{/,'').replace(/\}$/,'').replace(/;$/,'').replace(/\n$/,'') + ";track(this)";
+            if (!t.includes("track(this)") && !t.includes("obj2functionstr["))
+            {
+            if (x.id == null || x.id == '')
+                x.id = "id_" + Object.keys(obj2functionstr).length;
+            obj2functionstr[x.id] = t;
+            x.onclick = "obj2functionstr[this.id];track(this)";
+            }
+        }
+     }
+     else if ( x.tagName.toLowerCase() == 'textarea'||x.tagName.toLowerCase() == 'select'
+             || x.tagName.toLowerCase() == 'input'  
+             &&  (typeof(x.type) == 'undefined' || x.type==null ||x.type==''||x.type.toLowerCase()=='text')) 
+     {
+           
+         if (typeof x.onchange == 'undefined' || x.onchange == null || '' + x.onchange == '')
+         {
+             x.onchange = function(){track(this,1);}
+         }
+         else  if (typeof x.onchange == 'function')
+         {
+             let t = (""+x.onchange).replace(/^[^\{]+{/,'').replace(/\}$/,'').replace(/;$/,'').replace(/\n$/,'');
+             if ( !t.includes("track(this,1)" ) && !t.includes("obj2functionstr[" )) 
+             {
+                 if (x.id == null)
+                    x.id = "id_" + Object.keys(obj2functionstr).length;
+                 obj2functionstr['_'+x.id] = t + ";track(this,1);";
+                 x.onchange  = function()
+                 {
+                     try{
+                         eval(obj2functionstr['_'+this.id]);
+                     }catch(e){
+                         console.log("Error=" + e.toString()+ "\nsource=" + obj2functionstr['_'+this.id]);
+                     } 
+                 }
+            }
+         }
+         else 
+         {
+             let t =  (""+x.onchange).replace(/^[^\{]+{/,'').replace(/\}$/,'').replace(/;$/,'').replace(/\n$/,'') ;
+             if (!t.includes("track(this,1)") && !t.includes("obj2functionstr["))
+             {
+                 if (x.id == null)
+                    x.id = "id_" + Object.keys(obj2functionstr).length;
+                 obj2functionstr['_'+x.id] = t + + ";track(this,1)";
+                 x.onchange  =  function(){try{eval(obj2functionstr['_'+this.id]);}catch(e){console.log(e.toStrig()+obj2functionstr['_'+this.id]);} };//"track(this,1);" + (""+x.onchange).replace(/^[^\{]+{/,'').replace(/\}$/,'');
+             }
+         }
+     }
+             
+          
+     var y = x.childNodes;
+     if (y !=null && y.length>0)
+     for (var j=0; j < y.length; j++)
+     {
+        if (y[j]!=x) trackinstall(y[j]);
+     }
+}
+ 
 function unifonts(x,f)
 {
-
+     if (x == document.body && localStorage['trackenable']=='T')
+     {
+         trackinstall(document.body);
+     }
      if (f == null) f = myfontname;
      if (x==null || x.nodeType==3 ||  typeof(x.className)!='undefined' && (''+x.className).toLowerCase().indexOf('math')==0) return;
      if ((typeof(x.id)=='undefined'|| x.id==null || x.id.toString().indexOf('S_s')<0 && x.id.toString().indexOf('D_d')<0 ) && typeof(x.tagName)!='undefined'
@@ -1998,6 +2664,7 @@ function unifonts(x,f)
         if (y[j]!=x) unifonts(y[j],f);
      }
 }
+var browserstr = '';
 function homestr()
 {
     if (typeof(IBGCOLOR)=='undefined') IBGCOLOR = "#007700";
@@ -2009,20 +2676,28 @@ function homestr()
 +"<td width=4 style=\"background-color:#ffffff\"  rowspan=2></td><td width=3 rowspan=2></td></tr><tr height=5><td style=\"background-color:#ffffff\" width=5></td></tr><tr height=12><td colspan=7></td></tr></table</div>";
  
 }
+var onloadbeforecookie = null;
+if (typeof (window.onload) == 'function')
+    onloadbeforecookie = window.onload;
 window.onload = function()
 {
+   if (onloadbeforecookie!=null) onloadbeforecookie(); 
    if (typeof (needtranslator) != 'undefined' && needtranslator)
     {
         var script = document.createElement("script");
         script.type = "text/javascript";
+        script.async = "yes";
         if (latexislocal)
         {
-            script.src = "mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+            //script.src = "mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+            script.src = "mathjax/MathJax.js?config=TeX-MML-AM_CHTML";
+            
         }
         else
         {
 
-            script.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+            //script.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML";
         }
         document.getElementsByTagName("head")[0].appendChild(script);
     }
@@ -2045,7 +2720,7 @@ window.onload = function()
             oldonclose0();
         //indexwindow.managewin(window, 1);
     }
-    var myfontname1 = GetCookie('telamanfontname');
+    var myfontname1 = localStorage['myfontname'];
     if (myfontname1!=null)
     {
         myfontname = myfontname1;
@@ -2054,6 +2729,44 @@ window.onload = function()
     {
         myfontname = defaultfontfamily;
     }
+     
+    if (typeof(navigator.userAgentData)!='undefined' &&
+        typeof(navigator.userAgentData.brands)!='undefined')
+{for (let ll = 0; ll < navigator.userAgentData.brands.length; ll++)
+        browserstr += navigator.userAgentData.brands[ll].brand + ',';
+}
+    else 
+    {
+    if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) 
+    {
+       browserstr = 'Opera';
+    }
+    else if(navigator.userAgent.indexOf("Edg") != -1 )
+    {
+        browserstr =('Edge');
+    }
+    else if(navigator.userAgent.indexOf("Chrome") != -1 )
+    {
+        browserstr =('Chrome');
+    }
+    else if(navigator.userAgent.indexOf("Safari") != -1)
+    {
+        browserstr =('Safari');
+    }
+    else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
+    {
+         browserstr =('Firefox');
+    }
+    else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
+    {
+      browserstr =('IE'); 
+    }  
+    else 
+    {
+       browserstr =('unknown');
+    }
+    }
+    //alert(navigator.userAgentData.mobile + browserstr);
     unifonts(document.body); 
     if (typeof(thisislogin) == 'undefined') mywindowref();
     if (window == parent.frames[1])
@@ -2081,7 +2794,9 @@ window.onload = function()
         var homeico = document.getElementById('homeico');
         if (homeico!=null)
             homeico.innerHTML = homestr();
-    }    
+    }
+    
+    
 }
 function round1(p)
 {
@@ -2115,6 +2830,7 @@ ResizeRounded.start2drag = function(anc)
 
 function ResizeRounded(c, resizeelements)
 {
+    if (c==null) return;
     if (c.id == null || c.id == '')
     {
         var j = mapfromc2r.length;
@@ -2693,6 +3409,8 @@ function getJsParam(js, params)
         return null;
     var argv = args.split(/&/);
     var ans = [];
+    var  xx= document.location.toString();
+    var weregrading = xx.includes('grading') || xx.includes('submi') || xx.includes('assigndoc')|| xx.includes('embed');
     for (var i = 0; i < params.length; i++)
     {
         var argValue = null;
@@ -2701,7 +3419,10 @@ function getJsParam(js, params)
             var pair = argv[j].split("=");
             if (pair[0] == params[i])
             {
-                argValue = pair[1];
+                if (weregrading && (pair[0] == 'sn' || pair[0] == 'dn'))
+                    argValue = '80';
+                else
+                argValue = pair[1]; 
                 break;
             }
         }
@@ -2726,11 +3447,6 @@ function delnotusedattach(x)
     }
 }
 
- 
-    
-
- 
- 
 function gohome1()
 {
     var b = (indexwindow!=null);
@@ -2808,7 +3524,7 @@ function showtimeslots(sel, cl, firsttime)
     var s = v.split(/,/);
     var k = 0;
     var heading = textmsg[1360].split(/@/);
-    var x = '<table style="-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;border-color:#d0d0c0;border-collapse:collapse;background-color:white" border=1 cellspacing=1 cellpadding=2 ><tr bgcolor=#eee ><td>' + heading[0] + "</td><td colspan=3>" + heading[1] + "</td><td></td><td colspan=3>" + heading[2] + "</td></tr>";
+    var x = '<table style="-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;border-color:#d0d0c0;border-collapse:collapse;background-color:white" border=1 cellspacing=1 cellpadding=3 ><tr bgcolor=#eee ><td>' + heading[0] + "</td><td colspan=3>" + heading[1] + "</td><td></td><td colspan=3>" + heading[2] + "</td></tr>";
     for (var i = 0; i < s.length && v != ''; i++)
     {
         var wd = s[i].replace(/([0-9])/, '@$1').split(/@/);
@@ -2974,9 +3690,9 @@ function setbacktimeslots(cl)
             formnewaction(fsnd, 'DataUpdate');
             // formnewaction(fsnd, 'Echo');
             fsnd.target = 'w' + tstmp;
-            //fsnd.target = '_blank'
+            fsnd.rel = 'opener';
            visual(fsnd);
- fsnd.submit();
+            fsnd.submit();
             if (subdb != '')
             {
                 formselementbyname(fsnd, 'subdb').value = '';
@@ -3144,6 +3860,7 @@ function openpicorfile(did, filename, alink)
             fsnd1.action = (did.indexOf('http')!=0?"FileOperation":did);
             fsnd1.method = 'post';
             fsnd1.target = "_blank";
+            fsnd1.rel = 'opener';
             fsnd1.innerHTML = "<input type=hidden name=did><input type=hidden name=operation value=open>";
             document.body.appendChild(fsnd1);
         }
@@ -3200,6 +3917,7 @@ function nonamefunc1()
             setv(r,1,textmsg[x]);valuechanged[r]=false;
     }
 }
+
 function visual(f)
 {
     var x = "name=" + f.name
@@ -3219,7 +3937,7 @@ function visual(f)
         if (f.elements[i].name!='wcds')
         x += "\n"+ f.elements[i].name + "=" + f.elements[i].value;
     failedformsubmit = "document." + f.name + ".submit();";
-    console.log(x);
+    if (localStorage['logdataout']=='T')console.log(x);
 }
 
 function makeformhiddenele(f, nm, vl)
@@ -3467,12 +4185,14 @@ function addasessionsubm()
     document.fadds.url.value = theurl.replace(/DataPicker.*/,'');
     document.fadds.action = "follows.jsp";
     document.fadds.target = "w" + tstmp;
+    document.fadds.rel = 'opener';
     visual(document.fadds);
     document.fadds.submit();         
 }
 function Message(tid, sid, sname, rid, code, msg)
 {
     this.j = 0;
+    this.valid = true;
     this.parse = function(s)
     {
         var i = s.indexOf("@", this.j);
@@ -3488,19 +4208,17 @@ function Message(tid, sid, sname, rid, code, msg)
         }
         return x;
     }
-
-    this.valid = true;
     if (code == null && tid != '')
     {
         var s = tid;
-        var j = s.length - 1;
-        while (j >= 0 && (s.charAt(j) == '\n' || s.charAt(j) == '\r'))
-            j--;
+        var k = s.length - 1;
+        while (k >= 0 && (s.charAt(k) == '\n' || s.charAt(k) == '\r'))
+            k--;
 
-        if (j == 0)
+        if (k == 0)
             s = '';
         else
-            s = s.substring(0, j + 1);
+            s = s.substring(0, k + 1);
         //"" + this.serial + " " + this.tid + " " + this.sek + " "
 
         this.serial = parseInt(this.parse(s));
@@ -3516,18 +4234,36 @@ function Message(tid, sid, sname, rid, code, msg)
     }
     else
     {
+        this.serial = 0;
+        this.num = 0;
         this.tid = tid;
         this.sid = sid;
         this.sname = sname;
         this.rid = rid;
         this.code = code;
         this.msg = msg;
-        this.num = 0;
-        this.serial = 0;
+        this.time = 0;
+        this.j = 0;
     }
     this.toString = function()
     {
-        return  this.serial + " " + this.num + " " + this.tid + " " + this.sid + " " + this.sname.replace(/ /g, '_') + " " + this.rid + " " + this.code + " " + this.time + " " + this.msg;
+        return  this.serial + " " + this.num + " " + this.tid + " " 
+                + this.sid + " " + (this.sname==null?"":this.sname.replace(/ /g, '_')) + " " 
+                + this.rid + " " + this.code + " " + this.time + " " 
+                + this.msg;
+    }
+    this.display = function(x)
+    {
+        myprompt("serial=" + this.serial   
+                + "<br>num=" + this.num   
+                + "<br>tid=" + this.tid  
+                + "<br>sid=" + this.sid  
+                + "<br>sname=" + this.sname 
+                + "<br>rid=" + this.rid 
+                + "<br>code=" + this.code 
+                + "<br>time=" + this.time 
+                + "<br>msg=" + this.msg,
+                 null,null,x);
     }
 }
 var Msg =
@@ -3553,12 +4289,9 @@ var Msg =
     tstmp:Math.round(Math.random()*10000000),
     needmore:true,
     hexd : '0123456789abcdef'.split( "" ),
-    sendingqueue:[],
-    tail:-1,
-    front:-1,
     maximum:100,
     sendingstatus:'sent',
-
+     key:'',
     xmlhttp:null,
 
     handleget: function (x)
@@ -3572,13 +4305,11 @@ var Msg =
     },
     send0 : function()
     {
-         formnewaction(Msg.fmsgsend);
-         visual(Msg.fmsgsend);
-         Msg.fmsgsend.submit();
+         
     },
      resend : function()
      {
-         Msg.sendingstatus = 'sent';
+          
          Msg.send();
      },
 
@@ -3594,11 +4325,15 @@ var Msg =
         if (typeof(packet.sek)!='undefined'){
             Msg.sek = packet.sek;  }
         if (typeof(packet.rid)!='undefined'){
-            Msg.rid = packet.rid;   }
+            Msg.rid = packet.rid;  }
         if (typeof(packet.sid)!='undefined'){
             Msg.sid = packet.sid;  }
         if (typeof(packet.msg)!='undefined'){
             Msg.msg = packet.msg;  }
+        if (typeof(packet.key)!='undefined'){
+            Msg.key = packet.key;  }
+        if (typeof(packet.sendhandle)!='undefined'){
+            Msg.sendhandle = packet.sendhandle;  }
         if (typeof(packet.code)!='undefined'){  Msg.code = packet.code;  }
         if (typeof(packet.sname)!='undefined'){ Msg.sname = packet.sname ;  }
         if (typeof(packet.stoken)!='undefined'){
@@ -3607,9 +4342,7 @@ var Msg =
        }
 
    },
-
-
-     process:function()
+    process:function()
     {
         if (Msg.xmlhttp.readyState == 4 && Msg.xmlhttp.status == 200&& Msg.xmlhttp.responseText!='')
         {
@@ -3619,8 +4352,7 @@ var Msg =
             Msg.listen();
         }
     },
-
-   fmsgsend:null,
+ 
    init : function (packet)
    {
        Msg.getpacket(packet);
@@ -3638,37 +4370,20 @@ var Msg =
         if (i==window.frames.length)
         {
            myprompt("The page does not have hidden tiny iframe" +window.frames.length)
-          //  var fr = document.createElement('i1111frame');
-          //  fr.name = 'w' + Msg.tstmp;
-          //  fr.width='1'; fr.height = '1';
-         //   document.body.appendChild(fr);
         }
-       var fsnd = document.createElement("form");
-        fsnd.name = "fmsg";
-        fsnd.action = "Msgsend";
-        fsnd.method = 'post';
-        fsnd.target = 'w' + Msg.tstmp;
-        fsnd.innerHTML = "<input type=\"hidden\" name=\"stoken\" value=\"\">"
-                + "<input type=\"hidden\" name=\"app\" value=\"\">"
-                + "<input type=\"hidden\" name=\"tid\">"
-                + "<input type=\"hidden\" name=\"topic\">"
-                + "<input type=\"hidden\" name=\"sid\">"
-                + "<input type=\"hidden\" name=\"sname\">"
-                + "<input type=\"hidden\" name=\"rid\">"
-                + "<input type=\"hidden\" name=\"code\">"
-                + "<input type=\"hidden\" name=\"msg\">"
-                + "<input type=\"hidden\" name=\"sek\" value=\"\">";
-        document.body.appendChild(fsnd);
-        Msg.fmsgsend = fsnd;
-
-
+         
     },
     lastlisten:0,
-
+    sendhandle:'Msgsend',
+    recevhandle:"Msgrecev",
+    sendact: function(handle,act,key,sek,sid)
+    {
+        postopen(handle,"code,key,sek,sid".split(/,/),[act,key,sek,sid],"w"+tstmp); 
+    },
     listen: function ()
     {
         lastlisten = (new Date()).getTime();
-        Msg.url = "Msgrecev?" + ((Msg.switchn++) % 100) + "&sek=" + Msg.sek + "&sid=" + Msg.sid + "&app=" + Msg.app;
+        Msg.url = Msg.recevhandle + "?orgnum=" + orgnum +  "&sek=" + Msg.sek + "&sid=" + Msg.sid + "&app=" + Msg.app + "&key=" + Msg.hex(Msg.key);
         var url =  Msg.getURL() + '&time='+ lastlisten;
         if (typeof(orgnum)!='undefined') url += "&orgnum=" + (orgnum%65536);
         Msg.xmlhttp.open('GET', url ,true);
@@ -3705,9 +4420,22 @@ var Msg =
         var x = '';
         for (var j=0; j < ms.length; j++)
             x += Msg.tohex(ms.charCodeAt(j))
-        return x;
+        return x; 
     },
-
+    fromhex: function(x)
+    {
+        if (x==null) return null;
+        let y = '';
+        for (let i=0; i < x.length/4 ; i++)
+        {
+            let j = parseInt(x.substring(i*4,(i+1)*4), 16);
+            if (''+ j == 'NaN') return x;
+            let c = String.fromCharCode(j);
+            y += (c);
+            
+        }
+        return y; 
+    },
     append: function(x,y)
     {
         return x +'=' + y +'&';
@@ -3715,51 +4443,26 @@ var Msg =
 
     send:function(packet)
     {
-         if (Msg.fmsgsend == null) return;
-         if (packet!=null)
-         {
-             Msg.tail = (Msg.tail + 1) % Msg.maximum;
-             Msg.sendingqueue[Msg.tail] = packet;
-         }
-         if (Msg.sendingstatus == 'sending')
-         {
-
-             return;
-         }
-         Msg.front = (Msg.front + 1) % Msg.maximum;
-         packet = Msg.sendingqueue[Msg.front];
          if (packet == null)
          {
-             Msg.front = (Msg.front - 1) % Msg.maximum;
              return;
          }
          Msg.getpacket(packet);
-
-         Msg.sendingqueue[Msg.front] = null;
-
-         Msg.sendingstatus = 'sending';
-         Msg.fmsgsend.app.value = Msg.app;
-         Msg.fmsgsend.sek.value = Msg.sek;
-         Msg.fmsgsend.tid.value = Msg.tid;
-         Msg.fmsgsend.topic.value = Msg.topic;
-         Msg.fmsgsend.sid.value = Msg.sid;
-         Msg.fmsgsend.rid.value = Msg.rid;
-         Msg.fmsgsend.sname.value = Msg.sname;
-         Msg.fmsgsend.code.value = Msg.code;
-         Msg.fmsgsend.stoken.value = Msg.stoken;
-         Msg.fmsgsend.msg.value = Msg.msg;
          if (Msg.code == 'new')
          {
              Msg.topic = Msg.msg;
-             Msg.fmsgsend.topic.value = Msg.msg;
          }
-       /* var url = "Msgsend?" + (Msg.switchn++) + "&sek=" + Msg.sek + "&app=" + Msg.app + "&tid=" + Msg.tid
-        + "&sid=" + Msg.sid + "&rid=" + Msg.rid + "&sname=" + Msg.hex(Msg.sname) + "&code=" + Msg.code + "&stoken=" + Msg.stoken
- +"&msg=" + Msg.hex(Msg.msg);*/
-         formnewaction(Msg.fmsgsend);
-         visual(Msg.fmsgsend);
-         Msg.fmsgsend.submit();
-
+         if (typeof(tstmp)!='undefined')
+         {
+             Msg.tstmp = tstmp;
+         }
+         let hk = Msg.key;
+         if (Msg.sendhandle === 'Msgretrive')
+             hk = Msg.hex(hk);
+         postopen(Msg.sendhandle,
+         "app,sek,tid,topic,sid,rid,sname,code,stoken,msg,key".split(/,/),
+         [Msg.app, Msg.sek,Msg.tid,Msg.topic,Msg.sid,Msg.rid,Msg.sname,Msg.code,Msg.stoken,Msg.hex(Msg.msg),hk],
+         "w" + Msg.tstmp);
     },
 
     get:function(x)
@@ -3799,13 +4502,27 @@ if (typeof(orgnum)!='undefined')
 }
 function warning(mg)
 {
-    if (mg.offsetWidth < 300)
-    {
-        document.getElementById('warning0').innerHTML = textmsg[1864];
-    }
+    document.getElementById('warning0').innerHTML = textmsg[1864];
 }
-function qrlink(nlg)
+
+if (typeof(moresetting) == 'undefined')
+moresetting = function()
 {
+    let xs = textmsg[1875].split(/@/);
+    myprompt( "<table cellpadding=5 style=\"margin:0px;padding:0px;border:0px\">"
+    +"<tr><td valign=top><input type=checkbox " + (localStorage['qrcodeenable']=='T'?"checked":"") 
+    + " onclick=\"javascript:localStorage['qrcodeenable']=(this.checked?'T':'F')\"></td><td>" +  xs[0] +  
+    "</td></tr><tr><td  valign=top><input type=checkbox " + (localStorage['logdataout']=='T'?"checked ":" ")  
+    + " onclick=\"javascript:localStorage['logdataout']=(this.checked?'T':'F')\"></td><td>"+ xs[1] 
+    +"</td></tr><tr><td  valign=top><input type=checkbox " + (localStorage['trackenable']=='T'?"checked ":"") 
+    + " onclick=\"javascript:localStorage['trackenable']=(this.checked?'T':'F')\"></td><td>" + xs[2]
+    + "</td></tr></table>")
+}
+
+function qrlink(withoutlogin)
+{
+    if (localStorage['qrcodeenable'] != 'T') 
+        return;
     if (parent!=window && parent.frames[0].document.location.toString().indexOf("studentindex.jsp")==0)
     {
 
@@ -3814,7 +4531,6 @@ function qrlink(nlg)
     if (typeof(theurl) == 'undefined' &&  parent != window)
     {
         theurl1 = parent.parent.parent.document.location.toString();
-        myprompt("<div id=warning0> </div><br><img src=\"Qrlink?url=" + Msg.hex(theurl1) + (nlg==null?'':('&nlg=1')) + "\" onload=warning(this) style=text-align:center>",null,null,textmsg[1860]);
     }
     else if (typeof(theurl) != 'undefined')
     {
@@ -3829,9 +4545,9 @@ function qrlink(nlg)
             var k = url.lastIndexOf('/');
             theurl1 = theurl.substring(0,j) + url.substring(k);
         }
-        myprompt("<div id=warning0> </div><img  style=alignment:center src=\"Qrlink?url=" + Msg.hex(theurl1) + (nlg==null?'':('&nlg=1'))  + "\" onload=warning(this)  style=text-align:center>",null,null,textmsg[1860]);
-
-    }
+   }
+    if (theurl1!='')
+        safelink0(theurl1, null, withoutlogin,null);
     else
     {
         myprompt("<img src=\"image/qrcode.gif\" >");
@@ -3869,8 +4585,41 @@ function redoexpired(win)
     {
         eval(failedformsubmit);
     }catch(e){
-        alert(failedformsubmit);
+        
     }
+}
+function asynopen(url,u,v,asyn)
+{
+    var xmlhttp;
+    if (asyn == null) asyn = true;
+    if (window.XMLHttpRequest)
+    {
+         xmlhttp = new XMLHttpRequest();
+    }
+    else
+    {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function()
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+            var y = xmlhttp.responseText; 
+            if (y!=''){myprompt(y); }
+        }
+    }
+    var f = new FormData();
+    for (let k=0; k < u.length; k++)
+       f.append(u[k], v[k]);
+    let data = {
+    'content':f,
+    contentType: false,
+    processData: false
+    
+    }; 
+    xmlhttp.open('POST', url, asyn);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(data);
 }
 function postopen()
 {
@@ -3943,10 +4692,11 @@ function postopen()
         if ( 'subfollo' == document.forms[j].name)
         {
             f3 = document.forms[j];
-            for (var k=0; k < f3.elements.length; k++)
+            for (var k= f3.elements.length-1; k>=0; k--)
             {
                 f3.removeChild(f3.elements[k]);
             }
+           
             break;
         }
     if (f3 == null)
@@ -3961,6 +4711,7 @@ function postopen()
     }
         formnewaction(f3,url);
         f3.target = target;
+        f3.rel = 'opener';
         if (nms!=null) 
         for (var i=0; i < nms.length; i++)
         {
@@ -4035,7 +4786,7 @@ function setbackf(x,err)
     }
     if(N >= 2)
     {
-        var vv = GetCookie("col" + subdb);
+        var vv = localStorage["col" + subdb];
         if (vv == null) vv = ";0:lastname;2:email;3:score;4:detail;5:detail;6:detail;7:detail;8:detail;9:detail;10:detail;11:detail;12:detail;13:detail;14:detail;15:detail;16:detail;17:detail;18:detail;19:detail;";
         var err1 = '<tr>';
         for (var j=0; j < N; j++)
@@ -4111,8 +4862,10 @@ function submissmatch()
 function selectse(sel,j)
 {
     document.thisform.whichc.value = document.thisform.whichc.value.replace(new RegExp(";" + j + ":[a-z]*;"),";") + j + ":" + sel.options[sel.selectedIndex].value + ";";
-    SetCookie("col" + subdb, document.thisform.whichc.value);
+    localStorage["col" + subdb] = document.thisform.whichc.value;
 }
+
+
 function uploadother()
 {
     numofuploadtries = 0;
@@ -4132,6 +4885,7 @@ function uploadother()
             else
                document.thisform.target = "w" + tstmp;
             visual(document.thisform);
+            document.thisform.rel = 'opener';
             document.thisform.submit();
         }
         document.thisform.appendChild(ef);
@@ -4148,7 +4902,7 @@ function uploadother()
         fs = document.createElement('input');
         fs.type = "hidden";
         fs.name = "whichc";
-        var vv = GetCookie("col" + subdb);
+        var vv = localStorage["col" + subdb];
         if (vv == null) vv = ";0:lastname;2:email;3:score;4:detail;5:detail;6:detail;7:detail;8:detail;9:detail;10:detail;11:detail;12:detail;13:detail;14:detail;15:detail;16:detail;17:detail;18:detail;19:detail;";
         fs.value = vv;
         document.thisform.appendChild(fs);
@@ -4190,9 +4944,9 @@ function recurainput(x)
       }
        
       if (x.href.indexOf("javascript")>=0)
-          allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + x.href +";closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
+          allainputeles += "<tr><td class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + x.href +";closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
       else
-          allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"open('" + x.href +"','_blank');closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
+          allainputeles += "<tr><td  class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onclick=\"open('" + x.href +"','_blank');closeactmenu()\"><nobr>" + x.innerHTML + "</nobr></td></tr>";
    }
    else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'input' && x.type.toLowerCase() =='submit') 
    {
@@ -4201,7 +4955,7 @@ function recurainput(x)
            return;
        }
         
-       allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.value + "</nobr></td></tr>";
+       allainputeles += "<tr><td  class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.value + "</nobr></td></tr>";
    }
    else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'input' && x.type.toLowerCase() =='button') 
    {
@@ -4210,7 +4964,8 @@ function recurainput(x)
            return;
        }
        
-       allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.value.replace(/</,label[11]).replace(/>/,label[12]) + "</nobr></td></tr>";
+       allainputeles += "<tr><td  class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + 
+               x.value.replace(/<</,label[15]).replace(/>>/,label[16]).replace(/</,label[11]).replace(/>/,label[12]) + "</nobr></td></tr>";
    }
    else if (typeof(x.tagName) !='undefined' && x.tagName.toLowerCase() == 'td' && typeof(x.onclick)!='undefined' && x.onclick!=null &&  x.onclick!='') 
    {
@@ -4219,7 +4974,7 @@ function recurainput(x)
           return;
       } 
       if (x.innerHTML.replace(/^\/[0-9]+.*/,'')!='')
-      allainputeles += "<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.innerHTML.replace(/&lt;/,label[11]).replace(/&gt;/,label[12]) + "</nobr></td></tr>";
+      allainputeles += "<tr><td  class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onclick=\"" + (''+x.onclick).replace(/^[^\{]+/,'').replace(/ /g,'') +";closeactmenu()\"><nobr>" + x.innerHTML.replace(/&lt;/,label[11]).replace(/&gt;/,label[12]) + "</nobr></td></tr>";
    }
    else if (typeof(x.childNodes)!='undefined' && x.childNodes!=null && x.childNodes.length>0)
    {
@@ -4242,6 +4997,7 @@ function gohome()
     var url0 = document.location.toString().replace(/[^\/]+$/,'');
     var url1= url0.replace(/\/$/,'');
     var url2 = url0 + "index.";
+    var url3 = url0 + "studentindex.";
     while (gp!=gp.parent) gp = gp.parent;
     var ip = gp.opener;
     if (ip !=null)
@@ -4249,7 +5005,7 @@ function gohome()
        try
        {
           var x = ip.document.location.toString();
-          if (x == url0 || x == url1 || x.indexOf(url2)>=0)
+          if (x == url0 || x == url1 || x.indexOf(url2)>=0 || x.indexOf(ur13)>=0)
           {
               gp.close();
           }
@@ -4294,8 +5050,9 @@ function actionmenu(spn)
         spn.parentNode.removeChild(spn);
         return;
     }
-    var str = "<table style=\"color:white;font-family:" + defaultfontfamily + "\" >" + allainputeles  
-       +"<tr><td style=\"color:white;font-family:" + defaultfontfamily + "\" onmouseout=closeactmenu() onclick=closeactmenu()>" + textmsg[1824] +  "</table>";
+    var str = "<table cellpadding=3 cellspacing=1 style=\"color:white;font-family:" + defaultfontfamily + "\" >" + allainputeles 
+    +"<tr><td class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onmouseout=closeactmenu() onclick=\"qrlink();closeactmenu()\">" + textmsg[1860] +  "</td></tr>"
+       +"<tr><td  class=BlackButton style=\"background-image:linear-gradient(var(--ibgcolor),var(--hibgcolor));color:white;font-family:" + defaultfontfamily + "\" onmouseout=closeactmenu() onclick=closeactmenu()>" + textmsg[1824] +  "</td></tr></table>";
     var xy = findPositionnoScrolling(spn);
     var dv = document.createElement("div");
     dv.id = 'dotmenu';
@@ -4452,7 +5209,13 @@ function democursorat()
    democursorsim.style.top = democursory + 'px';
    }
 }
-
+function isNaN1(x)
+{
+    if (x == null) return true;
+    x = x.replace(/[ |\t|\n|\r]/g,'');
+    if (x === '') return true;
+    return isNaN(x);
+}
 function demoremovesim()
 {
     if (democursorsim!=null)
@@ -4461,143 +5224,14 @@ function demoremovesim()
         democursorsim = null;
     }
 }
-
-
-
-var eventcodes = new Array();
-eventcodes[0] = "realClose();";
-eventcodes[1] = "if(hints[cc]==labels[cc] && mandatory[cc]==false) closeprompt();else{myprompt(((hints[cc]==labels[cc])?(labels[cc]+ textmsg[722]):hints[cc]),null,null,textmsg[191]);var xy=findPositionnoScrolling(ele(0,cc));promptwin.style.top=(xy[1]+25)+'px';promptwin.style.left=(xy[0]+150)+'px';}";
-eventcodes[2] = "opener.document.location.href='cfgdb.jsp?which=registered';var win=window.open('','_top','',true);win.opener=true;win.close();";
-eventcodes[3] = "opener.syn2();realClose();";
-eventcodes[4] = "opener.aftertool()";
-eventcodes[5] = "validating=opener.check()";
-eventcodes[6] = "defaultRecord[0]=Math.floor((new Date())/1000)";
-eventcodes[7] = "popwin='z21';parent.z12.syn1();";
-eventcodes[8] = "parent.frames[0].setname(mat[0][0])";
-eventcodes[9] = "opener.redo(mat);populate(true)";
-eventcodes[10] = "opener.assemble()";
-eventcodes[11] = "parent.frames[0].refresh()";
-eventcodes[12] = "if (cc==0)renaming()";
-eventcodes[13] = "if(retrv(0,0)==''){validating=textmsg[97];ele(0,0).focus();}";
-eventcodes[14] = "if(cc==1){setv(0,2,guessFormat(v));}";
-eventcodes[15] = "save2places();SetCookie(subdb+'tcmt','');SetCookie(subdb+'acinfo','');saveabsence()";
-eventcodes[16] = "f2.subdb.value=''";
-eventcodes[17] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);";
-eventcodes[18] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==5&&rdapname=='roster')setCell(rr,6,''+(parseInt(retrv(rr,6))+parseInt(v)-parseInt(x)));";
-eventcodes[19] = "opener.getChecked(newmat[rr][cc])";
-eventcodes[20] = "if (cc==1&&v!='...'){var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split( \"\" );var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
-eventcodes[21] = "if(numRows!=1){myprompt('Incorrect code');} else{xy=findPositionnoScrolling(document.getElementById('thetoolbar'));myHintx=xy[0]-10;myHinty=xy[1]+80; showmyhint(0,1);}";
-eventcodes[22] = "timeformat=timeformat.replace(/ hh:mm/,'');opener.close();resizeTo(600,screen.height);moveTo((screen.width-600)/2,0)";
-eventcodes[23] = "ret=2;nav1.document.getElementById('detail').innerHTML=textmsg[90];close();";
-eventcodes[24] = "timeformat=timeformat.replace(/hh/,'').replace(/mm/,'').replace(/:/g,'');setv(0,15,defaultRecord[15]);";
-eventcodes[25] = "parent.frames['z12'].syn5()";
-eventcodes[26] = "if(cc==3){parent.z12.showlabel(rr);if(mat[rr][2]!='')setv(rr,cc,x);}";
-eventcodes[27] = "for(r=numRows-1;r>=0;r--)valuechanged[r]=false;";
-eventcodes[28] = "for(r=numRows-1;r>=0;r--)if(parseInt(mat[r][11])>0){mat[r][8]='';ele(r,8,'');}";
-eventcodes[29] = "opener.log1(rr,cc,x,v)";
-eventcodes[30] = "popwin1=parent.frames[1].name;";
-eventcodes[31] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3));";
-eventcodes[32] = "ret=2;myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;formnewaction(f1);visual(f1f1.submit();}\");updateQuery=x;";
-eventcodes[33] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8)setv(0,9,guessFormat(v));";
-eventcodes[34] = "document.location.href='DataForm?rdap=feeurge&numrows=1'";
-eventcodes[35] = "if(cc==9){setv(rr,10,guessFormat(v));setv(rr,8,'1');}";
-eventcodes[36] = "for(r=0; r < numRows; r++)setv(r,15,''+r)";
-eventcodes[37] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==6&&rdapname=='roster'){formselementbyname(document.form1,rr+'_7').value=''+(parseInt(retrv(rr,7))-parseInt(v)+parseInt(x));}";
-eventcodes[38] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);showtimeslots(ele(0,3),3,1)";
-eventcodes[39] = "parent.resizeIframe(0,window);";
-eventcodes[40] = "parent.rename0(rr,cc)";
-eventcodes[41] = "parent.old(x)";
-eventcodes[42] = "valuechanged[0]=true;validating='';var fm=window.frames[0];setv(0,2,'');c=fm.passoverNumRows();for(j=c-1;j>=0;j--){r=c-j;cc=fm.retrv(r-1,3);x=fm.retrv(r-1,2);if(x==''){validating=textmsg[417].concat(fm.retrv(r-1,0));break;}setv(0,cc,retrv(0,cc).concat(fm.retrv(r-1,2)));fm.setvaluechanged(r-1,false);}";
-eventcodes[43] = "for(c=0;c<4;c++)if(ctype[c]=='h'){setv(0,c,'');mat[0][c]='';}valuechanged[0]=false;";
-eventcodes[44] = "parent.openassess1(mat[0][0])";
-eventcodes[45] = "popwin1=parent.frames[1].name";
-eventcodes[46] = 'parent.parent.frames[0].zz()';
-eventcodes[47] = "opener.fill(window)";
-eventcodes[48] = "cellvalue=retrv(0,3);setv(0,4,''+guessFormat(cellvalue));";
-eventcodes[49] = "opener.follows(1)";
-eventcodes[50] = 'passdefaults(parent.frames[0])';
-eventcodes[51] = "parent.match();parent.resizeIframe(1,window)";
-eventcodes[52] = "parent.fill()";
-eventcodes[53] = "parent.endload((5+NUMROWS)*23)";
-eventcodes[54] = "opener.changeback()";
-eventcodes[55] = "opener.existwarning(numRows)";
-eventcodes[56] = "parent.regroup();parent.resizeIframe(1,window)";
-eventcodes[57] = "opener.redo(mat);populate(0)";
-eventcodes[58] = "opener.assemble()";
-eventcodes[59] = "addextraform()";
-eventcodes[60] = "parent.frames[0].redo(mat);populate(true);var labelsc0=textmsg[1644].split(/@/);for(var i=0;i<5;i++)setv(i,0,labelsc0[i]);";
-eventcodes[61] = "parent.frames[0].assemble()";
-eventcodes[62] = "parent.frames[0].menupermit()";
-eventcodes[63] = "for(r=3;r>=0;r--)valuechanged[r]=true;";
-eventcodes[64] = "if (numRows==0) myprompt('Record does not exist. You may help to enter one')";
-eventcodes[65] = 'popwin=self.name;if(cc==0){setv(0,2,v.split(/\|/)[0]);setv(0,4,v.split(/\|/)[1]);}';
-eventcodes[66] = "popwin1=self.name;";
-eventcodes[67] = "popwin1=self.name;ele(0,4).options[0]=new Option(textmsg[1272],'');ele(0,4).selectedIndex=0;";
-eventcodes[68] = "popwin1='tlmrsch';";
-eventcodes[69] =  "popwin1='tlmrsch';showhelp2(popwin1);";
-eventcodes[70] = "if(whichaction=='0')parent.frames[0].openfix();";
-eventcodes[71] = "if(whichaction=='0')parent.parent.frames[0].openfix(600);";
-eventcodes[72] = "if(numRows==0)valuechanged[0]=true;popwin1='tlmrsch';showhelp2(popwin1);";
-eventcodes[73] = "if(numRows==0)opener.hints1();focus()";
-eventcodes[74] = "ret=3;opener.refresh();setTimeout(close,100)";
-eventcodes[75] = "if(ctype[cc]=='a'){var fmti=0;for(;fmti < numCols && fields[fmti].toLowerCase()!='format';fmti++);if (fmti<numCols){cellvalue=retrv(0,fmti);setv(0,fmti,guessFormat(v));}}";
-eventcodes[76] = "ret=3;opener.reopen();setTimeout(close,100);";
-eventcodes[77] = "if(retrv(0,0)==mat[0][0] && retrv(0,1)==mat[0][1] && confirm(textmsg[723])==false) validating=' '";
-eventcodes[78] = "ret=2;opener.openagain();setTimeout('close()','100')";
-eventcodes[79] = "allanswers()";
-eventcodes[80] = "opener.updatescore()";
-eventcodes[81] = "if (numRows == NUMROWS) document.location.href= document.location.toString();";
-eventcodes[82] = "if(cc==1)parent.parent.frames[0].check1(retrv(rr,cc),rr)";
-eventcodes[83] = "if(cc==1)parent.parent.frames[0].check(retrv(rr,cc),rr)";
-eventcodes[84] = "if(cc==1)parent.frames[0].check(retrv(rr,cc),rr)";
-eventcodes[85] = "if (cc==1&&v!='...'){ var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split('|');var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
-eventcodes[86] = "";
-eventcodes[87] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3))";
-//eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Echo';f1.target='_blank';visual(f1);f1.submit();}\");updateQuery=x;";
-eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;visual(f1);f1.submit();}\");updateQuery=x;";
-eventcodes[89] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8){setv(0,10,guessFormat(v));}else if (c==9){v=v.replace(/([a-z])[ ]*$/,'$1,');setv(0,9,v);}";
-eventcodes[90] = "maxsize[3]=1000";
-eventcodes[91] = "if(cc==0){subdb=(retrv(0,0)=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(retrv(0,0)=='1')?mat[0][5]:mat[0][6];}else if (c==9){v=v.replace(/([a-z][ ]*)$/,'$1,');setv(0,9,v);}";
-eventcodes[92] = "opener.addAnItem1()";
-eventcodes[93] = "parent.z12.syn5()";
-eventcodes[94] = "close()";
-eventcodes[95] = "if (cc==3)showtimeslots(ele(counter,3),3)";
-eventcodes[96] = "if (cc==1)showtimeslots(ele(rr,1),1)";
-eventcodes[97] = "if (numRows==0 && typeof(document.thisform.webservice0)!='undefined'){myprompt(textmsg[1362],null,null,textmsg[591]);};";
-eventcodes[98] = "if (numRows==0){myprompt(textmsg[1363],null,null,textmsg[591]);};";
-eventcodes[99] = "narrowtable();"
-eventcodes[100] = "nonamefunc1();";
-eventcodes[101] = "for(r=numRows;r<NUMROWS;r++){n=Math.round(Math.pow(2,(r-1)));setv(r,0,''+r);setv(r,1,''+n);valuechanged[r]=false;}";
-eventcodes[102] = "r=thispageheight();parent.resizeifrm(window.name,r);"
-eventcodes[103] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changeid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[104] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changecid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[105] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changedept',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
-eventcodes[106] = "if(numRows>0 && rr < numRows && cc==1&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][1],retrv(rr,1),'',retrv(rr,0),retrv(rr,3));else setv(rr,1,x);\",'')}";
-eventcodes[107] = "if(numRows>0 && rr < numRows && cc==2&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][2],retrv(rr,2),'',retrv(rr,0),retrv(rr,4));else setv(rr,2,x);\",'')}";
-eventcodes[108] = "popwin1='w'+tstmp;";
-eventcodes[109] = "parent.width2(document.getElementById('maintable').offsetWidth,document.getElementById('maintable').offsetHeight)";
-eventcodes[110] = "var xx=ele(0,1).options.length;ele(0,1).options[xx]=new Option(textmsg[114]+' '+labels[1] ,'@');newitem=function(Z,j){var X=ele(Z,j);if (X.options[X.selectedIndex].value=='@')myprompt('<center><iframe src=schedulerindex.jsp?semester=@&forindex=1 width=300 height=320 /></center>');}";;
-eventcodes[111] = "fff();";
-eventcodes[112] = "setv(rr,0,retrv(rr,1) + '|' + retrv(rr,2) + '|' + retrv(rr,4))";
-eventcodes[113] = "morecoursesel(existing)";
-eventcodes[114] = "setTimeout(parent.closeprompt,1500)";
-eventcodes[115] = "timeformat=timeformat.replace(/[a-z][a-z]/g,'').replace(/:/g,'');Sch.printsch1();parent.newalarm(mat,numRows)";
-eventcodes[116] = "printcourse()";
-eventcodes[117] = "printcourse1()";
-eventcodes[118] = "morecoursesel(existing);writehint()";
-eventcodes[119] = "popwin1=parent.frames[1].name;parent.modify23(f1)";
-eventcodes[120] = "timeformat=timeformat.replace(/ mm:ss/,'');for(j1=0;j1<numCols&&fields[j1]!='Birthday';j1++);if (mat[0][j1]==null || mat[0][j1]=='0'){mat[0][j1]=(''+((new Date()).getTime()-20*365*24*3600000) ).replace(/[0-9][0-9][0-9]$/,'');ele(0,j1).value=timestr(parseInt(mat[0][j1]));} ele(0,j1).value=ele(0,j1).value.replace(/ [0-9][0-9]:[0-9][0-9]/,'');";
-eventcodes[121] = "SetCookie(mat[0][0] + \"acinfo\",'');parent.document.location.herf=parent.document.location.toString()";
-eventcodes[122] = "saveabsence()"; 
-eventcodes[123] = "parent.extraweight(window)"; 
-var homestr = '<a href="../"><div style="float:left;background:radial-gradient(farthest-side at 70% 65%,#efeffd,#666660);width:54px;height:54px;border-radius:27px;alignment:center;text-align:center;vertical-align:middle;line-height:54px"><table cellspacing="0" width="24" style="transform:scale(1.5,1.5);margin:10px 0px 0px 13px" align="center"><tr height="6"><td colspan="7"></td></tr><tr height="10"><td colspan="7"><div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr><tr height="3"><td width="3" rowspan="2"></td><td width="5" style="background-color:#ffffff" rowspan="2"></td><td width="5" rowspan="2"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="5"></td><td width="4" style="background-color:#ffffff" rowspan="2"></td><td width="3" rowspan="2"></td></tr><tr height="5"><td style="background-color:#ffffff" width="5"></td></tr><tr height="12"><td colspan="7"></td></tr></table></div></a>';
-function openfileto(filebox,txtbox)
+function openfileto(filebox,txtbox,parsefile)
 {
  var file = filebox.files[0];
  var reader = new FileReader();
  reader.onload = function (e) 
  {
     txtbox.value = e.target.result;
+    if (parsefile!=null)parsefile();
  };
  reader.readAsText(file); 
  let j = filebox.value.lastIndexOf('/');
@@ -4717,5 +5351,436 @@ var blob = new Blob([txtbox.value], {type: mime_type});
 
     dlink.click();
     dlink.remove();
-}   
+} 
+function displayquestion(i,txt)
+{
+    let dv = document.getElementById('qumsg'+i);
+    dv.parentNode.style.borderWidth = '0px';
+    dv.parentNode.style.margin = '0px 0px 0px 0px';
+    dv.parentNode.style.padding = '0px 0px 0px 0px';
+    dv.innerHTML = txt;
+}
+function retrivequestion(i,sca)
+{
+    if (typeof(tstmp) == 'undefined')
+    {
+        tstmp = (new Date()).getTime();
+        let d = document.createElement('iframe');
+        d.height = "1";d.width = "1";
+        d.name="w" + tstmp;
+        document.body.appendChild(d);
+    }
+    postopen('follows.jsp','x,order,sca'.split(/,/),
+    ["retrivequestion", ""+i, sca], 'w' + tstmp);
+}
+function replyaskquestion(but,subdb,sid,rid,posttime,topic)
+{
+   let td = but.parentNode;
+   let txt = td.getElementsByTagName('textarea')[0];
+   let msg = txt.value;
+   if (topic != null)
+   {
+       if (typeof(tstmp) != "undefined")
+       {
+           postopen('follows.jsp', "x,topic,subdb,sid,rid,posttime,msg".split(/,/), 
+          ["replyquestion",topic,subdb,sid,rid,posttime,msg], 'w' + tstmp);
+       }
+       else
+       {
+           const xml = new XMLHttpRequest();
+           let url = 'follows.jsp?x=replyquestion&subdb=' + subdb + '&sid='+sid +'&rid='+rid +'&posttime='+posttime +'&hex=1&msg=' + Msg.hex(msg);
+           url += '&topic='+ topic;
+           xml.open('GET', url,false);
+           xml.send();
+       }
+   }
+   let tr = td.parentNode;
+   let tbl = tr.parentNode;
+   tbl.removeChild(tr);
+}
+function safelink0(url,jspfilename,withoutlogin, anchor) 
+{   
+    if (withoutlogin == null) 
+        withoutlogin = true;
+    let wn = "";
+    if (withoutlogin==false)
+        wn = "<tr><td   align=left id=warning0 style=color:red>" + textmsg[1864] + "</td></tr>";
+    let studentdo = url.includes("follows.jsp");
+    if (jspfilename!=null)
+    url = url.replace(/\/follows\.jsp/,'/'+ jspfilename );
+    
+    myprompt("<table><tr><TD   align=center><textarea rows=5 style=width:450px;font-size:18px id=urlforstudent onclick=\"javascript:this.style.fontSize=(parseInt(this.style.fontSize.replace(/px/,''))+1)+'px'\">" + url + "</textarea>  </td></tr>"  
+    + (studentdo?"":("<tr><td   width=100% align=left>"  
+    + "<input  type=checkbox  style=\"text-align:center;\" onclick=\"qrlink(" + (!withoutlogin) + ")\" " + (withoutlogin?"":" checked ") + ">"
+    + " " + textmsg[1890] + "</td></tr>"))
+    +"<tr><td   width=100% align=center>"  
+    + "<input id=testbutt type=button class=GreenButton  style=\"width:" + Math.round(font_size * 4.5) + "px;text-align:center;\" value=\"" + textmsg[1200] + "\" onclick=\"testurl()\" >"
+    + "<input id=copybutt type=button class=GreenButton style=\"width:" + Math.round(font_size * 4.5) + "px;text-align:center;\"   value=\"" + textmsg[1773].split(/@/)[4] + "\" onclick=\"toclip()\" ></td></tr>"
+    + wn
+    + "<tr><td align=center ><img width=450 src=\"Qrlink?url=" + Msg.hex(url) + (withoutlogin?('&nlg=1"'):('" onload=warning(this)')) + " style=text-align:center></td></tr></table>",null,null,textmsg[546] + " + " + textmsg[1860]);
+    
+    if (anchor !=null) 
+    {
+       var xy = findPositionnoScrolling(anchor);
+       promptwin.style.left = xy[0] + 'px';
+       promptwin.style.top = (xy[1]-10) + 'px';
+    }
+    else
+    {
+        promptwin.style.top =   '0px';
+    }
+}
+function toclip() {
+  var copyText = document.getElementById("urlforstudent");
+  copyText.select();
+  copyText.setSelectionRange(0,300); /* For mobile devices */
+  document.execCommand("copy");
+   
+}
+function testurl()
+{
+    var copyText = document.getElementById("urlforstudent");
+    open( copyText.value, '_blank');
+}
+var formbesubmitting = null;
+if (typeof downloadfilename == 'undefined')
+downloadfilename = 'downloadfile.html';
+function submitbyajax(f)
+{
+    if ( (typeof(tstmp) == 'undefined' || f.target != 'w' + tstmp) && f.target != self.name && f.target != '_self')
+    {
+        f.submit();
+        return;
+    }
+    formbesubmitting = f;
+    let fd = new FormData();
+    let isq = f.action.includes('gradeQuiz.jsp');
+    for (let fe of f.elements)
+    {  
+        if (isq && fe.name.replace(/q[0-9]+/,'') === '')
+            continue;
+        let vl;
+        
+        if (fe.tagName.toLowerCase() == 'select')
+            vl = fe.options[fe.selectedIndex].value;
+        else if (fe.tagName.toLowerCase() == 'input' && fe.type.toLowerCase()=='radio' && fe.checked == false)
+            continue;
+        else
+            vl = fe.value;
+        fd.append(fe.name, vl);
+    }
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+         xmlhttp = new XMLHttpRequest();
+    }
+    else
+    {
+         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function()
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+           
+            var y = xmlhttp.responseText; 
+           
+            closeprompt();
+            if (formbesubmitting.target == self.name || formbesubmitting.target == '_self')
+            {
+                 document.write(y);
+                 downloadaswell(y,downloadfilename);
+                 return;
+            }
+            var  myIFrame = document.getElementsByName('w' + tstmp)[0];
+             
+            myIFrame = myIFrame.contentWindow || myIFrame.contentDocument.document || myIFrame.contentDocument;
+            myIFrame.document.open();
+            myIFrame.document.write(y);
+            myIFrame.document.close(); 
+        }
+    };
+    
+    let xx = new URLSearchParams(fd).toString();
+    let url = f.action;
+    let jj =url.indexOf('?');
+    if ( jj > 0 ) 
+    {  
+        if (url.substring(jj+1).includes('='))
+        xx += url.substring(jj+1);
+        url = url.substring(0,jj);
+    }
+    let xy = findPositionnoScrolling(f);
+    let left = xy[0] + f.offsetWidth/2 -20;
+    let top = xy[1] + f.offsetHeight - 180;
+    myprompt('<img id=progress src=image/progress.gif>',null,null,'.....'); 
+    promptwin.style.cssText = '';
+    promptwin.className = 'rundisk';
+    promptwin.style.left = left + 'px';
+    promptwin.style.top = top + 'px';
+     
+    xmlhttp.open('POST', url, true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(xx); 
+    
+}
+function removememobj( course,session)
+{
+    open("embedquiz.jsp?mode=remove&clearmem=1&course=" + course + "&sessionname=" + session, "w" + tstmp);
+}
  
+function backupbyajax(iid,line)
+{
+    if (localStorage[savedQuizName+'b']!=null) return;
+    let v = GetCookie("backupinfo");
+    var c = document.getElementById('chattxt');
+    if ( (v == null || v=='') && typeof(backupinfo)!='undefined')
+        v = backupinfo;
+    if (v == null || v == '') return;
+    let urlcode = v.split(/,/);
+    let fd = new FormData();
+    let q = v.indexOf('?');
+    fd.append('iid', iid);
+    fd.append('content', line);// encryptString0(line));
+    
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+         xmlhttp = new XMLHttpRequest();
+    }
+    else
+    {
+         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function()
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+            var y = xmlhttp.responseText;
+            localStorage[savedQuizName+'b'] = '1';
+            delCookie("backupinfo");
+            
+            myprompt( 'Also backed up!');
+        }
+    };
+    
+    let xx = new URLSearchParams(fd).toString(); 
+    xmlhttp.open('POST' ,v.substring(0,q), true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(v.substring(q+1) + '&'+xx); 
+   
+}
+ 
+function downloadaswell(contents, filename) 
+{
+        let mime_type =  "text/html";
+        var blob = new Blob([contents], {type: mime_type});
+        var dlink = document.createElement('a');
+        dlink.download = filename;
+        dlink.href = window.URL.createObjectURL(blob);
+        dlink.onclick = function(e) {
+            var that = this;
+            setTimeout(function() {
+                window.URL.revokeObjectURL(that.href);
+            }, 1500);
+        };
+
+        dlink.click();
+        dlink.remove();
+    }
+function printasis(element, ii, arr)
+{
+    if (element == null)
+    {
+        var ss = [];
+        ii = 0;
+        printasis(document.body ,0,ss);
+        //alert(ss.length);
+        var ht = ss.join('');  
+        postopen('printdoc.jsp', ['wcds'],[ht],'_blank');
+        return;
+    }
+    if ( element != null && element.nodeType === 3)
+    {
+        for (let j = 0; j < ii; j++) 
+           arr.push(' ');
+        arr.push(element.nodeValue);
+        return;
+    }
+    if ( element == null || element.nodeType !== 1)
+        return;
+    var ta = element.tagName;
+    if (ta == null) 
+        return;        
+    var t = ta .toLowerCase();
+    console.log(t +'\n');
+    if (t == 'script' )
+    {
+        return;
+    }
+    var x = "html,head,title,body,center,p,nobr,h1,h2,h3,h4,h5,h6,strong,em,span,br,hr,a,nav,ul,ol,li,img,ul,ol,li,table,tbody,tr,td,th,form,input,textarea,select,button,audio,video,source,iframe,object,embed,canvas,header,footer,section,article,aside,main,figure,figcaption,mark,time,a,button,details,summary,input,label,select,textarea,progress,meter".split(/,/);
+    if (!x.includes(t)) return;
+    //if (t == 'td' )
+    {
+        //arr.push(element.outerHTML);
+        //return;
+    }
+    for (let j = 0; j < ii; j++)arr.push(' ');
+    arr.push('<' + t + ' ');
+    var attributesObject = element.attributes;
+    for (var i = 0; i < element.attributes.length; i++) 
+    {
+        var attributeName = element.attributes[i].name;
+        var attributeValue = element.attributes[i].value;
+        arr.push(attributeName + '="' + attributeValue + '" ');
+    }
+    arr.push('style="');
+    var styles = window.getComputedStyle(element);
+    var k =0;
+    for (var i = 0; i < styles.length && k < 15; i++) 
+    {
+        var property = styles[i];
+        var value = styles.getPropertyValue(property);
+        if (value!=null && value!='none' && value!='' && value!='auto' && value!='normal' && !property.includes('animation-'))
+        {    arr.push(property + ':' + value + ";");
+        k++;}
+    }
+   
+    arr.push('" >\n');
+    var children = element.childNodes;
+    ii += 3;
+    if (children.length)
+    {
+        for (var i = 0; i < children.length; i++)
+        printasis(children[i], ii, arr);
+    }
+    for (let j = 0; j < ii; j++)arr.push(' ');
+    arr.push('</' + t + '>\n');
+}
+var eventcodes = new Array();
+eventcodes[0] = "realClose();";
+eventcodes[1] = "if(hints[cc]==labels[cc] && mandatory[cc]==false) closeprompt();else{myprompt(((hints[cc]==labels[cc])?(labels[cc]+ textmsg[722]):hints[cc]),null,null,textmsg[191]);var xy=findPositionnoScrolling(ele(0,cc));promptwin.style.top=(xy[1]+25)+'px';promptwin.style.left=(xy[0]+150)+'px';}";
+eventcodes[2] = "opener.document.location.href='cfgdb.jsp?which=registered';var win=window.open('','_top','',true);win.opener=true;win.close();";
+eventcodes[3] = "opener.syn2();realClose();";
+eventcodes[4] = "opener.aftertool()";
+eventcodes[5] = "validating=opener.check()";
+eventcodes[6] = "defaultRecord[0]=Math.floor((new Date())/1000)";
+eventcodes[7] = "popwin='z21';parent.z12.syn1();";
+eventcodes[8] = "parent.frames[0].setname(mat[0][0])";
+eventcodes[9] = "opener.redo(mat);populate(true)";
+eventcodes[10] = "opener.assemble()";
+eventcodes[11] = "parent.frames[0].refresh()";
+eventcodes[12] = "if (cc==0)renaming()";
+eventcodes[13] = "if(retrv(0,0)==''){validating=textmsg[97];ele(0,0).focus();}";
+eventcodes[14] = "if(cc==1){setv(0,2,guessFormat(v));}";
+eventcodes[15] = "save2places();SetCookie(subdb+'tcmt','');SetCookie(subdb+'acinfo','');saveabsence()";
+eventcodes[16] = "f2.subdb.value=''";
+eventcodes[17] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);";
+eventcodes[18] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==5&&rdapname=='roster')setCell(rr,6,''+(parseInt(retrv(rr,6))+parseInt(v)-parseInt(x)));";
+eventcodes[19] = "opener.getChecked(newmat[rr][cc])";
+eventcodes[20] = "if (cc==1&&v!='...'){var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split( \"\" );var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
+eventcodes[21] = "if(numRows!=1){myprompt('Incorrect code');} else{xy=findPositionnoScrolling(document.getElementById('thetoolbar'));myHintx=xy[0]-10;myHinty=xy[1]+80; showmyhint(0,1);}";
+eventcodes[22] = "timeformat=timeformat.replace(/ hh:mm/,'');opener.close();resizeTo(600,screen.height);moveTo((screen.width-600)/2,0)";
+eventcodes[23] = "ret=2;nav1.document.getElementById('detail').innerHTML=textmsg[90];close();";
+eventcodes[24] = "timeformat=timeformat.replace(/hh/,'').replace(/mm/,'').replace(/:/g,'');setv(0,15,defaultRecord[15]);";
+eventcodes[25] = "parent.frames['z12'].syn5()";
+eventcodes[26] = "if(cc==3){parent.z12.showlabel(rr);if(mat[rr][2]!='')setv(rr,cc,x);}";
+eventcodes[27] = "for(r=numRows-1;r>=0;r--)valuechanged[r]=false;";
+eventcodes[28] = "for(r=numRows-1;r>=0;r--)if(parseInt(mat[r][11])>0){mat[r][8]='';ele(r,8,'');}";
+eventcodes[29] = "opener.log1(rr,cc,x,v)";
+eventcodes[30] = "popwin1=parent.frames[1].name;";
+eventcodes[31] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3));";
+eventcodes[32] = "ret=2;myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;formnewaction(f1);visual(f1f1.submit();}\");updateQuery=x;";
+eventcodes[33] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8)setv(0,9,guessFormat(v));";
+eventcodes[34] = "document.location.href='DataForm?rdap=feeurge&numrows=1'";
+eventcodes[35] = "if(cc==9){setv(rr,10,guessFormat(v));setv(rr,8,'1');}";
+eventcodes[36] = "for(r=0; r < numRows; r++)setv(r,15,''+r)";
+eventcodes[37] = "if(cc==1){if(valuechanged[rr])for(var i=0;i<numCols;i++)if(ele(rr,i).value=='')setv(rr,i,defaultRecord[i]);}else if (cc==6&&rdapname=='roster'){formselementbyname(document.form1,rr+'_7').value=''+(parseInt(retrv(rr,7))-parseInt(v)+parseInt(x));}";
+eventcodes[38] = "if(mat[0][8]=='')setv(0,8,mat[0][14]);if(mat[0][5]=='')setv(0,5,mat[0][15]);showtimeslots(ele(0,3),3,1)";
+eventcodes[39] = "parent.resizeIframe(0,window);";
+eventcodes[40] = "parent.rename0(rr,cc)";
+eventcodes[41] = "parent.old(x)";
+eventcodes[42] = "valuechanged[0]=true;validating='';var fm=window.frames[0];setv(0,2,'');c=fm.passoverNumRows();for(j=c-1;j>=0;j--){r=c-j;cc=fm.retrv(r-1,3);x=fm.retrv(r-1,2);if(x==''){validating=textmsg[417].concat(fm.retrv(r-1,0));break;}setv(0,cc,retrv(0,cc).concat(fm.retrv(r-1,2)));fm.setvaluechanged(r-1,false);}";
+eventcodes[43] = "for(c=0;c<4;c++)if(ctype[c]=='h'){setv(0,c,'');mat[0][c]='';}valuechanged[0]=false;";
+eventcodes[44] = "parent.openassess1(mat[0][0])";
+eventcodes[45] = "popwin1=parent.frames[1].name";
+eventcodes[46] = 'parent.parent.frames[0].zz()';
+eventcodes[47] = "parent.fill(window)";
+eventcodes[48] = "cellvalue=retrv(0,3);setv(0,4,''+guessFormat(cellvalue));";
+eventcodes[49] = "opener.follows(1)";
+eventcodes[50] = 'passdefaults(parent.frames[0])';
+eventcodes[51] = "parent.match();parent.resizeIframe(1,window)";
+eventcodes[52] = "parent.fill()";
+eventcodes[53] = "parent.endload((5+NUMROWS)*23)";
+eventcodes[54] = "opener.changeback()";
+eventcodes[55] = "opener.existwarning(numRows)";
+eventcodes[56] = "parent.regroup();parent.resizeIframe(1,window)";
+eventcodes[57] = "opener.redo(mat);populate(0)";
+eventcodes[58] = "opener.assemble()";
+eventcodes[59] = "addextraform()";
+eventcodes[60] = "parent.frames[0].redo(mat);populate(true);var labelsc0=textmsg[1644].split(/@/);for(var i=0;i<5;i++)setv(i,0,labelsc0[i]);";
+eventcodes[61] = "parent.frames[0].assemble()";
+eventcodes[62] = "parent.frames[0].menupermit()";
+eventcodes[63] = "for(r=3;r>=0;r--)valuechanged[r]=true;";
+eventcodes[64] = "if (numRows==0) myprompt('Record does not exist. You may help to enter one')";
+eventcodes[65] = 'popwin=self.name;if(cc==0){setv(0,2,v.split(/\|/)[0]);setv(0,4,v.split(/\|/)[1]);}';
+eventcodes[66] = "popwin1=self.name;";
+eventcodes[67] = "popwin1=self.name;ele(0,4).options[0]=new Option(textmsg[1272],'');ele(0,4).selectedIndex=0;";
+eventcodes[68] = "popwin1='tlmrsch';";
+eventcodes[69] =  "popwin1='tlmrsch';showhelp2(popwin1);";
+eventcodes[70] = "if(whichaction=='0')parent.frames[0].openfix();";
+eventcodes[71] = "if(whichaction=='0')parent.parent.frames[0].openfix(600);";
+eventcodes[72] = "if(numRows==0)valuechanged[0]=true;popwin1='tlmrsch';showhelp2(popwin1);";
+eventcodes[73] = "if(numRows==0)opener.hints1();focus()";
+eventcodes[74] = "ret=3;opener.refresh();setTimeout(close,100)";
+eventcodes[75] = "if(ctype[cc]=='a'){var fmti=0;for(;fmti < numCols && fields[fmti].toLowerCase()!='format';fmti++);if (fmti<numCols){cellvalue=retrv(0,fmti);setv(0,fmti,guessFormat(v));}}";
+eventcodes[76] = "ret=3;opener.reopen();setTimeout(close,100);";
+eventcodes[77] = "if(retrv(0,0)==mat[0][0] && retrv(0,1)==mat[0][1] && confirm(textmsg[723])==false) validating=' '";
+eventcodes[78] = "ret=2;opener.openagain();setTimeout('close()','100')";
+eventcodes[79] = "allanswers()";
+eventcodes[80] = "opener.updatescore()";
+eventcodes[81] = "if (numRows == NUMROWS) document.location.href= document.location.toString();";
+eventcodes[82] = "if(cc==1)parent.parent.frames[0].check1(retrv(rr,cc),rr)";
+eventcodes[83] = "if(cc==1)parent.parent.frames[0].check(retrv(rr,cc),rr)";
+eventcodes[84] = "if(cc==1)parent.frames[0].check(retrv(rr,cc),rr)";
+eventcodes[85] = "if (cc==1&&v!='...'){ var t=v.split(',');for(var z=0;z<t.length;z++){var w=t[z].split('|');var j=rr;if(z>0&&rr<numRows)j=numRows+z-1;else if (z>0&&rr==numRows)j=numRows+z;setv(j,0,retrv(rr,0));setv(j,3,w[0]);setv(j,4,w[1]); }}";
+eventcodes[86] = "";
+eventcodes[87] = "";//x=updateQuery;updateQuery=mu(updateQuery,retrv(0,3))";
+//eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Echo';f1.target='_blank';visual(f1);f1.submit();}\");updateQuery=x;";
+eventcodes[88] = "myprompt(textmsg[778],null,\"if(v){f1.action='Email';f1.target='w'+tstmp;visual(f1);f1.submit();}\");updateQuery=x;";
+eventcodes[89] = "if(cc==0){subdb=(v=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(v=='1')?mat[0][5]:mat[0][6];}else if (cc==8){setv(0,10,guessFormat(v));}else if (c==9){v=v.replace(/([a-z])[ ]*$/,'$1,');setv(0,9,v);}";
+eventcodes[90] = "maxsize[3]=1000";
+eventcodes[91] = "if(cc==0){subdb=(retrv(0,0)=='1')?mat[0][1]:'';setv(0,2,subdb);mat[0][4]=(retrv(0,0)=='1')?mat[0][5]:mat[0][6];}else if (c==9){v=v.replace(/([a-z][ ]*)$/,'$1,');setv(0,9,v);}";
+eventcodes[92] = "opener.addAnItem1()";
+eventcodes[93] = "parent.z12.syn5()";
+eventcodes[94] = "close()";
+eventcodes[95] = "if (cc==3)showtimeslots(ele(counter,3),3)";
+eventcodes[96] = "if (cc==1)showtimeslots(ele(rr,1),1)";
+eventcodes[97] = "if (numRows==0 && typeof(document.thisform.webservice0)!='undefined'){myprompt(textmsg[1362],null,null,textmsg[591]);};";
+eventcodes[98] = "if (numRows==0){myprompt(textmsg[1363],null,null,textmsg[591]);};";
+eventcodes[99] = "narrowtable();"
+eventcodes[100] = "nonamefunc1();";
+eventcodes[101] = "for(r=numRows;r<NUMROWS;r++){n=Math.round(Math.pow(2,(r-1)));setv(r,0,''+r);setv(r,1,''+n);valuechanged[r]=false;}";
+eventcodes[102] = "r=thispageheight();parent.resizeifrm(window.name,r);"
+eventcodes[103] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changeid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
+eventcodes[104] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changecid',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
+eventcodes[105] = "if(numRows>0 && rr < numRows && cc==0&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changedept',mat[rr][0],retrv(rr,0));else setv(rr,0,x);\",'')}";
+eventcodes[106] = "if(numRows>0 && rr < numRows && cc==1&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][1],retrv(rr,1),'',retrv(rr,0),retrv(rr,3));else setv(rr,1,x);\",'')}";
+eventcodes[107] = "if(numRows>0 && rr < numRows && cc==2&&v!=x){myprompt(textmsg[1572],null,\"if(v)changerid('changesess',mat[rr][2],retrv(rr,2),'',retrv(rr,0),retrv(rr,4));else setv(rr,2,x);\",'')}";
+eventcodes[108] = "popwin1='w'+tstmp;";
+eventcodes[109] = "parent.width2(document.getElementById('maintable').offsetWidth,document.getElementById('maintable').offsetHeight)";
+eventcodes[110] = "var xx=ele(0,1).options.length;ele(0,1).options[xx]=new Option(textmsg[114]+' '+labels[1] ,'@');newitem=function(Z,j){var X=ele(Z,j);if (X.options[X.selectedIndex].value=='@')myprompt('<center><iframe src=schedulerindex.jsp?semester=@&forindex=1 width=300 height=320 /></center>');}";;
+eventcodes[111] = "fff();";
+eventcodes[112] = "setv(rr,0,retrv(rr,1) + '|' + retrv(rr,2) + '|' + retrv(rr,4))";
+eventcodes[113] = "morecoursesel(existing)";
+eventcodes[114] = "setTimeout(parent.closeprompt,1500)";
+eventcodes[115] = "timeformat=timeformat.replace(/[a-z][a-z]/g,'').replace(/:/g,'');Sch.printsch1();parent.newalarm(mat,numRows)";
+eventcodes[116] = "printcourse()";
+eventcodes[117] = "printcourse1()";
+eventcodes[118] = "morecoursesel(existing);writehint()";
+eventcodes[119] = "popwin1=parent.frames[1].name;parent.modify23(f1)";
+eventcodes[120] = "timeformat=timeformat.replace(/ mm:ss/,'');for(j1=0;j1<numCols&&fields[j1]!='Birthday';j1++);if (mat[0][j1]==null || mat[0][j1]=='0'){mat[0][j1]=(''+((new Date()).getTime()-20*365*24*3600000) ).replace(/[0-9][0-9][0-9]$/,'');ele(0,j1).value=timestr(parseInt(mat[0][j1]));} ele(0,j1).value=ele(0,j1).value.replace(/ [0-9][0-9]:[0-9][0-9]/,'');";
+eventcodes[121] = "SetCookie(mat[0][0] + \"acinfo\",'');parent.document.location.herf=parent.document.location.toString()";
+eventcodes[122] = "saveabsence()"; 
+eventcodes[123] = "parent.extraweight(window)"; 
+eventcodes[124] = "parent.savetempgrade()"; 
