@@ -721,7 +721,6 @@ function onlinetoolbarfollow(ta)
     }
      
 }
-
 var ele2focus = []; 
 function onlinetoolbarsearch(dummy)
 {
