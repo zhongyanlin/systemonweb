@@ -58,7 +58,7 @@ function onlinetoolbarinit()
     {
         if (onlinetoolinitial == null)
         {
-            onlinetoolinitial = GetCookie("myonlinetools" + onlinetoolbarsubject);
+            onlinetoolinitial = localStorage["myonlinetools" + onlinetoolbarsubject];
             if (onlinetoolinitial == null)
             {
                
@@ -391,7 +391,7 @@ function onlinetoolmini(btn)
          
         onlinetoolbase.style.overflow = "hidden";
         onlinetoolbase.style.width = "24px";
-        var x = parseInt(onlinetoolbase.style.left.replace(/px/,''))-24; 
+        var x = 5;//parseInt(onlinetoolbase.style.left.replace(/px/,''))-24; 
         var y = parseInt(onlinetoolbase.style.top.replace(/px/,''))+60;
         if (x >= 5)
         {
@@ -489,7 +489,7 @@ function onlinetoolstr(mytools)
     ans += "<td><input id=tosmall type=button class=\"BlueButton Button\" style=\"text-align:center;width:22px\" onclick=\"onlinetoolmini(this)\" value=\"&bull;\" ></td>";
     if (onlinetoolbarsubject != 'tst')
     {
-        //ans+= "<td  bgcolor=white><input name=onlineco  type=button value=\"MoreTool\" class=BlueButton style=\"background-color:#5ba9cf\" onclick=\"javascript:onlinetoolconfigure()\"></td>";
+        //ans+= "<td  style=background-color:white><input name=onlineco  type=button value=\"MoreTool\" class=BlueButton style=\"background-color:#5ba9cf\" onclick=\"javascript:onlinetoolconfigure()\"></td>";
     }
     i = mytools.indexOf(";");
     
@@ -523,7 +523,7 @@ function onlinetoolstr(mytools)
          
         names += name + ",";
         var cgi = list[i * 6 + 4];
-        
+        let cgi0 = cgi;
         if (cgi == null) break;
         var nosrc = false;
         if ( cgi.indexOf("/") < 0)
@@ -541,7 +541,7 @@ function onlinetoolstr(mytools)
         
         if (option.replace(/^[a-z|0-9|_|\.]+\([^\)]*\)$/i, '') == '')
         {
-            if (cgi != null && cgi.replace(/ /g,'') != '' && alljss.indexOf("," + cgi + ",") < 0 && jsnotexist(jss,cgi) )
+            if (cgi0 != null && cgi0.replace(/ /g,'') != '' && alljss.indexOf("," + cgi + ",") < 0 && jsnotexist(jss,cgi0)  && jsnotexist(jss,cgi) )
             {
                 alljss = alljss + cgi + ",";
                 var n = jscount;
@@ -566,7 +566,7 @@ function onlinetoolstr(mytools)
       
         ans += "</td>";
     }
-    ans += "<td><table cellspacing=0 cellpadding=0><tr><td><input  type=button class=\"BlueButton Button\" style=width:30px;text-align:center;font-size:" + font_size + "px  value=\"&larr;\" onclick=\"document.execCommand('undo')\" ></td><td><input  type=button class=\"BlueButton Button\" value=\"&rarr;\"  style=width:30px;text-align:center;font-size:" + font_size + "px onclick=\"document.execCommand('redo')\" ></td></tr></table></td>";
+    ans += "<td><table cellspacing=0 cellpadding=0><tr><td><input  type=button class=\"BlueButton Button\" style=width:30px;text-align:center;font-size:" + font_size + "px  value=\"&#8634;\" onclick=\"document.execCommand('undo')\" ></td><td><input  type=button class=\"BlueButton Button\" value=\"&#8635;\"  style=width:30px;text-align:center;font-size:" + font_size + "px onclick=\"document.execCommand('redo')\" ></td></tr></table></td>";
     
     ans += "</tr></table>" + onlinetoolround2();
     onlinetoolpasssel = names;
@@ -675,7 +675,7 @@ function onlinetoolgetselected(zz, dao)
     
     if (navigator.appName.indexOf("Explorer") < 0)
         onlinetoolbase.style.overflow = "display";
-    SetCookie("myonlinetools" + onlinetoolbarsubject, mytools);
+    localStorage["myonlinetools" + onlinetoolbarsubject] = mytools;
     onlinetoolbase.style.left = x;
     if (navigator.appName.indexOf("Explorer") >= 0)
         onlinetooladjust();
@@ -716,13 +716,68 @@ function onlinetoolbarfollow(ta)
     }
     else  
     {
-        onlinetoolbase.style.left = (xy[0]-24) + "px";
-        onlinetoolbase.style.top = (xy[1]+35) + "px";
+        onlinetoolbase.style.left = (xy[0]-40) + "px";
+        onlinetoolbase.style.top = (xy[1] ) + "px";
     }
      
 }
+
+var ele2focus = []; 
+function onlinetoolbarsearch(dummy)
+{
+    let allt = [];
+    let allta = document.getElementsByTagName('textarea');
+    for (let xx of allta)
+    {
+        allt[allt.length] = xx;
+    }
+    let alltextinput = document.getElementsByTagName('input'); 
+    var isassign = true;//(typeof(detailass) !='undefined');
+    if (isassign)
+    {
+        for (let xx of alltextinput)
+        {
+            if (xx.type.toLowerCase() == 'text' && xx.name.replace(/q[0-9]+_[0-9]+/,'') == '')
+                allt[allt.length] = xx;
+        }
+    }
+    if(allt.length == 0) return;
+    for (let k=0; k < allt.length; k++)
+    {
+        let ele = allt[k];
+        if (ele2focus[uniqueid(ele)]!=null) 
+            return;
+        if (typeof (ele.onfocus) == 'function')
+        {
+            ele2focus[uniqueid(ele)] = ele.onfocus;
+            ele.onfocus = function()
+            {
+                if (ele2focus[uniqueid(this)]!=null)
+                    ele2focus[uniqueid(this)]();
+                onlinetoolbarfollow(this);
+            };
+        }
+        else 
+        {
+            ele2focus[uniqueid(ele)] = onlinetoolbarfollow;
+            ele.onfocus = function()
+            {
+                onlinetoolbarfollow(this);
+            };
+        }
+    }
+    if (onlinetoolbarhas == false)
+    try{
+       onlinetoolbarfollow(allt[0]);
+       onlinetoolbarhas = true;
+    }catch(e)
+    {
+       console.log('make bar error');
+    }
+        
+}
  
-function onlinetoolbarsearch(ele)
+function onlinetoolbarsearch_old(ele)
 {
     
     if (ele == null || ele.tagName == null)
@@ -790,11 +845,7 @@ function onlinetooladjust0(ele)
             onlinetooladjust0(eles[i]);
     }
 }
-function onlinetooladjust()
-{
-    var toolbar = document.getElementById("thetoolbar");
-  //  onlinetooladjust0(toolbar);
-}
+ 
 function initmini()
 {
     if (onlinetoolbase == null) 
@@ -807,19 +858,29 @@ function initmini()
     onlinetoolbase.style.width = "20px";
      
 }
-var oldonloadtool = window.onload;
+function rebuild(course,sessionname, subdb)
+{
+    postopen('follows.jsp',  'x,course,sessionname,subdb'.split(/,/),["rebuildtool", course,sessionname,subdb],'w'+tstmp);
+}
+function rebuildcallback(s)
+{
+     document.body.removeChild(onlinetoolbase);
+     onlinetoolbarmake(s);
+     onlinetoolbarfollow(onlinetooltextarea);      
+}
+
+
+var onloadbeforetool  = null;
+if (typeof window.onload == 'function')
+onloadbeforetool= window.onload;
 window.onload = function()
 {
     try{ 
-    if (oldonloadtool!=null)   
-        oldonloadtool();
+    if (onloadbeforetool!=null)   
+        onloadbeforetool();
     }catch(e){}
     onlinetoolbarinit();
-    
-    if (onlinetoolbarhas)
-    {
-        if (navigator.appName.indexOf("Explorer") >= 0)  onlinetooladjust();
-    }  
+  
 }
 
  
