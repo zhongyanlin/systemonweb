@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Myid</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body> 
+        My Did: <input id="myid" onload="getv(this)">  <input type="button"  name="submit" value ="Fetch score" onclick="fetch()" >
+<script>
+function setCookie(name,value,days) 
+{
+    var expires = "";
+    if (days) 
+    {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getv(t)
+{ var y = localStorage['mysid'];
+ if (y != null)
+ {
+      t.value = y;
+  }
+  else t.value = 'Enter you Did';
+ 
+ }
+function fetch()
+{
+   let myid = document.getElementById('myid').trim();
+   if (myid.replace(/D10[0-9]{6}/,'') != '')
+   {
+       alert('Incorrect Did'); return;
+   }
+    setCookie('myid',myid, 100);
+    document.location.href = document.location.toString().replace(/backup.*$/,'backup?code=score&id=' + myid);
+}
+</script>
+</body>
+</html>
