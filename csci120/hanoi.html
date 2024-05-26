@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+        <style>
+            .layer{
+                position:absolute;
+                background-color: pink;
+                border-radius:5px;
+            
+         }
+         </style>
+         <style id="dynamic">
+        @keyframes diskmove
+        {
+            0%{left:100px;top:200px}
+            100%{left:400px;top:500px}
+        }
+        </style>
+    </head>
+    <body>
+       Number of Disks<select id=numdisks></select>
+<input type=button id=startbtn value="Start" class=butlooking onclick="startgame()"
+ onmouseenter="showhint('select number of disks then click this button to start','start')"
+ onmouseout="hidehint('start')">
+
+<input type=button id=pausebtn value="Pause" class=butlooking onclick="pausegame()"
+ onmouseenter="showhint('pause the game','pause')"
+ onmouseout="hidehint('pause')">
+ 
+
+TIme Period<select id=period></select>
+
+       <script src="../js/Drag.js"></script>
+      <script src="hanoi.js"></script>
+ <script>
+
+</script>
+     
+      
+      
+       
+    </body>
+</html>

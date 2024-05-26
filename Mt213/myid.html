@@ -4,6 +4,7 @@
         <title>Myid</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     </head>
     <body> 
         My Did: <input id="myid" onload="getv(this)">  <input type="button"  name="submit" value ="Fetch score" onclick="fetch()" >
@@ -30,7 +31,7 @@ function getv(t)
  }
 function fetch()
 {
-   let myid = document.getElementById('myid').trim();
+   let myid = document.getElementById('myid').value.trim();
    if (myid.replace(/D10[0-9]{6}/,'') != '')
    {
        alert('Incorrect Did'); return;
