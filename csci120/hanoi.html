@@ -28,9 +28,13 @@
  onmouseout="hidehint('start')" >
 
 <input type=button id=pausebtn value="Pause" class=butlooking onclick="pausegame()"
- onmouseenter="showhint('pause the game','pause')"
+ onmouseenter="if (this.value=='Pause') showhint('pause the game','pause');else showhint('Resume the game','pause');"
  onmouseout="hidehint('pause')" >
- 
+
+<input type=button id=stopbtn value="Stop" class=butlooking onclick="stopgame()"
+ onmouseenter="showhint('stop the game','stop')"
+ onmouseout="hidehint('stop')" >
+
 
 TIme Period<select id=period></select>
  

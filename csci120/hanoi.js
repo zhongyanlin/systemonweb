@@ -187,6 +187,8 @@ function startgame()
    	let nd=s.options[s.selectedIndex].value;
 	N=parseInt(nd);
 	tower(N);
+        move(N,0,1,2);
+        orderOfInstructions = 0;
 	moveasch();
 }
 function readtime()
@@ -206,7 +208,16 @@ function moveasch()
         handle = setTimeout(moveasch, n*1000);
     }
 }
-
+function stopgame()
+{
+    let b = document.getElementById('pausebtn'); 
+    if (b.value === 'Pause')
+    {
+        clearTimeout(handle);
+    }
+    b.value = 'Pause';
+    
+}
 function pausegame()
 {
     let b = document.getElementById('pausebtn');
