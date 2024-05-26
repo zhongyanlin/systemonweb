@@ -48,7 +48,7 @@ function tower(n)
     for(let i=0;i<n;i++)
     {
         let disk=document.getElementById('layer'+i);
-        Drag.init(disk);
+   //     Drag.init(disk);
     }
     
 }
