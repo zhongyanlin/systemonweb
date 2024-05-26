@@ -41,6 +41,18 @@ function layer(n,i)
 
 function tower(n)
 {
+    let t, j=0;
+    while (( t = My.$('layer' + j))!=null)
+    {    
+        document.body.removeChild(t);
+        j++;
+    }
+    j = 0;
+    while (( t = My.$('pillar' + j))!=null)
+    {    
+        document.body.removeChild(t);
+        j++;
+    }
     for(let i=0;i<n;i++)
         layer(n,i);
     for(let i=0;i<3;i++)
@@ -108,9 +120,7 @@ function move(n,source,destin,temp)
 //My.println(p[0]+"-->"+p[1]);
 
 let stack=[];
-stack[0]=[];for(let i=0;i<N;i++)stack[0].push(i);
-stack[1]=[];
-stack[2]=[];
+
 //move(1,2)means:disk poped from 1,read out its (x0,y0)
 //read out(x1,y1)from top of pier 2
 //push the disk to the pier 2
@@ -148,20 +158,12 @@ let kftext="@keyframes diskmoveK{0%{left:X;top:Y}\n30%{left:X;top:0px}\n70%{left
     disk.style.left=x1;
     disk.style.top=y1;
 }
-//movedisk(0);
-//for(let i=1;i<instructions.length;i++)
-//setTimeout('movedisk('+i+')',i*1010);
-
-
+ 
 let s =document.getElementById('numdisks');
-
 for(let n=0; n<=8;n++)
      s.options[n]=new Option(n+2,n+2);
- 
 s.selectedIndex=0;
-
 s=document.getElementById('period');
-
 for (let n=0; n <=5; n++)
 s.options[n]=new Option((1+n)*0.5,(1+n)*0.5);
 
@@ -187,6 +189,11 @@ function startgame()
    	let nd=s.options[s.selectedIndex].value;
 	N=parseInt(nd);
 	tower(N);
+        stack[0]=[];
+        for(let i=0;i<N;i++)stack[0].push(i);
+        stack[1]=[];
+        stack[2]=[];
+        instructions = [];
         move(N,0,1,2);
         orderOfInstructions = 0;
 	moveasch();
