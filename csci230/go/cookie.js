@@ -2927,7 +2927,7 @@ function CSVParse()
                 }
             }
         }
-        var s = '<table border=1 style="border-collapse:collapse" >';
+        var s = '<table border=1 style="border-collapse:collapse"  cellpadding=3 >';
         for (var i = 0; i < x.length; i++)
         {
             s += "<tr>";
