@@ -1,0 +1,63 @@
+<html>
+<body>
+<h3>edqaa Backup</h3>
+<h1> Check Grades</h1>
+Enter your Did to check out your grades:
+<input id=did onload=loadold(this)><input type=button value=Checkout onclick=fetch()>
+<script>
+function loadold(t)
+{
+      let old = localStorage['mydid'];
+      if (old!=null)
+           t.value = old;
+}
+function fetch() {
+    
+    var xhr = new XMLHttpRequest();
+    url = document.location.toString().replace(/backup.html/,"scores.txt");
+alert(url);
+    xhr.open('GET', url, true);
+
+    // Set up a function that is called when the request is completed
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+           
+            filter(xhr.responseText);
+        } else {
+             
+            console.error('Request failed: ' + xhr.statusText);
+        }
+    };
+
+    // Set up a function that handles any errors that occur during the network request
+    xhr.onerror = function () {
+        console.error('Request failed to reach the server.');
+    };
+
+    // Send the request
+    xhr.send();
+}
+
+// This is your filter function that processes the data
+function filter(data) {
+     let did = document.getElementById('did');
+     localStorage['mydid'] = did;
+     let j, i = 0;
+     while (true)
+     {
+          j = data.indexOf(did,i);
+          if (j < 0) break;
+          let k = data.indexOf('\n',j);
+          if (k ==-1) 
+          {
+              document.write(data.substring(k));
+              break;
+          }
+          else
+              document.writeln(dat.substring(j,k) + '<br>');
+          i = k+1;
+     }
+}
+</script>
+</body>
+</html>
