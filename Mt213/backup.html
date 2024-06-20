@@ -12,10 +12,11 @@ function loadold(t)
            t.value = old;
 }
 function fetch() {
-    
+      let did = document.getElementById('did');
+    if (did.value === '') {alert('enter your Did'); return;}
     var xhr = new XMLHttpRequest();
     url = document.location.toString().replace(/backup.html/,"scores.txt");
-alert(url);
+ 
     xhr.open('GET', url, true);
 
     // Set up a function that is called when the request is completed
