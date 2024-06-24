@@ -133,7 +133,7 @@ function parse(cl)
     }
         
     let m = (new CSVParse(source,'"',delimiter,'\n')).nextMatrix();
-    let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase>';
+    let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase cellpadding=4 >';
     if (m.length <2) return;
     let l = 1; for ( ; l < m[1].length; l++)
        if( m[1][l]!=null && (cl==0 && m[1][l].replace(/ /g,'')=='' ||  ''+ parseFloat(m[1][l].replace(/ /g,'')) != 'NaN'))

@@ -1,0 +1,49 @@
+Session:	35-120-N2	
+Instructor:	Zhongyan Lin	
+Time:	06/24/24 16:49	
+ID	Last Name	First Name	Grade	%
+D10694080	Qu	Dongbo	A	89
+D10755504	Bai	Junfu	C	70
+D10755508	Chen	Wenjie	C	75
+D10755511	dai	yilun	C	73
+D10755514	Ding	Jiali	A	88
+D10755521	He	Peng	C	73
+D10755524	hu	yubin	F	37
+D10755527	Huang	xiaofeng	C	71
+D10755538	Li	Fengdu	D	64
+D10755540	Lin	Aiying	B	86
+D10755552	Sha	Yuhan	C	77
+D10755554	Shen	Xiyan	A	90
+D10755555	Shen	Entong	B	86
+D10755556	shen	yuhao	F	55
+D10755567	Wang	xin	C	75
+D10755568	Wang	Yipeng	A	90
+D10755569	Wang	Wenjie	A	89
+D10755570	Wang	Jiahui	C	77
+D10755575	Wu	Yuhan	C	73
+D10755577	Wu	Ziyou	A	90
+D10755580	Nuo	Xu	B	87
+D10755581	Xu	Hao	A	94
+D10755583	Yang	Jiawen	A	91
+D10755584	Ye	Lihao	C	74
+D10755586	Yu	Yuhan	A	93
+D10755587	yu	yongkang	B	81
+D10755589	Yue	Xiaotian	A	90
+D10755590	Zeng	Shuai	C	78
+D10755592	zhang	boyang	B	85
+D10755593	Zhang	Haoyi	B	80
+D10755594	zhang	hao	C	76
+D10755595	Zhang	Qi	A	94
+D10755599	Zheng	Zhekai	C	72
+D10755600	Cai	Zhijie	A	89
+D10755601	Zhong	Shirun	A	88
+D10755603	Zhu	Zhicheng	C	78
+D10755613	Gu	Shiyu	B	85
+D10755621	Li	Siting	C	77
+D10755626	wang	xinyuan	C	73
+D10755631	Qiu	Yuchen	C	70
+D10755647	Du	Nuanxin	A	91
+D10755649	Huang	Yikai	C	78
+D10755665	Liu	Chuning	F	51
+D10755736	Gao	Yile	F	19
+D10758352	yang	Xiangjun	B	86

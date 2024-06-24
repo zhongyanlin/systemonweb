@@ -1,0 +1,55 @@
+Session:	35-212-N1	
+Instructor:	Zhongyan Lin	
+Time:	06/24/24 16:55	
+ID
+Last Name
+First Name
+Grade
+%
+D10747428	Chen	Yiwei	B	85
+D10747473	Cai	Jiaxuan	C	73
+D10747474	Cao	Kewei	B	81
+D10747479	Chen	Jiacong	B	80
+D10747480	Chen	Haotian	C	77
+D10747481	Chen	Zanhang	C	72
+D10747489	Ding	Zhehao	B	83
+D10747497	Fang	Tianyi	C	77
+D10747499	Fang	Yichun	A	90
+D10747507	Gong	Zheng	B	80
+D10747512	He	Li	C	76
+D10747521	Jiang	Hongyi	B	84
+D10747530	Li	Junlai	B	85
+D10747532	Li	Jinjiang	B	89
+D10747533	Lin	Xin Jue	F	45
+D10747535	Liu	Tianyu	B	88
+D10747538	Lu	Yulin	B	81
+D10747539	Lv	Yuanyuan	B	88
+D10747540	Ma	Tianze	B	84
+D10747550	Ou	Bingchen	B	82
+D10747552	Ren	Hanyu	B	85
+D10747555	Shen	Feng	B	83
+D10747556	Shen	Shihao	B	81
+D10747557	Shen	Shuning	B	83
+D10747568	Wang	Huaxin	B	80
+D10747574	Wang	Jingjing	C	70
+D10747576	Wang	Zijian	C	79
+D10747577	Wang	Tingxuan	B	88
+D10747584	Wu	Jianan	B	84
+D10747587	Xu	Haoyu	B	89
+D10747589	Xu	Yujia	C	79
+D10747591	Xu	Tao	B	85
+D10747592	Xu	Yulun	B	81
+D10747593	Yang	Zhaoyi	C	72
+D10747596	Yao	Yunlong	C	71
+D10747597	Ye	Qinglin	C	78
+D10747599	Ying	Yancheng	C	78
+D10747601	Yu	Chengyin	C	78
+D10747602	Yuan	Chengyang	B	83
+D10747605	Zhang	Maihao	C	79
+D10747606	Zhang	Zhiming	B	81
+D10747609	Zhao	Jiayu	B	87
+D10747612	Zheng	Jitong	C	72
+D10747617	Zhu	Chengjie	B	88
+D10747618	Zou	Jiale	C	74
+D10748136	Wang	Jiaye	D	62
+D10748485	Fang	Jiawei	B	81

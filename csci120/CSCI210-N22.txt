@@ -1,0 +1,57 @@
+Session:	35-212-N2	
+Instructor:	Zhongyan Lin	
+Time:	06/24/24 16:56	
+ID
+Last Name
+First Name
+Grade
+%
+D10747468	Bao	Feiyu	C	78
+D10747469	Bao	Yeyunchao	B	84
+D10747476	Chen	Zhebin	B	83
+D10747477	Chen	Hanyue	B	85
+D10747491	Duan	Shengyu	C	78
+D10747494	Fan	Xiaoyu	B	89
+D10747496	Fan	Shuhan	C	74
+D10747498	Fang	Zhecheng	B	82
+D10747502	Gao	Xibo	C	79
+D10747505	Ge	Yanzhe	B	87
+D10747511	Guo	Yike	B	82
+D10747513	He	Fangting	C	71
+D10747514	He	Hangbin	C	73
+D10747516	Huang	Siyi	B	83
+D10747518	Ji	Yuchen	A	90
+D10747519	Jiang	Zhicai	C	73
+D10747520	Jiang	Hong	B	83
+D10747523	Kong	Youan	B	80
+D10747528	Li	Chen	B	86
+D10747529	Li	Tao	C	77
+D10747536	Lu	Ning	B	84
+D10747537	Lu	Hongjie	B	86
+D10747543	Meng	Jiahao	D	63
+D10747563	Sun	Xiang	B	85
+D10747564	Sun	Kaidong	B	83
+D10747569	Wang	Xiayu	B	80
+D10747570	Wang	Lijia	C	72
+D10747571	Wang	Zihao	C	77
+D10747572	Wang	Zhenchen	B	81
+D10747573	Wang	Peiyi	B	81
+D10747575	Wang	Jusheng	B	85
+D10747585	Xiang	Jiale	C	78
+D10747586	Xu	Zhouhang	B	81
+D10747588	Xu	Qian	C	70
+D10747590	Xu	Ruijie	B	82
+D10747594	Yang	Yanwen	C	78
+D10747595	Yao	Chengqi	C	72
+D10747598	Ye	Xukai	C	77
+D10747600	Yu	Mengjie	B	84
+D10747603	Yujie	Gu	A	90
+D10747604	Zhai	Xuan	C	76
+D10747607	Zhang	Yilin	C	78
+D10747608	Zhang	Tengfei	B	81
+D10747610	Zheng	Luyao	C	77
+D10747611	Zheng	Jiayang	B	84
+D10747613	Zhong	Kaiyi	C	75
+D10747614	Zhou	Tianqing	C	76
+D10747615	Zhu	Zhiqing	C	78
+D10747616	Zhu	Yepeng	C	75
