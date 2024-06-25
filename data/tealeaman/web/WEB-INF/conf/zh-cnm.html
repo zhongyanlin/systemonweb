@@ -1,0 +1,55 @@
+办公室电脑用户在设计编辑笔填表时经常用下划线字符串（如_______) 来标示填空处。本程序就是为你转换这样设计编辑的笔填表成为网上可填表。表的原文件可以是HTML格式的网页文件、文本文件或纸质表的影像文件。
+为此，转换前请做如下预处理：若表文件是微软Word的doc文件，则在Word中将文件另存为HTML网页文件，若表文件是PDF文件，则到 <a href="http://access.adobe.com/access" target="_blank">http://access.adobe.com/access</a> 上将PDF文件转换为HTML网页文件。你也可用本程序提供的简便的网页编辑器来即时地编辑一张HTML文件的表（按新加选定名号后你会看到一个“当即设计”按纽)。
+如果原表是纸质的，你简单地用手机照一个像，保存为通常的图像文件备用。
+
+<br><br><center><h2>转换规则</h2></center><ol>
+
+
+<li>其格式象<b>（1=差, 2=好）</b>一样的、逗号分隔的选项集将会被转换为一组象 <b> <nobr><input type=radio name=r>差</nobr>  <nobr><input type=radio name=r>好</nobr> </b> 一样的单选圈， 随后的下划线字符串（可能有多串）将被这组单选圈替代, 
+直到下划线字符串的字符个数改变为止。
+<li>其格式象<br>&nbsp;&nbsp;<b>（1=差<br>&nbsp;&nbsp; 2=好）</b><br>一样的、换行符分隔的选项集、或格式象<b>（1=差 / 2=好）</b>一样的前斜线分隔的选项集将会被转换为一个象 <b><select style="font-weight:690;border:1px #3399cc solid"><option value=1>差</option> <option value=2>好</option></select></b> 一样的的下拉菜单, 
+随后的下划线字符串（可能有多串）将被这个下拉菜单替代, 直到下划线字符串的字符个数改变为止。
+<li>如果没被上述选择圈/框替代, 两个下划线字符，即__ ，将会被转换为一个象 <input type=checkbox>一样的复选框。
+<li>如果没被上述选择圈/框替代, 方括弧包住的两个以上的下划线字符，如[__________________], 将会被转换成象下面一样的多行文本输入区<br><textarea rows=2 cols=23 style="border:1px  #3399CC solid"></textarea>
+
+<li>如果没被上述选择圈/框替代, '@'字符包住的两个以上的下划线字符，如@_______________@, 将会被转换成随附文件小助件，象 <font color=blue>&oplus; file1.jpg &ominus;</font>，点击它们可启动随附、打开和删除文件的功能
+<li>如果没被上述选择圈/框替代, 不带方括弧和@的两个以上的下划线字符, 如____________, 将被转换为一个象 <input name=a width=8 style="border:1px  #3399CC solid"> 一样的的单行文本输入框，长度随下划线字符个数而定。 
+<li>包含连续两个以上空格的、但不含下划线字符串的格子阵（HTML table)会被转变为自动加行的可填格子阵。</ol>
+
+ 
+假如，你有一张Word版的、准备打印出来供人笔填的、名为“临时工作申请表”的表，你只要把它编辑成下面左边的样子，它就可被转换为右边的网上可填表。
+
+<br><br>
+<table id=example align=center>
+<tr><td width=300 align=center valign=top bgcolor=wheat>
+ 
+<h2>临时工作申请表</h2>
+<table><tr><td>1. </td><td>姓名</td><td>______________</td></tr>
+<tr><td>2. </td><td>性别</td><td>(1=男, 2=女)___</td></tr>
+<tr><td>3. </td><td>原籍</td><td>(北京/天津/其他)____</td></tr>
+<tr><td>4. </td><td>现住</td><td>____</td></tr>
+<tr><td valign=top>5. </td><td valign=top><nobr>工作简历</nobr></td><td>[_____________________]</td></tr>
+<tr><td valign=top>6. </td><td valign=top>教育</td><td><table border=1 style="border-collapse:collapse;border:1px lightblue solid;background-color:white"><tr><td width=80><nobr>学校</nobr></td><td><nobr>时间段</nobr></td><td><nobr>文凭</nobr></td></tr> <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></td></tr>
+<tr><td>7. </td><td>可上夜班</td><td>__</td></tr>
+<tr><td>8. </td><td>头像</td><td>@________________@</td></tr>
+
+</table>
+</center>
+</td><td width=300 align=center  bgcolor=wheat>
+<h2>临时工作申请表</h2>
+<table> <tr><td>1. </td><td>姓名</td><td><input size=8></td></tr>
+<tr><td>2. </td><td>性别</td><td><input type=radio  style=background-color:transparent  name=r1 value=1>男  <input type=radio  style=background-color:transparent name=r1 value=2>女</td></tr>
+<tr><td>3. </td><td>原籍</td><td><select name=s1><option  value="北京">北京</option> <option value="天津">天津</option><option value="其他">其他</option></select></td></tr>
+<tr><td>4. </td><td>现住</td><td><select name=s1><option  value="北京">北京</option> <option value="天津">天津</option><option value="其他">其他</option></select></td></tr>
+<tr><td valign=top>5. </td><td valign=top><nobr>工作简历</nobr></td><td><textarea name=t1 rows=3 cols=18></textarea></td></tr>
+<tr><td valign=top>6. </td><td valign=top>教育</td><td><table border=1 style="border-collapse:collapse;border:1px lightblue solid;background-color:white" ><tr><td width=80>学校</td><td><nobr>时间段</nobr></td><td><nobr>文凭</nobr></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></td></tr>
+<tr><td>7. </td><td><nobr>可上夜班</nobr></td><td><input  style=background-color:transparent type=checkbox></td></tr>
+<tr><td>8. </td><td>头像</td><td><font color=blue>&oplus;  &ominus; </font></td></tr>
+
+</table>
+<input type=button value="提交" style="color:white;background-color:teal">
+</center>
+</td></tr>
+</table>
+<br>
+ 解释：因为第4项的下划线字符个数和第3项的一样，都是4个，但小于第5项的，按照转换规律第二条，第3项生成的地址下拉菜单也替代第4项的下划线字符串, 但不会替代第5项的。

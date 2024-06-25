@@ -169,6 +169,7 @@ function parse(cl)
     matchbtn.style.display = 'inline';
     if ($('tbl0')!=null)
         swapbtn.style.display = 'inline';
+    colorcol();
 }
 let pairb = -1, pairg = -1;
 let clickedcellb = null, clickedcellg = null;
@@ -372,18 +373,54 @@ function redomatch(sel)
     match();
 }
 let mapcol = {};
+function colorcol()
+{
+    let tbl0 = $('tbl0'), tbl1 = $('tbl2');
+    if (tbl0 === null || tbl1 === null) return;
+    for (let i =0; i < tbl0.rows[0].cells.lengh; i++)
+        tbl0.rows[0].cells[i].style.color ='grey';
+    for (let i =0; i < tbl1.rows[0].cells.lengh; i++)
+        tbl1.rows[0].cells[i].style.color ='grey';
+    if (matcol1[0]!=null){
+    tbl0.rows[0].cells[matcol1[0]-1].style.backgroundColor = '#444444';
+    tbl1.rows[0].cells[matcol2[0]-1].style.backgroundColor = '#444444';
+    }
+    if (matcol1[1]!=null){
+        tbl0.rows[0].cells[matcol1[1]-1].style.backgroundColor = '#555555';
+        tbl1.rows[0].cells[matcol2[1]-1].style.backgroundColor = '#555555';
+    }
+}
 function matchcol()
 {
-    let xy = prompt("Enter 1st pair of matching columns like this 2 1:\n here 2 is the column on the left and 1 the column on the right","2 1");
+    let str = "2 1";
+    let hint = "Enter 1st pair of matching columns like this 2 1:\n here 2 is the column on the left and 1 the column on the right";
+    if (matcol1.length>0)
+    {    
+        str = matcol1[0] + " " + matcol2[0];
+        hint = "Enter 1st matching column pair";
+    }
+    let xy = prompt(hint,str);
     let xys = xy.split(/ /);
     matcol1[0] = parseInt(xys[0]);matcol2[0] = parseInt(xys[1]);
     mapcol[matcol1[0]] = matcol2[0];
-    xy = prompt("Enter  2nd pair of matching columns like this 1 2:\n here 1 is the column on the left and 2 the column on the right\nIf none, Cancel","1 2");
+    
+    str = "1 2";
+    hint = "Enter  2nd pair of matching columns like this 1 2:\n here 1 is the column on the left and 2 the column on the right\nIf none, Cancel";
+    if (matcol1.length>1)
+    {    
+        str = matcol1[1] + " " + matcol2[1];
+        hint = "Enter 2nd matching column pair";
+    }
+    
+    xy = prompt(hint,str);
     if (xy!=null)
-    {  xys = xy.split(/ /);
+    { 
+        xys = xy.split(/ /);
         matcol1[1] = parseInt(xys[0]);matcol2[1] = parseInt(xys[1]);
         mapcol[matcol1[1]] = matcol2[1];
+        
     }
+    colorcol();
 }
 let matcol1 = [], matcol2 = [];
 function match()
@@ -424,18 +461,18 @@ function match()
              let count = 0; 
              let isemail = false;var j; 
              let d100 = false;
-             for (j=0; j < bi; j++)
+             for (j=0; j < b[0].length; j++)
              {
-                if (!matcol1.includes(j)) continue;
-                let k = mapcol[j];
+                if (!matcol1.includes(j+1)) continue;
+                let k = mapcol[j+1]-1;
                 //for (let k=0; k < gi; k++)
                 {
-                   if (b[m][j].toLowerCase() == g[i][k].toLowerCase())
+                   if (b[m][j].toLowerCase().trim() == g[i][k].toLowerCase().trim())
                    {    
                        count++;
                        if (b[m][j].indexOf("@")>0 && b[m][j].indexOf(".")>0)
                            isemail = true;
-                       else if (b[m][j].replace(/D[0-9]+/,'') === '') d100 = false;
+                       else if (b[m][j].replace(/D[0-9]+/,'') === '') d100 = true;
                       // console.log(b[m][j].toLowerCase() + ' == ' +  g[i][k].toLowerCase());
                    }
                    //else  console.log(b[m][j].toLowerCase() + ' != ' +  g[i][k].toLowerCase());
@@ -578,7 +615,7 @@ function match()
     }
     for (let j=0; j < gi; j++)
     {
-        s += '<td align=left><nobr>' + (g[0][j]==null?"":g[0][j]) + '</nobr></td>';
+        s += '<td align=left ><nobr>' + (g[0][j]==null?"":g[0][j]) + '</nobr></td>';
     }
     for (let j=gi; j < maxm; j++)
     {
@@ -638,7 +675,7 @@ function match()
     headingset.style.display = 'inline';
     //$('merge').enabled = true;
     //$('discard').enabled = true;
-    
+    colorcol();  
 }
 function showdup(mark, i)
 {

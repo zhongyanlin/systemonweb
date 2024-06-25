@@ -1,0 +1,13 @@
+Web Form Center is a system on web that allows ordinary computer users such as secretaries, teachers, managers, administrators, or researchers who don't have training in web development to be able to make web forms quickly. User can create web forms from scratch or from templates, or convert their existing Microsoft Word forms or PDF forms to web forms. Web databases are connected, and routines for storing, reviewing, searching, displaying, updating, removing, and migrating form data with full access controls are generated automatically. Optionally, routines for analyzing data can be developed. The Web Form Center allows companies and organizations to get rid of their paper forms quickly at the minimum cost.
+|Paper Form|Web Form
+Cost effectiveness|costs money to print|utilizes idle severs
+Data input|needs a printer|supports iphone
+Editability|uses non-removable ink|is editable
+Readability|gets unreadable handwritings|uses printing fonts
+Extendability|uses fixed spaces|is automatically adjustable
+Form processing|is very slow|is very Fast
+Data availablity|is used from one place|can be used anywhere
+Searchability|supports menual search only|supports Internet search
+Maintainability|generates a big volume to keep|is easy to backup
+Are there so many reasons to use paper form  instead of web form?  
+         

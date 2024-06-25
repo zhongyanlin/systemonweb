@@ -1,0 +1,61 @@
+TeaLeaMan File Synchronization and Backup
+Sel
+Local Folder
+Direction
+Web/Local Mirror
+Time Diff
+Filter
+Days
+Time
+Scheduled
+Select rows to perform functions invoked by button click
+The path of the local folder you want to copy files from or to. 
++Click 'Choose Folder' to fill out this field
+'F1 >>>> F2' means that most recent files in F1 will be copied to F2. 
++<<>> means that both folders will get most recent files
+The path of the web or local folder you want to copy files from or to. 
++Click 'Choose Folder' to choose local folder. A web folder is a 
++subfolder of your TeaLeaMan root web folder, such as "lecture". 
++"/" denotes your web root folder. 
+If the difference between the timestamp of a file and the timestamp 
++of the file with the same name in the mirror is greater than this 
++number of seconds, the newer file will override the old one.
+Only copy files whose name  contains  this string
+Days in a week when file synchronization and back-up occur
+Time on the specified days when file synchronization and back-up occur
+Indicating if this item is successfully scheduled
+Web/Local File Synchronization and Local File Back-up
+User
+Web File Server
+Choose Folder
+Set Schedule
+Cancel Schedule
+Synchronize Now
+Stop Process
+files copied
+Error: the local folder is blank
+Error: the web/Local Mirror is blank
+Error: 
+ contains invalid character. User alphabets and digits only for naming web folders
+does not exist
+is not an number for seconds
+is invalid. Days should be digits in [0,6] separated by comma
+is an invalid time format. Valid time format is a military time such as 13:59
+Doing 
+Please wait...
+No row has been selected
+Error: Incorrect days format: 
+The scheduled file synchronization or backup has been canceled.
+To cancel the scheduled task,  edit the /etc/crontab to remove lines that contain
+To set the scheduled task,     edit the /etc/crontab to contain lines:
+Error: no file uploaded because the zipped files exceeds the limit of 2MB. Because only limited space is available on the web server, please upload minimum number of files. Use filter to split the volume.
+ files uploaded. 
+ files downloaded. 
+Keep File Set
+True or False. True: no new file created and files only get updated.
++False: Files in source folder will be copied to the destination folder if they are
++not in the destination folder.
+Field
+Explanation
+  
+

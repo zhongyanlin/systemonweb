@@ -1,0 +1,1697 @@
+   0 utf-8 
+   1 Please complete now 
+   2 Please complete ASAP
+   3 Notify 
+   4 Form Converter
+   5 Please note that your test score will be initiated to zero on the server once your start the test and you can only update the score by submitting your answers. TeaLeaMan allows you to start the test only once. Therefore, if you quit the test, your score will remain zero.
+   6 Start
+   7 You have already completed this item.  
+   8 The test is overdue and closed. The questions are not open for review.  Due:
+   9 New User?
+  10 Sign Up
+  11 Session time out. Please relogin.
+  12 Test/Use Web Application Service
+  13 Mandatory
+  14 Name
+  15 Title
+  16 Roles
+  17 System
+  18 Instructor
+  19 Student
+  20 Public
+  21 Format
+  22 Table
+  23 Form
+  24 Text
+  25 Picker
+  26 Long Form
+  27 Query
+  28 Insert
+  29 Update
+  30 Delete
+  31 Tools
+  32 Help
+  33 Exec
+  34 New
+  35 SaveAs
+  36 Save
+  37 Search
+  38 Table
+  39 Login
+  40 Change
+  41 Description
+  42 Size
+  43 Online Form Center
+  44 Form Model Show
+  45 special users
+  46 Apply
+  47 Incorrect course id
+  48 Grading:  Grading Submitted Assignment/Tests 
+  49 Submitted Assignment/Tests
+  50 Question
+  51 Submit
+  52 Cached Quick Link
+  53 Answer
+  54 Review
+  55 Send
+  56 Server Agent:  Web Server Agent
+  57 id is present
+  58 Instant Message
+  59 You have been removed from the waiting queue.
+  60 Instant Messaging:  Instant Message
+  61 The size of the waiting queue:
+  62 Please wait.
+  63 Wait
+  64 Leave
+  65 Resource Management
+  66 Teaching Resources
+  67 Name
+  68 Home Folder
+  69 Weight
+  70 Transplant
+  71 Operation successful
+  72 operation failed
+  73 Decrypt
+  74 Server Agent
+  75 Error Message
+  76 Connect
+  77 select query is empty
+  78 Backup
+  79 The file size exceeds the maximum uploading size on this server:
+  80 Restore
+  81 can NOT be uploaded
+  82 Close
+  83 Number of Records
+  84 The backup file may have collapsed because the Checksum failed in the record
+  85 invalid start:
+  86 invalid char: 
+  87 invalid number:
+  88 Empty query.
+  89 Rename
+  90 Renaming failed. Target file
+  91 may exist
+  92 Failed to copy  the following files or folders:
+  93 Refresh
+  94 Failed to move the following files or folders
+  95 Failed to delete the following files or folders
+  96 Failed to create a new folder.
+  97 mkdir
+  98 Failed to Save file
+  99 is not a zip file
+ 100 The file can not be unzipped. This is possibly because the zip program you used to zip the file does not match the unzip program in this system. Right mouse click to download this zip program to zip you folders and files.
+ 101 For Save
+ 102 File name was not specified.
+ 103 Could not get file name
+ 104 You don't have the privilege to run this query
+ 105 There is no routine name
+ 106 was not passed in
+ 107 not permitted.
+ 108 An account with the same id exists already
+ 109 Failed to create a database
+ 110 Duplicate id
+ 111 File collapsed
+ 112 No such a record
+ 113 Database error
+ 114 Admin Login
+ 115 Incorrect ID
+ 116 Incorrect password
+ 117 Connection failed. Check database server and password
+ 118 Need to relogin
+ 119 Failed to create a ODBC source
+ 120 Incorrect Login Information.
+ 121 Details
+ 122 Please change password in
+ 123 Illegal Access.
+ 124 Cannot instantiate a driver classes.
+ 125 Cannot find the database driver classes.
+ 126 Cannot connect to this database.
+ 127 There is no database to execute the query.
+ 128 Connection failed.
+ 129 Web Java Compilation
+ 130 Java Compilation
+ 131 Empty source. The name of parameter for source has to be 'source' or 'content'
+ 132 There is no  class name
+ 133 Server Agent
+ 134 The permission of execution of programs is not granted by the system administrator.
+ 135 Duplicate letter of choice was found:
+ 136 No question   number was found
+ 137  is not among the choices for question  
+ 138 There is no answer to question number
+ 139 Time Remaining
+ 140 The following question  has no answer choice
+ 141 This assignment/test does not comply with the format of fixed-format test. 
+   + The syntax rule for making fixed-format test:\n1.Order questions numerically (1, 2, 3...).
+   + \n2.Order answer choices alphabetically (a, b, c, ...A, B, C...).\n3.
+   + The ordering numbers or letters are the leading character in the line
+ 142 This assignment/test does not have the format of fixed-format test. Tell your instructor this message
+ 143 Update Database Records
+ 144 Debug
+ 145 row(s) Updated
+ 146 To migrate a database, i.e, change a Relation Database Management System, back up the whole 
+   + database first to generate a back-up file, then ask the system administrator to change your database server, 
+   + finally restore the database from the back-up file to the new server.
+ 147 Closed
+ 148 The following commands and application programs are allowed to be executed by registered users
+ 149 is not permitted to execute on the server
+ 150 Created folder:
+ 151 Re 
+ 152 Failed to zip
+ 153 Failed to Save file.
+ 154 Please wait while the server is processing your request
+ 155 Upload File
+ 156 Session time out. Please relogin and repeat the uploading task
+ 157 File path has not been specified.
+ 158 can NOT be uploaded
+ 159 File name was not specified
+ 160 Empty file
+ 161 Could not get file name
+ 162 Instructor Password
+ 163 StudentID
+ 164 Password
+ 165 System Configuration
+ 166 's Definition
+ 167 Routines of Data Presentations
+ 168 Optional
+ 169 Cancel
+ 170 Colors
+ 171 File Folders
+ 172 Registration Policy
+ 173 Database
+ 174 Server Agent
+ 175 User Login 
+ 176 Instructor User Account Management
+ 177 System Configuration
+ 178 Why Web Form
+ 179 Textbox
+ 180 TextArea
+ 181 Radios
+ 182 Checkbox
+ 183 Table
+ 184 WebPage
+ 185 Image
+ 186 Hidden
+ 187 Design
+ 188 FieldName: Or field label. It should be one or few words for naming the field
+   + Description: An explanation of the field or an instruction for user to fill out this field
+   + Format: The way for displaying data or accepting data input for this field. Select one format to see more explanations
+   + Size1: Depending on the format, Size1 can mean   width of object,  length of  text or   number of digits
+   + Size2: Depending on the format, Size2 can mean   height of object or number of decimals
+   + Mandatory: If this field is mandatory
+   + DefaultValue: The default/initial value or the list of choices for drop down menu or radio buttons. 
+ 189 Confirm It
+ 190 User ID
+ 191 New
+ 192 Reset
+ 193 Password was not confirmed
+ 194 Users and Roles
+ 195 Associated Pages
+ 196 ID
+ 197 FirstName
+ 198 LastName
+ 199 Depart.
+ 200 School
+ 201 DBMS
+ 202 has
+ 203 is
+ 204 WebSite
+ 205 Administr.
+ 206 Select
+ 207 Enter some Selecting requirements then press the Select button
+ 208 Instructor User
+ 209 Name
+ 210 Return Search
+ 211 Incorrect course id
+ 212 Assignment 
+ 213 Item Name
+ 214 PlainText
+ 215 HTML
+ 216 LaTeXML
+ 217 Editing Assignment/Test
+ 218 Open
+ 219 Auto
+ 220 Description
+ 221 Invalid numeric record in the group
+ 222 dropped
+ 223 Item
+ 224 Score
+ 225 Total
+ 226 New
+ 227 Inconsistent assignment name:
+ 228 Grade Aggregation
+ 229 Grade Aggregation
+ 230 Scale (full score) is zero in group
+ 231 Order
+ 232 SID
+ 233 Session
+ 234 Last Name
+ 235 First Name
+ 236 Score
+ 237 Grade
+ 238 Average
+ 239 Determine and Edit all Grades, their Thresholds and GPA Values
+ 240 Score Distribution
+ 241 Grade Levels
+ 242 Use Score as Grade
+ 243 Five Grades:A,B,C,D,F
+ 244 A,B,C,D,F with +,-
+ 245 Instructor User Defined
+ 246 Alert
+ 247 Alert students who are failing in the course
+ 248 Show the evaluation details of all students (You may click column heading to sort by fields first)
+ 249 Show and prepare to print the grade report to be submitted to the teaching administrator (you may sort it first)
+ 250 Save the evaluation grades and details to your database
+ 251 Go back the previous page to modify the weights
+ 252 Don't Use Grouping
+ 253 Use Grouping
+ 254 Weight
+ 255 Group
+ 256 Determine and edit Scale and Grouping
+ 257 Determine and edit Scale and Weight
+ 258 of each item.
+ 259 Determine and edit the Group table
+ 260 Report
+ 261 Modify
+ 262 The order of record
+ 263 Show guide
+ 264 Click the URL button to test the back-end functions
+ 265 Come here to make form, fill out form and manage form data rapidly!
+ 266 Left Menu
+ 267 Website Management
+ 268 If you  already have a web site for teaching, you may embed the following block of codes into your web pages for student's login
+ 269 Announcements
+ 270 Web Services
+ 271 Read New Messages Received
+ 272 Send the Instructor a Message
+ 273 Stud'Name
+ 274 Sent Date
+ 275 Subject
+ 276 Message
+ 277 Direction
+ 278 Both
+ 279 To Student
+ 280 From Student
+ 281 Messages
+ 282 Announcements
+ 283 It is before due.
+ 284 This test document is not open for review
+ 285 Test Aborted
+ 286 Assignment/Test
+ 287 -//W3C//DTD HTML 4.01 Transitional//EN
+ 288 Select a course
+ 289 Due
+ 290 Status
+ 291 Type
+ 292 Pick Tools
+ 293 Assignment and other
+ 294 Formatted
+ 295 Online written test
+ 296 Assignment/Test
+ 297 Assignments by Status
+ 298 Open Assignment/Test
+ 299 Closed Assignment/Test
+ 300 There is no course? Try to enter your teaching assignments first.
+ 301 Assignment & Test
+ 302 Page Background Color
+ 303 Color for  table lines
+ 304 Create an Item
+ 305 Select a status
+ 306 Alert Message
+ 307 Alert students whose score is lower than
+ 308 points
+ 309 Threshold
+ 310 Student IDs
+ 311 About the Function Buttons
+ 312 Send the alerting message
+ 313 Save this message as default message
+ 314 Threshold: A student ID will be put into the Student ID box if his/her score is lower than this number.
+   + StudentID: The list of IDs of students who will receive the alerting message.
+   + Message: The alerting message.
+ 315 Alert: you are failing in  
+ 316 because of low  attendance, or insufficient submission of course work, or low test scores. Please seek help from your Instructor as early as possible.
+ 317 Send Alert
+ 318 No Message
+ 319 System Alert
+ 320 Weighed
+ 321 Test
+ 322 MainBackground
+ 323 MenuBackground
+ 324 TableLineColor
+ 325 TableCellColor
+ 326 Service Item
+ 327 Colors have been set.
+ 328 Database Configuration
+ 329 User Database parameters were set
+ 330 Database Connection
+ 331 Parameters of the system administration database set
+ 332 Databases
+ 333 file
+ 334 This database host may require a password. Do you want to enter the password?
+ 335 This database server may require a password. Do you want to enter the password?
+ 336 Configuration
+ 337 Main Database
+ 338 JDBC Driver
+ 339 Admin User
+ 340 Databases for  Users
+ 341 Database Host
+ 342 Main DB Name
+ 343 JDBC Driver
+ 344 Admin User
+ 345 Default
+ 346 Install folder
+ 347 Faculty web folder
+ 348 Student web folder
+ 349 Database folder
+ 350 Application working folder
+ 351 MaxUploadSize
+ 352  and 
+ 353 can not be the same
+ 354 Database folder is empty
+ 355 Attached
+ 356 Student file quota 
+ 357 Faculty file quota
+ 358 Font Size
+ 359 Form Design
+ 360 Unable to set folders.
+ 361 mandatory, different from other folders
+ 362 blank value means not to offer file folder
+ 363 blank value means not to offer file folder
+ 364 The maximum size of file allowed to be uploaded to a web folder:
+ 365 blank value means  not to allow execution of application programs
+ 366 Options
+ 367 Allow students to use other resources on the computer
+ 368 Allow students to review  the test questions after the test
+ 369 Show test results immediately after submission
+ 370 Font on test page 
+ 371 Size
+ 372 How to compute scores: drop lower
+ 373 The only literals used in the formula
+ 374 numbers
+ 375 e.g. 100 0.5  2.3333
+ 376 stands for the raw score
+ 377 stands for the total number of questions
+ 378 The only operators used in formula
+ 379 addition operator
+ 380 subtraction  operator
+ 381 multiplication  operator
+ 382 division  operator
+ 383 exponential  operator
+ 384 There must be an operator between two literal.
+ 385 The examples of formula
+ 386 raw scores
+ 387 rescale to 100 pts for 10 questions
+ 388 use square root
+ 389 minimum 30 pts
+ 390 formula is mandatory
+ 391 is not a valid literal
+ 392 is not a valid operator
+ 393 auto scanned
+ 394 To download the WinNT/2000 executable, Right-mouse-button click the link
+ 395 and save the target as
+ 396 Web Compilation
+ 397 Database Backup
+ 398 Table Name
+ 399 Restricted to
+ 400 Only for records modified between
+ 401 Clear only the records that are added or modified between
+ 402 and 
+ 403 please wait while the server is creating a backup and sending to you....
+ 404 Restrict To: This field allows you to delete a portion of data in the table. The syntax is like SQL WHERE clause, such as 
+ 405 clause, such as 
+ 406 Create a backup of the selected tables.
+ 407 Allow registered users to use these operating system commands and application programs on the server via the ServerAgent:
+ 408 Set ServerAgent's working folder
+ 409 ServerAgent
+ 410  is a web application that allows user to execute operating system commands or application programs on the server if they are permitted by the system administrator. It takes the following four parameters
+ 411 Mandatory
+ 412 Example
+ 413 Grades
+ 414 command or program (with options) to be executed
+ 415 Yes
+ 416 As Of 
+ 417 If the command is interactive, feed is the input
+ 418 No
+ 419 means that content should be saved as a cpp file and resulted file is an exe file
+ 420 Text to be processed
+ 421 If the command takes a text file as a parameter, such as compilation, content is the content of the file
+ 422 If content is present, ext is the combination of extenuation name of source file and resulted file, separated by a comma
+ 423 Clean Data
+ 424 Clear the data in the selected tables.
+ 425 Delete Table Data
+ 426 Before your delete the selected data, make sure the backup downloading has completed, the backup file is valid and have been saved in the secured place. To be sure, please relogin.
+ 427 TableName: Select the name of tables to clear.  \nRestrictionTo: This allows you to clear a portion of data in a table. The syntax for this field is the same as that for the 'WHERE clause' in SQL, for instance
+ 428 Database Information
+ 429 To renew the database right before each new semester, back up the database of the previous semester, then clear  Submission and Message  table. If you teach a course that was taught in the previous semester, you may reuse the assignments.
+ 430 Course
+ 431 Reference Date Time
+ 432 New  Date Time
+ 433 Normally, choose Reference Data Time to the be the first day of the old semester, and New Date Time to be the first day of the new semester.
+ 434 Database Information
+ 435 Database Migration
+ 436 Database Renewal
+ 437 Enter data time in the format
+ 438 Database Administration
+ 439 Table Index
+ 440 Backup/Remove Data
+ 441 Import/Restore Data
+ 442 Remove
+ 443 Renew Database
+ 444 Select a routine
+ 445 Database Administration
+ 446 already exists
+ 447 Database Restore
+ 448 Backup file
+ 449 Only update the following selected tables in the current database
+ 450 All
+ 451 For those tables in the current database for which the backup file provides records, you want to
+ 452 Drop such tables completely and then use the records in the backup file to recreate and populate those tables
+ 453 Imagelet
+ 454 Keep such tables, add new records from the backup file to the tables, and use the data in the backup file, if newer, to update the existing records in the tables.
+ 455 Keep such tables, add new records from the backup file to the tables, and always use the data in the backup file to update the existing records in the tables.
+ 456 Keep such tables and their records, add new records from the backup file, but not touch the existing records
+ 457 Restore
+ 458 Browse
+ 459 ImportRestore
+ 460 Enter a database backup file ( .bak file)
+ 461 Record Grades
+ 462 Use this table to
+ 463 Change scores
+ 464 Record scores of hard copy submissions only
+ 465 database%20error
+ 466 Record of Scores
+ 467 Not documented
+ 468 Click a course title to create a new item or select an item under a course title
+ 469 Test
+ 470 is overdue and does not accept submission
+ 471 No answer.
+ 472 does not have answer yet.
+ 473 incorrect answers:
+ 474 Number of answers provided < number of questions
+ 475 Number of answers provided < number of questions.
+ 476 Divide by zero. Incorrect formula:
+ 477 is not a number. Incorrect formula:
+ 478 Shuffled
+ 479 Original
+ 480 None
+ 481 Data Management
+ 482 The Formula of Calculating Score
+ 483 Your answers were not saved successfully. Print out a hard copy and report this problem to the Instructor 
+ 484 Grading Quiz
+ 485 The Formula of Score:
+ 486 The question order on the test is shuffled, which is different from question order in the original test document that you can review.
+ 487 Submission received.
+ 488 Test Results
+ 489 Record/Checking Grades 
+ 490 Grading
+ 491 No record was found to meet the searching requirements.
+ 492 View all submissions in the current selection set. The text following a //// in each line will be turn to red color. Some special symbols may not be converted correctly.
+ 493 description
+ 494 Received at
+ 495 Notes
+ 496 ViewAll
+ 497 Offline
+ 498 Graded
+ 499 Any
+ 500 Assignment
+ 501 Content
+ 502 Note
+ 503 Transform
+ 504 Keep the internal table definition
+ 505 Not graded
+ 506 This is just an example showing you that a web form may use a variety of data controls. 
+   + To start, click the 'New' button to create a new web form or select an existing web form to modify 
+ 507 For each field, the wizard extracts the text block in front of the field as a temporary description and  uses the first 24 characters of the description as a temporary field name.<br>You may need to find better words to rename the fields and edit the field descriptions.
+ 508 Explicit Menu
+ 509 To submit an assignment/test on behalf of a student, Please select course and assignment name.
+ 510 To submit an assignment/test on behalf of a student, you'd better enter at least a part of the student ID or name. Do you want to stop to enter this information?
+ 511 Valid entry
+ 512 select an assignment
+ 513 copy paste the student's answer to this text box
+ 514 Grading
+ 515 TeaLeaMan
+ 516 Teaching and Advising 
+ 517 Instructor User Account
+ 518 Create Account
+ 519 Update Account
+ 520 Change  Password
+ 521 Set Personal Preferences
+ 522 Teaching Information
+ 523 Course  Information etc.
+ 524 Student Information
+ 525 Registration Rosters
+ 526 Teaching Materials
+ 527 Communications
+ 528 Announcements
+ 529 Instant Messager
+ 530 Database Management
+ 531 Include Table Definition
+ 532 Application of Data
+ 533 Login Session
+ 534 Logout
+ 535 Session Info
+ 536 Assignment, Test and Grades
+ 537 Edit Assignment and Test
+ 538 Grade Assignment and Test
+ 539 Record/Change Grades
+ 540 Grade Aggregation
+ 541 Web Services
+ 542 Processing Tools
+ 543 Pick Tools for Course
+ 544 Documentation and Support
+ 545 Backup file generated:
+ 546 Defects and Enhancements
+ 547 TeaLeaMan Forum
+ 548 For Students
+ 549 Registration
+ 550 For Administrator
+ 551 Location
+ 552 Telephone
+ 553 Email
+ 554 Website
+ 555 Instructor User Information
+ 556 operation failed.
+ 557 Record
+ 558 may exist.
+ 559 Message
+ 560 Look Up
+ 561 Student IDs
+ 562 Look up student IDs from a list of students
+ 563 Send out this message
+ 564 Class Roster
+ 565 Registration
+ 566 There is no course record. Enter the course records first
+ 567 Registration Roster
+ 568 Student Information
+ 569 Searching Students
+ 570 Major
+ 571 Any
+ 572 Adviser
+ 573 PhotoUrl
+ 574 Distribution by Major
+ 575 Distribution by Course
+ 576 Enter selecting requirements then click the "Select" button
+ 577 Editing/Processing Messages
+ 578 Service Subscriptions
+ 579 To accept or resume a student  to your session, go to My Session>>Roster page, change the student's registration status to an appropriate status (Normal/Listener/Incomplete)
+ 580 For the drop out requests, for safety, it is better not delete the student from the registration roster which contains the  attendance records. Don't delete and submission data either.  
+ 581 Session Information
+ 582 Session ID
+ 583 Start Time
+ 584 Last Access
+ 585 Inactive Interval
+ 586 Initial Folders
+ 587 stores the attachments of the answers to assignments and tests questions. User normally accesses this folder by using the Attach button on the Assignment & Test page.
+ 588 stores the student's attachments to the assignments they submit
+ 589 stores lecture notes or any teaching materials. The unlocked files in this folder can be downloaded by students on their Teaching Material page.
+ 590 Database operation fails.
+ 591 Update successful.
+ 592 Password has been changed.
+ 593 You changed the course selection. You must inform the Instructor User of this change
+ 594 New Password
+ 595 Not Declared
+ 596 If you know the name of your adviser, please enter it here
+ 597 Phone
+ 598 Photo URL
+ 599 Registered
+ 600 Login Count
+ 601 Other
+ 602 Register
+ 603 Student Account
+ 604 Initial Value/Options
+ 605 Web Form
+ 606 Rows grow automatically
+ 607 Save
+ 608 Save the lock information and the linked resources
+ 609 stores the attachments of assignments and tests. User normally accesses this folder by the Attach button is the Assignment & Test page.
+ 610 Compose Message   
+ 611 Synchronized. No file transferred
+ 612 Reply
+ 613 Suppress
+ 614 Welcome to TeaLeaMan!
+ 615 TeaLeaMan is a web-based system for Teaching and Learning Management.
+ 616 To have a tutorial, just click the menu items on the left side.
+ 617 To suppress a message, such as this one, click the suppress link on the right hand side of the message.
+ 618 Questions
+ 619 To get help for a page, click the Help button on that page.
+ 620 Compose/send Message
+ 621 To
+ 622 Announcement
+ 623 Messages for You
+ 624 Welcome
+ 625 Announcement
+ 626 About
+ 627 Submitted
+ 628 The test document is not open for review
+ 629 Take Test
+ 630 Formatted test
+ 631 Missed
+ 632 Assignment/Tests
+ 633 Assignment
+ 634  has no assignment/test now
+ 635 Open
+ 636 Web File Management
+ 637 Operation
+ 638 Last Modified
+ 639 Up Level
+ 640 MoveInto
+ 641 Zip
+ 642 Edit
+ 643 UnZip
+ 644 Selected
+ 645 Unselect
+ 646 NewFolder
+ 647 Upload
+ 648 Name fields are editable. Rename a file or folder then hit the return key
+ 649 Show the selected files and folders. Selected file and folders can be carried to the other folder view
+ 650 Clear the selection of files and folders, including those carried from the previous folder view
+ 651 Create a new folder in the current folder
+ 652 Delete the selected files and folders
+ 653 Upload a file to the current web folder.
+ 654 How to Move Files and Folders into Another Folder
+ 655 How to Prevent a Folder from Being Browsed
+ 656 First of all, please note that all files on your web site are accessible by any web user. However, if you put a file named index.html into a folder, then a web user can not list the folder and so he/she can not get a file in the folder unless he/she knows the file name
+ 657 Select the files and folders you want to move, then select
+ 658 from the operations of target folder that you want to move items into. Note that the selected items can be carried into the next folder view
+ 659 No file has been selected to move to this folder. Select files first
+ 660 Name: The name of the item
+   + Type: Folder or file
+   + Size: The size of the file
+   + Operation: Operations you can perform on the item 
+   + Lock: Control availability of file to viewers
+   + Last Modified: When the file was modified last time
+ 661 File
+ 662 Enter a valid, unique form ID
+ 663 No file  has been selected
+ 664 No file has been selected to delete
+ 665 Enter the name of new Folder
+ 666 Do you want to delete the following selected files
+ 667 Select files then click the icon of folder that you want to move the selected files into
+ 668 Do you want to move the following files into
+ 669 Student Operations
+ 670 Messages & Announcements
+ 671 Basic Information
+ 672 Instant Messaging
+ 673 Change Password
+ 674 Logout
+ 675 Assignments & Tests
+ 676 Submissions
+ 677 Student Services
+ 678 by
+ 679 Logout successfully
+ 680 Re-login
+ 681 Incorrect Instructor User ID or the Instructor User file collapsed
+ 682 Database operation failed.
+ 683 Login successfully
+ 684 Incorrect student ID or password
+ 685 Incorrect login option
+ 686 Instructor User database failed
+ 687 User Login
+ 688 New to the Instructor? 
+ 689 Please enter student ID
+ 690 Please enter password
+ 691 Please select Instructor User id
+ 692 Academic Monitor
+ 693 Information & Registration
+ 694 Reset Password
+ 695 Web Folder
+ 696 Student Main Page
+ 697 There is no user Id
+ 698 Enter at least two characters
+ 699 Don't abort the test because the score has been initialized to zero on the server
+ 700 Reply message
+ 701 Failed in sending message
+ 702 Select Action
+ 703 Definition
+ 704 Data
+ 705 In Form
+ 706 In PlainText
+ 707 In LaTex
+ 708 In XML
+ 709 In Web Page
+ 710 User Tables
+ 711 Delete Table
+ 712 New Table
+ 713 Do you really want to delete the table?
+ 714 exists. Enter a new table name
+ 715 Do you really want to delete the table
+ 716 Enter the new table name
+ 717 Web Database
+ 718 Manage Database Tables
+ 719 Field Name
+ 720 Data Type
+ 721 Length
+ 722 Nullable
+ 723 Distinct
+ 724 DefaultValue
+ 725 IsKey
+ 726 Value Supplied by
+ 727 Commit
+ 728 Access
+ 729 Database Administration  
+ 730 Instant Messaging
+ 731 AutoRv
+ 732 With
+ 733 Time Elapsed
+ 734 Time Quota
+ 735 SendMsg
+ 736 RecvMsg
+ 737 EndTalk
+ 738 SendFile
+ 739 Course
+ 740 Course & Organization
+ 741 Courses & Session
+ 742 Office Hours
+ 743 Majors (optional)
+ 744 Advisers (optional)
+ 745 Invalid operation
+ 746 is displayed in a combobox, its options supplied by queries
+ 747 in  a text field of size
+ 748 password box of size
+ 749 in a text area of
+ 750 for numeric field using m digits and l decimals
+ 751 in time-format box
+ 752 in a checkbox
+ 753 in an URL link
+ 754 invokes select table
+ 755 is hidden
+ 756 is replaced by the   modified data   in
+ 757 by original data in
+ 758 is a parameter
+ 759 SQL Help
+ 760 Pick Tool
+ 761 Web Application
+ 762 Web File Management
+ 763 Web folder is not offered on this server. Ask the system administrator.
+ 764 CopyInto
+ 765 Root(this folder)
+ 766 NewFile
+ 767 Enter the name of new file
+ 768 No file has been selected to copy to this folder. Select files first
+ 769 You need to restart this page to see the new configuration
+ 770 About the Operation Menus
+ 771 Configure the Operation Menus
+ 772 Create a new file in the current folder
+ 773 Grading 
+ 774 Already have an account
+ 775 Your account has been created successfully
+ 776 Teaching Instructor Sign-up
+ 777 Update Record
+ 778 Login
+ 779 Set Database Parameters
+ 780 The operation requires to login first
+ 781 The id  already exists else or not permitted to register
+ 782 Record updated successfully
+ 783 Operation of updating record failed
+ 784 Database connection test successful
+ 785 Database connection test failed
+ 786 Enter and repeat new password
+ 787 Operation of changing password failed
+ 788 The ID
+ 789 exists. Click 'Cancel' to go back to change ID
+ 790  If you DON'T have your own database server, click 'Cancel' now
+ 791 The id and password here must be the same as those used to access<br>your own database server
+ 792 New User
+ 793 User login successful
+ 794 Incorrect userid or password
+ 795 Account
+ 796 Read this specification carefully. Click 'New' to start a new form conversion or select a converted form to manage it
+ 797  New 
+ 798 Department
+ 799 City
+ 800 State/Province
+ 801 Zip Code
+ 802 Web Site
+ 803 Time Format
+ 804 Not a valid html file
+ 805 No starting tag  html  
+ 806 No open body tag
+ 807 No end body tag
+ 808 No file was found to convert. Upload a html file and try again
+ 809 Interface Variant
+ 810 Please enter an interface variant suffix, such as cn, ko. 
+ 811 An interface variant of a form is  a variation of the interface language, wording or/and format of the form under the invariant of form fields and the order. A typical interface variant is a foreigh language edition of a form. Add &amp;ifvr=code on the tail of each link above to access an interface variant of the form. Here the code is the interface variant suffix code that is entered in the Modify page where   interface variants  can be created by uploading HTML files.
+ 812 Login successful
+ 813 Preview
+ 814 NotGraded
+ 815 Web Services
+ 816 Category
+ 817 Table Back Up
+ 818 Account Information
+ 819 Login Counter
+ 820 Administrator
+ 821 Reset Passwd
+ 822 Enter a temporary password
+ 823 User
+ 824 Temporary password
+ 825 Update 
+ 826 's user information has been updated
+ 827 has been deleted from the Instructor file
+ 828 Please select one
+ 829 Have already  registered
+ 830 Registration successful
+ 831 Student Information and Registration
+ 832 Database operation fails
+ 833 Hold ctrl key to select multiple courses
+ 834 Hold ctrl key<br>to select<br>multiple courses
+ 835  is full and not allowed to add
+ 836 You are not allowed to drop 
+ 837  at this time
+ 838 Instant Messaging
+ 839 Backup
+ 840 Click a course title that you want to do aggregation
+ 841 Select an action from a table
+ 842 Options
+ 843 command
+ 844 source
+ 845 content
+ 846 subfolder
+ 847 Fatal Error: Braces  do  not match.
+ 848 Name or Folder is null
+ 849 format
+ 850 coursetitle
+ 851 course
+ 852 assignname
+ 853 assign
+ 854 Handler
+ 855 Option
+ 856 ButtonColor
+ 857 Web Services
+ 858 Students
+ 859 Received Messages
+ 860 Messages Sent Out
+ 861 Messages Sent by the Student
+ 862 Messages Received by the Student
+ 863 Write a Message to the Student
+ 864 Student Login
+ 865 Title
+ 866 Input
+ 867 Value
+ 868 Click a name or an ID
+ 869 No record found satisfying the Selecting requirements
+ 870 User logout
+ 871 Student ID
+ 872 Answered
+ 873 Correct
+ 874 If you don not enter any selecting requirement, all student records will be retrieved, but it may take long time. Continue?
+ 875 Data Transfer
+ 876 #Records
+ 877 Transferred
+ 878 There is no administrator user
+ 879 lecture
+ 880 Announcements
+ 881 Role in System
+ 882 Teaching Administration  
+ 883 System Administration  
+ 884 System Analysis and Development  
+ 885 Database Development
+ 886 Form ID has to be valid, unique, and simple. A valid ID starts with an alphabet and contains alphabets and digits only. You are suggested to use one of the following ids. However, because other users may be selecting form ID at this very moment, some ID in this list  may not be available any more. In that case, just try another one. 
+ 887 Feedback
+ 888 Edit Feedback Question
+ 889 Edit Survey Value
+ 890 Link
+ 891 Database Applications
+ 892 Database Application
+ 893 Defects and Enhancements - TeaLemMan 
+ 894 Please submit your descriptions the bug scenarios or your request for enhancements of functions. 
+ 895 Request Time
+ 896 Forun
+ 897 Forum
+ 898 Discussion Board
+ 899 Reserve a Form ID
+ 900 Topic
+ 901 Post
+ 902 Followed
+ 903 Follow
+ 904 New Topic
+ 905 Change
+ 906 Portal for Teaching, Learning & Management
+ 907 Current User
+ 908 Starting at
+ 909 TeaLeaMan Setting Up
+ 910 Client Name
+ 911 Scheduling
+ 912 System Development
+ 913 Data Merge
+ 914 Template
+ 915 User ID of Grader(TA or other)
+ 916 Sessions that get this Assignment
+ 917 Curriculum and Registration
+ 918 Adviser Information
+919 Assignment Status
+920 Sent at
+921 Progressive Scores
+922 Miscellaneous Setting
+923 URL
+924 Setting
+925 From/To Selected Users
+926 To All My Students
+927 To All My Students in 
+928 and students in department of
+929 in all departments
+930 You can not get the assignment/test question from this computer
+931 Incorrect code. Try again
+932 The test is still open. You need a code to access it.
+933 Incorrect type for this operation
+934 You don't have a database now. A instructor should have one. Ask the System Administrator to create one for you
+935 Unnamed
+936 Switch
+937 Font Name
+938 Size
+939 The URL of this procedure is
+940 Data Transfer
+941 Server
+942 Driver
+943 Fields
+944 Partial Tbl
+945 Whole Tbl
+946 Def Only
+947 Incorrect Database access information
+948 records transferred
+949 No field specified for partial table data transfer 
+950 User Registration and Configuration
+951 The operation of creating a new record failed because a record with the same ID exists in the database. The operation of updating the record failed because this would create an inconsistency. The operation of deleting the record failed because the record is referenced by other records
+952 Your account(id
+953 Please login  and follow the further instructions to perform   account  initiation.
+954 has been created.
+955 This account has its own database
+956 Current setting
+957 Registration Form
+958 Instruction
+959 Instructor Utilization
+960 Display
+961 clause
+962 Classroom Utilization
+963 Select Semester
+964 New Semester
+965 Course Sessions
+966 Select Faculty Instructor
+967 Add Other Instructors
+968 Select Classrooms
+969 Nonnegotiable Items
+970 Candidates & Exceptions
+971 Instructor's Preferred Time
+972 Non-concurrent Sessions
+973 Classroom Timeshare
+974 Build
+975 Verify
+976 Printable Schedule
+977 Edit Schedule
+978 Based on the input resources and requirements, after exhausting all combination, TeaLeaMan Scheduler was not able to build a course schedule.
+979 Report on the left hand side and this  incomplete schedule may help you to decide to add more resources or release some requirements. 
+980 Incomplete Schedule 
+981 CourseId
+982 Course ID
+983 Course Title
+984 Staff
+985 Room
+986 Time
+987 #Candidates
+988 Edit Incomplete Schedule with Fixed Items
+989 can not be scheduled no matter how the completed lines are scheduled
+990 Error Messages
+991 The schedule in the system meets the mandatory and selected optional requirements
+992 Announcements for Course
+993 Syllabus
+994 Audit
+995 Required but missing supporting file
+996 Register
+997 SelectionName
+998 Code
+999 URL Link of this Selection
+1000 Only tell this to the people whom you are supposed to submit teaching evaluations to
+1001 Evaluation Rating
+1002 Teaching Evaluations  
+1003 Course Evaluation
+1004 Semester
+1005 Ratting
+1006 Comments
+1007 Fails to satisfy fixed items of session
+1008 is too small for 
+1009 Time slot
+1010 is not fit to 
+1011 does not teach in 
+1012 is not preferred to teach
+1013 can not teach
+1014 is not a preferred room for 
+1015 is scheduled but should not be taught in
+1016 is not a preferred time for
+1017 is scheduled but should not be taught in
+1018 Classroom Timeshare is not satisfied:   room
+1019 is used at
+1020 There schedule for the semester  has not been completed. Try to build the schedule first
+1021 is overloaded
+1022 Serious
+1023 conflicts with
+1024 Non-concurrency
+1025 are not at the same time
+1026 (Warning) The fixed 
+1027 is not among the candidate list for 
+1028 is among the exception list for 
+1029 (Warning) There is no suitable combination of resources for course session
+1030 Total number of credits
+1031 exceeds the total number of teaching loads
+1032 More professors needed
+1033 rooms at
+1034 time slots can not facilitate
+1035 course sessions 
+1036 Select Time Slots
+1037 A schedule has been built. But it has the following problems
+1038 There is a full schedule in the system.TeaLeaMan Scheduler verified it 
+1039 and confirms that the schedule meets the mandatory and selected optional requirements
+1040 but found the following errors
+1041 You may correctly it manually or completely or partially delete the schedule and allow TeaLeaMan Scheduler to rebuild one for you
+1042 Load/Capacity
+1043 Report of Operation
+1044 Enter selecting requirements and click the Select/Search button to select desired records.<br><br>If no desired record is found, you may enter a new record
+1045 (Serious)Incompatible requirements
+1046 Proceed
+1047 To read course-specific messages:
+1048 Course specific messages
+1049 Course Registration
+1050 Minor
+1051 Schedule
+1052 Transcript
+1053 Moveup
+1054 Mvdown
+1055 Exists
+1056  Students
+1057 Roles for<br>Viewing
+1058 Roles for<br>Inserting
+1059 Roles for<br>Updating
+1060 Roles for<br>Deleting
+1061 SaveAll
+1062 Initiator
+1063 Info
+1064 Public Area
+1065 Empty Queue
+1066 Routine of Accessing and Presenting Data
+1067 Do you really want to delete 
+1068 All departments
+1069 Compose and Post Announcement
+1070 Academic Calendar and Events
+1071 This Year
+1072 This Month
+1073 Today
+1074 Tomorrow
+1075 You are not authorized to perform the process. It is designed for 
+1076  has been updated
+1077 Compilation of Routine
+1078 All Fields
+1079  does not need to be compiled
+1080 Error in UpdateQuery
+1081 Error in inserQuery
+1082 Error in deleteQuery
+1083 OK
+1084 Instant Message Service
+1085 Choose an name
+1086 Initiate
+1087 This test has to be taken in the specified class rooms. You are not in any of these rooms
+1088 Access code is required
+1089 #Participants
+1090 Delete
+1091 Plan a course for future semester
+1092 There has been no evaluation record yet. Urge students to do evaluation. 
+1093 Template
+1094 Teaching Evaluation for Instructor
+1095 Teaching Evaluation for Teaching Assistant
+1096 Teaching Assistant
+1097 Teaching Evaluation Due
+1098 Summarize Teaching Evaluation
+1099 Questionnaire 
+1100 Change Sign-up Policy
+1101 Registration Status
+1102 Request for changing registration status
+1103 Registration
+1104 Accounting
+1105 this link
+1106 A message has been sent to person who will process your request.
+1107 You need to call the person who will process your request for next step. To find contact information, click 
+1108 All Courses
+1109 Announcements from Administration 
+1110 Your request of changing registration status for
+1111  has been approved. The current status is 
+1112 The system has received one or more requests of changing course registration status, and asks you to process these requests. To approve or deny the requests, click 
+1113 FindNext
+1114 Replace
+1115 JScript 
+1116 PreProc
+1117 PostProc
+1118 This document contains a digital signature. Authentication page: 
+1119 Available
+1120 Exceed
+1121 Please enter student information
+1122 Attendance
+1123 Times
+1124 To
+1125 Forgot Password
+1126 is an invalid user id or it doesn't have an valid email account. See the System Administrator for help
+1127 Your password has been sent your email address (#). If you can not read your email, please contact the system administrator
+1128 Recover Password
+1129 Acquire Preference Input
+1130 Institutions
+1131 Secure out
+1132 You have to use your ID in your institution system
+1133 Compose Announcement
+1134 A file with the same file name exits in the target web folder. If they are really two different files, you must rename your local file and upload it again.
+1135 Search Message
+1136 Search Announcement
+1137 Foot
+1138 Vendor
+1139 Time Differ
+1140 Hire date
+1141 Current Status
+1142 Requested Status
+1143 Approve Request
+1144 Reason To Deny
+1145 Scale
+1146 Data Time
+1147 TaskOrEvent
+1148 DeptInvolved
+1149 RoleInvolved
+1150 Role
+1151 Scheme Num
+1152 UserLink
+1153 Sender
+1154 PostTime
+1155 Purpose
+1156 Composition
+1157 SelectionMethod
+1158 Rate
+1159 Comment
+1160 Elective
+1161 Expertise
+1162 InstructorAve
+1163 NumStudents
+1164 AttendanceAve
+1165 Information
+1166 Academics
+1167 Professor
+1168 NumberRegistrations
+1169 NormalRegistrations
+1170 NumberEvaluations
+1171 AbsenceAverage
+1172 Topic
+1173 PlanTime
+1174 NumberOfCredits
+1175 Pick
+1176 OfRole
+1177 InDepartment
+1178 Editable
+1179 StudentWhom
+1180 CellPhone
+1181 PersonalWebsite
+1182 Objective
+1183 TextIBSN
+1184 RolesInsert
+1185 RolesUpdate
+1186 RolesDel
+1187 JScript
+1188 Preop
+1189 Postop
+1190 Units
+1191 UnitName
+1192 AmountCharged
+1193 TimeCharged
+1194 SSN
+1195 ReceivedFrom
+1196 NumSubmitted
+1197 OpenIt
+1198 RoomCode
+1199 EntryTime
+1200 PreviousDegree
+1201 EntryScore
+1202 Poster
+1203 Reason
+1204 Specialty
+1205 EntryDate
+1206 Adreess
+1207 TimeCandidateOrException
+1208 TestColor
+1209 STMPHost
+1210 STMPUser
+1211 STMPPassword
+1212 MajorOrMinor
+1213 Piker
+1214 Numeric
+1215 Parameters
+1216 Link to
+1217 Linked by
+1218 Keywords
+1219 Change to
+1220 Modifications of Data Access Routines
+1221 Generate Data
+1222 Operations
+1223 Clear Data
+1224 Save in Memory
+1225 Save in File
+1226 Exp
+1227 Locked
+1228 Download
+1229 Student Menu
+1230 Common Functions
+1231 Lecture Notes & Class Quiz
+1232 System Overview
+1233 A separate process has been created to run this task. 
++ In the meantime, you may do other job or logout. You will be informed when the processing is completed.
+1234 Results of Last Try
+1235 The Process of scheduling is completed. To see the results, please go to the scheduling page and follow  the link
+1236 Systems on Web,Inc.All rights reserved
+1237 Announcement from Instructors
+1238 Category Code
+1239 Search Assignment & Test
+1240 Parse to Import Data
+1241 Column Separator
+1242 Simplified
+1243 Parse
+1244 Undo
+1245 Copy data and paste here
+1246 Target Table
+1247 Pattern
+1248 ReplaceAll
+1249 Purple colored rows are rejected. To see the cause, land the cursor on the first field.
+1250 Row Separator
+1251 requests to add to
+1252 requests to drop from
+1253 Your request waits for the instructor's approval. In the meantime, you can read the course syllabus.   
+1254 Background
+1255 Slide Show
+1256 Check the box to confirm that you understand this rule
+1257 Window Snapshots
+1258 Overview
+1259 Initialize/re-initialize the main database
+1260 Initialization of the system database may destroy the existing data. Continue?
+1261 Registration of System Administrator User  
+1262 The software has to work with a relational database system. The following initially-set data source for the 
++ Main Database is not available, or the database is down, or the connection information 
++ is not correct. The system administrator should make such a database source available and accessible, or enter 
++ the connection information of another accessible database.
+1263 You may use it as a temporary Main Database while another database system supporting 
++ concurrent access is desired.
+1264 Upload the driver package ( one or more jar files) to the TeaLeaMan folder
+1265 The command for this task  has to be  issued by a logon System Administrator or from the server.
+1266 Pause
+1267 Adapt It
+1268 Initialize
+1269 Forms for Public
+1270 Go to
+1271 Form Name
+1272 To insert a new record
+1273 To update the i-th record
+1274 To delete the i-th record
+1275 To search records
+1276 To review records
+1277 To review the i-th records
+1278 Delete the form  and its associated data 
+1279 All Records in One Merged Form, All Records in Separated Merged Forms, All Records in Comma Separated Value(Open in Excel), All Records in Data Sheet
+1280 Merged Form, Comma Separated Form, Data Sheet 
+1281 User Level
+1282 1. If you want to add the form to the index page, fill out and save the Title and Category
++ <Br>2. The typical associated pages are the aggregation and analysis of the form data and interface variant pages.
++ <Br>3. By default, any public user can fill out the form but you are the only user permitted to 
++ manage the data. To change the permission setting, click 'Permit' button. 
+1283 Permit
+1284 To update the form with change in data fields and table, perform the following steps <ol><li>Create a new web form using your updated source file</li>
++ <li>Copy data associated with the old form to new form (see the below)</li>
++ <li>Delete the old form</li><li>Rename the new form to the old form</li></ol>
+1285 The URL will be 
+1286 If you are satisfied with this page layout, click the Commit button, 
+   + otherwise, edit your files and upload it again. You can also 
+   + try to fill out and submit the form to see if the server echos your input. 
+1287 Menus
+1288 Information for Indexing 
+1289 The form will be removed from the index page because of the blank title. Continue?
+1290 This form requires following supporting files. It is better to upload them now. But you can also upload them later on the Modify page after the form is saved. 
+1291 Upload the main HTML file first. To upload a file, click the Browser Button to find the file in your computer, then click the Upload button. You may also click the Makeone button to make a HTML-formatted form instantly
+1292 Click ... to select the code of roles that are permitted for operations.
+1293 Document Authentication 
+1294 Select the document to be verified from your local file system
+1295 passed authentication. It is the original, official version issued from this server
+1296 failed in authentication. It is not an official document issued from this server or it has been modified from the original version
+1297 Enter "#1" in "Plus User" column to allow a login user to perform the corresponding operation on the form data records whose 1st field have the same value as the user id. This implies that the 1st field of the original form is designated to record user id
+1298 To test the routine, you may set the permitted roles to include your role
+1299 If present, it is the name of the data source this routine will access. Blank value or the parameter's absence  means that  the data source is the system database
+1300 If present, the value must be 1 and it means that the routine is not a system routine and can not access the system database. If it is absent, this routine is a system routine can access both system database and non-system database
+1301 If present, it is the number of extra blank rows  in the table reserved for entering new records. If absent, the number of extra rows is 6 
+1302 If present, it represent the number of total rows in the table unless the number of records excesses this value
+1303 If present, it is the RSA encryption code: 1 for server to user, 2 for user to server, and 3 for both way
+1304 If present, to show the Save As button if the insert operation is permitted
+1305 If present, to suppress the Customize button
+1306 If present, to suppress the Delete button regardless of the permission
+1307 If present, to show the Help button
+1308 If present, to suppress the Select button
+1309 If present, to align the table on the left
+1310 If present, to suppress the New button regardless the permission
+1311 If present, to suppress the Print button 
+1312 If present, to align this table on the right
+1313 If present, to suppress the check box in the front of each row
+1314 If present, to suppress the Update button regardless of the permission
+1315 The javascript codes to execute right after the initial values populated
+1316 The javascript codes to execute when a data control receives the focus 
+1317 The javascript codes to execute when a data control losses the focus  
+1318 The javascript codes to execute right before the updated data is going to be sent to the server
+1319 The javascript codes to execute right after the data has been updated 
+1320 The javascript codes to execute right before when the window is closing 
+1321 Operation selection for a web form
+1322 Build URL by Setting Optional Parameter Values
+1323 Encrypt
+1324 Semantics
+1325 Syntax
+1326 If present, to enforce unique choice
+1327 Instead of building a schedule from scratch, you may use the schedule of one of the previous semesters as a base or template. It normally saves a lot of time.
+   + If you like to do so, please choose a semester which may have the closest schedule to the new one
+1328 Instructions: <br>1. Please save this receipt to your computer. It is the only proof of the submission you just made.
+   + In case of a dispute, your instructor will not honor your claim unless you email this receipt. Paper copy is not useful. 
+   + It is also a file backup in case the file server collapses<br>
+   + 2. Don't make any change to the receipt because any single-letter change will result in 
+   + a complete failure in the receipt authentication process and your instructor will not honor edited receipt.
+1329 Assignment/Test Submission Receipt
+1330 If you are willing to share your design with other users  by contributing this form design to the template library, click 
+1331 Optionally, you can choose a form template to start with. If none of templates is close to what you need, you may enter some field/column names in the Field box, one in a line.
+1332 Data Management
+1333 #
+1334 Home Page
+1335 On the right-hand side, check the courses you have registered with the institution and click the Select button.<li>Fill out your Student Information Form by clicking Basic Information link above
+1336 Open page in,Right,Tab 
+1337 Not use template
+1338 You may enter a field names here, one in a row
+1339 Your current registration status is not sufficient for you to access this page. If you just added to the class, please wait until the instructor approves your adding. Otherwise, you may request your instructor to change your registration status.
+1340 Back
+1341 Select a Form Model
+1342 Create the form   and all managing routines
+1343 Undo all that have been done to the form since the starting of the current page
+1344 Move to
+1345 Is Numeric
+1346 Max Length
+1347 Displayed Order
+1348 Line Number
+1349 Invalid file. Make sure the file type is HTML and file extension name is  htm,  html or  text
+1350 Reverse to initial developer's setting
+1351 Caution! All database connection settings you have entered in this page will be erased (but the data inserted into databases will not be affected). Continue?
+1352 Scheduled Communications
+1353 You can let the system send emails to remind students the assignments that are going to be due. Enter the time in the format like 02:30. As this is a time-consuming and expensive task, try to set it during system idle time and away from the time period for backing up  files.
+1354 Information about Myself
+1355 Reset default values of the fields in the form
+1356 If you don't change any field or table, but only change the interface of the form or supporting files, just upload the new file to overwrite the existing one. 
+1357 To copy the data associated with this form to another form (Usually an empty, new form. Please enter the name of new form and click Start): 
+1358 Top Menu
+1359 Teaching
+1360 Basics
+1361 Implementation
+1362 Accounting
+1363 User Accounts
+1364 Tables
+1365 Development
+1366 User Self
+1367 User Support
+1368 Linked Internet Resources
+1369 TurnOnWeb
+1370 RenameSite
+1371 CloseSite
+1372 Assessment 
+1373 Total Questions
+1374 Total Tests
+1375 Total Points
+1376 Total Scores
+1377 Attainment Level
+1378 Class Quiz
+1379 If you can edit the HTML codes and you don't change the data fields, you can do a minor editing directly on the source file
+1380 Make One
+1381 or
+1382 Converted
+1383  Web Addresses for Form Operations
+1384  Modifications
+1385 Click the 'Fields' button to list all fields of both forms
+1386 For each data field on the left source file you want to transfer data, select a destination field on the right
+1387 Delete existing schedule
+1388 Winner
+1389 Tense Future Present Complete
+1390 Scan All
+1391 Rules and Instructions
++ Don't start typing until an answer is ready in your mind, finish typing before timer goes off 
++ Don't submit until the end of the class. Don't discuss  with your classmates
++ Attach a file only if the instructor asks to do so  
++ You are not registered. If asked by the instructor,  
+1392 Answered Right Ratio Objective First
+1393 Click to Show
+1394 Question
+1395 Instant Tutoring
+1396 Or Select
+1397 Warning: Don't add or modify underscore character '_'. To modify the structure of the form, click the Cancel button to return to the previous page 
+1398 lecture,assignment,answer,submission,notes,email,announcement,chat,discussion,communication
+1399 By downloading the information about course scheduling and students, you accept the teaching assignments
+1400 Brief Description of Electronic Signature: important documents issued by this site, such as receipts or transcripts, are attached by an electronic signature. Electronic signature is actually a string of text computed from a file text and a secret and site-specific code. Because of confidentiality of the code, one can not make up an electronic signature if he or she alter the file text.
+1401 Digital Signature
+1402 For small documents such as submission receipts or transcripts, the clients have to verify them on this page. Copy all characters on the page and paste them into this text box and click the Send button. 
+ 
+1403 For large documents, for fairness, clients may get them authenticated by using the third party software. We use Sha1 to get message digest and encrypt the digest using our RSA private key. Our RSA public key is 
+1404 Session token between user and server was lost. Please close all pages and relogin
+1405 Public Website Folder
+1406 Notes
+1407 Advising
+1408 Ignore Other Rising Topics
+1409 The system database disk has failed or is locked at this moment. Your answer can not be saved at this moment. Inform the instructor of this error right way. Keep this raw receipt for submission later on
+1410 Convert CSV file to table
+1411 Select a CSV file
+1412 If the file is in local machine, upload it to your web folder first
+1413 Field separator	
+1414 Row separator
+1415 or choose a table below as the target table to add converted data
+1416 Parse
+1417 The first line is the column heading
+1418 Row #
+1419 Convert
+1420 Data Access Routine
+1421 Block Number
+1422 Browse
+1423 Data Wrapper
+1424 Basic Menu
+1425 User New 
+1426 Main DB
+1427 There is no information about your course scheduling in the main database. Please open "My Courses" and enter one or more courses, them open "My Session" to enter one or more real sessions you teach in the current semester or virtual/testing sessions  
+1428 There is no information about your course scheduling in the main database. Please open "My Session" to enter one or more real sessions you teach in the current semester or virtual/testing sessions  
+1429 Accept
+1430 The associated email server failed to send you an email. Please report this error to the system administrator and ask him/her to correct the user name and password for  
+1431 Basic Manu
+1432 Calendar,Department,Acmmap,Announcement,Applicant,DatabaseTables,User,Course,Assignment,BackupFolder,ChatMessages,Classroom,College,CommandLine,ComputerAccount,AssessMap,Curriculum,DatabaseOwner,DistinctCode,Faculty,DomainValue,EvalQuestion,EvalSelDetail,EvalSelection,Evaluation,Major,Faq,Fee,FeeCharge,FeeCollect,Feediscount,FeePolicy,FeePrice,FormModel,Forum,FunctionBlock,FunctionURL,GradeThresh,Hint,LectureNotes,AcademicProgram,Message,OnlineService,CourseService,ServiceType,Outlook,Permits,Registration,Role,Scheduler,SchduleEerror,SchduleFixed,SchduleRoom,SchduleTime,SchduleUser,Session,SessionSum,SigninPolicy,Staff,Student,StudentGroup,StudyGroup,Submission,SystemParam,Task,TeachPlan,Textbook,TimeSlot,Transferred,Userform,Vender,Assgroup,Taskopt,Project,Projectmem,Userkeys,TaskLang,Docslang,Subactivity,Absence
+1433 Five-level Scale
+1434 100-point Scale
+1435 Scaling
+1436 Data Analysis
+1437 Suggestions for Improvement
+1438 Click here to enter text
+1439 Course Learning Outcomes
+1440 Domain Values
+1441 Instructor Quickstart
++ Get familiar with the menu, for each menu item, learn its name, open it to overview without doing anything.
++ Open "Account Information", fill out the required fields and save.
++ Open "Professional Information", fill out the required fields and save.
++ Open "My Courses", enter a course Id and title, follow the Details link ">>",  fill out the required fields, and click Save
++ Open "My Sessions", enter a course Id and session name, follow the Details link ">>", fill out the required fields, and click Save 
++ Open "Teaching Resources" and upload a file for students to download
++ Open "Assignments & Tests" to create a record that starts right now. 
++ Open "Student Menu" to browse student menus, in particular, open "Assignments & Tests" to view the item you just created
++ Ask your students to sign up an account, login, click "Registered Course", and select the course session you have created
+1442 Powered by
+1443 Questionnaire
+1444 Institution-specific Functions
+1445 Admin Quickstart
++    Get familiar with the menu, for each menu item, learn its name, open it to overview without doing anything.
++    Open "Account Information", fill out the required fields and save.
++    Open Database Administration | Parse Data. Import your data to Database table named "Department"  by following the wizard
++    If you file is Excel formatted, use "CSV to Table" instead. 
++    Use the same method to import the Id and name of your Academic Programs into the table named "Academic Program"
++    Use the same method to import the Id and name of your courses into the table named "Course"
++    Inform your instructor users to register an account in the front page, using Registration Code "faculty"
+1446 Converted Form will be rendered here
+1447 Update
+1448 ,/()
+1449 Find the following repeated character patterns that is similar to the underscores. If they should be, please make correction in the source file.
+1450 Select One
+1451 Data Received from You by Server
+1452 Delay
+1453 Do AllDB
+1454 There has been no submission yet
+1455 Change ID
+1456 Attribute
+1457 Program Learning Outcomes
+1458 Relevant
+1459 Instruments
+1460 Methods
+1461 Class quizzes, labs, homework, projects, and exams
+1462 Embedded questions rubrics
+1463 Proof of non-robot
+1464 Incorrect recognition of Captcha. You may click the Captcha area to generate another one and try to recognize it again.
+1465 Copy the incomplete answers you saved elsewhere and paste to the textbox below and press the 'Restore' button. When your computer is re-connected with the server, copy the text  below, don't edit it, and paste to the right upper text box in the online submit page to restore there.
+1466 This is an offline back-up! Download this file as a back-up in case the server will not be available. Don't use it if you can login the server.
+1467 Restore
+1468 The pasted text failed the check sum. Make sure that you have copied all characters from the source. Don't alert any character.
+1469 When you leave this page, to save your work, you must copy all characters in the textbox on the top of the page and paste to a notepad to save as a file to your local drive. Don't change any character.
+1470 Basic Data
+1471 TeaLeaMan (Personal Edition)
+1472 The system has started another process for restoring data from the following backup file. The time is proportional to the file length. In the meantime you can do something else and system will piggyback a message on other operation you do when the process completes.
+1473 The process of restoring data from backup file has completed.
+1474 Current Semester
+1475 Save in Web Folder 
+1476 https://tealeaman.desu.edu/tealeaman/Kernel?license=
+1477 https://www.systemsonweb.com/tealeaman2.2
+1478 Because the server is not connected to the Internet, some functions are not available
+1479 Portal for Teaching, Learning and Management
+1480 was set to be the main database, but it is down now. So H2 is set to be the main database for time being. If you still want to have the original, after login, open 'Database Setting' to fix it
+1481 Your computer is reconnected to the Internet. Refresh the front page. If you have an upper level server, you may open the Data Management page, back up the data which are modified during the time period when you are disconnected from the Internet, then login the upper level server and restore the backup file into that server.
+1482 If this computer has domain name  visit
+1483 domain name
+1484 otherwise, visit
+1485 Schuser Table collapsed.
+1486 Schroom Table collapsed. 
+1487 TimeSlot Table collapsed. 
+1488 Schtime Table collapsed. 
+1489 Scheduler Table collapsed.
+1490 has no candidate. No combinations can facilitate it
+1491 Spring
+1492 associates with another user id
+1493 Since each email address can be used for only one user id, you have to use another email address or login the other account to change that email address field. If you forget the password of that account, click the "Forgot Password" link above
+1494 This message was generated automatically. Don't reply. For any question, please directly contact your instructor.
+1495 In case the server is not available you may use the attached backup archive of this assignment, but if the server is up, you always use the online version instead of this attached file.
+1496 has been scheduled to start at
+1497 Arial;times;courier;Berlin Sans FB
+1498 Days Difference between two semesters
+1499 All,Assignment,Test,Class Quiz,The Same
+1500 Click the Submit button to download the archive file. When you deliver the archive to the collaborator recipient, tell the recipient to install the file using the following installation service associated with his/her account. If you include class quizzes, alert the recipient to rename  class quizzes. 
+1501 Collaboration Transfer allows you to select and package the assignment/tests you have made and offer to your collaborators who use TeaLeaMan to teach the same or similar courses. Your collaborators need  to tell you their course Id, targeted session names, targeted semester, the grader's user id, and the estimated number of days between two semesters. 
+1502 Click the "New Topic" button to start a new topic or "Follow" button to comment on existing topic
+1503 Click the file links to display images
+1504 Follow up
+1505 System Information and Advising
+1506 From:To
+1507 Attach
+1508 No records transferred
+1509 Modify or add fields using "What you see is what you get"
+1510 Delete field one at a time
+1511 Sort:alphabet:dependency
+1512 ER Diagram
+1513 Warning: user # may have blank password
+1514 Password Free
+1515 You don't have any test to invigilate within one week
+1516 Invigilating Assistance
+1517 Serial@Position@Topic@Session@Sender@Receiver@Type@Time@Progress@User@LastMsg@Waiting@LastPost@LastRecev@Topics@Id@Description@#Message@#Users@myself@this app
+1518 Contests,Initial,win,Game Time,Queues,Rules,Random,Image,Download,Restore,Algorithm,Help,Negotiate,Remove,Count,UnCount,Give Up,Removing,MenuBack,Counted,Source point is a stone. Need to be blank,Destination point is a stone. Need to be blank,Counting,You may consider to give up,Waiting,Play,Illegal move,Join,Quit,Negotiate,stones,Accept,
++ I give up and you win,Double click to place a stone. Your turn,No one yet,Replay,Finished,Do this only when status is initial or waiting, My Preferences,white, black, random,first,second,rank,indef,on line,Status,The Go Game,Reject,Rejected,Player,Grey,Win,Not authentic records,match score,bargains with you,Send,Register,User name,Password,Email Address,
++ Human intelligence verification string,The account exists or inputs are invalid,Your account has been created,Please enter all username password and email,Length of user name should be > 3,Password length should be > 7, Invalid email address,Invalid Human Intelligence Verification format,Login,Logout,hour,
++ Player,Myself,Id,Name,Rank,Time Limit,New,Partner,Blank,Color,#Stones,Seconds,Minutes,Archives,Go@Gobang@Tictactoe@Any,none,Ask Pairup,Youe game type has to be the same,You have to specify a type,Gap,Way,Wonder if the point,is reachable from point,Try to find the shortest path connecting them,Routing,depth-first: along border,depth-first: 1st avaiable,depth-first: random,breadth-first search,
++ not available any longer,
++ left accidentally or temporarily. You may wait, 
++ connection is still alive,
++ Waiting List,
++ doesn't want to play with you at this moment,
++ is not reachable from,
++ Abort,
++ Your partner disconnected from backend, 
++ while your connection remains active. You can wait for the partner resuming or abort the game,
++ Watch,Ongoing Games,No more,@ @ stones are contained and removed the board,#Rounds,
++ Enter your name or nick name,To,Both,TBA,Quit
+1519 Enter your name or nickname, your rank(dan) and preferred time limit, then click the "Join" button to wait for pair-up. @You can pick  one or more players from the waiting list to request to pair up.@Having paired up, double click to place a stone@During the game, press the Count button to estimate the winning chance, and when it is small, you may, but are discouraged to, click Give Up button
+1520 My Minute @P.Minutes@Result@Load@Delete@Archived Games@No game archive was found
+1521 Giving up will make you lose the game. You may count first to estimate chance to win. Continue to give up
+1522 Copy a saved codes from file on your PC and  paste here and Restore
+1523 Copy the following codes to a notepad and save to your PC
+1524 Frontpage
+1525 The following students have missed the latest-due assignment or test and their total number  of  submissions is low. You may send them an alerting message. Click the checkbox on the leftmost to include or exclude a student. The records of absence can be meraged into the data grids as reference.
+1526 Submitted/Assigned
+1527 Missing Rate
+1528 Last Alert
+1529 The number of your submissions is low and you have a risk of course failure. Please see your instructor for help.
+1530 System reminding: The number of submissions of one of more of your courses is low. Please login to the system to see detailed alerting message.
+1531 does not exist
+1532 The answer is not open for you now
+1533 The answer is not open for review
+1534 This is a close-book test. During the test, you can not minimize, resize and move this window, and you are not allowed to open other window.  All your window activities are automatically monitored and your violation of these rules will result in score zero for this test. 
+1535 No one was found to receive alert at this time 
+1536 The following string of characters is the license key. Please copy paste it into a notepad and save the file as  INSTALL Folder/web/WEB-INF/conf/license.txt. Then retart the program
+1537 Normalized Score 
+1538 or Estimated Grade
+1539 By the way, the status of these items is still "Grading". If all submissions are graded, please set the status as "Auto" to allow students to view  their grades 
+1540 Invalid submission @Invalid question number@No reference answer for pre-grading@Invalid answer@No answer or invalid answer number@Answer number invalid
+1541 Retention Assistance
+1542 Enable progressive message (speed will suffer though!)
+1543 Delete data source file 
+1544 Delete this message file on the server
+1545 Override@Keep old@Ignore@Extract
+1546 Monitoring restoring files from zip archive
+1547 Monitoring restoring tables from zip archive
+1548 Backend
+1549 Data backed up to dropbox.com during time period from
+1550 not available
+1551 Your web file folder will be closed soon. Please download your files as soon as possible.
+1552 Grant
+1553 Further you may send the shorten text message to the cell phones of email receipients. To do so, download the following smshub.apk to your Android device by using its web browser. After launching the app, enter the following credentials to send out short text message
+1554 PIN
+1555 Need to Send SMS
+1556 ,)(:.]/[
+1557 You may also use h2 database. Download h2 database, and click the h*.jar file to start it, change the following system database setting to h2
+1558 Extra
+1559 For All
+1560 Graders@# Students@Set Size@Missed Assignment@Missed Question@Average
+1561 Order@Scale@Score@Goal@Scores
+1562 All@Split
+1563 You have to select one course and assignment
+1564 to advisors
+1565 Advisee's abnormal performance alert
+1566 Some of your advisees have abnormal academic performance. Please check out the detailed message sent to your tealeaman account. 
+1567 #Sessions
+1568 #Enrollments
+1569 #Assignments/tests
+1570 #Submissions
+1571 Student @ just added to your class @ on tealeaman. Please follow the link bellow to complete your account, course, session and student registration information to support the student
+1572 Your instructors may announce some or all assignments  through other communication channels instead of posting here.  To submit such an assignment/test, @click here       
+1573 Instructor may assign questions for multiple times in a week. All of them together will be regarded as one assignment. Please answer the questions or solve the problems in the order in which they were assigned, and briefly indicate the question in the answering box, e.g, question 8 on page 211.
+1574 Week
+1575 A student (@) in your course session @ starts answering assignment @. Please follow the link below to edit the assignment, fill out the question, answer, assessment, weight and scale fields, and be ready to grade the submitted work.
+1576 Assigned else where
+1577 This question has not been specified on the system. You may enter it.
+1578 Questions, Labs or Projects Designed to Assess Learning Outcome #
+1579 Unauthorized access#The page/function is designed for #Please login as another user that has the designated role
+1580 Semester#Bulletin#Information#Registration#Schedule#Curriculum#Advisor#Accounting#Website#Advising#Applications#Password#Logout
+1581 Syllabus#Communication#Materials#Notes#Assignments#Submissions#Grades#Discussion#Tutorial#Feedback#Refresh
+1582 Teaching Assistant Grading 
+1583 Windows Activities
+1584 Demo
+1585 Quick Start
+1586 News and References
+1587 Back up files to dropbox.com
+1588 Restore files from dropbox.com
+1589 Justified
+1590 Excuse
+1591 Assignment or task assigned elsewhere
+1592 Reviewed
+1593 Records of Absence
+1594 Evidences
+1595 Ask for Leave
+1596 Click to enter excuses
+1597 Click + to upload files to verify your excuse
+1598 Leave and Absence
+1599 Login successful. You may close this window and repeat the previous action
+1600 Absence
+1601 Deduction
+1602 Order of Absence, Deduction
+1603 The student (@) in your course session @ deleted the assignment @ that he/she created. Please ignore the previous email regarding this assignment
+1604 Recent Absence
+1605 Number of Absence
+1606 Source@Editing@Separator@Target@When entering default value, one may use Row Variable$r$@Closure@1st row is heading@CSV file 
+1607 Method@Create new records only@Update the existing records as well
+1608 Local File@or@File in Web Folder@enter below
+1609 For each column in the target table, specify a column above  to induct or  a default value to fill
+1610 Name each column, set  data type and specify a column above  to induct or  a default value to fill
+1611 Using
+1612 Install@Assignment archive
+1613 MM/DD/YYYY hh:mm
+1614 The literal translation of  "Go game" from Chinese is "containment game" or "surrounding game" . It is a game of containment and anti-containment. <br>In the left-upper area, no white stone can  go inside the 
++ holes to get itself completely surrounded by black stones and border,   seeing no unoccupied "free land" in its 
++ neighborhood . <br>However, in the right-upper area, a white stone can go inside the hole surrouded by black stones to 
++ contain and take away the seven black stones because the white contains the black stones from outside.
++ <br>Therefore, to secure a territory, you must make your conncted territory contain two or more holes of unoccupied 
++ "free land" such as the  left bottom area. <br>In the right bottom area, the black territory has not been made 
++  secure yet because the upper black stone could be taken away at any time by white
+1615 is disconnected temprarily. Wait
+1616 Teaching Assistance
+1617 Agent
+1618 Review
+1619 Grading Programing Project/Questions@Student ID@Grade @Comment@Content@Attachment@Testing Service@Select@Grade All@Test Run@Save@Student Id@Score@Submitted<br>Codes@Comment@Assessment@Attachment@Attached@Not specify@Based on@Execution Results@Publish

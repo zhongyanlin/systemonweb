@@ -1,0 +1,10 @@
+access,jdbc:odbc:Driver={Microsoft Access Driver (*.mdb)};DBQ=dbfolder\,telaman.mdb,sun.jdbc.odbc.JdbcOdbcDriver,root,tomcat,0,0
+mysql,jdbc:mysql://localhost:3306/,test,com.mysql.jdbc.Driver,root,tomcat,1,1
+mariadb,jdbc:mariadb://localhost:3307/,test,com.mysql.jdbc.Driver,root,tomcat,0,0
+oracle,jdbc:oracle:thin:@localhost:1521/,telaman,,root,tomcat,0,0
+postgres,jdbc:postgres://localhost:1521/,telaman,com.postgress.jdbc.Driver,root,tomcat,0,0
+sqlserver,jdbc:microsoft:sqlserver://localhost\SQLEXPRESS:1433;DatabaseName=,telaman,com.microsoft.jdbc.sqlsrever.SQLServerDriver,root,tomcat,0,0
+h2,jdbc:h2:~/,telaman,org.h2.Driver,root,tomcat,0,0
+derby,jdbc:derby://localhost:1527/,telaman,rg.apache.derby.jdbc.ClientDriver,root,tomcat,0,0
+
+

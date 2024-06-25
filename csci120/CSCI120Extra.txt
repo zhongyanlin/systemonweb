@@ -1,12 +1,13 @@
-D10755553 QinHong Shen B 85
-D10755558 Song Zixiang B 80
-D10755578 Xiao Dongao C 76
-D10747533 Lin XinJue C 86
-D10747606 Zhang Zhiming C 92
-D10755600  Cai  Zhijie A 89
-D10755601 Zhong Shirun A 88 
-D10755665 Liu Chuning F 51
-D10755568 Wang Yipeng A 90
-D10755552 Sha Yunhan 77
+D10755553 QinHong Shen B
+D10755558 Song Zixiang B
+D10755578 Xiao Dongao C
+D10747533 Lin XinJue C
+D10747606 Zhang Zhiming C
+D10755600 Cai  Zhijie A
+D10755665 Liu Chuning F
+D10755552 Sha Yunhan C
+
+D10747481	Chen	Zanhang	C
+D10747533	Lin	Xin	Jue
 
  

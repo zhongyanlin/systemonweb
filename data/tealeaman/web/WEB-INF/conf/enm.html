@@ -1,0 +1,74 @@
+When you design a data entry form  and intend to print it out on paper and let your clients fill out it by pen,
+you may use consecutive underscore character strings, such as _______, intuitively to
+mark blank field for your clients to fill out. This program is just to convert such   forms  to  web form. The source file must be HTML document.
+For this end, you need to perform the following pre-process  before conversion: If your source file is a Microsoft Word doc file, please save it as a HTML web page file in Word, and if it is a PDF file, please go to
+<a href = "http://access.adobe.com/access" target ="_blank"> http://access.adobe.com/access </a> to convert it  to a HTML web page  file.
+If you don't have a HTML-form now, go ahead to click the "New" button anyway, a wizard will have a "MakeOne" button to enable you  
+to create a HTML-format form instantly.
+<br><br>
+The following are the rules of converting HTML-format paper forms to web form:
+<ol>
+ <li> A selective item set with camma sign or blank character as separator, formatted as <b>(1=poor, 2=good)</b> or  <b>(1=poor  2=good)</b>, where the parentheses are required, in the file will be converted to a
+ group of radios like this <span><b><input type=radio  style="padding:0 0 -2 0;margin:0 0 -2 0"  name=r>poor <input type=radio  style="padding:0 0 -2 0;margin:0 0 -2 0"  name=r>good</b></span>, and this group of radios
+ will keep replacing  the following consecutive underscore patterns  until the number of underscores is changed.
+ <li> A selective item set with new line or slash as separator formatted as <br>
+    <center><b>(1=poor<br>2=good)</b></center><br> or  <b>(1=poor/ 2=good)</b>
+ will be converted to a select box like this 
+ <select style="font-weight:680;border:1px #3399CC solid">
+    <option value=1>poor</option>
+    <option value=2>good</option>
+ </select>,
+ and this select box will keep replacing  the following consecutive underscore patterns until the number of underscores is changed.
+ <li> If not replaced by radios or selects, a pattern of two consecutive underscores, i.e, ___,  will be converted to a checkbox like this
+ <input style="padding:0 0 -2 0;margin:0 0 -2 0" type=checkbox>
+<li> If not replaced by radios or selects, a pattern of three or more consecutive underscores enclosed in a square blacket, e.g.[________________________], will be converted to a textarea like this<br>
+ <textarea  rows=3 cols=25  style="border:1px #3399CC solid"></textarea>
+
+ <li> If not replaced by radios or selects, a pattern of three or more consecutive underscores enclosed by @, e.g.@___________________@, will be converted to a widget for file attachment like  
+ <font color=blue>&oplus; file1.jpg &ominus;</font> , clicking these <font color=blue>&oplus;</font>, <font color=blue>file name</font>  and <font color=blue>&ominus;</font> will start attaching more, opening file and deleting file functions, respectively.
+ <li> If not replaced by radios or selects, a pattern of three or more consecutive underscores, e.g._______, will be converted to a textbox like this <input name=a width=8 style="border:1px  #3399CC solid">  
+ <li> Tables containing two consecutive blank cells but no consecutive underscore character pattern will be made editable and automatic  row growing  
+
+</ol> 
+
+For instant, if you have designed a form titled "Part-time Job Application" in Microsoft Word as the following left-hand side,
+this conversion program can convert it to a web form like the following right-hand side.
+
+<br><br>
+<table  id=example align=center>
+<tr><td width=300 align=center valign=top bgcolor=wheat>
+ 
+<h2>Part-time Job Application</h2>
+<table><tr><td>1. </td><td>Name</td><td>______________</td></tr>
+</tr>
+<tr><td>2. </td><td>Sex</td><td>(m=Male, f=Female)___</td></tr>
+<tr><td>3. </td><td><nobr>Residential State</nobr></td><td>(NY/NJ/other)____</td></tr>
+<tr><td>4. </td><td>Current State</td><td>____</td></tr>
+<tr><td valign=top>5. </td><td valign=top><nobr>Experience</nobr></td><td>[_____________________]</td></tr>
+<tr><td valign=top>6. </td><td valign=top>Education</td><td><table border=1 style=border-collapse:collapse><tr><td width=80><nobr>School</nobr></td><td><nobr>Time Period</nobr></td><td><nobr>Degree</nobr></td></tr>
+ <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></td></tr>
+<tr><td>7. </td><td>OK night shift</td><td>__</td></tr>
+<tr><td>8. </td><td>Photo</td><td>@________________@</td>
+</table>
+
+</td><td width=300 align=center  bgcolor=wheat>
+<h2>Part-time Job Application</h2>
+<table><tr><td>1. </td><td>Name</td><td><input size=8></td></tr>
+<tr><td>2. </td><td>Sex</td><td><input type=radio style="background-color:transparent" name=r1 value=1>Male  <input type=radio  style="background-color:transparent"  name=r1 value=2>Female</td></tr>
+<tr><td>3. </td><td>Residential State</td><td><select name=s1><option value="NY">NY</option> <option value="NJ">NJ</option><option value="other">Other</option></select></td></tr>
+<tr><td>4. </td><td>Current State</td><td><select name=s1><option value="NY">NY</option> <option value="NJ">NJ</option><option value="other">Other</option></select></td></tr>
+<tr><td valign=top>5. </td><td valign=top><nobr>Experience</nobr></td><td><textarea name=t1 rows=3 cols=22></textarea></td></tr>
+<tr><td valign=top>6. </td><td valign=top>Education</td><td><table border=1 style="border-collapse:collapse;border:1px lightblue solid;background-color:white" ><tr><td width=80>School</td><td><nobr>Time Period</nobr></td><td><nobr>Degree</nobr></td></tr> <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></td></tr>
+<tr><td>7. </td><td><nobr>OK night shift</nobr></td><td><input  style="background-color:transparent"  type=checkbox></td></tr>
+<tr><td>8. </td><td>Photo</td><td><font color=blue>&oplus; &ominus;</font> </td></tr>
+
+</table>
+<input type=button value="Submit" style="color:white;background-color:teal">
+
+</td></tr>
+</table>
+<br>
+<b>Explanation</b>: Because the number of consecutive underscore characters in the forth item is the same as that in the third item, i.e, both are four, but it is different from that in the fifth item, therefore, according to
+the the second conversion rule, the generated drop-down menu  will replace two consecutive underscore patterns in both item 3 and item 4, but not in the item 5.
+ 
+ 

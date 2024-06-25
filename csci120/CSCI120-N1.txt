@@ -1,54 +1,48 @@
-	Session:	35-120-N1	
-Instructor:	Zhongyan Lin	
-Time:	06/24/24 16:45	
-ID
-Last Name
-First Name
-Grade
-%
-D10747533	Lin	Xin Jue	C	86
-D10747606	Zhang	Zhiming	C	92
-D10755503	An	Yujie	A	91
-D10755505	Bei	Jiayi	A	90
-D10755507	Chen	Junzhi	B	86
-D10755509	Chu	Yuzexin	C	77
-D10755515	Ding	Tianyu	B	82
-D10755519	Gong	Zhe	B	85
-D10755520	He	peizhe	C	71
-D10755525	Huang	Ruitao	C	73
-D10755526	Huang	Danlin	B	87
-D10755528	Huo	Yuanda	B	87
-D10755530	Jiang	Yaxin	B	83
-D10755531	Jin	Zhen	C	77
-D10755533	Kan	Bowen	B	80
-D10755535	Li	Yupeng	B	84
-D10755536	li	xin	B	83
-D10755537	Li	Yixing	B	83
-D10755539	Lin	Jiahui	A	89
-D10755541	Lin	Jirun	A	90
-D10755545	Niu	Junmin	B	83
-D10755546	Peng	junlin	C	70
-D10755547	Qiao	Kun	B	87
-D10755548	Ren	Zhiqi	A	92
-D10755553	QinHong	Shen	B	85
-D10755558	Song	Zixiang	B	80
-D10755561	Tang	Ranran	B	84
-D10755562	Tong	Wei	B	83
-D10755564	Wang	Hao	A	90
-D10755565	Wang	ZhiLing	A	88
-D10755566	Wang	Yanan	B	83
-D10755574	wu	zhaocheng	B	81
-D10755576	wu	zherui	C	79
-D10755578	Xiao	Dongao	C	76
-D10755579	xie	zijing	C	73
-D10755582	Xue	Jipei	B	82
-D10755585	Ye	Xinran	B	83
-D10755588	Yuan	Ye	A	90
-D10755591	Zhang	Zhanhao	D	60
-D10755596	Zhang	Hanwen	A	91
-D10755597	Zhao	Kenan	C	79
-D10755598	Zheng	Jinhao	C	78
-D10755602	Zhou	Kaiqi	B	81
-D10755604	zhu	quanyuan	A	94
-D10755793	Lu	Yifeng	C	68
-D10755801	Yuan	Wenjie	C	76
+SID	LastName	FirstName	Grade
+D10747533	Lin	XinJue	C
+D10747606	Zhang	Zhiming	C
+D10755503	An	Yujie	A
+D10755505	Bei	Jiayi	A
+D10755507	Chen	Junzhi	B
+D10755509	Chu	Yuzexin	C
+D10755515	Ding	Tianyu	B
+D10755519	Gong	Zhe	B
+D10755520	He	Peizhe	C
+D10755525	Huang	Ruitao	C
+D10755526	Huang	Danlin	B
+D10755528	Huo	Yuanda	B
+D10755530	Jiang	Yaxin	B
+D10755531	Jin	Zhen	C
+D10755533	Kan	Bowen	B
+D10755535	Li	Yupeng	B
+D10755536	Li	Xin	B
+D10755537	Li	Yixing	B
+D10755539	Lin	Jiahui	A
+D10755545	Niu	Junmin	B
+D10755546	Peng	Junlin	C
+D10755547	Qiao	Kun	B
+D10755548	Ren	Zhiqi	A
+D10755561	Tang	Ranran	B
+D10755562	Tong	Wei	B
+D10755564	Wang	Hao	A
+D10755565	Wang	Zhiling	A
+D10755566	Wang	Yanan	B
+D10755574	Wu	Zhaocheng	B
+D10755576	Wu	Zherui	C
+D10755579	Xie	Zijing	C
+D10755582	Xue	Jipei	B
+D10755585	Ye	Xinran	B
+D10755588	Yuan	Ye	A
+D10755596	Zhang	Hanwen	A
+D10755597	Zhao	Kenan	C
+D10755598	Zheng	Jinghao	C
+D10755601	Zhong	Shirun	A
+D10755602	Zhou	Kaiqi	B
+D10755604	Zhu	Quanyuan	A
+D10755793	Lu	Yifeng	C
+D10755801	Yuan	Wenjie	C
+D10755553	QinHong	Shen	B
+D10755558	Song	Zixiang	B
+D10755578	Xiao	Dongao	C
+D10755541	Lin	Jirun	A
+D10755591	Zhang	Zhanhao	D
