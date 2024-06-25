@@ -427,7 +427,7 @@ function match()
              for (j=0; j < bi; j++)
              {
                 if (!matcol1.includes(j)) continue;
-                let k = matcol[j];
+                let k = mapcol[j];
                 //for (let k=0; k < gi; k++)
                 {
                    if (b[m][j].toLowerCase() == g[i][k].toLowerCase())
