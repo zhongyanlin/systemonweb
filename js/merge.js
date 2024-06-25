@@ -371,6 +371,18 @@ function redomatch(sel)
     parse(2);
     match();
 }
+function matchcol()
+{
+    let xy = prompt("Enter 1st pair of matching columns like this 2 1:\n here 2 is the column on the left and 1 the column on the right","2 1");
+    let xys = xy.split(/ /);
+    matcol1[0] = parseInt(xys[0]);matcol1[1] = parseInt(xys[1]);
+    xy = prompt("Enter  2nd pair of matching columns like this 1 2:\n here 1 is the column on the left and 2 the column on the right\nIf none, Cancel","1 2");
+    if (xy!=null)
+    {  xys = xy.split(/ /);
+        matcol2[0] = parseInt(xys[0]);matcol2[1] = parseInt(xys[1]);
+    }
+}
+let matcol1 = [], matcol2 = [];
 function match()
 {
     duplicate = [];
@@ -407,8 +419,9 @@ function match()
         for (m=0; m < b.length; m++)
         {
              let count = 0; 
-             let isemail = false;
-             for (let j=0; j < bi; j++)
+             let isemail = false;var j; 
+             let d100 = false;
+             for (j=0; j < bi; j++)
              {
                 for (let k=0; k < gi; k++)
                 {
@@ -417,15 +430,17 @@ function match()
                        count++;
                        if (b[m][j].indexOf("@")>0 && b[m][j].indexOf(".")>0)
                            isemail = true;
+                       else if (b[m][j].replace(/D[0-9]+/,'') === '') d100 = false;
                       // console.log(b[m][j].toLowerCase() + ' == ' +  g[i][k].toLowerCase());
                    }
                    //else  console.log(b[m][j].toLowerCase() + ' != ' +  g[i][k].toLowerCase());
                 }
              }
-             if (isemail)
+             if (isemail || d100)
              {
                  arr[m] = 1000000 + m;
              }
+            
              else
                  arr[m] = count*1000 + m;
          }
