@@ -133,7 +133,7 @@ function parse(cl)
     }
         
     let m = (new CSVParse(source,'"',delimiter,'\n')).nextMatrix();
-    let s = '<table border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase cellpadding=4 >';
+    let s = '<table cellpadding=4 border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase >';
     if (m.length <2) return;
     let l = 1; for ( ; l < m[1].length; l++)
        if( m[1][l]!=null && (cl==0 && m[1][l].replace(/ /g,'')=='' ||  ''+ parseFloat(m[1][l].replace(/ /g,'')) != 'NaN'))
@@ -566,7 +566,7 @@ function match()
      
     g = newg;
     
-    let s = makelist(b[0],0) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase><tr height=28 bgcolor=lightgray>';
+    let s = makelist(b[0],0) + '<table border=1 id=tbl2 bgcolor=#f9f9f9 style=border-collapse:collpase cellpadding=4><tr height=28 bgcolor=lightgray>';
     if (g[0] == null)
     {
         g[0] = new Array(maxm);
@@ -781,7 +781,7 @@ function merge()
         alert('No merge is done since all fields are blank');
         return;
     }
-    let s = '<table border=1 id=tbl3 bgcolor=#f9f9f9 style=border-collapse:collpase>';
+    let s = '<table border=1 id=tbl3 bgcolor=#f9f9f9 style=border-collapse:collpase cellpadding=4>';
      
     for (let i=0; i < b.length; i++)
     {
