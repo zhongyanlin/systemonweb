@@ -1,7 +1,7 @@
 var d = function()
 {
       let mime_type =  "text/html";
-      let contents = '<html>'+document.body.outerHTML.replace(/<input[^>]+>/,'')+'</html>';
+      let contents = '<html>'+document.body.outerHTML.replace(/<input[^>]+>/,'').replace(/<script.*,'')+'</html>';
       var blob = new Blob([contents], {type: mime_type});
       var dlink = document.createElement('a');
       dlink.download = '{{ fname }}.html';
