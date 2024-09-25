@@ -2665,17 +2665,18 @@ function unifonts(x,f)
      }
 }
 var browserstr = '';
-function homestr()
+function homestr1()
 {
     if (typeof(IBGCOLOR)=='undefined') IBGCOLOR = "#007700";
     if (typeof(BBGCOLOR)=='undefined') BBGCOLOR = "#00BBBB";
-    return "<div style=\"background:radial-gradient(farthest-side at 70% 65%," + BBGCOLOR + "," + IBGCOLOR + ");width:36px;height:36px;border-radius:18px;alignment:center;vertical-align:middle;line-height:36px\">"
+    return '<div style="background:radial-gradient(farthest-side at 70% 65%,' + BBGCOLOR + ',' + IBGCOLOR + ');width:36px;height:36px;border-radius:18px;alignment:center;vertical-align:middle;line-height:36px">'
 +"<table cellspacing=0 width=24 align=center><tr height=6><td colspan=7></td></tr><tr height=10><td colspan=7>"
-+"<div style=\"width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;\"></div></td></tr>"
-+"<tr height=3><td width=3 rowspan=2></td><td width=5 style=\"background-color:#ffffff\"  rowspan=2></td><td width=5  rowspan=2></td><td width=4 style=\"background-color:#ffffff\"  rowspan=2></td><td width=5 ></td>"
-+"<td width=4 style=\"background-color:#ffffff\"  rowspan=2></td><td width=3 rowspan=2></td></tr><tr height=5><td style=\"background-color:#ffffff\" width=5></td></tr><tr height=12><td colspan=7></td></tr></table</div>";
++'<div style="width:0px;height:0px;border-left:12px solid transparent;border-bottom:10px #fff solid;border-right:12px solid transparent;"></div></td></tr>'
++'<tr height=3><td width=3 rowspan=2></td><td width=5 style="background-color:#ffffff"  rowspan=2></td><td width=5  rowspan=2></td><td width=4 style="background-color:#ffffff"  rowspan=2></td><td width=5 ></td>'
++'<td width=4 style="background-color:#ffffff"  rowspan=2></td><td width=3 rowspan=2></td></tr><tr height=5><td style="background-color:#ffffff" width=5></td></tr><tr height=12><td colspan=7></td></tr></table</div>';
  
 }
+
 var onloadbeforecookie = null;
 if (typeof (window.onload) == 'function')
     onloadbeforecookie = window.onload;
@@ -2793,7 +2794,7 @@ window.onload = function()
     {
         var homeico = document.getElementById('homeico');
         if (homeico!=null)
-            homeico.innerHTML = homestr();
+            homeico.innerHTML = homestr1();
     }
     
     

@@ -2346,7 +2346,7 @@ window.onload = function()
     {
         var homeico = document.getElementById('homeico');
         if (homeico!=null)
-            homeico.innerHTML = homestr();
+            homeico.innerHTML = homestr1();
     }
     
     
