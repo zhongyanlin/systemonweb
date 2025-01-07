@@ -487,7 +487,7 @@ function matchcol()
         if (x1!=null) delete mapcol[x1];
         mapcol[X] = Y;
     }
-    myprompt(JSON.stringify(mapcol));
+    
     colorcol();
 }
  
