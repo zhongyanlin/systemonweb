@@ -103,6 +103,46 @@ function loadcoursesource(course)
     }
 }
 let maxcol = 0;
+function matchs(X, Y) {
+    let M = [];
+
+    function getColumn(matrix, colIndex) {
+        return matrix.map(row => row[colIndex]);
+    }
+
+    function countInclusions(arr1, arr2) {
+        let count = 0;
+        for (let value of arr1) {
+            if (arr2.includes(value)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function getDistinctRatio(arr) {
+        const set = new Set(arr);
+        return set.size / arr.length;
+    }
+
+    for (let i = 0; i < X[0].length; i++) {
+        const X_col = getColumn(X, i);
+        for (let j = 0; j < Y[0].length; j++) {
+            const Y_col = getColumn(Y, j);
+            const a = countInclusions(X_col, Y_col) / X_col.length;
+            const b = countInclusions(Y_col, X_col) / Y_col.length;
+            const c = getDistinctRatio(X_col);
+            const d = getDistinctRatio(Y_col);
+            const e = (d + c) / 2;
+            const score = Math.max(a, b) * 0.9 + e * 0.1;
+            M.push([i + 1, j + 1, score]);
+        }
+    }
+
+    M.sort((a, b) => b[2] - a[2]);
+    return M;
+}
+let  ma;
 function parse(cl)
 {
     if (cl==2)
@@ -133,12 +173,13 @@ function parse(cl)
     }
         
     let m = (new CSVParse(source,'"',delimiter,'\n')).nextMatrix();
+     
     let s = '<table cellpadding=4 border=1 id=tbl' + cl + ' bgcolor=#f9f9f9 style=border-collapse:collpase >';
     if (m.length <2) return;
     let l = 1; for ( ; l < m[1].length; l++)
        if( m[1][l]!=null && (cl==0 && m[1][l].replace(/ /g,'')=='' ||  ''+ parseFloat(m[1][l].replace(/ /g,'')) != 'NaN'))
           break;
-    bl[cl] = l;
+    bl[cl] = 0;//l;
     //alert('bl[' + cl + ']=' + l);
     for (let i=0; i <m.length; i++)
     {
@@ -161,7 +202,20 @@ function parse(cl)
     }
       
     let t = maintbl.rows[3].cells[cl];
-    if (cl == 0) b = m;else g = m;
+    if (cl == 0) 
+        b = m;
+    else 
+    {
+        g = m;
+        if (g!=null){
+        ma = matchs(b,g);
+        mapcol = {};
+        mapcol[''+ma[0][0]] = ma[0][1];
+        if (ma[0][2] < 0.8)
+        {
+           mapcol[''+ma[1][0]] = ma[1][1]; 
+        }}
+    }
     t.innerHTML = s + '</table>';
     
     if ($('tbl0')!=null
@@ -377,52 +431,66 @@ function colorcol()
 {
     let tbl0 = $('tbl0'), tbl1 = $('tbl2');
     if (tbl0 === null || tbl1 === null) return;
-    for (let i =0; i < tbl0.rows[0].cells.lengh; i++)
-        tbl0.rows[0].cells[i].style.color ='grey';
-    for (let i =0; i < tbl1.rows[0].cells.lengh; i++)
-        tbl1.rows[0].cells[i].style.color ='grey';
-    if (matcol1[0]!=null){
-    tbl0.rows[0].cells[matcol1[0]-1].style.backgroundColor = '#444444';
-    tbl1.rows[0].cells[matcol2[0]-1].style.backgroundColor = '#444444';
+    for (let i =0; i < tbl0.rows[0].cells.length; i++)
+        tbl0.rows[0].cells[i].style.backgroundColor ='lightyellow';
+    for (let i =0; i < tbl1.rows[0].cells.length; i++)
+        tbl1.rows[0].cells[i].style.backgroundColor ='lightyellow';
+    let keys = Object.keys(mapcol);
+    if (keys.length > 0){
+    tbl0.rows[0].cells[parseInt(keys[0])-1].style.backgroundColor = '#444444';
+    tbl1.rows[0].cells[mapcol[keys[0]]-1].style.backgroundColor = '#444444';
     }
-    if (matcol1[1]!=null){
-        tbl0.rows[0].cells[matcol1[1]-1].style.backgroundColor = '#555555';
-        tbl1.rows[0].cells[matcol2[1]-1].style.backgroundColor = '#555555';
+    if (keys.length > 1){
+        tbl0.rows[0].cells[parseInt(keys[1])-1].style.backgroundColor = '#555555';
+        tbl1.rows[0].cells[mapcol[keys[1]]-1].style.backgroundColor = '#555555';
     }
 }
 function matchcol()
 {
     let str = "2 1";
     let hint = "Enter 1st pair of matching columns like this 2 1:\n here 2 is the column on the left and 1 the column on the right";
-    if (matcol1.length>0)
+    let keys = Object.keys(mapcol);
+    if (keys.length>0)
     {    
-        str = matcol1[0] + " " + matcol2[0];
+        str = keys[0] + " " + mapcol[keys[0]];
         hint = "Enter 1st matching column pair";
     }
+    let x1 = null, y1;
+    if (keys.length>1)
+    {    
+        x1 = keys[1]; y1 = mapcol[x1]; 
+    }
     let xy = prompt(hint,str);
+    if (xy == null) return;
+    
     let xys = xy.split(/ /);
-    matcol1[0] = parseInt(xys[0]);matcol2[0] = parseInt(xys[1]);
-    mapcol[matcol1[0]] = matcol2[0];
+    let X =xys[0].trim(), Y = parseInt(xys[1].trim());
+    if (isNaN(X) || ''+Y == 'NaN') return;
+    if (keys.length>0) delete mapcol[keys[0]];
+    mapcol[X] = Y;
     
     str = "1 2";
     hint = "Enter  2nd pair of matching columns like this 1 2:\n here 1 is the column on the left and 2 the column on the right\nIf none, Cancel";
-    if (matcol1.length>1)
-    {    
-        str = matcol1[1] + " " + matcol2[1];
+    if (x1!=null)
+    {   
+       
+        str = x1 + " " + y1;
         hint = "Enter 2nd matching column pair";
     }
     
     xy = prompt(hint,str);
     if (xy!=null)
     { 
-        xys = xy.split(/ /);
-        matcol1[1] = parseInt(xys[0]);matcol2[1] = parseInt(xys[1]);
-        mapcol[matcol1[1]] = matcol2[1];
-        
+        let xys = xy.split(/ /);
+        let X = xys[0].trim(), Y = parseInt(xys[1].trim());
+        if (isNaN(X) || ''+Y == 'NaN') return;
+        if (x1!=null) delete mapcol[x1];
+        mapcol[X] = Y;
     }
+    myprompt(JSON.stringify(mapcol));
     colorcol();
 }
-let matcol1 = [], matcol2 = [];
+ 
 function match()
 {
     duplicate = [];
@@ -447,6 +515,7 @@ function match()
     let maxm = 0;
     let mts = '';
     let dup = new Array();
+    let kes = Object.keys(mapcol);
     for (let i=0; i < g.length; i++)
     {
         if (g[i] == null) continue;
@@ -459,15 +528,13 @@ function match()
         for (m=0; m < b.length; m++)
         {
              let count = 0; 
-             let isemail = false;var j; 
+             let isemail = false;
              let d100 = false;
-             for (j=0; j < b[0].length; j++)
+             for (let j1 of kes)
              {
-                if (!matcol1.includes(j+1)) continue;
-                let k = mapcol[j+1]-1;
-                //for (let k=0; k < gi; k++)
-                {
-                   if (b[m][j].toLowerCase().trim() == g[i][k].toLowerCase().trim())
+                let j = parseInt(j1) - 1;
+                let k = mapcol[j1]-1;
+                if (b[m][j].toLowerCase().trim() == g[i][k].toLowerCase().trim())
                    {    
                        count++;
                        if (b[m][j].indexOf("@")>0 && b[m][j].indexOf(".")>0)
@@ -475,8 +542,7 @@ function match()
                        else if (b[m][j].replace(/D[0-9]+/,'') === '') d100 = true;
                       // console.log(b[m][j].toLowerCase() + ' == ' +  g[i][k].toLowerCase());
                    }
-                   //else  console.log(b[m][j].toLowerCase() + ' != ' +  g[i][k].toLowerCase());
-                }
+              
              }
              if (isemail || d100)
              {
@@ -547,7 +613,7 @@ function match()
             {
                msg += '<td bgcolor=white onclick="pair(this,' + m + ',' + (rw0++) +  ')">' + b[m][l] + '</td>';
             }
-            msg += '<' + '/tr>'
+            msg += '<' + '/tr>';
            }
         }
         else
@@ -557,7 +623,7 @@ function match()
             dup[m].splice(0,1);
         }
     }
-    msg += '<' + '/table><'+ '/td><td valign=top><div style=background-color:red>Right Records without Matching</div><table>'
+    msg += '<' + '/table><'+ '/td><td valign=top><div style=background-color:red>Right Records without Matching</div><table>';
     let  missright = mism.length>0;
      
     for (let j=0; j < mism.length; j++)
@@ -615,11 +681,17 @@ function match()
     }
     for (let j=0; j < gi; j++)
     {
-        s += '<td align=left ><nobr>' + (g[0][j]==null?"":g[0][j]) + '</nobr></td>';
+        s += '<td align=left height=28><nobr>' + (g[0][j]==null?"":g[0][j]) + '</nobr></td>';
     }
     for (let j=gi; j < maxm; j++)
     {
-        s += '<td align=right style="padding:0px 0px 0px 0px"><input style="margin:-1px -1px -1px -1px;border:0px;color:red;border:1px red solid" id="field' + j + '" list="existing" value="' + (g[0][j]==null?(""):g[0][j])+ '"</td>';
+        let lb = 'Choose...'; let incol = false; let k;
+        for ( k in mapcol) if (mapcol[k] == j+1) incol = true;
+        let cl = 'red'; if (incol) {cl = 'black';  lb = g[0][j];}
+        if (incol)
+               s += '<td align=right style="padding:0px 0px 0px 0px;background-color#555555;color:black">'+ lb + '</td>';
+        else 
+        s += '<td align=right style="padding:0px 0px 0px 0px"><input style="width:80px;margin:-1px -1px -1px -1px;border:0px;color:' + cl + ';border:1px ' + cl + ' solid" id="field' + j + '" list="existing" value=""></td>';
     }
     s += "</tr>";
     for (let i=1; i <g.length; i++)
@@ -653,7 +725,7 @@ function match()
              for (let j=0; j < maxcol; j++)
             {
                g[i][j] = '';
-               s += '<td ' + (j==0?'onclick=accept(' + i + ',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '>&nbsp;&nbsp;</td>';
+               s += '<td ' + (j==0?'onclick=accept(' + i + ',this.parentNode)':'') + ' align=' + (true?'left':'right   width=50  ') + '>&nbsp;&nbsp;</td>';
             }
             //s += '<td colspan=' + maxm +'>&nbsp&nbsp;</td>';
         }
@@ -665,7 +737,7 @@ function match()
             s += '<td ';
             if (j ==0 && mark!=null)
                 s += ' onmouseover="showdup(\'' + mark + '\','+ i +')" onmouseexit=cleardup('+ i +') ';
-            s +=   (j==0 && i>=b.length ?'onclick=moveto('+i+',this.parentNode)':'') + ' align=' + (j<gi?'left':'right   width=85  ') + '><div style="' + (j<bi?"":"width:80px;overflow:hidden") + '"><nobr>' + (g[i][j]==null?"":g[i][j]) + '</nobr></div></td>';
+            s +=   (j==0 && i>=b.length ?'onclick=moveto('+i+',this.parentNode)':'') + ' align=' + (true?'left':'right   width=50  ') + '><div style="' + (j<bi?"":"width:50px;overflow:hidden") + '"><nobr>' + (g[i][j]==null?"":g[i][j]) + '</nobr></div></td>';
         }
         s += '</tr>';
     }
