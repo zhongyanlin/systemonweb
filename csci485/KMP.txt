@@ -1,0 +1,41 @@
+Lecture: Significance of KMP algorithm  O(n + m).
+         Navie matching O(n * m)
+
+(0) https://www.geeksforgeeks.org/applications-of-string-matching-algorithms/
+
+(1) windows utility  fc  file1 file2
+(2) DNA match https://www.genome.gov/dna-day/15-ways/dna-sequencing
+(3) bioinformation
+(4) criminal justice (story in Nanjing Medical School)
+(5) missing kids
+(6) paternity test
+
+
+
+
+Lab and homework
+
+1. Watch the anomation of KMP algorithm provided on Tencent Videos (20 minutes)
+
+2. visit https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
+   Grab the Java codes of KMP implemention and compile them in Netbeans
+
+3. Implement the Navie string matching algorithm as static List<Integer> NavieSearch(String pat, String txt)
+
+
+4. Implement the string matching by using Java-built-in library method  txt.indexOf(pat) and txt.indexOf(pat, k) as
+   static List<Integer> JavaBuiltInSearch(String pat, String txt)
+
+5. In each implemention, add loop counter to count number of iterations
+
+6. In the test driver (main method) 
+   For  String txt = "geeksforgeeks";
+        String pat = "geeks";
+   Apply three methods 
+   
+   
+
+
+
+
+  
