@@ -67,7 +67,7 @@ ol li{font-size:16px}
 table tr td {font-size:16px}  /* top level table */
 div.showing{width:100%;text-align:center;line-height:100px;font-size:16px;background:#DDFFDD;border-radius:3px;height:100px;}
 td.showing0{width:100%;font-size:16px;background:#DDFFDD;border-radius:3px;}
-
+select {font-size:16px}
 div {font-size:16px}
 table tr td table tr td{font-size:16px;} /*second level nested table*/
        </style>
@@ -88,15 +88,15 @@ table tr td table tr td{font-size:16px;} /*second level nested table*/
 <table align="center" border="0" cellpadding="1" cellspacing="1" style="width:100%;margin-top:0px">
 	<tbody>
 <tr> <td  valign="middle"  align="center" id="h" >
-  Merging Blackboard Gradebook with Other Score Reports <img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode >       
-        
+        Merging Blackboard Gradebook with Other Score Reports <img style="float:right;height:90px;margin-bottom:-40px"  src="../frames.png" id=qrcode >   </td></tr>    
+<tr> <td  valign="middle"  align="center"   > or for generic spreadsheet merging </td></tr>       
   
 <tr> <td   class="showing0">
     Instructions:<ol>
     <li>Download the grade book from Blackboard Grade Center with Work Offline option using comma as the separator,save as a local file, then click the left Choose File to open and parse the file (see 1st <span class=lbl>Parse</span> button)
-    <li>Click the right "Choose File" to open the csv files downloaded from 3rd party systems such as google form/github/zybooks, optionally edit and then parse the text(see 2nd <span class=lbl>Parse</span> button)
-    <li>Click the emerging <span class=lbl>Match</span> button, and resolve possible mismatches and duplicates in the emerging dialog window
-    <li>On the heading of the second resulted table, decide the matching columns or set unwanted column's heading to blank (the emerging <span class=lbl>Null Heading</span>  button can help). Click the emerging <span class=lbl>Merge</span> button next to the Match button.
+    <li>Click the right "Choose File" to open the csv or Excel files downloaded from 3rd party systems such as google form/github/zybooks, optionally edit and then parse the text(see 2nd <span class=lbl>Parse</span> button)
+    <li>Click the <span class=lbl>Match</span> button  that appears, and resolve possible mismatches and duplicates in the resulting dialog window. You may need to use <span class=lbl>Match Column </span> to select key matching columns.
+    <li>On the heading of the second resulted table, for each column of data, decide the destination column  to the left table. Click the <span class=lbl>Merge</span>  button that appears next to the  Match  button..
     <li>If the data are merged correctly, click the emerging <span class=lbl>CSV</span>  button under the merged table. This will generate a csv file format of merged data 
     <li>Copy-paste generated text inside the bottom textbox to override original downloaded file and upload the modified file back to Blackboard
     <li>Optionally, for the convenience of transferring grades to the banner system,  downloading file again(needs BB to do calculation) and parse again, you may use <span class=lbl>Swap Column</span>  to bring the Weighted Total or Final Grade column closer to student name column   
@@ -105,13 +105,13 @@ table tr td table tr td{font-size:16px;} /*second level nested table*/
 <table align="center" border="0" cellpadding="1" cellspacing="1" style="width:100%;margin-top:0px">
 	<tbody>
 		<tr >
-                    <td style="background-color:lightgray;text-align:left;"><strong>CSV formated full or partial Gradebook downloaded from Blackboard</strong><br>
-                    Course: <datalist id="courselist"></datalist><input id="course" list="courselist" onchange="buildcourselist(this)"> <input id="myFile0" type="file" onchange="openfileto(this,$('bbsource'))"/></td>
+                    <td style="background-color:lightgray;text-align:left;"><strong>CSV/Excel formatted full or partial Gradebook downloaded from Blackboard</strong><br>
+                    Course: <datalist id="courselist"></datalist><input id="course" list="courselist" onchange="buildcourselist(this)"> <input id="myFile0" type="file" onchange="openfileto1(this,$('bbsource'))"/></td>
 			<td>&nbsp;</td>
-                        <td style="background-color:lightgray; text-align:left"><strong>Score report copied from Google form, Github, zybooks or others</strong><br>
+                        <td style="background-color:lightgray; text-align:left"><strong>CSV/Excel Score report copied from Google form, Github, zybooks or others</strong><br>
                             <a href="index.html"></a>
                             <table align="left" style="background-color:lightgray"><tr>
-                                    <td><input id="myFile1" type="file"   onchange="openfileto(this,$('googlesource'))" /> <input class="button" id="view" value="View Tab" onclick="view(this)"></td>
+                                    <td><input id="myFile1" type="file"   onchange="openfileto1(this,$('googlesource'))" /></td><td><input class="button" id="view" value="View Tab" onclick="view(this)"></td>
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td><datalist id="reglist"></datalist><input id="regex"  type="checkbox"></td>
                                     <td>RegEx</td><td>&nbsp;</td>
@@ -132,14 +132,14 @@ Sample    Student  samplestudent@desu.edu  70  80
 "Honter"   "Gred"  "dffg22@students.desu.edu"  45   67</textarea></td>
                 </tr>
 		<tr>
-                    <td style="text-align:right"><table width="100%"><tr  ><td align="right" style="width:99%;white-space:nowrap;color:#FFFFFF"> Column Separator</td><td width="0%" ><select id="delimiter0" onchange="parse(0)"><option value="\t">Tab</option><option value=",">Comma</option></select></td>
+                    <td style="text-align:right"><table width="100%"><tr  ><td align="right" style="width:99%;white-space:nowrap;color:#FFFFFF"> Column Separator</td><td width="0%" ><select id="delimiter0" onchange="parse(0)"><option value="\t">Tab</option><option value=",">Comma</option><option value=";">Semicolon</option><option value="  ">2+ Spaces</option><option value=" ">1+ Spaces</option></select></td>
                                 <td width="0%"><input class="roundbutton button"  name="parsebb" type="button" value="Parse" onclick="parse(0)"/></td>
                                 <td width="0%"><input class=button   id="swapbt"  type="button" value="Match Column" style="width:100px;float:left"  onclick=matchcol()  ></td>
                                 <td><input class="roundbutton button"  style=float:right type="button" id="match" value="Match" onclick="match()"></td></tr></table></td>
 			<td>&nbsp;</td>
-                        <td style="text-align:center"><table width="100%"><tr   ><td><input class="roundbutton button"  style=float:left type="button" id="merge" value="Merge" onclick="merge()"></td><td style="width:0%;white-space:nowrap;color:#FFFFFF">Column Separator</td><td  width="0%"><select id="delimiter" onclick="parse(2)"><option value="\t">Tab</option><option value=",">Comma</option><option value=";">Semicolon</option><option value="  ">2+ Spaces</option><option value=" ">1+ Spaces</option></select></td><td  width="0%"><input class="roundbutton button"   name="parsegoogle" type="button" value="Parse"  onclick="parse(2)"/></td> 
-                                    <td  width="100%" align="right"><table id="heading"><tr><td>Curved=<td><td><input   id="curve" size=7 value="x"></td>
-                        <td><input class="button"  type=button id="discard" value="Null Heading" onclick="nullall()" style="float:right;width:100px" >
+                        <td style="text-align:center"><table width="100%"><tr   ><td><input class="roundbutton button"  style=float:left type="button" id="merge" value="Merge" onclick="merge()"></td><td style="width:0%;white-space:nowrap;color:#FFFFFF">Column Separator</td><td  width="0%"><select id="delimiter"  ><option value="\t">Tab</option><option value=",">Comma</option><option value=";">Semicolon</option><option value="  ">2+ Spaces</option><option value=" ">1+ Spaces</option></select></td><td  width="0%"><input class="roundbutton button"   name="parsegoogle" type="button" value="Parse"  onclick="parse(2)"/></td> 
+                                    <td  width="100%" align="right"><table ><tr><td id="heading">Curved=<td><td id="heading1"><input   id="curve" size=7 value="x"></td>
+                        <td><input   type=checkbox id="casesensitive"   ></td><td  style="width:99%;white-space:nowrap;color:#FFFFFF">Case Sensitive
                                     </td></tr></table></td></tr></table></td>
 		</tr>
 		<tr>
